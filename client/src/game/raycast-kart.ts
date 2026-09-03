@@ -68,7 +68,7 @@ export const RAYCAST_KART_TUNING = {
     highSpeedSteeringReduction: 0.65,
     maxYawSpeed: 1.65,
     steeringResponse: 7,
-    steeringReturn: 10,
+    steeringReturn: 7,
     wheelRadius: 0.28,
     suspensionRestLength: 0.28,
     suspensionStiffness: 24,
@@ -77,6 +77,7 @@ export const RAYCAST_KART_TUNING = {
     // High passive side grip for normal arcade steering. A lower rear value
     // belongs to a later, explicitly activated drift mode.
     frictionSlip: 18,
+    rearFrictionSlip: 21,
     rollInfluence: 0.05
 } as const;
 
@@ -144,7 +145,7 @@ export class RaycastKartController {
             wheelInfo.set_m_suspensionStiffness(RAYCAST_KART_TUNING.suspensionStiffness);
             wheelInfo.set_m_wheelsDampingCompression(RAYCAST_KART_TUNING.suspensionCompression);
             wheelInfo.set_m_wheelsDampingRelaxation(RAYCAST_KART_TUNING.suspensionDamping);
-            wheelInfo.set_m_frictionSlip(RAYCAST_KART_TUNING.frictionSlip);
+            wheelInfo.set_m_frictionSlip(isFront ? RAYCAST_KART_TUNING.frictionSlip : RAYCAST_KART_TUNING.rearFrictionSlip);
             wheelInfo.set_m_rollInfluence(RAYCAST_KART_TUNING.rollInfluence);
         });
 
@@ -213,9 +214,13 @@ export class RaycastKartController {
         const forward = this.kart.forward;
         const forwardSpeed = velocity.x() * forward.x + velocity.y() * forward.y + velocity.z() * forward.z;
         if (this.kart.rigidbody) {
-            this.kart.rigidbody.angularDamping = Math.abs(forwardSpeed) > RAYCAST_KART_TUNING.highSpeedDampingStart && this.steering === 0
-                ? RAYCAST_KART_TUNING.highSpeedAngularDamping
-                : 0.8;
+            const speedRange = RAYCAST_KART_TUNING.maxSpeed - RAYCAST_KART_TUNING.highSpeedDampingStart;
+            const highSpeedFactor = speedRange > 0
+                ? clamp((Math.abs(forwardSpeed) - RAYCAST_KART_TUNING.highSpeedDampingStart) / speedRange, 0, 1)
+                : 0;
+            const steeringFactor = clamp(Math.abs(this.steering) / RAYCAST_KART_TUNING.maxSteering, 0, 1);
+            const neutralDamping = 0.8 + (RAYCAST_KART_TUNING.highSpeedAngularDamping - 0.8) * highSpeedFactor;
+            this.kart.rigidbody.angularDamping = neutralDamping - (neutralDamping - 0.8) * steeringFactor;
         }
         const throttle = clamp(input.y, -1, 1);
         let targetEngineForce = 0;
