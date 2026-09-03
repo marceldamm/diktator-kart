@@ -29,7 +29,9 @@ Der Controller trennt Beschleunigen, Ausrollen, Bremsen und Rückwärtsgang. Die
 
 Beim Wechsel von Vorwärtsfahrt zu S wird zunächst nur gebremst. Der Rückwärtsantrieb setzt erst nahe dem Stillstand ein. Physik-generierte Restrotation wird nicht in den nächsten Frame übernommen; die geglättete Lenkung bestimmt ausschließlich die aktuelle Ziel-Gierrate.
 
-Sehr kleine seitliche Restgeschwindigkeiten werden bei neutraler Lenkung innerhalb einer Deadzone auf null gesetzt. Größeres seitliches Rutschen bleibt sichtbar und wird weiterhin durch den Arcade-Grip abgebaut.
+Seitliche Restgeschwindigkeit wird bei neutraler Lenkung vollständig entfernt. Größeres seitliches Rutschen bleibt bei aktiver Lenkung sichtbar und wird weiterhin durch den Arcade-Grip abgebaut.
+
+Die Neutral-Lenkung arbeitet strikt planar: X/Z-Geschwindigkeit wird auf den normalisierten planaren Forward-Vektor projiziert, während die vertikale Y-Geschwindigkeit unverändert bleibt. Bei `input.x === 0` wird damit jede seitliche X/Z-Komponente entfernt und die Yaw-Geschwindigkeit auf null gesetzt.
 
 ## Architektur
 

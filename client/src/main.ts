@@ -19,6 +19,7 @@ import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { KeyboardInput } from './game/input';
 import { createKart, driveKart, KartController, resetKart } from './game/kart';
+import { TelemetryLog } from './game/telemetry-log';
 import { createTestTrack } from './game/track';
 
 import './starter.css';
@@ -31,6 +32,11 @@ WasmModule.setConfig('Ammo', {
 await new Promise<void>((resolve) => {
     WasmModule.getInstance('Ammo', () => resolve());
 });
+
+document.body.insertAdjacentHTML(
+    'beforeend',
+    '<section class="telemetry-panel"><div class="telemetry-title"><strong>Geradeaus-Telemetrie</strong><span id="telemetry-status">gestoppt</span></div><div class="controls"><button id="telemetry-start" type="button">Logging starten</button><button id="telemetry-stop" type="button">Logging stoppen</button><button id="telemetry-clear" type="button">Log l&ouml;schen</button><button id="telemetry-copy" type="button">Log kopieren</button></div><pre id="telemetry-log" class="telemetry-log">Noch keine Samples aufgezeichnet.</pre></section>'
+);
 
 document.body.insertAdjacentHTML(
     'beforeend',
@@ -62,9 +68,38 @@ const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
 const debugHud = new DebugHud();
+const telemetry = new TelemetryLog();
+const telemetryLog = document.getElementById('telemetry-log')!;
+const telemetryStatus = document.getElementById('telemetry-status')!;
+const refreshTelemetryView = () => {
+    telemetryLog.textContent = telemetry.getText();
+    telemetryLog.scrollTop = telemetryLog.scrollHeight;
+    telemetryStatus.textContent = telemetry.isActive
+        ? `läuft · ${telemetry.count} Samples`
+        : `gestoppt · ${telemetry.count} Samples`;
+};
 document.getElementById('reset-kart')!.addEventListener('click', () => {
     resetKart(kart);
     controller.reset();
+    telemetry.stop();
+    telemetry.clear();
+    refreshTelemetryView();
+});
+document.getElementById('telemetry-start')!.addEventListener('click', () => {
+    telemetry.start(kart);
+    refreshTelemetryView();
+});
+document.getElementById('telemetry-stop')!.addEventListener('click', () => {
+    telemetry.stop();
+    refreshTelemetryView();
+});
+document.getElementById('telemetry-clear')!.addEventListener('click', () => {
+    telemetry.clear();
+    refreshTelemetryView();
+});
+document.getElementById('telemetry-copy')!.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(telemetry.getText());
+    telemetryStatus.textContent = 'kopiert';
 });
 
 const camera = new Entity('camera');
@@ -89,6 +124,7 @@ app.on('update', (dt: number) => {
     const kartInput = input.read();
     driveKart(controller, kart, kartInput, dt);
     debugHud.update(controller.getDebugSnapshot(kart, kartInput));
+    if (telemetry.update(dt, kart, controller, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

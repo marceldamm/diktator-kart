@@ -44,6 +44,60 @@ pc-app {
     pointer-events: auto;
 }
 
+.telemetry-panel {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 15;
+    width: min(820px, calc(100vw - 32px));
+    padding: 10px 12px;
+    border: 1px solid #ffffff24;
+    border-radius: 10px;
+    background: #0b1019e8;
+    box-shadow: 0 12px 40px #0008;
+    backdrop-filter: blur(12px);
+    pointer-events: auto;
+}
+
+.telemetry-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #9fe5d7;
+    font-size: 12px;
+}
+
+.telemetry-title span {
+    color: #9daab7;
+    font-size: 11px;
+}
+
+.telemetry-panel .controls {
+    margin-top: 8px;
+}
+
+.telemetry-panel button {
+    padding: 5px 8px;
+    font-size: 11px;
+}
+
+.telemetry-log {
+    max-height: 210px;
+    margin: 8px 0 0;
+    overflow: auto;
+    padding: 7px;
+    border: 1px solid #ffffff1c;
+    border-radius: 6px;
+    background: #02070bcc;
+    color: #c7d4da;
+    font:
+        10px/1.35 ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+    white-space: pre;
+}
+
 h1 {
     margin: 0 0 6px;
     font-size: 18px;

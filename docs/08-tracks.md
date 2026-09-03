@@ -16,7 +16,7 @@ Boden und Wände besitzen PlayCanvas-Kollisionen. Es gibt noch kein Rundensystem
 
 ## Aktueller Stand
 
-Die Testfläche ist 72 × 260 Einheiten groß. Die Breite wurde damit gegenüber dem vorherigen 72 × 52-Aufbau verfünffacht. Das Kart startet am linken Ende der langen Seite, mittig in der Breite, und zeigt entlang der langen Fahrtrichtung.
+Die Testfläche ist 700 × 260 Einheiten groß. Sie ist damit lang genug für einen mehrsekündigen Vollgas-Geradeauslauf. Das Kart startet am linken Ende der langen Seite, exakt auf der Mittellinie, und zeigt entlang der langen Fahrtrichtung.
 
 Zur Orientierung gibt es zwei farbige Startmarkierungen. Diese Elemente sind rein visuell und besitzen keine Kollision.
 
