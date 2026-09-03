@@ -190,12 +190,15 @@ export class RaycastKartController {
         let engineForce = 0;
         let brakeForce = 0;
 
+        // btRaycastVehicle uses the configured local +Z as its forward axis.
+        // This kart's visual forward is PlayCanvas -Z, so engine force needs
+        // the opposite sign to make positive input move along kart.forward.
         if (throttle > 0) {
-            engineForce = throttle * RAYCAST_KART_TUNING.maxEngineForce;
+            engineForce = -throttle * RAYCAST_KART_TUNING.maxEngineForce;
         } else if (throttle < 0 && forwardSpeed > 0.25) {
             brakeForce = -throttle * RAYCAST_KART_TUNING.maxBrakeForce;
         } else if (throttle < 0) {
-            engineForce = throttle * RAYCAST_KART_TUNING.maxReverseForce;
+            engineForce = -throttle * RAYCAST_KART_TUNING.maxReverseForce;
         }
 
         this.vehicle.setSteeringValue(this.steering, 0);
