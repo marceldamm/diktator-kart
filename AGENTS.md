@@ -52,3 +52,18 @@ Beispiel:
 * danach Grafik, Charaktere und umfangreicher Content
 
 Funktionsfähigkeit geht vor Perfektion.
+
+## Stand sichern
+
+Wenn der Benutzer den Befehl **„Stand sichern“** gibt:
+
+1. Prüfe den aktuellen Git-Status und die vorhandenen Änderungen.
+2. Erstelle selbstständig eine kurze, passende Commit-Nachricht, die die wesentlichen Änderungen beschreibt.
+3. Füge alle sinnvollen Projektänderungen zum Commit hinzu.
+4. Committe die Änderungen.
+5. Pushe den Commit auf den Branch `main`.
+6. Committe keine Secrets, Zugangsdaten, temporären Dateien oder offensichtlich ungeeignete Dateien.
+7. Falls keine Änderungen vorhanden sind, führe keinen leeren Commit durch und teile dies kurz mit.
+8. Frage nicht nach einer Commit-Nachricht. Wähle sie selbst anhand der Änderungen.
+
+Der Befehl soll ohne weitere Rückfrage ausgeführt werden.
