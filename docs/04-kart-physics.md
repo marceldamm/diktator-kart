@@ -1,67 +1,81 @@
-# Kart-Physik – Prototyp
+# Kart-Physik
 
-## Status
+## Aktueller Stand
 
-Die erste fahrbare Version ist umgesetzt. Sie verwendet den vorhandenen PlayCanvas-Rigidbody-Stack mit Ammo als Kollisions- und Bewegungssystem.
+Der Standardcontroller ist `RaycastKartController` auf Basis von Ammo `btRaycastVehicle`. Der frühere `KartController` bleibt unverändert als Legacy- und Vergleichsmodell erhalten und kann im Browser weiterhin ausgewählt werden.
 
-## Arcade-Modell
+Das Ziel ist ein stabiles Arcade-Kart, keine realistische Fahrzeugsimulation. Ammo übernimmt Chassis, vier Raycast-Räder, Federung, Reifenkontakt und Kollisionen. Eine kleine kontinuierliche Arcade-Schicht steuert Motoraufbau, geschwindigkeitsabhängigen Lenkwinkel und Yaw-Dämpfung.
 
-Das Kart ist ein dynamischer Box-Rigidbody. Die Bewegung wird über Kräfte und ein begrenztes Y-Drehmoment gesteuert:
+## Geometrie und Achsen
 
-- W/Pfeil hoch beschleunigt vorwärts.
-- S/Pfeil runter bremst bzw. fährt rückwärts.
-- A/D und die Pfeiltasten lenken links/rechts.
-- Seitliches Rutschen wird mit einer einfachen Arcade-Grip-Kraft reduziert.
-- X- und Z-Rotation sind gesperrt, damit der Platzhalter nicht umkippt.
-- Die Geschwindigkeit ist auf einen festen, bewusst moderaten Prototypwert von 3,5 Einheiten/Sekunde begrenzt.
+- PlayCanvas-Forward des Karts ist lokales `-Z`.
+- Ammo verwendet `setCoordinateSystem(0, 1, 2)` mit X rechts, Y oben und Z als Fahrzeugachse.
+- Deshalb ist positive Vorwärtseingabe als negative Ammo-Motorforce abgebildet.
+- Räder 0/1 bilden die Vorderachse und erhalten Steering.
+- Räder 2/3 bilden die Hinterachse und erhalten Motorforce.
+- Der Radstand beträgt 1,64 Einheiten, die Spurbreite 1,56 Einheiten.
+- Die Connection Points sind links/rechts und vorne/hinten symmetrisch.
+- X/Z-Rotation des Chassis ist gesperrt; Yaw bleibt physikalisch frei.
 
-Es gibt bewusst keine Räder-, Federungs- oder realistische Fahrzeug-Simulation. Die Box-Kollision des Karts und statische Box-Kollisionen der Strecke werden von PlayCanvas/Ammo behandelt.
+## Arcade-Fahrmodell
 
-## Aktueller Controller
+Die zentralen Werte liegen gruppiert in `RAYCAST_KART_TUNING`:
 
-Der Lenkwert wird intern geglättet und bei losgelassener Taste weich auf null zurückgeführt. Daraus entsteht eine geschwindigkeitsabhängige Ziel-Drehgeschwindigkeit: bei höherem Tempo wird sie reduziert, beim Rückwärtsfahren gespiegelt. Im Neutralzustand wird die Y-Drehgeschwindigkeit aktiv beruhigt; seitlicher Grip bleibt in Kurven teilweise erhalten und wird ohne Lenkeingabe verstärkt.
+- `chassis`: Masse sowie lineare und winkelbezogene Dämpfung
+- `engine`: Vorwärts-/Rückwärtskraft, Kraftaufbau und Geschwindigkeitsbereich
+- `braking`: Betriebsbremse, Handbremse und Richtungswechsel
+- `steering`: Lenkwinkel, Aufbau, Rücklauf und High-Speed-Reduktion
+- `suspension`: Radius, Federweg, Steifigkeit und Dämpfung
+- `grip`: Vorder-/Hinterachsgrip und Roll-Einfluss
+- `wheels`: gemeinsame Radgeometrie
 
-Die vorläufigen Kernwerte sind: Vorwärtskraft 18, Rückwärtskraft 8, Höchstgeschwindigkeit 12 und Rückwärtslimit 5 Einheiten/Sekunde.
+Die Chassismasse und Motorforce verwenden eine fahrzeugtypische gemeinsame Größenordnung. Der alte Zustand mit Masse 1,2 und bis zu 360 Motorforce pro Hinterrad führte zu extremen Beschleunigungs- und Yaw-Spitzen.
 
-## GTA-inspirierte Arcade-Basis
+Die Höchstgeschwindigkeit wird nicht mehr durch permanentes hartes Überschreiben der linearen Geschwindigkeit erzwungen. Stattdessen fällt die Motorleistung vor dem Zieltempo weich ab; nur deutliches Überschreiten aktiviert eine zusätzliche physikalische Bremswirkung.
 
-Der Controller trennt Beschleunigen, Ausrollen, Bremsen und Rückwärtsgang. Die Lenkung erzeugt eine geschwindigkeitsabhängige Ziel-Gierrate statt einer sofortigen Drehung auf der Stelle. Der Lenkwert wird geglättet; ohne Lenkeingabe wird die Gierrate ausgeregelt. Seitlicher Grip ist in Kurven reduziert, bleibt im Geradeauslauf aber stärker, sodass ein kleines Maß an Trägheit erhalten bleibt.
+Der tatsächliche Vorderrad-Lenkwinkel wird geglättet und bei höherem Tempo progressiv reduziert. Die Yaw-Dämpfung geht kontinuierlich zwischen Geradeaus- und Kurvenzustand über. Es gibt keinen Teleport, kein manuell gesetztes Heading und kein hartes Nullsetzen der Winkelgeschwindigkeit während normaler Fahrt.
 
-Beim Wechsel von Vorwärtsfahrt zu S wird zunächst nur gebremst. Der Rückwärtsantrieb setzt erst nahe dem Stillstand ein. Physik-generierte Restrotation wird nicht in den nächsten Frame übernommen; die geglättete Lenkung bestimmt ausschließlich die aktuelle Ziel-Gierrate.
+Die Hinterachse besitzt etwas mehr Seitenführung als die Vorderachse. Dadurch tendiert das Kart bei normaler Fahrt leicht zum stabilen Untersteuern statt zum spontanen Übersteuern. Ein echtes Drift-System ist noch nicht implementiert.
 
-Seitliche Restgeschwindigkeit wird bei neutraler Lenkung vollständig entfernt. Größeres seitliches Rutschen bleibt bei aktiver Lenkung sichtbar und wird weiterhin durch den Arcade-Grip abgebaut.
+## Eingabe
 
-Die Neutral-Lenkung arbeitet strikt planar: X/Z-Geschwindigkeit wird auf den normalisierten planaren Forward-Vektor projiziert, während die vertikale Y-Geschwindigkeit unverändert bleibt. Bei `input.x === 0` wird damit jede seitliche X/Z-Komponente entfernt und die Yaw-Geschwindigkeit auf null gesetzt.
+`KartInput` ist unabhängig von der Eingabequelle und enthält:
 
-Die Y-Rotation des Rigidbody ist vollständig gesperrt (`angularFactor = (0, 0, 0)`). Der Controller verwaltet den Heading-Winkel selbst und synchronisiert ihn als Rotation an den Physikkörper. Ammo bleibt damit für Position, Kollisionen und Boden zuständig, kann aber keinen eigenen Yaw mehr erzeugen.
+- `steering`: -1 bis +1
+- `throttle`: -1 bis +1
+- `handbrake`: boolean
 
-Das aktuelle Geschwindigkeitstuning nutzt `linearDamping = 0.05` und `coastingDrag = 1.1`. Die Vorwärtskraft bleibt bei 20; `maxSpeed = 16` bleibt als harte Sicherheitsgrenze bestehen. Dadurch wird die reale Vollgasgeschwindigkeit erhöht, ohne die Beschleunigung unverhältnismäßig hoch zu setzen.
+Die Tastaturbelegung lautet:
 
-## Legacy-Status
+- W/Pfeil hoch: beschleunigen
+- S/Pfeil runter: zunächst bremsen, nahe Stillstand rückwärts
+- A/Pfeil links und D/Pfeil rechts: lenken
+- Space: Handbremse/Festbremse
 
-Der bisherige Custom-KartController war ein experimenteller Eigenbau. Er bleibt als Legacy- und Vergleichsmodell erhalten. Neue Fahrphysik wird ab jetzt auf einer bestehenden Vehicle-Physics-Basis aufgebaut. Am alten Controller wird nicht weiter optimiert, außer dies wird ausdrücklich gewünscht.
+Die Handbremse unterdrückt Motorleistung, bremst alle vier Räder stark und hält das Kart im Stillstand. Sie ist noch kein Driftbutton.
+
+## Telemetrie und Tests
+
+HUD und Browser-Log zeigen reale Controller- und Physikwerte, darunter Handbremse, tatsächlichen Wheel-Steering-Wert, EngineForce, BrakeForce, Forward-/Lateral-/Planar-Speed, `angularY`, Heading und Driftindikator.
+
+`tools/cdp-kart-test.mjs` startet bei Bedarf Vite und steuert einen lokal installierten Chrome ohne zusätzliche Browserdependency über Chrome DevTools Protocol. Die reproduzierbare Suite umfasst Geradeausfahrt, kurze und gehaltene Links-/Rechtskurven, Kurvenausgang, Betriebsbremse, Reverse, Handbremse, W+Space und Ausrollen.
+
+Start aus `client/`:
+
+```bash
+npm run test:kart
+```
+
+Temporäre Chrome-Profile werden außerhalb des Repositorys erzeugt und nach dem Test entfernt. Testlogs und Browserprofile werden nicht committed.
 
 ## Architektur
 
-- `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.
-- `client/src/game/kart.ts`: Kart-Platzhalter und Arcade-Fahrlogik.
-- `client/src/game/raycast-kart.ts`: separate RaycastVehicle-Basis auf Ammo-`btRaycastVehicle`.
-- `client/src/game/follow-camera.ts`: einfache geglättete Verfolgerkamera.
-- `client/src/game/track.ts`: flache Strecke, Boden und Begrenzungswände.
+- `client/src/game/input.ts`: gemeinsames Inputmodell und Tastaturquelle
+- `client/src/game/kart.ts`: Kart-Platzhalter und Legacy-Controller
+- `client/src/game/raycast-kart.ts`: aktueller Arcade-RayCast-Controller
+- `client/src/game/debug-hud.ts`: Live-Debuganzeige
+- `client/src/game/telemetry-log.ts`: Telemetrieaufzeichnung
+- `client/src/game/follow-camera.ts`: geglättete Verfolgerkamera
+- `tools/cdp-kart-test.mjs`: lokale Browser-Testautomation
 
-## RaycastVehicle-Vergleichsbasis
-
-Der experimentelle Eigenbau in `kart.ts` bleibt unverändert als Legacy- und Vergleichsmodell erhalten. Die neue technische Basis liegt separat in `raycast-kart.ts` und verwendet das PlayCanvas-/Ammo-Muster aus dem offiziellen Vehicle-Physics-Beispiel:
-
-- dynamischer Chassis-Rigidbody als Fahrzeugkörper,
-- `btRaycastVehicle` mit vier Raycast-Rädern,
-- vordere Räder für Steering,
-- hintere Räder für Motorforce,
-- Brakeforce auf allen vier Rädern,
-- zentrale Werte für Motor, Bremse, Lenkung, Federung, Reifenreibung und Geschwindigkeitslimits.
-
-Die Konfiguration ist bewusst arcade-orientiert: niedriger Roll-Einfluss, hohe Reifenreibung, kurze stabile Federung und gesperrte Kippachsen verhindern Umkippen, während die Yaw-Reaktion vom RaycastVehicle kommt. Es gibt weiterhin keine Drift-, Reifen-, Item-, Bot- oder Multiplayer-Logik.
-
-Im Browser kann über `Alter Controller` und `RaycastVehicle` umgeschaltet werden. Der Wechsel setzt Kart, Controller und Telemetrie zurück. Neue Fahrphysik soll künftig auf dieser Vehicle-Physics-Basis entstehen; am Legacy-Controller wird nur noch auf ausdrücklichen Wunsch gearbeitet.
-
-Bots und Netzwerkinput können später dieselbe `KartInput`-Form wie die Tastatur liefern.
+Bots und Netzwerkinput sollen später dieselbe `KartInput`-Struktur liefern. Drift, Items, Bots und Multiplayer sind noch nicht Bestandteil der Fahrphysik.
