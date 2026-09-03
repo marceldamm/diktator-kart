@@ -150,7 +150,9 @@ export class RaycastKartController {
 
         this.active = active;
         const angularFactor = new Vec3(0, active ? 1 : 0, 0);
-        this.kart.rigidbody?.angularFactor.copy(angularFactor);
+        // Assign through the component setter so the value reaches Ammo.
+        // Mutating the getter with .copy() only changed PlayCanvas' cached Vec3.
+        if (this.kart.rigidbody) this.kart.rigidbody.angularFactor = angularFactor;
 
         if (active) {
             (this.app.systems.rigidbody!.dynamicsWorld as { addAction(action: AmmoVehicle): void }).addAction(this.vehicle);
