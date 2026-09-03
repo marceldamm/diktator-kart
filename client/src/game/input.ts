@@ -1,6 +1,8 @@
-import { Vec2 } from 'playcanvas';
-
-export type KartInput = Readonly<Vec2>;
+export type KartInput = Readonly<{
+    steering: number;
+    throttle: number;
+    handbrake: boolean;
+}>;
 
 /** Keyboard input kept separate so bots and network input can replace it later. */
 export class KeyboardInput {
@@ -9,7 +11,9 @@ export class KeyboardInput {
     constructor() {
         window.addEventListener('keydown', (event) => {
             if (
-                ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD'].includes(event.code)
+                ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 'Space'].includes(
+                    event.code
+                )
             ) {
                 event.preventDefault();
                 this.keys.add(event.code);
@@ -26,6 +30,10 @@ export class KeyboardInput {
         const steering =
             Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft')) -
             Number(this.keys.has('KeyD') || this.keys.has('ArrowRight'));
-        return new Vec2(steering, throttle);
+        return {
+            steering,
+            throttle,
+            handbrake: this.keys.has('Space')
+        };
     }
 }

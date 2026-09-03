@@ -18,8 +18,11 @@ type TelemetrySample = {
     headingDelta: number;
     inputX: number;
     inputY: number;
+    handbrake: boolean;
     steering: number;
-    targetYaw: number;
+    wheelSteering: number;
+    engineForce: number;
+    brakeForce: number;
     angularY: number;
     velocityX: number;
     velocityY: number;
@@ -27,6 +30,7 @@ type TelemetrySample = {
     forwardSpeed: number;
     lateralSpeed: number;
     totalSpeed: number;
+    planarSpeed: number;
     movementAngle: number;
     headingVsMovement: number;
     distanceFromCenterLine: number;
@@ -127,7 +131,7 @@ export class TelemetryLog {
         const position = kart.getPosition();
         const velocity = body.linearVelocity;
         const heading = headingFromForward(kart.forward);
-        const movementAngle = snapshot.totalSpeed > 0.001 ? Math.atan2(-velocity.x, -velocity.z) * degrees : heading;
+        const movementAngle = snapshot.planarSpeed > 0.001 ? Math.atan2(-velocity.x, -velocity.z) * degrees : heading;
         const displacement = position.clone().sub(this.startPosition);
         this.samples.push({
             t: this.elapsed,
@@ -137,10 +141,13 @@ export class TelemetryLog {
             positionZ: position.z,
             heading,
             headingDelta: wrapDegrees(heading - this.startHeading),
-            inputX: input.x,
-            inputY: input.y,
+            inputX: input.steering,
+            inputY: input.throttle,
+            handbrake: input.handbrake,
             steering: snapshot.steering,
-            targetYaw: snapshot.targetYawSpeed,
+            wheelSteering: snapshot.wheelSteering,
+            engineForce: snapshot.engineForce,
+            brakeForce: snapshot.brakeForce,
             angularY: body.angularVelocity.y,
             velocityX: velocity.x,
             velocityY: velocity.y,
@@ -148,6 +155,7 @@ export class TelemetryLog {
             forwardSpeed: snapshot.forwardSpeed,
             lateralSpeed: snapshot.lateralSpeed,
             totalSpeed: snapshot.totalSpeed,
+            planarSpeed: snapshot.planarSpeed,
             movementAngle,
             headingVsMovement: wrapDegrees(movementAngle - heading),
             distanceFromCenterLine: displacement.dot(this.startRight),
@@ -165,13 +173,17 @@ export class TelemetryLog {
             `headingDelta=${number(sample.headingDelta)}`,
             `inputX=${number(sample.inputX)}`,
             `inputY=${number(sample.inputY)}`,
+            `handbrake=${sample.handbrake ? 'YES' : 'NO'}`,
             `steering=${number(sample.steering)}`,
-            `targetYaw=${number(sample.targetYaw)}`,
+            `wheelSteering=${number(sample.wheelSteering)}`,
+            `engineForce=${number(sample.engineForce)}`,
+            `brakeForce=${number(sample.brakeForce)}`,
             `angularY=${number(sample.angularY)}`,
             `vel=(${number(sample.velocityX)},${number(sample.velocityZ)})`,
             `forwardSpeed=${number(sample.forwardSpeed)}`,
             `lateralSpeed=${number(sample.lateralSpeed)}`,
             `totalSpeed=${number(sample.totalSpeed)}`,
+            `planarSpeed=${number(sample.planarSpeed)}`,
             `movementAngle=${number(sample.movementAngle)}`,
             `headingVsMovement=${number(sample.headingVsMovement)}`,
             `centerOffset=${number(sample.distanceFromCenterLine)}`,

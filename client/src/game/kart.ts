@@ -24,13 +24,17 @@ export const KART_TUNING = {
 export type KartDebugSnapshot = {
     inputX: number;
     inputY: number;
+    inputHandbrake: boolean;
     steering: number;
+    wheelSteering: number;
+    engineForce: number;
+    brakeForce: number;
     forwardSpeed: number;
     lateralSpeed: number;
+    planarSpeed: number;
     totalSpeed: number;
     yawSpeed: number;
     vehicleTurn: number;
-    targetYawSpeed: number;
     driftActive: boolean;
     driftAmount: number;
 };
@@ -69,7 +73,7 @@ export const createKart = (root: Entity) => {
     addVisualBox(kart, 'nose', new Vec3(0, 0.25, -0.78), new Vec3(1.05, 0.2, 0.55), trim);
     addVisualBox(kart, 'seat', new Vec3(0, 0.4, 0.3), new Vec3(0.72, 0.45, 0.65), tire);
     for (const x of [-0.78, 0.78]) {
-        for (const z of [-0.62, 0.62])
+        for (const z of [-0.82, 0.82])
             addVisualBox(kart, `wheel-${x}-${z}`, new Vec3(x, -0.18, z), new Vec3(0.22, 0.4, 0.48), tire);
     }
 
@@ -98,12 +102,10 @@ export const resetKart = (kart: Entity) => {
 
 export class KartController {
     private steering = 0;
-    private targetYawSpeed = 0;
     private heading = START_YAW;
 
     reset() {
         this.steering = 0;
-        this.targetYawSpeed = 0;
         this.heading = START_YAW;
     }
 
@@ -120,15 +122,19 @@ export class KartController {
         const vehicleTurn = new Vec3().cross(new Vec3(0, yawSpeed, 0), forwardPlanar).dot(rightPlanar);
         const drift = getDriftTelemetry(forwardSpeed, planarVelocity.dot(rightPlanar));
         return {
-            inputX: input.x,
-            inputY: input.y,
+            inputX: input.steering,
+            inputY: input.throttle,
+            inputHandbrake: input.handbrake,
             steering: this.steering,
+            wheelSteering: this.steering,
+            engineForce: 0,
+            brakeForce: 0,
             forwardSpeed,
             lateralSpeed: planarVelocity.dot(rightPlanar),
+            planarSpeed: planarVelocity.length(),
             totalSpeed: velocity.length(),
             yawSpeed,
             vehicleTurn,
-            targetYawSpeed: this.targetYawSpeed,
             driftActive: drift.active,
             driftAmount: drift.amount
         };
@@ -146,26 +152,26 @@ export class KartController {
         const velocity = body.linearVelocity.clone();
         const planarVelocity = new Vec3(velocity.x, 0, velocity.z);
         const forwardSpeed = planarVelocity.dot(forwardPlanar);
-        const steeringResponse = input.x === 0 ? KART_TUNING.steeringReturn : KART_TUNING.steeringResponse;
-        this.steering += (input.x - this.steering) * Math.min(1, steeringResponse * dt);
+        const steeringResponse = input.steering === 0 ? KART_TUNING.steeringReturn : KART_TUNING.steeringResponse;
+        this.steering += (input.steering - this.steering) * Math.min(1, steeringResponse * dt);
         if (Math.abs(this.steering) < 0.005) this.steering = 0;
 
         // Throttle, coasting and braking/reverse are deliberately separate.
-        if (input.y > 0) {
-            body.applyForce(forwardPlanar.clone().mulScalar(KART_TUNING.forwardForce * input.y));
-        } else if (input.y < 0 && forwardSpeed > 0.08) {
+        if (input.throttle > 0) {
+            body.applyForce(forwardPlanar.clone().mulScalar(KART_TUNING.forwardForce * input.throttle));
+        } else if (input.throttle < 0 && forwardSpeed > 0.08) {
             const brakeDirection = planarVelocity.length() > 0.01 ? planarVelocity.normalize() : forwardPlanar;
             const brakeScale = Math.min(1, forwardSpeed / 2);
             body.applyForce(brakeDirection.mulScalar(-KART_TUNING.brakeForce * brakeScale));
-        } else if (input.y < 0) {
-            body.applyForce(forwardPlanar.clone().mulScalar(KART_TUNING.reverseForce * input.y));
+        } else if (input.throttle < 0) {
+            body.applyForce(forwardPlanar.clone().mulScalar(KART_TUNING.reverseForce * input.throttle));
         }
         body.applyForce(planarVelocity.clone().mulScalar(-KART_TUNING.coastingDrag));
 
         // Keep all ground movement strictly planar. Y is gravity/bounce and must
         // never be treated as lateral drift.
         const lateral = planarVelocity.clone().sub(forwardPlanar.clone().mulScalar(forwardSpeed));
-        if (input.x === 0) {
+        if (input.steering === 0) {
             // Strong arcade rule: neutral steering means exactly forward/backward.
             const straightVelocity = forwardPlanar.clone().mulScalar(forwardSpeed);
             body.linearVelocity = new Vec3(straightVelocity.x, velocity.y, straightVelocity.z);
@@ -182,7 +188,6 @@ export class KartController {
             1 - KART_TUNING.highSpeedSteeringReduction * Math.min(1, Math.abs(forwardSpeed) / KART_TUNING.maxSpeed);
         const targetYawSpeed =
             this.steering * KART_TUNING.maxYawSpeed * lowSpeedFactor * highSpeedFactor * movementDirection;
-        this.targetYawSpeed = targetYawSpeed;
         this.heading += targetYawSpeed * dt * (180 / Math.PI);
         // Keep angular velocity locked even while the controller changes heading.
         body.angularVelocity = new Vec3(0, 0, 0);

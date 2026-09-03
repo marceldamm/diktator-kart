@@ -41,7 +41,7 @@ document.body.insertAdjacentHTML(
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD oder Pfeiltasten zum Fahren</p><button id="reset-kart" type="button">Kart zurücksetzen</button></section></div>'
+    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD/Pfeiltasten zum Fahren &middot; Space = Handbremse</p><button id="reset-kart" type="button">Kart zur&uuml;cksetzen</button></section></div>'
 );
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
@@ -77,7 +77,7 @@ const telemetryLog = document.getElementById('telemetry-log')!;
 const telemetryStatus = document.getElementById('telemetry-status')!;
 const vehicleModeStatus = document.createElement('span');
 vehicleModeStatus.id = 'vehicle-mode-status';
-vehicleModeStatus.textContent = 'Eigenbau';
+vehicleModeStatus.textContent = 'RaycastVehicle';
 const raycastButton = document.createElement('button');
 raycastButton.type = 'button';
 raycastButton.textContent = 'RaycastVehicle';
