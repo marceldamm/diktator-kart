@@ -36,7 +36,6 @@ export const createTestTrack = (root: Entity) => {
     const asphalt = makeMaterial(new Color(0.13, 0.16, 0.19));
     const wall = makeMaterial(new Color(0.75, 0.16, 0.08));
     const curb = makeMaterial(new Color(0.95, 0.8, 0.22));
-    const marking = makeMaterial(new Color(0.75, 0.9, 0.95), 0.5);
     const accent = makeMaterial(new Color(0.1, 0.8, 0.72), 0.5);
     const grid = makeMaterial(new Color(0.2, 0.27, 0.32), 0.25);
 
@@ -52,10 +51,6 @@ export const createTestTrack = (root: Entity) => {
     addStaticBox(track, 'south-curb', new Vec3(0, 0.08, 23.5), new Vec3(66, 0.16, 0.35), curb);
 
     // Visual-only markings provide orientation without adding more collision shapes.
-    for (let z = -20; z <= 20; z += 4) {
-        addVisualBox(track, `center-dash-${z}`, new Vec3(0, 0.025, z), new Vec3(0.28, 0.05, 2), marking);
-    }
-    addVisualBox(track, 'start-line', new Vec3(0, 0.03, 7), new Vec3(20, 0.06, 0.35), marking);
     addVisualBox(track, 'start-accent-left', new Vec3(-11, 0.025, 7), new Vec3(2, 0.05, 0.25), accent);
     addVisualBox(track, 'start-accent-right', new Vec3(11, 0.025, 7), new Vec3(2, 0.05, 0.25), accent);
 

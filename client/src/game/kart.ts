@@ -19,6 +19,17 @@ export const KART_TUNING = {
     highSpeedSteeringReduction: 0.45
 } as const;
 
+export type KartDebugSnapshot = {
+    inputX: number;
+    inputY: number;
+    steering: number;
+    forwardSpeed: number;
+    lateralSpeed: number;
+    totalSpeed: number;
+    yawSpeed: number;
+    targetYawSpeed: number;
+};
+
 const material = (color: Color) => {
     const result = new StandardMaterial();
     result.diffuse = color;
@@ -71,9 +82,29 @@ export const resetKart = (kart: Entity) => {
 
 export class KartController {
     private steering = 0;
+    private targetYawSpeed = 0;
 
     reset() {
         this.steering = 0;
+        this.targetYawSpeed = 0;
+    }
+
+    getDebugSnapshot(kart: Entity, input: KartInput): KartDebugSnapshot {
+        const body = kart.rigidbody;
+        const forward = kart.forward.clone();
+        const velocity = body?.linearVelocity.clone() ?? new Vec3();
+        const forwardSpeed = velocity.dot(forward);
+        const lateral = velocity.clone().sub(forward.clone().mulScalar(forwardSpeed));
+        return {
+            inputX: input.x,
+            inputY: input.y,
+            steering: this.steering,
+            forwardSpeed,
+            lateralSpeed: lateral.length(),
+            totalSpeed: velocity.length(),
+            yawSpeed: body?.angularVelocity.y ?? 0,
+            targetYawSpeed: this.targetYawSpeed
+        };
     }
 
     update(kart: Entity, input: KartInput, dt: number) {
@@ -112,6 +143,7 @@ export class KartController {
             1 - KART_TUNING.highSpeedSteeringReduction * Math.min(1, Math.abs(forwardSpeed) / KART_TUNING.maxSpeed);
         const targetYawSpeed =
             this.steering * KART_TUNING.maxYawSpeed * lowSpeedFactor * highSpeedFactor * movementDirection;
+        this.targetYawSpeed = targetYawSpeed;
         // Steering smoothing already supplies the transition. Do not carry
         // physics-generated yaw into the next frame, especially in neutral.
         body.angularVelocity = new Vec3(0, targetYawSpeed, 0);

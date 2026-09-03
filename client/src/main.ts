@@ -15,6 +15,7 @@ import {
     createGraphicsDevice
 } from 'playcanvas';
 
+import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { KeyboardInput } from './game/input';
 import { createKart, driveKart, KartController, resetKart } from './game/kart';
@@ -60,6 +61,7 @@ createTestTrack(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
+const debugHud = new DebugHud();
 document.getElementById('reset-kart')!.addEventListener('click', () => {
     resetKart(kart);
     controller.reset();
@@ -84,7 +86,9 @@ light.setEulerAngles(45, 35, 0);
 app.root.addChild(light);
 
 app.on('update', (dt: number) => {
-    driveKart(controller, kart, input.read(), dt);
+    const kartInput = input.read();
+    driveKart(controller, kart, kartInput, dt);
+    debugHud.update(controller.getDebugSnapshot(kart, kartInput));
     followCamera.update(camera, kart, dt);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

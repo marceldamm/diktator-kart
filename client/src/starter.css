@@ -102,3 +102,106 @@ button:disabled {
     translate: -50% -50%;
     box-shadow: 0 0 4px #000;
 }
+
+.debug-hud {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 20;
+    width: 264px;
+    padding: 10px 12px;
+    border: 1px solid #ffffff2b;
+    border-radius: 8px;
+    background: #071018e8;
+    box-shadow: 0 8px 24px #0007;
+    color: #dce9ef;
+    font:
+        11px/1.3 ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+    pointer-events: none;
+}
+
+.debug-hud.is-hidden {
+    display: none;
+}
+
+.debug-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+    color: #71e5d1;
+    font-weight: 700;
+}
+
+.debug-title span {
+    color: #82939c;
+    font-weight: 400;
+}
+
+.debug-section {
+    display: grid;
+    gap: 2px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #ffffff1c;
+}
+
+.debug-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.debug-row output {
+    color: #f4c96b;
+}
+
+.debug-label {
+    margin-top: 7px;
+    color: #9fb3bc;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
+
+.debug-label small {
+    display: block;
+    color: #71858f;
+    font-size: 9px;
+    letter-spacing: 0;
+}
+
+.debug-bar {
+    position: relative;
+    height: 7px;
+    margin-top: 3px;
+    overflow: hidden;
+    border: 1px solid #ffffff35;
+    border-radius: 5px;
+    background: #17252d;
+}
+
+.debug-bar i,
+.debug-bar b {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: block;
+}
+
+.debug-bar i {
+    width: 1px;
+    background: #dce9ef;
+    box-shadow: 0 0 3px #fff;
+}
+
+.debug-bar b {
+    width: 5px;
+    border-radius: 3px;
+    background: #71e5d1;
+    transform: translateX(-50%);
+}
+
+.debug-bar.is-negative b {
+    background: #ee9b75;
+}

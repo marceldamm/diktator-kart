@@ -53,17 +53,18 @@ Beispiel:
 
 Funktionsfähigkeit geht vor Perfektion.
 
-## Stand sichern
+## Routinebefehl „push“
 
-Wenn der Benutzer den Befehl **„push“** gibt:
+Wenn der Benutzer den Befehl **„push“** gibt, ist dies ein schneller, sparsamer Checkpoint-Vorgang:
 
-1. Prüfe den aktuellen Git-Status und die vorhandenen Änderungen.
-2. Erstelle selbstständig eine kurze, passende Commit-Nachricht, die die wesentlichen Änderungen beschreibt.
-3. Füge alle sinnvollen Projektänderungen zum Commit hinzu.
-4. Committe die Änderungen.
-5. Pushe den Commit auf den Branch `main`.
-6. Committe keine Secrets, Zugangsdaten, temporären Dateien oder offensichtlich ungeeignete Dateien.
-7. Falls keine Änderungen vorhanden sind, führe keinen leeren Commit durch und teile dies kurz mit.
-8. Frage nicht nach einer Commit-Nachricht. Wähle sie selbst anhand der Änderungen.
+1. Git-Status kurz prüfen.
+2. Änderungen nur so weit prüfen, wie es für eine sinnvolle kurze Commit-Nachricht nötig ist.
+3. Keine ausführliche Codeanalyse, unnötigen Prüfungen oder erneute Dokumentationslektüre durchführen, sofern sie für den Commit nicht erforderlich sind.
+4. Selbstständig eine kurze Commit-Nachricht wählen.
+5. Sinnvolle Projektänderungen stagen und committen.
+6. Direkt auf den Branch `main` pushen.
+7. Keine Rückfragen stellen.
+8. Danach nur Commit-Titel und Push-Ergebnis kurz mitteilen.
+9. Falls nichts geändert wurde, dies kurz mitteilen und nichts weiter tun.
 
-Der Befehl soll ohne weitere Rückfrage ausgeführt werden.
+Secrets, Zugangsdaten, temporäre Dateien und offensichtlich ungeeignete Dateien dürfen nicht committed werden.

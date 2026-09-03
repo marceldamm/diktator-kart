@@ -18,7 +18,7 @@ Boden und Wände besitzen PlayCanvas-Kollisionen. Es gibt noch kein Rundensystem
 
 Die Testfläche wurde auf 72 × 52 Einheiten vergrößert; die vier Wände und die beiden Randmarkierungen wurden entsprechend nach außen versetzt.
 
-Zur Orientierung gibt es zusätzlich eine gestrichelte Mittellinie, eine Startlinie und zwei farbige Startmarkierungen. Diese Elemente sind rein visuell und besitzen keine Kollision.
+Zur Orientierung gibt es zwei farbige Startmarkierungen. Diese Elemente sind rein visuell und besitzen keine Kollision.
 
 Die große Testfläche besitzt außerdem ein dezentes Raster aus visuellen Linien, damit Bewegung und Kurven auch ohne die Wände besser eingeschätzt werden können.
 
