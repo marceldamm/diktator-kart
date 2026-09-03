@@ -4,6 +4,7 @@ import type { AppBase, Entity } from 'playcanvas';
 import type { KartInput } from './input';
 import { getDriftTelemetry } from './kart';
 import type { KartDebugSnapshot } from './kart';
+import { RACE_LAYOUT } from './race-layout';
 
 type AmmoVector3 = { setValue(x: number, y: number, z: number): void; x(): number; y(): number; z(): number };
 type AmmoQuaternion = { x(): number; y(): number; z(): number; w(): number };
@@ -80,11 +81,22 @@ export const RAYCAST_KART_TUNING = {
         damping: 2.3
     },
     grip: { front: 12, rear: 15, rollInfluence: 0.05 },
+    drift: {
+        minSpeed: 5,
+        frontGrip: 10,
+        rearGrip: 5.5,
+        steeringMultiplier: 1.16,
+        blendInRate: 7,
+        blendOutRate: 5,
+        angularDamping: 0.22,
+        minimumDurationForBoost: 0.7,
+        boostDuration: 0.55,
+        boostForce: 260
+    },
+    hop: { impulse: 270, cooldown: 0.28, groundHeight: 0.85, driftWindow: 0.5 },
     wheels: { connectionY: -0.15 }
 } as const;
 
-const START_POSITION = new Vec3(-330, 0.65, 0);
-const START_YAW = -90;
 const LEGACY_ANGULAR_DAMPING = 0.8;
 const clamp = (value: number, min: number, max: number): number => Math.max(min, Math.min(max, value));
 const lerp = (from: number, to: number, amount: number): number => from + (to - from) * clamp(amount, 0, 1);
@@ -102,6 +114,7 @@ export class RaycastKartController {
     private readonly app: AppBase;
     private readonly kart: Entity;
     private readonly wheelEntities: Entity[];
+    private readonly wheelInfos: AmmoWheelInfo[] = [];
     private readonly body: NonNullable<Entity['rigidbody']>['body'];
     private readonly vehicle: AmmoVehicle;
     private active = false;
@@ -109,6 +122,13 @@ export class RaycastKartController {
     private wheelSteering = 0;
     private engineForce = 0;
     private brakeForce = 0;
+    private hopCooldown = 0;
+    private driftWindow = 0;
+    private driftDuration = 0;
+    private driftBlend = 0;
+    private drifting = false;
+    private boostTimer = 0;
+    private hopActive = false;
 
     constructor(kart: Entity, app: AppBase) {
         this.kart = kart;
@@ -147,6 +167,7 @@ export class RaycastKartController {
             wheelInfo.set_m_wheelsDampingRelaxation(RAYCAST_KART_TUNING.suspension.damping);
             wheelInfo.set_m_frictionSlip(isFront ? RAYCAST_KART_TUNING.grip.front : RAYCAST_KART_TUNING.grip.rear);
             wheelInfo.set_m_rollInfluence(RAYCAST_KART_TUNING.grip.rollInfluence);
+            this.wheelInfos.push(wheelInfo);
         });
         Ammo.destroy(connection);
         Ammo.destroy(direction);
@@ -177,7 +198,7 @@ export class RaycastKartController {
     reset(): void {
         this.resetControlState();
         this.vehicle.resetSuspension?.();
-        this.kart.rigidbody?.teleport(START_POSITION, new Vec3(0, START_YAW, 0));
+        this.kart.rigidbody?.teleport(RACE_LAYOUT.startPosition, new Vec3(0, RACE_LAYOUT.startYaw, 0));
         if (this.kart.rigidbody) {
             this.kart.rigidbody.linearVelocity = Vec3.ZERO;
             this.kart.rigidbody.angularVelocity = Vec3.ZERO;
@@ -192,6 +213,7 @@ export class RaycastKartController {
         const forwardSpeed = velocity.x() * forward.x + velocity.z() * forward.z;
         const planarSpeed = Math.sqrt(velocity.x() ** 2 + velocity.z() ** 2);
         const speedRatio = clamp(Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.engine.maxSpeed, 0, 1);
+        this.updateHopAndDrift(input, planarSpeed, dt);
         this.updateSteering(input.steering, speedRatio, dt);
         this.updateAngularDamping(speedRatio);
         this.updateDrive(input, forwardSpeed, planarSpeed, dt);
@@ -216,7 +238,8 @@ export class RaycastKartController {
             planarSpeed,
             inputY: input.throttle,
             inputX: input.steering,
-            inputHandbrake: input.handbrake,
+            inputHop: input.hop,
+            inputDrift: input.drift,
             steering: this.steering,
             wheelSteering: this.wheelSteering,
             engineForce: this.engineForce,
@@ -225,8 +248,10 @@ export class RaycastKartController {
             vehicleTurn: angularY,
             forwardSpeed,
             lateralSpeed,
-            driftActive: drift.active,
-            driftAmount: drift.amount
+            driftActive: this.drifting,
+            driftAmount: this.drifting ? Math.max(drift.amount, this.driftBlend) : drift.amount,
+            hopActive: this.hopActive,
+            boostActive: this.boostTimer > 0
         };
     }
 
@@ -237,7 +262,8 @@ export class RaycastKartController {
         this.steering += (target - this.steering) * (1 - Math.exp(-rate * dt));
         if (Math.abs(this.steering) < 0.0001) this.steering = 0;
         const speedScale = 1 - RAYCAST_KART_TUNING.steering.highSpeedReduction * smoothStep(0.2, 1, speedRatio);
-        this.wheelSteering = this.steering * speedScale;
+        this.wheelSteering =
+            this.steering * speedScale * lerp(1, RAYCAST_KART_TUNING.drift.steeringMultiplier, this.driftBlend);
     }
 
     private updateAngularDamping(speedRatio: number): void {
@@ -253,6 +279,11 @@ export class RaycastKartController {
             RAYCAST_KART_TUNING.chassis.cornerAngularDamping,
             steeringActivity
         );
+        this.kart.rigidbody.angularDamping = lerp(
+            this.kart.rigidbody.angularDamping,
+            RAYCAST_KART_TUNING.drift.angularDamping,
+            this.driftBlend
+        );
     }
 
     private updateDrive(input: KartInput, forwardSpeed: number, planarSpeed: number, dt: number): void {
@@ -260,9 +291,7 @@ export class RaycastKartController {
         const directionThreshold = RAYCAST_KART_TUNING.braking.directionChangeSpeed;
         let targetEngineForce = 0;
         let targetBrakeForce = 0;
-        if (input.handbrake) {
-            targetBrakeForce = RAYCAST_KART_TUNING.braking.handbrakeForce;
-        } else if (throttle > 0 && forwardSpeed < -directionThreshold) {
+        if (throttle > 0 && forwardSpeed < -directionThreshold) {
             targetBrakeForce = RAYCAST_KART_TUNING.braking.serviceForce * throttle;
         } else if (throttle < 0 && forwardSpeed > directionThreshold) {
             targetBrakeForce = RAYCAST_KART_TUNING.braking.serviceForce * -throttle;
@@ -285,9 +314,10 @@ export class RaycastKartController {
                 );
             targetEngineForce = RAYCAST_KART_TUNING.engine.reverseForce * -throttle * power;
         }
-        if (!input.handbrake && planarSpeed > RAYCAST_KART_TUNING.engine.maxSpeed * 1.03) {
+        if (planarSpeed > RAYCAST_KART_TUNING.engine.maxSpeed * 1.03) {
             targetBrakeForce = Math.max(targetBrakeForce, RAYCAST_KART_TUNING.braking.overspeedForce);
         }
+        if (this.boostTimer > 0 && throttle > 0) targetEngineForce -= RAYCAST_KART_TUNING.drift.boostForce;
         const forceRate =
             Math.abs(targetEngineForce) > Math.abs(this.engineForce)
                 ? RAYCAST_KART_TUNING.engine.forceRiseRate
@@ -320,10 +350,62 @@ export class RaycastKartController {
         this.wheelSteering = 0;
         this.engineForce = 0;
         this.brakeForce = 0;
+        this.hopCooldown = 0;
+        this.driftWindow = 0;
+        this.driftDuration = 0;
+        this.driftBlend = 0;
+        this.drifting = false;
+        this.boostTimer = 0;
+        this.hopActive = false;
         if (this.kart.rigidbody) {
             this.kart.rigidbody.linearVelocity = Vec3.ZERO;
             this.kart.rigidbody.angularVelocity = Vec3.ZERO;
         }
+    }
+
+    private updateHopAndDrift(input: KartInput, planarSpeed: number, dt: number): void {
+        this.hopCooldown = Math.max(0, this.hopCooldown - dt);
+        this.driftWindow = Math.max(0, this.driftWindow - dt);
+        this.boostTimer = Math.max(0, this.boostTimer - dt);
+        const position = this.kart.getPosition();
+        const verticalSpeed = this.body.getLinearVelocity().y();
+        const grounded = position.y <= RAYCAST_KART_TUNING.hop.groundHeight && verticalSpeed <= 0.35;
+        this.hopActive = !grounded && verticalSpeed > -0.5;
+        if (input.hop && grounded && this.hopCooldown === 0) {
+            this.kart.rigidbody?.applyImpulse(0, RAYCAST_KART_TUNING.hop.impulse, 0);
+            this.hopCooldown = RAYCAST_KART_TUNING.hop.cooldown;
+            this.driftWindow = RAYCAST_KART_TUNING.hop.driftWindow;
+        }
+
+        const canStartDrift =
+            input.drift &&
+            Math.abs(input.steering) > 0.1 &&
+            planarSpeed >= RAYCAST_KART_TUNING.drift.minSpeed &&
+            this.driftWindow > 0;
+        if (canStartDrift) this.drifting = true;
+        if (this.drifting && (!input.drift || planarSpeed < RAYCAST_KART_TUNING.drift.minSpeed * 0.55)) {
+            if (this.driftDuration >= RAYCAST_KART_TUNING.drift.minimumDurationForBoost) {
+                this.boostTimer = RAYCAST_KART_TUNING.drift.boostDuration;
+            }
+            this.drifting = false;
+            this.driftDuration = 0;
+        }
+        if (this.drifting) this.driftDuration += dt;
+        const targetBlend = this.drifting ? 1 : 0;
+        const blendRate = this.drifting
+            ? RAYCAST_KART_TUNING.drift.blendInRate
+            : RAYCAST_KART_TUNING.drift.blendOutRate;
+        this.driftBlend += (targetBlend - this.driftBlend) * (1 - Math.exp(-blendRate * dt));
+        if (this.driftBlend < 0.001) this.driftBlend = 0;
+        this.updateWheelGrip();
+    }
+
+    private updateWheelGrip(): void {
+        this.wheelInfos.forEach((wheelInfo, index) => {
+            const normalGrip = index < 2 ? RAYCAST_KART_TUNING.grip.front : RAYCAST_KART_TUNING.grip.rear;
+            const driftGrip = index < 2 ? RAYCAST_KART_TUNING.drift.frontGrip : RAYCAST_KART_TUNING.drift.rearGrip;
+            wheelInfo.set_m_frictionSlip(lerp(normalGrip, driftGrip, this.driftBlend));
+        });
     }
 
     private findWheelEntities(): Entity[] {

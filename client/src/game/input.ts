@@ -1,12 +1,16 @@
 export type KartInput = Readonly<{
     steering: number;
     throttle: number;
-    handbrake: boolean;
+    /** One-frame press event. A controller decides whether a hop is possible. */
+    hop: boolean;
+    /** Held while Space is down; used to hold an already initiated drift. */
+    drift: boolean;
 }>;
 
 /** Keyboard input kept separate so bots and network input can replace it later. */
 export class KeyboardInput {
     private readonly keys = new Set<string>();
+    private hopQueued = false;
 
     constructor() {
         window.addEventListener('keydown', (event) => {
@@ -16,6 +20,7 @@ export class KeyboardInput {
                 )
             ) {
                 event.preventDefault();
+                if (event.code === 'Space' && !event.repeat) this.hopQueued = true;
                 this.keys.add(event.code);
             }
         });
@@ -30,10 +35,13 @@ export class KeyboardInput {
         const steering =
             Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft')) -
             Number(this.keys.has('KeyD') || this.keys.has('ArrowRight'));
+        const hop = this.hopQueued;
+        this.hopQueued = false;
         return {
             steering,
             throttle,
-            handbrake: this.keys.has('Space')
+            hop,
+            drift: this.keys.has('Space')
         };
     }
 }

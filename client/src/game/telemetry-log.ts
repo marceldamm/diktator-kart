@@ -18,7 +18,11 @@ type TelemetrySample = {
     headingDelta: number;
     inputX: number;
     inputY: number;
-    handbrake: boolean;
+    hop: boolean;
+    driftInput: boolean;
+    driftActive: boolean;
+    hopActive: boolean;
+    boostActive: boolean;
     steering: number;
     wheelSteering: number;
     engineForce: number;
@@ -34,7 +38,6 @@ type TelemetrySample = {
     movementAngle: number;
     headingVsMovement: number;
     distanceFromCenterLine: number;
-    driftActive: boolean;
     driftAmount: number;
 };
 
@@ -143,7 +146,11 @@ export class TelemetryLog {
             headingDelta: wrapDegrees(heading - this.startHeading),
             inputX: input.steering,
             inputY: input.throttle,
-            handbrake: input.handbrake,
+            hop: input.hop,
+            driftInput: input.drift,
+            driftActive: snapshot.driftActive,
+            hopActive: snapshot.hopActive,
+            boostActive: snapshot.boostActive,
             steering: snapshot.steering,
             wheelSteering: snapshot.wheelSteering,
             engineForce: snapshot.engineForce,
@@ -159,7 +166,6 @@ export class TelemetryLog {
             movementAngle,
             headingVsMovement: wrapDegrees(movementAngle - heading),
             distanceFromCenterLine: displacement.dot(this.startRight),
-            driftActive: snapshot.driftActive,
             driftAmount: snapshot.driftAmount
         });
     }
@@ -169,11 +175,16 @@ export class TelemetryLog {
             `#${sample.sample}`,
             `t=${number(sample.t)}`,
             `pos=(${number(sample.positionX)},${number(sample.positionZ)})`,
+            `posY=${number(sample.positionY)}`,
             `heading=${number(sample.heading)}`,
             `headingDelta=${number(sample.headingDelta)}`,
             `inputX=${number(sample.inputX)}`,
             `inputY=${number(sample.inputY)}`,
-            `handbrake=${sample.handbrake ? 'YES' : 'NO'}`,
+            `hop=${sample.hop ? 'YES' : 'NO'}`,
+            `driftInput=${sample.driftInput ? 'YES' : 'NO'}`,
+            `drift=${sample.driftActive ? 'YES' : 'NO'}`,
+            `hopActive=${sample.hopActive ? 'YES' : 'NO'}`,
+            `boost=${sample.boostActive ? 'YES' : 'NO'}`,
             `steering=${number(sample.steering)}`,
             `wheelSteering=${number(sample.wheelSteering)}`,
             `engineForce=${number(sample.engineForce)}`,
@@ -187,7 +198,6 @@ export class TelemetryLog {
             `movementAngle=${number(sample.movementAngle)}`,
             `headingVsMovement=${number(sample.headingVsMovement)}`,
             `centerOffset=${number(sample.distanceFromCenterLine)}`,
-            `drift=${sample.driftActive ? 'YES' : 'NO'}`,
             `driftAmount=${number(sample.driftAmount)}`
         ].join(' | ');
     }

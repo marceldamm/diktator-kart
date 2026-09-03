@@ -32,11 +32,7 @@ if (!(await serverIsReady())) {
     ],
     { cwd: clientPath, stdio: "ignore" },
   );
-  for (
-    let attempt = 0;
-    attempt < 80 && !(await serverIsReady());
-    attempt += 1
-  )
+  for (let attempt = 0; attempt < 80 && !(await serverIsReady()); attempt += 1)
     await wait(100);
   if (!(await serverIsReady()))
     throw new Error("Vite development server did not start.");
@@ -146,11 +142,15 @@ const summarize = (name, text) => {
   const samples = lines.map((line) => ({
     t: parseNumber(line, "t"),
     inputX: parseNumber(line, "inputX"),
+    positionY: parseNumber(line, "posY"),
     headingDelta: parseNumber(line, "headingDelta"),
     angularY: parseNumber(line, "angularY"),
     forwardSpeed: parseNumber(line, "forwardSpeed"),
     lateralSpeed: parseNumber(line, "lateralSpeed"),
     centerOffset: parseNumber(line, "centerOffset"),
+    drift: line.includes("drift=YES"),
+    hopActive: line.includes("hopActive=YES"),
+    boost: line.includes("boost=YES"),
   }));
   const maximum = (field) =>
     Math.max(0, ...samples.map((sample) => Math.abs(sample[field])));
@@ -176,12 +176,20 @@ const summarize = (name, text) => {
     ),
     maxLateralSpeed: maximum("lateralSpeed"),
     maxCenterOffset: maximum("centerOffset"),
+    maxHeight: Math.max(0, ...samples.map((sample) => sample.positionY)),
+    driftSamples: samples.filter((sample) => sample.drift).length,
+    hopSamples: samples.filter((sample) => sample.hopActive).length,
+    boostSamples: samples.filter((sample) => sample.boost).length,
   };
 };
 
 const runTest = async (name, actions) => {
   await evaluate("document.getElementById('reset-kart').click()");
-  await wait(350);
+  // The playable race has a real 3-2-1 countdown. Start every physics case
+  // after it so tests still use the normal player input route.
+  // Headless Chrome can advance the PlayCanvas simulation a little below
+  // wall-clock rate, so leave a generous margin after the 3-2-1.
+  await wait(6000);
   await evaluate("document.getElementById('telemetry-start').click()");
   for (const action of actions) {
     if (action.key) await key(action.key, action.down);
@@ -258,19 +266,37 @@ try {
     await runTest("reverse", [{ key: "KeyS", down: true }, { wait: 2500 }]),
   );
   tests.push(
-    await runTest("handbrake", [
+    await runTest("hop", [
       { key: "KeyW", down: true },
-      { wait: 2500 },
-      { key: "KeyW", down: false },
+      { wait: 1500 },
       { key: "Space", down: true },
-      { wait: 2000 },
+      { wait: 120 },
+      { key: "Space", down: false },
+      { wait: 1200 },
     ]),
   );
   tests.push(
-    await runTest("throttle-handbrake", [
+    await runTest("drift-left", [
       { key: "KeyW", down: true },
+      { wait: 1500 },
       { key: "Space", down: true },
-      { wait: 2000 },
+      { key: "KeyA", down: true },
+      { wait: 1500 },
+      { key: "Space", down: false },
+      { key: "KeyA", down: false },
+      { wait: 1300 },
+    ]),
+  );
+  tests.push(
+    await runTest("drift-right", [
+      { key: "KeyW", down: true },
+      { wait: 1500 },
+      { key: "Space", down: true },
+      { key: "KeyD", down: true },
+      { wait: 1500 },
+      { key: "Space", down: false },
+      { key: "KeyD", down: false },
+      { wait: 1300 },
     ]),
   );
   tests.push(

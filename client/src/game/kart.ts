@@ -1,8 +1,9 @@
 import { Color, Entity, StandardMaterial, Vec3 } from 'playcanvas';
 
 import type { KartInput } from './input';
+import { RACE_LAYOUT } from './race-layout';
 
-const START_YAW = -90;
+const START_YAW = RACE_LAYOUT.startYaw;
 
 export const KART_TUNING = {
     forwardForce: 20,
@@ -24,7 +25,8 @@ export const KART_TUNING = {
 export type KartDebugSnapshot = {
     inputX: number;
     inputY: number;
-    inputHandbrake: boolean;
+    inputHop: boolean;
+    inputDrift: boolean;
     steering: number;
     wheelSteering: number;
     engineForce: number;
@@ -37,6 +39,8 @@ export type KartDebugSnapshot = {
     vehicleTurn: number;
     driftActive: boolean;
     driftAmount: number;
+    hopActive: boolean;
+    boostActive: boolean;
 };
 
 export const getDriftTelemetry = (forwardSpeed: number, lateralSpeed: number) => {
@@ -63,8 +67,8 @@ const addVisualBox = (root: Entity, name: string, position: Vec3, scale: Vec3, b
 
 export const createKart = (root: Entity) => {
     const kart = new Entity('player-kart');
-    kart.setPosition(-330, 0.65, 0);
-    kart.setEulerAngles(0, -90, 0);
+    kart.setPosition(RACE_LAYOUT.startPosition);
+    kart.setEulerAngles(0, RACE_LAYOUT.startYaw, 0);
 
     const body = material(new Color(0.12, 0.36, 0.82));
     const trim = material(new Color(0.95, 0.75, 0.12));
@@ -91,12 +95,19 @@ export const resetKart = (kart: Entity) => {
     if (kart.rigidbody) {
         // Dynamic Ammo bodies must be teleported through the physics component;
         // otherwise the next simulation step can restore the old transform.
-        kart.rigidbody.teleport(-330, 0.65, 0, 0, -90, 0);
+        kart.rigidbody.teleport(
+            RACE_LAYOUT.startPosition.x,
+            RACE_LAYOUT.startPosition.y,
+            RACE_LAYOUT.startPosition.z,
+            0,
+            RACE_LAYOUT.startYaw,
+            0
+        );
         kart.rigidbody.linearVelocity = new Vec3(0, 0, 0);
         kart.rigidbody.angularVelocity = new Vec3(0, 0, 0);
     } else {
-        kart.setPosition(-330, 0.65, 0);
-        kart.setEulerAngles(0, -90, 0);
+        kart.setPosition(RACE_LAYOUT.startPosition);
+        kart.setEulerAngles(0, RACE_LAYOUT.startYaw, 0);
     }
 };
 
@@ -124,7 +135,8 @@ export class KartController {
         return {
             inputX: input.steering,
             inputY: input.throttle,
-            inputHandbrake: input.handbrake,
+            inputHop: input.hop,
+            inputDrift: input.drift,
             steering: this.steering,
             wheelSteering: this.steering,
             engineForce: 0,
@@ -136,7 +148,9 @@ export class KartController {
             yawSpeed,
             vehicleTurn,
             driftActive: drift.active,
-            driftAmount: drift.amount
+            driftAmount: drift.amount,
+            hopActive: false,
+            boostActive: false
         };
     }
 

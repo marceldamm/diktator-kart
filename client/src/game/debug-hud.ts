@@ -18,7 +18,7 @@ export class DebugHud {
                     <div class="debug-row"><span>Speed total</span><output data-debug="totalSpeed">0.000</output></div>
                     <div class="debug-row"><span>Input gas/brake</span><output data-debug="inputY">0.000</output></div>
                     <div class="debug-row"><span>Input steering</span><output data-debug="inputX">0.000</output></div>
-                    <div class="debug-row"><span>Handbrake</span><output data-debug="handbrake">NEIN</output></div>
+                    <div class="debug-row"><span>Hop / Drift</span><output data-debug="hopDrift">NEIN</output></div>
                     <div class="debug-row"><span>Steering smooth</span><output data-debug="steering">0.000</output></div>
                     <div class="debug-row"><span>Wheel steering</span><output data-debug="wheelSteering">0.000</output></div>
                     <div class="debug-row"><span>Engine force</span><output data-debug="engineForce">0.000</output></div>
@@ -28,6 +28,7 @@ export class DebugHud {
                     <div class="debug-row"><span>Forward velocity</span><output data-debug="forwardSpeedDetail">0.000</output></div>
                     <div class="debug-row"><span>Lateral velocity</span><output data-debug="lateralSpeed">0.000</output></div>
                     <div class="debug-row"><span>Drift status</span><output data-debug="driftStatus">NO</output></div>
+                    <div class="debug-row"><span>Mini-Turbo</span><output data-debug="boostStatus">NO</output></div>
                     <div class="debug-row"><span>Drift amount</span><output data-debug="driftAmount">0.000</output></div>
                 </div>
                 <div class="debug-label">INPUT LENKUNG <small>Links &lt;----|----&gt; Rechts · 0 = neutral</small></div>
@@ -69,10 +70,11 @@ export class DebugHud {
         this.setValue('wheelSteering', snapshot.wheelSteering);
         this.setValue('engineForce', snapshot.engineForce);
         this.setValue('brakeForce', snapshot.brakeForce);
-        this.values.get('handbrake')!.textContent = snapshot.inputHandbrake ? 'JA' : 'NEIN';
+        this.values.get('hopDrift')!.textContent = snapshot.inputHop ? 'HOP' : snapshot.inputDrift ? 'DRIFT' : 'NEIN';
         this.setValue('yawSpeed', snapshot.yawSpeed);
         this.setValue('lateralSpeed', snapshot.lateralSpeed);
         this.values.get('driftStatus')!.textContent = snapshot.driftActive ? 'JA' : 'NEIN';
+        this.values.get('boostStatus')!.textContent = snapshot.boostActive ? 'JA' : 'NEIN';
         this.setValue('driftAmount', snapshot.driftAmount);
         this.setCenteredBar('inputSteering', snapshot.inputX, 1);
         this.setCenteredBar('controllerSteering', snapshot.steering, 1);
