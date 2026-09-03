@@ -9,6 +9,7 @@ export const KART_TUNING = {
     coastingDrag: 1.35,
     cornerGrip: 5.5,
     straightGrip: 11,
+    lateralNeutralDeadzone: 0.08,
     maxSpeed: 16,
     reverseMaxSpeed: 6,
     maxYawSpeed: 1.65,
@@ -27,6 +28,7 @@ export type KartDebugSnapshot = {
     lateralSpeed: number;
     totalSpeed: number;
     yawSpeed: number;
+    vehicleTurn: number;
     targetYawSpeed: number;
 };
 
@@ -48,8 +50,8 @@ const addVisualBox = (root: Entity, name: string, position: Vec3, scale: Vec3, b
 
 export const createKart = (root: Entity) => {
     const kart = new Entity('player-kart');
-    kart.setPosition(0, 0.65, 7);
-    kart.setEulerAngles(0, 180, 0);
+    kart.setPosition(-32, 0.65, 0);
+    kart.setEulerAngles(0, -90, 0);
 
     const body = material(new Color(0.12, 0.36, 0.82));
     const trim = material(new Color(0.95, 0.75, 0.12));
@@ -72,8 +74,8 @@ export const createKart = (root: Entity) => {
 };
 
 export const resetKart = (kart: Entity) => {
-    kart.setPosition(0, 0.65, 7);
-    kart.setEulerAngles(0, 180, 0);
+    kart.setPosition(-32, 0.65, 0);
+    kart.setEulerAngles(0, -90, 0);
     if (kart.rigidbody) {
         kart.rigidbody.linearVelocity = new Vec3(0, 0, 0);
         kart.rigidbody.angularVelocity = new Vec3(0, 0, 0);
@@ -92,17 +94,20 @@ export class KartController {
     getDebugSnapshot(kart: Entity, input: KartInput): KartDebugSnapshot {
         const body = kart.rigidbody;
         const forward = kart.forward.clone();
+        const right = kart.right.clone();
         const velocity = body?.linearVelocity.clone() ?? new Vec3();
         const forwardSpeed = velocity.dot(forward);
-        const lateral = velocity.clone().sub(forward.clone().mulScalar(forwardSpeed));
+        const yawSpeed = body?.angularVelocity.y ?? 0;
+        const vehicleTurn = new Vec3().cross(new Vec3(0, yawSpeed, 0), forward).dot(right);
         return {
             inputX: input.x,
             inputY: input.y,
             steering: this.steering,
             forwardSpeed,
-            lateralSpeed: lateral.length(),
+            lateralSpeed: velocity.dot(right),
             totalSpeed: velocity.length(),
-            yawSpeed: body?.angularVelocity.y ?? 0,
+            yawSpeed,
+            vehicleTurn,
             targetYawSpeed: this.targetYawSpeed
         };
     }
@@ -133,7 +138,12 @@ export class KartController {
         // Arcade grip allows a little inertia in a curve but settles quickly in neutral.
         const lateral = velocity.clone().sub(forward.clone().mulScalar(forwardSpeed));
         const grip = Math.abs(this.steering) < 0.02 ? KART_TUNING.straightGrip : KART_TUNING.cornerGrip;
-        body.applyForce(lateral.mulScalar(-grip));
+        if (Math.abs(this.steering) < 0.02 && lateral.length() < KART_TUNING.lateralNeutralDeadzone) {
+            // Remove tiny numerical/contact remnants so neutral driving stays straight.
+            body.linearVelocity = velocity.clone().sub(lateral);
+        } else {
+            body.applyForce(lateral.mulScalar(-grip));
+        }
 
         // PlayCanvas forward is -Z. Curves require movement; there is no stationary spin.
         const movementDirection = forwardSpeed < -0.1 ? -1 : 1;

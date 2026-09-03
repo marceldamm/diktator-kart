@@ -29,6 +29,8 @@ Der Controller trennt Beschleunigen, Ausrollen, Bremsen und Rückwärtsgang. Die
 
 Beim Wechsel von Vorwärtsfahrt zu S wird zunächst nur gebremst. Der Rückwärtsantrieb setzt erst nahe dem Stillstand ein. Physik-generierte Restrotation wird nicht in den nächsten Frame übernommen; die geglättete Lenkung bestimmt ausschließlich die aktuelle Ziel-Gierrate.
 
+Sehr kleine seitliche Restgeschwindigkeiten werden bei neutraler Lenkung innerhalb einer Deadzone auf null gesetzt. Größeres seitliches Rutschen bleibt sichtbar und wird weiterhin durch den Arcade-Grip abgebaut.
+
 ## Architektur
 
 - `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.

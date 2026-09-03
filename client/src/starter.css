@@ -182,7 +182,8 @@ button:disabled {
 }
 
 .debug-bar i,
-.debug-bar b {
+.debug-bar b,
+.debug-bar em {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -193,6 +194,12 @@ button:disabled {
     width: 1px;
     background: #dce9ef;
     box-shadow: 0 0 3px #fff;
+}
+
+.debug-bar em {
+    width: 1px;
+    background: #f4c96b;
+    box-shadow: 0 0 3px #f4c96b;
 }
 
 .debug-bar b {

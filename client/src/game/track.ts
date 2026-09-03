@@ -39,26 +39,26 @@ export const createTestTrack = (root: Entity) => {
     const accent = makeMaterial(new Color(0.1, 0.8, 0.72), 0.5);
     const grid = makeMaterial(new Color(0.2, 0.27, 0.32), 0.25);
 
-    addStaticBox(track, 'ground', new Vec3(0, -0.1, 0), new Vec3(72, 0.2, 52), asphalt);
+    addStaticBox(track, 'ground', new Vec3(0, -0.1, 0), new Vec3(72, 0.2, 260), asphalt);
     // Thick boundaries make contact reliable even at low-end browser frame rates.
-    addStaticBox(track, 'north-wall', new Vec3(0, 0.55, -26), new Vec3(72, 1.1, 2), wall);
-    addStaticBox(track, 'south-wall', new Vec3(0, 0.55, 26), new Vec3(72, 1.1, 2), wall);
-    addStaticBox(track, 'west-wall', new Vec3(-36, 0.55, 0), new Vec3(2, 1.1, 52), wall);
-    addStaticBox(track, 'east-wall', new Vec3(36, 0.55, 0), new Vec3(2, 1.1, 52), wall);
+    addStaticBox(track, 'north-wall', new Vec3(0, 0.55, -130), new Vec3(72, 1.1, 2), wall);
+    addStaticBox(track, 'south-wall', new Vec3(0, 0.55, 130), new Vec3(72, 1.1, 2), wall);
+    addStaticBox(track, 'west-wall', new Vec3(-36, 0.55, 0), new Vec3(2, 1.1, 260), wall);
+    addStaticBox(track, 'east-wall', new Vec3(36, 0.55, 0), new Vec3(2, 1.1, 260), wall);
 
     // A few low visual curbs make the flat rectangle read as a simple race track.
-    addStaticBox(track, 'north-curb', new Vec3(0, 0.08, -23.5), new Vec3(66, 0.16, 0.35), curb);
-    addStaticBox(track, 'south-curb', new Vec3(0, 0.08, 23.5), new Vec3(66, 0.16, 0.35), curb);
+    addStaticBox(track, 'north-curb', new Vec3(0, 0.08, -127.5), new Vec3(66, 0.16, 0.35), curb);
+    addStaticBox(track, 'south-curb', new Vec3(0, 0.08, 127.5), new Vec3(66, 0.16, 0.35), curb);
 
     // Visual-only markings provide orientation without adding more collision shapes.
-    addVisualBox(track, 'start-accent-left', new Vec3(-11, 0.025, 7), new Vec3(2, 0.05, 0.25), accent);
-    addVisualBox(track, 'start-accent-right', new Vec3(11, 0.025, 7), new Vec3(2, 0.05, 0.25), accent);
+    addVisualBox(track, 'start-accent-left', new Vec3(-32, 0.025, -11), new Vec3(0.25, 0.05, 2), accent);
+    addVisualBox(track, 'start-accent-right', new Vec3(-32, 0.025, 11), new Vec3(0.25, 0.05, 2), accent);
 
     // Subtle grid pattern for orientation across the large flat playground.
     for (let x = -32; x <= 32; x += 4) {
-        addVisualBox(track, `grid-x-${x}`, new Vec3(x, 0.012, 0), new Vec3(0.035, 0.025, 47), grid);
+        addVisualBox(track, `grid-x-${x}`, new Vec3(x, 0.012, 0), new Vec3(0.035, 0.025, 255), grid);
     }
-    for (let z = -24; z <= 24; z += 4) {
+    for (let z = -128; z <= 128; z += 4) {
         addVisualBox(track, `grid-z-${z}`, new Vec3(0, 0.013, z), new Vec3(67, 0.025, 0.035), grid);
     }
 
