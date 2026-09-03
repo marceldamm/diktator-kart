@@ -12,6 +12,7 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "start": "vite preview",
+        "test:kart": "node ../tools/cdp-kart-test.mjs",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
