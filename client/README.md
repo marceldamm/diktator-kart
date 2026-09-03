@@ -2,13 +2,13 @@
 
 A Vite-powered PlayCanvas Engine project with TypeScript, hot module replacement, ESLint and Prettier.
 
-## Physics Playground
+## Diktator-Kart-Prototyp
 
-A rigid-body scene with a static floor, orbit camera and dynamic primitive shapes.
+Eine flache Teststrecke mit einem aus Boxen gebauten Kart-Platzhalter. Der Kart-Körper nutzt PlayCanvas/Ammo-Rigidbody-Physik für Boden- und Wandkollisionen; die Fahrsteuerung bleibt bewusst arcadeorientiert.
 
 ### Controls
 
-Use **Spawn object** to add a body and **Reset** to recreate the starting set. Drag to orbit the camera.
+Die Kamera folgt dem Kart automatisch. Der Button „Kart zurücksetzen“ setzt Position und Geschwindigkeit zurück. Es gibt in diesem Prototypen keine Bots, Items oder Multiplayer-Funktionen.
 
 ## Prerequisites
 
@@ -17,8 +17,6 @@ Node.js 22.23.2 or later.
 ## Getting started
 
 ```bash
-npm create playcanvas@latest playcanvas-project -- --format engine
-cd playcanvas-project
 npm install
 npm run dev
 ```
