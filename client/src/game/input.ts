@@ -24,8 +24,8 @@ export class KeyboardInput {
             Number(this.keys.has('KeyW') || this.keys.has('ArrowUp')) -
             Number(this.keys.has('KeyS') || this.keys.has('ArrowDown'));
         const steering =
-            Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) -
-            Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft'));
+            Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft')) -
+            Number(this.keys.has('KeyD') || this.keys.has('ArrowRight'));
         return new Vec2(steering, throttle);
     }
 }

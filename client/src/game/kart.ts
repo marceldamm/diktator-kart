@@ -2,11 +2,11 @@ import { Color, Entity, StandardMaterial, Vec3 } from 'playcanvas';
 
 import type { KartInput } from './input';
 
-const FORWARD_FORCE = 5;
-const REVERSE_FORCE = 3;
-const STEERING_TORQUE = 2.5;
+const FORWARD_FORCE = 10;
+const REVERSE_FORCE = 7;
+const STEERING_SPEED = 2.2;
 const LATERAL_GRIP = 8;
-const MAX_SPEED = 3.5;
+const MAX_SPEED = 9;
 
 const material = (color: Color) => {
     const result = new StandardMaterial();
@@ -71,7 +71,10 @@ export const driveKart = (kart: Entity, input: KartInput) => {
     // Arcade grip: remove sideways sliding without simulating wheels or suspension.
     const lateral = velocity.clone().sub(forward.clone().mulScalar(forwardSpeed));
     body.applyForce(lateral.mulScalar(-LATERAL_GRIP));
-    body.applyTorque(0, -input.x * STEERING_TORQUE * Math.min(1, Math.abs(forwardSpeed) / 2), 0);
+    // Direct arcade yaw keeps A/D effective at low speed and prevents
+    // physics contacts from creating a residual turn in the neutral state.
+    const steeringFactor = Math.max(0.65, Math.min(1, Math.abs(forwardSpeed) / 2));
+    body.angularVelocity = new Vec3(0, input.x * STEERING_SPEED * steeringFactor, 0);
 
     if (velocity.length() > MAX_SPEED) body.linearVelocity = velocity.normalize().mulScalar(MAX_SPEED);
 };
