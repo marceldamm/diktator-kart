@@ -67,7 +67,9 @@ export const RAYCAST_KART_TUNING = {
     suspensionStiffness: 24,
     suspensionCompression: 4.4,
     suspensionDamping: 2.3,
-    frictionSlip: 7,
+    // High passive side grip for normal arcade steering. A lower rear value
+    // belongs to a later, explicitly activated drift mode.
+    frictionSlip: 18,
     rollInfluence: 0.05
 } as const;
 
