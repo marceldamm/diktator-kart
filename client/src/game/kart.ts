@@ -8,7 +8,7 @@ export const KART_TUNING = {
     forwardForce: 20,
     reverseForce: 8,
     brakeForce: 24,
-    coastingDrag: 1.35,
+    coastingDrag: 1.1,
     cornerGrip: 5.5,
     straightGrip: 11,
     maxSpeed: 16,
@@ -69,7 +69,7 @@ export const createKart = (root: Entity) => {
     kart.addComponent('rigidbody', { type: 'dynamic', mass: 1.2, friction: 0.9, restitution: 0.05 });
     // Ammo owns translation/collision only. The controller owns all rotation.
     kart.rigidbody!.angularFactor = new Vec3(0, 0, 0);
-    kart.rigidbody!.linearDamping = 0.35;
+    kart.rigidbody!.linearDamping = 0.05;
     kart.rigidbody!.angularDamping = 0.8;
     root.addChild(kart);
     return kart;

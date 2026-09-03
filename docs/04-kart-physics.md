@@ -35,6 +35,12 @@ Die Neutral-Lenkung arbeitet strikt planar: X/Z-Geschwindigkeit wird auf den nor
 
 Die Y-Rotation des Rigidbody ist vollständig gesperrt (`angularFactor = (0, 0, 0)`). Der Controller verwaltet den Heading-Winkel selbst und synchronisiert ihn als Rotation an den Physikkörper. Ammo bleibt damit für Position, Kollisionen und Boden zuständig, kann aber keinen eigenen Yaw mehr erzeugen.
 
+Das aktuelle Geschwindigkeitstuning nutzt `linearDamping = 0.05` und `coastingDrag = 1.1`. Die Vorwärtskraft bleibt bei 20; `maxSpeed = 16` bleibt als harte Sicherheitsgrenze bestehen. Dadurch wird die reale Vollgasgeschwindigkeit erhöht, ohne die Beschleunigung unverhältnismäßig hoch zu setzen.
+
+## Legacy-Status
+
+Der bisherige Custom-KartController war ein experimenteller Eigenbau. Er bleibt als Legacy- und Vergleichsmodell erhalten. Neue Fahrphysik wird ab jetzt auf einer bestehenden Vehicle-Physics-Basis aufgebaut. Am alten Controller wird nicht weiter optimiert, außer dies wird ausdrücklich gewünscht.
+
 ## Architektur
 
 - `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.
