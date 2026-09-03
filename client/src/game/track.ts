@@ -1,5 +1,7 @@
 import { Color, Entity, StandardMaterial, Vec3 } from 'playcanvas';
 
+import { RACE_LAYOUT } from './race-layout';
+
 const makeMaterial = (color: Color, gloss = 0.2) => {
     const material = new StandardMaterial();
     material.diffuse = color;
@@ -15,56 +17,113 @@ const addStaticBox = (root: Entity, name: string, position: Vec3, size: Vec3, ma
     visual.setLocalScale(size);
     visual.addComponent('render', { type: 'box', material });
     entity.addChild(visual);
-    // Keep collision dimensions explicit; render scaling is isolated on the visual child.
     entity.addComponent('collision', { type: 'box', halfExtents: size.clone().mulScalar(0.5) });
     entity.addComponent('rigidbody', { type: 'static' });
     root.addChild(entity);
 };
 
 const addVisualBox = (root: Entity, name: string, position: Vec3, size: Vec3, material: StandardMaterial) => {
-    const marker = new Entity(name);
-    marker.setPosition(position);
-    marker.setLocalScale(size);
-    marker.addComponent('render', { type: 'box', material });
-    root.addChild(marker);
+    const entity = new Entity(name);
+    entity.setPosition(position);
+    entity.setLocalScale(size);
+    entity.addComponent('render', { type: 'box', material });
+    root.addChild(entity);
 };
 
-export const createTestTrack = (root: Entity) => {
-    const track = new Entity('test-track');
+const addTree = (root: Entity, index: number, position: Vec3, trunk: StandardMaterial, leaves: StandardMaterial) => {
+    addVisualBox(
+        root,
+        `tree-trunk-${index}`,
+        position.clone().add(new Vec3(0, 1.2, 0)),
+        new Vec3(0.45, 2.4, 0.45),
+        trunk
+    );
+    const crown = new Entity(`tree-crown-${index}`);
+    crown.setPosition(position.clone().add(new Vec3(0, 3.25, 0)));
+    crown.setLocalScale(2.8, 3.1, 2.8);
+    crown.addComponent('render', { type: 'cone', material: leaves });
+    root.addChild(crown);
+};
+
+const addFinishLine = (root: Entity, black: StandardMaterial, white: StandardMaterial) => {
+    for (let row = 0; row < 2; row += 1) {
+        for (let column = 0; column < 10; column += 1) {
+            addVisualBox(
+                root,
+                `finish-${row}-${column}`,
+                new Vec3(-220 + column * 4.4 - 19.8, 0.025, 42 + row * 2.2),
+                new Vec3(4.4, 0.05, 2.2),
+                (row + column) % 2 === 0 ? white : black
+            );
+        }
+    }
+};
+
+/** The broad first loop: deliberately simple, with forgiving square-radius turns. */
+export const createRaceTrack = (root: Entity) => {
+    const track = new Entity('race-track');
     root.addChild(track);
+    const grass = makeMaterial(new Color(0.13, 0.37, 0.16));
+    const asphalt = makeMaterial(new Color(0.105, 0.12, 0.15), 0.38);
+    const barrier = makeMaterial(new Color(0.86, 0.12, 0.08));
+    const white = makeMaterial(new Color(0.92, 0.94, 0.86), 0.55);
+    const black = makeMaterial(new Color(0.03, 0.035, 0.045));
+    const yellow = makeMaterial(new Color(1, 0.72, 0.12), 0.45);
+    const teal = makeMaterial(new Color(0.08, 0.78, 0.68), 0.4);
+    const trunk = makeMaterial(new Color(0.27, 0.13, 0.06));
+    const leaves = makeMaterial(new Color(0.07, 0.45, 0.18));
 
-    const asphalt = makeMaterial(new Color(0.13, 0.16, 0.19));
-    const wall = makeMaterial(new Color(0.75, 0.16, 0.08));
-    const curb = makeMaterial(new Color(0.95, 0.8, 0.22));
-    const marking = makeMaterial(new Color(0.8, 0.88, 0.9), 0.5);
-    const accent = makeMaterial(new Color(0.1, 0.8, 0.72), 0.5);
-    const grid = makeMaterial(new Color(0.2, 0.27, 0.32), 0.25);
+    // One collision ground keeps the RaycastVehicle contact surface completely stable.
+    addStaticBox(track, 'grass-ground', new Vec3(0, -0.1, 0), new Vec3(700, 0.2, 260), grass);
+    addVisualBox(track, 'north-asphalt', new Vec3(0, 0.012, 66), new Vec3(560, 0.04, 124), asphalt);
+    addVisualBox(track, 'south-asphalt', new Vec3(0, 0.012, -66), new Vec3(560, 0.04, 124), asphalt);
+    addVisualBox(track, 'west-link', new Vec3(-220, 0.014, 0), new Vec3(120, 0.045, 130), asphalt);
+    addVisualBox(track, 'east-link', new Vec3(220, 0.014, 0), new Vec3(120, 0.045, 130), asphalt);
 
-    addStaticBox(track, 'ground', new Vec3(0, -0.1, 0), new Vec3(700, 0.2, 260), asphalt);
-    // Thick boundaries make contact reliable even at low-end browser frame rates.
-    addStaticBox(track, 'north-wall', new Vec3(0, 0.55, -130), new Vec3(700, 1.1, 2), wall);
-    addStaticBox(track, 'south-wall', new Vec3(0, 0.55, 130), new Vec3(700, 1.1, 2), wall);
-    addStaticBox(track, 'west-wall', new Vec3(-350, 0.55, 0), new Vec3(2, 1.1, 260), wall);
-    addStaticBox(track, 'east-wall', new Vec3(350, 0.55, 0), new Vec3(2, 1.1, 260), wall);
+    // Outer boundary and central island form a broad, forgiving rectangular loop.
+    addStaticBox(track, 'outer-north', new Vec3(0, 0.7, 130), new Vec3(570, 1.4, 2), barrier);
+    addStaticBox(track, 'outer-south', new Vec3(0, 0.7, -130), new Vec3(570, 1.4, 2), barrier);
+    addStaticBox(track, 'outer-west', new Vec3(-285, 0.7, 0), new Vec3(2, 1.4, 260), barrier);
+    addStaticBox(track, 'outer-east', new Vec3(285, 0.7, 0), new Vec3(2, 1.4, 260), barrier);
+    addStaticBox(track, 'island-north', new Vec3(0, 0.55, 5), new Vec3(320, 1.1, 2), barrier);
+    addStaticBox(track, 'island-south', new Vec3(0, 0.55, -5), new Vec3(320, 1.1, 2), barrier);
+    addStaticBox(track, 'island-west', new Vec3(-160, 0.55, 0), new Vec3(2, 1.1, 10), barrier);
+    addStaticBox(track, 'island-east', new Vec3(160, 0.55, 0), new Vec3(2, 1.1, 10), barrier);
 
-    // A few low visual curbs make the flat rectangle read as a simple race track.
-    addStaticBox(track, 'north-curb', new Vec3(0, 0.08, -127.5), new Vec3(694, 0.16, 0.35), curb);
-    addStaticBox(track, 'south-curb', new Vec3(0, 0.08, 127.5), new Vec3(694, 0.16, 0.35), curb);
-
-    // Visual-only markings provide orientation without adding more collision shapes.
-    addVisualBox(track, 'center-line', new Vec3(0, 0.025, 0), new Vec3(694, 0.05, 0.3), marking);
-    addVisualBox(track, 'left-reference-line', new Vec3(0, 0.022, -8), new Vec3(694, 0.044, 0.14), accent);
-    addVisualBox(track, 'right-reference-line', new Vec3(0, 0.022, 8), new Vec3(694, 0.044, 0.14), accent);
-    addVisualBox(track, 'start-accent-left', new Vec3(-330, 0.025, -11), new Vec3(0.25, 0.05, 2), accent);
-    addVisualBox(track, 'start-accent-right', new Vec3(-330, 0.025, 11), new Vec3(0.25, 0.05, 2), accent);
-
-    // Subtle grid pattern for orientation across the large flat playground.
-    for (let x = -344; x <= 344; x += 8) {
-        addVisualBox(track, `grid-x-${x}`, new Vec3(x, 0.012, 0), new Vec3(0.035, 0.025, 255), grid);
+    addVisualBox(track, 'north-curb', new Vec3(0, 0.045, 125), new Vec3(554, 0.08, 1.2), yellow);
+    addVisualBox(track, 'south-curb', new Vec3(0, 0.045, -125), new Vec3(554, 0.08, 1.2), yellow);
+    addVisualBox(track, 'island-grass', new Vec3(0, 0.02, 0), new Vec3(316, 0.05, 8), teal);
+    addFinishLine(track, black, white);
+    addVisualBox(track, 'start-arch-left', new Vec3(-220, 2.1, 32), new Vec3(0.7, 4.2, 0.7), yellow);
+    addVisualBox(track, 'start-arch-right', new Vec3(-220, 2.1, 52), new Vec3(0.7, 4.2, 0.7), yellow);
+    addVisualBox(track, 'start-arch-top', new Vec3(-220, 4, 42), new Vec3(0.7, 0.7, 20), yellow);
+    RACE_LAYOUT.checkpoints.forEach((checkpoint, index) => {
+        addVisualBox(
+            track,
+            `checkpoint-${index}`,
+            checkpoint.position.clone().add(new Vec3(0, 0.035, 0)),
+            new Vec3(1.5, 0.06, checkpoint.halfWidth * 2),
+            teal
+        );
+    });
+    for (let index = 0; index < 18; index += 1) {
+        const x = -330 + (index % 9) * 82;
+        const z = index < 9 ? 148 : -148;
+        addTree(track, index, new Vec3(x, 0, z), trunk, leaves);
     }
-    for (let z = -128; z <= 128; z += 4) {
-        addVisualBox(track, `grid-z-${z}`, new Vec3(0, 0.013, z), new Vec3(67, 0.025, 0.035), grid);
-    }
+    return track;
+};
 
+/** Retained physics playground for future focused controller experiments. */
+export const createPhysicsTestTrack = (root: Entity) => {
+    const track = new Entity('physics-test-track');
+    root.addChild(track);
+    addStaticBox(
+        track,
+        'test-ground',
+        new Vec3(0, -0.1, 0),
+        new Vec3(700, 0.2, 260),
+        makeMaterial(new Color(0.13, 0.16, 0.19))
+    );
     return track;
 };

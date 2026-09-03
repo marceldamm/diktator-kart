@@ -19,9 +19,11 @@ import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { KeyboardInput } from './game/input';
 import { createKart, driveKart, KartController, resetKart } from './game/kart';
+import { RaceController } from './game/race';
+import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
 import { TelemetryLog } from './game/telemetry-log';
-import { createTestTrack } from './game/track';
+import { createRaceTrack } from './game/track';
 
 import './starter.css';
 
@@ -41,7 +43,7 @@ document.body.insertAdjacentHTML(
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD/Pfeiltasten zum Fahren &middot; Space = Handbremse</p><button id="reset-kart" type="button">Kart zur&uuml;cksetzen</button></section></div>'
+    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD/Pfeiltasten zum Fahren &middot; Space = Hop / Drift</p><button id="reset-kart" type="button">Rennen neu starten</button></section></div>'
 );
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
@@ -64,10 +66,13 @@ app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 app.systems.rigidbody!.gravity.set(0, -9.81, 0);
 
-createTestTrack(app.root);
+createRaceTrack(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
+const race = new RaceController();
+race.reset(kart);
+const raceHud = new RaceHud();
 let raycastController: RaycastKartController | undefined;
 type DriveMode = 'legacy' | 'raycast';
 let driveMode: DriveMode = 'raycast';
@@ -94,23 +99,21 @@ const refreshTelemetryView = () => {
         ? `läuft · ${telemetry.count} Samples`
         : `gestoppt · ${telemetry.count} Samples`;
 };
-document.getElementById('reset-kart')!.addEventListener('click', () => {
+const restartRace = () => {
     resetKart(kart);
     controller.reset();
     raycastController?.reset();
+    race.reset(kart);
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
-});
+};
+document.getElementById('reset-kart')!.addEventListener('click', restartRace);
 function setDriveMode(mode: DriveMode) {
     driveMode = mode;
     if (!raycastController) return;
     raycastController.setActive(mode === 'raycast');
-    resetKart(kart);
-    controller.reset();
-    raycastController.reset();
-    telemetry.stop();
-    telemetry.clear();
+    restartRace();
     vehicleModeStatus.textContent = mode === 'raycast' ? 'RaycastVehicle' : 'Eigenbau';
     refreshTelemetryView();
 }
@@ -160,12 +163,15 @@ app.on('update', (dt: number) => {
             vehicleModeStatus.textContent = 'RaycastVehicle nicht verfügbar';
         }
     }
-    const kartInput = input.read();
+    const rawInput = input.read();
+    const kartInput = race.canDrive ? rawInput : { steering: 0, throttle: 0, hop: false, drift: false };
     const activeController = driveMode === 'raycast' && raycastController ? raycastController : controller;
     if (driveMode === 'raycast' && raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
     debugHud.update(activeController.getDebugSnapshot(kart, kartInput));
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
+    race.update(kart, dt);
+    raceHud.update(race.snapshot());
 });
 window.addEventListener('resize', () => app.resizeCanvas());
