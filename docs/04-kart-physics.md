@@ -45,7 +45,23 @@ Der bisherige Custom-KartController war ein experimenteller Eigenbau. Er bleibt 
 
 - `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.
 - `client/src/game/kart.ts`: Kart-Platzhalter und Arcade-Fahrlogik.
+- `client/src/game/raycast-kart.ts`: separate RaycastVehicle-Basis auf Ammo-`btRaycastVehicle`.
 - `client/src/game/follow-camera.ts`: einfache geglättete Verfolgerkamera.
 - `client/src/game/track.ts`: flache Strecke, Boden und Begrenzungswände.
+
+## RaycastVehicle-Vergleichsbasis
+
+Der experimentelle Eigenbau in `kart.ts` bleibt unverändert als Legacy- und Vergleichsmodell erhalten. Die neue technische Basis liegt separat in `raycast-kart.ts` und verwendet das PlayCanvas-/Ammo-Muster aus dem offiziellen Vehicle-Physics-Beispiel:
+
+- dynamischer Chassis-Rigidbody als Fahrzeugkörper,
+- `btRaycastVehicle` mit vier Raycast-Rädern,
+- vordere Räder für Steering,
+- hintere Räder für Motorforce,
+- Brakeforce auf allen vier Rädern,
+- zentrale Werte für Motor, Bremse, Lenkung, Federung, Reifenreibung und Geschwindigkeitslimits.
+
+Die Konfiguration ist bewusst arcade-orientiert: niedriger Roll-Einfluss, hohe Reifenreibung, kurze stabile Federung und gesperrte Kippachsen verhindern Umkippen, während die Yaw-Reaktion vom RaycastVehicle kommt. Es gibt weiterhin keine Drift-, Reifen-, Item-, Bot- oder Multiplayer-Logik.
+
+Im Browser kann über `Alter Controller` und `RaycastVehicle` umgeschaltet werden. Der Wechsel setzt Kart, Controller und Telemetrie zurück. Neue Fahrphysik soll künftig auf dieser Vehicle-Physics-Basis entstehen; am Legacy-Controller wird nur noch auf ausdrücklichen Wunsch gearbeitet.
 
 Bots und Netzwerkinput können später dieselbe `KartInput`-Form wie die Tastatur liefern.

@@ -117,6 +117,24 @@ p {
     margin-top: 14px;
 }
 
+.vehicle-mode {
+    display: grid;
+    gap: 6px;
+    margin-top: 12px;
+    color: #aeb8c8;
+    font-size: 12px;
+}
+
+.vehicle-mode span {
+    color: #71e5d1;
+    font-size: 11px;
+}
+
+.vehicle-mode button {
+    padding: 6px 8px;
+    font-size: 11px;
+}
+
 button {
     padding: 8px 11px;
     border: 1px solid #ffffff24;

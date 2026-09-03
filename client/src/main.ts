@@ -19,6 +19,7 @@ import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { KeyboardInput } from './game/input';
 import { createKart, driveKart, KartController, resetKart } from './game/kart';
+import { RaycastKartController } from './game/raycast-kart';
 import { TelemetryLog } from './game/telemetry-log';
 import { createTestTrack } from './game/track';
 
@@ -67,10 +68,25 @@ createTestTrack(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
+let raycastController: RaycastKartController | undefined;
+type DriveMode = 'legacy' | 'raycast';
+let driveMode: DriveMode = 'legacy';
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
 const telemetryLog = document.getElementById('telemetry-log')!;
 const telemetryStatus = document.getElementById('telemetry-status')!;
+const vehicleModeStatus = document.createElement('span');
+vehicleModeStatus.id = 'vehicle-mode-status';
+vehicleModeStatus.textContent = 'Eigenbau';
+const raycastButton = document.createElement('button');
+raycastButton.type = 'button';
+raycastButton.textContent = 'RaycastVehicle';
+raycastButton.addEventListener('click', () => setDriveMode('raycast'));
+const legacyButton = document.createElement('button');
+legacyButton.type = 'button';
+legacyButton.textContent = 'Alter Controller';
+legacyButton.addEventListener('click', () => setDriveMode('legacy'));
+document.querySelector('.hud .panel')?.append(vehicleModeStatus, legacyButton, raycastButton);
 const refreshTelemetryView = () => {
     telemetryLog.textContent = telemetry.getText();
     telemetryLog.scrollTop = telemetryLog.scrollHeight;
@@ -81,10 +97,23 @@ const refreshTelemetryView = () => {
 document.getElementById('reset-kart')!.addEventListener('click', () => {
     resetKart(kart);
     controller.reset();
+    raycastController?.reset();
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
 });
+function setDriveMode(mode: DriveMode) {
+    driveMode = mode;
+    if (!raycastController) return;
+    raycastController.setActive(mode === 'raycast');
+    resetKart(kart);
+    controller.reset();
+    raycastController.reset();
+    telemetry.stop();
+    telemetry.clear();
+    vehicleModeStatus.textContent = mode === 'raycast' ? 'RaycastVehicle' : 'Eigenbau';
+    refreshTelemetryView();
+}
 document.getElementById('telemetry-start')!.addEventListener('click', () => {
     telemetry.start(kart);
     refreshTelemetryView();
@@ -121,10 +150,21 @@ light.setEulerAngles(45, 35, 0);
 app.root.addChild(light);
 
 app.on('update', (dt: number) => {
+    if (!raycastController) {
+        try {
+            raycastController = new RaycastKartController(kart, app);
+        } catch (error) {
+            console.error('RaycastVehicle konnte nicht initialisiert werden.', error);
+            raycastButton.disabled = true;
+            vehicleModeStatus.textContent = 'RaycastVehicle nicht verfügbar';
+        }
+    }
     const kartInput = input.read();
-    driveKart(controller, kart, kartInput, dt);
-    debugHud.update(controller.getDebugSnapshot(kart, kartInput));
-    if (telemetry.update(dt, kart, controller, kartInput)) refreshTelemetryView();
+    const activeController = driveMode === 'raycast' && raycastController ? raycastController : controller;
+    if (driveMode === 'raycast' && raycastController) raycastController.update(kartInput, dt);
+    else driveKart(controller, kart, kartInput, dt);
+    debugHud.update(activeController.getDebugSnapshot(kart, kartInput));
+    if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

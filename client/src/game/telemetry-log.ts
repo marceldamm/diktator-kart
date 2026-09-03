@@ -2,7 +2,11 @@ import { Vec3 } from 'playcanvas';
 import type { Entity } from 'playcanvas';
 
 import type { KartInput } from './input';
-import type { KartController } from './kart';
+import type { KartDebugSnapshot } from './kart';
+
+export type KartDebugProvider = {
+    getDebugSnapshot(kart: Entity, input: KartInput): KartDebugSnapshot;
+};
 
 type TelemetrySample = {
     t: number;
@@ -72,7 +76,7 @@ export class TelemetryLog {
         this.beginSession(kart, true);
     }
 
-    update(dt: number, kart: Entity, controller: KartController, input: KartInput) {
+    update(dt: number, kart: Entity, controller: KartDebugProvider, input: KartInput) {
         if (!this.active) return false;
         this.elapsed += dt;
         this.accumulator += dt;
@@ -114,7 +118,7 @@ export class TelemetryLog {
         this.startHeading = headingFromForward(kart.forward);
     }
 
-    private record(kart: Entity, controller: KartController, input: KartInput) {
+    private record(kart: Entity, controller: KartDebugProvider, input: KartInput) {
         const body = kart.rigidbody;
         if (!body) return;
         const snapshot = controller.getDebugSnapshot(kart, input);
