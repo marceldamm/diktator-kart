@@ -1,27 +1,13 @@
-# Teststrecke – Prototyp
+# Strecken – Prototyp
 
-## Status
+## Aktueller Kurs
 
-Die erste Teststrecke ist umgesetzt und dient ausschließlich dem Erproben von Fahrgefühl und Kollisionen.
+Der Standard ist ein breiter, flacher Rechteck-Rundkurs mit langer oberer und unterer Geraden sowie sehr großzügigen Kurven. Eine gemeinsame Kollisionsfläche unter Asphalt und Gras hält den RaycastVehicle-Kontakt stabil.
 
-## Aufbau
+Der Kurs enthält rote Begrenzungen, gelbe Curbs, ein zentrales Gras-Infield, Start/Ziel-Schachbrettlinie, Startbogen, drei sichtbare Checkpoint-Markierungen und einfache Low-Poly-Bäume. Er ist absichtlich noch kein finaler Art-Track, soll aber sofort als Kart-Rennspiel lesbar sein.
 
-Die Strecke besteht aus:
+## Rennablauf
 
-- einer flachen rechteckigen Asphaltfläche (36 × 26 Einheiten),
-- vier statischen, zwei Einheiten dicken Begrenzungswänden,
-- zwei niedrigen gelben Randmarkierungen als visuelle Orientierung.
+`RaceController` verwaltet 3-2-1-LOS, drei Runden, aktuelle Rennzeit, Rundenzeit und beste Runde. Drei Checkpoints müssen vor der Ziellinie in der richtigen Reihenfolge passiert werden; Start/Ziel-Hin-und-Her zählt nicht als Runde.
 
-Boden und Wände besitzen PlayCanvas-Kollisionen. Es gibt noch kein Rundensystem, keine Checkpoints und keine Streckenassets aus Blender.
-
-## Aktueller Stand
-
-Die Testfläche ist 700 × 260 Einheiten groß. Sie ist damit lang genug für einen mehrsekündigen Vollgas-Geradeauslauf. Das Kart startet am linken Ende der langen Seite, exakt auf der Mittellinie, und zeigt entlang der langen Fahrtrichtung.
-
-Zur Orientierung gibt es zwei farbige Startmarkierungen. Diese Elemente sind rein visuell und besitzen keine Kollision.
-
-Die große Testfläche besitzt außerdem ein dezentes Raster aus visuellen Linien, damit Bewegung und Kurven auch ohne die Wände besser eingeschätzt werden können.
-
-## Erweiterung
-
-Weitere Strecken sollen zunächst ebenfalls als klar getrennte statische Geometrie erstellt werden. Rundensystem, Hindernisse und Streckenmechaniken folgen erst nach der Validierung des grundlegenden Fahrgefühls.
+Die frühere große Physik-Testfläche bleibt als `createPhysicsTestTrack` für spätere isolierte Controllerexperimente erhalten.

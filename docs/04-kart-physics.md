@@ -2,80 +2,42 @@
 
 ## Aktueller Stand
 
-Der Standardcontroller ist `RaycastKartController` auf Basis von Ammo `btRaycastVehicle`. Der frühere `KartController` bleibt unverändert als Legacy- und Vergleichsmodell erhalten und kann im Browser weiterhin ausgewählt werden.
+`RaycastKartController` ist der Standardcontroller und basiert auf Ammo `btRaycastVehicle`. Der frühere `KartController` bleibt als Legacy- und Vergleichsmodell erhalten.
 
-Das Ziel ist ein stabiles Arcade-Kart, keine realistische Fahrzeugsimulation. Ammo übernimmt Chassis, vier Raycast-Räder, Federung, Reifenkontakt und Kollisionen. Eine kleine kontinuierliche Arcade-Schicht steuert Motoraufbau, geschwindigkeitsabhängigen Lenkwinkel und Yaw-Dämpfung.
+Ammo verwaltet Chassis, vier Raycast-Räder, Federung, Kontakt und Kollisionen. Die kleine Arcade-Schicht steuert Kraftaufbau, Lenkwinkel, Gripzustand und Dämpfung; sie setzt niemals Heading oder Position künstlich.
 
-## Geometrie und Achsen
+## Geometrie und Normalfahrt
 
-- PlayCanvas-Forward des Karts ist lokales `-Z`.
-- Ammo verwendet `setCoordinateSystem(0, 1, 2)` mit X rechts, Y oben und Z als Fahrzeugachse.
-- Deshalb ist positive Vorwärtseingabe als negative Ammo-Motorforce abgebildet.
-- Räder 0/1 bilden die Vorderachse und erhalten Steering.
-- Räder 2/3 bilden die Hinterachse und erhalten Motorforce.
-- Der Radstand beträgt 1,64 Einheiten, die Spurbreite 1,56 Einheiten.
-- Die Connection Points sind links/rechts und vorne/hinten symmetrisch.
-- X/Z-Rotation des Chassis ist gesperrt; Yaw bleibt physikalisch frei.
+- PlayCanvas-Forward ist lokales `-Z`; Ammo verwendet `setCoordinateSystem(0, 1, 2)`.
+- Vorderräder 0/1 lenken, Hinterräder 2/3 erhalten Motorforce.
+- Der Radstand beträgt 1,64, Spurbreite 1,56; alle Connection Points sind symmetrisch.
+- X/Z-Rotation bleibt gesperrt, Yaw ist physikalisch frei.
+- `RAYCAST_KART_TUNING` gruppiert `chassis`, `engine`, `braking`, `steering`, `suspension`, `grip`, `hop`, `drift` und `wheels`.
 
-## Arcade-Fahrmodell
+Motorleistung fällt vor der Höchstgeschwindigkeit weich ab; nur deutliches Überschreiten aktiviert eine physikalische Schutzbremse. Normaler Grip ist bewusst stabil und leicht untersteuernd. S bremst bei Vorwärtsfahrt zuerst und fährt erst nahe Stillstand rückwärts.
 
-Die zentralen Werte liegen gruppiert in `RAYCAST_KART_TUNING`:
+## Hop, Drift und Mini-Turbo
 
-- `chassis`: Masse sowie lineare und winkelbezogene Dämpfung
-- `engine`: Vorwärts-/Rückwärtskraft, Kraftaufbau und Geschwindigkeitsbereich
-- `braking`: Betriebsbremse, Handbremse und Richtungswechsel
-- `steering`: Lenkwinkel, Aufbau, Rücklauf und High-Speed-Reduktion
-- `suspension`: Radius, Federweg, Steifigkeit und Dämpfung
-- `grip`: Vorder-/Hinterachsgrip und Roll-Einfluss
-- `wheels`: gemeinsame Radgeometrie
+`KartInput` ist eingabequellenunabhängig und enthält `steering`, `throttle`, `hop` (einmaliges Druckereignis) und `drift` (gehaltene Aktion). Damit bleiben Human-, Bot- und Netzwerkinput später austauschbar.
 
-Die Chassismasse und Motorforce verwenden eine fahrzeugtypische gemeinsame Größenordnung. Der alte Zustand mit Masse 1,2 und bis zu 360 Motorforce pro Hinterrad führte zu extremen Beschleunigungs- und Yaw-Spitzen.
-
-Die Höchstgeschwindigkeit wird nicht mehr durch permanentes hartes Überschreiben der linearen Geschwindigkeit erzwungen. Stattdessen fällt die Motorleistung vor dem Zieltempo weich ab; nur deutliches Überschreiten aktiviert eine zusätzliche physikalische Bremswirkung.
-
-Der tatsächliche Vorderrad-Lenkwinkel wird geglättet und bei höherem Tempo progressiv reduziert. Die Yaw-Dämpfung geht kontinuierlich zwischen Geradeaus- und Kurvenzustand über. Es gibt keinen Teleport, kein manuell gesetztes Heading und kein hartes Nullsetzen der Winkelgeschwindigkeit während normaler Fahrt.
-
-Die Hinterachse besitzt etwas mehr Seitenführung als die Vorderachse. Dadurch tendiert das Kart bei normaler Fahrt leicht zum stabilen Untersteuern statt zum spontanen Übersteuern. Ein echtes Drift-System ist noch nicht implementiert.
-
-## Eingabe
-
-`KartInput` ist unabhängig von der Eingabequelle und enthält:
-
-- `steering`: -1 bis +1
-- `throttle`: -1 bis +1
-- `handbrake`: boolean
-
-Die Tastaturbelegung lautet:
-
-- W/Pfeil hoch: beschleunigen
-- S/Pfeil runter: zunächst bremsen, nahe Stillstand rückwärts
-- A/Pfeil links und D/Pfeil rechts: lenken
-- Space: Handbremse/Festbremse
-
-Die Handbremse unterdrückt Motorleistung, bremst alle vier Räder stark und hält das Kart im Stillstand. Sie ist noch kein Driftbutton.
+- W/oben beschleunigt, S/unten bremst bzw. fährt rückwärts, A/D lenken.
+- Space kurz gibt beim Bodenkontakt einen kleinen vertikalen Physikimpuls. Cooldown und Bodenprüfung verhindern Spam.
+- Space während des Hops halten und gleichzeitig A/D drücken startet Drift.
+- Im Drift sinkt der Hinterachsgrip kontrolliert, vorne bleibt mehr Seitenführung, der effektive Lenkwinkel steigt leicht und die Yaw-Dämpfung wird weicher. Beim Loslassen blendet Normalgrip wieder ein.
+- Nach mindestens 0,7 Sekunden Drift gibt das Loslassen einen kurzen, moderaten Mini-Turbo. Es gibt noch keine Mehrstufen-Funken.
 
 ## Telemetrie und Tests
 
-HUD und Browser-Log zeigen reale Controller- und Physikwerte, darunter Handbremse, tatsächlichen Wheel-Steering-Wert, EngineForce, BrakeForce, Forward-/Lateral-/Planar-Speed, `angularY`, Heading und Driftindikator.
+HUD und Browser-Log zeigen Hop/Drift/Mini-Turbo, Wheel-Steering, EngineForce, BrakeForce, Forward-/Lateral-/Planar-Speed, `angularY` und Heading.
 
-`tools/cdp-kart-test.mjs` startet bei Bedarf Vite und steuert einen lokal installierten Chrome ohne zusätzliche Browserdependency über Chrome DevTools Protocol. Die reproduzierbare Suite umfasst Geradeausfahrt, kurze und gehaltene Links-/Rechtskurven, Kurvenausgang, Betriebsbremse, Reverse, Handbremse, W+Space und Ausrollen.
-
-Start aus `client/`:
-
-```bash
-npm run test:kart
-```
-
-Temporäre Chrome-Profile werden außerhalb des Repositorys erzeugt und nach dem Test entfernt. Testlogs und Browserprofile werden nicht committed.
+`npm run test:kart` startet bei Bedarf Vite und steuert lokales Chrome per CDP ohne neue Browserdependency. Die Suite testet Geradeausfahrt, Links/Rechts, Bremsen, Reverse, Hop, Drift links/rechts mit Ausklang und Ausrollen.
 
 ## Architektur
 
-- `client/src/game/input.ts`: gemeinsames Inputmodell und Tastaturquelle
-- `client/src/game/kart.ts`: Kart-Platzhalter und Legacy-Controller
-- `client/src/game/raycast-kart.ts`: aktueller Arcade-RayCast-Controller
-- `client/src/game/debug-hud.ts`: Live-Debuganzeige
-- `client/src/game/telemetry-log.ts`: Telemetrieaufzeichnung
-- `client/src/game/follow-camera.ts`: geglättete Verfolgerkamera
-- `tools/cdp-kart-test.mjs`: lokale Browser-Testautomation
+- `input.ts`: gemeinsames Eingabemodell
+- `kart.ts`: Platzhalter und Legacy-Controller
+- `raycast-kart.ts`: aktueller Arcade-RayCast-Controller
+- `telemetry-log.ts` / `debug-hud.ts`: technische Messung
+- `tools/cdp-kart-test.mjs`: lokale Browserautomation
 
-Bots und Netzwerkinput sollen später dieselbe `KartInput`-Struktur liefern. Drift, Items, Bots und Multiplayer sind noch nicht Bestandteil der Fahrphysik.
+Drift ist jetzt Teil des Prototyps. Items, Bots und Multiplayer bleiben außerhalb dieser Phase.
