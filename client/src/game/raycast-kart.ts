@@ -56,11 +56,16 @@ declare const Ammo: AmmoNamespace;
 export const RAYCAST_KART_TUNING = {
     maxEngineForce: 360,
     maxReverseForce: 150,
-    engineForceResponse: 900,
+    // Prevent the 1.2-mass chassis from reaching max speed in a few physics
+    // steps. The maximum engine force itself remains unchanged.
+    engineForceResponse: 300,
+    highSpeedDampingStart: 8,
+    highSpeedAngularDamping: 1.05,
     maxBrakeForce: 120,
     maxSpeed: 16,
     reverseMaxSpeed: 6,
     maxSteering: 0.32,
+    highSpeedSteeringReduction: 0.65,
     maxYawSpeed: 1.65,
     steeringResponse: 7,
     steeringReturn: 10,
@@ -207,6 +212,11 @@ export class RaycastKartController {
         const velocity = this.body.getLinearVelocity();
         const forward = this.kart.forward;
         const forwardSpeed = velocity.x() * forward.x + velocity.y() * forward.y + velocity.z() * forward.z;
+        if (this.kart.rigidbody) {
+            this.kart.rigidbody.angularDamping = Math.abs(forwardSpeed) > RAYCAST_KART_TUNING.highSpeedDampingStart && this.steering === 0
+                ? RAYCAST_KART_TUNING.highSpeedAngularDamping
+                : 0.8;
+        }
         const throttle = clamp(input.y, -1, 1);
         let targetEngineForce = 0;
         let brakeForce = 0;
@@ -226,8 +236,10 @@ export class RaycastKartController {
         const forceDelta = targetEngineForce - this.engineForce;
         this.engineForce += Math.abs(forceDelta) <= forceStep ? forceDelta : Math.sign(forceDelta) * forceStep;
 
-        this.vehicle.setSteeringValue(this.steering, 0);
-        this.vehicle.setSteeringValue(this.steering, 1);
+        const steeringSpeedFactor = clamp(Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.maxSpeed, 0, 1);
+        const steeringAtSpeed = this.steering * (1 - RAYCAST_KART_TUNING.highSpeedSteeringReduction * steeringSpeedFactor);
+        this.vehicle.setSteeringValue(steeringAtSpeed, 0);
+        this.vehicle.setSteeringValue(steeringAtSpeed, 1);
         this.vehicle.applyEngineForce(this.engineForce, 2);
         this.vehicle.applyEngineForce(this.engineForce, 3);
         for (let index = 0; index < 4; index += 1) {
@@ -235,7 +247,9 @@ export class RaycastKartController {
         }
 
         const speedFactor = clamp(Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.maxSpeed, 0, 1);
-        this.targetYawSpeed = this.steering === 0 ? 0 : this.steering / RAYCAST_KART_TUNING.maxSteering * RAYCAST_KART_TUNING.maxYawSpeed * (0.35 + speedFactor * 0.65);
+        this.targetYawSpeed = steeringAtSpeed === 0
+            ? 0
+            : steeringAtSpeed / RAYCAST_KART_TUNING.maxSteering * RAYCAST_KART_TUNING.maxYawSpeed * (0.35 + speedFactor * 0.65);
 
         for (let index = 0; index < 4; index += 1) {
             this.vehicle.updateWheelTransform(index, true);
