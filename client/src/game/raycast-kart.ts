@@ -2,6 +2,7 @@ import { Vec3 } from 'playcanvas';
 import type { AppBase, Entity, Vec2 } from 'playcanvas';
 
 import type { KartInput } from './input';
+import { getDriftTelemetry } from './kart';
 import type { KartDebugSnapshot } from './kart';
 
 type AmmoVector3 = {
@@ -240,6 +241,7 @@ export class RaycastKartController {
         const totalSpeed = Math.sqrt(velocity.x() ** 2 + velocity.y() ** 2 + velocity.z() ** 2);
         const angularY = body.getAngularVelocity().y();
 
+        const drift = getDriftTelemetry(forwardSpeed, lateralSpeed);
         return {
             totalSpeed,
             inputY: input.y,
@@ -249,7 +251,9 @@ export class RaycastKartController {
             vehicleTurn: angularY,
             targetYawSpeed: this.targetYawSpeed,
             forwardSpeed,
-            lateralSpeed
+            lateralSpeed,
+            driftActive: drift.active,
+            driftAmount: drift.amount
         };
     }
 

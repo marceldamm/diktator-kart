@@ -70,7 +70,7 @@ const input = new KeyboardInput();
 const controller = new KartController();
 let raycastController: RaycastKartController | undefined;
 type DriveMode = 'legacy' | 'raycast';
-let driveMode: DriveMode = 'legacy';
+let driveMode: DriveMode = 'raycast';
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
 const telemetryLog = document.getElementById('telemetry-log')!;
@@ -153,6 +153,7 @@ app.on('update', (dt: number) => {
     if (!raycastController) {
         try {
             raycastController = new RaycastKartController(kart, app);
+            raycastController.setActive(driveMode === 'raycast');
         } catch (error) {
             console.error('RaycastVehicle konnte nicht initialisiert werden.', error);
             raycastButton.disabled = true;

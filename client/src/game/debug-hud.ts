@@ -24,6 +24,8 @@ export class DebugHud {
                     <div class="debug-row"><span>Target yaw</span><output data-debug="targetYawSpeed">0.000</output></div>
                     <div class="debug-row"><span>Forward velocity</span><output data-debug="forwardSpeedDetail">0.000</output></div>
                     <div class="debug-row"><span>Lateral velocity</span><output data-debug="lateralSpeed">0.000</output></div>
+                    <div class="debug-row"><span>Drift status</span><output data-debug="driftStatus">NO</output></div>
+                    <div class="debug-row"><span>Drift amount</span><output data-debug="driftAmount">0.000</output></div>
                 </div>
                 <div class="debug-label">INPUT LENKUNG <small>Links &lt;----|----&gt; Rechts · 0 = neutral</small></div>
                 <div class="debug-bar" data-bar="inputSteering"><i></i><b></b></div>
@@ -64,6 +66,8 @@ export class DebugHud {
         this.setValue('yawSpeed', snapshot.yawSpeed);
         this.setValue('targetYawSpeed', snapshot.targetYawSpeed);
         this.setValue('lateralSpeed', snapshot.lateralSpeed);
+        this.values.get('driftStatus')!.textContent = snapshot.driftActive ? 'JA' : 'NEIN';
+        this.setValue('driftAmount', snapshot.driftAmount);
         this.setCenteredBar('inputSteering', snapshot.inputX, 1);
         this.setCenteredBar('controllerSteering', snapshot.steering, 1);
         this.setCenteredBar('vehicleTurn', snapshot.vehicleTurn, 1.65, 1.65, snapshot.targetYawSpeed);

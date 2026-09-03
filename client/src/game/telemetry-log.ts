@@ -30,6 +30,8 @@ type TelemetrySample = {
     movementAngle: number;
     headingVsMovement: number;
     distanceFromCenterLine: number;
+    driftActive: boolean;
+    driftAmount: number;
 };
 
 const degrees = 180 / Math.PI;
@@ -148,7 +150,9 @@ export class TelemetryLog {
             totalSpeed: snapshot.totalSpeed,
             movementAngle,
             headingVsMovement: wrapDegrees(movementAngle - heading),
-            distanceFromCenterLine: displacement.dot(this.startRight)
+            distanceFromCenterLine: displacement.dot(this.startRight),
+            driftActive: snapshot.driftActive,
+            driftAmount: snapshot.driftAmount
         });
     }
 
@@ -170,7 +174,9 @@ export class TelemetryLog {
             `totalSpeed=${number(sample.totalSpeed)}`,
             `movementAngle=${number(sample.movementAngle)}`,
             `headingVsMovement=${number(sample.headingVsMovement)}`,
-            `centerOffset=${number(sample.distanceFromCenterLine)}`
+            `centerOffset=${number(sample.distanceFromCenterLine)}`,
+            `drift=${sample.driftActive ? 'YES' : 'NO'}`,
+            `driftAmount=${number(sample.driftAmount)}`
         ].join(' | ');
     }
 }

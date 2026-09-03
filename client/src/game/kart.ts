@@ -31,6 +31,14 @@ export type KartDebugSnapshot = {
     yawSpeed: number;
     vehicleTurn: number;
     targetYawSpeed: number;
+    driftActive: boolean;
+    driftAmount: number;
+};
+
+export const getDriftTelemetry = (forwardSpeed: number, lateralSpeed: number) => {
+    const active = Math.abs(forwardSpeed) > 0.75 && Math.abs(lateralSpeed) > 0.2;
+    const amount = Math.min(1, Math.abs(lateralSpeed) / Math.max(Math.abs(forwardSpeed), 1));
+    return { active, amount };
 };
 
 const material = (color: Color) => {
@@ -110,6 +118,7 @@ export class KartController {
         const forwardSpeed = planarVelocity.dot(forwardPlanar);
         const yawSpeed = body?.angularVelocity.y ?? 0;
         const vehicleTurn = new Vec3().cross(new Vec3(0, yawSpeed, 0), forwardPlanar).dot(rightPlanar);
+        const drift = getDriftTelemetry(forwardSpeed, planarVelocity.dot(rightPlanar));
         return {
             inputX: input.x,
             inputY: input.y,
@@ -119,7 +128,9 @@ export class KartController {
             totalSpeed: velocity.length(),
             yawSpeed,
             vehicleTurn,
-            targetYawSpeed: this.targetYawSpeed
+            targetYawSpeed: this.targetYawSpeed,
+            driftActive: drift.active,
+            driftAmount: drift.amount
         };
     }
 
