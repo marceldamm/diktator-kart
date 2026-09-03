@@ -2,15 +2,22 @@ import { Color, Entity, StandardMaterial, Vec3 } from 'playcanvas';
 
 import type { KartInput } from './input';
 
-const FORWARD_FORCE = 18;
-const REVERSE_FORCE = 8;
-const STEERING_SPEED = 2.4;
-const STEERING_RESPONSE = 5.5;
-const STEERING_RETURN = 7;
-const LATERAL_GRIP = 5;
-const NEUTRAL_GRIP = 12;
-const MAX_SPEED = 12;
-const REVERSE_MAX_SPEED = 5;
+export const KART_TUNING = {
+    forwardForce: 20,
+    reverseForce: 8,
+    brakeForce: 24,
+    coastingDrag: 1.35,
+    cornerGrip: 5.5,
+    straightGrip: 11,
+    maxSpeed: 16,
+    reverseMaxSpeed: 6,
+    maxYawSpeed: 1.65,
+    steeringResponse: 5,
+    steeringReturn: 8,
+    lowSpeedSteering: 0.18,
+    steeringSpeedReference: 6,
+    highSpeedSteeringReduction: 0.45
+} as const;
 
 const material = (color: Color) => {
     const result = new StandardMaterial();
@@ -65,32 +72,51 @@ export const resetKart = (kart: Entity) => {
 export class KartController {
     private steering = 0;
 
+    reset() {
+        this.steering = 0;
+    }
+
     update(kart: Entity, input: KartInput, dt: number) {
         const body = kart.rigidbody;
         if (!body) return;
 
         const forward = kart.forward.clone();
         const velocity = body.linearVelocity.clone();
+        const planarVelocity = new Vec3(velocity.x, 0, velocity.z);
         const forwardSpeed = velocity.dot(forward);
-        const steeringResponse = input.x === 0 ? STEERING_RETURN : STEERING_RESPONSE;
+        const steeringResponse = input.x === 0 ? KART_TUNING.steeringReturn : KART_TUNING.steeringResponse;
         this.steering += (input.x - this.steering) * Math.min(1, steeringResponse * dt);
-        const force = input.y >= 0 ? FORWARD_FORCE * input.y : REVERSE_FORCE * input.y;
-        body.applyForce(forward.clone().mulScalar(force));
+
+        // Throttle, coasting and braking/reverse are deliberately separate.
+        if (input.y > 0) {
+            body.applyForce(forward.clone().mulScalar(KART_TUNING.forwardForce * input.y));
+        } else if (input.y < 0 && forwardSpeed > 0.08) {
+            const brakeDirection = planarVelocity.length() > 0.01 ? planarVelocity.normalize() : forward;
+            const brakeScale = Math.min(1, forwardSpeed / 2);
+            body.applyForce(brakeDirection.mulScalar(-KART_TUNING.brakeForce * brakeScale));
+        } else if (input.y < 0) {
+            body.applyForce(forward.clone().mulScalar(KART_TUNING.reverseForce * input.y));
+        }
+        body.applyForce(planarVelocity.clone().mulScalar(-KART_TUNING.coastingDrag));
 
         // Arcade grip allows a little inertia in a curve but settles quickly in neutral.
         const lateral = velocity.clone().sub(forward.clone().mulScalar(forwardSpeed));
-        const grip = Math.abs(this.steering) < 0.02 ? NEUTRAL_GRIP : LATERAL_GRIP;
+        const grip = Math.abs(this.steering) < 0.02 ? KART_TUNING.straightGrip : KART_TUNING.cornerGrip;
         body.applyForce(lateral.mulScalar(-grip));
 
-        // PlayCanvas forward is -Z. Reverse steering is mirrored so A/D remain intuitive.
+        // PlayCanvas forward is -Z. Curves require movement; there is no stationary spin.
         const movementDirection = forwardSpeed < -0.1 ? -1 : 1;
-        const speedFactor = 1 / (1 + (Math.abs(forwardSpeed) / MAX_SPEED) * 0.65);
-        const targetYawSpeed = this.steering * STEERING_SPEED * speedFactor * movementDirection;
-        const yawSpeed = body.angularVelocity.y + (targetYawSpeed - body.angularVelocity.y) * Math.min(1, 10 * dt);
-        body.angularVelocity = new Vec3(0, yawSpeed, 0);
+        const speedFactor = Math.min(1, Math.abs(forwardSpeed) / KART_TUNING.steeringSpeedReference);
+        const lowSpeedFactor = KART_TUNING.lowSpeedSteering + (1 - KART_TUNING.lowSpeedSteering) * speedFactor;
+        const highSpeedFactor =
+            1 - KART_TUNING.highSpeedSteeringReduction * Math.min(1, Math.abs(forwardSpeed) / KART_TUNING.maxSpeed);
+        const targetYawSpeed =
+            this.steering * KART_TUNING.maxYawSpeed * lowSpeedFactor * highSpeedFactor * movementDirection;
+        // Steering smoothing already supplies the transition. Do not carry
+        // physics-generated yaw into the next frame, especially in neutral.
+        body.angularVelocity = new Vec3(0, targetYawSpeed, 0);
 
-        const planarVelocity = new Vec3(velocity.x, 0, velocity.z);
-        const speedLimit = forwardSpeed < 0 ? REVERSE_MAX_SPEED : MAX_SPEED;
+        const speedLimit = forwardSpeed < 0 ? KART_TUNING.reverseMaxSpeed : KART_TUNING.maxSpeed;
         if (planarVelocity.length() > speedLimit) {
             const limited = planarVelocity.normalize().mulScalar(speedLimit);
             body.linearVelocity = new Vec3(limited.x, velocity.y, limited.z);

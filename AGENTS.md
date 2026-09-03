@@ -55,7 +55,7 @@ Funktionsfähigkeit geht vor Perfektion.
 
 ## Stand sichern
 
-Wenn der Benutzer den Befehl **„Stand sichern“** gibt:
+Wenn der Benutzer den Befehl **„push“** gibt:
 
 1. Prüfe den aktuellen Git-Status und die vorhandenen Änderungen.
 2. Erstelle selbstständig eine kurze, passende Commit-Nachricht, die die wesentlichen Änderungen beschreibt.

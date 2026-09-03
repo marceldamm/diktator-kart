@@ -23,6 +23,12 @@ Der Lenkwert wird intern geglättet und bei losgelassener Taste weich auf null z
 
 Die vorläufigen Kernwerte sind: Vorwärtskraft 18, Rückwärtskraft 8, Höchstgeschwindigkeit 12 und Rückwärtslimit 5 Einheiten/Sekunde.
 
+## GTA-inspirierte Arcade-Basis
+
+Der Controller trennt Beschleunigen, Ausrollen, Bremsen und Rückwärtsgang. Die Lenkung erzeugt eine geschwindigkeitsabhängige Ziel-Gierrate statt einer sofortigen Drehung auf der Stelle. Der Lenkwert wird geglättet; ohne Lenkeingabe wird die Gierrate ausgeregelt. Seitlicher Grip ist in Kurven reduziert, bleibt im Geradeauslauf aber stärker, sodass ein kleines Maß an Trägheit erhalten bleibt.
+
+Beim Wechsel von Vorwärtsfahrt zu S wird zunächst nur gebremst. Der Rückwärtsantrieb setzt erst nahe dem Stillstand ein. Physik-generierte Restrotation wird nicht in den nächsten Frame übernommen; die geglättete Lenkung bestimmt ausschließlich die aktuelle Ziel-Gierrate.
+
 ## Architektur
 
 - `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.

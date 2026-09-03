@@ -20,6 +20,8 @@ Die Testfläche wurde auf 72 × 52 Einheiten vergrößert; die vier Wände und d
 
 Zur Orientierung gibt es zusätzlich eine gestrichelte Mittellinie, eine Startlinie und zwei farbige Startmarkierungen. Diese Elemente sind rein visuell und besitzen keine Kollision.
 
+Die große Testfläche besitzt außerdem ein dezentes Raster aus visuellen Linien, damit Bewegung und Kurven auch ohne die Wände besser eingeschätzt werden können.
+
 ## Erweiterung
 
 Weitere Strecken sollen zunächst ebenfalls als klar getrennte statische Geometrie erstellt werden. Rundensystem, Hindernisse und Streckenmechaniken folgen erst nach der Validierung des grundlegenden Fahrgefühls.

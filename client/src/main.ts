@@ -60,7 +60,10 @@ createTestTrack(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
-document.getElementById('reset-kart')!.addEventListener('click', () => resetKart(kart));
+document.getElementById('reset-kart')!.addEventListener('click', () => {
+    resetKart(kart);
+    controller.reset();
+});
 
 const camera = new Entity('camera');
 camera.setPosition(0, 4.5, 13);
