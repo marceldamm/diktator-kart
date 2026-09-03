@@ -15,9 +15,9 @@ import {
     createGraphicsDevice
 } from 'playcanvas';
 
-import { followKart } from './game/follow-camera';
+import { FollowCameraController } from './game/follow-camera';
 import { KeyboardInput } from './game/input';
-import { createKart, driveKart, resetKart } from './game/kart';
+import { createKart, driveKart, KartController, resetKart } from './game/kart';
 import { createTestTrack } from './game/track';
 
 import './starter.css';
@@ -59,6 +59,7 @@ app.systems.rigidbody!.gravity.set(0, -9.81, 0);
 createTestTrack(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
+const controller = new KartController();
 document.getElementById('reset-kart')!.addEventListener('click', () => resetKart(kart));
 
 const camera = new Entity('camera');
@@ -66,6 +67,7 @@ camera.setPosition(0, 4.5, 13);
 camera.lookAt(kart.getPosition());
 camera.addComponent('camera', { clearColor: new Color(0.05, 0.07, 0.11) });
 app.root.addChild(camera);
+const followCamera = new FollowCameraController();
 
 const light = new Entity('light');
 light.addComponent('light', {
@@ -79,7 +81,7 @@ light.setEulerAngles(45, 35, 0);
 app.root.addChild(light);
 
 app.on('update', (dt: number) => {
-    driveKart(kart, input.read());
-    followKart(camera, kart, dt);
+    driveKart(controller, kart, input.read(), dt);
+    followCamera.update(camera, kart, dt);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

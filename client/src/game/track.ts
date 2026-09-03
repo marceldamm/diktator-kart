@@ -21,6 +21,14 @@ const addStaticBox = (root: Entity, name: string, position: Vec3, size: Vec3, ma
     root.addChild(entity);
 };
 
+const addVisualBox = (root: Entity, name: string, position: Vec3, size: Vec3, material: StandardMaterial) => {
+    const marker = new Entity(name);
+    marker.setPosition(position);
+    marker.setLocalScale(size);
+    marker.addComponent('render', { type: 'box', material });
+    root.addChild(marker);
+};
+
 export const createTestTrack = (root: Entity) => {
     const track = new Entity('test-track');
     root.addChild(track);
@@ -28,17 +36,27 @@ export const createTestTrack = (root: Entity) => {
     const asphalt = makeMaterial(new Color(0.13, 0.16, 0.19));
     const wall = makeMaterial(new Color(0.75, 0.16, 0.08));
     const curb = makeMaterial(new Color(0.95, 0.8, 0.22));
+    const marking = makeMaterial(new Color(0.75, 0.9, 0.95), 0.5);
+    const accent = makeMaterial(new Color(0.1, 0.8, 0.72), 0.5);
 
-    addStaticBox(track, 'ground', new Vec3(0, -0.1, 0), new Vec3(36, 0.2, 26), asphalt);
+    addStaticBox(track, 'ground', new Vec3(0, -0.1, 0), new Vec3(72, 0.2, 52), asphalt);
     // Thick boundaries make contact reliable even at low-end browser frame rates.
-    addStaticBox(track, 'north-wall', new Vec3(0, 0.55, -13), new Vec3(36, 1.1, 2), wall);
-    addStaticBox(track, 'south-wall', new Vec3(0, 0.55, 13), new Vec3(36, 1.1, 2), wall);
-    addStaticBox(track, 'west-wall', new Vec3(-18, 0.55, 0), new Vec3(2, 1.1, 26), wall);
-    addStaticBox(track, 'east-wall', new Vec3(18, 0.55, 0), new Vec3(2, 1.1, 26), wall);
+    addStaticBox(track, 'north-wall', new Vec3(0, 0.55, -26), new Vec3(72, 1.1, 2), wall);
+    addStaticBox(track, 'south-wall', new Vec3(0, 0.55, 26), new Vec3(72, 1.1, 2), wall);
+    addStaticBox(track, 'west-wall', new Vec3(-36, 0.55, 0), new Vec3(2, 1.1, 52), wall);
+    addStaticBox(track, 'east-wall', new Vec3(36, 0.55, 0), new Vec3(2, 1.1, 52), wall);
 
     // A few low visual curbs make the flat rectangle read as a simple race track.
-    addStaticBox(track, 'north-curb', new Vec3(0, 0.08, -10.5), new Vec3(30, 0.16, 0.35), curb);
-    addStaticBox(track, 'south-curb', new Vec3(0, 0.08, 10.5), new Vec3(30, 0.16, 0.35), curb);
+    addStaticBox(track, 'north-curb', new Vec3(0, 0.08, -23.5), new Vec3(66, 0.16, 0.35), curb);
+    addStaticBox(track, 'south-curb', new Vec3(0, 0.08, 23.5), new Vec3(66, 0.16, 0.35), curb);
+
+    // Visual-only markings provide orientation without adding more collision shapes.
+    for (let z = -20; z <= 20; z += 4) {
+        addVisualBox(track, `center-dash-${z}`, new Vec3(0, 0.025, z), new Vec3(0.28, 0.05, 2), marking);
+    }
+    addVisualBox(track, 'start-line', new Vec3(0, 0.03, 7), new Vec3(20, 0.06, 0.35), marking);
+    addVisualBox(track, 'start-accent-left', new Vec3(-11, 0.025, 7), new Vec3(2, 0.05, 0.25), accent);
+    addVisualBox(track, 'start-accent-right', new Vec3(11, 0.025, 7), new Vec3(2, 0.05, 0.25), accent);
 
     return track;
 };

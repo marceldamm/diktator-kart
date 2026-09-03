@@ -17,6 +17,12 @@ Das Kart ist ein dynamischer Box-Rigidbody. Die Bewegung wird über Kräfte und 
 
 Es gibt bewusst keine Räder-, Federungs- oder realistische Fahrzeug-Simulation. Die Box-Kollision des Karts und statische Box-Kollisionen der Strecke werden von PlayCanvas/Ammo behandelt.
 
+## Aktueller Controller
+
+Der Lenkwert wird intern geglättet und bei losgelassener Taste weich auf null zurückgeführt. Daraus entsteht eine geschwindigkeitsabhängige Ziel-Drehgeschwindigkeit: bei höherem Tempo wird sie reduziert, beim Rückwärtsfahren gespiegelt. Im Neutralzustand wird die Y-Drehgeschwindigkeit aktiv beruhigt; seitlicher Grip bleibt in Kurven teilweise erhalten und wird ohne Lenkeingabe verstärkt.
+
+Die vorläufigen Kernwerte sind: Vorwärtskraft 18, Rückwärtskraft 8, Höchstgeschwindigkeit 12 und Rückwärtslimit 5 Einheiten/Sekunde.
+
 ## Architektur
 
 - `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.
