@@ -2,6 +2,8 @@ import { Color, Entity, StandardMaterial, Vec3 } from 'playcanvas';
 
 import type { KartInput } from './input';
 
+const START_YAW = -90;
+
 export const KART_TUNING = {
     forwardForce: 20,
     reverseForce: 8,
@@ -65,7 +67,8 @@ export const createKart = (root: Entity) => {
 
     kart.addComponent('collision', { type: 'box', halfExtents: new Vec3(0.72, 0.25, 1.1) });
     kart.addComponent('rigidbody', { type: 'dynamic', mass: 1.2, friction: 0.9, restitution: 0.05 });
-    kart.rigidbody!.angularFactor = new Vec3(0, 1, 0);
+    // Ammo owns translation/collision only. The controller owns all rotation.
+    kart.rigidbody!.angularFactor = new Vec3(0, 0, 0);
     kart.rigidbody!.linearDamping = 0.35;
     kart.rigidbody!.angularDamping = 0.8;
     root.addChild(kart);
@@ -88,10 +91,12 @@ export const resetKart = (kart: Entity) => {
 export class KartController {
     private steering = 0;
     private targetYawSpeed = 0;
+    private heading = START_YAW;
 
     reset() {
         this.steering = 0;
         this.targetYawSpeed = 0;
+        this.heading = START_YAW;
     }
 
     getDebugSnapshot(kart: Entity, input: KartInput): KartDebugSnapshot {
@@ -122,6 +127,9 @@ export class KartController {
         const body = kart.rigidbody;
         if (!body) return;
 
+        // Synchronize the physics body to the controller-owned heading before
+        // calculating forces, so Ammo cannot feed its own rotation back in.
+        body.teleport(kart.getPosition(), new Vec3(0, this.heading, 0));
         const forward = kart.forward.clone();
         const forwardPlanar = new Vec3(forward.x, 0, forward.z).normalize();
         const velocity = body.linearVelocity.clone();
@@ -164,15 +172,17 @@ export class KartController {
         const targetYawSpeed =
             this.steering * KART_TUNING.maxYawSpeed * lowSpeedFactor * highSpeedFactor * movementDirection;
         this.targetYawSpeed = targetYawSpeed;
-        // Steering smoothing already supplies the transition. Do not carry
-        // physics-generated yaw into the next frame, especially in neutral.
-        body.angularVelocity = new Vec3(0, input.x === 0 ? 0 : targetYawSpeed, 0);
+        this.heading += targetYawSpeed * dt * (180 / Math.PI);
+        // Keep angular velocity locked even while the controller changes heading.
+        body.angularVelocity = new Vec3(0, 0, 0);
 
         const speedLimit = forwardSpeed < 0 ? KART_TUNING.reverseMaxSpeed : KART_TUNING.maxSpeed;
         if (planarVelocity.length() > speedLimit) {
             const limited = planarVelocity.normalize().mulScalar(speedLimit);
             body.linearVelocity = new Vec3(limited.x, velocity.y, limited.z);
         }
+
+        body.teleport(kart.getPosition(), new Vec3(0, this.heading, 0));
     }
 }
 

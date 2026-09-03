@@ -33,6 +33,8 @@ Seitliche Restgeschwindigkeit wird bei neutraler Lenkung vollständig entfernt. 
 
 Die Neutral-Lenkung arbeitet strikt planar: X/Z-Geschwindigkeit wird auf den normalisierten planaren Forward-Vektor projiziert, während die vertikale Y-Geschwindigkeit unverändert bleibt. Bei `input.x === 0` wird damit jede seitliche X/Z-Komponente entfernt und die Yaw-Geschwindigkeit auf null gesetzt.
 
+Die Y-Rotation des Rigidbody ist vollständig gesperrt (`angularFactor = (0, 0, 0)`). Der Controller verwaltet den Heading-Winkel selbst und synchronisiert ihn als Rotation an den Physikkörper. Ammo bleibt damit für Position, Kollisionen und Boden zuständig, kann aber keinen eigenen Yaw mehr erzeugen.
+
 ## Architektur
 
 - `client/src/game/input.ts`: Tastaturinput als austauschbare Inputquelle.
