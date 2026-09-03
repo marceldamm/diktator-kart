@@ -20,6 +20,7 @@ export class RaceHud {
     }
 
     update(snapshot: RaceSnapshot): void {
+        this.lap.parentElement!.classList.toggle('is-hidden', snapshot.phase === 'idle');
         this.lap.textContent =
             snapshot.phase === 'finished' ? 'RENNEN BEENDET' : `RUNDE ${snapshot.lap} / ${snapshot.lapsToWin}`;
         this.time.textContent = `ZEIT ${RaceController.formatTime(snapshot.raceTime)}`;

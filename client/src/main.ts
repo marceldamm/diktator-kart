@@ -38,12 +38,12 @@ await new Promise<void>((resolve) => {
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    '<section class="telemetry-panel"><div class="telemetry-title"><strong>Geradeaus-Telemetrie</strong><span id="telemetry-status">gestoppt</span></div><div class="controls"><button id="telemetry-start" type="button">Logging starten</button><button id="telemetry-stop" type="button">Logging stoppen</button><button id="telemetry-clear" type="button">Log l&ouml;schen</button><button id="telemetry-copy" type="button">Log kopieren</button></div><pre id="telemetry-log" class="telemetry-log">Noch keine Samples aufgezeichnet.</pre></section>'
+    '<section class="telemetry-panel"><div class="telemetry-title"><strong>Telemetrie und Log</strong><span id="telemetry-status">gestoppt</span></div><div class="controls"><button id="telemetry-start" type="button">Logging starten</button><button id="telemetry-stop" type="button">Logging stoppen</button><button id="telemetry-clear" type="button">Log l&ouml;schen</button><button id="telemetry-copy" type="button">Log kopieren</button></div><pre id="telemetry-log" class="telemetry-log">Noch keine Samples aufgezeichnet.</pre></section>'
 );
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD/Pfeiltasten zum Fahren &middot; Space = Hop / Drift</p><button id="reset-kart" type="button">Rennen neu starten</button></section></div>'
+    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD/Pfeiltasten zum Fahren &middot; Space = Hop / Drift</p><div class="controls"><button id="start-race" type="button">Start</button><button id="reset-kart" type="button">Kart zur&uuml;cksetzen</button></div></section></div>'
 );
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
@@ -74,24 +74,10 @@ const race = new RaceController();
 race.reset(kart);
 const raceHud = new RaceHud();
 let raycastController: RaycastKartController | undefined;
-type DriveMode = 'legacy' | 'raycast';
-let driveMode: DriveMode = 'raycast';
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
 const telemetryLog = document.getElementById('telemetry-log')!;
 const telemetryStatus = document.getElementById('telemetry-status')!;
-const vehicleModeStatus = document.createElement('span');
-vehicleModeStatus.id = 'vehicle-mode-status';
-vehicleModeStatus.textContent = 'RaycastVehicle';
-const raycastButton = document.createElement('button');
-raycastButton.type = 'button';
-raycastButton.textContent = 'RaycastVehicle';
-raycastButton.addEventListener('click', () => setDriveMode('raycast'));
-const legacyButton = document.createElement('button');
-legacyButton.type = 'button';
-legacyButton.textContent = 'Alter Controller';
-legacyButton.addEventListener('click', () => setDriveMode('legacy'));
-document.querySelector('.hud .panel')?.append(vehicleModeStatus, legacyButton, raycastButton);
 const refreshTelemetryView = () => {
     telemetryLog.textContent = telemetry.getText();
     telemetryLog.scrollTop = telemetryLog.scrollHeight;
@@ -109,14 +95,10 @@ const restartRace = () => {
     refreshTelemetryView();
 };
 document.getElementById('reset-kart')!.addEventListener('click', restartRace);
-function setDriveMode(mode: DriveMode) {
-    driveMode = mode;
-    if (!raycastController) return;
-    raycastController.setActive(mode === 'raycast');
+document.getElementById('start-race')!.addEventListener('click', () => {
     restartRace();
-    vehicleModeStatus.textContent = mode === 'raycast' ? 'RaycastVehicle' : 'Eigenbau';
-    refreshTelemetryView();
-}
+    race.start(kart);
+});
 document.getElementById('telemetry-start')!.addEventListener('click', () => {
     telemetry.start(kart);
     refreshTelemetryView();
@@ -156,17 +138,15 @@ app.on('update', (dt: number) => {
     if (!raycastController) {
         try {
             raycastController = new RaycastKartController(kart, app);
-            raycastController.setActive(driveMode === 'raycast');
+            raycastController.setActive(true);
         } catch (error) {
             console.error('RaycastVehicle konnte nicht initialisiert werden.', error);
-            raycastButton.disabled = true;
-            vehicleModeStatus.textContent = 'RaycastVehicle nicht verfügbar';
         }
     }
     const rawInput = input.read();
     const kartInput = race.canDrive ? rawInput : { steering: 0, throttle: 0, hop: false, drift: false };
-    const activeController = driveMode === 'raycast' && raycastController ? raycastController : controller;
-    if (driveMode === 'raycast' && raycastController) raycastController.update(kartInput, dt);
+    const activeController = raycastController ?? controller;
+    if (raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
     debugHud.update(activeController.getDebugSnapshot(kart, kartInput));
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();

@@ -326,3 +326,7 @@ button:disabled {
 .race-hud b.race-go {
     color: #5ff0c7;
 }
+
+.race-hud.is-hidden {
+    display: none;
+}

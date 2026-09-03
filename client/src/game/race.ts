@@ -4,7 +4,7 @@ import type { Entity } from 'playcanvas';
 import { RACE_LAYOUT } from './race-layout';
 
 export type RaceSnapshot = Readonly<{
-    phase: 'countdown' | 'racing' | 'finished';
+    phase: 'idle' | 'countdown' | 'racing' | 'finished';
     countdownText: string;
     lap: number;
     lapsToWin: number;
@@ -18,7 +18,7 @@ const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${(seconds 
 
 /** Position-triggered ordered checkpoint race flow, kept independent from rendering and input. */
 export class RaceController {
-    private phase: RaceSnapshot['phase'] = 'countdown';
+    private phase: RaceSnapshot['phase'] = 'idle';
     private countdown = 3.5;
     private lap = 1;
     private raceTime = 0;
@@ -28,7 +28,7 @@ export class RaceController {
     private previousPosition = new Vec3();
 
     reset(kart: Entity): void {
-        this.phase = 'countdown';
+        this.phase = 'idle';
         this.countdown = 3.5;
         this.lap = 1;
         this.raceTime = 0;
@@ -37,8 +37,13 @@ export class RaceController {
         this.previousPosition.copy(kart.getPosition());
     }
 
+    start(kart: Entity): void {
+        this.reset(kart);
+        this.phase = 'countdown';
+    }
+
     get canDrive(): boolean {
-        return this.phase === 'racing';
+        return this.phase === 'idle' || this.phase === 'racing';
     }
 
     update(kart: Entity, dt: number): void {
@@ -66,7 +71,9 @@ export class RaceController {
 
     snapshot(): RaceSnapshot {
         const countdownText =
-            this.phase === 'finished'
+            this.phase === 'idle'
+                ? ''
+                : this.phase === 'finished'
                 ? 'ZIEL!'
                 : this.phase === 'racing'
                   ? 'LOS!'

@@ -53,13 +53,16 @@ export const RAYCAST_KART_TUNING = {
         straightAngularDamping: 0.72
     },
     engine: {
-        forwardForce: 520,
-        reverseForce: 210,
-        forceRiseRate: 900,
-        forceFallRate: 1800,
-        maxSpeed: 16,
-        reverseMaxSpeed: 6,
-        powerFadeStart: 0.72
+        forwardForce: 1100,
+        reverseForce: 280,
+        forceRiseRate: 1250,
+        forceFallRate: 2200,
+        maxSpeed: 32,
+        reverseMaxSpeed: 8,
+        // Steering and yaw damping retain the proven 16-speed reference,
+        // even though the drivetrain can now carry more top speed.
+        handlingSpeedReference: 16,
+        powerFadeStart: 0.78
     },
     braking: {
         serviceForce: 900,
@@ -68,7 +71,7 @@ export const RAYCAST_KART_TUNING = {
         directionChangeSpeed: 0.35
     },
     steering: {
-        maxAngle: 0.22,
+        maxAngle: 0.19,
         response: 5,
         returnRate: 6,
         highSpeedReduction: 0.55
@@ -212,7 +215,11 @@ export class RaycastKartController {
         const forward = this.kart.forward;
         const forwardSpeed = velocity.x() * forward.x + velocity.z() * forward.z;
         const planarSpeed = Math.sqrt(velocity.x() ** 2 + velocity.z() ** 2);
-        const speedRatio = clamp(Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.engine.maxSpeed, 0, 1);
+        const speedRatio = clamp(
+            Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.engine.handlingSpeedReference,
+            0,
+            1
+        );
         this.updateHopAndDrift(input, planarSpeed, dt);
         this.updateSteering(input.steering, speedRatio, dt);
         this.updateAngularDamping(speedRatio);

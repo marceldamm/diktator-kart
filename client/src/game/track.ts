@@ -51,8 +51,8 @@ const addFinishLine = (root: Entity, black: StandardMaterial, white: StandardMat
             addVisualBox(
                 root,
                 `finish-${row}-${column}`,
-                new Vec3(-220 + column * 4.4 - 19.8, 0.025, 42 + row * 2.2),
-                new Vec3(4.4, 0.05, 2.2),
+                new Vec3(-220 + row * 2.2 - 1.1, 0.025, 65 + column * 8.8 - 39.6),
+                new Vec3(2.2, 0.05, 8.8),
                 (row + column) % 2 === 0 ? white : black
             );
         }
@@ -94,9 +94,9 @@ export const createRaceTrack = (root: Entity) => {
     addVisualBox(track, 'south-curb', new Vec3(0, 0.045, -125), new Vec3(554, 0.08, 1.2), yellow);
     addVisualBox(track, 'island-grass', new Vec3(0, 0.02, 0), new Vec3(316, 0.05, 8), teal);
     addFinishLine(track, black, white);
-    addVisualBox(track, 'start-arch-left', new Vec3(-220, 2.1, 32), new Vec3(0.7, 4.2, 0.7), yellow);
-    addVisualBox(track, 'start-arch-right', new Vec3(-220, 2.1, 52), new Vec3(0.7, 4.2, 0.7), yellow);
-    addVisualBox(track, 'start-arch-top', new Vec3(-220, 4, 42), new Vec3(0.7, 0.7, 20), yellow);
+    addVisualBox(track, 'start-arch-left', new Vec3(-220, 2.1, 20), new Vec3(0.7, 4.2, 0.7), yellow);
+    addVisualBox(track, 'start-arch-right', new Vec3(-220, 2.1, 110), new Vec3(0.7, 4.2, 0.7), yellow);
+    addVisualBox(track, 'start-arch-top', new Vec3(-220, 4, 65), new Vec3(0.7, 0.7, 90), yellow);
     RACE_LAYOUT.checkpoints.forEach((checkpoint, index) => {
         addVisualBox(
             track,
