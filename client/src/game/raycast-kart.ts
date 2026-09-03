@@ -56,6 +56,7 @@ declare const Ammo: AmmoNamespace;
 export const RAYCAST_KART_TUNING = {
     maxEngineForce: 360,
     maxReverseForce: 150,
+    engineForceResponse: 900,
     maxBrakeForce: 120,
     maxSpeed: 16,
     reverseMaxSpeed: 6,
@@ -93,6 +94,7 @@ export class RaycastKartController {
     private readonly dynamicsWorld: unknown;
     private active = false;
     private steering = 0;
+    private engineForce = 0;
     private targetYawSpeed = 0;
 
     constructor(kart: Entity, app: AppBase) {
@@ -141,6 +143,18 @@ export class RaycastKartController {
             wheelInfo.set_m_rollInfluence(RAYCAST_KART_TUNING.rollInfluence);
         });
 
+        console.table(this.wheelEntities.map((wheel, index) => {
+            const position = wheel.getLocalPosition();
+            return {
+                index,
+                axle: index < 2 ? 'front' : 'rear',
+                side: position.x < 0 ? 'left' : 'right',
+                connectionX: position.x,
+                connectionY: -0.15,
+                connectionZ: position.z
+            };
+        }));
+
         Ammo.destroy(connection);
         Ammo.destroy(direction);
         Ammo.destroy(axle);
@@ -163,6 +177,7 @@ export class RaycastKartController {
         } else {
             (this.app.systems.rigidbody!.dynamicsWorld as { removeAction(action: AmmoVehicle): void }).removeAction(this.vehicle);
             this.steering = 0;
+            this.engineForce = 0;
             this.targetYawSpeed = 0;
             this.body.setAngularVelocity(new Ammo.btVector3(0, 0, 0));
         }
@@ -170,6 +185,7 @@ export class RaycastKartController {
 
     reset(): void {
         this.steering = 0;
+        this.engineForce = 0;
         this.targetYawSpeed = 0;
         this.vehicle.resetSuspension?.();
         this.body.setLinearVelocity(new Ammo.btVector3(0, 0, 0));
@@ -192,24 +208,28 @@ export class RaycastKartController {
         const forward = this.kart.forward;
         const forwardSpeed = velocity.x() * forward.x + velocity.y() * forward.y + velocity.z() * forward.z;
         const throttle = clamp(input.y, -1, 1);
-        let engineForce = 0;
+        let targetEngineForce = 0;
         let brakeForce = 0;
 
         // btRaycastVehicle uses the configured local +Z as its forward axis.
         // This kart's visual forward is PlayCanvas -Z, so engine force needs
         // the opposite sign to make positive input move along kart.forward.
         if (throttle > 0) {
-            engineForce = -throttle * RAYCAST_KART_TUNING.maxEngineForce;
+            targetEngineForce = -throttle * RAYCAST_KART_TUNING.maxEngineForce;
         } else if (throttle < 0 && forwardSpeed > 0.25) {
             brakeForce = -throttle * RAYCAST_KART_TUNING.maxBrakeForce;
         } else if (throttle < 0) {
-            engineForce = -throttle * RAYCAST_KART_TUNING.maxReverseForce;
+            targetEngineForce = -throttle * RAYCAST_KART_TUNING.maxReverseForce;
         }
+
+        const forceStep = RAYCAST_KART_TUNING.engineForceResponse * dt;
+        const forceDelta = targetEngineForce - this.engineForce;
+        this.engineForce += Math.abs(forceDelta) <= forceStep ? forceDelta : Math.sign(forceDelta) * forceStep;
 
         this.vehicle.setSteeringValue(this.steering, 0);
         this.vehicle.setSteeringValue(this.steering, 1);
-        this.vehicle.applyEngineForce(engineForce, 2);
-        this.vehicle.applyEngineForce(engineForce, 3);
+        this.vehicle.applyEngineForce(this.engineForce, 2);
+        this.vehicle.applyEngineForce(this.engineForce, 3);
         for (let index = 0; index < 4; index += 1) {
             this.vehicle.setBrake(brakeForce, index);
         }
