@@ -47,6 +47,7 @@ const material = (hex: string) => {
 };
 
 export class ItemSystem {
+    private readonly statues: { entity: Entity; life: number }[] = [];
     private readonly root: Entity;
     private readonly bots: BotRaceManager;
     private readonly grantBoost: () => void;
@@ -112,6 +113,8 @@ export class ItemSystem {
     }
 
     reset(): void {
+        for (const statue of this.statues) statue.entity.destroy();
+        this.statues.length = 0;
         this.inventory = null;
         this.nextItem = 0;
         this.noticeTimer = 0;
@@ -130,6 +133,15 @@ export class ItemSystem {
     }
 
     update(player: Entity, dt: number, active: boolean): void {
+        if (!active || !this.active) return;
+        for (let index = this.statues.length - 1; index >= 0; index -= 1) {
+            const statue = this.statues[index];
+            statue.life -= dt;
+            if (statue.life <= 0) {
+                statue.entity.destroy();
+                this.statues.splice(index, 1);
+            }
+        }
         this.noticeTimer = Math.max(0, this.noticeTimer - dt);
         this.shieldTimer = Math.max(0, this.shieldTimer - dt);
         this.slowTimer = Math.max(0, this.slowTimer - dt);
@@ -307,7 +319,7 @@ export class ItemSystem {
         statue.addComponent('collision', { type: 'cylinder', radius: 0.9, height: 2.8 });
         statue.addComponent('rigidbody', { type: 'static' });
         this.root.addChild(statue);
-        window.setTimeout(() => statue.destroy(), 9000);
+        this.statues.push({ entity: statue, life: 9 });
     }
 
     private say(message: string): void {

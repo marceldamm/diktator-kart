@@ -33,6 +33,7 @@ export class RaceController {
         this.lap = 1;
         this.raceTime = 0;
         this.lapTime = 0;
+        this.bestLapTime = null;
         this.nextCheckpoint = 0;
         this.previousPosition.copy(kart.getPosition());
     }
@@ -93,7 +94,9 @@ export class RaceController {
     static formatTime = formatTime;
 
     progress(kart: Entity): number {
-        if (this.phase === 'finished') return RACE_LAYOUT.lapsToWin * (RACE_LAYOUT.checkpoints.length + 1) + 1;
+        // Earlier finishers must stay ahead after other racers cross the line.
+        if (this.phase === 'finished')
+            return RACE_LAYOUT.lapsToWin * (RACE_LAYOUT.checkpoints.length + 1) + 1 / (1 + this.raceTime);
         const segment = (this.lap - 1) * (RACE_LAYOUT.checkpoints.length + 1) + this.nextCheckpoint;
         const target = RACE_LAYOUT.checkpoints[this.nextCheckpoint]?.position ?? RACE_LAYOUT.finish.position;
         return segment - Math.min(0.99, kart.getPosition().distance(target) / 1000);

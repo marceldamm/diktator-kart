@@ -127,17 +127,50 @@ export class GameUi {
         return this.mode;
     }
 
-    update(snapshot: RaceSnapshot, savedBest: number | null = null, newRecord = false): void {
+    update(snapshot: RaceSnapshot, savedBest: number | null = null, newRecord = false, position = 1): void {
+        if (snapshot.phase !== 'finished') this.wasFinished = false;
         if (snapshot.phase !== 'finished' || this.wasFinished) return;
         this.wasFinished = true;
-        const best =
-            snapshot.bestLapTime === null
-                ? 'ohne registrierte Runde'
-                : `beste Runde ${RaceController.formatTime(snapshot.bestLapTime)}`;
-        document.getElementById('result-copy')!.textContent =
+        const copy = document.getElementById('result-copy')!;
+        copy.classList.add('race-newspaper');
+        copy.replaceChildren();
+        const masthead = document.createElement('small');
+        masthead.textContent = 'DIE EINSTIMMIGE PRESSE · SPORTAUSGABE';
+        const headline = document.createElement('strong');
+        headline.textContent =
             this.mode === 'time-trial'
-                ? `${newRecord ? 'NEUER AKTENREKORD!' : 'Zeit ordnungsgemäß erfasst.'} Gesamtzeit ${RaceController.formatTime(snapshot.raceTime)}${savedBest === null ? '' : ` · Rekord ${RaceController.formatTime(savedBest)}`}.`
-                : `${this.selected.name} erklärt das Rennen nach ${RaceController.formatTime(snapshot.raceTime)} und ${best} für planmäßig gewonnen.`;
+                ? newRecord
+                    ? 'Neuer Aktenrekord amtlich bestätigt'
+                    : 'Zeit ordnungsgemäß erfasst'
+                : position === 1
+                  ? 'Ministerium bestätigt echten Sieg'
+                  : `Regierung feiert Platz ${position} als historischen Erfolg`;
+        const byline = document.createElement('span');
+        byline.textContent = `${this.selected.name} · Hauptstadt auf Bewährung`;
+        const statistics = document.createElement('span');
+        statistics.className = 'report-statistics';
+        const metrics = [
+            [
+                this.mode === 'time-trial' ? 'Gespeicherter Rekord' : 'Amtlicher Platz',
+                this.mode === 'time-trial'
+                    ? savedBest === null
+                        ? '—'
+                        : RaceController.formatTime(savedBest)
+                    : String(position)
+            ],
+            ['Rennzeit', RaceController.formatTime(snapshot.raceTime)],
+            ['Beste Runde', snapshot.bestLapTime === null ? '—' : RaceController.formatTime(snapshot.bestLapTime)]
+        ];
+        for (const [label, value] of metrics) {
+            const metric = document.createElement('span');
+            const caption = document.createElement('small');
+            caption.textContent = label;
+            const number = document.createElement('b');
+            number.textContent = value;
+            metric.append(caption, number);
+            statistics.append(metric);
+        }
+        copy.append(masthead, headline, byline, statistics);
         this.result.classList.remove('is-hidden');
     }
 

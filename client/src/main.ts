@@ -282,7 +282,7 @@ app.on('update', (dt: number) => {
         }
         announcer.say('finish', true);
     }
-    raceHud.update(raceSnapshot, racePosition, bots.racers.length + 1);
-    gameUi.update(raceSnapshot, savedTimeTrialBest, newTimeTrialRecord);
+    raceHud.update(raceSnapshot, racePosition, gameMode === 'time-trial' ? 1 : bots.racers.length + 1);
+    gameUi.update(raceSnapshot, savedTimeTrialBest, newTimeTrialRecord, racePosition);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

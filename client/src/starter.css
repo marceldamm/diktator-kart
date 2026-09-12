@@ -919,3 +919,33 @@ button:disabled {
 .reduced-effects .ability-notice {
     transition: none;
 }
+.race-newspaper {
+    display: grid;
+    gap: 14px;
+    max-width: 620px;
+    padding: 24px;
+    background: #e8dfbf;
+    color: #29251e;
+    border: 5px double #554c38;
+    font-family: Georgia, serif;
+}
+.race-newspaper > strong {
+    font-size: clamp(24px, 4vw, 38px);
+    line-height: 1.08;
+}
+.race-newspaper > small {
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 8px;
+    letter-spacing: 0.08em;
+}
+.report-statistics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding-top: 14px;
+    border-top: 1px solid currentColor;
+}
+.report-statistics > span {
+    display: grid;
+    gap: 5px;
+}
