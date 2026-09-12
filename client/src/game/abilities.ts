@@ -4,7 +4,7 @@ import type { BotRaceManager } from './bots';
 import type { DriverDefinition } from './drivers';
 
 const ABILITIES: Record<string, Readonly<{ name: string; icon: string }>> = {
-    hitler: { name: 'Größenbefehl', icon: '⚡' },
+    groefaz: { name: 'Größenbefehl', icon: '⚡' },
     stalin: { name: 'Planbereinigung', icon: '📋' },
     mussolini: { name: 'Balkonrede', icon: '📢' },
     mao: { name: 'Großer Sprung', icon: '↥' },
@@ -74,7 +74,7 @@ export class AbilitySystem {
             this.say(`NOCH ${Math.ceil(this.cooldown)} SEKUNDEN BIS ZUR GENEHMIGUNG`);
             return;
         }
-        const ability = ABILITIES[this.driver.id] ?? ABILITIES.hitler;
+        const ability = ABILITIES[this.driver.id] ?? ABILITIES.groefaz;
         switch (this.driver.id) {
             case 'stalin':
                 for (const racer of this.bots.racers) this.bots.applyHit(racer.entity, 1.8);
@@ -109,7 +109,7 @@ export class AbilitySystem {
     }
 
     private render(): void {
-        const ability = ABILITIES[this.driver.id] ?? ABILITIES.hitler;
+        const ability = ABILITIES[this.driver.id] ?? ABILITIES.groefaz;
         const ready = this.cooldown === 0;
         this.hud.innerHTML = `<b>${ability.icon}</b><span>${ability.name}</span><small>${ready ? 'Q einsetzen' : `${Math.ceil(this.cooldown)} s`}</small>`;
         this.hud.classList.toggle('is-ready', ready);

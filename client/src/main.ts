@@ -175,6 +175,7 @@ const gameUi = new GameUi({
     onDriver: (driver) => {
         applyKartStyle(kart, driver);
         abilities.setDriver(driver);
+        bots.setPlayerDriver(driver);
     },
     onStart: startRace,
     onRestart: startRace,
@@ -281,7 +282,7 @@ app.on('update', (dt: number) => {
     items.update(kart, dt, race.canDrive && !gameUi.isPaused);
     if (!gameUi.isPaused) abilities.update(dt);
     const leaderLap = Math.max(race.snapshot().lap, ...bots.snapshot().map((bot) => bot.lap));
-    if (!gameUi.isPaused) worldEvents.update(dt, leaderLap, kart);
+    if (!gameUi.isPaused && race.canDrive) worldEvents.update(dt, gameMode === 'time-trial' ? 1 : leaderLap, kart);
     botSnapshotTimer += dt;
     if (botSnapshotTimer >= 1) {
         botSnapshotTimer = 0;

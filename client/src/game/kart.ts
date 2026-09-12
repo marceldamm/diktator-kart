@@ -100,6 +100,7 @@ export const createKart = (root: Entity, driver: DriverDefinition = DEFAULT_DRIV
     kart.rigidbody!.linearDamping = 0.05;
     kart.rigidbody!.angularDamping = 0.8;
     root.addChild(kart);
+    applyKartStyle(kart, driver);
     return kart;
 };
 

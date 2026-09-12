@@ -4,7 +4,8 @@ import { Vec3 } from 'playcanvas';
 import { DRIVERS } from './drivers';
 import type { DriverDefinition } from './drivers';
 import type { KartInput } from './input';
-import { createKart, driveKart, KartController, teleportKart } from './kart';
+import { applyKartStyle, createKart, driveKart, KartController, teleportKart } from './kart';
+import { KartAnimator } from './kart-animation';
 import { RaceController } from './race';
 import { RACE_LAYOUT } from './race-layout';
 
@@ -56,6 +57,7 @@ type BotRacer = {
     personality: BotPersonality;
     race: RaceController;
     controller: KartController;
+    animator: KartAnimator;
     routeIndex: number;
     startPosition: Vec3;
     slowTimer: number;
@@ -108,6 +110,7 @@ export class BotRaceManager {
                 personality: BOT_PERSONALITIES[personalities[index]],
                 race,
                 controller: new KartController(),
+                animator: new KartAnimator(entity),
                 routeIndex: 0,
                 startPosition,
                 slowTimer: 0,
@@ -121,10 +124,21 @@ export class BotRaceManager {
         for (const racer of this.racers) racer.entity.enabled = active;
     }
 
+    setPlayerDriver(driver: DriverDefinition): void {
+        const opponents = DRIVERS.filter((candidate) => candidate.id !== driver.id);
+        this.racers.forEach((racer, index) => {
+            racer.driver = opponents[index];
+            racer.entity.name = `bot-${racer.driver.id}`;
+            applyKartStyle(racer.entity, racer.driver);
+            racer.animator.reset();
+        });
+    }
+
     start(): void {
         for (const racer of this.racers) {
             teleportKart(racer.entity, racer.startPosition, RACE_LAYOUT.startYaw);
             racer.controller.reset();
+            racer.animator.reset();
             racer.race.start(racer.entity);
             racer.routeIndex = 0;
             racer.slowTimer = 0;
@@ -136,6 +150,7 @@ export class BotRaceManager {
         for (const racer of this.racers) {
             teleportKart(racer.entity, racer.startPosition, RACE_LAYOUT.startYaw);
             racer.controller.reset();
+            racer.animator.reset();
             racer.race.reset(racer.entity);
             racer.routeIndex = 0;
             racer.slowTimer = 0;
@@ -156,6 +171,11 @@ export class BotRaceManager {
                 ? this.createInput(racer)
                 : { steering: 0, throttle: 0, hop: false, drift: false };
             driveKart(racer.controller, racer.entity, input, dt);
+            racer.animator.update(
+                racer.controller.getDebugSnapshot(racer.entity, input),
+                dt,
+                document.documentElement.classList.contains('reduced-effects')
+            );
             racer.race.update(racer.entity, dt);
         }
     }
