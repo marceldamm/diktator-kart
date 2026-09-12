@@ -26,6 +26,7 @@ import { KeyboardInput } from './game/input';
 import { ItemSystem } from './game/items';
 import type { ItemId } from './game/items';
 import { applyKartStyle, createKart, driveKart, KartController, resetKart } from './game/kart';
+import { KartAnimator } from './game/kart-animation';
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
@@ -77,6 +78,7 @@ const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
 const race = new RaceController();
+const kartAnimator = new KartAnimator(kart);
 race.reset(kart);
 const raceHud = new RaceHud();
 const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.search).has('kartTest'));
@@ -126,6 +128,7 @@ const refreshTelemetryView = () => {
 const restartRace = () => {
     resetKart(kart);
     controller.reset();
+    kartAnimator.reset();
     raycastController?.reset();
     race.reset(kart);
     bots.reset();
@@ -228,7 +231,9 @@ app.on('update', (dt: number) => {
     const activeController = raycastController ?? controller;
     if (raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
-    debugHud.update(activeController.getDebugSnapshot(kart, kartInput));
+    const kartSnapshot = activeController.getDebugSnapshot(kart, kartInput);
+    debugHud.update(kartSnapshot);
+    kartAnimator.update(kartSnapshot, dt, document.documentElement.classList.contains('reduced-effects'));
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
     if (!gameUi.isPaused) race.update(kart, dt);
