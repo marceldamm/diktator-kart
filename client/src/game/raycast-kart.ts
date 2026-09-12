@@ -1,6 +1,7 @@
 import { Vec3 } from 'playcanvas';
 import type { AppBase, Entity } from 'playcanvas';
 
+import { DRIFT_CHARGE, driftStage } from './drift-charge';
 import type { KartInput } from './input';
 import { getDriftTelemetry } from './kart';
 import type { KartDebugSnapshot } from './kart';
@@ -92,8 +93,8 @@ export const RAYCAST_KART_TUNING = {
         blendInRate: 7,
         blendOutRate: 5,
         angularDamping: 0.22,
-        minimumDurationForBoost: 0.7,
-        boostDuration: 0.55,
+        minimumDurationForBoost: DRIFT_CHARGE.first,
+        boostDuration: DRIFT_CHARGE.firstBoost,
         boostForce: 260
     },
     hop: { impulse: 270, cooldown: 0.28, groundHeight: 0.85, driftWindow: 0.5 },
@@ -210,6 +211,14 @@ export class RaycastKartController {
 
     grantBoost(duration = 0.8): void {
         this.boostTimer = Math.max(this.boostTimer, duration);
+    }
+
+    getDriftCharge(): { stage: 0 | 1 | 2; fraction: number; active: boolean } {
+        return {
+            stage: driftStage(this.driftDuration),
+            fraction: Math.min(1, this.driftDuration / DRIFT_CHARGE.second),
+            active: this.drifting
+        };
     }
 
     update(input: KartInput, dt: number): void {
@@ -392,7 +401,9 @@ export class RaycastKartController {
         if (canStartDrift) this.drifting = true;
         if (this.drifting && (!input.drift || planarSpeed < RAYCAST_KART_TUNING.drift.minSpeed * 0.55)) {
             if (this.driftDuration >= RAYCAST_KART_TUNING.drift.minimumDurationForBoost) {
-                this.boostTimer = RAYCAST_KART_TUNING.drift.boostDuration;
+                const duration =
+                    driftStage(this.driftDuration) === 2 ? DRIFT_CHARGE.secondBoost : DRIFT_CHARGE.firstBoost;
+                this.boostTimer = Math.max(this.boostTimer, duration);
             }
             this.drifting = false;
             this.driftDuration = 0;

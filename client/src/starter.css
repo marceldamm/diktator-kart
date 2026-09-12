@@ -949,3 +949,33 @@ button:disabled {
     display: grid;
     gap: 5px;
 }
+.drift-charge {
+    position: fixed;
+    bottom: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 17;
+    display: grid;
+    gap: 7px;
+    padding: 12px 18px;
+    background: #08111de8;
+    border: 2px solid #738697;
+    color: #eff8ff;
+    font:
+        800 12px system-ui,
+        sans-serif;
+    pointer-events: none;
+}
+.drift-charge progress {
+    width: 100%;
+    accent-color: #48ceff;
+}
+.drift-charge[data-stage='1'] {
+    border-color: #48ceff;
+}
+.drift-charge[data-stage='2'] {
+    border-color: #ffd35a;
+}
+.drift-charge[data-stage='2'] progress {
+    accent-color: #ffd35a;
+}

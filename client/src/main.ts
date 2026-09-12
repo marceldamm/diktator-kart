@@ -83,6 +83,15 @@ const race = new RaceController();
 const kartAnimator = new KartAnimator(kart);
 race.reset(kart);
 const raceHud = new RaceHud();
+const driftHud = document.createElement('div');
+driftHud.className = 'drift-charge is-hidden';
+driftHud.setAttribute('role', 'status');
+const driftLabel = document.createElement('span');
+const driftMeter = document.createElement('progress');
+driftMeter.max = 1;
+driftMeter.setAttribute('aria-label', 'Driftladung');
+driftHud.append(driftLabel, driftMeter);
+document.body.append(driftHud);
 const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.search).has('kartTest'));
 (window as unknown as { __diktatorKartBots: () => ReturnType<BotRaceManager['snapshot']> }).__diktatorKartBots = () =>
     bots.snapshot();
@@ -273,6 +282,18 @@ app.on('update', (dt: number) => {
     if (raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
     const kartSnapshot = activeController.getDebugSnapshot(kart, kartInput);
+    const charge = raycastController?.getDriftCharge();
+    driftHud.classList.toggle('is-hidden', !charge?.active || !race.canDrive);
+    if (charge) {
+        driftMeter.value = charge.fraction;
+        driftHud.dataset.stage = String(charge.stage);
+        driftLabel.textContent =
+            charge.stage === 2
+                ? 'TURBO II BEREIT · DRIFT LOSLASSEN'
+                : charge.stage === 1
+                  ? 'TURBO I BEREIT · WEITERLADEN'
+                  : 'DRIFT LÄDT';
+    }
     debugHud.update(kartSnapshot);
     kartAnimator.update(kartSnapshot, dt, document.documentElement.classList.contains('reduced-effects'));
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();

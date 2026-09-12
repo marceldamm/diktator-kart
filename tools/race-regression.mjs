@@ -11,6 +11,12 @@ registerHooks({
 });
 const { RaceController } = await import('../client/src/game/race.ts');
 const { RACE_LAYOUT } = await import('../client/src/game/race-layout.ts');
+const { driftStage, DRIFT_CHARGE } = await import('../client/src/game/drift-charge.ts');
+assert.equal(driftStage(0.69), 0);
+assert.equal(driftStage(0.7), 1);
+assert.equal(driftStage(1.79), 1);
+assert.equal(driftStage(1.8), 2);
+assert.ok(DRIFT_CHARGE.secondBoost > DRIFT_CHARGE.firstBoost);
 const position = RACE_LAYOUT.startPosition.clone();
 const kart = { getPosition: () => position };
 const cross = (race, gate, seconds = 1) => {
