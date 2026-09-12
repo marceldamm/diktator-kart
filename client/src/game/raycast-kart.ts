@@ -198,10 +198,10 @@ export class RaycastKartController {
         this.body.setActivationState(4);
     }
 
-    reset(): void {
+    reset(position: Vec3 = RACE_LAYOUT.startPosition, yaw = RACE_LAYOUT.startYaw): void {
         this.resetControlState();
         this.vehicle.resetSuspension?.();
-        this.kart.rigidbody?.teleport(RACE_LAYOUT.startPosition, new Vec3(0, RACE_LAYOUT.startYaw, 0));
+        this.kart.rigidbody?.teleport(position, new Vec3(0, yaw, 0));
         if (this.kart.rigidbody) {
             this.kart.rigidbody.linearVelocity = Vec3.ZERO;
             this.kart.rigidbody.angularVelocity = Vec3.ZERO;
@@ -215,11 +215,7 @@ export class RaycastKartController {
         const forward = this.kart.forward;
         const forwardSpeed = velocity.x() * forward.x + velocity.z() * forward.z;
         const planarSpeed = Math.sqrt(velocity.x() ** 2 + velocity.z() ** 2);
-        const speedRatio = clamp(
-            Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.engine.handlingSpeedReference,
-            0,
-            1
-        );
+        const speedRatio = clamp(Math.abs(forwardSpeed) / RAYCAST_KART_TUNING.engine.handlingSpeedReference, 0, 1);
         this.updateHopAndDrift(input, planarSpeed, dt);
         this.updateSteering(input.steering, speedRatio, dt);
         this.updateAngularDamping(speedRatio);

@@ -210,7 +210,7 @@ try {
   await connect();
   await command("Runtime.enable");
   await command("Page.enable");
-  await command("Page.navigate", { url: "http://127.0.0.1:5173/" });
+  await command("Page.navigate", { url: "http://127.0.0.1:5173/?kartTest=1" });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const ready = await evaluate(
       "Boolean(document.getElementById('reset-kart') && document.getElementById('application-canvas'))",
@@ -309,9 +309,46 @@ try {
     ]),
   );
 
-  process.stdout.write(
-    `${JSON.stringify({ tests, consoleMessages }, null, 2)}\n`,
+  await command("Page.navigate", { url: "http://127.0.0.1:5173/" });
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    if (await evaluate("Boolean(document.getElementById('start-race'))")) break;
+    await wait(100);
+  }
+  await evaluate("document.getElementById('start-race').click()");
+  await wait(9000);
+  const botState = await evaluate(
+    "JSON.parse(document.documentElement.dataset.botState || '[]')",
   );
+  const byName = Object.fromEntries(tests.map((test) => [test.name, test]));
+  const failures = [];
+  const require = (condition, message) => {
+    if (!condition) failures.push(message);
+  };
+  require(byName.straight.maxSpeed > 14, "straight did not reach arcade speed");
+  require(byName["left-hold"].finalHeadingDelta >
+    35, "left steering did not turn left");
+  require(byName["right-hold"].finalHeadingDelta <
+    -35, "right steering did not turn right");
+  require(byName.brake.finalSpeed < 6, "braking did not reduce forward speed");
+  require(byName.reverse.finalSpeed < -2, "reverse did not engage");
+  require(byName.hop.hopSamples > 0 &&
+    byName.hop.maxHeight > 0.75, "hop was not detected");
+  require(byName["drift-left"].driftSamples > 0 &&
+    byName["drift-left"].boostSamples > 0, "left drift boost failed");
+  require(byName["drift-right"].driftSamples > 0 &&
+    byName["drift-right"].boostSamples > 0, "right drift boost failed");
+  require(botState.length === 5, "expected five bots");
+  require(botState.every(
+    (bot) => bot.x > -225 && bot.speed > 1,
+  ), "not every bot left the grid");
+  require(!consoleMessages.some((message) =>
+    message.startsWith("EXCEPTION:"),
+  ), "browser exception detected");
+
+  process.stdout.write(
+    `${JSON.stringify({ tests, botState, failures, consoleMessages }, null, 2)}\n`,
+  );
+  if (failures.length) process.exitCode = 1;
 } finally {
   socket?.close();
   chrome.kill();

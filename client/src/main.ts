@@ -15,6 +15,7 @@ import {
     createGraphicsDevice
 } from 'playcanvas';
 
+import { BotRaceManager } from './game/bots';
 import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
@@ -70,7 +71,11 @@ const controller = new KartController();
 const race = new RaceController();
 race.reset(kart);
 const raceHud = new RaceHud();
+const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.search).has('kartTest'));
+(window as unknown as { __diktatorKartBots: () => ReturnType<BotRaceManager['snapshot']> }).__diktatorKartBots = () =>
+    bots.snapshot();
 let raycastController: RaycastKartController | undefined;
+let botSnapshotTimer = 0;
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
 const telemetryLog = document.getElementById('telemetry-log')!;
@@ -87,6 +92,7 @@ const restartRace = () => {
     controller.reset();
     raycastController?.reset();
     race.reset(kart);
+    bots.reset();
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
@@ -94,6 +100,7 @@ const restartRace = () => {
 const startRace = () => {
     restartRace();
     race.start(kart);
+    bots.start();
 };
 const gameUi = new GameUi({
     onDriver: (driver) => applyKartStyle(kart, driver),
@@ -161,8 +168,14 @@ app.on('update', (dt: number) => {
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
     if (!gameUi.isPaused) race.update(kart, dt);
+    bots.update(dt, gameUi.isPaused);
+    botSnapshotTimer += dt;
+    if (botSnapshotTimer >= 1) {
+        botSnapshotTimer = 0;
+        document.documentElement.dataset.botState = JSON.stringify(bots.snapshot());
+    }
     const raceSnapshot = race.snapshot();
-    raceHud.update(raceSnapshot);
+    raceHud.update(raceSnapshot, bots.playerPosition(kart, race), bots.racers.length + 1);
     gameUi.update(raceSnapshot);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

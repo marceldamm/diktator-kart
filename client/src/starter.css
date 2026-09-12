@@ -295,7 +295,7 @@ button:disabled {
     left: 50%;
     z-index: 12;
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(4, auto);
     gap: 12px;
     align-items: center;
     padding: 10px 14px;
@@ -312,6 +312,10 @@ button:disabled {
 
 .race-hud span {
     color: #9fe5d7;
+}
+
+.race-hud [data-race='position'] {
+    color: #ffe36e;
 }
 
 .race-hud b {

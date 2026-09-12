@@ -8,13 +8,13 @@ import { RACE_LAYOUT } from './race-layout';
 const START_YAW = RACE_LAYOUT.startYaw;
 
 export const KART_TUNING = {
-    forwardForce: 20,
+    forwardForce: 32,
     reverseForce: 8,
     brakeForce: 24,
-    coastingDrag: 1.1,
+    coastingDrag: 0.9,
     cornerGrip: 5.5,
     straightGrip: 11,
-    maxSpeed: 16,
+    maxSpeed: 22,
     reverseMaxSpeed: 6,
     maxYawSpeed: 1.65,
     steeringResponse: 5,
@@ -119,22 +119,19 @@ export const applyKartStyle = (kart: Entity, driver: DriverDefinition): void => 
 };
 
 export const resetKart = (kart: Entity) => {
+    teleportKart(kart, RACE_LAYOUT.startPosition, RACE_LAYOUT.startYaw);
+};
+
+export const teleportKart = (kart: Entity, position: Vec3, yaw: number) => {
     if (kart.rigidbody) {
         // Dynamic Ammo bodies must be teleported through the physics component;
         // otherwise the next simulation step can restore the old transform.
-        kart.rigidbody.teleport(
-            RACE_LAYOUT.startPosition.x,
-            RACE_LAYOUT.startPosition.y,
-            RACE_LAYOUT.startPosition.z,
-            0,
-            RACE_LAYOUT.startYaw,
-            0
-        );
+        kart.rigidbody.teleport(position.x, position.y, position.z, 0, yaw, 0);
         kart.rigidbody.linearVelocity = new Vec3(0, 0, 0);
         kart.rigidbody.angularVelocity = new Vec3(0, 0, 0);
     } else {
-        kart.setPosition(RACE_LAYOUT.startPosition);
-        kart.setEulerAngles(0, RACE_LAYOUT.startYaw, 0);
+        kart.setPosition(position);
+        kart.setEulerAngles(0, yaw, 0);
     }
 };
 

@@ -92,6 +92,13 @@ export class RaceController {
 
     static formatTime = formatTime;
 
+    progress(kart: Entity): number {
+        if (this.phase === 'finished') return RACE_LAYOUT.lapsToWin * (RACE_LAYOUT.checkpoints.length + 1) + 1;
+        const segment = (this.lap - 1) * (RACE_LAYOUT.checkpoints.length + 1) + this.nextCheckpoint;
+        const target = RACE_LAYOUT.checkpoints[this.nextCheckpoint]?.position ?? RACE_LAYOUT.finish.position;
+        return segment - Math.min(0.99, kart.getPosition().distance(target) / 1000);
+    }
+
     private crossed(
         gate: (typeof RACE_LAYOUT.checkpoints)[number] | typeof RACE_LAYOUT.finish,
         current: Vec3
