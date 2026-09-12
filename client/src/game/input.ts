@@ -12,6 +12,7 @@ export class KeyboardInput {
     private readonly keys = new Set<string>();
     private hopQueued = false;
     private itemQueued = false;
+    private abilityQueued = false;
 
     constructor() {
         window.addEventListener('keydown', (event) => {
@@ -26,12 +27,14 @@ export class KeyboardInput {
                     'KeyA',
                     'KeyD',
                     'Space',
-                    'KeyE'
+                    'KeyE',
+                    'KeyQ'
                 ].includes(event.code)
             ) {
                 event.preventDefault();
                 if (event.code === 'Space' && !event.repeat) this.hopQueued = true;
                 if (event.code === 'KeyE' && !event.repeat) this.itemQueued = true;
+                if (event.code === 'KeyQ' && !event.repeat) this.abilityQueued = true;
                 this.keys.add(event.code);
             }
         });
@@ -42,6 +45,12 @@ export class KeyboardInput {
     consumeItem(): boolean {
         const queued = this.itemQueued;
         this.itemQueued = false;
+        return queued;
+    }
+
+    consumeAbility(): boolean {
+        const queued = this.abilityQueued;
+        this.abilityQueued = false;
         return queued;
     }
 

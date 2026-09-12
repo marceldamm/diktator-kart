@@ -15,10 +15,12 @@ import {
     createGraphicsDevice
 } from 'playcanvas';
 
+import { AbilitySystem } from './game/abilities';
 import { Announcer } from './game/announcer';
 import type { AnnouncerCue } from './game/announcer';
 import { BotRaceManager } from './game/bots';
 import { DebugHud } from './game/debug-hud';
+import { DEFAULT_DRIVER } from './game/drivers';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
 import type { GameMode } from './game/game-ui';
@@ -107,6 +109,12 @@ const items = new ItemSystem(
         if (cue) announcer.say(cue, event === 'hit' || event === 'shielded');
     }
 );
+const abilities = new AbilitySystem(
+    DEFAULT_DRIVER,
+    bots,
+    (duration) => raycastController?.grantBoost(duration),
+    (duration) => items.grantShield(duration)
+);
 let announcedLap = 1;
 let previousPosition = 1;
 let announcedFinish = false;
@@ -140,6 +148,7 @@ const restartRace = () => {
     announcedLap = 1;
     previousPosition = 1;
     announcedFinish = false;
+    abilities.reset();
     newTimeTrialRecord = false;
     const storedBest = Number(localStorage.getItem(`diktator-kart-best-v1-${gameUi?.selectedDriver.id}`));
     savedTimeTrialBest = Number.isFinite(storedBest) && storedBest > 0 ? storedBest : null;
@@ -154,7 +163,10 @@ const startRace = () => {
     announcer.say('start', true);
 };
 const gameUi = new GameUi({
-    onDriver: (driver) => applyKartStyle(kart, driver),
+    onDriver: (driver) => {
+        applyKartStyle(kart, driver);
+        abilities.setDriver(driver);
+    },
     onStart: startRace,
     onRestart: startRace,
     onMenu: restartRace,
@@ -221,11 +233,16 @@ app.on('update', (dt: number) => {
     }
     const rawInput = input.read();
     if (input.consumeItem() && race.canDrive && !gameUi.isPaused) items.use(kart);
+    if (input.consumeAbility() && race.canDrive && !gameUi.isPaused) abilities.use(kart);
     const kartInput =
         race.canDrive && !gameUi.isPaused
             ? {
                   ...rawInput,
-                  throttle: rawInput.throttle * items.playerPowerScale * worldEvents.playerPowerScale
+                  throttle:
+                      rawInput.throttle *
+                      items.playerPowerScale *
+                      worldEvents.playerPowerScale *
+                      abilities.playerPowerScale
               }
             : { steering: 0, throttle: 0, hop: false, drift: false };
     const activeController = raycastController ?? controller;
@@ -239,6 +256,7 @@ app.on('update', (dt: number) => {
     if (!gameUi.isPaused) race.update(kart, dt);
     bots.update(dt, gameUi.isPaused);
     items.update(kart, dt, race.canDrive && !gameUi.isPaused);
+    if (!gameUi.isPaused) abilities.update(dt);
     const leaderLap = Math.max(race.snapshot().lap, ...bots.snapshot().map((bot) => bot.lap));
     if (!gameUi.isPaused) worldEvents.update(dt, leaderLap, kart);
     botSnapshotTimer += dt;

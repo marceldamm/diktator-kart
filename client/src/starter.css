@@ -841,3 +841,81 @@ button:disabled {
     opacity: 1;
     transform: translate(-50%, 0);
 }
+.item-hud,
+.ability-hud {
+    visibility: hidden;
+}
+
+.race-active .item-hud,
+.race-active .ability-hud {
+    visibility: visible;
+}
+
+.ability-hud {
+    position: fixed;
+    right: 20px;
+    top: 105px;
+    z-index: 17;
+    display: grid;
+    grid-template-columns: 36px 145px;
+    grid-template-rows: 1fr 1fr;
+    padding: 7px 10px;
+    border: 1px solid #ffffff30;
+    background: #080c13df;
+    color: #aab2be;
+    pointer-events: none;
+}
+
+.ability-hud.is-ready {
+    border-color: #45d9d0;
+    color: #e9fffd;
+}
+
+.ability-hud b {
+    grid-row: 1 / 3;
+    align-self: center;
+    font-size: 24px;
+}
+
+.ability-hud span {
+    font:
+        800 11px ui-sans-serif,
+        system-ui,
+        sans-serif;
+}
+
+.ability-hud small {
+    color: #8d98a7;
+    font:
+        10px ui-sans-serif,
+        system-ui,
+        sans-serif;
+}
+
+.ability-notice {
+    position: fixed;
+    left: 50%;
+    top: 29%;
+    z-index: 19;
+    padding: 8px 14px;
+    border: 1px solid #45d9d0;
+    background: #071a1ce8;
+    color: #aafffa;
+    font:
+        900 13px ui-sans-serif,
+        system-ui,
+        sans-serif;
+    opacity: 0;
+    transform: translate(-50%, -8px);
+    transition: 160ms ease;
+    pointer-events: none;
+}
+
+.ability-notice.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.reduced-effects .ability-notice {
+    transition: none;
+}

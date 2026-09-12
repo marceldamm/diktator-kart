@@ -106,6 +106,11 @@ export class ItemSystem {
         for (const pickup of this.pickups) pickup.entity.enabled = active && pickup.cooldown === 0;
     }
 
+    grantShield(duration = 5): void {
+        this.shieldTimer = Math.max(this.shieldTimer, duration);
+        this.say('🛡️ Sonderimmunität aktiv');
+    }
+
     reset(): void {
         this.inventory = null;
         this.nextItem = 0;

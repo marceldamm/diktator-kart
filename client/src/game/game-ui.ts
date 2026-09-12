@@ -142,6 +142,7 @@ export class GameUi {
     }
 
     private showRace(): void {
+        document.body.classList.add('race-active');
         this.menu.classList.add('is-hidden');
         this.result.classList.add('is-hidden');
         this.raceControls.classList.remove('is-hidden');
@@ -149,6 +150,7 @@ export class GameUi {
     }
 
     private showMenu(): void {
+        document.body.classList.remove('race-active');
         this.menu.classList.remove('is-hidden');
         this.result.classList.add('is-hidden');
         this.raceControls.classList.add('is-hidden');
