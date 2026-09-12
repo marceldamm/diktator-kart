@@ -11,7 +11,7 @@ export class DebugHud {
     constructor() {
         document.body.insertAdjacentHTML(
             'beforeend',
-            `<aside id="debug-hud" class="debug-hud" aria-label="Kart Controller Debug HUD">
+            `<aside id="debug-hud" class="debug-hud is-hidden" aria-label="Kart Controller Debug HUD">
                 <div class="debug-title">Kart Debug <span>F3</span></div>
                 <div class="debug-section">
                     <div class="debug-row"><span>Speed signed</span><output data-debug="forwardSpeed">0.000</output></div>

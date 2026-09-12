@@ -1,5 +1,7 @@
 import { Color, Entity, StandardMaterial, Vec3 } from 'playcanvas';
 
+import { DEFAULT_DRIVER } from './drivers';
+import type { DriverDefinition } from './drivers';
 import type { KartInput } from './input';
 import { RACE_LAYOUT } from './race-layout';
 
@@ -57,6 +59,8 @@ const material = (color: Color) => {
     return result;
 };
 
+const colorFromHex = (value: string) => new Color().fromString(value);
+
 const addVisualBox = (root: Entity, name: string, position: Vec3, scale: Vec3, boxMaterial: StandardMaterial) => {
     const part = new Entity(name);
     part.setLocalPosition(position);
@@ -65,17 +69,25 @@ const addVisualBox = (root: Entity, name: string, position: Vec3, scale: Vec3, b
     root.addChild(part);
 };
 
-export const createKart = (root: Entity) => {
+export const createKart = (root: Entity, driver: DriverDefinition = DEFAULT_DRIVER) => {
     const kart = new Entity('player-kart');
     kart.setPosition(RACE_LAYOUT.startPosition);
     kart.setEulerAngles(0, RACE_LAYOUT.startYaw, 0);
 
-    const body = material(new Color(0.12, 0.36, 0.82));
-    const trim = material(new Color(0.95, 0.75, 0.12));
+    const body = material(colorFromHex(driver.color));
+    const trim = material(colorFromHex(driver.accent));
     const tire = material(new Color(0.03, 0.035, 0.045));
     addVisualBox(kart, 'body', new Vec3(0, 0, 0), new Vec3(1.45, 0.5, 2.2), body);
     addVisualBox(kart, 'nose', new Vec3(0, 0.25, -0.78), new Vec3(1.05, 0.2, 0.55), trim);
     addVisualBox(kart, 'seat', new Vec3(0, 0.4, 0.3), new Vec3(0.72, 0.45, 0.65), tire);
+    addVisualBox(kart, 'driver-body', new Vec3(0, 0.82, 0.25), new Vec3(0.62, 0.72, 0.5), body);
+    const head = new Entity('driver-head');
+    head.setLocalPosition(0, 1.38, 0.17);
+    head.setLocalScale(0.58, 0.58, 0.58);
+    head.addComponent('render', { type: 'sphere', material: material(new Color(0.68, 0.48, 0.34)) });
+    kart.addChild(head);
+    addVisualBox(kart, 'driver-hat', new Vec3(0, 1.68, 0.17), new Vec3(0.72, 0.16, 0.65), trim);
+    addVisualBox(kart, 'moving-detail', new Vec3(0, 1.03, -0.08), new Vec3(0.46, 0.12, 0.08), trim);
     for (const x of [-0.78, 0.78]) {
         for (const z of [-0.82, 0.82])
             addVisualBox(kart, `wheel-${x}-${z}`, new Vec3(x, -0.18, z), new Vec3(0.22, 0.4, 0.48), tire);
@@ -89,6 +101,21 @@ export const createKart = (root: Entity) => {
     kart.rigidbody!.angularDamping = 0.8;
     root.addChild(kart);
     return kart;
+};
+
+export const applyKartStyle = (kart: Entity, driver: DriverDefinition): void => {
+    const bodyMaterial = material(colorFromHex(driver.color));
+    const accentMaterial = material(colorFromHex(driver.accent));
+    for (const name of ['body', 'driver-body']) {
+        const part = kart.findByName(name) as Entity | null;
+        if (part?.render) part.render.meshInstances.forEach((mesh) => (mesh.material = bodyMaterial));
+    }
+    for (const name of ['nose', 'driver-hat', 'moving-detail']) {
+        const part = kart.findByName(name) as Entity | null;
+        if (part?.render) part.render.meshInstances.forEach((mesh) => (mesh.material = accentMaterial));
+    }
+    kart.tags.clear();
+    kart.tags.add('player-kart', `driver-${driver.id}`);
 };
 
 export const resetKart = (kart: Entity) => {

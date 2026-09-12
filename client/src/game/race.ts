@@ -19,7 +19,7 @@ const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${(seconds 
 /** Position-triggered ordered checkpoint race flow, kept independent from rendering and input. */
 export class RaceController {
     private phase: RaceSnapshot['phase'] = 'idle';
-    private countdown = 3.5;
+    private countdown = 3;
     private lap = 1;
     private raceTime = 0;
     private lapTime = 0;
@@ -29,7 +29,7 @@ export class RaceController {
 
     reset(kart: Entity): void {
         this.phase = 'idle';
-        this.countdown = 3.5;
+        this.countdown = 3;
         this.lap = 1;
         this.raceTime = 0;
         this.lapTime = 0;
@@ -43,7 +43,7 @@ export class RaceController {
     }
 
     get canDrive(): boolean {
-        return this.phase === 'idle' || this.phase === 'racing';
+        return this.phase === 'racing';
     }
 
     update(kart: Entity, dt: number): void {
@@ -74,10 +74,10 @@ export class RaceController {
             this.phase === 'idle'
                 ? ''
                 : this.phase === 'finished'
-                ? 'ZIEL!'
-                : this.phase === 'racing'
-                  ? 'LOS!'
-                  : String(Math.max(1, Math.ceil(this.countdown)));
+                  ? 'ZIEL!'
+                  : this.phase === 'racing'
+                    ? 'LOS!'
+                    : String(Math.max(1, Math.ceil(this.countdown)));
         return {
             phase: this.phase,
             countdownText,

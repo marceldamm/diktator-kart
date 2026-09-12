@@ -17,8 +17,9 @@ import {
 
 import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
+import { GameUi } from './game/game-ui';
 import { KeyboardInput } from './game/input';
-import { createKart, driveKart, KartController, resetKart } from './game/kart';
+import { applyKartStyle, createKart, driveKart, KartController, resetKart } from './game/kart';
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
@@ -38,12 +39,7 @@ await new Promise<void>((resolve) => {
 
 document.body.insertAdjacentHTML(
     'beforeend',
-    '<section class="telemetry-panel"><div class="telemetry-title"><strong>Telemetrie und Log</strong><span id="telemetry-status">gestoppt</span></div><div class="controls"><button id="telemetry-start" type="button">Logging starten</button><button id="telemetry-stop" type="button">Logging stoppen</button><button id="telemetry-clear" type="button">Log l&ouml;schen</button><button id="telemetry-copy" type="button">Log kopieren</button></div><pre id="telemetry-log" class="telemetry-log">Noch keine Samples aufgezeichnet.</pre></section>'
-);
-
-document.body.insertAdjacentHTML(
-    'beforeend',
-    '<div class="hud"><section class="panel"><h1>Diktator Kart</h1><p>WASD/Pfeiltasten zum Fahren &middot; Space = Hop / Drift</p><div class="controls"><button id="start-race" type="button">Start</button><button id="reset-kart" type="button">Kart zur&uuml;cksetzen</button></div></section></div>'
+    '<section class="telemetry-panel is-hidden" id="telemetry-panel"><div class="telemetry-title"><strong>Telemetrie und Log</strong><span id="telemetry-status">gestoppt</span></div><div class="controls"><button id="telemetry-start" type="button">Logging starten</button><button id="telemetry-stop" type="button">Logging stoppen</button><button id="telemetry-clear" type="button">Log l&ouml;schen</button><button id="telemetry-copy" type="button">Log kopieren</button></div><pre id="telemetry-log" class="telemetry-log">Noch keine Samples aufgezeichnet.</pre></section>'
 );
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
@@ -65,6 +61,7 @@ app.start();
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 app.systems.rigidbody!.gravity.set(0, -9.81, 0);
+app.scene.ambientLight = new Color(0.58, 0.61, 0.66);
 
 createRaceTrack(app.root);
 const kart = createKart(app.root);
@@ -94,10 +91,15 @@ const restartRace = () => {
     telemetry.clear();
     refreshTelemetryView();
 };
-document.getElementById('reset-kart')!.addEventListener('click', restartRace);
-document.getElementById('start-race')!.addEventListener('click', () => {
+const startRace = () => {
     restartRace();
     race.start(kart);
+};
+const gameUi = new GameUi({
+    onDriver: (driver) => applyKartStyle(kart, driver),
+    onStart: startRace,
+    onRestart: startRace,
+    onMenu: restartRace
 });
 document.getElementById('telemetry-start')!.addEventListener('click', () => {
     telemetry.start(kart);
@@ -115,11 +117,17 @@ document.getElementById('telemetry-copy')!.addEventListener('click', async () =>
     await navigator.clipboard.writeText(telemetry.getText());
     telemetryStatus.textContent = 'kopiert';
 });
+window.addEventListener('keydown', (event) => {
+    if (event.code === 'F4') {
+        event.preventDefault();
+        document.getElementById('telemetry-panel')!.classList.toggle('is-hidden');
+    }
+});
 
 const camera = new Entity('camera');
 camera.setPosition(0, 4.5, 13);
 camera.lookAt(kart.getPosition());
-camera.addComponent('camera', { clearColor: new Color(0.05, 0.07, 0.11) });
+camera.addComponent('camera', { clearColor: new Color(0.22, 0.34, 0.5), farClip: 900, fov: 62 });
 app.root.addChild(camera);
 const followCamera = new FollowCameraController();
 
@@ -144,14 +152,17 @@ app.on('update', (dt: number) => {
         }
     }
     const rawInput = input.read();
-    const kartInput = race.canDrive ? rawInput : { steering: 0, throttle: 0, hop: false, drift: false };
+    const kartInput =
+        race.canDrive && !gameUi.isPaused ? rawInput : { steering: 0, throttle: 0, hop: false, drift: false };
     const activeController = raycastController ?? controller;
     if (raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
     debugHud.update(activeController.getDebugSnapshot(kart, kartInput));
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
-    race.update(kart, dt);
-    raceHud.update(race.snapshot());
+    if (!gameUi.isPaused) race.update(kart, dt);
+    const raceSnapshot = race.snapshot();
+    raceHud.update(raceSnapshot);
+    gameUi.update(raceSnapshot);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

@@ -185,6 +185,7 @@ const summarize = (name, text) => {
 
 const runTest = async (name, actions) => {
   await evaluate("document.getElementById('reset-kart').click()");
+  await evaluate("document.getElementById('start-race').click()");
   // The playable race has a real 3-2-1 countdown. Start every physics case
   // after it so tests still use the normal player input route.
   // Headless Chrome can advance the PlayCanvas simulation a little below

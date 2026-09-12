@@ -5,7 +5,7 @@ const desiredPosition = new Vec3();
 const desiredLookTarget = new Vec3();
 
 export class FollowCameraController {
-    private distance = 8;
+    private distance = 12;
     private readonly lookTarget = new Vec3();
     private initialized = false;
 
@@ -22,9 +22,9 @@ export class FollowCameraController {
 
     update(camera: Entity, kart: Entity, dt: number) {
         desiredPosition.copy(kart.getPosition()).sub(kart.forward.clone().mulScalar(this.distance));
-        desiredPosition.y += 2.5 + this.distance * 0.45;
+        desiredPosition.y += 3.8;
         desiredLookTarget.copy(kart.getPosition());
-        desiredLookTarget.y += 0.6;
+        desiredLookTarget.y += 1.15;
         if (!this.initialized) {
             this.lookTarget.copy(desiredLookTarget);
             this.initialized = true;

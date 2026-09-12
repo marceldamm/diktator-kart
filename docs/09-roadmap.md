@@ -9,14 +9,16 @@
 
 ## Diese Phase
 
-- Hop, bewusst ausgelöster Drift und erster Mini-Turbo
-- Singleplayer-Rennablauf mit Checkpoints und drei Runden
-- erster Rundkurs, Race-HUD und Low-Poly-Prototyp-Visuals
+- Produktionsfähiger Singleplayer-Ablauf vom Hauptmenü bis Revanche
+- sechs Fahrer/Karts mit eigener visueller Identität
+- fünf Bots und verlässliche Platzierungslogik
+- Itemkern und mindestens acht Items einschließlich Dienstweg-Rakete und Diplomatischer Immunität
+- Ausbau des Kurses „Größenwahn Grand Prix“ mit fahrbarer Druckerei-Abkürzung
+- ereignisgesteuerter Sprecher, Audio, Effekte und Ergebnisinszenierung
 
 ## Danach
 
-- Bots
-- Items
-- Fahrer und Karts
+- Zeitfahrgeist, lokale Orden und Fotomodus
+- Erweiterung auf zwölf Fahrer
 - Multiplayer
 - weitere Kurse und Content
