@@ -1,10 +1,20 @@
-# Strecken – Prototyp
+# Strecken – Größenwahn Grand Prix
 
 ## Aktueller Kurs
 
-Der Standard ist ein breiter, flacher Rechteck-Rundkurs mit langer oberer und unterer Geraden sowie sehr großzügigen Kurven. Eine gemeinsame Kollisionsfläche unter Asphalt und Gras hält den RaycastVehicle-Kontakt stabil.
+Der Standard ist ein breiter Hauptstadt-Rundkurs mit langer oberer und unterer Geraden sowie großzügigen Außenkurven. Eine gemeinsame Kollisionsfläche unter Asphalt und Gras hält den RaycastVehicle-Kontakt stabil.
 
-Der Kurs enthält rote Begrenzungen, gelbe Curbs, ein zentrales Gras-Infield, Start/Ziel-Schachbrettlinie, Startbogen, drei sichtbare Checkpoint-Markierungen und einfache Low-Poly-Bäume. Er ist absichtlich noch kein finaler Art-Track, soll aber sofort als Kart-Rennspiel lesbar sein.
+Fünf lesbare Bereiche rahmen die Runde: Palastplatz, Boulevard der einstimmigen Begeisterung, Staatsdruckerei, Fünfjahresplan-Monument und Palastgärten mit goldenem Entenbrunnen. Rote Begrenzungen, gelbe Curbs, Startbogen und sichtbare Checkpoint-Markierungen halten die Wegführung klar.
+
+## Staatsdruckerei-Abkürzung
+
+Die sichere Außenroute der Ostkurve bleibt unverändert. Eine Papierbahn bei `x = 178` schneidet die Kurve deutlich kürzer. Zwei feste Rampen markieren Ein- und Ausfahrt. Drei große Stempel arbeiten in versetzten, jeweils 4,2 Sekunden langen Zyklen. Ihre Köpfe bleiben lange oben und schlagen erst nach einer sichtbaren Abwärtsphase zu. Ein Treffer reduziert die Motorleistung 2,1 Sekunden; Gas und Lenkung bleiben nutzbar.
+
+Der geometrische Zeitvorteil ist integriert. Der messende Fahrvergleich und die sichtbare Prüfung der Vorwarnzeit stehen wegen der vorübergehend gesperrten Browsersteuerung noch aus.
+
+## Rundenabhängige Kulisse
+
+Der führende Rundenstand steuert drei rein dekorative, globale Veränderungen: Der Pappapplaus verliert ab Runde zwei seine Synchronität, das Palastbanner wird zunehmend überzogen und das Gerüst am Monument kippt beziehungsweise wird verstärkt. Diese Zustände verändern keine Kollisionsgeometrie und werden beim Neustart vollständig zurückgesetzt.
 
 ## Rennablauf
 

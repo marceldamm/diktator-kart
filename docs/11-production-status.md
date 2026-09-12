@@ -18,11 +18,11 @@ Stand: 12. September 2026, Branch `astra/full-game`
 | Pause / Neustart / Menü           | ja      | ja                                                                              | Pause sichtbar geprüft                                                                                                        | nein                                                                               |
 | Ergebnis / Revanche               | ja      | ja, an echtes Rennergebnis gekoppelt                                            | Build/Typprüfung; vollständiger Zieleinlauf offen                                                                             | nein                                                                               |
 | Fünf Streckenbereiche             | ja      | erste räumliche Art-Pass-Silhouetten                                            | Startblick sichtbar geprüft                                                                                                   | Fahrprüfung aller Sektoren offen                                                   |
-| Druckerei-Abkürzung               | ja      | nein                                                                            | nein                                                                                                                          | nein                                                                               |
-| Drei Weltveränderungen            | ja      | nein                                                                            | nein                                                                                                                          | nein                                                                               |
+| Druckerei-Abkürzung               | ja      | kürzere Papierlinie, zwei feste Rampen, drei lesbar getaktete Stempel und Trefferstrafe | Typprüfung, Lint und Build erfolgreich; Fahr-/Zeitvergleich offen                                                          | Browsersteuerung bis zum App-Limit-Reset gesperrt                                  |
+| Drei Weltveränderungen            | ja      | Applaus verliert Synchronität, Banner kippt/wächst, Monument-Gerüst verändert sich | Typprüfung, Lint und Build erfolgreich; sichtbare Rundenabnahme offen                                                      | Browsersteuerung bis zum App-Limit-Reset gesperrt                                  |
 | Fünf Bots / drei Persönlichkeiten | ja      | fünf physische Gegner, gemeinsame Inputs, drei Datenprofile und Platzberechnung | Start, 20–22 Einheiten/s, Position 1/6→6/6, alle Checkpoints und Rundenwechsel aller fünf sichtbar geprüft; Zieleinlauf offen | Multi-RayCastVehicle mit aktuellem Ammo instabil; stabile Rigidbody-Variante aktiv |
 | Itemsystem / acht Items           | ja      | acht Kisten-Items, HUD, Einsatz, Projektile, Bot-Effekte und gemeinsame Schutzlogik | Typprüfung, Lint und Build erfolgreich; Laufzeit-/Sichtprüfung offen                                                        | Browsersteuerung bis zum App-Limit-Reset gesperrt                                  |
-| Sprecher, mindestens 20 Zeilen    | ja      | nein                                                                            | nein                                                                                                                          | lokale Vertonung noch zu erzeugen                                                  |
+| Sprecher, mindestens 20 Zeilen    | ja      | 24 lokal vorproduzierte deutsche WAV-Zeilen, Untertitel, Priorität und Wiederholungsschutz | Dateien erzeugt; Typprüfung, Lint und Build erfolgreich; Hörprüfung offen                                                | Browsersteuerung bis zum App-Limit-Reset gesperrt                                  |
 | Fahrzeugdetails / Reaktionen      | ja      | je Fahrer ein benanntes Detail im Datenmodell; erstes sichtbares Detail am Kart | Farb-/Fahrerwechsel sichtbar geprüft                                                                                          | Animationen offen                                                                  |
 | Reduzierte Effekte/Kamera         | ja      | flachere lesbare Kamera; Einstellungsoption offen                               | sichtbar geprüft                                                                                                              | nein                                                                               |
 | Drei vollständige Rennen          | ja      | nein                                                                            | nein                                                                                                                          | erst nach Bots/Items sinnvoll                                                      |
@@ -30,9 +30,9 @@ Stand: 12. September 2026, Branch `astra/full-game`
 ## Nächste Produktionsschritte
 
 1. Laufzeitabnahme aller acht Items und der Schutz-Wechselwirkung nach Freigabe der Browsersteuerung.
-2. Druckerei-Abkürzung und sektorweise Fahrtests.
-3. Drei rundenabhängige Weltveränderungen.
-4. Fahreranimationen, Effekte und Audiofeedback.
-5. Sprecher, Siegerehrung, Rennbericht und kombinierte Abnahme.
+2. Druckerei-Abkürzung, Weltveränderungen und Sprecher sichtbar beziehungsweise hörbar abnehmen.
+3. Individuelle Fahreranimationen und Fahr-Effekte.
+4. Einstellungen, Zeitfahren, lokale Bestzeiten und Spezialfähigkeiten.
+5. Siegerehrung, Rennbericht und kombinierte Abnahme.
 
 Technische Messwerte und subjektive Spielspaßbewertung werden in der Abnahme getrennt dokumentiert.

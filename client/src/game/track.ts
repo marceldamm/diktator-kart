@@ -22,6 +22,26 @@ const addStaticBox = (root: Entity, name: string, position: Vec3, size: Vec3, ma
     root.addChild(entity);
 };
 
+const addStaticRamp = (
+    root: Entity,
+    name: string,
+    position: Vec3,
+    size: Vec3,
+    angle: number,
+    material: StandardMaterial
+) => {
+    const entity = new Entity(name);
+    entity.setPosition(position);
+    entity.setEulerAngles(angle, 0, 0);
+    const visual = new Entity(`${name}-visual`);
+    visual.setLocalScale(size);
+    visual.addComponent('render', { type: 'box', material });
+    entity.addChild(visual);
+    entity.addComponent('collision', { type: 'box', halfExtents: size.clone().mulScalar(0.5) });
+    entity.addComponent('rigidbody', { type: 'static' });
+    root.addChild(entity);
+};
+
 const addVisualBox = (root: Entity, name: string, position: Vec3, size: Vec3, material: StandardMaterial) => {
     const entity = new Entity(name);
     entity.setPosition(position);
@@ -164,9 +184,14 @@ export const createRaceTrack = (root: Entity) => {
     }
     addVisualPrimitive(track, 'jubel-button', 'cylinder', new Vec3(132, 2.2, 144), new Vec3(7, 4.2, 7), propaganda);
 
-    // Staatsdruckerei at the east turn, with oversized stamps visible above its roofline.
+    // Staatsdruckerei: the outside line remains broad and safe; the paper lane at x=178 is shorter.
     addVisualBox(track, 'printing-office', new Vec3(318, 12, 8), new Vec3(54, 24, 94), darkMarble);
     addVisualBox(track, 'printing-door', new Vec3(289.5, 7, 8), new Vec3(1, 14, 26), paper);
+    addVisualBox(track, 'printing-shortcut-paper', new Vec3(178, 0.06, 0), new Vec3(28, 0.09, 118), paper);
+    addVisualBox(track, 'printing-shortcut-edge-a', new Vec3(163.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
+    addVisualBox(track, 'printing-shortcut-edge-b', new Vec3(192.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
+    addStaticRamp(track, 'printing-entry-ramp', new Vec3(178, 0.55, 48), new Vec3(24, 1, 13), -7, paper);
+    addStaticRamp(track, 'printing-exit-ramp', new Vec3(178, 0.55, -48), new Vec3(24, 1, 13), 7, paper);
     for (let index = 0; index < 3; index += 1) {
         addVisualPrimitive(
             track,
@@ -177,7 +202,23 @@ export const createRaceTrack = (root: Entity) => {
             propaganda
         );
         addVisualBox(track, `stamp-head-${index}`, new Vec3(295, 8.5, -18 + index * 18), new Vec3(16, 3, 13), gold);
+        addVisualPrimitive(
+            track,
+            `shortcut-stamp-${index}`,
+            'cylinder',
+            new Vec3(178, 9, -25 + index * 25),
+            new Vec3(4, 12, 4),
+            propaganda
+        );
+        addVisualBox(
+            track,
+            `shortcut-stamp-head-${index}`,
+            new Vec3(178, 3.5, -25 + index * 25),
+            new Vec3(18, 2.5, 7),
+            gold
+        );
     }
+    addVisualBox(track, 'approved-print', new Vec3(178, 0.13, -12), new Vec3(17, 0.08, 7), propaganda);
 
     // Fünfjahresplan monument: gold only on the public-facing half.
     addVisualPrimitive(track, 'statue-plinth', 'cylinder', new Vec3(70, 5, 0), new Vec3(25, 10, 25), marble);

@@ -50,6 +50,7 @@ export class ItemSystem {
     private readonly root: Entity;
     private readonly bots: BotRaceManager;
     private readonly grantBoost: () => void;
+    private readonly announce: (event: ItemId | 'pickup' | 'shielded' | 'hit') => void;
     private readonly pickups: Pickup[];
     private readonly projectiles: Projectile[] = [];
     private readonly slot: HTMLElement;
@@ -64,10 +65,16 @@ export class ItemSystem {
     private planPenaltyTimer = 0;
     private hostileTimer = 16;
 
-    constructor(root: Entity, bots: BotRaceManager, grantBoost: () => void) {
+    constructor(
+        root: Entity,
+        bots: BotRaceManager,
+        grantBoost: () => void,
+        announce: (event: ItemId | 'pickup' | 'shielded' | 'hit') => void
+    ) {
         this.root = root;
         this.bots = bots;
         this.grantBoost = grantBoost;
+        this.announce = announce;
         this.pickups = PICKUP_POSITIONS.map((position, index) => {
             const entity = new Entity(`item-box-${index}`);
             entity.setPosition(position);
@@ -136,6 +143,7 @@ export class ItemSystem {
                 pickup.cooldown = 7;
                 pickup.entity.enabled = false;
                 this.say(`${this.inventory.icon} ${this.inventory.name} eingesammelt`);
+                this.announce('pickup');
                 this.renderHud();
             }
         }
@@ -160,6 +168,7 @@ export class ItemSystem {
         }
         const item = this.inventory;
         this.inventory = null;
+        this.announce(item.id);
         switch (item.id) {
             case 'propaganda':
             case 'censor':
@@ -264,9 +273,11 @@ export class ItemSystem {
         if (this.shieldTimer > 0) {
             this.shieldTimer = 0;
             this.say('🛡️ Angriff diplomatisch zurückgewiesen');
+            this.announce('shielded');
         } else {
             this.slowTimer = 3;
             this.say('💥 Verwaltungsakt zugestellt');
+            this.announce('hit');
         }
     }
 

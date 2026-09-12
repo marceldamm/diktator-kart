@@ -681,3 +681,54 @@ button:disabled {
     opacity: 1;
     transform: translate(-50%, 0);
 }
+
+.shortcut-notice {
+    position: fixed;
+    left: 50%;
+    bottom: 16%;
+    z-index: 19;
+    padding: 8px 14px;
+    border: 2px solid #ed334b;
+    background: #16080be8;
+    color: #ffb3bd;
+    font:
+        900 13px ui-sans-serif,
+        system-ui,
+        sans-serif;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transform: translate(-50%, 12px);
+    transition: 160ms ease;
+    pointer-events: none;
+}
+
+.shortcut-notice.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.announcer-subtitle {
+    position: fixed;
+    left: 50%;
+    bottom: 7%;
+    z-index: 22;
+    max-width: min(720px, calc(100vw - 30px));
+    padding: 9px 16px;
+    border-bottom: 3px solid #e7c44e;
+    background: #05080de8;
+    color: #fff;
+    font:
+        800 16px/1.35 ui-sans-serif,
+        system-ui,
+        sans-serif;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, 10px);
+    transition: 180ms ease;
+    pointer-events: none;
+}
+
+.announcer-subtitle.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}

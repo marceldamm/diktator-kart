@@ -15,18 +15,22 @@ import {
     createGraphicsDevice
 } from 'playcanvas';
 
+import { Announcer } from './game/announcer';
+import type { AnnouncerCue } from './game/announcer';
 import { BotRaceManager } from './game/bots';
 import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
 import { KeyboardInput } from './game/input';
 import { ItemSystem } from './game/items';
+import type { ItemId } from './game/items';
 import { applyKartStyle, createKart, driveKart, KartController, resetKart } from './game/kart';
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
 import { TelemetryLog } from './game/telemetry-log';
 import { createRaceTrack } from './game/track';
+import { WorldEvents } from './game/world-events';
 
 import './starter.css';
 
@@ -66,6 +70,7 @@ app.systems.rigidbody!.gravity.set(0, -9.81, 0);
 app.scene.ambientLight = new Color(0.58, 0.61, 0.66);
 
 createRaceTrack(app.root);
+const worldEvents = new WorldEvents(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
 const controller = new KartController();
@@ -76,7 +81,31 @@ const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.s
 (window as unknown as { __diktatorKartBots: () => ReturnType<BotRaceManager['snapshot']> }).__diktatorKartBots = () =>
     bots.snapshot();
 let raycastController: RaycastKartController | undefined;
-const items = new ItemSystem(app.root, bots, () => raycastController?.grantBoost());
+const announcer = new Announcer();
+const itemCue: Partial<Record<ItemId | 'pickup' | 'shielded' | 'hit', AnnouncerCue>> = {
+    pickup: 'pickup',
+    'duty-rocket': 'rocket',
+    immunity: 'immunity',
+    shielded: 'shielded',
+    hit: 'hit',
+    'economic-plan': 'plan',
+    propaganda: 'propaganda',
+    censor: 'censor',
+    statue: 'statue',
+    'secret-police': 'police'
+};
+const items = new ItemSystem(
+    app.root,
+    bots,
+    () => raycastController?.grantBoost(),
+    (event) => {
+        const cue = itemCue[event];
+        if (cue) announcer.say(cue, event === 'hit' || event === 'shielded');
+    }
+);
+let announcedLap = 1;
+let previousPosition = 1;
+let announcedFinish = false;
 let botSnapshotTimer = 0;
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
@@ -96,6 +125,11 @@ const restartRace = () => {
     race.reset(kart);
     bots.reset();
     items.reset();
+    worldEvents.reset();
+    announcer.reset();
+    announcedLap = 1;
+    previousPosition = 1;
+    announcedFinish = false;
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
@@ -104,6 +138,7 @@ const startRace = () => {
     restartRace();
     race.start(kart);
     bots.start();
+    announcer.say('start', true);
 };
 const gameUi = new GameUi({
     onDriver: (driver) => applyKartStyle(kart, driver),
@@ -165,7 +200,10 @@ app.on('update', (dt: number) => {
     if (input.consumeItem() && race.canDrive && !gameUi.isPaused) items.use(kart);
     const kartInput =
         race.canDrive && !gameUi.isPaused
-            ? { ...rawInput, throttle: rawInput.throttle * items.playerPowerScale }
+            ? {
+                  ...rawInput,
+                  throttle: rawInput.throttle * items.playerPowerScale * worldEvents.playerPowerScale
+              }
             : { steering: 0, throttle: 0, hop: false, drift: false };
     const activeController = raycastController ?? controller;
     if (raycastController) raycastController.update(kartInput, dt);
@@ -176,13 +214,27 @@ app.on('update', (dt: number) => {
     if (!gameUi.isPaused) race.update(kart, dt);
     bots.update(dt, gameUi.isPaused);
     items.update(kart, dt, race.canDrive && !gameUi.isPaused);
+    const leaderLap = Math.max(race.snapshot().lap, ...bots.snapshot().map((bot) => bot.lap));
+    if (!gameUi.isPaused) worldEvents.update(dt, leaderLap, kart);
     botSnapshotTimer += dt;
     if (botSnapshotTimer >= 1) {
         botSnapshotTimer = 0;
         document.documentElement.dataset.botState = JSON.stringify(bots.snapshot());
     }
     const raceSnapshot = race.snapshot();
-    raceHud.update(raceSnapshot, bots.playerPosition(kart, race), bots.racers.length + 1);
+    const racePosition = bots.playerPosition(kart, race);
+    if (raceSnapshot.lap > announcedLap) {
+        announcedLap = raceSnapshot.lap;
+        announcer.say(raceSnapshot.lap === raceSnapshot.lapsToWin ? 'finalLap' : 'lap2', true);
+    }
+    if (racePosition > previousPosition) announcer.say(racePosition === 6 ? 'lastPlace' : 'losePlace');
+    else if (racePosition < previousPosition) announcer.say(racePosition === 1 ? 'lead' : 'comeback');
+    previousPosition = racePosition;
+    if (raceSnapshot.phase === 'finished' && !announcedFinish) {
+        announcedFinish = true;
+        announcer.say('finish', true);
+    }
+    raceHud.update(raceSnapshot, racePosition, bots.racers.length + 1);
     gameUi.update(raceSnapshot);
 });
 window.addEventListener('resize', () => app.resizeCanvas());
