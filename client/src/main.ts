@@ -20,6 +20,7 @@ import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
 import { KeyboardInput } from './game/input';
+import { ItemSystem } from './game/items';
 import { applyKartStyle, createKart, driveKart, KartController, resetKart } from './game/kart';
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
@@ -75,6 +76,7 @@ const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.s
 (window as unknown as { __diktatorKartBots: () => ReturnType<BotRaceManager['snapshot']> }).__diktatorKartBots = () =>
     bots.snapshot();
 let raycastController: RaycastKartController | undefined;
+const items = new ItemSystem(app.root, bots, () => raycastController?.grantBoost());
 let botSnapshotTimer = 0;
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
@@ -93,6 +95,7 @@ const restartRace = () => {
     raycastController?.reset();
     race.reset(kart);
     bots.reset();
+    items.reset();
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
@@ -159,8 +162,11 @@ app.on('update', (dt: number) => {
         }
     }
     const rawInput = input.read();
+    if (input.consumeItem() && race.canDrive && !gameUi.isPaused) items.use(kart);
     const kartInput =
-        race.canDrive && !gameUi.isPaused ? rawInput : { steering: 0, throttle: 0, hop: false, drift: false };
+        race.canDrive && !gameUi.isPaused
+            ? { ...rawInput, throttle: rawInput.throttle * items.playerPowerScale }
+            : { steering: 0, throttle: 0, hop: false, drift: false };
     const activeController = raycastController ?? controller;
     if (raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
@@ -169,6 +175,7 @@ app.on('update', (dt: number) => {
     followCamera.update(camera, kart, dt);
     if (!gameUi.isPaused) race.update(kart, dt);
     bots.update(dt, gameUi.isPaused);
+    items.update(kart, dt, race.canDrive && !gameUi.isPaused);
     botSnapshotTimer += dt;
     if (botSnapshotTimer >= 1) {
         botSnapshotTimer = 0;

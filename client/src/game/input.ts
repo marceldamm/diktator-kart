@@ -11,21 +11,38 @@ export type KartInput = Readonly<{
 export class KeyboardInput {
     private readonly keys = new Set<string>();
     private hopQueued = false;
+    private itemQueued = false;
 
     constructor() {
         window.addEventListener('keydown', (event) => {
             if (
-                ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 'Space'].includes(
-                    event.code
-                )
+                [
+                    'ArrowUp',
+                    'ArrowDown',
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'KeyW',
+                    'KeyS',
+                    'KeyA',
+                    'KeyD',
+                    'Space',
+                    'KeyE'
+                ].includes(event.code)
             ) {
                 event.preventDefault();
                 if (event.code === 'Space' && !event.repeat) this.hopQueued = true;
+                if (event.code === 'KeyE' && !event.repeat) this.itemQueued = true;
                 this.keys.add(event.code);
             }
         });
         window.addEventListener('keyup', (event) => this.keys.delete(event.code));
         window.addEventListener('blur', () => this.keys.clear());
+    }
+
+    consumeItem(): boolean {
+        const queued = this.itemQueued;
+        this.itemQueued = false;
+        return queued;
     }
 
     read(): KartInput {

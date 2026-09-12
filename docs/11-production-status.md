@@ -21,7 +21,7 @@ Stand: 12. September 2026, Branch `astra/full-game`
 | Druckerei-Abkürzung               | ja      | nein                                                                            | nein                                                                                                                          | nein                                                                               |
 | Drei Weltveränderungen            | ja      | nein                                                                            | nein                                                                                                                          | nein                                                                               |
 | Fünf Bots / drei Persönlichkeiten | ja      | fünf physische Gegner, gemeinsame Inputs, drei Datenprofile und Platzberechnung | Start, 20–22 Einheiten/s, Position 1/6→6/6, alle Checkpoints und Rundenwechsel aller fünf sichtbar geprüft; Zieleinlauf offen | Multi-RayCastVehicle mit aktuellem Ammo instabil; stabile Rigidbody-Variante aktiv |
-| Itemsystem / acht Items           | ja      | nein                                                                            | nein                                                                                                                          | nein                                                                               |
+| Itemsystem / acht Items           | ja      | acht Kisten-Items, HUD, Einsatz, Projektile, Bot-Effekte und gemeinsame Schutzlogik | Typprüfung, Lint und Build erfolgreich; Laufzeit-/Sichtprüfung offen                                                        | Browsersteuerung bis zum App-Limit-Reset gesperrt                                  |
 | Sprecher, mindestens 20 Zeilen    | ja      | nein                                                                            | nein                                                                                                                          | lokale Vertonung noch zu erzeugen                                                  |
 | Fahrzeugdetails / Reaktionen      | ja      | je Fahrer ein benanntes Detail im Datenmodell; erstes sichtbares Detail am Kart | Farb-/Fahrerwechsel sichtbar geprüft                                                                                          | Animationen offen                                                                  |
 | Reduzierte Effekte/Kamera         | ja      | flachere lesbare Kamera; Einstellungsoption offen                               | sichtbar geprüft                                                                                                              | nein                                                                               |
@@ -29,9 +29,9 @@ Stand: 12. September 2026, Branch `astra/full-game`
 
 ## Nächste Produktionsschritte
 
-1. Bot-Input, Wegpunkte, fünf Gegner und gemeinsame Platzierungslogik.
-2. Itemboxen, Inventar und gemeinsame Treffer-/Schutzlogik.
-3. Druckerei-Abkürzung und sektorweise Fahrtests.
+1. Laufzeitabnahme aller acht Items und der Schutz-Wechselwirkung nach Freigabe der Browsersteuerung.
+2. Druckerei-Abkürzung und sektorweise Fahrtests.
+3. Drei rundenabhängige Weltveränderungen.
 4. Fahreranimationen, Effekte und Audiofeedback.
 5. Sprecher, Siegerehrung, Rennbericht und kombinierte Abnahme.
 

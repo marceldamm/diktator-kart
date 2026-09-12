@@ -208,6 +208,10 @@ export class RaycastKartController {
         }
     }
 
+    grantBoost(duration = 0.8): void {
+        this.boostTimer = Math.max(this.boostTimer, duration);
+    }
+
     update(input: KartInput, dt: number): void {
         if (!this.active) return;
         this.body.setActivationState(4);

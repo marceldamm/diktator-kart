@@ -1,40 +1,40 @@
 # Items
 
-## Status
+## Integrierter Stand
 
-Dieses Dokument sammelt die aktuell vorgesehenen Item-Ideen für **Diktator Kart**. Effekte, Reichweiten, Wahrscheinlichkeiten und Balancing sind noch offen.
+Das Rennen besitzt acht einsammelbare Items. Gold-türkise Versorgungskisten stehen entlang der vollständigen Runde, verschwinden nach der Aufnahme und erscheinen nach sieben Sekunden erneut. Der Spieler hält genau ein Item und setzt es mit `E` ein.
 
-## Aktuelle Item-Ideen
-
-| Item | Effekt |
+| Item | Integrierte Wirkung |
 | --- | --- |
-| **Propaganda-Plakat** | Verdeckt kurz die Sicht der Gegner. |
-| **Roter Aktenordner** | Entfernt zufällig ein Item eines Fahrers. |
-| **Personenkult-Statue** | Erzeugt ein großes Hindernis auf der Strecke. |
-| **Zensurstempel** | Versteckt kurz die Minikarte. |
-| **Geheimpolizei** | Verfolgt den nächstplatzierten Fahrer als zielverfolgendes Angriffs-Item. |
-| **Wirtschaftsplan** | Gewährt einen starken Turbo mit hoher Chance auf anschließenden Motorschaden bzw. deutlichen Geschwindigkeitsverlust. |
+| **Propaganda-Flut** | Verkürzt für 3,2 Sekunden die wirksame Lenkvorausschau aller Bots. |
+| **Rote Akte** | Verlangsamt den nächsten Bot für 3,2 Sekunden durch eine „Sonderprüfung“. |
+| **Heldenstatue** | Stellt hinter dem Spieler für neun Sekunden ein kollidierendes Hindernis auf. |
+| **Zensurbalken** | Beeinträchtigt die Bot-Vorausschau stärker für 4,5 Sekunden, ohne die Straße des Spielers zu verdecken. |
+| **Geheimpolizei** | Verfolgt als zielsuchendes Geschoss den nächsten Gegner und verlangsamt ihn bei Treffer. |
+| **Fünfjahresplan** | Gewährt zuerst einen kurzen Boost; danach bleibt Gas nutzbar, leistet aber 3,8 Sekunden weniger. |
+| **Dienstweg-Rakete** | Fliegt geradlinig, lebt höchstens fünf Sekunden und trifft höchstens einen Bot. |
+| **Diplomatische Immunität** | Hält acht Sekunden oder bis zum ersten abgefangenen Angriff. Ein sichtbares Siegel zeigt den Schutz an. |
 
-## Designprinzipien
+## Gemeinsame Trefferlogik
 
-Die Items sollen zum schwarzen, satirischen Stil des Spiels passen und gleichzeitig klar verständliche Arcade-Effekte haben.
+Geradlinige und zielsuchende Geschosse laufen durch dieselbe Projektilaktualisierung und werden nach einem Treffer unmittelbar entfernt. Bots erhalten denselben zeitlich begrenzten Verlangsamungszustand. Der Spieler kann von angekündigten zielsuchenden Dienstweg-Angriffen getroffen werden; Diplomatische Immunität fängt diesen Angriff in derselben Trefferfunktion ab und wird dabei verbraucht. Streckenwände und Begrenzungen bleiben davon unberührt.
 
-Geplante Kategorien:
+## Bedienung und Rückmeldung
 
-- offensive Items
-- defensive Items
-- Sicht- und UI-Störungen
-- Streckenhindernisse
-- Geschwindigkeits- und Boost-Items
-- Risiko-/Belohnungs-Items mit möglichem Eigenschaden
+- `E`: gehaltenes Item einsetzen
+- obere rechte Anzeige: Itemname, Symbol und Bedienhinweis
+- mittige Meldung: Aufnahme, Einsatz, Warnung, Treffer oder Abwehr
+- separates Siegel: aktive Diplomatische Immunität
+
+## Verifiziert
+
+- TypeScript-Prüfung, ESLint und Produktions-Build sind erfolgreich.
+- Laufzeit- und Sichtprüfung dieses neuen Systems steht aus, solange die Browsersteuerung durch das App-Nutzungslimit gesperrt ist.
 
 ## Noch offen
 
-- Häufigkeit einzelner Items
-- Item-Verteilung abhängig von Rennposition
-- Dauer von Sicht- und UI-Effekten
-- Stärke von Verfolgungs-Items
-- Verhalten gegenüber Bots
-- Verhalten im Multiplayer
-- Schutzmechanismen gegen Ketteneffekte
-- visuelle und akustische Darstellung jedes Items
+- Partikel aus Papierzetteln, Stempelstaub und Papierkonfetti
+- akustische Ankündigungen und Einsatzgeräusche
+- positionsabhängige statt deterministisch rotierende Itemverteilung
+- Bot-Aufnahme und bewusster Bot-Einsatz nach Persönlichkeit
+- kombinierte Abnahme aller acht Items im echten Rennen

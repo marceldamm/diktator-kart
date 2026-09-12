@@ -58,6 +58,8 @@ type BotRacer = {
     controller: KartController;
     routeIndex: number;
     startPosition: Vec3;
+    slowTimer: number;
+    visionTimer: number;
 };
 
 const ROUTE = [
@@ -106,7 +108,9 @@ export class BotRaceManager {
                 race,
                 controller: new KartController(),
                 routeIndex: 0,
-                startPosition
+                startPosition,
+                slowTimer: 0,
+                visionTimer: 0
             };
         });
     }
@@ -117,6 +121,8 @@ export class BotRaceManager {
             racer.controller.reset();
             racer.race.start(racer.entity);
             racer.routeIndex = 0;
+            racer.slowTimer = 0;
+            racer.visionTimer = 0;
         }
     }
 
@@ -126,11 +132,15 @@ export class BotRaceManager {
             racer.controller.reset();
             racer.race.reset(racer.entity);
             racer.routeIndex = 0;
+            racer.slowTimer = 0;
+            racer.visionTimer = 0;
         }
     }
 
     update(dt: number, paused: boolean): void {
         for (const racer of this.racers) {
+            racer.slowTimer = Math.max(0, racer.slowTimer - dt);
+            racer.visionTimer = Math.max(0, racer.visionTimer - dt);
             if (paused) {
                 driveKart(racer.controller, racer.entity, { steering: 0, throttle: 0, hop: false, drift: false }, dt);
                 continue;
@@ -141,6 +151,28 @@ export class BotRaceManager {
             driveKart(racer.controller, racer.entity, input, dt);
             racer.race.update(racer.entity, dt);
         }
+    }
+
+    nearestTarget(position: Vec3): Entity | null {
+        let nearest: BotRacer | undefined;
+        let distance = Number.POSITIVE_INFINITY;
+        for (const racer of this.racers) {
+            const candidate = racer.entity.getPosition().distance(position);
+            if (candidate < distance) {
+                nearest = racer;
+                distance = candidate;
+            }
+        }
+        return nearest?.entity ?? null;
+    }
+
+    applyHit(entity: Entity, duration = 2.4): void {
+        const racer = this.racers.find((candidate) => candidate.entity === entity);
+        if (racer) racer.slowTimer = Math.max(racer.slowTimer, duration);
+    }
+
+    impairVision(duration = 3): void {
+        for (const racer of this.racers) racer.visionTimer = Math.max(racer.visionTimer, duration);
     }
 
     playerPosition(player: Entity, playerRace: RaceController): number {
@@ -181,12 +213,14 @@ export class BotRaceManager {
         const right = racer.entity.right.clone();
         right.y = 0;
         right.normalize();
-        const steering = clamp(-desired.dot(right) * 2.8, -1, 1);
+        const steering = clamp(-desired.dot(right) * 2.8, -1, 1) * (racer.visionTimer > 0 ? 0.62 : 1);
         const alignment = clamp(forward.dot(desired), -1, 1);
         const cornerThrottle = 1 - Math.abs(steering) * racer.personality.cornerCaution * 0.4;
         return {
             steering,
-            throttle: alignment < -0.25 ? -0.45 : racer.personality.throttle * cornerThrottle,
+            throttle:
+                (alignment < -0.25 ? -0.45 : racer.personality.throttle * cornerThrottle) *
+                (racer.slowTimer > 0 ? 0.38 : 1),
             hop: false,
             drift: Math.abs(steering) > 0.72 && alignment > 0.35 && racer.personality.shortcutRisk > 0.7
         };
