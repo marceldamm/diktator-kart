@@ -90,4 +90,12 @@ export class Announcer {
         this.volume = Math.max(0, Math.min(1, volume));
         if (this.current) this.current.volume = this.volume;
     }
+
+    setPaused(paused: boolean): void {
+        if (paused) this.current?.pause();
+        else if (this.current && !this.current.ended)
+            void this.current.play().catch(() => {
+                // Keep the subtitle available when the browser blocks audio resumption.
+            });
+    }
 }

@@ -16,6 +16,7 @@ export class KeyboardInput {
 
     constructor() {
         window.addEventListener('keydown', (event) => {
+            if (event.target instanceof HTMLElement && event.target.closest('input, select, textarea, button')) return;
             if (
                 [
                     'ArrowUp',
@@ -39,7 +40,14 @@ export class KeyboardInput {
             }
         });
         window.addEventListener('keyup', (event) => this.keys.delete(event.code));
-        window.addEventListener('blur', () => this.keys.clear());
+        window.addEventListener('blur', () => this.reset());
+    }
+
+    reset(): void {
+        this.keys.clear();
+        this.hopQueued = false;
+        this.itemQueued = false;
+        this.abilityQueued = false;
     }
 
     consumeItem(): boolean {

@@ -9,11 +9,13 @@ export type GameUiHandlers = Readonly<{
     onRestart: () => void;
     onMenu: () => void;
     onMode: (mode: GameMode) => void;
+    onPause: (paused: boolean) => void;
 }>;
 
 export type GameMode = 'grand-prix' | 'time-trial';
 
 export class GameUi {
+    private readonly onPause: (paused: boolean) => void;
     private readonly menu: HTMLElement;
     private readonly pause: HTMLElement;
     private readonly result: HTMLElement;
@@ -23,6 +25,7 @@ export class GameUi {
     private mode: GameMode = 'grand-prix';
 
     constructor(handlers: GameUiHandlers) {
+        this.onPause = handlers.onPause;
         const cards = DRIVERS.map(
             (
                 driver
@@ -175,6 +178,7 @@ export class GameUi {
     }
 
     private showRace(): void {
+        (document.activeElement as HTMLElement | null)?.blur();
         document.body.classList.add('race-active');
         this.menu.classList.add('is-hidden');
         this.result.classList.add('is-hidden');
@@ -192,5 +196,7 @@ export class GameUi {
 
     private setPaused(paused: boolean): void {
         this.pause.classList.toggle('is-hidden', !paused);
+        this.onPause(paused);
+        if (!paused) (document.activeElement as HTMLElement | null)?.blur();
     }
 }

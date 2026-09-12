@@ -88,6 +88,13 @@ const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.s
     bots.snapshot();
 let raycastController: RaycastKartController | undefined;
 const announcer = new Announcer();
+let menuPaused = false;
+let settingsOpen = false;
+const synchronizePause = () => {
+    app.timeScale = menuPaused || settingsOpen ? 0 : 1;
+    input.reset();
+    announcer.setPaused(app.timeScale === 0);
+};
 const itemCue: Partial<Record<ItemId | 'pickup' | 'shielded' | 'hit', AnnouncerCue>> = {
     pickup: 'pickup',
     'duty-rocket': 'rocket',
@@ -134,6 +141,7 @@ const refreshTelemetryView = () => {
         : `gestoppt · ${telemetry.count} Samples`;
 };
 const restartRace = () => {
+    input.reset();
     resetKart(kart);
     controller.reset();
     kartAnimator.reset();
@@ -157,6 +165,7 @@ const restartRace = () => {
     refreshTelemetryView();
 };
 const startRace = () => {
+    (document.activeElement as HTMLElement | null)?.blur();
     restartRace();
     race.start(kart);
     bots.start();
@@ -170,6 +179,10 @@ const gameUi = new GameUi({
     onStart: startRace,
     onRestart: startRace,
     onMenu: restartRace,
+    onPause: (paused) => {
+        menuPaused = paused;
+        synchronizePause();
+    },
     onMode: (mode) => {
         gameMode = mode;
         bots.setActive(mode === 'grand-prix');
@@ -205,11 +218,17 @@ camera.lookAt(kart.getPosition());
 camera.addComponent('camera', { clearColor: new Color(0.22, 0.34, 0.5), farClip: 900, fov: 62 });
 app.root.addChild(camera);
 const followCamera = new FollowCameraController();
-new SettingsPanel((settings) => {
-    announcer.setVolume(settings.masterVolume * settings.voiceVolume);
-    followCamera.setReducedMotion(settings.reducedCamera);
-    document.documentElement.classList.toggle('reduced-effects', settings.reducedEffects);
-});
+new SettingsPanel(
+    (settings) => {
+        announcer.setVolume(settings.masterVolume * settings.voiceVolume);
+        followCamera.setReducedMotion(settings.reducedCamera);
+        document.documentElement.classList.toggle('reduced-effects', settings.reducedEffects);
+    },
+    (open) => {
+        settingsOpen = open;
+        synchronizePause();
+    }
+);
 
 const light = new Entity('light');
 light.addComponent('light', {
@@ -223,6 +242,10 @@ light.setEulerAngles(45, 35, 0);
 app.root.addChild(light);
 
 app.on('update', (dt: number) => {
+    if (app.timeScale === 0) {
+        input.reset();
+        return;
+    }
     if (!raycastController) {
         try {
             raycastController = new RaycastKartController(kart, app);

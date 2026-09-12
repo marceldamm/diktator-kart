@@ -4,7 +4,7 @@ Der Ergebnisbericht verwendet den tatsächlichen Platz, die Rennzeit und die bes
 
 Beendete Rennen werden nach ihrer Zielzeit geordnet. Zuvor bekamen alle fertigen Fahrer denselben Fortschrittswert, wodurch Platz eins fälschlich angezeigt werden konnte. Ein Neustart löscht die beste Runde des vorherigen Rennens. Die langfristige Zeitfahrbestzeit bleibt separat gespeichert.
 
-Temporäre Itemstatuen verwenden Rennzeit statt eines unabhängigen Browser-Timers und werden beim Neustart entfernt. Itemeffekte laufen bei Pause nicht mehr ab. Dies behebt nicht die noch separat zu prüfende vollständige Physikpause.
+Temporäre Itemstatuen verwenden Rennzeit statt eines unabhängigen Browser-Timers und werden beim Neustart entfernt. Itemeffekte laufen bei Pause nicht mehr ab. Pause und Einstellungen setzen jetzt die PlayCanvas-Spieluhr auf null; damit werden auch Physik und Renntimer angehalten. Der Sprecher pausiert ebenfalls. Eingaben werden an diesen Übergängen verworfen, und Tastaturbedienung von Formularfeldern erzeugt keine Fahrbefehle. Die gemeinsame Laufzeitprüfung bleibt offen.
 
 ## Nachweis
 

@@ -21,7 +21,7 @@ export class SettingsPanel {
     private readonly onChange: (settings: GameSettings) => void;
     private settings: GameSettings;
 
-    constructor(onChange: (settings: GameSettings) => void) {
+    constructor(onChange: (settings: GameSettings) => void, onOpenChange: (open: boolean) => void) {
         this.onChange = onChange;
         this.settings = this.load();
         document.body.insertAdjacentHTML(
@@ -33,12 +33,15 @@ export class SettingsPanel {
             <p class="control-help"><b>Steuerung</b><br>WASD/Pfeile: Fahren · Leertaste: Hop/Drift · E: Item · ESC: Pause</p><button class="primary-button" id="settings-close" type="button">ÜBERNEHMEN</button></div></section>`
         );
         this.panel = document.getElementById('settings-panel')!;
-        document
-            .getElementById('settings-open')!
-            .addEventListener('click', () => this.panel.classList.remove('is-hidden'));
-        document
-            .getElementById('settings-close')!
-            .addEventListener('click', () => this.panel.classList.add('is-hidden'));
+        document.getElementById('settings-open')!.addEventListener('click', () => {
+            this.panel.classList.remove('is-hidden');
+            onOpenChange(true);
+        });
+        document.getElementById('settings-close')!.addEventListener('click', () => {
+            this.panel.classList.add('is-hidden');
+            onOpenChange(false);
+            (document.activeElement as HTMLElement | null)?.blur();
+        });
         this.panel.querySelectorAll<HTMLInputElement>('input').forEach((input) => {
             input.addEventListener('input', () => this.readForm());
         });
