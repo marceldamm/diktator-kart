@@ -21,6 +21,7 @@ import { BotRaceManager } from './game/bots';
 import { DebugHud } from './game/debug-hud';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
+import type { GameMode } from './game/game-ui';
 import { KeyboardInput } from './game/input';
 import { ItemSystem } from './game/items';
 import type { ItemId } from './game/items';
@@ -28,6 +29,7 @@ import { applyKartStyle, createKart, driveKart, KartController, resetKart } from
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
+import { SettingsPanel } from './game/settings';
 import { TelemetryLog } from './game/telemetry-log';
 import { createRaceTrack } from './game/track';
 import { WorldEvents } from './game/world-events';
@@ -106,6 +108,9 @@ const items = new ItemSystem(
 let announcedLap = 1;
 let previousPosition = 1;
 let announcedFinish = false;
+let gameMode: GameMode = 'grand-prix';
+let savedTimeTrialBest: number | null = null;
+let newTimeTrialRecord = false;
 let botSnapshotTimer = 0;
 const debugHud = new DebugHud();
 const telemetry = new TelemetryLog();
@@ -125,11 +130,16 @@ const restartRace = () => {
     race.reset(kart);
     bots.reset();
     items.reset();
+    bots.setActive(gameMode === 'grand-prix');
+    items.setActive(gameMode === 'grand-prix');
     worldEvents.reset();
     announcer.reset();
     announcedLap = 1;
     previousPosition = 1;
     announcedFinish = false;
+    newTimeTrialRecord = false;
+    const storedBest = Number(localStorage.getItem(`diktator-kart-best-v1-${gameUi?.selectedDriver.id}`));
+    savedTimeTrialBest = Number.isFinite(storedBest) && storedBest > 0 ? storedBest : null;
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
@@ -144,7 +154,12 @@ const gameUi = new GameUi({
     onDriver: (driver) => applyKartStyle(kart, driver),
     onStart: startRace,
     onRestart: startRace,
-    onMenu: restartRace
+    onMenu: restartRace,
+    onMode: (mode) => {
+        gameMode = mode;
+        bots.setActive(mode === 'grand-prix');
+        items.setActive(mode === 'grand-prix');
+    }
 });
 document.getElementById('telemetry-start')!.addEventListener('click', () => {
     telemetry.start(kart);
@@ -175,6 +190,11 @@ camera.lookAt(kart.getPosition());
 camera.addComponent('camera', { clearColor: new Color(0.22, 0.34, 0.5), farClip: 900, fov: 62 });
 app.root.addChild(camera);
 const followCamera = new FollowCameraController();
+new SettingsPanel((settings) => {
+    announcer.setVolume(settings.masterVolume * settings.voiceVolume);
+    followCamera.setReducedMotion(settings.reducedCamera);
+    document.documentElement.classList.toggle('reduced-effects', settings.reducedEffects);
+});
 
 const light = new Entity('light');
 light.addComponent('light', {
@@ -232,9 +252,14 @@ app.on('update', (dt: number) => {
     previousPosition = racePosition;
     if (raceSnapshot.phase === 'finished' && !announcedFinish) {
         announcedFinish = true;
+        if (gameMode === 'time-trial' && (savedTimeTrialBest === null || raceSnapshot.raceTime < savedTimeTrialBest)) {
+            savedTimeTrialBest = raceSnapshot.raceTime;
+            newTimeTrialRecord = true;
+            localStorage.setItem(`diktator-kart-best-v1-${gameUi.selectedDriver.id}`, String(savedTimeTrialBest));
+        }
         announcer.say('finish', true);
     }
     raceHud.update(raceSnapshot, racePosition, bots.racers.length + 1);
-    gameUi.update(raceSnapshot);
+    gameUi.update(raceSnapshot, savedTimeTrialBest, newTimeTrialRecord);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

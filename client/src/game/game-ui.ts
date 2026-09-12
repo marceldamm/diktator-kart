@@ -8,7 +8,10 @@ export type GameUiHandlers = Readonly<{
     onStart: () => void;
     onRestart: () => void;
     onMenu: () => void;
+    onMode: (mode: GameMode) => void;
 }>;
+
+export type GameMode = 'grand-prix' | 'time-trial';
 
 export class GameUi {
     private readonly menu: HTMLElement;
@@ -17,6 +20,7 @@ export class GameUi {
     private readonly raceControls: HTMLElement;
     private selected = DEFAULT_DRIVER;
     private wasFinished = false;
+    private mode: GameMode = 'grand-prix';
 
     constructor(handlers: GameUiHandlers) {
         const cards = DRIVERS.map(
@@ -31,7 +35,7 @@ export class GameUi {
             'beforeend',
             `<section class="game-menu" id="game-menu" aria-label="Hauptmenü">
                 <div class="menu-copy"><span class="eyebrow">MINISTERIUM FÜR RENNSIEGE PRÄSENTIERT</span><h1>DIKTATOR<br><em>KART</em></h1><p>Die Platzierung steht fest. Die Kurve leider nicht.</p></div>
-                <div class="menu-panel"><span class="step">1 / 2 · FAHRER WÄHLEN</span><div class="driver-grid">${cards}</div>
+                <div class="menu-panel"><span class="step">1 / 3 · MODUS</span><div class="mode-select"><button class="is-selected" data-mode="grand-prix">GRAND PRIX<small>5 Gegner · Items · 3 Runden</small></button><button data-mode="time-trial">AKTENZEICHEN BESTZEIT<small>Freie Strecke · lokale Bestzeit</small></button></div><span class="step">2 / 3 · FAHRER WÄHLEN</span><div class="driver-grid">${cards}</div>
                     <div class="selected-driver"><div><small id="driver-title">${DEFAULT_DRIVER.title}</small><strong id="driver-name">${DEFAULT_DRIVER.name} · ${DEFAULT_DRIVER.kart}</strong><span id="driver-detail">${DEFAULT_DRIVER.personality}<br>${DEFAULT_DRIVER.movingDetail}</span></div>
                     <button class="primary-button" id="start-race" type="button">GRAND PRIX STARTEN <b>→</b></button></div>
                 </div>
@@ -44,6 +48,18 @@ export class GameUi {
         this.pause = document.getElementById('pause-screen')!;
         this.result = document.getElementById('result-screen')!;
         this.raceControls = document.getElementById('race-controls')!;
+
+        document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => {
+            button.addEventListener('click', () => {
+                this.mode = button.dataset.mode as GameMode;
+                document
+                    .querySelectorAll('[data-mode]')
+                    .forEach((entry) => entry.classList.toggle('is-selected', entry === button));
+                document.getElementById('start-race')!.childNodes[0].textContent =
+                    this.mode === 'time-trial' ? 'ZEITFAHREN STARTEN ' : 'GRAND PRIX STARTEN ';
+                handlers.onMode(this.mode);
+            });
+        });
 
         document.querySelectorAll<HTMLButtonElement>('[data-driver]').forEach((button) => {
             button.addEventListener('click', () => {
@@ -107,7 +123,11 @@ export class GameUi {
         return this.selected;
     }
 
-    update(snapshot: RaceSnapshot): void {
+    get selectedMode(): GameMode {
+        return this.mode;
+    }
+
+    update(snapshot: RaceSnapshot, savedBest: number | null = null, newRecord = false): void {
         if (snapshot.phase !== 'finished' || this.wasFinished) return;
         this.wasFinished = true;
         const best =
@@ -115,7 +135,9 @@ export class GameUi {
                 ? 'ohne registrierte Runde'
                 : `beste Runde ${RaceController.formatTime(snapshot.bestLapTime)}`;
         document.getElementById('result-copy')!.textContent =
-            `${this.selected.name} erklärt das Rennen nach ${RaceController.formatTime(snapshot.raceTime)} und ${best} für planmäßig gewonnen.`;
+            this.mode === 'time-trial'
+                ? `${newRecord ? 'NEUER AKTENREKORD!' : 'Zeit ordnungsgemäß erfasst.'} Gesamtzeit ${RaceController.formatTime(snapshot.raceTime)}${savedBest === null ? '' : ` · Rekord ${RaceController.formatTime(savedBest)}`}.`
+                : `${this.selected.name} erklärt das Rennen nach ${RaceController.formatTime(snapshot.raceTime)} und ${best} für planmäßig gewonnen.`;
         this.result.classList.remove('is-hidden');
     }
 

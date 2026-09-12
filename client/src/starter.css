@@ -511,6 +511,115 @@ button:disabled {
     font-size: 22px;
 }
 
+.mode-select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 7px 0 18px;
+}
+
+.mode-select button {
+    display: grid;
+    gap: 4px;
+    padding: 10px;
+    border: 1px solid #ffffff25;
+    background: #0c1119;
+    color: #e7e9ed;
+    font-weight: 900;
+    text-align: left;
+}
+
+.mode-select button.is-selected {
+    border-color: #e7c44e;
+    box-shadow: inset 4px 0 0 #e7c44e;
+}
+
+.mode-select small {
+    color: #929dac;
+    font-weight: 500;
+}
+
+.settings-open {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    z-index: 30;
+    border-color: #ffffff30;
+    background: #080c13dc;
+}
+
+.settings-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    background: #05080ddd;
+    backdrop-filter: blur(8px);
+}
+
+.settings-panel > div {
+    display: grid;
+    width: min(480px, calc(100vw - 34px));
+    gap: 12px;
+    padding: 28px;
+    border: 1px solid #e7c44e80;
+    background: #111720;
+    box-shadow: 12px 12px 0 #0008;
+}
+
+.settings-panel h2 {
+    margin: 0 0 8px;
+    color: #e7c44e;
+    font-size: 36px;
+}
+
+.settings-panel label:not(.setting-toggle) {
+    display: grid;
+    grid-template-columns: 145px 1fr;
+    align-items: center;
+    color: #d7dbe2;
+    font:
+        700 12px ui-sans-serif,
+        system-ui,
+        sans-serif;
+}
+
+.settings-panel input[type='range'] {
+    accent-color: #e7c44e;
+}
+
+.setting-toggle {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    color: #d7dbe2;
+    font:
+        700 12px ui-sans-serif,
+        system-ui,
+        sans-serif;
+}
+
+.setting-toggle input {
+    accent-color: #e7c44e;
+}
+
+.control-help {
+    padding: 10px;
+    background: #080c13;
+    color: #aeb5c0;
+    font:
+        11px/1.6 ui-sans-serif,
+        system-ui,
+        sans-serif;
+}
+
+.reduced-effects .item-notice,
+.reduced-effects .shortcut-notice,
+.reduced-effects .announcer-subtitle {
+    transition: none;
+}
+
 .race-controls {
     position: fixed;
     right: 18px;

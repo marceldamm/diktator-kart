@@ -64,6 +64,7 @@ export class ItemSystem {
     private planBoostTimer = 0;
     private planPenaltyTimer = 0;
     private hostileTimer = 16;
+    private active = true;
 
     constructor(
         root: Entity,
@@ -99,6 +100,12 @@ export class ItemSystem {
         return 1;
     }
 
+    setActive(active: boolean): void {
+        this.active = active;
+        document.querySelector('.item-hud')?.classList.toggle('is-hidden', !active);
+        for (const pickup of this.pickups) pickup.entity.enabled = active && pickup.cooldown === 0;
+    }
+
     reset(): void {
         this.inventory = null;
         this.nextItem = 0;
@@ -110,7 +117,7 @@ export class ItemSystem {
         this.hostileTimer = 16;
         for (const pickup of this.pickups) {
             pickup.cooldown = 0;
-            pickup.entity.enabled = true;
+            pickup.entity.enabled = this.active;
         }
         for (const projectile of this.projectiles) projectile.entity.destroy();
         this.projectiles.length = 0;
@@ -127,7 +134,7 @@ export class ItemSystem {
         this.planPenaltyTimer = Math.max(0, this.planPenaltyTimer - dt);
         this.notice.classList.toggle('is-visible', this.noticeTimer > 0);
         this.shield.classList.toggle('is-visible', this.shieldTimer > 0);
-        if (!active) return;
+        if (!active || !this.active) return;
 
         for (const pickup of this.pickups) {
             pickup.entity.rotate(0, 90 * dt, 45 * dt);

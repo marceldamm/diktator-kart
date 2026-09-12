@@ -56,6 +56,7 @@ export class Announcer {
     private current: HTMLAudioElement | null = null;
     private lastCue = '';
     private lastSpokenAt = -20;
+    private volume = 0.82;
 
     constructor() {
         document.body.insertAdjacentHTML('beforeend', '<div class="announcer-subtitle" id="announcer-subtitle"></div>');
@@ -67,7 +68,7 @@ export class Announcer {
         if (!priority && (now - this.lastSpokenAt < 12 || cue === this.lastCue)) return;
         this.current?.pause();
         const audio = new Audio(`/audio/announcer/${cue}.wav`);
-        audio.volume = 0.82;
+        audio.volume = this.volume;
         audio.addEventListener('ended', () => this.subtitle.classList.remove('is-visible'), { once: true });
         void audio.play().catch(() => this.subtitle.classList.remove('is-visible'));
         this.current = audio;
@@ -83,5 +84,10 @@ export class Announcer {
         this.lastCue = '';
         this.lastSpokenAt = -20;
         this.subtitle.classList.remove('is-visible');
+    }
+
+    setVolume(volume: number): void {
+        this.volume = Math.max(0, Math.min(1, volume));
+        if (this.current) this.current.volume = this.volume;
     }
 }

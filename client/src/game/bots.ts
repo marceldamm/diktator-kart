@@ -77,6 +77,7 @@ const clamp = (value: number, minimum: number, maximum: number) => Math.max(mini
 
 export class BotRaceManager {
     readonly racers: BotRacer[];
+    private active = true;
 
     constructor(root: Entity, enabled = true) {
         if (!enabled) {
@@ -115,6 +116,11 @@ export class BotRaceManager {
         });
     }
 
+    setActive(active: boolean): void {
+        this.active = active;
+        for (const racer of this.racers) racer.entity.enabled = active;
+    }
+
     start(): void {
         for (const racer of this.racers) {
             teleportKart(racer.entity, racer.startPosition, RACE_LAYOUT.startYaw);
@@ -138,6 +144,7 @@ export class BotRaceManager {
     }
 
     update(dt: number, paused: boolean): void {
+        if (!this.active) return;
         for (const racer of this.racers) {
             racer.slowTimer = Math.max(0, racer.slowTimer - dt);
             racer.visionTimer = Math.max(0, racer.visionTimer - dt);
@@ -176,11 +183,13 @@ export class BotRaceManager {
     }
 
     playerPosition(player: Entity, playerRace: RaceController): number {
+        if (!this.active) return 1;
         const entries = [playerRace.progress(player), ...this.racers.map((racer) => racer.race.progress(racer.entity))];
         return 1 + entries.slice(1).filter((progress) => progress > entries[0]).length;
     }
 
     snapshot() {
+        if (!this.active) return [];
         return this.racers.map((racer) => {
             const position = racer.entity.getPosition();
             return {
