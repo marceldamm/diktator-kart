@@ -20,6 +20,7 @@ import { Announcer } from './game/announcer';
 import type { AnnouncerCue } from './game/announcer';
 import { BotRaceManager } from './game/bots';
 import { DebugHud } from './game/debug-hud';
+import { DriftEffects } from './game/drift-effects';
 import { DEFAULT_DRIVER } from './game/drivers';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
@@ -81,6 +82,7 @@ const input = new KeyboardInput();
 const controller = new KartController();
 const race = new RaceController();
 const kartAnimator = new KartAnimator(kart);
+const driftEffects = new DriftEffects(kart);
 race.reset(kart);
 const raceHud = new RaceHud();
 const driftHud = document.createElement('div');
@@ -283,6 +285,12 @@ app.on('update', (dt: number) => {
     else driveKart(controller, kart, kartInput, dt);
     const kartSnapshot = activeController.getDebugSnapshot(kart, kartInput);
     const charge = raycastController?.getDriftCharge();
+    driftEffects.update(
+        dt,
+        charge?.stage ?? 0,
+        Boolean(charge?.active && race.canDrive),
+        document.documentElement.classList.contains('reduced-effects')
+    );
     driftHud.classList.toggle('is-hidden', !charge?.active || !race.canDrive);
     if (charge) {
         driftMeter.value = charge.fraction;
