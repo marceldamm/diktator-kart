@@ -8,6 +8,8 @@ Nach dieser Änderung startete das normale Rennen im Browser: Spieler-Kart und f
 
 ## Ursprünglicher Fehler
 
+Zusätzlicher Regressionstest: `node tools/wheel-lifetime-regression.mjs` modelliert eine bei jeder Radeinfügung umziehende Bullet-Radliste. Er instanziiert den echten Controller und prüft dessen anschließende Grip-Aktualisierung. Alle vier Schreibzugriffe verwenden nach der Korrektur gültige Referenzen. Der Test deckt die Referenzlebensdauer ab, nicht die gesamte native Ammo-Simulation.
+
 Die Browserprüfung des aktuellen Spielstands ist fehlgeschlagen. Nach Auswahl des Zeitfahrmodus und Versuch des Rennstarts blieb die Szene ohne funktionierenden Rennablauf stehen. Der Screenshot zeigte eine entfernte Startaufstellung, kein Spielerfahrzeug im Nahbereich und weiterhin das Item-HUD.
 
 Die Browserkonsole meldet wiederholt `RuntimeError: memory access out of bounds` in `ammo.wasm.wasm`, anschließend `getGravity`, `AmmoPhysicsWorld.setGravity` und `RigidBodyComponentSystem.onUpdate`. Damit ist der aktuelle kombinierte Stand trotz erfolgreicher Builds nicht als spielbar verifiziert.
