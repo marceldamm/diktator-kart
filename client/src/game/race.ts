@@ -77,7 +77,9 @@ export class RaceController {
                 : this.phase === 'finished'
                   ? 'ZIEL!'
                   : this.phase === 'racing'
-                    ? 'LOS!'
+                    ? this.raceTime < 1.2
+                        ? 'LOS!'
+                        : ''
                     : String(Math.max(1, Math.ceil(this.countdown)));
         return {
             phase: this.phase,
@@ -110,9 +112,11 @@ export class RaceController {
         const after = current.clone().sub(gate.position);
         const beforeDistance = before.dot(gate.normal);
         const afterDistance = after.dot(gate.normal);
-        if (beforeDistance > 0 || afterDistance < 0) return false;
+        if (beforeDistance >= 0 || afterDistance < 0) return false;
+        const fraction = -beforeDistance / (afterDistance - beforeDistance);
+        const crossing = before.clone().lerp(before, after, fraction);
         const tangent = new Vec3(-gate.normal.z, 0, gate.normal.x);
-        return Math.abs(after.dot(tangent)) <= gate.halfWidth;
+        return Math.abs(crossing.dot(tangent)) <= gate.halfWidth;
     }
 
     private completeLap(): void {
