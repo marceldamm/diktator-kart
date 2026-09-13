@@ -1,5 +1,13 @@
 # Laufzeitbefund vom 13. September 2026
 
+## Korrektur und erster Nachtest
+
+Der RaycastController speicherte Rückgabereferenzen von `addWheel`, während weitere Räder hinzugefügt wurden. Die interne Bullet-Radliste kann beim Wachsen zuvor gelieferte Referenzen ungültig machen. Der Controller holt jetzt alle vier dauerhaften Referenzen über `getWheelInfo` erst nach der letzten Einfügung. Die einmalige Konfiguration direkt nach jeder Einfügung bleibt gültig.
+
+Nach dieser Änderung startete das normale Rennen im Browser: Spieler-Kart und fahrende Bots sichtbar, Rennzeit über 13 Sekunden, leeres Fehlerprotokoll. Typprüfung, Lint und Build erfolgreich. Das ist ein positiver erster Laufzeitnachweis, noch keine vollständige Stabilitätsabnahme. Ein anschließender Pausentest wurde durch einen unerwartet geänderten UI-Zustand unterbrochen und gilt nicht als bestanden.
+
+## Ursprünglicher Fehler
+
 Die Browserprüfung des aktuellen Spielstands ist fehlgeschlagen. Nach Auswahl des Zeitfahrmodus und Versuch des Rennstarts blieb die Szene ohne funktionierenden Rennablauf stehen. Der Screenshot zeigte eine entfernte Startaufstellung, kein Spielerfahrzeug im Nahbereich und weiterhin das Item-HUD.
 
 Die Browserkonsole meldet wiederholt `RuntimeError: memory access out of bounds` in `ammo.wasm.wasm`, anschließend `getGravity`, `AmmoPhysicsWorld.setGravity` und `RigidBodyComponentSystem.onUpdate`. Damit ist der aktuelle kombinierte Stand trotz erfolgreicher Builds nicht als spielbar verifiziert.

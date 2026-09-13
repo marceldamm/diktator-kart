@@ -18,6 +18,7 @@ type AmmoWheelInfo = {
     set_m_rollInfluence(value: number): void;
 };
 type AmmoVehicle = {
+    getWheelInfo(index: number): AmmoWheelInfo;
     setCoordinateSystem(rightAxis: number, upAxis: number, forwardAxis: number): void;
     addWheel(
         connectionPoint: AmmoVector3,
@@ -171,8 +172,12 @@ export class RaycastKartController {
             wheelInfo.set_m_wheelsDampingRelaxation(RAYCAST_KART_TUNING.suspension.damping);
             wheelInfo.set_m_frictionSlip(isFront ? RAYCAST_KART_TUNING.grip.front : RAYCAST_KART_TUNING.grip.rear);
             wheelInfo.set_m_rollInfluence(RAYCAST_KART_TUNING.grip.rollInfluence);
-            this.wheelInfos.push(wheelInfo);
         });
+        // addWheel grows Bullet's internal array and can invalidate earlier references.
+        // Only retain wheel handles after the final insertion.
+        for (let index = 0; index < 4; index += 1) {
+            this.wheelInfos.push(this.vehicle.getWheelInfo(index));
+        }
         Ammo.destroy(connection);
         Ammo.destroy(direction);
         Ammo.destroy(axle);
