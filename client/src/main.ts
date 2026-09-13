@@ -22,6 +22,7 @@ import { BotRaceManager } from './game/bots';
 import { DebugHud } from './game/debug-hud';
 import { DriftEffects } from './game/drift-effects';
 import { DEFAULT_DRIVER } from './game/drivers';
+import { DrivingAudio } from './game/driving-audio';
 import { FollowCameraController } from './game/follow-camera';
 import { GameUi } from './game/game-ui';
 import type { GameMode } from './game/game-ui';
@@ -99,12 +100,14 @@ const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.s
     bots.snapshot();
 let raycastController: RaycastKartController | undefined;
 const announcer = new Announcer();
+const drivingAudio = new DrivingAudio();
 let menuPaused = false;
 let settingsOpen = false;
 const synchronizePause = () => {
     app.timeScale = menuPaused || settingsOpen ? 0 : 1;
     input.reset();
     announcer.setPaused(app.timeScale === 0);
+    drivingAudio.setPaused(app.timeScale === 0);
 };
 const itemCue: Partial<Record<ItemId | 'pickup' | 'shielded' | 'hit', AnnouncerCue>> = {
     pickup: 'pickup',
@@ -152,6 +155,7 @@ const refreshTelemetryView = () => {
         : `gestoppt · ${telemetry.count} Samples`;
 };
 const restartRace = () => {
+    drivingAudio.reset();
     input.reset();
     resetKart(kart);
     controller.reset();
@@ -176,6 +180,7 @@ const restartRace = () => {
     refreshTelemetryView();
 };
 const startRace = () => {
+    drivingAudio.unlock();
     (document.activeElement as HTMLElement | null)?.blur();
     restartRace();
     race.start(kart);
@@ -233,6 +238,7 @@ const followCamera = new FollowCameraController();
 new SettingsPanel(
     (settings) => {
         announcer.setVolume(settings.masterVolume * settings.voiceVolume);
+        drivingAudio.setVolume(settings.masterVolume * settings.effectsVolume);
         followCamera.setReducedMotion(settings.reducedCamera);
         document.documentElement.classList.toggle('reduced-effects', settings.reducedEffects);
     },
@@ -285,6 +291,7 @@ app.on('update', (dt: number) => {
     else driveKart(controller, kart, kartInput, dt);
     const kartSnapshot = activeController.getDebugSnapshot(kart, kartInput);
     const charge = raycastController?.getDriftCharge();
+    drivingAudio.update(kartSnapshot, charge?.stage ?? 0, race.canDrive);
     driftEffects.update(
         dt,
         charge?.stage ?? 0,
