@@ -31,6 +31,7 @@ import { ItemSystem } from './game/items';
 import type { ItemId } from './game/items';
 import { applyKartStyle, createKart, driveKart, KartController, resetKart } from './game/kart';
 import { KartAnimator } from './game/kart-animation';
+import { readBestTime, writeSave } from './game/local-save';
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
@@ -173,8 +174,7 @@ const restartRace = () => {
     announcedFinish = false;
     abilities.reset();
     newTimeTrialRecord = false;
-    const storedBest = Number(localStorage.getItem(`diktator-kart-best-v1-${gameUi?.selectedDriver.id}`));
-    savedTimeTrialBest = Number.isFinite(storedBest) && storedBest > 0 ? storedBest : null;
+    savedTimeTrialBest = readBestTime(`diktator-kart-best-v1-${gameUi.selectedDriver.id}`);
     telemetry.stop();
     telemetry.clear();
     refreshTelemetryView();
@@ -338,7 +338,8 @@ app.on('update', (dt: number) => {
         if (gameMode === 'time-trial' && (savedTimeTrialBest === null || raceSnapshot.raceTime < savedTimeTrialBest)) {
             savedTimeTrialBest = raceSnapshot.raceTime;
             newTimeTrialRecord = true;
-            localStorage.setItem(`diktator-kart-best-v1-${gameUi.selectedDriver.id}`, String(savedTimeTrialBest));
+            const saved = writeSave(`diktator-kart-best-v1-${gameUi.selectedDriver.id}`, String(savedTimeTrialBest));
+            document.documentElement.dataset.recordPersistence = saved ? 'saved' : 'session-only';
         }
         announcer.say('finish', true);
     }

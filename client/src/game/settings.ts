@@ -71,15 +71,32 @@ export class SettingsPanel {
             reducedCamera: value('reducedCamera').checked,
             reducedEffects: value('reducedEffects').checked
         };
-        localStorage.setItem('diktator-kart-settings-v1', JSON.stringify(this.settings));
+        const saved = writeSave('diktator-kart-settings-v1', JSON.stringify(this.settings));
+        document.getElementById('settings-close')!.textContent = saved
+            ? 'ÜBERNEHMEN'
+            : 'ÜBERNEHMEN · NUR DIESE SITZUNG';
         this.onChange(this.settings);
     }
 
     private load(): GameSettings {
         try {
-            return { ...DEFAULTS, ...JSON.parse(localStorage.getItem('diktator-kart-settings-v1') ?? '{}') };
+            const stored = JSON.parse(readSave('diktator-kart-settings-v1') ?? '{}');
+            if (!stored || typeof stored !== 'object' || Array.isArray(stored)) return DEFAULTS;
+            const volume = (key: keyof GameSettings): number =>
+                typeof stored[key] === 'number' && Number.isFinite(stored[key])
+                    ? Math.max(0, Math.min(1, stored[key]))
+                    : (DEFAULTS[key] as number);
+            return {
+                masterVolume: volume('masterVolume'),
+                musicVolume: volume('musicVolume'),
+                effectsVolume: volume('effectsVolume'),
+                voiceVolume: volume('voiceVolume'),
+                reducedCamera: stored.reducedCamera === true,
+                reducedEffects: stored.reducedEffects === true
+            };
         } catch {
             return DEFAULTS;
         }
     }
 }
+import { readSave, writeSave } from './local-save';

@@ -150,6 +150,9 @@ export class GameUi {
                   : `Regierung feiert Platz ${position} als historischen Erfolg`;
         const byline = document.createElement('span');
         byline.textContent = `${this.selected.name} · Hauptstadt auf Bewährung`;
+        if (this.mode === 'time-trial' && document.documentElement.dataset.recordPersistence === 'session-only') {
+            byline.textContent += ' · Browser erlaubt keine dauerhafte Speicherung; Rekord gilt nur für diese Sitzung.';
+        }
         const statistics = document.createElement('span');
         statistics.className = 'report-statistics';
         const metrics = [
