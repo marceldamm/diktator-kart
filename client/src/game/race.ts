@@ -112,7 +112,10 @@ export class RaceController {
         const after = current.clone().sub(gate.position);
         const beforeDistance = before.dot(gate.normal);
         const afterDistance = after.dot(gate.normal);
-        if (beforeDistance >= 0 || afterDistance < 0) return false;
+        // Treat a kart that starts exactly on the gate plane as having started
+        // from the near side; otherwise a frame that lands on the plane can
+        // make the next frame's crossing impossible to detect.
+        if (beforeDistance > 0 || afterDistance < 0 || beforeDistance === afterDistance) return false;
         const fraction = -beforeDistance / (afterDistance - beforeDistance);
         const crossing = before.clone().lerp(before, after, fraction);
         const tangent = new Vec3(-gate.normal.z, 0, gate.normal.x);
