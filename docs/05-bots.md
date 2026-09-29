@@ -2,7 +2,7 @@
 
 ## Architektur
 
-Fünf Gegner verwenden wie der Spieler `KartInput` und dynamische Ammo-Rigidbodies. Die Botlogik setzt ausschließlich Lenkung, Gas/Bremse, Hop und Drift; sie teleportiert während eines laufenden Rennens nicht und erhält innerhalb des Botfelds keine abweichenden Motor- oder Physikwerte.
+Fünf Gegner verwenden wie der Spieler `KartInput` und dynamische Ammo-Rigidbodies. Die Botlogik setzt ausschließlich Lenkung, Gas/Bremse, Hop und Drift; sie teleportiert während eines laufenden Rennens nicht. Der Bot-`KartController` nutzt erhöhte Antriebskraft und ein Tempolimit von 36 Einheiten/s; Itemboosts erlauben kurzzeitig bis zu 40 Einheiten/s. Das Spielerkart bleibt unverändert.
 
 Der Spieler nutzt weiterhin den `RaycastKartController`. Mehrere gleichzeitig registrierte `btRaycastVehicle`-Actions verursachten mit dem eingebundenen Ammo-WASM reproduzierbar Speicherzugriffsfehler. Die Bots nutzen deshalb vorerst den vorhandenen physikalischen `KartController`. Das ist eine dokumentierte Stabilitätsentscheidung, kein geheimer Botvorteil; eine gemeinsame Multi-Vehicle-RayCast-Lösung bleibt offen.
 
@@ -10,26 +10,26 @@ Der Spieler nutzt weiterhin den `RaycastKartController`. Mehrere gleichzeitig re
 
 ## Persönlichkeiten
 
-- **Paraderacer:** breite, vorsichtige Linie; reduziert in Kurven früher das Gas und wird später defensive Items bevorzugen.
-- **Größenwahnsinniger:** aggressiveres Gas, spätere Kurvenreaktion, hohe Drift- und Abkürzungsbereitschaft.
-- **Bürokrat:** gleichmäßige mittlere Linie und kontrollierte Entscheidungen; wird später Itemboxen priorisieren.
+- **Paraderacer:** breite Linie und maßvolle Kurvenkorrektur.
+- **Größenwahnsinniger:** aggressiveres Gas, spätere Kurvenreaktion und hohe Driftbereitschaft.
+- **Bürokrat:** gleichmäßige mittlere Linie und kontrollierte Entscheidungen.
 
-Die fünf Startgegner verwenden diese drei Profile in der Verteilung 2/2/1. `shortcutRisk` ist bereits Teil der Daten, die tatsächliche Druckerei-Abkürzung folgt mit dem Streckenausbau.
+Die fünf Startgegner verwenden diese drei Profile in der Verteilung 2/2/1. `laneOffset` erzeugt individuelle Linien und zusätzliche Abstände zwischen den Bots; `shortcutRisk` beeinflusst die Driftbereitschaft. Bots nehmen Versorgungskisten auf und setzen Items abhängig von Abstand, Ausrichtung und Haltezeit ein.
 
-Der gemeinsame Botcontroller ist auf 22 Einheiten/s begrenzt. Bei der aktuellen Streckenlänge zielt das auf etwa 60–100 Sekunden pro Runde; die reale Zeit wird über vollständige Browserrennen weiter kalibriert.
+Die reale Rundenzeit und die Item-Balance werden über vollständige Browserrennen weiter kalibriert.
 
 ## Noch zu verifizieren
 
 - drei komplette Rennen mit Zieleinlauf aller fünf Bots
 - Recovery, wenn ein Bot entgegen der Fahrtrichtung oder an einer Barriere steht
 - angemessene Wirkung von Sicht-/Täuschungsitems auf die Vorausschau
-- Itemwahl und Spezialfähigkeiten pro Persönlichkeit
+- Itemverhalten und Tempo-Balance über vollständige Rennen
 
 ## Verifizierter Zwischenstand
 
 - fünf Bots verlassen die Startaufstellung unter eigener Physik
 - alle drei Profile halten die Strecke und passieren die geordneten Checkpoints
 - alle fünf Bots wechselten im sichtbaren Browser-Langzeitlauf gemeinsam in Runde 2
-- gemessene Geradeausgeschwindigkeit nach dem Balancing: rund 20–22 Einheiten/s
+- Bot-Tempolimit auf 36 Einheiten/s angehoben; längere Laufzeitmessung ausstehend
 - Spielerposition reagiert auf Botfortschritt (sichtbar 1/6 zu 6/6)
 - separater Controller-Test und Bot-Smoke-Test ohne Browserausnahme

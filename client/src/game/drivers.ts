@@ -13,7 +13,7 @@ export type DriverDefinition = Readonly<{
 export const DRIVERS: readonly DriverDefinition[] = [
     {
         id: 'groefaz',
-        name: 'GröFaZ',
+        name: 'Hitler',
         title: 'Selbsternannter Streckenbesitzer',
         kart: 'Größenwahn-Mobil',
         color: '#8e2635',

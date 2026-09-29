@@ -139,6 +139,13 @@ export const teleportKart = (kart: Entity, position: Vec3, yaw: number) => {
 export class KartController {
     private steering = 0;
     private heading = START_YAW;
+    private readonly maxSpeed: number;
+    private readonly powerMultiplier: number;
+
+    constructor(maxSpeed: number = KART_TUNING.maxSpeed, powerMultiplier = 1) {
+        this.maxSpeed = maxSpeed;
+        this.powerMultiplier = powerMultiplier;
+    }
 
     reset() {
         this.steering = 0;
@@ -179,7 +186,7 @@ export class KartController {
         };
     }
 
-    update(kart: Entity, input: KartInput, dt: number) {
+    update(kart: Entity, input: KartInput, dt: number, speedBoost = 0) {
         const body = kart.rigidbody;
         if (!body) return;
 
@@ -197,7 +204,12 @@ export class KartController {
 
         // Throttle, coasting and braking/reverse are deliberately separate.
         if (input.throttle > 0) {
-            body.applyForce(forwardPlanar.clone().mulScalar(KART_TUNING.forwardForce * input.throttle));
+            const boostMultiplier = speedBoost > 0 ? 1.5 : 1;
+            body.applyForce(
+                forwardPlanar
+                    .clone()
+                    .mulScalar(KART_TUNING.forwardForce * this.powerMultiplier * boostMultiplier * input.throttle)
+            );
         } else if (input.throttle < 0 && forwardSpeed > 0.08) {
             const brakeDirection = planarVelocity.length() > 0.01 ? planarVelocity.normalize() : forwardPlanar;
             const brakeScale = Math.min(1, forwardSpeed / 2);
@@ -231,7 +243,7 @@ export class KartController {
         // Keep angular velocity locked even while the controller changes heading.
         body.angularVelocity = new Vec3(0, 0, 0);
 
-        const speedLimit = forwardSpeed < 0 ? KART_TUNING.reverseMaxSpeed : KART_TUNING.maxSpeed;
+        const speedLimit = forwardSpeed < 0 ? KART_TUNING.reverseMaxSpeed : this.maxSpeed + speedBoost;
         if (planarVelocity.length() > speedLimit) {
             const limited = planarVelocity.normalize().mulScalar(speedLimit);
             body.linearVelocity = new Vec3(limited.x, velocity.y, limited.z);
@@ -241,6 +253,6 @@ export class KartController {
     }
 }
 
-export const driveKart = (controller: KartController, kart: Entity, input: KartInput, dt: number) => {
-    controller.update(kart, input, dt);
+export const driveKart = (controller: KartController, kart: Entity, input: KartInput, dt: number, speedBoost = 0) => {
+    controller.update(kart, input, dt, speedBoost);
 };

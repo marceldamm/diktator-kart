@@ -27,8 +27,8 @@ export const BOT_PERSONALITIES: Readonly<Record<BotPersonalityId, BotPersonality
         label: 'Paraderacer',
         laneOffset: 11,
         lookAhead: 24,
-        throttle: 0.82,
-        cornerCaution: 0.72,
+        throttle: 1,
+        cornerCaution: 0.42,
         shortcutRisk: 0.05
     },
     groessenwahnsinnig: {
@@ -37,7 +37,7 @@ export const BOT_PERSONALITIES: Readonly<Record<BotPersonalityId, BotPersonality
         laneOffset: -8,
         lookAhead: 13,
         throttle: 1,
-        cornerCaution: 0.28,
+        cornerCaution: 0.16,
         shortcutRisk: 0.9
     },
     buerokrat: {
@@ -45,8 +45,8 @@ export const BOT_PERSONALITIES: Readonly<Record<BotPersonalityId, BotPersonality
         label: 'Bürokrat',
         laneOffset: 1,
         lookAhead: 19,
-        throttle: 0.9,
-        cornerCaution: 0.5,
+        throttle: 1,
+        cornerCaution: 0.28,
         shortcutRisk: 0.35
     }
 };
@@ -59,9 +59,12 @@ type BotRacer = {
     controller: KartController;
     animator: KartAnimator;
     routeIndex: number;
+    laneOffset: number;
     startPosition: Vec3;
     slowTimer: number;
     visionTimer: number;
+    boostTimer: number;
+    shieldTimer: number;
 };
 
 const ROUTE = [
@@ -109,12 +112,17 @@ export class BotRaceManager {
                 driver,
                 personality: BOT_PERSONALITIES[personalities[index]],
                 race,
-                controller: new KartController(),
+                controller: new KartController(36, 1.8),
                 animator: new KartAnimator(entity),
                 routeIndex: 0,
+                laneOffset:
+                    (index % 2 === 0 ? -1 : 1) * (16 + Math.floor(index / 2) * 2) +
+                    BOT_PERSONALITIES[personalities[index]].laneOffset * 0.1,
                 startPosition,
                 slowTimer: 0,
-                visionTimer: 0
+                visionTimer: 0,
+                boostTimer: 0,
+                shieldTimer: 0
             };
         });
     }
@@ -143,6 +151,10 @@ export class BotRaceManager {
             racer.routeIndex = 0;
             racer.slowTimer = 0;
             racer.visionTimer = 0;
+            racer.boostTimer = 0;
+            racer.shieldTimer = 0;
+            racer.boostTimer = 0;
+            racer.shieldTimer = 0;
         }
     }
 
@@ -163,6 +175,8 @@ export class BotRaceManager {
         for (const racer of this.racers) {
             racer.slowTimer = Math.max(0, racer.slowTimer - dt);
             racer.visionTimer = Math.max(0, racer.visionTimer - dt);
+            racer.boostTimer = Math.max(0, racer.boostTimer - dt);
+            racer.shieldTimer = Math.max(0, racer.shieldTimer - dt);
             if (paused) {
                 driveKart(racer.controller, racer.entity, { steering: 0, throttle: 0, hop: false, drift: false }, dt);
                 continue;
@@ -170,7 +184,7 @@ export class BotRaceManager {
             const input = racer.race.canDrive
                 ? this.createInput(racer)
                 : { steering: 0, throttle: 0, hop: false, drift: false };
-            driveKart(racer.controller, racer.entity, input, dt);
+            driveKart(racer.controller, racer.entity, input, dt, racer.boostTimer > 0 ? 4 : 0);
             racer.animator.update(
                 racer.controller.getDebugSnapshot(racer.entity, input),
                 dt,
@@ -193,9 +207,21 @@ export class BotRaceManager {
         return nearest?.entity ?? null;
     }
 
-    applyHit(entity: Entity, duration = 2.4): void {
+    applyHit(entity: Entity, duration = 2.4): boolean {
         const racer = this.racers.find((candidate) => candidate.entity === entity);
-        if (racer) racer.slowTimer = Math.max(racer.slowTimer, duration);
+        if (!racer || racer.shieldTimer > 0) return false;
+        racer.slowTimer = Math.max(racer.slowTimer, duration);
+        return true;
+    }
+
+    grantBoost(entity: Entity, duration = 2): void {
+        const racer = this.racers.find((candidate) => candidate.entity === entity);
+        if (racer) racer.boostTimer = Math.max(racer.boostTimer, duration);
+    }
+
+    grantShield(entity: Entity, duration = 6): void {
+        const racer = this.racers.find((candidate) => candidate.entity === entity);
+        if (racer) racer.shieldTimer = Math.max(racer.shieldTimer, duration);
     }
 
     impairVision(duration = 3): void {
@@ -228,10 +254,10 @@ export class BotRaceManager {
 
     private createInput(racer: BotRacer): KartInput {
         const position = racer.entity.getPosition();
-        let target = ROUTE[racer.routeIndex];
+        let target = this.routeTarget(racer);
         if (position.distance(target) < racer.personality.lookAhead) {
             racer.routeIndex = (racer.routeIndex + 1) % ROUTE.length;
-            target = ROUTE[racer.routeIndex];
+            target = this.routeTarget(racer);
         }
         const desired = target.clone().sub(position);
         desired.y = 0;
@@ -253,5 +279,14 @@ export class BotRaceManager {
             hop: false,
             drift: Math.abs(steering) > 0.72 && alignment > 0.35 && racer.personality.shortcutRisk > 0.7
         };
+    }
+
+    private routeTarget(racer: BotRacer): Vec3 {
+        const previous = ROUTE[(racer.routeIndex + ROUTE.length - 1) % ROUTE.length];
+        const target = ROUTE[racer.routeIndex];
+        const direction = target.clone().sub(previous);
+        direction.y = 0;
+        direction.normalize();
+        return target.clone().add(new Vec3(-direction.z, 0, direction.x).mulScalar(racer.laneOffset));
     }
 }

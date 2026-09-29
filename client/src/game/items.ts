@@ -8,6 +8,7 @@ export type ItemId =
 type ItemDefinition = Readonly<{ id: ItemId; name: string; icon: string; color: string }>;
 type Pickup = { entity: Entity; cooldown: number };
 type Projectile = { entity: Entity; velocity: Vec3; target: Entity | null; hostile: boolean; life: number };
+type BotInventory = { item: ItemDefinition | null; cursor: number; heldTimer: number };
 
 export const ITEMS: readonly ItemDefinition[] = [
     { id: 'propaganda', name: 'Propaganda-Flut', icon: '📣', color: '#ed334b' },
@@ -54,6 +55,7 @@ export class ItemSystem {
     private readonly announce: (event: ItemId | 'pickup' | 'shielded' | 'hit') => void;
     private readonly pickups: Pickup[];
     private readonly projectiles: Projectile[] = [];
+    private readonly botInventories: Map<Entity, BotInventory>;
     private readonly slot: HTMLElement;
     private readonly notice: HTMLElement;
     private readonly shield: HTMLElement;
@@ -64,7 +66,6 @@ export class ItemSystem {
     private slowTimer = 0;
     private planBoostTimer = 0;
     private planPenaltyTimer = 0;
-    private hostileTimer = 16;
     private active = true;
 
     constructor(
@@ -85,6 +86,9 @@ export class ItemSystem {
             root.addChild(entity);
             return { entity, cooldown: 0 };
         });
+        this.botInventories = new Map(
+            bots.racers.map((racer) => [racer.entity, { item: null, cursor: 0, heldTimer: 0 }])
+        );
         document.body.insertAdjacentHTML(
             'beforeend',
             '<aside class="item-hud"><div class="item-slot" id="item-slot"><b>—</b><span>KEIN ITEM</span><small>E einsetzen</small></div><div class="item-shield" id="item-shield">DIPLOMATISCH GESCHÜTZT</div></aside><div class="item-notice" id="item-notice"></div>'
@@ -122,7 +126,11 @@ export class ItemSystem {
         this.slowTimer = 0;
         this.planBoostTimer = 0;
         this.planPenaltyTimer = 0;
-        this.hostileTimer = 16;
+        for (const inventory of this.botInventories.values()) {
+            inventory.item = null;
+            inventory.cursor = 0;
+            inventory.heldTimer = 0;
+        }
         for (const pickup of this.pickups) {
             pickup.cooldown = 0;
             pickup.entity.enabled = this.active;
@@ -172,16 +180,7 @@ export class ItemSystem {
             }
         }
 
-        this.hostileTimer -= dt;
-        if (this.hostileTimer <= 0 && this.bots.racers.length) {
-            this.hostileTimer = 18;
-            const origin = this.bots.racers[0].entity
-                .getPosition()
-                .clone()
-                .add(new Vec3(0, 1, 0));
-            this.spawnProjectile(origin, player, true, true);
-            this.say('⚠ EINGEHENDER DIENSTWEG!');
-        }
+        this.updateBotItems(player, dt);
         this.updateProjectiles(player, dt);
     }
 
@@ -249,6 +248,99 @@ export class ItemSystem {
         this.renderHud();
     }
 
+    private updateBotItems(player: Entity, dt: number): void {
+        for (const [botIndex, racer] of this.bots.racers.entries()) {
+            const inventory = this.botInventories.get(racer.entity);
+            if (!inventory || !racer.race.canDrive) continue;
+
+            const botPosition = racer.entity.getPosition();
+            if (!inventory.item) {
+                const pickup = this.pickups.find(
+                    (candidate) => candidate.entity.enabled && candidate.entity.getPosition().distance(botPosition) < 24
+                );
+                if (pickup) {
+                    inventory.item = ITEMS[(botIndex + inventory.cursor) % ITEMS.length];
+                    inventory.cursor += 1;
+                    inventory.heldTimer = 0;
+                    pickup.cooldown = 7;
+                    pickup.entity.enabled = false;
+                }
+            }
+            if (!inventory.item) continue;
+            inventory.heldTimer += dt;
+
+            const toPlayer = player.getPosition().clone().sub(botPosition);
+            const distance = toPlayer.length();
+            if (distance > 0) toPlayer.normalize();
+            const facing = racer.entity.forward.dot(toPlayer);
+            const item = inventory.item;
+            const canAttack = distance < 95;
+            const shouldUse = (() => {
+                switch (item.id) {
+                    case 'economic-plan':
+                        return true;
+                    case 'immunity':
+                        return distance < 45 || inventory.heldTimer > 8;
+                    case 'statue':
+                        return (facing < -0.25 && distance < 30) || (inventory.heldTimer > 12 && distance < 80);
+                    case 'duty-rocket':
+                        return (
+                            (facing > 0.72 && distance < 65) ||
+                            (inventory.heldTimer > 10 && facing > 0.25 && distance < 150)
+                        );
+                    case 'secret-police':
+                        return canAttack || (inventory.heldTimer > 10 && distance < 170);
+                    case 'propaganda':
+                    case 'red-folder':
+                    case 'censor':
+                        return distance < 70 || (inventory.heldTimer > 8 && canAttack);
+                }
+            })();
+            if (!shouldUse) continue;
+
+            inventory.item = null;
+            inventory.heldTimer = 0;
+            this.announce(item.id);
+            switch (item.id) {
+                case 'propaganda':
+                    this.hitPlayer(3.2);
+                    break;
+                case 'red-folder':
+                    this.hitPlayer(3.2);
+                    break;
+                case 'censor':
+                    this.hitPlayer(4.5);
+                    break;
+                case 'statue':
+                    this.dropStatue(racer.entity);
+                    break;
+                case 'secret-police':
+                    this.spawnProjectile(
+                        botPosition.clone().add(new Vec3(0, 1, 0)),
+                        player,
+                        true,
+                        true
+                    );
+                    break;
+                case 'economic-plan':
+                    this.bots.grantBoost(racer.entity, 0.8);
+                    break;
+                case 'duty-rocket':
+                    this.spawnProjectile(
+                        botPosition.clone().add(racer.entity.forward.clone().add(new Vec3(0, 1, 0))),
+                        player,
+                        true,
+                        false,
+                        racer.entity.forward
+                    );
+                    break;
+                case 'immunity':
+                    this.bots.grantShield(racer.entity, 8);
+                    break;
+            }
+        }
+    }
+
     private spawnProjectile(origin: Vec3, target: Entity | null, hostile: boolean, homing: boolean, direction?: Vec3) {
         const entity = new Entity(hostile ? 'incoming-rocket' : 'item-projectile');
         entity.setPosition(origin);
@@ -293,13 +385,13 @@ export class ItemSystem {
         }
     }
 
-    private hitPlayer(): void {
+    private hitPlayer(duration = 3): void {
         if (this.shieldTimer > 0) {
             this.shieldTimer = 0;
             this.say('🛡️ Angriff diplomatisch zurückgewiesen');
             this.announce('shielded');
         } else {
-            this.slowTimer = 3;
+            this.slowTimer = duration;
             this.say('💥 Verwaltungsakt zugestellt');
             this.announce('hit');
         }

@@ -2,7 +2,7 @@
 
 ## Integrierter Stand
 
-Das Rennen besitzt acht einsammelbare Items. Gold-türkise Versorgungskisten stehen entlang der vollständigen Runde, verschwinden nach der Aufnahme und erscheinen nach sieben Sekunden erneut. Der Spieler hält genau ein Item und setzt es mit `E` ein.
+Das Rennen besitzt acht einsammelbare Items. Gold-türkise Versorgungskisten stehen entlang der vollständigen Runde, verschwinden nach der Aufnahme und erscheinen nach sieben Sekunden erneut. Spieler und Bots halten jeweils höchstens ein Item; der Spieler setzt es mit `E` ein, Bots wählen den Einsatz nach Itemtyp, Distanz, Ausrichtung und Haltezeit.
 
 | Item | Integrierte Wirkung |
 | --- | --- |
@@ -17,7 +17,7 @@ Das Rennen besitzt acht einsammelbare Items. Gold-türkise Versorgungskisten ste
 
 ## Gemeinsame Trefferlogik
 
-Geradlinige und zielsuchende Geschosse laufen durch dieselbe Projektilaktualisierung und werden nach einem Treffer unmittelbar entfernt. Bots erhalten denselben zeitlich begrenzten Verlangsamungszustand. Der Spieler kann von angekündigten zielsuchenden Dienstweg-Angriffen getroffen werden; Diplomatische Immunität fängt diesen Angriff in derselben Trefferfunktion ab und wird dabei verbraucht. Streckenwände und Begrenzungen bleiben davon unberührt.
+Geradlinige und zielsuchende Geschosse laufen durch dieselbe Projektilaktualisierung und werden nach einem Treffer unmittelbar entfernt. Bots erhalten denselben zeitlich begrenzten Verlangsamungszustand und können Treffer während aktiver Diplomatischer Immunität abwehren. Gegnerische Angriffe entstehen aus tatsächlich aufgenommenen Items statt aus einem festen globalen Raketen-Timer. Streckenwände und Begrenzungen bleiben davon unberührt.
 
 ## Bedienung und Rückmeldung
 
@@ -36,5 +36,5 @@ Geradlinige und zielsuchende Geschosse laufen durch dieselbe Projektilaktualisie
 - Partikel aus Papierzetteln, Stempelstaub und Papierkonfetti
 - akustische Ankündigungen und Einsatzgeräusche
 - positionsabhängige statt deterministisch rotierende Itemverteilung
-- Bot-Aufnahme und bewusster Bot-Einsatz nach Persönlichkeit
+- Sicht- und Balanceprüfung der Bot-Aufnahme sowie ihrer taktischen Einsätze im Browser
 - kombinierte Abnahme aller acht Items im echten Rennen
