@@ -114,6 +114,16 @@ const moveTowards = (current: number, target: number, maxDelta: number): number 
     return Math.abs(delta) <= maxDelta ? target : current + Math.sign(delta) * maxDelta;
 };
 
+export const getSurfaceGripScale = (x: number, z: number): number => {
+    if (x >= 176 && x <= 204 && Math.abs(z) <= 58) return 0.76;
+    if (x >= -30 && x <= -4 && Math.abs(z) >= 30 && Math.abs(z) <= 100) return 0.88;
+    const onStraight = Math.abs(z) >= 30 && Math.abs(z) <= 100 && Math.abs(x) <= 190;
+    const eastRadius = Math.hypot(x - 190, z);
+    const westRadius = Math.hypot(x + 190, z);
+    const onTurn = [eastRadius, westRadius].some((radius) => radius >= 30 && radius <= 100);
+    return onStraight || onTurn ? 1 : 0.64;
+};
+
 /** Ammo raycast chassis with a small continuous arcade-assist layer. */
 export class RaycastKartController {
     private readonly app: AppBase;
@@ -204,7 +214,7 @@ export class RaycastKartController {
         this.body.setActivationState(4);
     }
 
-    reset(position: Vec3 = RACE_LAYOUT.startPosition, yaw = RACE_LAYOUT.startYaw): void {
+    reset(position: Vec3 = RACE_LAYOUT.startPosition, yaw: number = RACE_LAYOUT.startYaw): void {
         this.resetControlState();
         this.vehicle.resetSuspension?.();
         this.kart.rigidbody?.teleport(position, new Vec3(0, yaw, 0));
@@ -424,10 +434,12 @@ export class RaycastKartController {
     }
 
     private updateWheelGrip(): void {
+        const position = this.kart.getPosition();
+        const surfaceGrip = getSurfaceGripScale(position.x, position.z);
         this.wheelInfos.forEach((wheelInfo, index) => {
             const normalGrip = index < 2 ? RAYCAST_KART_TUNING.grip.front : RAYCAST_KART_TUNING.grip.rear;
             const driftGrip = index < 2 ? RAYCAST_KART_TUNING.drift.frontGrip : RAYCAST_KART_TUNING.drift.rearGrip;
-            wheelInfo.set_m_frictionSlip(lerp(normalGrip, driftGrip, this.driftBlend));
+            wheelInfo.set_m_frictionSlip(lerp(normalGrip, driftGrip, this.driftBlend) * surfaceGrip);
         });
     }
 

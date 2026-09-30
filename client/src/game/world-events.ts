@@ -1,5 +1,11 @@
 import type { Entity, GraphNode } from 'playcanvas';
 
+export const CROWD_LAP_MOTION = [
+    { frequency: 3.4, amplitude: 24 },
+    { frequency: 4.2, amplitude: 28 },
+    { frequency: 5.2, amplitude: 32 }
+] as const;
+
 /** Cheap deterministic set dressing: visual state changes never alter the drivable collision layout. */
 export class WorldEvents {
     private time = 0;
@@ -50,10 +56,13 @@ export class WorldEvents {
             this.lapState = leaderLap;
             this.applyLapState();
         }
-        this.arms.forEach((arm, index) => {
-            const disorder = this.lapState >= 2 ? 0.58 + (index % 4) * 0.13 : 1;
-            arm.setLocalEulerAngles(0, 0, Math.sin(this.time * (3.4 * disorder) + index * 0.83) * 24);
-        });
+        if (!document.documentElement.classList.contains('reduced-effects')) {
+            const motion = CROWD_LAP_MOTION[Math.min(CROWD_LAP_MOTION.length - 1, Math.max(0, this.lapState - 1))];
+            this.arms.forEach((arm, index) => {
+                const frequency = motion.frequency + (index % 4) * 0.13;
+                arm.setLocalEulerAngles(0, 0, Math.sin(this.time * frequency + index * 0.83) * motion.amplitude);
+            });
+        }
         this.shortcutStamps.forEach((stamp, index) => {
             // Three fixed, staggered cycles telegraph their motion long before the kart arrives.
             const cycle = (this.time + index * 1.15) % 4.2;
@@ -65,12 +74,12 @@ export class WorldEvents {
                       : cycle < 3.45
                         ? 2.2
                         : 2.2 + ((cycle - 3.45) / 0.75) * 4;
-            stamp.setPosition(178, y, -25 + index * 25);
+            stamp.setPosition(190, y, -25 + index * 25);
             const playerPosition = player.getPosition();
             if (
                 this.shortcutHitLock === 0 &&
                 y < 3.1 &&
-                Math.abs(playerPosition.x - 178) < 10 &&
+                Math.abs(playerPosition.x - 190) < 10 &&
                 Math.abs(playerPosition.z - (-25 + index * 25)) < 5
             ) {
                 this.shortcutPenalty = 2.1;

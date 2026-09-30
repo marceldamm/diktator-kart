@@ -2,6 +2,24 @@
 
 Stand: 12. September 2026, Branch `astra/full-game`
 
+## Nachtrag: 29. September 2026, Branch `main`
+
+- Menü-Key-Art, Strecken-Beacons und Sektor-Schilder ergänzen die primitive Streckenkulisse.
+- Minikarte, Tempometer, dynamischer FOV/Kameraroll und reduzierte HiDPI-Auflösung sind integriert.
+- Asphalt, Druckerei-Papier und Gras verwenden getrennte Reifengripwerte; der Regressionstest prüft diese Oberflächenwerte.
+- Die 24 Sprechertexte haben emotionale Piper-Neuralclips erhalten. Die vorhandenen WAVs bleiben Fallback; Piper und sein Modell werden nicht im Browser ausgeliefert.
+- TypeScript, ESLint, Produktions-Build sowie Renn-, Speicher-, Wheel- und Oberflächen-Regressionen bestanden.
+- Die vollständige Browser-Fahrserie mit zehn Fahrfällen, Driftlinks/rechts, Botstart und ohne Browserausnahme ist nach dem letzten Controller-Änderungslauf bestanden.
+
+## Nachtrag: 30. September 2026
+
+- Stadionkurs mit synchronisierten Checkpoints, Minikarte, Botroute, Oberflächengriff und Itemlinien; Bot-Recovery ohne geschenkten Checkpoint-Fortschritt.
+- Separater prozeduraler Rennscore, über den Musikregler steuerbar; Schlussrunden-Tonfolge sowie Ergebnis-Karte mit Platzierung, Runden-Splits und Itemzähler.
+- Stahl-Gripsektoren plus fester Driftspuren-Pool.
+- Eigenes 100-KB-GLB-Zielportal; erfolgreicher Container-Load im Browser verifiziert.
+- Controller-Regression läuft auf dem flachen Physik-Testfeld; separate Browserfahrt startet fünf Bots auf dem echten Kurs und prüft mindestens eine abgeschlossene Runde.
+- Build-Warnung bleibt: Haupt-JavaScript-Chunk rund 1,23 MB minifiziert / 330 KB gzip; Rendering-/VRAM-Werte werden mit der aktuellen CDP-Serie erstmals aufgezeichnet.
+
 ## Verifizierte Ausgangslage
 
 - Produktions-Build: erfolgreich
@@ -39,3 +57,11 @@ Stand: 12. September 2026, Branch `astra/full-game`
 5. Siegerehrung, Rennbericht und kombinierte Abnahme.
 
 Technische Messwerte und subjektive Spielspaßbewertung werden in der Abnahme getrennt dokumentiert.
+
+## Browser- und Renderabnahme (30. September 2026)
+
+- Automatisierter Browserlauf: zehn Steuer-/Driftfälle bestanden, fünf Bots innerhalb der Stadiongrenzen, mindestens ein Bot überquert die Ziellinie in die Folgerunde, Zielportal geladen und keine JavaScript-Ausnahme.
+- Das statische Strecken-Batching hält bewegliche Zuschauerarme, Banner, Stempel und Gerüst separat. Im gleichen Headless-Chrome-Lauf sanken die Strecken-Draw-Calls von 119 auf 66 (−45 %).
+- Einzel-Snapshot mit Batching: 25 FPS, 33,4 ms Framezeit, 1,5 ms Renderzeit, 1,3 ms Updatezeit, 0,3 ms Physikzeit, 40.244 Dreiecke und rund 9,0 MiB gemeldeter VRAM.
+- Wichtige Einordnung: SwiftShader/Headless limitiert Bildrate und Framezeit. Das ist ein technischer Vergleichslauf, kein Leistungsversprechen für reale Zielgeräte; Mehr-Rennen- und Hardwaremessung bleiben offen.
+- Production-Preview mit separatem PlayCanvas-Engine-Chunk und rund 90-kB-Game-Entry besteht den vollständigen Browserlauf. Transfergröße praktisch unverändert: 1.155 kB Engine (305 kB gzip) plus 90 kB Game (30 kB gzip); der Engine-Chunk löst weiter Vites 500-kB-Hinweis aus. Keine aggressivere Zerlegung, solange sie Codeausführungsrisiken und Transfermehrkosten mitbringt.

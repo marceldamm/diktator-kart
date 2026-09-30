@@ -11,6 +11,7 @@ export type RaceSnapshot = Readonly<{
     raceTime: number;
     lapTime: number;
     bestLapTime: number | null;
+    lapTimes: readonly number[];
     nextCheckpoint: number;
 }>;
 
@@ -24,8 +25,11 @@ export class RaceController {
     private raceTime = 0;
     private lapTime = 0;
     private bestLapTime: number | null = null;
+    private lapTimes: number[] = [];
     private nextCheckpoint = 0;
     private previousPosition = new Vec3();
+    private recoveryPosition = RACE_LAYOUT.startPosition.clone();
+    private recoveryYaw: number = RACE_LAYOUT.startYaw;
 
     reset(kart: Entity): void {
         this.phase = 'idle';
@@ -34,7 +38,15 @@ export class RaceController {
         this.raceTime = 0;
         this.lapTime = 0;
         this.bestLapTime = null;
+        this.lapTimes = [];
         this.nextCheckpoint = 0;
+        this.previousPosition.copy(kart.getPosition());
+        this.recoveryPosition.copy(kart.getPosition());
+        this.recoveryYaw = RACE_LAYOUT.startYaw;
+    }
+
+    /** Keep checkpoint crossing continuous after a non-progressing recovery teleport. */
+    resyncPosition(kart: Entity): void {
         this.previousPosition.copy(kart.getPosition());
     }
 
@@ -45,6 +57,10 @@ export class RaceController {
 
     get canDrive(): boolean {
         return this.phase === 'racing';
+    }
+
+    getRecoveryPose(): Readonly<{ position: Vec3; yaw: number }> {
+        return { position: this.recoveryPosition.clone(), yaw: this.recoveryYaw };
     }
 
     update(kart: Entity, dt: number): void {
@@ -60,11 +76,13 @@ export class RaceController {
         const current = kart.getPosition();
         const expected = RACE_LAYOUT.checkpoints[this.nextCheckpoint];
         if (expected && this.crossed(expected, current)) {
+            this.updateRecoveryPose(expected.position, expected.normal);
             this.nextCheckpoint += 1;
         } else if (
             this.nextCheckpoint === RACE_LAYOUT.checkpoints.length &&
             this.crossed(RACE_LAYOUT.finish, current)
         ) {
+            this.updateRecoveryPose(RACE_LAYOUT.finish.position, RACE_LAYOUT.finish.normal);
             this.completeLap();
         }
         this.previousPosition.copy(current);
@@ -89,6 +107,7 @@ export class RaceController {
             raceTime: this.raceTime,
             lapTime: this.lapTime,
             bestLapTime: this.bestLapTime,
+            lapTimes: [...this.lapTimes],
             nextCheckpoint: this.nextCheckpoint
         };
     }
@@ -123,6 +142,7 @@ export class RaceController {
     }
 
     private completeLap(): void {
+        this.lapTimes.push(this.lapTime);
         this.bestLapTime = this.bestLapTime === null ? this.lapTime : Math.min(this.bestLapTime, this.lapTime);
         if (this.lap >= RACE_LAYOUT.lapsToWin) {
             this.phase = 'finished';
@@ -131,5 +151,11 @@ export class RaceController {
         this.lap += 1;
         this.lapTime = 0;
         this.nextCheckpoint = 0;
+    }
+
+    private updateRecoveryPose(position: Vec3, forward: Vec3): void {
+        this.recoveryPosition.copy(position).add(forward.clone().mulScalar(8));
+        this.recoveryPosition.y = RACE_LAYOUT.startPosition.y;
+        this.recoveryYaw = (Math.atan2(-forward.x, -forward.z) * 180) / Math.PI;
     }
 }

@@ -65,17 +65,21 @@ type BotRacer = {
     visionTimer: number;
     boostTimer: number;
     shieldTimer: number;
+    stuckTimer: number;
+    recoveryCooldown: number;
 };
 
 const ROUTE = [
-    new Vec3(-110, 0, 64),
-    new Vec3(120, 0, 64),
-    new Vec3(218, 0, 58),
-    new Vec3(220, 0, -88),
-    new Vec3(110, 0, -66),
-    new Vec3(-120, 0, -66),
-    new Vec3(-242, 0, -58),
-    new Vec3(-242, 0, 64)
+    new Vec3(-105, 0, 65),
+    new Vec3(120, 0, 65),
+    new Vec3(218, 0, 48),
+    new Vec3(255, 0, 0),
+    new Vec3(218, 0, -48),
+    new Vec3(105, 0, -65),
+    new Vec3(-120, 0, -65),
+    new Vec3(-218, 0, -48),
+    new Vec3(-255, 0, 0),
+    new Vec3(-218, 0, 48)
 ] as const;
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.max(minimum, Math.min(maximum, value));
@@ -122,7 +126,9 @@ export class BotRaceManager {
                 slowTimer: 0,
                 visionTimer: 0,
                 boostTimer: 0,
-                shieldTimer: 0
+                shieldTimer: 0,
+                stuckTimer: 0,
+                recoveryCooldown: 0
             };
         });
     }
@@ -153,6 +159,8 @@ export class BotRaceManager {
             racer.visionTimer = 0;
             racer.boostTimer = 0;
             racer.shieldTimer = 0;
+            racer.stuckTimer = 0;
+            racer.recoveryCooldown = 0;
             racer.boostTimer = 0;
             racer.shieldTimer = 0;
         }
@@ -167,6 +175,8 @@ export class BotRaceManager {
             racer.routeIndex = 0;
             racer.slowTimer = 0;
             racer.visionTimer = 0;
+            racer.stuckTimer = 0;
+            racer.recoveryCooldown = 0;
         }
     }
 
@@ -177,6 +187,7 @@ export class BotRaceManager {
             racer.visionTimer = Math.max(0, racer.visionTimer - dt);
             racer.boostTimer = Math.max(0, racer.boostTimer - dt);
             racer.shieldTimer = Math.max(0, racer.shieldTimer - dt);
+            racer.recoveryCooldown = Math.max(0, racer.recoveryCooldown - dt);
             if (paused) {
                 driveKart(racer.controller, racer.entity, { steering: 0, throttle: 0, hop: false, drift: false }, dt);
                 continue;
@@ -190,7 +201,26 @@ export class BotRaceManager {
                 dt,
                 document.documentElement.classList.contains('reduced-effects')
             );
+            const position = racer.entity.getPosition();
+            if (
+                !Number.isFinite(position.x) ||
+                !Number.isFinite(position.y) ||
+                !Number.isFinite(position.z) ||
+                Math.abs(position.x) > 450 ||
+                Math.abs(position.z) > 200 ||
+                position.y < -8 ||
+                position.y > 30
+            ) {
+                this.recoverRacer(racer);
+                continue;
+            }
             racer.race.update(racer.entity, dt);
+            const speed = racer.entity.rigidbody?.linearVelocity.length() ?? 0;
+            racer.stuckTimer =
+                racer.race.canDrive && racer.slowTimer === 0 && speed < 0.9
+                    ? racer.stuckTimer + dt
+                    : Math.max(0, racer.stuckTimer - dt * 2);
+            if (racer.stuckTimer > 3 && racer.recoveryCooldown === 0) this.recoverRacer(racer);
         }
     }
 
@@ -288,5 +318,22 @@ export class BotRaceManager {
         direction.y = 0;
         direction.normalize();
         return target.clone().add(new Vec3(-direction.z, 0, direction.x).mulScalar(racer.laneOffset));
+    }
+
+    private recoverRacer(racer: BotRacer): void {
+        const previousIndex = (racer.routeIndex + ROUTE.length - 1) % ROUTE.length;
+        const previous = ROUTE[previousIndex];
+        const target = ROUTE[racer.routeIndex];
+        const direction = target.clone().sub(previous).normalize();
+        const lane = new Vec3(-direction.z, 0, direction.x).mulScalar(racer.laneOffset);
+        const position = previous.clone().add(lane);
+        position.y = 1.05;
+        const yaw = (Math.atan2(-direction.x, -direction.z) * 180) / Math.PI;
+        teleportKart(racer.entity, position, yaw);
+        racer.controller.reset(yaw);
+        racer.animator.reset();
+        racer.race.resyncPosition(racer.entity);
+        racer.stuckTimer = 0;
+        racer.recoveryCooldown = 6;
     }
 }

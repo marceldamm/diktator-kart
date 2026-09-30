@@ -16,6 +16,8 @@ Ammo verwaltet Chassis, vier Raycast-Räder, Federung, Kontakt und Kollisionen. 
 
 Motorleistung fällt vor der Höchstgeschwindigkeit weich ab; nur deutliches Überschreiten aktiviert eine physikalische Schutzbremse. Normaler Grip ist bewusst stabil und leicht untersteuernd. S bremst bei Vorwärtsfahrt zuerst und fährt erst nahe Stillstand rückwärts.
 
+Asphalt auf den Hauptgeraden und Kurven behält den Basisgrip. Die Papier-Abkürzung reduziert den Reifengrip auf 76 Prozent; Gras außerhalb der definierten Fahrbahn reduziert ihn auf 64 Prozent. Die Untergrenze kommt aus der Track-Geometrie und verändert keine Checkpoints oder Kollisionskörper.
+
 ## Hop, Drift und Mini-Turbo
 
 `KartInput` ist eingabequellenunabhängig und enthält `steering`, `throttle`, `hop` (einmaliges Druckereignis) und `drift` (gehaltene Aktion). Damit bleiben Human-, Bot- und Netzwerkinput später austauschbar.

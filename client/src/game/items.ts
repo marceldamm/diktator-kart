@@ -9,6 +9,7 @@ type ItemDefinition = Readonly<{ id: ItemId; name: string; icon: string; color: 
 type Pickup = { entity: Entity; cooldown: number };
 type Projectile = { entity: Entity; velocity: Vec3; target: Entity | null; hostile: boolean; life: number };
 type BotInventory = { item: ItemDefinition | null; cursor: number; heldTimer: number };
+type ImpactParticle = { entity: Entity; position: Vec3; velocity: Vec3; life: number };
 
 export const ITEMS: readonly ItemDefinition[] = [
     { id: 'propaganda', name: 'Propaganda-Flut', icon: '📣', color: '#ed334b' },
@@ -22,14 +23,14 @@ export const ITEMS: readonly ItemDefinition[] = [
 ] as const;
 
 const PICKUP_POSITIONS = [
-    new Vec3(-122, 1.5, 66),
-    new Vec3(28, 1.5, 66),
-    new Vec3(214, 1.5, 40),
-    new Vec3(218, 1.5, -70),
-    new Vec3(54, 1.5, -66),
-    new Vec3(-116, 1.5, -66),
-    new Vec3(-240, 1.5, -36),
-    new Vec3(-240, 1.5, 82)
+    new Vec3(-122, 1.5, 65),
+    new Vec3(28, 1.5, 65),
+    new Vec3(235, 1.5, 46),
+    new Vec3(235, 1.5, -46),
+    new Vec3(54, 1.5, -65),
+    new Vec3(-116, 1.5, -65),
+    new Vec3(-240, 1.5, -46),
+    new Vec3(-240, 1.5, 46)
 ] as const;
 
 const material = (hex: string) => {
@@ -55,12 +56,16 @@ export class ItemSystem {
     private readonly announce: (event: ItemId | 'pickup' | 'shielded' | 'hit') => void;
     private readonly pickups: Pickup[];
     private readonly projectiles: Projectile[] = [];
+    private readonly impactParticles: ImpactParticle[] = [];
+    private readonly impactMaterials: Record<'gold' | 'red' | 'shield', StandardMaterial>;
+    private impactCursor = 0;
     private readonly botInventories: Map<Entity, BotInventory>;
     private readonly slot: HTMLElement;
     private readonly notice: HTMLElement;
     private readonly shield: HTMLElement;
     private inventory: ItemDefinition | null = null;
     private nextItem = 0;
+    private itemsUsed = 0;
     private noticeTimer = 0;
     private shieldTimer = 0;
     private slowTimer = 0;
@@ -78,6 +83,18 @@ export class ItemSystem {
         this.bots = bots;
         this.grantBoost = grantBoost;
         this.announce = announce;
+        this.impactMaterials = {
+            gold: material('#ffd45a'),
+            red: material('#ff4059'),
+            shield: material('#45d9d0')
+        };
+        for (let index = 0; index < 18; index += 1) {
+            const entity = new Entity(`impact-spark-${index}`);
+            entity.addComponent('render', { type: 'sphere', material: this.impactMaterials.gold, castShadows: false });
+            entity.enabled = false;
+            root.addChild(entity);
+            this.impactParticles.push({ entity, position: new Vec3(), velocity: new Vec3(), life: 0 });
+        }
         this.pickups = PICKUP_POSITIONS.map((position, index) => {
             const entity = new Entity(`item-box-${index}`);
             entity.setPosition(position);
@@ -105,6 +122,10 @@ export class ItemSystem {
         return 1;
     }
 
+    get playerItemsUsed(): number {
+        return this.itemsUsed;
+    }
+
     setActive(active: boolean): void {
         this.active = active;
         document.querySelector('.item-hud')?.classList.toggle('is-hidden', !active);
@@ -121,6 +142,7 @@ export class ItemSystem {
         this.statues.length = 0;
         this.inventory = null;
         this.nextItem = 0;
+        this.itemsUsed = 0;
         this.noticeTimer = 0;
         this.shieldTimer = 0;
         this.slowTimer = 0;
@@ -137,11 +159,17 @@ export class ItemSystem {
         }
         for (const projectile of this.projectiles) projectile.entity.destroy();
         this.projectiles.length = 0;
+        this.impactCursor = 0;
+        for (const particle of this.impactParticles) {
+            particle.life = 0;
+            particle.entity.enabled = false;
+        }
         this.renderHud();
     }
 
-    update(player: Entity, dt: number, active: boolean): void {
+    update(player: Entity, dt: number, active: boolean, reducedEffects = false): void {
         if (!active || !this.active) return;
+        this.updateImpactParticles(dt, reducedEffects);
         for (let index = this.statues.length - 1; index >= 0; index -= 1) {
             const statue = this.statues[index];
             statue.life -= dt;
@@ -174,14 +202,15 @@ export class ItemSystem {
                 this.nextItem += 1;
                 pickup.cooldown = 7;
                 pickup.entity.enabled = false;
+                this.burst(pickup.entity.getPosition(), 'gold', reducedEffects);
                 this.say(`${this.inventory.icon} ${this.inventory.name} eingesammelt`);
                 this.announce('pickup');
                 this.renderHud();
             }
         }
 
-        this.updateBotItems(player, dt);
-        this.updateProjectiles(player, dt);
+        this.updateBotItems(player, dt, reducedEffects);
+        this.updateProjectiles(player, dt, reducedEffects);
     }
 
     use(player: Entity): void {
@@ -191,6 +220,7 @@ export class ItemSystem {
         }
         const item = this.inventory;
         this.inventory = null;
+        this.itemsUsed += 1;
         this.announce(item.id);
         switch (item.id) {
             case 'propaganda':
@@ -248,7 +278,7 @@ export class ItemSystem {
         this.renderHud();
     }
 
-    private updateBotItems(player: Entity, dt: number): void {
+    private updateBotItems(player: Entity, dt: number, reducedEffects: boolean): void {
         for (const [botIndex, racer] of this.bots.racers.entries()) {
             const inventory = this.botInventories.get(racer.entity);
             if (!inventory || !racer.race.canDrive) continue;
@@ -303,24 +333,19 @@ export class ItemSystem {
             this.announce(item.id);
             switch (item.id) {
                 case 'propaganda':
-                    this.hitPlayer(3.2);
+                    this.hitPlayer(3.2, reducedEffects);
                     break;
                 case 'red-folder':
-                    this.hitPlayer(3.2);
+                    this.hitPlayer(3.2, reducedEffects);
                     break;
                 case 'censor':
-                    this.hitPlayer(4.5);
+                    this.hitPlayer(4.5, reducedEffects);
                     break;
                 case 'statue':
                     this.dropStatue(racer.entity);
                     break;
                 case 'secret-police':
-                    this.spawnProjectile(
-                        botPosition.clone().add(new Vec3(0, 1, 0)),
-                        player,
-                        true,
-                        true
-                    );
+                    this.spawnProjectile(botPosition.clone().add(new Vec3(0, 1, 0)), player, true, true);
                     break;
                 case 'economic-plan':
                     this.bots.grantBoost(racer.entity, 0.8);
@@ -351,7 +376,7 @@ export class ItemSystem {
         this.projectiles.push({ entity, velocity, target: homing ? target : null, hostile, life: 5 });
     }
 
-    private updateProjectiles(player: Entity, dt: number): void {
+    private updateProjectiles(player: Entity, dt: number, reducedEffects: boolean): void {
         for (let index = this.projectiles.length - 1; index >= 0; index -= 1) {
             const shot = this.projectiles[index];
             shot.life -= dt;
@@ -374,7 +399,8 @@ export class ItemSystem {
                     )?.entity ?? null;
             }
             if (target && shot.entity.getPosition().distance(target.getPosition()) < 3.2) {
-                if (shot.hostile) this.hitPlayer();
+                this.burst(target.getPosition(), shot.hostile ? 'red' : 'gold', reducedEffects);
+                if (shot.hostile) this.hitPlayer(3, reducedEffects);
                 else this.bots.applyHit(target, 2.8);
                 shot.life = 0;
             }
@@ -385,15 +411,57 @@ export class ItemSystem {
         }
     }
 
-    private hitPlayer(duration = 3): void {
+    private hitPlayer(duration = 3, reducedEffects = false): void {
+        const kartPosition = this.root.findByName('player-kart')?.getPosition() ?? new Vec3();
         if (this.shieldTimer > 0) {
+            this.burst(kartPosition, 'shield', reducedEffects);
             this.shieldTimer = 0;
             this.say('🛡️ Angriff diplomatisch zurückgewiesen');
             this.announce('shielded');
         } else {
+            this.burst(kartPosition, 'red', reducedEffects);
             this.slowTimer = duration;
             this.say('💥 Verwaltungsakt zugestellt');
             this.announce('hit');
+        }
+    }
+
+    private burst(position: Vec3, color: 'gold' | 'red' | 'shield', reducedEffects = false): void {
+        if (reducedEffects) return;
+        for (let index = 0; index < 9; index += 1) {
+            const particle = this.impactParticles[this.impactCursor];
+            this.impactCursor = (this.impactCursor + 1) % this.impactParticles.length;
+            const angle = (Math.PI * 2 * index) / 9;
+            const speed = 3.5 + (index % 3) * 1.15;
+            particle.position.copy(position).add(new Vec3(0, 0.9 + (index % 2) * 0.25, 0));
+            particle.velocity.set(Math.cos(angle) * speed, 2.1 + (index % 3) * 0.45, Math.sin(angle) * speed);
+            particle.life = 0.46;
+            particle.entity.render!.material = this.impactMaterials[color];
+            particle.entity.setPosition(particle.position);
+            particle.entity.setLocalScale(0.19, 0.19, 0.19);
+            particle.entity.enabled = true;
+        }
+    }
+
+    private updateImpactParticles(dt: number, reducedEffects: boolean): void {
+        if (reducedEffects) {
+            for (const particle of this.impactParticles) {
+                particle.life = 0;
+                particle.entity.enabled = false;
+            }
+            return;
+        }
+        for (const particle of this.impactParticles) {
+            if (particle.life <= 0) continue;
+            particle.life = Math.max(0, particle.life - dt);
+            particle.velocity.y -= 8.5 * dt;
+            particle.position.x += particle.velocity.x * dt;
+            particle.position.y += particle.velocity.y * dt;
+            particle.position.z += particle.velocity.z * dt;
+            particle.entity.setPosition(particle.position);
+            const scale = 0.07 + particle.life * 0.28;
+            particle.entity.setLocalScale(scale, scale, scale);
+            particle.entity.enabled = particle.life > 0;
         }
     }
 

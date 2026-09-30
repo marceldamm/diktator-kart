@@ -34,6 +34,7 @@ globalThis.Ammo = {
 const { RaycastKartController } = await import('../client/src/game/raycast-kart.ts');
 const kart = {
     rigidbody: { body: { setActivationState() {} } },
+    getPosition: () => ({ x: 0, z: 66 }),
     children: [-1, 1].flatMap(x => [-1, 1].map(z => ({
         name: `wheel-${x}-${z}`,
         getLocalPosition: () => ({ x, y: 0, z })

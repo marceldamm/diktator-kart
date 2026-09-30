@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,6 +7,9 @@ import { fileURLToPath } from "node:url";
 const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const repositoryPath = dirname(dirname(fileURLToPath(import.meta.url)));
 const clientPath = join(repositoryPath, "client");
+const baseUrl = process.argv[2] ?? "http://127.0.0.1:5173";
+const screenshotPath = process.argv[3];
+const testPort = new URL(baseUrl).port || "5173";
 const debugPort = 9300 + Math.floor(Math.random() * 400);
 const profilePath = mkdtempSync(join(tmpdir(), "diktator-kart-cdp-"));
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -14,7 +17,7 @@ let devServer;
 
 const serverIsReady = async () => {
   try {
-    return (await fetch("http://127.0.0.1:5173/")).ok;
+    return (await fetch(baseUrl)).ok;
   } catch {
     return false;
   }
@@ -28,7 +31,7 @@ if (!(await serverIsReady())) {
       "--host",
       "127.0.0.1",
       "--port",
-      "5173",
+      testPort,
     ],
     { cwd: clientPath, stdio: "ignore" },
   );
@@ -96,7 +99,7 @@ const connect = async () => {
       );
     } else if (message.method === "Runtime.exceptionThrown") {
       consoleMessages.push(
-        `EXCEPTION: ${message.params.exceptionDetails.text}`,
+        `EXCEPTION: ${message.params.exceptionDetails.exception?.description ?? message.params.exceptionDetails.text}`,
       );
     }
   });
@@ -191,6 +194,9 @@ const runTest = async (name, actions) => {
   // Headless Chrome can advance the PlayCanvas simulation a little below
   // wall-clock rate, so leave a generous margin after the 3-2-1.
   await wait(6000);
+  await evaluate(
+    "window.__diktatorKartCameraSamples = []; window.__diktatorKartCameraTimer = setInterval(() => window.__diktatorKartCameraSamples.push(window.__diktatorKartCamera()), 50)",
+  );
   await evaluate("document.getElementById('telemetry-start').click()");
   for (const action of actions) {
     if (action.key) await key(action.key, action.down);
@@ -199,24 +205,63 @@ const runTest = async (name, actions) => {
   for (const code of ["KeyW", "KeyA", "KeyS", "KeyD", "Space"])
     await key(code, false);
   await wait(250);
+  let warpPosition = null;
+  if (name === "camera-spin") {
+    await evaluate("window.__diktatorKartForceWarp()");
+    await wait(900);
+    warpPosition = await evaluate("window.__diktatorKartPosition()");
+  }
   await evaluate("document.getElementById('telemetry-stop').click()");
   const text = await evaluate(
     "document.getElementById('telemetry-log').textContent",
   );
-  return summarize(name, text);
+  const cameraSamples = await evaluate(
+    "clearInterval(window.__diktatorKartCameraTimer); window.__diktatorKartCameraSamples",
+  );
+  const camera = {
+    samples: cameraSamples.length,
+    minUpDot: Math.min(...cameraSamples.map((sample) => sample.upDot)),
+    minViewAlignment: Math.min(
+      ...cameraSamples.map((sample) => sample.viewAlignment),
+    ),
+    maxRotationStepDegrees: Math.max(
+      0,
+      ...cameraSamples.slice(1).map((sample, index) => {
+        const previous = cameraSamples[index];
+        const dot = Math.abs(
+          sample.qx * previous.qx +
+            sample.qy * previous.qy +
+            sample.qz * previous.qz +
+            sample.qw * previous.qw,
+        );
+        return (2 * Math.acos(Math.min(1, dot)) * 180) / Math.PI;
+      }),
+    ),
+    warpPosition,
+  };
+  return { ...summarize(name, text), camera };
 };
 
 try {
   await connect();
   await command("Runtime.enable");
   await command("Page.enable");
-  await command("Page.navigate", { url: "http://127.0.0.1:5173/?kartTest=1" });
+  await command("Page.navigate", { url: `${baseUrl}/?kartTest=1` });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const ready = await evaluate(
       "Boolean(document.getElementById('reset-kart') && document.getElementById('application-canvas'))",
     );
     if (ready) break;
     await wait(100);
+  }
+  if (
+    !(await evaluate(
+      "Boolean(document.getElementById('reset-kart') && document.getElementById('start-race'))",
+    ))
+  ) {
+    throw new Error(
+      `Kart UI did not initialize: ${consoleMessages.join(" | ")}`,
+    );
   }
   await wait(1200);
 
@@ -241,7 +286,7 @@ try {
       { key: "KeyA", down: true },
       { wait: 2000 },
       { key: "KeyA", down: false },
-      { wait: 1200 },
+      { wait: 2000 },
     ]),
   );
   tests.push(
@@ -249,7 +294,7 @@ try {
       { key: "KeyW", down: true },
       { wait: 1500 },
       { key: "KeyD", down: true },
-      { wait: 2000 },
+      { wait: 1200 },
       { key: "KeyD", down: false },
       { wait: 1200 },
     ]),
@@ -308,17 +353,57 @@ try {
       { wait: 2500 },
     ]),
   );
+  tests.push(
+    await runTest("camera-spin", [
+      { key: "KeyW", down: true },
+      { key: "KeyA", down: true },
+      { wait: 2300 },
+      { key: "KeyA", down: false },
+      { key: "KeyD", down: true },
+      { wait: 2600 },
+      { key: "KeyD", down: false },
+      { key: "KeyW", down: false },
+      { key: "KeyS", down: true },
+      { wait: 900 },
+    ]),
+  );
+  const controllerPerformance = await evaluate(
+    "window.__diktatorKartPerf?.() ?? null",
+  );
 
-  await command("Page.navigate", { url: "http://127.0.0.1:5173/" });
+  await command("Page.navigate", { url: `${baseUrl}/` });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     if (await evaluate("Boolean(document.getElementById('start-race'))")) break;
     await wait(100);
   }
+  if (!(await evaluate("Boolean(document.getElementById('start-race'))"))) {
+    throw new Error(
+      `Race UI did not initialize: ${consoleMessages.join(" | ")}`,
+    );
+  }
   await evaluate("document.getElementById('start-race').click()");
   await wait(9000);
-  const botState = await evaluate(
+  if (screenshotPath) {
+    const { data } = await command("Page.captureScreenshot", { format: "png" });
+    writeFileSync(screenshotPath, Buffer.from(data, "base64"));
+  }
+  const racePerformance = await evaluate(
+    "window.__diktatorKartPerf?.() ?? null",
+  );
+  const initialBotState = await evaluate(
     "JSON.parse(document.documentElement.dataset.botState || '[]')",
   );
+  let botState = initialBotState;
+  for (
+    let attempt = 0;
+    attempt < 55 && !botState.some((bot) => bot.lap > 1);
+    attempt += 1
+  ) {
+    await wait(1000);
+    botState = await evaluate(
+      "JSON.parse(document.documentElement.dataset.botState || '[]')",
+    );
+  }
   const byName = Object.fromEntries(tests.map((test) => [test.name, test]));
   const failures = [];
   const require = (condition, message) => {
@@ -337,16 +422,35 @@ try {
     byName["drift-left"].boostSamples > 0, "left drift boost failed");
   require(byName["drift-right"].driftSamples > 0 &&
     byName["drift-right"].boostSamples > 0, "right drift boost failed");
+  require(byName["camera-spin"].camera.samples > 10 &&
+    byName["camera-spin"].camera.minUpDot > 0.92 &&
+    byName["camera-spin"].camera.minViewAlignment > 0.92 &&
+    byName["camera-spin"].camera.maxRotationStepDegrees < 60 &&
+    Math.abs(byName["camera-spin"].camera.warpPosition.x) < 450 &&
+    Math.abs(byName["camera-spin"].camera.warpPosition.z) <
+      200, "camera flip or player out-of-bounds recovery failed during a rapid yaw reversal");
   require(botState.length === 5, "expected five bots");
   require(botState.every(
-    (bot) => bot.x > -225 && bot.speed > 1,
+    (bot) => Math.abs(bot.x) < 450 && Math.abs(bot.z) < 200,
+  ), "a bot left the stadium bounds");
+  require(initialBotState.every(
+    (bot) => bot.x > -225,
   ), "not every bot left the grid");
+  require(botState.some(
+    (bot) => bot.lap > 1,
+  ), "no bot completed a full lap on the stadium circuit");
+  require(await evaluate(
+    "document.documentElement.dataset.finishArch === 'loaded'",
+  ), "custom finish GLB did not load");
+  require(racePerformance?.fps > 0 &&
+    racePerformance?.drawCalls >
+      0, "render performance metrics were not sampled");
   require(!consoleMessages.some((message) =>
     message.startsWith("EXCEPTION:"),
   ), "browser exception detected");
 
   process.stdout.write(
-    `${JSON.stringify({ tests, botState, failures, consoleMessages }, null, 2)}\n`,
+    `${JSON.stringify({ tests, controllerPerformance, racePerformance, botState, failures, consoleMessages }, null, 2)}\n`,
   );
   if (failures.length) process.exitCode = 1;
 } finally {

@@ -57,6 +57,7 @@ export class Announcer {
     private lastCue = '';
     private lastSpokenAt = -20;
     private volume = 0.82;
+    private lastVoice: 'male' | 'female' = 'female';
 
     constructor() {
         document.body.insertAdjacentHTML('beforeend', '<div class="announcer-subtitle" id="announcer-subtitle"></div>');
@@ -67,10 +68,25 @@ export class Announcer {
         const now = performance.now() / 1000;
         if (!priority && (now - this.lastSpokenAt < 12 || cue === this.lastCue)) return;
         this.current?.pause();
-        const audio = new Audio(`/audio/announcer/${cue}.wav`);
+        const voice: 'male' | 'female' = this.lastVoice === 'female' ? 'male' : 'female';
+        this.lastVoice = voice;
+        const primary = voice === 'female' ? 'announcer-female' : 'announcer-neural';
+        const audio = new Audio(`/audio/${primary}/${cue}.wav`);
+        audio.addEventListener(
+            'error',
+            () => {
+                if (audio.dataset.fallback) return;
+                audio.dataset.fallback = 'true';
+                audio.src = voice === 'female' ? `/audio/announcer-neural/${cue}.wav` : `/audio/announcer/${cue}.wav`;
+                void audio.play().catch(() => this.subtitle.classList.remove('is-visible'));
+            },
+            { once: true }
+        );
         audio.volume = this.volume;
         audio.addEventListener('ended', () => this.subtitle.classList.remove('is-visible'), { once: true });
-        void audio.play().catch(() => this.subtitle.classList.remove('is-visible'));
+        void audio.play().catch(() => {
+            if (!audio.dataset.fallback) this.subtitle.classList.remove('is-visible');
+        });
         this.current = audio;
         this.lastCue = cue;
         this.lastSpokenAt = now;

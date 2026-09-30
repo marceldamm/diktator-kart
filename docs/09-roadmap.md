@@ -6,6 +6,12 @@
 - Kart-Platzhalter, Kamera und Telemetrie
 - RaycastVehicle-Arcadefahrmodell
 - lokale Chrome/CDP-Testautomation
+- Menü-Key-Art, Sektor-Landmarken, Strecken-Beacons und Mittelmarkierungen
+- Minikarte mit Fahrerpositionen und Tempometer
+- dynamische Kamera mit Tempofeld und Kurvenneigung
+- dynamische Motorharmonie, Driftreifen und Fahrtwind
+- begrenzte Pixeldichte für HiDPI-Renderperformance
+- 24 lokal vorproduzierte emotionale deutsche Piper-Neuralansagen mit Fallback
 
 ## Diese Phase
 
@@ -22,3 +28,5 @@
 - Erweiterung auf zwölf Fahrer
 - Multiplayer
 - weitere Kurse und Content
+
+Die konkrete Ausbau- und Abnahmeliste steht in `18-next-level-roadmap.md`.

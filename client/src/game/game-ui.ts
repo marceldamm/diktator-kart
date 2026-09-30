@@ -51,6 +51,20 @@ export class GameUi {
         this.pause = document.getElementById('pause-screen')!;
         this.result = document.getElementById('result-screen')!;
         this.raceControls = document.getElementById('race-controls')!;
+        const resultCard = this.result.firstElementChild as HTMLElement;
+        resultCard.classList.add('result-card');
+        const resultTitle = this.result.querySelector('h2')!;
+        resultTitle.id = 'result-title';
+        const podium = document.createElement('header');
+        podium.className = 'result-podium';
+        podium.innerHTML = '<b id="result-place">01</b><div><small>OFFIZIELLE PLATZIERUNG</small></div>';
+        podium.lastElementChild!.append(resultTitle);
+        document.getElementById('result-copy')!.before(podium);
+        const lapList = document.createElement('div');
+        lapList.className = 'result-laps';
+        lapList.id = 'result-laps';
+        lapList.setAttribute('aria-label', 'Rundenzeiten');
+        document.getElementById('result-copy')!.after(lapList);
 
         document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => {
             button.addEventListener('click', () => {
@@ -130,13 +144,26 @@ export class GameUi {
         return this.mode;
     }
 
-    update(snapshot: RaceSnapshot, savedBest: number | null = null, newRecord = false, position = 1): void {
+    update(
+        snapshot: RaceSnapshot,
+        savedBest: number | null = null,
+        newRecord = false,
+        position = 1,
+        itemsUsed = 0
+    ): void {
         if (snapshot.phase !== 'finished') this.wasFinished = false;
         if (snapshot.phase !== 'finished' || this.wasFinished) return;
         this.wasFinished = true;
         const copy = document.getElementById('result-copy')!;
+        const laps = document.getElementById('result-laps')!;
+        const medal = document.getElementById('result-place')!;
+        const title = document.getElementById('result-title')!;
+        medal.textContent = String(position).padStart(2, '0');
+        title.textContent = this.mode === 'time-trial' ? 'ZEIT IM KASTEN' : position === 1 ? 'SIEG!' : 'IM ZIEL';
+        this.result.dataset.placement = String(position);
         copy.classList.add('race-newspaper');
         copy.replaceChildren();
+        laps.replaceChildren();
         const masthead = document.createElement('small');
         masthead.textContent = 'DIE EINSTIMMIGE PRESSE · SPORTAUSGABE';
         const headline = document.createElement('strong');
@@ -165,7 +192,8 @@ export class GameUi {
                     : String(position)
             ],
             ['Rennzeit', RaceController.formatTime(snapshot.raceTime)],
-            ['Beste Runde', snapshot.bestLapTime === null ? '—' : RaceController.formatTime(snapshot.bestLapTime)]
+            ['Beste Runde', snapshot.bestLapTime === null ? '—' : RaceController.formatTime(snapshot.bestLapTime)],
+            ['Eingesetzte Items', String(itemsUsed)]
         ];
         for (const [label, value] of metrics) {
             const metric = document.createElement('span');
@@ -177,6 +205,16 @@ export class GameUi {
             statistics.append(metric);
         }
         copy.append(masthead, headline, byline, statistics);
+        snapshot.lapTimes.forEach((lapTime, index) => {
+            const split = document.createElement('span');
+            split.className = 'result-lap';
+            const label = document.createElement('small');
+            label.textContent = `RUNDE ${index + 1}`;
+            const value = document.createElement('b');
+            value.textContent = RaceController.formatTime(lapTime);
+            split.append(label, value);
+            laps.append(split);
+        });
         this.result.classList.remove('is-hidden');
     }
 

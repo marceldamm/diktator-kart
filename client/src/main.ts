@@ -1,7 +1,9 @@
 import {
     AppBase,
     AppOptions,
+    BatchManager,
     CameraComponentSystem,
+    ContainerHandler,
     CollisionComponentSystem,
     Color,
     Entity,
@@ -11,6 +13,7 @@ import {
     RESOLUTION_AUTO,
     RigidBodyComponentSystem,
     ScriptComponentSystem,
+    Vec3,
     WasmModule,
     createGraphicsDevice
 } from 'playcanvas';
@@ -37,7 +40,7 @@ import { RaceHud } from './game/race-hud';
 import { RaycastKartController } from './game/raycast-kart';
 import { SettingsPanel } from './game/settings';
 import { TelemetryLog } from './game/telemetry-log';
-import { createRaceTrack } from './game/track';
+import { createPhysicsTestTrack, createRaceTrack } from './game/track';
 import { WorldEvents } from './game/world-events';
 
 import './starter.css';
@@ -58,8 +61,10 @@ document.body.insertAdjacentHTML(
 
 const canvas = document.getElementById('application-canvas') as HTMLCanvasElement;
 const device = await createGraphicsDevice(canvas);
+device.maxPixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
 const options = new AppOptions();
 options.graphicsDevice = device;
+options.batchManager = BatchManager;
 options.componentSystems = [
     RenderComponentSystem,
     CameraComponentSystem,
@@ -68,16 +73,73 @@ options.componentSystems = [
     CollisionComponentSystem,
     RigidBodyComponentSystem
 ];
+options.resourceHandlers = [ContainerHandler];
 
 const app = new AppBase(canvas);
 app.init(options);
 app.start();
+(
+    window as unknown as {
+        __diktatorKartPerf: () => Readonly<Record<string, number>>;
+    }
+).__diktatorKartPerf = () => {
+    const { frame, drawCalls, vram } = app.stats;
+    return {
+        fps: frame.fps,
+        frameMs: Number(frame.ms.toFixed(2)),
+        updateMs: Number(frame.updateTime.toFixed(2)),
+        renderMs: Number(frame.renderTime.toFixed(2)),
+        physicsMs: Number(frame.physicsTime.toFixed(2)),
+        drawCalls: drawCalls.total,
+        triangles: frame.triangles,
+        vramBytes: Object.values(vram).reduce((total, bytes) => total + bytes, 0)
+    };
+};
 app.setCanvasFillMode(FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(RESOLUTION_AUTO);
 app.systems.rigidbody!.gravity.set(0, -9.81, 0);
 app.scene.ambientLight = new Color(0.58, 0.61, 0.66);
 
-createRaceTrack(app.root);
+const kartTestMode = new URLSearchParams(window.location.search).has('kartTest');
+let staticTrackBatchGroup = -1;
+if (kartTestMode) {
+    createPhysicsTestTrack(app.root);
+    document.documentElement.dataset.finishArch = 'test-skipped';
+} else {
+    createRaceTrack(app.root);
+    const track = app.root.findByName('race-track') as Entity | null;
+    if (track) {
+        staticTrackBatchGroup = app.batcher.addGroup('capital-grand-prix-static', false, 512).id;
+        const animatedTrackParts = new Set([
+            ...Array.from({ length: 12 }, (_, index) => `spectator-arm-${index}`),
+            ...Array.from({ length: 3 }, (_, index) => `shortcut-stamp-head-${index}`),
+            'palace-banner',
+            'statue-scaffold-cross'
+        ]);
+        for (const component of track.findComponents('render')) {
+            if (component.entity && !animatedTrackParts.has(component.entity.name)) {
+                (component as typeof component & { batchGroupId: number }).batchGroupId = staticTrackBatchGroup;
+            }
+        }
+    }
+    document.documentElement.dataset.finishArch = 'loading';
+    app.assets.loadFromUrl('/models/capital-finish-arch.glb', 'container', (error, asset) => {
+        if (error || !asset?.resource) {
+            document.documentElement.dataset.finishArch = 'failed';
+            console.warn('Das GLB-Zielportal konnte nicht geladen werden.', error);
+            return;
+        }
+        const container = asset.resource as { instantiateRenderEntity(options?: object): Entity };
+        const arch = container.instantiateRenderEntity({ castShadows: false });
+        arch.name = 'capital-finish-arch';
+        arch.setPosition(-190, 0, 65);
+        for (const component of arch.findComponents('render')) {
+            (component as typeof component & { batchGroupId: number }).batchGroupId = staticTrackBatchGroup;
+        }
+        app.root.addChild(arch);
+        document.documentElement.dataset.finishArch = 'loaded';
+    });
+}
 const worldEvents = new WorldEvents(app.root);
 const kart = createKart(app.root);
 const input = new KeyboardInput();
@@ -96,7 +158,7 @@ driftMeter.max = 1;
 driftMeter.setAttribute('aria-label', 'Driftladung');
 driftHud.append(driftLabel, driftMeter);
 document.body.append(driftHud);
-const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.search).has('kartTest'));
+const bots = new BotRaceManager(app.root, !kartTestMode);
 (window as unknown as { __diktatorKartBots: () => ReturnType<BotRaceManager['snapshot']> }).__diktatorKartBots = () =>
     bots.snapshot();
 let raycastController: RaycastKartController | undefined;
@@ -128,6 +190,7 @@ const items = new ItemSystem(
     () => raycastController?.grantBoost(),
     (event) => {
         const cue = itemCue[event];
+        drivingAudio.playEvent(event);
         if (cue) announcer.say(cue, event === 'hit' || event === 'shielded');
     }
 );
@@ -157,11 +220,13 @@ const refreshTelemetryView = () => {
 };
 const restartRace = () => {
     drivingAudio.reset();
+    driftEffects.reset();
     input.reset();
     resetKart(kart);
     controller.reset();
     kartAnimator.reset();
     raycastController?.reset();
+    followCamera.reset(camera, kart);
     race.reset(kart);
     bots.reset();
     items.reset();
@@ -232,13 +297,48 @@ window.addEventListener('keydown', (event) => {
 const camera = new Entity('camera');
 camera.setPosition(0, 4.5, 13);
 camera.lookAt(kart.getPosition());
-camera.addComponent('camera', { clearColor: new Color(0.22, 0.34, 0.5), farClip: 900, fov: 62 });
+camera.addComponent('camera', { clearColor: new Color(0.22, 0.34, 0.5), farClip: 600, fov: 62 });
 app.root.addChild(camera);
 const followCamera = new FollowCameraController();
+if (kartTestMode) {
+    (window as unknown as { __diktatorKartCamera: () => Readonly<Record<string, number>> }).__diktatorKartCamera =
+        () => {
+            const rotation = camera.getRotation();
+            const targetDirection = kart
+                .getPosition()
+                .clone()
+                .add(new Vec3(0, 1.15, 0))
+                .sub(camera.getPosition())
+                .normalize();
+            return {
+                qx: rotation.x,
+                qy: rotation.y,
+                qz: rotation.z,
+                qw: rotation.w,
+                upDot: camera.up.y,
+                viewAlignment: camera.forward.dot(targetDirection)
+            };
+        };
+    (window as unknown as { __diktatorKartForceWarp: () => void }).__diktatorKartForceWarp = () => {
+        if (!raycastController) return;
+        const position = kart
+            .getPosition()
+            .clone()
+            .add(new Vec3(600, 0, 0));
+        raycastController.reset(position, kart.getEulerAngles().y + 180);
+    };
+    (
+        window as unknown as { __diktatorKartPosition: () => Readonly<{ x: number; y: number; z: number }> }
+    ).__diktatorKartPosition = () => {
+        const position = kart.getPosition();
+        return { x: position.x, y: position.y, z: position.z };
+    };
+}
 new SettingsPanel(
     (settings) => {
         announcer.setVolume(settings.masterVolume * settings.voiceVolume);
         drivingAudio.setVolume(settings.masterVolume * settings.effectsVolume);
+        drivingAudio.setMusicVolume(settings.masterVolume * settings.musicVolume);
         followCamera.setReducedMotion(settings.reducedCamera);
         document.documentElement.classList.toggle('reduced-effects', settings.reducedEffects);
     },
@@ -289,9 +389,34 @@ app.on('update', (dt: number) => {
     const activeController = raycastController ?? controller;
     if (raycastController) raycastController.update(kartInput, dt);
     else driveKart(controller, kart, kartInput, dt);
+    const kartPosition = kart.getPosition();
+    if (
+        race.canDrive &&
+        (Math.abs(kartPosition.x) > 450 || Math.abs(kartPosition.z) > 200 || kartPosition.y < -8 || kartPosition.y > 30)
+    ) {
+        const safePose = race.getRecoveryPose();
+        if (raycastController) raycastController.reset(safePose.position, safePose.yaw);
+        else {
+            resetKart(kart);
+            controller.reset(safePose.yaw);
+        }
+        followCamera.rebaseAfterTeleport(camera, kart);
+        input.reset();
+        driftEffects.reset();
+        kartAnimator.reset();
+        race.resyncPosition(kart);
+        drivingAudio.playEvent('hit');
+        announcer.say('collision', true);
+    }
     const kartSnapshot = activeController.getDebugSnapshot(kart, kartInput);
     const charge = raycastController?.getDriftCharge();
-    drivingAudio.update(kartSnapshot, charge?.stage ?? 0, race.canDrive);
+    const musicRaceState = race.snapshot();
+    drivingAudio.update(
+        kartSnapshot,
+        charge?.stage ?? 0,
+        race.canDrive,
+        musicRaceState.lap === musicRaceState.lapsToWin
+    );
     driftEffects.update(
         dt,
         charge?.stage ?? 0,
@@ -312,10 +437,15 @@ app.on('update', (dt: number) => {
     debugHud.update(kartSnapshot);
     kartAnimator.update(kartSnapshot, dt, document.documentElement.classList.contains('reduced-effects'));
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
-    followCamera.update(camera, kart, dt);
+    followCamera.update(camera, kart, dt, kartSnapshot.forwardSpeed, kartInput.steering, kartSnapshot.boostActive);
     if (!gameUi.isPaused) race.update(kart, dt);
     bots.update(dt, gameUi.isPaused);
-    items.update(kart, dt, race.canDrive && !gameUi.isPaused);
+    items.update(
+        kart,
+        dt,
+        race.canDrive && !gameUi.isPaused,
+        document.documentElement.classList.contains('reduced-effects')
+    );
     if (!gameUi.isPaused) abilities.update(dt);
     const leaderLap = Math.max(race.snapshot().lap, ...bots.snapshot().map((bot) => bot.lap));
     if (!gameUi.isPaused && race.canDrive) worldEvents.update(dt, gameMode === 'time-trial' ? 1 : leaderLap, kart);
@@ -343,7 +473,14 @@ app.on('update', (dt: number) => {
         }
         announcer.say('finish', true);
     }
-    raceHud.update(raceSnapshot, racePosition, gameMode === 'time-trial' ? 1 : bots.racers.length + 1);
-    gameUi.update(raceSnapshot, savedTimeTrialBest, newTimeTrialRecord, racePosition);
+    raceHud.update(
+        raceSnapshot,
+        racePosition,
+        gameMode === 'time-trial' ? 1 : bots.racers.length + 1,
+        kartSnapshot.forwardSpeed,
+        kart,
+        bots.racers.map((racer) => racer.entity)
+    );
+    gameUi.update(raceSnapshot, savedTimeTrialBest, newTimeTrialRecord, racePosition, items.playerItemsUsed);
 });
 window.addEventListener('resize', () => app.resizeCanvas());

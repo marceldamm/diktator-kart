@@ -59,6 +59,13 @@ const material = (color: Color) => {
     return result;
 };
 
+const emissiveMaterial = (color: Color) => {
+    const result = material(color);
+    result.emissive = color.clone().mulScalar(0.65);
+    result.update();
+    return result;
+};
+
 const colorFromHex = (value: string) => new Color().fromString(value);
 
 const addVisualBox = (root: Entity, name: string, position: Vec3, scale: Vec3, boxMaterial: StandardMaterial) => {
@@ -77,8 +84,22 @@ export const createKart = (root: Entity, driver: DriverDefinition = DEFAULT_DRIV
     const body = material(colorFromHex(driver.color));
     const trim = material(colorFromHex(driver.accent));
     const tire = material(new Color(0.03, 0.035, 0.045));
+    const steel = material(new Color(0.52, 0.58, 0.6));
+    const headlight = emissiveMaterial(new Color(1, 0.83, 0.4));
+    const taillight = emissiveMaterial(new Color(0.9, 0.08, 0.045));
     addVisualBox(kart, 'body', new Vec3(0, 0, 0), new Vec3(1.45, 0.5, 2.2), body);
     addVisualBox(kart, 'nose', new Vec3(0, 0.25, -0.78), new Vec3(1.05, 0.2, 0.55), trim);
+    addVisualBox(kart, 'front-bumper', new Vec3(0, -0.12, -1.1), new Vec3(1.58, 0.14, 0.2), steel);
+    addVisualBox(kart, 'front-grille', new Vec3(0, 0.03, -1.08), new Vec3(0.5, 0.13, 0.08), tire);
+    addVisualBox(kart, 'rear-bumper', new Vec3(0, -0.12, 1.08), new Vec3(1.58, 0.14, 0.2), steel);
+    addVisualBox(kart, 'rear-wing', new Vec3(0, 0.58, 0.86), new Vec3(1.32, 0.12, 0.34), trim);
+    for (const x of [-0.44, 0.44]) {
+        addVisualBox(kart, `wing-support-${x}`, new Vec3(x, 0.44, 0.83), new Vec3(0.1, 0.3, 0.12), steel);
+        addVisualBox(kart, `headlight-${x}`, new Vec3(x, 0.13, -1.05), new Vec3(0.22, 0.13, 0.08), headlight);
+        addVisualBox(kart, `taillight-${x}`, new Vec3(x, 0.1, 1.08), new Vec3(0.2, 0.1, 0.08), taillight);
+    }
+    for (const x of [-0.74, 0.74])
+        addVisualBox(kart, `side-skirt-${x}`, new Vec3(x, -0.1, 0.05), new Vec3(0.13, 0.17, 1.25), steel);
     addVisualBox(kart, 'seat', new Vec3(0, 0.4, 0.3), new Vec3(0.72, 0.45, 0.65), tire);
     addVisualBox(kart, 'driver-body', new Vec3(0, 0.82, 0.25), new Vec3(0.62, 0.72, 0.5), body);
     const head = new Entity('driver-head');
@@ -111,7 +132,7 @@ export const applyKartStyle = (kart: Entity, driver: DriverDefinition): void => 
         const part = kart.findByName(name) as Entity | null;
         if (part?.render) part.render.meshInstances.forEach((mesh) => (mesh.material = bodyMaterial));
     }
-    for (const name of ['nose', 'driver-hat', 'moving-detail']) {
+    for (const name of ['nose', 'driver-hat', 'moving-detail', 'rear-wing']) {
         const part = kart.findByName(name) as Entity | null;
         if (part?.render) part.render.meshInstances.forEach((mesh) => (mesh.material = accentMaterial));
     }
@@ -138,7 +159,7 @@ export const teleportKart = (kart: Entity, position: Vec3, yaw: number) => {
 
 export class KartController {
     private steering = 0;
-    private heading = START_YAW;
+    private heading: number = START_YAW;
     private readonly maxSpeed: number;
     private readonly powerMultiplier: number;
 
@@ -147,9 +168,9 @@ export class KartController {
         this.powerMultiplier = powerMultiplier;
     }
 
-    reset() {
+    reset(heading: number = START_YAW) {
         this.steering = 0;
-        this.heading = START_YAW;
+        this.heading = heading;
     }
 
     getDebugSnapshot(kart: Entity, input: KartInput): KartDebugSnapshot {

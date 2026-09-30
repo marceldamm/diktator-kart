@@ -10,9 +10,17 @@ const makeMaterial = (color: Color, gloss = 0.2) => {
     return material;
 };
 
-const addStaticBox = (root: Entity, name: string, position: Vec3, size: Vec3, material: StandardMaterial) => {
+const addStaticBox = (
+    root: Entity,
+    name: string,
+    position: Vec3,
+    size: Vec3,
+    material: StandardMaterial,
+    rotationY = 0
+) => {
     const entity = new Entity(name);
     entity.setPosition(position);
+    entity.setEulerAngles(0, rotationY, 0);
     const visual = new Entity(`${name}-visual`);
     visual.setLocalScale(size);
     visual.addComponent('render', { type: 'box', material });
@@ -42,9 +50,17 @@ const addStaticRamp = (
     root.addChild(entity);
 };
 
-const addVisualBox = (root: Entity, name: string, position: Vec3, size: Vec3, material: StandardMaterial) => {
+const addVisualBox = (
+    root: Entity,
+    name: string,
+    position: Vec3,
+    size: Vec3,
+    material: StandardMaterial,
+    rotationY = 0
+) => {
     const entity = new Entity(name);
     entity.setPosition(position);
+    entity.setEulerAngles(0, rotationY, 0);
     entity.setLocalScale(size);
     entity.addComponent('render', { type: 'box', material });
     root.addChild(entity);
@@ -87,15 +103,19 @@ const addFinishLine = (root: Entity, black: StandardMaterial, white: StandardMat
             addVisualBox(
                 root,
                 `finish-${row}-${column}`,
-                new Vec3(-220 + row * 2.2 - 1.1, 0.025, 65 + column * 8.8 - 39.6),
-                new Vec3(2.2, 0.05, 8.8),
+                new Vec3(
+                    RACE_LAYOUT.finish.position.x + row * 2.1 - 1.05,
+                    0.025,
+                    RACE_LAYOUT.finish.position.z + column * 7 - 24.5
+                ),
+                new Vec3(2.1, 0.05, 7),
                 (row + column) % 2 === 0 ? white : black
             );
         }
     }
 };
 
-/** The broad first loop: deliberately simple, with forgiving square-radius turns. */
+/** Capital Grand Prix: a readable stadium circuit with wide, flowing end turns. */
 export const createRaceTrack = (root: Entity) => {
     const track = new Entity('race-track');
     root.addChild(track);
@@ -114,32 +134,168 @@ export const createRaceTrack = (root: Entity) => {
     const propaganda = makeMaterial(new Color(0.55, 0.045, 0.06), 0.32);
     const paper = makeMaterial(new Color(0.91, 0.87, 0.72), 0.2);
     const water = makeMaterial(new Color(0.16, 0.68, 0.82), 0.8);
+    const steel = makeMaterial(new Color(0.42, 0.52, 0.58), 0.92);
+    steel.emissive = new Color(0.035, 0.055, 0.065);
+    steel.update();
+    const neon = makeMaterial(new Color(0.08, 0.7, 0.62), 0.2);
+    neon.emissive = new Color(0.02, 0.22, 0.19);
+    neon.update();
 
     // One collision ground keeps the RaycastVehicle contact surface completely stable.
     addStaticBox(track, 'grass-ground', new Vec3(0, -0.1, 0), new Vec3(700, 0.2, 260), grass);
-    addVisualBox(track, 'north-asphalt', new Vec3(0, 0.012, 66), new Vec3(560, 0.04, 124), asphalt);
-    addVisualBox(track, 'south-asphalt', new Vec3(0, 0.012, -66), new Vec3(560, 0.04, 124), asphalt);
-    addVisualBox(track, 'west-link', new Vec3(-220, 0.014, 0), new Vec3(120, 0.045, 130), asphalt);
-    addVisualBox(track, 'east-link', new Vec3(220, 0.014, 0), new Vec3(120, 0.045, 130), asphalt);
+    const straightLength = 380;
+    const turnRadius = 65;
+    const turnSegments = 12;
+    for (const z of [-turnRadius, turnRadius]) {
+        addVisualBox(
+            track,
+            `straight-asphalt-${z}`,
+            new Vec3(0, 0.012, z),
+            new Vec3(straightLength, 0.04, 70),
+            asphalt
+        );
+    }
+    for (const [turn, centerX, startAngle] of [
+        ['east', 190, 90],
+        ['west', -190, -90]
+    ] as const) {
+        const endAngle = startAngle - 180;
+        for (let index = 0; index < turnSegments; index += 1) {
+            const angle = startAngle + (endAngle - startAngle) * ((index + 0.5) / turnSegments);
+            const radians = (angle * Math.PI) / 180;
+            const chord = 2 * turnRadius * Math.sin(Math.PI / (turnSegments * 2)) + 0.35;
+            const center = new Vec3(centerX + turnRadius * Math.cos(radians), 0.012, turnRadius * Math.sin(radians));
+            addVisualBox(
+                track,
+                `${turn}-turn-asphalt-${index}`,
+                center,
+                new Vec3(chord, 0.04, 70),
+                asphalt,
+                90 - angle
+            );
+        }
+    }
 
-    // Outer boundary and central island form a broad, forgiving rectangular loop.
-    addStaticBox(track, 'outer-north', new Vec3(0, 0.7, 130), new Vec3(570, 1.4, 2), barrier);
-    addStaticBox(track, 'outer-south', new Vec3(0, 0.7, -130), new Vec3(570, 1.4, 2), barrier);
-    addStaticBox(track, 'outer-west', new Vec3(-285, 0.7, 0), new Vec3(2, 1.4, 260), barrier);
-    addStaticBox(track, 'outer-east', new Vec3(285, 0.7, 0), new Vec3(2, 1.4, 260), barrier);
-    addStaticBox(track, 'island-north', new Vec3(0, 0.55, 5), new Vec3(320, 1.1, 2), barrier);
-    addStaticBox(track, 'island-south', new Vec3(0, 0.55, -5), new Vec3(320, 1.1, 2), barrier);
-    addStaticBox(track, 'island-west', new Vec3(-160, 0.55, 0), new Vec3(2, 1.1, 10), barrier);
-    addStaticBox(track, 'island-east', new Vec3(160, 0.55, 0), new Vec3(2, 1.1, 10), barrier);
+    // Short steel plates add a visible, slightly slick surface cue to each straight.
+    for (const z of [-turnRadius, turnRadius]) {
+        addVisualBox(track, `steel-sector-${z}`, new Vec3(-17, 0.043, z), new Vec3(26, 0.025, 68), steel);
+        for (const edgeZ of [z - 34, z + 34]) {
+            addVisualBox(
+                track,
+                `steel-sector-edge-${z}-${edgeZ}`,
+                new Vec3(-17, 0.061, edgeZ),
+                new Vec3(25, 0.015, 0.34),
+                yellow
+            );
+        }
+    }
 
-    addVisualBox(track, 'north-curb', new Vec3(0, 0.045, 125), new Vec3(554, 0.08, 1.2), yellow);
-    addVisualBox(track, 'south-curb', new Vec3(0, 0.045, -125), new Vec3(554, 0.08, 1.2), yellow);
-    addVisualBox(track, 'island-grass', new Vec3(0, 0.02, 0), new Vec3(316, 0.05, 8), teal);
+    // Guard rails follow both the outside radius and the infield edge of each hairpin.
+    for (const z of [-100, 100]) {
+        addStaticBox(track, `straight-outer-rail-${z}`, new Vec3(0, 0.7, z), new Vec3(straightLength, 1.4, 2), barrier);
+        addStaticBox(
+            track,
+            `straight-inner-rail-${z}`,
+            new Vec3(0, 0.55, z / 3.333),
+            new Vec3(straightLength, 1.1, 2),
+            barrier
+        );
+    }
+    for (const [turn, centerX, startAngle] of [
+        ['east', 190, 90],
+        ['west', -190, -90]
+    ] as const) {
+        const endAngle = startAngle - 180;
+        for (let index = 0; index < turnSegments; index += 1) {
+            const angle = startAngle + (endAngle - startAngle) * ((index + 0.5) / turnSegments);
+            const radians = (angle * Math.PI) / 180;
+            const rotation = 90 - angle;
+            for (const [edge, radius] of [
+                ['outer', 100],
+                ['inner', 30]
+            ] as const) {
+                const chord = 2 * radius * Math.sin(Math.PI / (turnSegments * 2)) + (edge === 'outer' ? 0.9 : 0.5);
+                const rail = new Vec3(
+                    centerX + radius * Math.cos(radians),
+                    edge === 'outer' ? 0.7 : 0.55,
+                    radius * Math.sin(radians)
+                );
+                addStaticBox(
+                    track,
+                    `${turn}-${edge}-rail-${index}`,
+                    rail,
+                    new Vec3(chord, edge === 'outer' ? 1.4 : 1.1, 2),
+                    index % 2 ? barrier : yellow,
+                    rotation
+                );
+            }
+        }
+    }
+
+    addVisualBox(track, 'north-curb', new Vec3(0, 0.045, 99), new Vec3(378, 0.08, 1.2), yellow);
+    addVisualBox(track, 'south-curb', new Vec3(0, 0.045, -99), new Vec3(378, 0.08, 1.2), yellow);
+    addVisualBox(track, 'infield-grass', new Vec3(0, 0.02, 0), new Vec3(378, 0.05, 60), teal);
+    for (const x of [-190, 190]) {
+        addVisualPrimitive(track, `infield-cap-${x}`, 'cylinder', new Vec3(x, 0.02, 0), new Vec3(60, 0.05, 60), teal);
+    }
+    // Painted rhythm marks make the long straights read as a racing surface at speed.
+    for (let index = 0; index < 14; index += 1) {
+        const x = -202 + index * 30;
+        addVisualBox(track, `north-lane-dash-${index}`, new Vec3(x, 0.045, 65), new Vec3(14, 0.025, 0.42), white);
+        addVisualBox(track, `south-lane-dash-${index}`, new Vec3(x, 0.045, -65), new Vec3(14, 0.025, 0.42), white);
+    }
+    // Sector banners and illuminated route beacons provide landmarks before each turn.
+    const sectorSigns = [
+        { id: 'palace', x: -220, z: 143, color: gold },
+        { id: 'boulevard', x: -40, z: 143, color: propaganda },
+        { id: 'monument', x: 90, z: -143, color: gold },
+        { id: 'gardens', x: -125, z: -143, color: teal }
+    ];
+    for (const sign of sectorSigns) {
+        addVisualBox(track, `${sign.id}-sign-frame`, new Vec3(sign.x, 8, sign.z), new Vec3(42, 12, 1.2), darkMarble);
+        addVisualBox(
+            track,
+            `${sign.id}-sign-face`,
+            new Vec3(sign.x, 8, sign.z - Math.sign(sign.z) * 0.7),
+            new Vec3(39, 9, 0.25),
+            sign.color
+        );
+        addVisualBox(
+            track,
+            `${sign.id}-sign-line-top`,
+            new Vec3(sign.x, 11, sign.z - Math.sign(sign.z) * 0.9),
+            new Vec3(27, 0.38, 0.18),
+            paper
+        );
+        addVisualBox(
+            track,
+            `${sign.id}-sign-line-bottom`,
+            new Vec3(sign.x, 5.3, sign.z - Math.sign(sign.z) * 0.9),
+            new Vec3(17, 0.32, 0.18),
+            gold
+        );
+        addVisualBox(track, `${sign.id}-beacon`, new Vec3(sign.x, 15, sign.z), new Vec3(2, 1.2, 2), neon);
+    }
+    for (let index = 0; index < 6; index += 1) {
+        const x = -247 + index * 98;
+        for (const z of [-122, 122]) {
+            addVisualBox(
+                track,
+                `route-beacon-${index}-${z}`,
+                new Vec3(x, 1.65, z),
+                new Vec3(0.65, 3.3, 0.65),
+                index % 3 === 0 ? gold : neon
+            );
+            addVisualBox(
+                track,
+                `route-beacon-cap-${index}-${z}`,
+                new Vec3(x, 3.45, z),
+                new Vec3(1.3, 0.38, 1.3),
+                white
+            );
+        }
+    }
     addFinishLine(track, black, white);
-    addVisualBox(track, 'start-arch-left', new Vec3(-220, 2.1, 20), new Vec3(0.7, 4.2, 0.7), yellow);
-    addVisualBox(track, 'start-arch-right', new Vec3(-220, 2.1, 110), new Vec3(0.7, 4.2, 0.7), yellow);
-    addVisualBox(track, 'start-arch-top', new Vec3(-220, 4, 65), new Vec3(0.7, 0.7, 90), yellow);
-
     // Palastplatz: a readable start vista built from cheap reusable primitives.
     addVisualBox(track, 'palace-main', new Vec3(-220, 15, 162), new Vec3(118, 30, 22), marble);
     for (let index = 0; index < 7; index += 1) {
@@ -184,14 +340,14 @@ export const createRaceTrack = (root: Entity) => {
     }
     addVisualPrimitive(track, 'jubel-button', 'cylinder', new Vec3(132, 2.2, 144), new Vec3(7, 4.2, 7), propaganda);
 
-    // Staatsdruckerei: the outside line remains broad and safe; the paper lane at x=178 is shorter.
+    // Staatsdruckerei: the paper lane cuts across the east hairpin, trading grip for distance.
     addVisualBox(track, 'printing-office', new Vec3(318, 12, 8), new Vec3(54, 24, 94), darkMarble);
     addVisualBox(track, 'printing-door', new Vec3(289.5, 7, 8), new Vec3(1, 14, 26), paper);
-    addVisualBox(track, 'printing-shortcut-paper', new Vec3(178, 0.06, 0), new Vec3(28, 0.09, 118), paper);
-    addVisualBox(track, 'printing-shortcut-edge-a', new Vec3(163.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
-    addVisualBox(track, 'printing-shortcut-edge-b', new Vec3(192.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
-    addStaticRamp(track, 'printing-entry-ramp', new Vec3(178, 0.55, 48), new Vec3(24, 1, 13), -7, paper);
-    addStaticRamp(track, 'printing-exit-ramp', new Vec3(178, 0.55, -48), new Vec3(24, 1, 13), 7, paper);
+    addVisualBox(track, 'printing-shortcut-paper', new Vec3(190, 0.06, 0), new Vec3(28, 0.09, 118), paper);
+    addVisualBox(track, 'printing-shortcut-edge-a', new Vec3(175.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
+    addVisualBox(track, 'printing-shortcut-edge-b', new Vec3(204.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
+    addStaticRamp(track, 'printing-entry-ramp', new Vec3(190, 0.55, 48), new Vec3(24, 1, 13), -7, paper);
+    addStaticRamp(track, 'printing-exit-ramp', new Vec3(190, 0.55, -48), new Vec3(24, 1, 13), 7, paper);
     for (let index = 0; index < 3; index += 1) {
         addVisualPrimitive(
             track,
@@ -206,19 +362,19 @@ export const createRaceTrack = (root: Entity) => {
             track,
             `shortcut-stamp-${index}`,
             'cylinder',
-            new Vec3(178, 9, -25 + index * 25),
+            new Vec3(190, 9, -25 + index * 25),
             new Vec3(4, 12, 4),
             propaganda
         );
         addVisualBox(
             track,
             `shortcut-stamp-head-${index}`,
-            new Vec3(178, 3.5, -25 + index * 25),
+            new Vec3(190, 3.5, -25 + index * 25),
             new Vec3(18, 2.5, 7),
             gold
         );
     }
-    addVisualBox(track, 'approved-print', new Vec3(178, 0.13, -12), new Vec3(17, 0.08, 7), propaganda);
+    addVisualBox(track, 'approved-print', new Vec3(190, 0.13, -12), new Vec3(17, 0.08, 7), propaganda);
 
     // Fünfjahresplan monument: gold only on the public-facing half.
     addVisualPrimitive(track, 'statue-plinth', 'cylinder', new Vec3(70, 5, 0), new Vec3(25, 10, 25), marble);
