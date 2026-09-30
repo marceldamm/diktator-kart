@@ -9,8 +9,8 @@ export type RaceGate = Readonly<{
 
 /** Shared physical and race layout for the first playable circuit. */
 export const RACE_LAYOUT = {
-    startPosition: new Vec3(-235, 0.65, 65),
-    startYaw: -90,
+    startPosition: new Vec3(-222.5, 0.65, -14),
+    startYaw: 180,
     lapsToWin: 3,
     checkpoints: [
         { id: 'north-straight', position: new Vec3(120, 0, 65), normal: new Vec3(1, 0, 0), halfWidth: 42 },
@@ -19,8 +19,8 @@ export const RACE_LAYOUT = {
     ] satisfies RaceGate[],
     finish: {
         id: 'finish',
-        position: new Vec3(-220, 0, 65),
-        normal: new Vec3(1, 0, 0),
-        halfWidth: 50
+        position: new Vec3(-222.5, 0, 0),
+        normal: new Vec3(0, 0, 1),
+        halfWidth: 61.5
     } satisfies RaceGate
 } as const;

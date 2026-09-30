@@ -141,10 +141,12 @@ export class KartController {
     private heading = START_YAW;
     private readonly maxSpeed: number;
     private readonly powerMultiplier: number;
+    private readonly handlingMultiplier: number;
 
-    constructor(maxSpeed: number = KART_TUNING.maxSpeed, powerMultiplier = 1) {
+    constructor(maxSpeed: number = KART_TUNING.maxSpeed, powerMultiplier = 1, handlingMultiplier = 1) {
         this.maxSpeed = maxSpeed;
         this.powerMultiplier = powerMultiplier;
+        this.handlingMultiplier = handlingMultiplier;
     }
 
     reset() {
@@ -238,7 +240,12 @@ export class KartController {
         const highSpeedFactor =
             1 - KART_TUNING.highSpeedSteeringReduction * Math.min(1, Math.abs(forwardSpeed) / KART_TUNING.maxSpeed);
         const targetYawSpeed =
-            this.steering * KART_TUNING.maxYawSpeed * lowSpeedFactor * highSpeedFactor * movementDirection;
+            this.steering *
+            KART_TUNING.maxYawSpeed *
+            this.handlingMultiplier *
+            lowSpeedFactor *
+            highSpeedFactor *
+            movementDirection;
         this.heading += targetYawSpeed * dt * (180 / Math.PI);
         // Keep angular velocity locked even while the controller changes heading.
         body.angularVelocity = new Vec3(0, 0, 0);

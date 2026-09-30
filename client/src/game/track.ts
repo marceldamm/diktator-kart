@@ -30,16 +30,33 @@ const addStaticRamp = (
     angle: number,
     material: StandardMaterial
 ) => {
-    const entity = new Entity(name);
-    entity.setPosition(position);
-    entity.setEulerAngles(angle, 0, 0);
+    const angleRadians = (angle * Math.PI) / 180;
+    const rise = Math.tan(Math.abs(angleRadians)) * size.z;
+    const segmentCount = 12;
+    const segmentDepth = size.z / segmentCount;
     const visual = new Entity(`${name}-visual`);
+    visual.setPosition(position.x, 0.03 + rise / 2 - size.y / 2, position.z);
+    visual.setEulerAngles(angle, 0, 0);
     visual.setLocalScale(size);
     visual.addComponent('render', { type: 'box', material });
-    entity.addChild(visual);
-    entity.addComponent('collision', { type: 'box', halfExtents: size.clone().mulScalar(0.5) });
-    entity.addComponent('rigidbody', { type: 'static' });
-    root.addChild(entity);
+    root.addChild(visual);
+
+    for (let index = 0; index < segmentCount; index += 1) {
+        const distanceFromLowEdge = (index + 0.5) * segmentDepth;
+        const z =
+            angle > 0
+                ? position.z + size.z / 2 - distanceFromLowEdge
+                : position.z - size.z / 2 + distanceFromLowEdge;
+        const height = (rise * (index + 1)) / segmentCount;
+        const step = new Entity(`${name}-collision-${index}`);
+        step.setPosition(position.x, height / 2, z);
+        step.addComponent('collision', {
+            type: 'box',
+            halfExtents: new Vec3(size.x / 2, height / 2, segmentDepth / 2)
+        });
+        step.addComponent('rigidbody', { type: 'static' });
+        root.addChild(step);
+    }
 };
 
 const addVisualBox = (root: Entity, name: string, position: Vec3, size: Vec3, material: StandardMaterial) => {
@@ -82,13 +99,20 @@ const addTree = (root: Entity, index: number, position: Vec3, trunk: StandardMat
 };
 
 const addFinishLine = (root: Entity, black: StandardMaterial, white: StandardMaterial) => {
+    const finish = RACE_LAYOUT.finish;
+    const tileWidth = (finish.halfWidth * 2) / 10;
+    const tangent = new Vec3(-finish.normal.z, 0, finish.normal.x);
     for (let row = 0; row < 2; row += 1) {
         for (let column = 0; column < 10; column += 1) {
+            const position = finish.position
+                .clone()
+                .add(finish.normal.clone().mulScalar(row * 2.2 - 1.1))
+                .add(tangent.clone().mulScalar(-finish.halfWidth + (column + 0.5) * tileWidth));
             addVisualBox(
                 root,
                 `finish-${row}-${column}`,
-                new Vec3(-220 + row * 2.2 - 1.1, 0.025, 65 + column * 8.8 - 39.6),
-                new Vec3(2.2, 0.05, 8.8),
+                new Vec3(position.x, 0.025, position.z),
+                Math.abs(tangent.x) > 0.5 ? new Vec3(tileWidth, 0.05, 2.2) : new Vec3(2.2, 0.05, tileWidth),
                 (row + column) % 2 === 0 ? white : black
             );
         }
@@ -136,9 +160,29 @@ export const createRaceTrack = (root: Entity) => {
     addVisualBox(track, 'south-curb', new Vec3(0, 0.045, -125), new Vec3(554, 0.08, 1.2), yellow);
     addVisualBox(track, 'island-grass', new Vec3(0, 0.02, 0), new Vec3(316, 0.05, 8), teal);
     addFinishLine(track, black, white);
-    addVisualBox(track, 'start-arch-left', new Vec3(-220, 2.1, 20), new Vec3(0.7, 4.2, 0.7), yellow);
-    addVisualBox(track, 'start-arch-right', new Vec3(-220, 2.1, 110), new Vec3(0.7, 4.2, 0.7), yellow);
-    addVisualBox(track, 'start-arch-top', new Vec3(-220, 4, 65), new Vec3(0.7, 0.7, 90), yellow);
+    const finish = RACE_LAYOUT.finish;
+    const archHalfWidth = finish.halfWidth - 5;
+    addVisualBox(
+        track,
+        'start-arch-left',
+        new Vec3(finish.position.x - archHalfWidth, 2.1, finish.position.z),
+        new Vec3(0.7, 4.2, 0.7),
+        yellow
+    );
+    addVisualBox(
+        track,
+        'start-arch-right',
+        new Vec3(finish.position.x + archHalfWidth, 2.1, finish.position.z),
+        new Vec3(0.7, 4.2, 0.7),
+        yellow
+    );
+    addVisualBox(
+        track,
+        'start-arch-top',
+        new Vec3(finish.position.x, 4, finish.position.z),
+        new Vec3(archHalfWidth * 2, 0.7, 0.7),
+        yellow
+    );
 
     // Palastplatz: a readable start vista built from cheap reusable primitives.
     addVisualBox(track, 'palace-main', new Vec3(-220, 15, 162), new Vec3(118, 30, 22), marble);
@@ -190,8 +234,8 @@ export const createRaceTrack = (root: Entity) => {
     addVisualBox(track, 'printing-shortcut-paper', new Vec3(178, 0.06, 0), new Vec3(28, 0.09, 118), paper);
     addVisualBox(track, 'printing-shortcut-edge-a', new Vec3(163.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
     addVisualBox(track, 'printing-shortcut-edge-b', new Vec3(192.5, 0.24, 0), new Vec3(1, 0.45, 118), black);
-    addStaticRamp(track, 'printing-entry-ramp', new Vec3(178, 0.55, 48), new Vec3(24, 1, 13), -7, paper);
-    addStaticRamp(track, 'printing-exit-ramp', new Vec3(178, 0.55, -48), new Vec3(24, 1, 13), 7, paper);
+    addStaticRamp(track, 'printing-entry-ramp', new Vec3(178, 0, 48), new Vec3(24, 0.06, 13), 1.1, paper);
+    addStaticRamp(track, 'printing-exit-ramp', new Vec3(178, 0, -48), new Vec3(24, 0.06, 13), -1.1, paper);
     for (let index = 0; index < 3; index += 1) {
         addVisualPrimitive(
             track,

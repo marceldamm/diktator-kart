@@ -979,3 +979,77 @@ button:disabled {
 .drift-charge[data-stage='2'] progress {
     accent-color: #ffd35a;
 }
+
+.race-minimap {
+    --map-player-color: #8e2635;
+    position: fixed;
+    right: 18px;
+    bottom: 76px;
+    z-index: 16;
+    width: min(224px, calc(100vw - 24px));
+    padding: 8px;
+    border: 1px solid #ffffff35;
+    background: #081018e8;
+    box-shadow: 6px 6px 0 #0007;
+    color: #eef6f7;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.race-active .race-minimap {
+    visibility: visible;
+}
+
+.race-minimap__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+    font: 800 9px/1.2 ui-sans-serif, system-ui, sans-serif;
+}
+
+.race-minimap__header strong {
+    margin-right: auto;
+    color: #aeb9c2;
+}
+
+.race-minimap__header span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #f5f4e9;
+}
+
+.race-minimap__header i {
+    width: 7px;
+    height: 7px;
+    border: 1px solid #f5f4e9;
+    border-radius: 50%;
+    background: var(--map-player-color);
+}
+
+.race-minimap__header small {
+    color: #8e9aa2;
+    font-size: 8px;
+}
+
+.race-minimap__canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 1;
+}
+
+@media (max-width: 520px) {
+    .race-minimap {
+        right: 10px;
+        bottom: 68px;
+        width: min(172px, calc(100vw - 20px));
+        padding: 6px;
+    }
+
+    .race-minimap__header {
+        gap: 6px;
+        margin-bottom: 3px;
+    }
+}

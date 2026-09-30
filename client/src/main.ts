@@ -34,6 +34,7 @@ import { KartAnimator } from './game/kart-animation';
 import { readBestTime, writeSave } from './game/local-save';
 import { RaceController } from './game/race';
 import { RaceHud } from './game/race-hud';
+import { RaceMinimap } from './game/race-minimap';
 import { RaycastKartController } from './game/raycast-kart';
 import { SettingsPanel } from './game/settings';
 import { TelemetryLog } from './game/telemetry-log';
@@ -97,6 +98,7 @@ driftMeter.setAttribute('aria-label', 'Driftladung');
 driftHud.append(driftLabel, driftMeter);
 document.body.append(driftHud);
 const bots = new BotRaceManager(app.root, !new URLSearchParams(window.location.search).has('kartTest'));
+const raceMinimap = new RaceMinimap();
 (window as unknown as { __diktatorKartBots: () => ReturnType<BotRaceManager['snapshot']> }).__diktatorKartBots = () =>
     bots.snapshot();
 let raycastController: RaycastKartController | undefined;
@@ -314,7 +316,8 @@ app.on('update', (dt: number) => {
     if (telemetry.update(dt, kart, activeController, kartInput)) refreshTelemetryView();
     followCamera.update(camera, kart, dt);
     if (!gameUi.isPaused) race.update(kart, dt);
-    bots.update(dt, gameUi.isPaused);
+    bots.update(dt, gameUi.isPaused, kart, race);
+    raceMinimap.update(kart, gameUi.selectedDriver.color, bots.racers);
     items.update(kart, dt, race.canDrive && !gameUi.isPaused);
     if (!gameUi.isPaused) abilities.update(dt);
     const leaderLap = Math.max(race.snapshot().lap, ...bots.snapshot().map((bot) => bot.lap));

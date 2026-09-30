@@ -8,7 +8,7 @@ Fünf lesbare Bereiche rahmen die Runde: Palastplatz, Boulevard der einstimmigen
 
 ## Staatsdruckerei-Abkürzung
 
-Die sichere Außenroute der Ostkurve bleibt unverändert. Eine Papierbahn bei `x = 178` schneidet die Kurve deutlich kürzer. Zwei feste Rampen markieren Ein- und Ausfahrt. Drei große Stempel arbeiten in versetzten, jeweils 4,2 Sekunden langen Zyklen. Ihre Köpfe bleiben lange oben und schlagen erst nach einer sichtbaren Abwärtsphase zu. Ein Treffer reduziert die Motorleistung 2,1 Sekunden; Gas und Lenkung bleiben nutzbar.
+Die sichere Außenroute der Ostkurve bleibt unverändert. Eine Papierbahn bei `x = 178` schneidet die Kurve deutlich kürzer. Zwei flache Rampen markieren Ein- und Ausfahrt; ihre bodenbündigen Enden zeigen jeweils zur Anfahrt beziehungsweise zur anschließenden Geraden. Die Kollisionsflächen steigen in zwölf Segmenten unter einer durchgehenden Papieroberfläche an; dadurch gibt es weder eine hohe Einstiegskante noch einen Spalt unter der Rampe. Drei große Stempel arbeiten in versetzten, jeweils 4,2 Sekunden langen Zyklen. Ihre Köpfe bleiben lange oben und schlagen erst nach einer sichtbaren Abwärtsphase zu. Ein Treffer reduziert die Motorleistung 2,1 Sekunden; Gas und Lenkung bleiben nutzbar.
 
 Der geometrische Zeitvorteil ist integriert. Der messende Fahrvergleich und die sichtbare Prüfung der Vorwarnzeit stehen wegen der vorübergehend gesperrten Browsersteuerung noch aus.
 
@@ -19,5 +19,7 @@ Der führende Rundenstand steuert drei rein dekorative, globale Veränderungen: 
 ## Rennablauf
 
 `RaceController` verwaltet 3-2-1-LOS, drei Runden, aktuelle Rennzeit, Rundenzeit und beste Runde. Drei Checkpoints müssen vor der Ziellinie in der richtigen Reihenfolge passiert werden; Start/Ziel-Hin-und-Her zählt nicht als Runde.
+
+Die Ziellinie liegt in der westlichen Verbindung zwischen Süd- und Nordgerade. Nach allen drei Checkpoints muss sie dort in Fahrtrichtung von Süden nach Norden durchquert werden. Außenbegrenzung und westliche Inselbarriere schließen die Durchfahrt seitlich, ohne die südliche Gerade zu blockieren. Die sichtbare Zielflagge deckt den vollständigen Korridor ab. Das Startgrid steht auf der südlichen Anfahrt und ist nach Norden ausgerichtet.
 
 Die frühere große Physik-Testfläche bleibt als `createPhysicsTestTrack` für spätere isolierte Controllerexperimente erhalten.
