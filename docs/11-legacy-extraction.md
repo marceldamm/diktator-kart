@@ -24,6 +24,8 @@ Zunächst wurden Projektindex, kreative Produktionsaufträge und Dateien unter `
 - ergänzende Dienstweg-Rakete und Diplomatische Immunität
 - gemeinsame Fähigkeitssysteme mit Cooldowns und ironischen Eigennachteilen
 - Bots über gemeinsame Eingabeschnittstelle mit Waypoints, Vorausschau, Recovery, Drift, Überholen und Itementscheidungen
+- zwölf benannte spätere Kostümideen und vier vorgeschlagene Multiplayer-Teams mit alten Zahlenwerten
+- Farbwerte, satirische Titel und bewegliche Fahrzeugdetails der sechs bisherigen Fahrer aus der alten Fahrerauswahl
 
 ## Belegte alte Bestandteile
 
@@ -33,7 +35,7 @@ Der Index beschreibt PlayCanvas, TypeScript, Vite und Ammo, einen Raycast-Kartco
 
 Nicht übernommen werden alte Quellklassen, Szenen, Buildkonfiguration, PlayCanvas-Assets, Ammo-Ladepfade, alte Render-/Performancewerte und Workarounds. Babylon.js wird unabhängig aufgebaut. Ein altes Verhalten darf nur übernommen werden, wenn es als gewünschtes Spieldesign bestätigt und im neuen System neu implementiert wird.
 
-Der bisher extrahierte Fahrer-, Kart- und Itemkatalog steht in [14-character-and-item-catalog.md](14-character-and-item-catalog.md). Die Gesamtprüfung fand noch nicht vollständig übernommene Kostümvarianten, Team-Boni, Fahrerfarben und individuelle bewegliche Details. Diese Restextraktion bleibt Aufgabe aus Dokument 10. Das Altarchiv bleibt deshalb vollständig erhalten und lesbar; seine technische Implementierung wird nicht weiterentwickelt oder übernommen. Die genaue persönliche Urheberschaft einzelner bearbeiteter Altideen ist nicht durchgängig belegt.
+Der Fahrer-, Kart- und Itemkatalog einschließlich Kostümvarianten, Team-Boni, Farbwerten und beweglichen Details steht in [14-character-and-item-catalog.md](14-character-and-item-catalog.md). Die konkret bei der Gesamtprüfung entdeckten Lücken sind damit geschlossen. Der Katalog ist keine Garantie, dass jede beliebige alte Notiz schon vollständig übertragen wurde; das Altarchiv bleibt vollständig lesbar. Die genaue persönliche Urheberschaft einzelner bearbeiteter Altideen ist nicht durchgängig belegt. Die alte technische Implementierung wird nicht weiterentwickelt oder übernommen.
 
 ## Widersprüche und Vorsicht
 

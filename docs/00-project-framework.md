@@ -66,7 +66,7 @@ Alte Technik ist keine Autorität für die neue Architektur.
 ## Aktueller Stand am 03.10.2026
 
 - Wissensbasis: angelegt und quergeprüft
-- Altideen: Fahrer, Karts, Items, Bots, Drift, Audio und Streckenideen weitgehend extrahiert; vollständiger Quellenabgleich für Kostümvarianten, Team-Boni und individuelle Details bleibt offen
+- Altideen: Fahrer, Karts, Items, Bots, Drift, Audio, Streckenideen sowie Kostümvarianten, Team-Boni und individuelle Details aus den bekannten Altquellen extrahiert; Altarchiv bleibt für spätere Rückfragen erhalten
 - Babylon.js: festgelegt, aber noch kein technischer Neustart implementiert
 - Itemumsetzung: konzeptionelle Produktionsmatrix in `15-item-feasibility-and-production.md`; technische Machbarkeit und Balance noch nicht praktisch verifiziert
 - Bauplan: in `16-production-blueprint.md`

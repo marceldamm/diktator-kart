@@ -27,6 +27,47 @@ Die folgende Zwölferliste bewahrt Originalideen. Namen und Wirkungen sind keine
 | Augusto Pinochet | Ordnungs-Kart | militärisch geordnet, karikiert | **Ausgangssperre:** Andere Fahrer können kurz keine Items nutzen; der eigene Itemzugriff wird ebenfalls eingeschränkt. |
 | Francisco Franco | Traditions-Tourer | altmodisch, schwerfällig | **Stillstand der Tradition:** Alle Fahrer werden vorübergehend verlangsamt. |
 
+## Details der sechs bisherigen Fahrer
+
+Quelle: `Diktator-Kart-Legacy/client/src/game/drivers.ts`. Farben und Details sind belegter Altstand, keine bereits beschlossene Farbpalette für Babylon.js. Die alten Profiltexte und Titel sind Wortlautideen, keine Balancevorgaben.
+
+| Fahrer | Primärfarbe | Akzent | Bewegliches Detail | Alter Titel |
+|---|---|---|---|---|
+| Hitler | `#8e2635` | `#e2c35b` | wackelnde Blechorden | Selbsternannter Streckenbesitzer |
+| Stalin | `#6f2424` | `#f0b83f` | federnder Sitzungsthron | Vorsitzender der Kurvenkommission |
+| Mussolini | `#31557a` | `#e9dfc4` | vibrierende Mini-Lautsprecher | Balkonfahrer ohne Balkon |
+| Mao | `#b72f2b` | `#f4d44d` | flatterndes Regelheft | Großer Lenker, mittelgroße Lenkung |
+| Kim Jong-un | `#263f70` | `#e63f44` | überlanger Auspuff | Sieger vor Rennbeginn |
+| Castro | `#315d42` | `#d7c99a` | aufklappender Aktenkoffer | Dienstältester Boxengassenredner |
+
+## Kostümvarianten und spätere Team-Boni aus dem Altprojekt
+
+Quelle: `Diktator-Kart-Legacy/docs/02-gameplay.md`. Diese Ideen bleiben für später bewahrt; Freischaltbedingungen, Gestaltung und tatsächliche Verwendung sind nicht entschieden. Kostüme oder Team-Boni gehören nicht automatisch zum ersten Singleplayer-Umfang.
+
+| Fahrer | Alte Kostümidee |
+|---|---|
+| Hitler | Bunker-Version |
+| Stalin | Generalissimus |
+| Mussolini | Balkon-Rede |
+| Mao | Roter Vorsitzender |
+| Kim Jong-un | Marschall-Ausführung |
+| Castro | Revolutionär 1959 |
+| Gaddafi | Beduinenzelt-Version |
+| Saddam Hussein | Goldpalast-Version |
+| Ceaușescu | Staatsbesuch-Version |
+| Idi Amin | Feldmarschall-Version |
+| Pinochet | Paradeuniform |
+| Franco | Staatschef-Version |
+
+| Alter Teamname | Fahrer | Alter Vorschlag |
+|---|---|---|
+| Achsen der Eitelkeit | Hitler, Mussolini, Franco | +5 % Höchstgeschwindigkeit, −10 % Handling |
+| Personenkult-Allianz | Stalin, Mao, Kim Jong-un | +10 % Item-Chance |
+| Revolutionäre Fraktion | Castro, Gaddafi | +10 % Beschleunigung |
+| Chaosfraktion | Idi Amin, Saddam Hussein | zufälliger positiver Effekt pro Runde |
+
+Die alten Prozentwerte sind **nicht beschlossen**. Vor einer Online-Umsetzung müssen Fairness, Modus und historische Darstellung gemeinsam geprüft werden. Ob die Teams nur in Teamrennen oder allgemein gelten, war bereits im Altdokument offen.
+
 ## Gewichtsklassen als Ausgangspunkt
 
 - **Leicht:** Mao, Fidel Castro, Kim Jong-un

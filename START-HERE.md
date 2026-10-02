@@ -27,7 +27,7 @@ Für die vollständige Anleitung für dich und Sarah: [TEAM-HANDBOOK.md](TEAM-HA
 **M0 abschließen und M1 beginnen:**
 
 1. Die 15 bestätigten Antworten in `docs/10-open-questions.md` gelten; keine erneute Grundsatzbefragung.
-2. Restliche Altideen sichern, kostenlosen Asset-/Audioweg und Messgeräte planen.
+2. Gesicherte Altideen in `docs/14-character-and-item-catalog.md` bei Bedarf nachschlagen; kostenlosen Asset-/Audioweg und Messgeräte planen.
 3. Technischen M1-Auftrag nach `docs/20-first-evening-runbook.md` konkretisieren.
 4. Die Gesamtprüfung ist erfolgt; ihre offenen Befunde bearbeiten, statt sie routinemäßig zu wiederholen.
 5. Danach die technische Umsetzung als eigene Aufgabe starten; am Ende Fortschrittslog aktualisieren.

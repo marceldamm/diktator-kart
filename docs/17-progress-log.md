@@ -28,7 +28,7 @@
 3. Babylon.js-Technikschicht und Fahrmodell bauen.
 4. Exakte Inhalte und Grenzen der Fahrer-/Itemdarstellung gemeinsam abnehmen.
 5. Bestätigten Stil G–L mit einem Fahrer/Kart in drei tatsächlichen Kameras prüfen; kostenlose Asset-/Audioqualität praktisch erproben.
-6. Restliche Altideen vollständig extrahieren; früherer Vollständigkeitsanspruch war zu weitgehend.
+6. Bei neuen Altideen den Katalog ergänzen; frühere pauschale Vollständigkeitsansprüche bleiben zu vermeiden.
 
 ## Einträge
 
@@ -136,7 +136,14 @@
 - Die neue Babylon-Wissensbasis liegt direkt im Hauptverzeichnis. 26 Markdown-Dateien wurden auf interne Verweise geprüft; keine ungültigen relativen Links gefunden. Zwei visuelle Referenzbilder sind im neuen Root enthalten.
 - Der Struktur- und Entscheidungsstand wurde auf `babylon-neustart-2026` veröffentlicht. Erster Umzugs-Commit: `a2743ec` (Move Babylon planning to project root and archive legacy). Eine spätere Übernahme nach `main` braucht eine separate Prüfung der Branch-Unterschiede und eine gemeinsame Entscheidung.
 - Es wurde kein neuer Spielcode erzeugt und kein Fahr-, Audio- oder Geräteleistungstest ausgeführt. Das lokale Archiv, insbesondere frühere nicht eingecheckte Änderungen, ist damit noch keine Online-Sicherung.
-- Nächster Schritt: M0-Restextraktion und M1-Auftrag; kein erneutes Abfragen der bereits bestätigten 15 Designentscheidungen.
+- Nächster Schritt: M1-Auftrag und kostenlose Asset-/Audioprobe; kein erneutes Abfragen der bereits bestätigten 15 Designentscheidungen.
+
+### 2026-10-03 – Konkrete Altkatalog-Lücken geschlossen
+
+- `docs/02-gameplay.md` und `client/src/game/drivers.ts` aus dem lokalen Altarchiv erneut gelesen.
+- Zwölf Kostümideen, vier vorgeschlagene Team-Boni samt alten Zahlenwerten sowie Farben, Titel und bewegliche Details der sechs bisherigen Fahrer in den neuen Katalog übernommen.
+- Alte Zahlenwerte sind keine Babylon-Balanceentscheidung; Kostüme und Teams gehören nicht automatisch zu Version 1. Die persönliche Urheberschaft einzelner bearbeiteter Alteinträge bleibt unbelegt.
+- Die entsprechenden offenen Aufgaben in Dokument 10 und im Gesamtgerüst aktualisiert. Das vollständige Altarchiv bleibt für späteren Quellenabgleich erhalten.
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 

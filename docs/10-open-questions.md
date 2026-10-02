@@ -36,7 +36,7 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 
 - [ ] Technischen Vorschlag für Babylon-Version, Build, Physikversuch und Launcher begründet festlegen. Aufgabe der KI, keine Frage nach Bibliotheksnamen an den Nutzer.
 - [ ] Git-Arbeitsbasis einschließlich abweichender alter Historie und offener lokaler Änderungen dokumentieren; main erst nach gesonderter Freigabe verändern.
-- [ ] Restliche Altideen (Skins, Team-Boni, Farben, individuelle Details) mit Quellen vollständig sichern; Herkunft nicht unbelegt Sarah zuschreiben.
+- [x] Bei der Gesamtprüfung entdeckte Altideen (Kostümvarianten, Team-Boni, Farben, individuelle Details) mit Quellen in Dokument 14 gesichert; persönliche Herkunft einzelner bearbeiteter Ideen bleibt unbelegt.
 - [ ] Arbeitsauftrag M1 mit Ergebnis, Tests, Wiederaufnahmepunkt und nächstem Schritt formulieren. Diese Dokumentationsentscheidung startet noch keine Spielentwicklung.
 
 ## Vor Art-Pilot / Performance-Abnahme
