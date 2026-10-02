@@ -124,11 +124,19 @@
 
 **Restliche Ordnerbereinigung:** Windows verweigerte den direkten Umzug der bisherigen `Legacy/`-Sicherung. Eine vollständige Kopie liegt im neuen Archiv; die ursprüngliche Sicherung bleibt zusätzlich unter `D:\Diktator-Kart\Legacy` erhalten. Diese verbleibende Dublette ist ausdrücklich nicht das aktive Altspiel. Zugriffsrechte wurden nicht geändert.
 
-**Git-Status:** dieser Dokumentations-/Umzugsschritt ist zunächst lokal, nicht committed oder gepusht. Vier zuvor vorgemerkte Dokumente gehörten noch zum alten Babylon-Unterpfad; beim nächsten Git-Checkpoint muss ausschließlich der beabsichtigte Gesamtstand mit neuen Pfaden geprüft werden. Kein pauschales Staging des Archivs. Main bleibt unverändert.
+**Git-Status beim Umzug:** zunächst nur lokal. Die vier zuvor vorgemerkten Dokumente unter dem alten Babylon-Unterpfad wurden vor dem neuen Commit aus der Vormerkung gelöst. Das Legacy-Archiv wurde nicht mit hochgeladen. Die nachfolgende Veröffentlichung ist unten dokumentiert; `main` blieb unverändert.
 
 **Offen:** übrige Altideen sichern, technische M1-Entscheidungen vorbereiten, kostenlose Produktionspipeline und fehlende Messgeräte prüfen. Historische Texte unten behalten ihren damaligen Stand.
 
 **Nächster Schritt:** konkreten M1-Auftrag aus den verbleibenden Aufgaben erstellen; erste Stilprobe und Geräteabnahmen planen.
+
+### 2026-10-03 – Neue Hauptstruktur auf GitHub veröffentlicht
+
+- Der alte Spielcode und die alten Dokumente liegen lokal unter `D:\Diktator-Kart\Diktator-Kart-Legacy/`; sie sind auf dem neuen Branch aus dem aktiven Root entfernt. Die ältere zusätzliche Sicherung `Legacy/` blieb wegen Windows-Zugriffssperre bestehen. Beide Archivordner sind von Git ausgeschlossen. `main` enthält weiterhin den früheren Spielstand.
+- Die neue Babylon-Wissensbasis liegt direkt im Hauptverzeichnis. 26 Markdown-Dateien wurden auf interne Verweise geprüft; keine ungültigen relativen Links gefunden. Zwei visuelle Referenzbilder sind im neuen Root enthalten.
+- Der Struktur- und Entscheidungsstand wurde auf `babylon-neustart-2026` veröffentlicht. Erster Umzugs-Commit: `a2743ec` (Move Babylon planning to project root and archive legacy). Eine spätere Übernahme nach `main` braucht eine separate Prüfung der Branch-Unterschiede und eine gemeinsame Entscheidung.
+- Es wurde kein neuer Spielcode erzeugt und kein Fahr-, Audio- oder Geräteleistungstest ausgeführt. Das lokale Archiv, insbesondere frühere nicht eingecheckte Änderungen, ist damit noch keine Online-Sicherung.
+- Nächster Schritt: M0-Restextraktion und M1-Auftrag; kein erneutes Abfragen der bereits bestätigten 15 Designentscheidungen.
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
