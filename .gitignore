@@ -1,3 +1,13 @@
 # X4: Foundations savegames do not belong in this game repository.
 /save_001.xml
 /save_001.xml.gz
+
+# Local legacy and pre-move backups are preserved, not uploaded wholesale.
+/Diktator-Kart-Legacy/
+/Legacy/
+
+# Reproducible dependencies and generated development output.
+node_modules/
+dist/
+.env
+.env.local

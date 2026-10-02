@@ -1,0 +1,64 @@
+# Entscheidungen und verbleibende Fragen
+
+Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworten werden nicht erneut als offene Grundsatzfragen geführt.
+
+## Bestätigte Antworten auf die 15 Prüfungsfragen
+
+1. **Veröffentlichung:** zunächst privat für uns und Freunde, später öffentlich kostenlos; kein verkaufbares Produkt geplant.
+2. **Budget:** ausschließlich vorhandene und kostenlose Werkzeuge/Assets. Derzeit kein Zusatzbudget für Musik oder Stimmen; spätere Änderung nur nach neuer Entscheidung.
+3. **Fahrerproduktion:** sechs Fahrer im ersten abgenommenen Spielprototyp; zunächst ein Fahrer/Kart vollständig ausgearbeitet, fünf einfachere Darstellungen. Stilprüfung mit dem Nutzer vor weiterem Ausbau. Startkader aus der alten Auswahl: Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro.
+4. **Figurenstil:** große Köpfe, deutlich überzeichnete Körper, erkennbare historische Gesichtszüge.
+5. **Erste Strecke:** frei zusammengestellte historische Berlin-/Stadionwelt mit wiedererkennbaren Gebäuden und eigenen satirischen Details. Alte gemischte Hauptstadtstrecke bleibt Ideenquelle, kein Pflichtlayout.
+6. **Kamera:** nahe und entfernte Third-Person-Verfolgerkamera mit maßvoller Dynamik/ruhiger Einstellung plus First Person aus Fahreraugenhöhe mit Händen, Lenkradbewegung, Armaturen und Vorderrädern.
+7. **Fahren:** Drift, Hop/Sprung und Mini-Turbo bleiben zentral; Federung, Bodenhaftung und Untergründe ergänzen Glaubwürdigkeit. Ziel weiter ungefähr 6/10 Realismus.
+8. **Aufholhilfe:** hintere Plätze erhalten maßvoll bessere Itemchancen; keine heimlichen Geschwindigkeitsvorteile. Gleiche Regeln für Menschen und Bots.
+9. **Start-Items:** geradliniges Projektil, zielsuchendes Projektil und Falle mit identischen Grundwirkungen bei allen Fahrern; nur Modelle, Sounds und Animationen wechseln.
+10. **Spezialfähigkeit:** eigene Taste/Eingabe, erneuter Einsatz nach fester Abklingzeit. Keine fahrleistungsabhängige Aufladung im Startkonzept. Konkrete Zeiten und Belegung sind noch keine Nutzerentscheidung.
+11. **Treffer:** kurze Rutscher und Tempoverluste, erkennbare Warnungen, Schutz vor Trefferketten; vollständige Kontrollentziehung sehr sparsam.
+12. **Schäden und Rücksetzung:** optische Schäden bis Rennende möglich, Lenkbeeinträchtigungen enden nach kurzer Zeit. Rücksetzung bei Festfahren mit Zeitverlust nach gleicher Regel für Mensch und Bot.
+13. **Mobile:** Android und iPhone, Querformat, gleiche Rennregeln, reduzierbare Grafik. iPhone 15 Pro als Nutzer-Testgerät; Sarahs Gerät/Android-Testgerät und schwacher PC noch offen.
+14. **Audio:** individuelle eigenständige Parodiestimmen plus Stadionsprecherin, sparsame Ansagen und vorproduzierte Audiodateien. Namen in üblicher deutscher Form. Historisch geprägte Musik; elektronische Musik ausgeschlossen.
+15. **Gemeinsames Spiel und Entscheidungen:** zunächst Singleplayer, danach private Online-Lobbys per Einladung auf getrennten Geräten mit Crossplay. Änderungen an Sarahs ursprünglichen Ideen gemeinsam bestätigen.
+
+## Weitere bereits geltende Grundpfeiler
+
+- Babylon.js gesetzt; alte technische Implementierung wird nicht übernommen.
+- Chrome unter Windows und Tastatur zuerst, Touch folgt. Gamepad ist bisher kein fest terminierter Pflichtumfang.
+- Normale PCs als Leistungsziel; persönlicher RTX-Laptop ist kein Mindestgerät. Vorläufiges Standardziel 60 FPS, schwächere Geräte stabile 30 FPS; noch ungemessen.
+- Sechs Themenstrecken plus eine verbindende Strecke langfristig; zunächst ein Kurs.
+- Faire, fehlbare Bots mit leicht/mittel/schwer und wenigen Persönlichkeiten.
+- Lokales, zeitweiliges Wetter: Regen/Schnee/Eis beeinflussen Fahrverhalten, Wind vorerst Kulisse.
+- Historische Satire ohne Verherrlichung und ohne Opfer als Zielscheibe; Grenzen in Dokument 13 bleiben gültig.
+- Stilraum G–L bestätigt; Bilder sind Referenzen, keine Echtzeitgarantie.
+- Ein-Klick-Start, lokale Einstellungen sowie reduzierte Effekte/Kamerabewegung gehören zum Produkt.
+
+## Vor M1: konkrete Vorbereitungsaufgaben
+
+- [ ] Technischen Vorschlag für Babylon-Version, Build, Physikversuch und Launcher begründet festlegen. Aufgabe der KI, keine Frage nach Bibliotheksnamen an den Nutzer.
+- [ ] Git-Arbeitsbasis einschließlich abweichender alter Historie und offener lokaler Änderungen dokumentieren; main erst nach gesonderter Freigabe verändern.
+- [ ] Restliche Altideen (Skins, Team-Boni, Farben, individuelle Details) mit Quellen vollständig sichern; Herkunft nicht unbelegt Sarah zuschreiben.
+- [ ] Arbeitsauftrag M1 mit Ergebnis, Tests, Wiederaufnahmepunkt und nächstem Schritt formulieren. Diese Dokumentationsentscheidung startet noch keine Spielentwicklung.
+
+## Vor Art-Pilot / Performance-Abnahme
+
+- [ ] Ersten vollständig auszuarbeitenden Fahrer vorschlagen und Stilprobe gemeinsam abnehmen.
+- [ ] Landmarken, Zeitraum und Symbolgestaltung der Berlin-/Stadionstrecke konkret entwerfen und innerhalb der bestehenden Grenzen prüfen.
+- [ ] Schwachen PC mit integrierter Grafik und Android-Testgerät benennen; konkrete Auflösung, Mindestleistung und Ladezeitziele anhand Messungen bestätigen.
+- [ ] Kostenlose Asset-/Audiopipeline an einem Modell und kurzen Hörproben prüfen; Herkunft/Lizenzen erfassen.
+- [ ] First-Person-Sichtbarkeit, Kameraruhe, Eingabe und Touch-Bedienung praktisch prüfen.
+
+## Vor Kernrennen-/Version-1-Abnahme
+
+- [ ] Konkrete Fähigkeiten, zulässige Ausnahmen beim Kontrollverlust und nötige Namensänderungen vorschlagen; Änderungen an Sarahs Ideen gemeinsam bestätigen. Punkt 10 entscheidet nur die Auslösung, nicht pauschal über Umbenennungen.
+- [ ] Abklingzeiten, Trefferzeiten, Rücksetzstrafe, Itemwahrscheinlichkeiten und Botstufen anhand Spieltests einstellen.
+- [ ] Umfang zusätzlicher Items/Fähigkeiten nach dem Start-Dreierset abgrenzen.
+- [ ] Wetterauswahl, Weltreaktionen und Cockpitqualität für den ersten vollständigen Kurs abnehmen.
+
+## Später
+
+- [ ] Lobbygröße, Einladungen, Verbindungsabbruch und kostenlos tragfähigen Online-Betrieb prüfen.
+- [ ] Weitere Fahrer/Strecken, Skins, Team-Boni, Geist, Orden, Fotomodus und Editor priorisieren; nicht automatisch in Version 1 ziehen.
+
+## Arbeitsregel
+
+Kleine technische und gestalterische Detailentscheidungen trifft die KI begründet selbst. Offene Nutzerentscheidungen mit großer Folgewirkung bleiben sichtbar. Einzelne fehlende Testgeräte oder spätere Inhaltsentscheidungen blockieren unabhängige vorbereitende Arbeit nicht, ersetzen aber keine spätere Abnahme.
