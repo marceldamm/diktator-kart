@@ -69,7 +69,7 @@ Individuelle Parodiestimmen und eine Stadionsprecherin verwenden vorproduziertes
 | Globale Projekthistorie | [PROGRESS-LOG.md](PROGRESS-LOG.md) |
 | Arbeitsumgebung und Betriebsregeln | [18-work-environment-and-operations.md](docs/18-work-environment-and-operations.md) |
 | UI, Einstellungen und lokale Speicherung | [19-ui-settings-and-save.md](docs/19-ui-settings-and-save.md) |
-| Runbook für den ersten Babylon.js-Abend | [20-first-evening-runbook.md](docs/20-first-evening-runbook.md) |
+| Runbook für den ersten Babylon.js-Abend | [20-first-evening-runbook.md](docs/history/20-first-evening-runbook.md) |
 
 Visuelle Referenzen werden künftig in [`references/visuals/`](references/visuals/) abgelegt. Dort kann der Nutzer Screenshots, Fotos, Farbideen, Fahrzeugformen, Architektur und gewünschte Stimmungen ergänzen.
 
