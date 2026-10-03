@@ -2,7 +2,7 @@
 
 ## Qualitätsstufe 2 – 03.10.2026
 
-Laufzeitbilder: [Belege, Abschnitt Qualitätsstufe 2](evidence/README.md). Die Welt folgt jetzt einem 593-m-Rundkurs mit komponierten Blickpunkten: Palast am Ende der Tribünengerade, Tor über dem Boulevard, Häuserschlucht, Brunnen-Haarnadel. Lesbare Grenzen durch rot-weiße Randsteine, gestreifte Banden und Satire-Tafeln („Jubel ist Pflicht“, „Überholen nur mit Stempel“). Paradebanner mit einem originalen fiktiven Emblem (Lorbeer, Krone, Paragraf) ersetzen jede historische Symbolik.
+Laufzeitbilder: [Belege, Abschnitt Qualitätsstufe 2](evidence/README.md). Die Welt folgt jetzt einem 593-m-Rundkurs mit komponierten Blickpunkten: Palast am Ende der Tribünengerade, Tor über dem Boulevard, Häuserschlucht, Brunnen-Haarnadel. Lesbare Grenzen durch rot-weiße Randsteine, gestreifte Banden und Satire-Tafeln („Jubel ist Pflicht“, „Überholen nur mit Stempel“). Paradebanner und wehende Fahnen mit einem originalen fiktiven Emblem (Lorbeer, Krone, Paragraf) ersetzen jede historische Symbolik. Statt historischer Denkmäler steht eine vergoldete Satirefigur „unbekannter Beamter mit Stempel“ auf Tor und Palastvorhof; Häuser erhielten Sockel, Pilaster, Verdachungen und Gauben.
 
 Karts: breite Spur, Ballonreifen, Messingfelgen, Kotflügel, Frontflügel, Nasenemblem, Klarlack. Figuren: große Köpfe, Uniform, Goldepauletten, Schärpe, Orden, Umhang; sechs neutrale fiktive Silhouetten über Kopfbedeckung (Schirmmütze, Pelzmütze, Lorbeerkranz, Barett, Diva-Frisur, Marinemütze) und Farben. Licht: warmer Nachmittag, CC0-Wolkenhimmel, Dunst, Bloom, Vignette und Farbkurven auf Standard; Basis verzichtet darauf.
 

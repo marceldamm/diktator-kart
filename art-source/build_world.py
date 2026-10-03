@@ -140,6 +140,23 @@ def trophy(x, y, z, scale=1.0, parent=None):
     cyl('Trophy cup', (x, y, z + 2.4 * scale), .5 * scale, 1.0 * scale, gold, parent, r2=.95 * scale)
     for sd in [-1, 1]: torus('Trophy handle', (x + sd * .9 * scale, y, z + 2.4 * scale), .42 * scale, .08 * scale, gold, parent, 'Y')
 
+def statue(x, y, z, scale=1.0, parent=None, rot=0.0):
+    """Gilded 'unknown clerk' raising a giant rubber stamp: original satirical monument figure."""
+    e = empty('statue', (x, y, z), parent); e.rotation_euler[2] = rot; e.scale = (scale, scale, scale)
+    blob('Statue gilded coat', (0, 0, 1.25), (.42, .34, .75), gold, e, 12, 8)
+    blob('Statue gilded head', (0, .02, 2.25), (.26, .26, .3), gold, e, 12, 8)
+    cyl('Statue gilded cap', (0, .02, 2.55), .27, .16, gold, e, verts=14)
+    blob('Statue cap visor', (0, .22, 2.48), (.2, .12, .03), gold, e, 10, 4)
+    tube_lo('Statue raised arm', [(.3, 0, 1.75), (.48, .05, 2.3), (.5, .05, 2.95)], .1, gold, e)
+    cyl('Statue stamp handle', (.5, .05, 3.15), .07, .4, gold, e, verts=10)
+    cyl('Statue stamp block', (.5, .05, 3.42), .26, .22, gold, e, verts=14)
+    tube_lo('Statue lowered arm', [(-.3, 0, 1.75), (-.42, .1, 1.25), (-.38, .25, .95)], .1, gold, e)
+    box('Statue file folder', (-.36, .3, .95), (.08, .34, .44), gold, .01, e)
+    vs = [(-.45, -.3, 1.95), (.45, -.3, 1.95), (-.62, -.62, .1), (.62, -.62, .1)]
+    mesh('Statue gilded cape', vs, [(0, 1, 3, 2)], gold, e)
+    box('Statue base', (0, 0, .15), (1.1, 1.1, .3), darkstone, .02, e)
+    bake(e)
+
 def facade_banner(x, y, z, height, parent=None, facing=-1):
     """Long burgundy banner with a gold laurel-and-paragraph emblem (fictional)."""
     box('Facade banner', (x, y, z), (2.2, .1, height), burgundy, .01, parent)
@@ -202,6 +219,23 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
             if (f + idx) % 2 == 0:
                 box('Balcony slab', (face - .55, dy, z - 1.2), (1.0, 2.0, .14), pale, .03, e)
                 tube_lo('Balcony rail', [(face - 1.0, dy - .95, z - .7), (face - 1.0, dy + .95, z - .7)], .035, black, e)
+    trim_stone = pale if body is not pale else stone
+    box('Rusticated base', (face - .1, 0, 2.1), (.22, width + .1, 4.2), darkstone, .02, e)
+    for k in range(5): box('Base joint', (face - .22, 0, .5 + k * .8), (.04, width + .12, .06), body, .005, e)
+    edges = [-width / 2 + .3] + [(cols[k] + cols[k + 1]) / 2 for k in range(len(cols) - 1)] + [width / 2 - .3]
+    for py in edges: box('Facade pilaster', (face - .16, py, 4.2 + (hgt - 4.8) / 2), (.22, .42, hgt - 4.8), trim_stone, .01, e)
+    for f in range(1, floors):
+        z = 4.2 + (f - 1) * 3.4 + 1.6
+        for dy in cols:
+            vs = [(face - .26, dy - 1.05, z + 1.25), (face - .26, dy + 1.05, z + 1.25), (face - .26, dy, z + 1.7), (face - .02, dy - 1.05, z + 1.25), (face - .02, dy + 1.05, z + 1.25), (face - .02, dy, z + 1.7)]
+            mesh('Window pediment', vs, [(0, 1, 2), (3, 5, 4), (0, 3, 4, 1), (1, 4, 5, 2), (2, 5, 3, 0)], trim_stone, e)
+    box('Main cornice', (face - .45, 0, hgt - .15), (.9, width + .9, .32), trim_stone, .02, e)
+    for k in range(int(width / .55)): box('Cornice dentil', (face - .82, -width / 2 + .3 + k * .55, hgt - .42), (.18, .22, .22), trim_stone, .005, e)
+    for dy in [-width / 4, width / 4]:
+        box('Roof dormer', (face + 1.6, dy, hgt + 1.1), (1.6, 1.6, 1.6), body, .02, e)
+        box('Dormer window', (face + .79, dy, hgt + 1.0), (.06, .9, 1.0), window, .01, e)
+        vs = [(face + .7, dy - .95, hgt + 1.9), (face + .7, dy + .95, hgt + 1.9), (face + 2.5, dy - .95, hgt + 1.9), (face + 2.5, dy + .95, hgt + 1.9), (face + .7, dy, hgt + 2.5), (face + 2.5, dy, hgt + 2.5)]
+        mesh('Dormer roof', vs, [(0, 1, 4), (2, 5, 3), (0, 4, 5, 2), (1, 3, 5, 4)], copper, e)
     for dy in cols:
         box('Shop display window', (face + .02, dy, 1.9), (.1, 2.6, 2.4), window, .012, e)
         for j in range(5):
@@ -224,6 +258,7 @@ def gate(s):
         for yy in [-2.65, 2.65]:
             facade_banner(x, yy + (-.08 if yy < 0 else .08), 7, 7.5, e, -1 if yy < 0 else 1)
     box('Gate attic', (0, 0, 11.9), (span + 1.6, 3, 2.2), stone, .05, e)
+    statue(0, 0, 13.0, 1.6, e)
     for yy, rot in [(-1.53, 0), (1.53, math.pi)]:
         text('Gate sign', 'AMT FÜR ÜBERHOLGENEHMIGUNGEN', (0, yy, 11.55), .78, gold, (math.pi / 2, 0, rot), e)
     bake(e)
@@ -290,6 +325,9 @@ for sd in [-1, 1]:
         cyl('Forecourt column', (xx, PY - 26, 4.5), .55, 9, pale, verts=16)
         trophy(xx, PY - 26, 9, .9)
 for x in [-17, -9, 9, 17]: facade_banner(PX + x, PY - 7.25, 6.3, 5.6)
+for x in [-14, 14]:
+    box('Statue pedestal', (PX + x, PY - 30, 2.2), (2.4, 2.4, 4.4), pale, .05)
+    statue(PX + x, PY - 30, 4.4, 1.7, None, math.pi)
 dome(PX, PY + 3, 17.5, 10, 8)
 text('Stadium sign', 'STADION DER EITELKEIT', (PX, PY - 7.98, 17.65), 1.1, gold)
 text('Satirical subtitle', 'APPLAUS NUR MIT GENEHMIGUNG', (PX, PY - 7.98, 16.2), .48, pale)

@@ -249,6 +249,38 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   banner.thinInstanceSetBuffer('matrix', bannerMatrices, 16, false); updateBanners(0);
   banner.isPickable = false; banner.receiveShadows = true;
 
+  // Tall parade flags along the palace sweeper (outside of the bend); thin-instanced, waving in place.
+  const flagTexture = canvasTexture(scene, 'Parade flag', 512, 320, (c) => {
+    const g = c.createLinearGradient(0, 0, 0, 320); g.addColorStop(0, '#a7242c'); g.addColorStop(1, '#6e141b');
+    c.fillStyle = g; c.fillRect(0, 0, 512, 320); c.fillStyle = '#d6a855'; c.fillRect(0, 0, 512, 16); c.fillRect(0, 304, 512, 16);
+    paintEmblem(c, 256, 166, 104);
+  });
+  const flagMaterial = pbr(scene, 'Parade flag cloth', '#ffffff', 0, .8); flagMaterial.albedoTexture = flagTexture; flagMaterial.backFaceCulling = false;
+  const flag = MeshBuilder.CreateGround('Parade flag', { width: 3.2, height: 2, subdivisionsX: 8, subdivisionsY: 1, updatable: true }, scene);
+  flag.rotation.x = -Math.PI / 2; flag.bakeCurrentTransformIntoVertices(); flag.material = flagMaterial; flag.isPickable = false;
+  const flagPositions = flag.getVerticesData('position')!.slice();
+  const mast = MeshBuilder.CreateCylinder('Flag mast', { diameterTop: .09, diameterBottom: .16, height: 9.5, tessellation: 8 }, scene);
+  mast.material = brass; mast.isPickable = false;
+  const mastMatrices: number[] = [], flagMatrices: number[] = [];
+  for (let s = 112; s <= 205; s += 13) {
+    const p = trackPoint(s, W + 4.2);
+    mastMatrices.push(...Matrix.Translation(p.x, 4.75, p.z).asArray());
+    flagMatrices.push(...Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(p.x, 8.2, p.z)).asArray());
+  }
+  mast.thinInstanceSetBuffer('matrix', new Float32Array(mastMatrices), 16, true);
+  flag.thinInstanceSetBuffer('matrix', new Float32Array(flagMatrices), 16, true);
+  shadow.addShadowCaster(mast);
+  const waveFlag = (time: number) => {
+    // Shared cloth wave: amplitude grows toward the free end; one buffer update for all instances.
+    const out = flag.getVerticesData('position')!;
+    for (let i = 0; i < flagPositions.length; i += 3) {
+      const u = (flagPositions[i] + 1.6) / 3.2;
+      out[i] = flagPositions[i] + 1.6; out[i + 1] = flagPositions[i + 1] - Math.sin(time * 4 + u * 5) * u * .12;
+      out[i + 2] = flagPositions[i + 2] + Math.sin(time * 5.2 + u * 6) * u * .32;
+    }
+    flag.updateVerticesData('position', out);
+  };
+
   // Pennant strings across the straights: one vertex-coloured mesh, gently swaying.
   const pennantPositions: number[] = [], pennantColors: number[] = [], pennantIndices: number[] = [];
   const palette = [new Color4(.62, .1, .13, 1), new Color4(.86, .68, .34, 1), new Color4(.93, .89, .78, 1), new Color4(.08, .28, .28, 1)];
@@ -274,6 +306,6 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   return {
     glowMeshes: [globe],
-    animate(time) { updateBanners(time); pennants.position.y = Math.sin(time * 1.3) * .04; },
+    animate(time) { updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04; },
   };
 }
