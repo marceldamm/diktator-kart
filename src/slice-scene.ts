@@ -253,7 +253,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const v = visuals[index]; if (!v) return;
           contactShadows[index].position.x=s.x;contactShadows[index].position.z=s.z;contactShadows[index].rotation.y=s.heading;
           contactShadows[index].visibility=Math.max(.15,1-s.height*.9);
-          v.root.position.set(s.x, s.height + s.suspensionOffset, s.z); v.root.rotation.y = s.heading;
+          v.root.position.set(s.x, s.height + s.suspensionOffset, s.z);
+          // Item hit: one eased full turn of the body while the kart coasts on its path.
+          const spin = s.spinRemaining > 0 ? 1 - (s.spinRemaining / .95) : 0;
+          v.root.rotation.y = s.heading + (s.spinRemaining > 0 ? (1 - (1 - spin) ** 2) * Math.PI * 2 : 0);
           v.root.rotation.x = -s.bodyPitch + s.impactVelocityZ * .035;
           const slip = Math.sin(s.heading - s.travelHeading);
           v.root.rotation.z = s.bodyRoll + (s.drifting ? -s.driftDirection * .055 : 0) + (s.grounded ? Math.max(-.07, Math.min(.07, slip * Math.abs(s.speed) * .012)) : 0);

@@ -23,3 +23,21 @@ await wav('lap',1.1,t=>bell(t<.25?523:t<.5?659:784,t)*.38);
 await wav('finish',1.5,t=>bell(t<.25?523:t<.5?659:t<.75?784:1046,t)*.4);
 await wav('hop',.2,t=>Math.sin(2*Math.PI*(180*t+150*t*t))*.3*Math.exp(-t*16));
 await wav('land',.22,t=>noise()*.2*Math.exp(-t*30)+Math.sin(2*Math.PI*65*t)*.4*Math.exp(-t*22));
+// Quality level 2: crowd bed (seamless 6 s loop) and metallic barrier scrape (loop).
+{
+  let lo=0,band=0,band2=0;
+  await wav('crowd',6,t=>{
+    const n=noise();lo=lo*.92+n*.08;band=band*.6+(n-lo)*.4;band2=band2*.85+band*.15;
+    const murmur=.55+.25*Math.sin(2*Math.PI*t/3)+.15*Math.sin(2*Math.PI*t/1.5+1);
+    const cheer=Math.max(0,Math.sin(2*Math.PI*t/6-1.2))**6*.9;
+    return (band2*1.8+band*.5)*(murmur+cheer)*.55;
+  });
+  let r1=0,r1v=0,r2=0,r2v=0;
+  await wav('scrape',1.5,t=>{
+    const n=noise()*(.6+.4*Math.sin(2*Math.PI*t*13));
+    const f1=2*Math.PI*2150/22050,f2=2*Math.PI*3420/22050;
+    r1v+=(n-r1)*f1*.08-r1v*.02;r1+=r1v*f1;r2v+=(n-r2)*f2*.08-r2v*.03;r2+=r2v*f2;
+    return (r1*.9+r2*.6+n*.08)*.7;
+  });
+  console.log('Crowd and scrape written.');
+}

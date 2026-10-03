@@ -1,0 +1,162 @@
+{
+  "announcer-welcome": {
+    "voice": "announcer",
+    "text": "Willkommen im Stadion der Eitelkeit! Sechs Fahrer, drei Runden, null Widerspruch.",
+    "emotion": null
+  },
+  "announcer-grid": {
+    "voice": "announcer",
+    "text": "Bitte nehmen Sie Ihre genehmigten Startplätze ein.",
+    "emotion": null
+  },
+  "announcer-3": {
+    "voice": "announcer",
+    "text": "Drei!",
+    "emotion": null
+  },
+  "announcer-2": {
+    "voice": "announcer",
+    "text": "Zwei!",
+    "emotion": null
+  },
+  "announcer-1": {
+    "voice": "announcer",
+    "text": "Eins!",
+    "emotion": null
+  },
+  "announcer-go": {
+    "voice": "announcer",
+    "text": "Los! Der Antrag ist genehmigt!",
+    "emotion": null
+  },
+  "announcer-lap2": {
+    "voice": "announcer",
+    "text": "Zweite Runde. Jubel ist weiterhin Pflicht.",
+    "emotion": null
+  },
+  "announcer-final": {
+    "voice": "announcer",
+    "text": "Letzte Runde! Bitte applaudieren Sie vorschriftsmäßig.",
+    "emotion": null
+  },
+  "announcer-lead": {
+    "voice": "announcer",
+    "text": "Neue Führung! Die Geschichtsbücher werden bereits umgeschrieben.",
+    "emotion": null
+  },
+  "announcer-delivery": {
+    "voice": "announcer",
+    "text": "Zustellung erfolgreich!",
+    "emotion": null
+  },
+  "announcer-stamp": {
+    "voice": "announcer",
+    "text": "Stempelfalle! Antrag abgelehnt.",
+    "emotion": null
+  },
+  "announcer-win": {
+    "voice": "announcer",
+    "text": "Sieg! Das Ergebnis stand selbstverständlich schon vorher fest.",
+    "emotion": null
+  },
+  "announcer-finish": {
+    "voice": "announcer",
+    "text": "Ziel erreicht. Ihre Platzierung wird nun geprüft.",
+    "emotion": null
+  },
+  "general-hit": {
+    "voice": "male",
+    "text": "Das ist Hochverrat!",
+    "emotion": "angry"
+  },
+  "general-pass": {
+    "voice": "male",
+    "text": "Platz da! Ich habe Vorfahrt per Dekret!",
+    "emotion": "angry"
+  },
+  "general-boost": {
+    "voice": "male",
+    "text": "Vorwärts, im Namen der Ordnung!",
+    "emotion": "neutral"
+  },
+  "general-win": {
+    "voice": "male",
+    "text": "Ich danke mir persönlich für diesen Sieg!",
+    "emotion": "amused"
+  },
+  "marschall-hit": {
+    "voice": "male",
+    "text": "Unerhört! Das gibt ein Nachspiel!",
+    "emotion": "disgusted"
+  },
+  "marschall-pass": {
+    "voice": "male",
+    "text": "Zur Seite! Hier kommt die Planerfüllung!",
+    "emotion": "angry"
+  },
+  "marschall-win": {
+    "voice": "male",
+    "text": "Planziel übererfüllt.",
+    "emotion": "neutral"
+  },
+  "imperator-hit": {
+    "voice": "male",
+    "text": "Mein Lorbeer! Wer war das?",
+    "emotion": "surprised"
+  },
+  "imperator-pass": {
+    "voice": "male",
+    "text": "Ha! Ihr Bauern seid zu langsam!",
+    "emotion": "amused"
+  },
+  "imperator-win": {
+    "voice": "male",
+    "text": "Selbstverständlich. Wie immer.",
+    "emotion": "amused"
+  },
+  "kommandant-hit": {
+    "voice": "male",
+    "text": "Formular nicht ausgefüllt!",
+    "emotion": "angry"
+  },
+  "kommandant-pass": {
+    "voice": "male",
+    "text": "Überholvorgang ordnungsgemäß abgeschlossen.",
+    "emotion": "neutral"
+  },
+  "kommandant-win": {
+    "voice": "male",
+    "text": "Der Sieg wurde ordnungsgemäß abgestempelt.",
+    "emotion": "neutral"
+  },
+  "diva-hit": {
+    "voice": "female",
+    "text": "Mein Lack! Das bezahlen Sie!",
+    "emotion": null
+  },
+  "diva-pass": {
+    "voice": "female",
+    "text": "Aus dem Weg, Darling!",
+    "emotion": null
+  },
+  "diva-win": {
+    "voice": "female",
+    "text": "Applaus, bitte. Mehr Applaus!",
+    "emotion": null
+  },
+  "admiralin-hit": {
+    "voice": "female",
+    "text": "Schaden an Backbord!",
+    "emotion": null
+  },
+  "admiralin-pass": {
+    "voice": "female",
+    "text": "Volle Kraft voraus!",
+    "emotion": null
+  },
+  "admiralin-win": {
+    "voice": "female",
+    "text": "Kurs gehalten. Wie befohlen.",
+    "emotion": null
+  }
+}

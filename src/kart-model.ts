@@ -22,6 +22,8 @@ export interface KartState {
   impactKind: 'boundary' | 'obstacle' | 'kart' | 'item' | null;
   /** Seconds of visible scrape/bump feedback after a glancing wall or kart contact. */
   scrapeRemaining: number;
+  /** Seconds of the visual spin-out after an item hit (presentation only). */
+  spinRemaining: number;
 }
 
 export interface DriveInput {
@@ -107,7 +109,7 @@ export function initialKartState(): KartState {
     suspensionOffset: 0, suspensionVelocity: 0, bodyPitch: 0, bodyRoll: 0,
     wheelGroundHeights: [0, 0, 0, 0], grounded: true,
     impactRemaining: 0, impactVelocityX: 0, impactVelocityZ: 0,
-    impactKind: null, scrapeRemaining: 0,
+    impactKind: null, scrapeRemaining: 0, spinRemaining: 0,
   };
 }
 
@@ -230,6 +232,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   let impactVelocityZ = state.impactVelocityZ * impactDecay;
 
   let scrapeRemaining = Math.max(0, (state.scrapeRemaining ?? 0) - dt);
+  const spinRemaining = Math.max(0, (state.spinRemaining ?? 0) - dt);
   const normalLength = Math.hypot(collisionNormalX, collisionNormalZ) || 1;
   const wallX = collisionNormalX / normalLength, wallZ = collisionNormalZ / normalLength;
   const closing = -(Math.sin(travelHeading) * wallX + Math.cos(travelHeading) * wallZ) * speed;
@@ -245,13 +248,21 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     if (glance > .28) { drifting = false; driftCharge = 0; driftDirection = 0; turboRemaining = 0; }
     scrapeRemaining = .2;
   } else if (collided) {
+    // Steep barrier hit: the normal part rebounds, the tangential part survives with friction;
+    // a straight head-on hit therefore ends at zero forward speed, oblique ones keep sliding.
+    const tangentKeep = kind === 'boundary' && speed > 0 ? Math.sqrt(Math.max(0, 1 - glance * glance)) * .6 : 0;
     if (Math.abs(speed) > 1 && impactRemaining === 0) {
-      const rebound = Math.min(KART_TUNING.impactReboundCap, Math.abs(speed) * 0.15 + 0.3);
+      const rebound = Math.min(KART_TUNING.impactReboundCap * 1.6, Math.abs(speed) * (kind === 'boundary' ? .32 : .15) + 0.3);
       impactVelocityX = wallX * rebound;
       impactVelocityZ = wallZ * rebound;
       impactRemaining = KART_TUNING.impactDuration;
     }
-    speed = 0;
+    if (tangentKeep > 0) {
+      const tangentX = Math.sin(travelHeading) * speed + closing * wallX, tangentZ = Math.cos(travelHeading) * speed + closing * wallZ;
+      travelHeading = Math.atan2(tangentX, tangentZ);
+      heading += Math.atan2(Math.sin(travelHeading - heading), Math.cos(travelHeading - heading)) * .35;
+    }
+    speed *= tangentKeep;
     turboRemaining = 0;
     drifting = false;
     driftCharge = 0;
@@ -276,7 +287,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
   return { x, z, heading, travelHeading, speed, height, hopRemaining, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
-    impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining };
+    impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining };
 }
 
 // Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.
@@ -307,32 +318,21 @@ export function resolveKartContacts(states: KartState[], project: WorldProjectio
         const [lvx, lvz] = velocity(left), [rvx, rvz] = velocity(right);
         const leftNormal = lvx * normalX + lvz * normalZ, rightNormal = rvx * normalX + rvz * normalZ;
         const closing = rightNormal - leftNormal;
-        if (closing < KART_TUNING.crashClosingSpeed) {
-          // Racing bump: equal karts share the normal velocity, keep their tangential speed and get a sideways shove.
+        // Equal karts share the normal velocity and keep their tangential speed; strong closings lose more and stagger.
+        const crash = closing >= KART_TUNING.crashClosingSpeed;
+        {
           if (closing <= .05) continue;
-          const shared = (leftNormal + rightNormal) / 2, shove = Math.min(2.2, closing * .55 + .5);
+          const shared = (leftNormal + rightNormal) / 2, shove = Math.min(crash ? 3.2 : 2.2, closing * (crash ? .3 : .55) + .5);
           for (const [kart, vx, vz, own, sign] of [[left, lvx, lvz, leftNormal, 1], [right, rvx, rvz, rightNormal, -1]] as const) {
             const nx = vx + (shared - own) * normalX, nz = vz + (shared - own) * normalZ;
             const forward = nx * Math.sin(kart.travelHeading) + nz * Math.cos(kart.travelHeading);
-            kart.speed = Math.sign(forward || 1) * Math.hypot(nx, nz) * .96;
+            kart.speed = Math.sign(forward || 1) * Math.hypot(nx, nz) * (crash ? .7 : .96);
             if (Math.abs(kart.speed) > .5) kart.travelHeading = Math.atan2(nx * Math.sign(kart.speed), nz * Math.sign(kart.speed));
             kart.impactVelocityX += normalX * shove * sign; kart.impactVelocityZ += normalZ * shove * sign;
             kart.scrapeRemaining = .25;
             if (closing > 3.5) { kart.drifting = false; kart.driftCharge = 0; kart.driftDirection = 0; }
+            if (crash) { kart.turboRemaining = 0; kart.impactRemaining = KART_TUNING.impactDuration; kart.impactKind = 'kart'; }
           }
-          continue;
-        }
-        const rebound = Math.min(KART_TUNING.impactReboundCap, incomingSpeed * 0.15 + 0.3);
-        for (const [kart, sign] of [[left, 1], [right, -1]] as const) {
-          kart.speed = 0;
-          kart.turboRemaining = 0;
-          kart.drifting = false;
-          kart.driftCharge = 0;
-          kart.driftDirection = 0;
-          kart.impactRemaining = KART_TUNING.impactDuration;
-          kart.impactVelocityX = normalX * rebound * sign;
-          kart.impactVelocityZ = normalZ * rebound * sign;
-          kart.impactKind = 'kart';
         }
       }
     }

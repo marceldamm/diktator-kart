@@ -5,13 +5,13 @@ export type ItemKind = 'direct' | 'homing' | 'trap';
 export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Suchauftrag',trap:'Stempelfalle'};
 export interface ItemBox { id:number; x:number; z:number; readyIn:number }
 export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; bounces?:number }
-export interface ItemEvent { kind:'pickup'|'launch'|'hit'; kart:number; item:ItemKind }
+export interface ItemEvent { kind:'pickup'|'launch'|'hit'; kart:number; item:ItemKind; owner?:number }
 export interface ItemWorld {
   slots:(ItemKind|null)[];heldFor:number[];immune:number[];objects:ItemObject[];boxes:ItemBox[];
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
-export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.48,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3};
+export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3};
 /** Dispatch box rows: end of the grandstand straight, the boulevard and the archive leg. */
 export const ITEM_BOX_PROGRESS=[72,330,520];
 export function createItems(count:number,seed=921):ItemWorld {
@@ -79,8 +79,8 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
     for(let i=0;i<karts.length;i++) {
       if((i===o.owner&&o.age<.8)||world.immune[i]>0||karts[i].height>.7)continue;
       if(sweptDistance(karts[i].x,karts[i].z,ax,az,o.x,o.z)>ITEM_RULES.hitRadius)continue;
-      const k=result[i];result[i]={...k,speed:k.speed*ITEM_RULES.hitSpeedFactor,drifting:false,driftCharge:0,turboRemaining:0,impactRemaining:.35,impactKind:'item',impactVelocityX:0,impactVelocityZ:0};
-      world.immune[i]=ITEM_RULES.immunity;world.events.push({kind:'hit',kart:i,item:o.kind});world.stats[o.kind].hits++;o.remaining=0;break;
+      const k=result[i];result[i]={...k,speed:k.speed*ITEM_RULES.hitSpeedFactor,drifting:false,driftCharge:0,turboRemaining:0,impactRemaining:.45,impactKind:'item',spinRemaining:.95};
+      world.immune[i]=ITEM_RULES.immunity;world.events.push({kind:'hit',kart:i,item:o.kind,owner:o.owner});world.stats[o.kind].hits++;o.remaining=0;break;
     }
   }
   world.objects=world.objects.filter(o=>o.remaining>0);return result;

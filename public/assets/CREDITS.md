@@ -26,3 +26,11 @@ Babylon.js / glTF-Loader: Apache-2.0; Paketlizenzen liegen in `node_modules/@bab
 `audio/pickup.wav`, `launch.wav`, `countdown.wav`, `start.wav`, `lap.wav`, `finish.wav`, `hop.wav`, `land.wav`: originale deterministische WAV-Effekte aus `build_audio.mjs`, vorproduziert und im Spiel abgespielt. Hörqualität nicht abgenommen.
 
 GLB-Optimierung: glTF Transform SDK 4.5.1 (MIT, https://gltf-transform.dev/ ) und Sharp 0.35.5 (Apache-2.0), nur lokale Entwicklung. Originale `.blend` bleiben editierbar; `npm run assets:optimize` verarbeitet den Rohcache. Kein externer Optimierungsdienst.
+
+## Qualitätsstufe 2 – Stimmen und Klang (03.10.2026)
+
+| Dateien | Herkunft / Nutzungsgrundlage | Bearbeitung |
+|---|---|---|
+| `audio/voice/*.wav`, `audio/voice/lines.json` | Offline mit Piper TTS 2023.11.14-2 (https://github.com/rhasspy/piper , MIT) synthetisiert. Stimmen aus https://huggingface.co/rhasspy/piper-voices (Repository MIT): `de_DE-kerstin-low` (Datensatz CC0, https://github.com/rhasspy/dataset-voice-kerstin), `de_DE-thorsten_emotional-medium` (Thorsten-Voice, CC0, https://github.com/thorstenMueller/Thorsten-Voice). | Eigene satirische Texte, keine historischen Zitate oder Personen. Reproduzierbar mit `art-source/build_voices.mjs`. Im Spiel: Stadion-Lautsprecherkette (Band, Sättigung, Hall) für die Sprecherin; Tonhöhe je Figur. Hörqualität nicht menschlich abgenommen. |
+| `audio/crowd.wav`, `audio/scrape.wav` | Originale deterministische Klänge aus `art-source/build_audio.mjs`. | Publikumsteppich (Schleife) und metallisches Bandenschleifen. |
+

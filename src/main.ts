@@ -82,9 +82,13 @@ class App {
   private lapTimes:number[]=[];
   private lapNoticeUntil=0;
   private lapNotice='';
+  private welcomed=false;
+  private lastRank=6;
+  private voiceCooldown=0;
+  private leadCooldown=0;
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ trackLength: TRACK.length, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -98,7 +102,7 @@ class App {
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
     document.querySelector('#menu-race')?.addEventListener('click',()=>void this.startRace());
-    document.querySelector('#menu-practice')?.addEventListener('click',()=>this.closeMenu());
+    document.querySelector('#menu-practice')?.addEventListener('click',()=>{this.closeMenu();void this.audio.unlock().then(()=>setTimeout(()=>this.welcome(),400));});
     document.querySelector('#menu-button')?.addEventListener('click',()=>this.openMenu());
     document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.startRace());
     document.querySelector('#finish-menu')?.addEventListener('click',()=>this.openMenu());
@@ -267,7 +271,7 @@ class App {
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.lapTimes=[];this.lapNoticeUntil=0;
-    this.audio.cue('countdown');
+    this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
     this.accumulator = 0; this.queuedHopPress = false;
@@ -324,6 +328,26 @@ class App {
     document.querySelector('.map-card span')!.textContent = `${Math.round(TRACK.length)} m · STADIONRING`;
   }
 
+  /** Welcome announcement once per page load, after the first gesture unlocked audio. */
+  private welcome(): void { if (this.welcomed || LAB_WORLD) return; this.welcomed = this.audio.voice('announcer-welcome'); }
+  /** A caricature's own line; the player's driver speaks louder than the field. */
+  private say(kart: number, kind: 'hit' | 'pass' | 'win' | 'boost', volume = 1): void {
+    const cast = CAST[kart % CAST.length];
+    const id = kind === 'boost' && cast.voice !== 'general' ? `${cast.voice}-pass` : `${cast.voice}-${kind}`;
+    this.audio.voice(id, { channel: 'driver', rate: cast.voiceRate, volume });
+  }
+  /** Rank changes drive the commentary: overtakes, a new leader, turbo shouts. */
+  private commentary(): void {
+    if (this.racePhase !== 'race') return;
+    const rank = rankRace(this.progress).indexOf(0) + 1;
+    if (rank < this.lastRank && this.raceTime > 4) {
+      if (rank === 1 && this.leadCooldown === 0) { this.audio.voice('announcer-lead'); this.audio.cheer(1); this.leadCooldown = 20; }
+      else if (this.voiceCooldown === 0) { this.say(0, 'pass'); this.voiceCooldown = 9; }
+    }
+    if (this.kart.turboRemaining > KART_TUNING.turboDuration - .05 && this.voiceCooldown === 0 && Math.random() < .35) { this.say(0, 'boost'); this.voiceCooldown = 12; }
+    this.lastRank = rank;
+  }
+
   private togglePause(): void {
     if (this.state === 'running') {
       this.queuedHopPress = false;
@@ -374,8 +398,8 @@ class App {
         const countdown = !LAB_WORLD && this.racePhase === 'countdown';
         if (countdown) {
           const before=Math.ceil(this.countdown-.4);this.countdown -= FIXED_STEP;
-          if(this.countdown<=0){this.racePhase='race';this.audio.cue('start');this.testScene?.celebrate?.('start');}
-          else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before)this.audio.cue('countdown');
+          if(this.countdown<=0){this.racePhase='race';this.audio.cue('start');this.audio.voice('announcer-go',{force:true});this.audio.cheer(1);this.testScene?.celebrate?.('start');}
+          else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before){this.audio.cue('countdown');this.audio.voice(`announcer-${Math.ceil(this.countdown-.4)}`,{force:true});}
         }
         if (!countdown && this.racePhase !== 'finished') {
         const project = LAB_WORLD ? undefined : projectTrack;
@@ -412,19 +436,25 @@ class App {
           for(const event of this.items.events) if(event.kart===0) {
             this.itemMessage=event.kind==='pickup'?`${ITEM_NAMES[event.item]} erhalten`:event.kind==='launch'?'Sendung zugestellt … unterwegs':'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+1.8;this.audio.itemEvent(event.kind);
+            if(event.kind==='hit')this.say(0,'hit');
           }
-          this.raceTime += FIXED_STEP;
+          for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
+            this.audio.voice(event.item==='trap'?'announcer-stamp':'announcer-delivery');this.audio.cheer(.5);
+            window.setTimeout(()=>this.say(event.kart,'hit',.75),900);
+          }
+          this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
           if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore){
             const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
             this.lapNoticeUntil=this.raceTime+3;
-            if(!this.progress[0].finished)this.audio.cue('lap');
+            if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);}
           }
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
-            this.audio.cue('finish');this.testScene?.celebrate?.('finish');
+            this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.audio.cheer(1.4);
+            {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});if(won)window.setTimeout(()=>this.say(0,'win'),3200);}
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
@@ -446,6 +476,7 @@ class App {
       this.camera?.update(this.kart, delta, false, frame.steering);
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
+      this.commentary();
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
         : this.kart.impactRemaining > 0
@@ -465,7 +496,10 @@ class App {
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
     if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.kart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
-    if (!LAB_WORLD) this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished');
+    if (!LAB_WORLD) {
+      const stand = trackPoint(TRACK.start + 20), nearness = Math.max(0, 1 - Math.hypot(this.kart.x - stand.x, this.kart.z - stand.z) / 70);
+      this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness);
+    }
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();

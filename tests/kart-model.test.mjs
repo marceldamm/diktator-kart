@@ -79,7 +79,8 @@ test('two approaching karts share one contact rule and separate after impact', (
   const [hitLeft, hitRight] = resolveKartContacts([left, right]);
   assert.ok(Math.hypot(hitLeft.x - hitRight.x, hitLeft.z - hitRight.z) >= 2 * KART_TUNING.collisionRadius - 1e-9);
   for (const kart of [hitLeft, hitRight]) {
-    assert.equal(kart.speed, 0);
+    // Head-on: equal karts cancel their closing speed instead of freezing in place.
+    assert.ok(Math.abs(kart.speed) < 1.5, `speed ${kart.speed}`);
     assert.equal(kart.impactKind, 'kart');
     assert.ok(kart.impactRemaining > 0);
     assert.equal(kart.turboRemaining, 0);

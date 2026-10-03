@@ -28,6 +28,9 @@
     "textures/sky-afternoon-2k.jpg",
     "textures/herringbone-diff.jpg",
     "textures/herringbone-nor_gl.jpg",
-    "textures/herringbone-arm.jpg"
+    "textures/herringbone-arm.jpg",
+    "audio/crowd.wav",
+    "audio/scrape.wav",
+    "audio/voice/lines.json"
   ]
 }
