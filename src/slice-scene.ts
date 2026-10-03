@@ -172,7 +172,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       });
       // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
       const bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
-      const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|racing suit|Warm skin|Hair|Hat cloth|Cape cloth|Dark leather/.test(mesh.name));
+      // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
+      const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|driverPose \/ Uniform racing suit|Cape cloth|Hat cloth/.test(mesh.name));
       return { root, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
