@@ -89,3 +89,5 @@ Die Archive wurden vor der Umstellung auf GitHub gesichert. Ein **einmaliger** M
 Netzwerk-/Loginfehler: lokalen Stand erhalten, fehlgeschlagene Synchronisierung melden, keinen aktuellen GitHub-Stand behaupten. Ungesicherte lokale Dateien: erst sichern. Konflikte: KI integrieren lassen. Alte Checkouts: Archiv und Umstieg, keine Entwicklung dort. Keine Behauptung, dass Markdown technisch jeden manuellen Eingriff verbietet; Regeln, Identitaetspruefung und Fast-Forward-Schutz sichern den vorgesehenen Ablauf.
 
 Offizielle Repo-Skill-Einbindung: https://learn.chatgpt.com/docs/build-skills . Ein erneuter Codex-Start kann erforderlich sein, wenn neue Skills nicht erscheinen; der ausgeschriebene KI-Befehl bleibt nutzbar.
+
+**Starter-Nachprüfung:** Die HTTP-Kennung enthält mode=dev/preview. Diktator-Kart-starten.cmd verwendet ausschließlich den aktuellen Entwicklungsserver desselben Checkouts; statische Produktionspreviews werden nicht wiederverwendet, weil dist älter als die Quellen sein kann. Alte Server ohne mode-Kennung bleiben unverändert und werden umgangen.

@@ -699,6 +699,24 @@
 
 **Budget:** Letzte offizielle Abfrage: 12 % Fünf-Stunden-/16 % Wochenverbrauch, kein Reset/Zusatzkontingent. Kein Ruhezustand.
 
+### 2026-10-03 – Konzeptbild-Ladephase nach abgeschlossener Teamumstellung
+
+**Auftrag / Reihenfolge:** Erst Starter/Git/teamfähigen neuen Hauptstand abschließen, anschließend den ungestalteten weißen HTML-Start durch Konzeptmotiv und Ladeanzeige ersetzen. Initiale Hauptumstellung 845c0bf tatsächlich nach GitHub main gepusht, zurückgelesen und babylon-team-baseline-2026-10-03 gesetzt; drei Archive unverändert gesichert. Danach echten Projektstart -Owner Marcel ausgeführt: eigener Branch codex/team-marcel-20261003-195001-659 auf aktuellem origin/main. Keine Claude-Worktree-/Legacy-Änderung.
+
+**Umgesetzt:** Eigenständiges helles G/J-inspiriertes Imagegen-Motiv, PNG-Rasterquelle und Motivauftrag erhalten; nur WebP-Konvertierung, 376.504 Bytes statt 2.734.128 Bytes bei gleicher 1672 × 941 Pixelgröße. Keine kopierte Referenztextur; Konzeptkunst klar beschriftet, keine 3D-Qualitätsbehauptung. Kritisches Inline-CSS sowie vom Babylon-Modul unabhängige Fehler-/Wiederholenhilfe in index.html verhindern den weißen/unformatierten Start. Echte sechs Ladeabschnitte über LoadingProgress und optionale Szenenreporter, keine Timerprozente; Techniklabor zwei Abschnitte. Abschluss erst nach whenReadyAsync und erfolgreichem ersten scene.render; danach wirkliches 3D-Menü. Neustart erzeugt frischen Fortschritt. Modul-/Modellfehler behalten Ladeoberfläche samt freundlicher Meldung, optionalen Fehlerdetails und Reload; langer Start bietet nach 45 s Wiederholen, ohne ihn abzubrechen. Artwork-Fehler belässt lesbaren dunklen Hintergrund.
+
+**Verifiziert:** Zwei neue Unit-Tests für Mehrfachmeldungen/Neustart und Labor ohne importierte Artassets bestanden. Produktionsbuild/TypeScript bestanden, bisherige Größenwarnung unverändert (Hauptchunk 2.192,25 kB / 549 kB gzip). Isolierter Chrome 9226 gegen echten Produktionspreview 4174: initiales Bild bereits bei angehaltenem Spielmodul, übriges HTML unsichtbar, 390 × 844 Layout ohne Überbreite und reduced-motion; Moduldownload unterbrochen → Fehlermeldung → erfolgreicher Retry; echte Fortschrittsfolge 0..6, sechs Fahrzeuge und gerendertes Menü; Hero-GLB unterbrochen → Fortschritt stoppt bei 3/6 → Retry lädt; vollständiger Szenenneustart wieder 0..6; Labor 0..2. Test erzeugt keinen künstlichen Produktions-Ladestopp, sondern pausiert nur Browserrequests für Belege. Rohdaten und tatsächliche Browserscreenshots in docs/evidence/loading-*. Vorherige Teamprobe mit Fahren/drei Kameras/Countdown/Pause bleibt getrennt dokumentiert. Der Projektabschluss führt die aktuelle vollständige Testsuite und Build erneut als Publikationsgate aus.
+
+**Zusätzliche Starterkorrektur:** HTTP-Identität unterscheidet jetzt mode=dev/preview; die Batch akzeptiert nur denselben aktiven Entwicklungscheckout, niemals eine möglicherweise veraltete dist-Vorschau, auch nicht mit passendem Root. Der vorhandene Startertest deckt beide Fälle sowie fehlende mode-Kennung ab. Eigene vorherige Dev-/Preview-Testprozesse nach genauer PID-/Elternprozess-Zuordnung geschlossen; kein fremder Server oder Benutzerbrowser beendet. npm ci mit aktuellem Lockfile erfolgreich (38 Pakete, Audit 0), finaler Entwicklungsserver auf 4173. Kein Lockfile geändert.
+
+**Nicht verifiziert / Grenzen:** 390-Pixel-Ansicht ist Chrome-Emulation, keine mobile Geräteabnahme. Keine schwache-PC-/neue FPS-/Audiohör-/G–L-Abnahme. Ladeabschnitte sind unterschiedlich groß und keine Byte-/Zeitprozente. Kunst bleibt Raster-Konzeptillustration, nicht editierbare 3D-Geometrie. Kein absichtlicher Mindest-Ladeaufenthalt; mit warmem Cache kann sie kurz erscheinen. Historische Besetzung und Sarahs kreative Freigaben bleiben offen.
+
+**Geänderte Dateien:** index.html, src/style.css, src/main.ts, scene.ts, slice-scene.ts, neue loading-progress.ts; tests/loading-progress.test.mjs und loading-browser.mjs; art-source/loading-stadium-v1.png/.md und README; public/assets/textures/loading-stadium-v1.webp, manifest/CREDITS; START-HERE und docs/02/19/22/17/evidence. Zusätzlich vite.config.ts/scripts/start-local.ps1 und Starter-Gittest für sichere Dev-/Preview-Unterscheidung. Fahrmodell, Kurs, 3D-Modelle und Audio unverändert.
+
+**Nächster Schritt:** Sarahs einmaliger geschützter Umstieg gemäß docs/21; anschließend täglicher Projektstart/Projektabschluss. Für die nächste Spielproduktion Drawcalls/Ladegruppen und Zielhardware prüfen oder sichtbare Charakter-/Wetterpolitur planen; keine bereits fertigen Wetter-/Charakterfeatures behaupten. Kein Ruhezustand.
+
+**Budget:** Letzte offizielle Abfrage 22 % Fünf-Stunden- und 18 % Wochenverbrauch; mindestens 78 % Rest im maßgeblichen Limit. Kein Reset oder Zusatzkontingent.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

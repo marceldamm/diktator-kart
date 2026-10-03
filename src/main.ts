@@ -8,6 +8,7 @@ import { TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gri
 import { KartAudio } from './audio';
 import { CAST } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
+import { LoadingProgress, type LoadingPhase } from './loading-progress';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -136,8 +137,9 @@ class App {
 
   private show(state: AppState, detail: string): void {
     this.state = state;
-    document.body.classList.toggle('is-loading',state==='loading');
+    document.body.classList.toggle('is-loading',state==='loading'||state==='error');
     document.body.classList.toggle('start-error',state==='error');
+    if (state === 'error') window.dispatchEvent(new CustomEvent('dk:load-error', { detail }));
     status.textContent = { loading: 'Lädt …', running: 'Testszene läuft', paused: 'Pausiert', error: 'Startfehler' }[state];
     message.textContent = detail;
     pauseButton.disabled = state === 'loading' || state === 'error';
@@ -185,7 +187,11 @@ class App {
 
   private async restart(): Promise<void> {
     const generation = ++this.generation;
+    const loading = new LoadingProgress(!LAB_WORLD);
+    const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail }));
+    const report = (phase: LoadingPhase) => { if (generation === this.generation) notify(loading.complete(phase)); };
     this.show('loading', 'Asset-Manifest und Szene werden geladen.');
+    notify(loading.initial());
     this.input.reset();
     this.testScene?.scene.dispose();
     this.testScene = undefined;
@@ -219,7 +225,8 @@ class App {
         this.rendererName = this.readRendererName();
         this.engine.runRenderLoop(() => this.frame());
       }
-      const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD,this.quality);
+      report('engine');
+      const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD,this.quality,report);
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
       this.applyQuality();
@@ -231,6 +238,8 @@ class App {
       this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
       await this.testScene.scene.whenReadyAsync();
       if(generation!==this.generation)return;
+      this.testScene.scene.render();
+      report('ready');
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
       if(!LAB_WORLD&&!DEMO)this.openMenu();
     } catch (error) {

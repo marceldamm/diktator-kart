@@ -52,4 +52,4 @@ Keine neue schwache-PC-/Mobil-, Hoer-, menschliche Komfort- oder G–L-Abnahme. 
 
 Regen/nasse Strasse/Pfuetzen/Blitz/Wolkenschatten und echtere Fahrer sind Nutzerwuensche, bislang **nicht implementiert**. Bots auf die Abkuerzung, Schadensstufen, Drawcall-/Ladeoptimierung sowie normale/schwache PC-/Mobilpruefung bleiben offen. Historische Gestaltung, Sarahs Ideen und gemeinsame Stilfreigabe weiterhin gesondert behandeln.
 
-Der anschliessend angeforderte Konzeptbild-Ladebildschirm wird erst nach abgeschlossener Teamumstellung implementiert und separat dokumentiert.
+Nach erfolgreicher Teamumstellung auf main 845c0bf umgesetzt: frueher Konzeptbild-Ladebildschirm mit kritischem Inline-CSS, originalem Imagegen-Motiv (376,5 kB WebP), echtem Fortschritt in sechs Abschnitten und Fehlerhilfe/Wiederholen. Das 3D-Menue folgt erst nach whenReadyAsync und erstem Renderbild. Quellen: art-source/loading-stadium-v1.md; Log/Browserbilder: docs/evidence/loading-*. Kein Ersatz fuer 3D-Spielgrafik oder neue G–L-Abnahme.

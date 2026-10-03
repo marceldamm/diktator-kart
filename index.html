@@ -4,11 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Diktator Kart · Stadion der Eitelkeit</title>
+    <meta name="theme-color" content="#10232b" />
+    <link rel="preload" as="image" href="/assets/textures/loading-stadium-v1.webp" />
+    <!-- Critical boot styles must arrive before the large game module and its CSS. -->
+    <style>
+      html,body{margin:0;background:#10232b}
+      .loading-screen{display:none;position:fixed;inset:0;z-index:1000;overflow:auto;color:#fff3d8;font-family:system-ui,sans-serif;box-sizing:border-box;background:#10232b}
+      .is-loading .loading-screen{display:flex;align-items:center}
+      .is-loading #app>:not(.loading-screen){visibility:hidden!important}
+      .loading-art,.loading-shade{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+      .loading-art{object-fit:cover;object-position:60% center}
+      .loading-shade{background:linear-gradient(90deg,#08191ef5 0%,#11272bdd 27%,#17313750 58%,#17313700 82%),linear-gradient(0deg,#0a1d28ce,transparent 28%)}
+      .loading-content{position:relative;width:min(460px,80vw);margin:7vh 7vw 15vh;box-sizing:border-box}
+      .loading-crest{display:inline-grid;place-items:center;width:58px;height:58px;border:1px solid #deb46a;font:bold italic 25px Georgia,serif;color:#e9c58b;box-shadow:inset 0 0 0 5px #dfb36216}
+      .loading-kicker{font-size:11px;letter-spacing:.32em;color:#e5c393;margin:25px 0 16px}
+      .loading-screen h2{font:clamp(42px,5vw,76px)/1.03 Georgia,serif;letter-spacing:-.035em;margin:0 0 22px;color:#fff3d8}
+      .loading-screen h2 em{color:#e2b877}
+      .loading-tagline{font:17px/1.65 Georgia,serif;color:#e7dec6;margin:0 0 50px;max-width:340px}
+      .loading-progress-head{display:flex;justify-content:space-between;gap:16px;align-items:center;font-size:10px;letter-spacing:.14em;color:#efd09d;text-transform:uppercase}
+      .loading-progress-head strong{font-weight:500;white-space:nowrap;letter-spacing:0;color:#fff1d0}
+      .loading-screen progress{display:block;width:100%;height:5px;margin:14px 0;background:#fff2;accent-color:#e4b86e;border:0;border-radius:0;appearance:none}
+      .loading-screen progress::-webkit-progress-bar{background:#fff2}
+      .loading-screen progress::-webkit-progress-value{background:linear-gradient(90deg,#bc8746,#ffe2a4);transition:width .25s ease}
+      .loading-screen progress::-moz-progress-bar{background:#e4b86e}
+      .loading-screen progress:indeterminate{background:linear-gradient(90deg,#f0c37a22,#f0c37aaa,#f0c37a22);background-size:200% 100%;animation:boot-breathe 1.8s ease-in-out infinite alternate}
+      .loading-message{font-size:12px;line-height:1.65;min-height:40px;color:#dfded1;margin:16px 0 0;overflow-wrap:anywhere}
+      .loading-retry{font:600 13px system-ui,sans-serif;padding:12px 22px;margin-top:18px;background:#e8c68c;color:#14282e;border:0;cursor:pointer}
+      .loading-retry[hidden]{display:none}
+      .loading-error{font:11px/1.6 system-ui,sans-serif;color:#d1c9b6;margin-top:18px;overflow-wrap:anywhere}
+      .loading-error summary{cursor:pointer}
+      .loading-footnote{position:fixed;left:7vw;bottom:30px;right:7vw;display:flex;justify-content:space-between;gap:20px;font:10px/1.5 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#eee3c4}
+      @keyframes boot-breathe{to{background-position:100% 0;opacity:.6}}
+      @media(max-width:600px){.loading-art{object-position:67% center}.loading-shade{background:linear-gradient(90deg,#08191ee6,#11272b95),linear-gradient(0deg,#08191ef5,transparent)}.loading-content{width:86vw;margin:7vh 7vw 110px}.loading-tagline{margin-bottom:32px}.loading-footnote{bottom:20px;flex-direction:column;gap:5px}}
+      @media(prefers-reduced-motion:reduce){.loading-screen progress:indeterminate{animation:none}.loading-screen progress::-webkit-progress-value{transition:none}}
+    </style>
   </head>
   <body class="is-loading">
     <main id="app">
       <canvas id="render-canvas" aria-label="Babylon.js-Testszene"></canvas>
-      <div class="loading-screen"><span class="loading-mark">DK</span><h2>Das Stadion wird vorbereitet</h2><div class="loading-line"></div><p>Karts, Tribünen und Rennstrecke werden geladen.</p></div>
+      <section class="loading-screen" aria-label="Spiel wird geladen" aria-busy="true">
+        <img class="loading-art" src="/assets/textures/loading-stadium-v1.webp" width="1672" height="941" alt="" fetchpriority="high" />
+        <div class="loading-shade"></div>
+        <div class="loading-content">
+          <span class="loading-crest" aria-hidden="true">DK</span>
+          <p class="loading-kicker">DIKTATOR KART</p>
+          <h2>Stadion der<br><em>Eitelkeit</em></h2>
+          <p class="loading-tagline">Sechs Fahrer. Drei Runden.<br>Eine große Portion Größenwahn.</p>
+          <div class="loading-progress-head"><span id="loading-heading">Das Stadion wird vorbereitet</span><strong id="loading-count">Bitte warten</strong></div>
+          <progress id="loading-progress" aria-label="Abgeschlossene Ladeabschnitte" max="6"></progress>
+          <p id="loading-message" class="loading-message" role="status">Spielmodule und Grafik-Engine starten …</p>
+          <button id="loading-retry" class="loading-retry" type="button" hidden>Erneut laden</button>
+          <details id="loading-error" class="loading-error" hidden><summary>Fehlerdetails</summary><p id="loading-error-detail"></p></details>
+          <noscript><p>Bitte JavaScript aktivieren, um das Spiel zu starten.</p></noscript>
+        </div>
+        <footer class="loading-footnote"><span>Berlin · Stadionring · Grand Prix</span><span>Konzeptillustration · Spielgrafik folgt nach dem Laden</span></footer>
+      </section>
       <section class="start-menu"><span class="menu-kicker">DIKTATOR KART</span><h1>Stadion der<br><em>Eitelkeit</em></h1><p class="menu-flavor">Sechs Fahrer. Drei Runden.<br>Der erste Platz braucht keine Genehmigung.</p><button id="menu-race" type="button">Grand Prix starten <span>↵</span></button><button id="menu-practice" type="button">Strecke erkunden</button><div id="menu-options"></div><small>WASD / Pfeile · Space für Hop & Drift<br>Items mit E · drei Kameras mit C</small><div class="menu-seal">AMTLICH<br><b>UNORDENTLICH</b></div></section>
       <div class="brand slice-only"><span class="brand-mark">DK</span><div><strong>DIKTATOR KART</strong><span>STADION DER EITELKEIT</span></div></div>
       <div class="race-hud slice-only"><span id="race-label">FREIE FAHRT</span><div class="race-stats"><div><b id="place">1</b><small>PLATZ / 6</small></div><div><b id="lap">1 / 3</b><small>RUNDE</small></div><div><b id="race-time">0:00.00</b><small>ZEIT</small></div></div></div>
@@ -44,6 +94,56 @@
       <p class="showcase-controls"><b>W / S</b> Fahren &nbsp; <b>A / D</b> Lenken<br><b>SPACE</b> Hop · halten: Drift · loslassen: Turbo<br><b>E</b>/Linksklick Item &nbsp; <b>B</b> Rücksetzung &nbsp; <b>C</b> Kamera &nbsp; <b>V</b> Foto &nbsp; <b>F3</b> Diagnose<br><b>Maus</b> umsehen · <b>Rechtsklick</b> Blick zurück · <b>Mausrad</b> Zoom</p>
       <div id="touch-controls" aria-label="Touch-Fahrsteuerung"><div><button data-drive-action="steerLeft" aria-label="Links lenken">◀</button><button data-drive-action="steerRight" aria-label="Rechts lenken">▶</button></div><div class="touch-aux"><button data-drive-action="camera" aria-label="Kamera wechseln">Kamera</button><button data-drive-action="recover" aria-label="Rücksetzen">Bergen</button></div><div><button data-drive-action="brake" aria-label="Bremsen und rückwärts fahren">Bremse</button><button data-drive-action="hopDrift" aria-label="Hop und Drift">Drift</button><button data-drive-action="accelerate" aria-label="Gas geben">Gas</button></div></div>
     </main>
+    <script>
+      // Independent of Babylon: module failures must leave a readable, retryable screen.
+      (() => {
+        const progress = document.getElementById('loading-progress');
+        const count = document.getElementById('loading-count');
+        const message = document.getElementById('loading-message');
+        const heading = document.getElementById('loading-heading');
+        const retry = document.getElementById('loading-retry');
+        const overlay = document.querySelector('.loading-screen');
+        let failed = false;
+        const fail = detail => {
+          if (!document.body.classList.contains('is-loading')) return;
+          failed = true;
+          heading.textContent = 'Der Start wurde unterbrochen';
+          message.textContent = 'Das Spiel konnte nicht vollständig geladen werden. Prüfe die Verbindung und versuche es erneut.';
+          document.getElementById('loading-error-detail').textContent = detail;
+          document.getElementById('loading-error').hidden = false;
+          count.textContent = 'Startfehler';
+          progress.value = progress.value || 0;
+          retry.hidden = false;
+          overlay.setAttribute('aria-busy', 'false');
+        };
+        window.addEventListener('dk:load-progress', ({ detail }) => {
+          failed = false;
+          progress.max = detail.total;
+          if (detail.completed === 0) progress.removeAttribute('value');
+          else progress.value = detail.completed;
+          count.textContent = `${detail.completed} / ${detail.total} Abschnitte`;
+          message.textContent = detail.message;
+          heading.textContent = 'Das Stadion wird vorbereitet';
+          retry.hidden = true;
+          document.getElementById('loading-error').hidden = true;
+          overlay.setAttribute('aria-busy', String(detail.completed < detail.total));
+        });
+        window.addEventListener('dk:load-error', ({ detail }) => fail(detail));
+        window.addEventListener('error', event => {
+          if (event.target instanceof HTMLScriptElement && event.target.type === 'module') fail('Die Spielmodule konnten nicht geladen werden. Prüfe die Verbindung und versuche es erneut.');
+          else if (event.message) fail(`Das Spiel konnte nicht gestartet werden: ${event.message}`);
+        }, true);
+        window.addEventListener('unhandledrejection', event => fail(`Der Spielstart ist fehlgeschlagen: ${event.reason?.message || event.reason || 'Unbekannter Fehler'}`));
+        document.querySelector('.loading-art').addEventListener('error', event => { event.target.style.visibility = 'hidden'; });
+        retry.addEventListener('click', () => location.reload());
+        setTimeout(() => {
+          if (document.body.classList.contains('is-loading') && !failed) {
+            message.textContent += ' Der erste Start kann länger dauern. Falls es nicht weitergeht, kannst du erneut laden.';
+            retry.hidden = false;
+          }
+        }, 45000);
+      })();
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

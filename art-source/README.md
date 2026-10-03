@@ -4,6 +4,8 @@ Stand 03.10.2026. Alle Kart-, Gebäude-, Requisiten- und Itemmodelle sind origin
 
 ## Quellen und Laufzeit (Qualitätsstufe 2)
 
+- Früher Ladebildschirm: `loading-stadium-v1.png` → `public/assets/textures/loading-stadium-v1.webp`. Eigenständige Imagegen-Konzeptillustration in G/J-Richtung; Motivauftrag und Nutzungsgrundlage in `loading-stadium-v1.md`. Nur Ladehintergrund, keine 3D-Spielgrafik. HTML-UI separat editierbar in `index.html`.
+
 - `build_kart.py` → `hero-kart.blend`/GLB: Kart, Fahrer und Varianten. Laufzeitvertrag: `wheelPivot-0..3`, `wheelSpin-0..3`, `steeringWheel`, `driverPose`, `headPose`, `scarfFlap` (Umhang), `variant-*` (Anbauten), `cast-*` (Mützen, Frisuren, Gesichter). Umgefärbte Materialien: `Petrol enamel`, `Uniform racing suit`, `Cape cloth`, `Hat cloth`. Besetzung in `src/cast.ts`.
 - `build_world.py` → `stadium-world.blend`/GLB: Palast, Tor, Zielbrücke, Tribünen, Häuser, Park, Bahnhof, Stadtring. Liest `track-layout.json`.
 - `export_track.mjs` → `track-layout.json`: Mittellinie aus `src/track-layout.ts`. Nach jeder Streckenänderung zuerst ausführen, dann `build_world.py`.

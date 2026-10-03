@@ -6,12 +6,12 @@ import { resolve } from 'node:path';
 // Identify the actual checkout, rather than accepting another game's title/manifest.
 function projectIdentity(): Plugin {
   const root = realpathSync(process.cwd());
-  const install = (server: { middlewares: { use: (...args: any[]) => void } }) => {
+  const install = (server: { middlewares: { use: (...args: any[]) => void } }, mode: 'dev' | 'preview') => {
     server.middlewares.use('/__diktator/status', (_request: unknown, response: any) => {
       try {
         const state = JSON.parse(readFileSync(resolve(root, 'project-state.json'), 'utf8'));
         const git = (...args: string[]) => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', windowsHide: true }).trim();
-        const payload = { ...state, root, branch: git('branch', '--show-current'), commit: git('rev-parse', 'HEAD') };
+        const payload = { ...state, root, mode, branch: git('branch', '--show-current'), commit: git('rev-parse', 'HEAD') };
         response.setHeader('Content-Type', 'application/json; charset=utf-8');
         response.setHeader('Cache-Control', 'no-store');
         response.end(JSON.stringify(payload));
@@ -21,7 +21,7 @@ function projectIdentity(): Plugin {
       }
     });
   };
-  return { name: 'diktator-checkout-identity', configureServer: install, configurePreviewServer: install };
+  return { name: 'diktator-checkout-identity', configureServer: server => install(server, 'dev'), configurePreviewServer: server => install(server, 'preview') };
 }
 
 export default defineConfig({

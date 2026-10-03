@@ -1,5 +1,9 @@
 # Art Direction
 
+## Frühe Ladeillustration – 03.10.2026
+
+Ein neu erzeugtes, eigenständiges G/J-inspiriertes Imagegen-Motiv zeigt die helle satirische Stadionwelt mit roten/goldenen Karts und fiktiven Fahrern. Es erscheint ausschließlich während des Ladens, gekennzeichnet als Konzeptillustration. Original-PNG/Motivauftrag in art-source/loading-stadium-v1.*, Laufzeit-WebP und Herkunft in public/assets/CREDITS.md. Kein Referenzbild als Spieltextur, keine bestätigte historische Gestaltung. Das tatsächliche Babylon-Menü übernimmt nach Szenenbereitschaft; die bestehende G–L-Lücke bleibt unverändert.
+
 ## Qualitätsstufe 2 – 03.10.2026
 
 Laufzeitbilder: [Belege, Abschnitt Qualitätsstufe 2](evidence/README.md). Die Welt folgt jetzt einem 593-m-Rundkurs mit komponierten Blickpunkten: Palast am Ende der Tribünengerade, Tor über dem Boulevard, Häuserschlucht, Brunnen-Haarnadel. Lesbare Grenzen durch rot-weiße Randsteine, gestreifte Banden und Satire-Tafeln („Jubel ist Pflicht“, „Überholen nur mit Stempel“). Paradebanner und wehende Fahnen mit einem originalen fiktiven Emblem (Lorbeer, Krone, Paragraf) ersetzen jede historische Symbolik. Statt historischer Denkmäler steht eine vergoldete Satirefigur „unbekannter Beamter mit Stempel“ auf Tor und Palastvorhof; Häuser erhielten Sockel, Pilaster, Verdachungen und Gauben.

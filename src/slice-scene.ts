@@ -34,6 +34,7 @@ import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
 import { CAST, CAST_PARTS } from './cast';
+import type { LoadingReporter } from './loading-progress';
 
 
 /** Panorama-space angle of the sun in sky-afternoon (table_mountain_2), measured in-game. */
@@ -46,7 +47,7 @@ function glowMaterial(scene: Scene, name: string, color: string): StandardMateri
 
 function particleTexture(scene: Scene): DynamicTexture { return softParticleTexture(scene); }
 
-export async function createSliceScene(engine: Engine, loadKartCount: number, quality=1): Promise<TestScene> {
+export async function createSliceScene(engine: Engine, loadKartCount: number, quality=1, report?: LoadingReporter): Promise<TestScene> {
   const scene = new Scene(engine);
   scene.skipPointerMovePicking=true;
   try {
@@ -80,6 +81,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     skyMaterial.emissiveTexture = skyTexture;
     skyMaterial.emissiveColor = Color3.Black(); skyMaterial.backFaceCulling = false; skyMaterial.fogEnabled = false; sky.material = skyMaterial; sky.infiniteDistance = true;
     const world = await ImportMeshAsync('/assets/models/stadium-world.glb', scene);
+    report?.('world');
     const worldOrientation = new TransformNode('Blender world orientation', scene); worldOrientation.rotation.y = Math.PI;
     world.meshes.filter((m) => !m.parent).forEach((m) => m.parent = worldOrientation);
     const stoneMaps = surfaceTextures(scene, 'Limestone', 'stone'), leafMaps = surfaceTextures(scene, 'Cypress', 'leaf'), fabricMaps = surfaceTextures(scene, 'Cloth', 'fabric');
@@ -103,6 +105,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const staticShadowMeshes=[...(shadow.getShadowMap()?.renderList??[])];
     const treeShadows: {root:TransformNode;meshes:Mesh[]}[]=[];
     const treeContainer = await LoadAssetContainerAsync('/assets/models/park-tree.glb', scene);
+    report?.('trees');
     for(const material of treeContainer.materials) if(material instanceof PBRMaterial && material.name.includes('leaves')) {
       material.transparencyMode=PBRMaterial.PBRMATERIAL_OPAQUE;
       material.backFaceCulling=false;
@@ -124,6 +127,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const glow = new GlowLayer('Restrained lamp and exhaust glow', scene, { mainTextureRatio: .35 }); glow.intensity = .45;
     for(const mesh of trackWorld.glowMeshes) glow.addIncludedOnlyMesh(mesh);
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
+    report?.('karts');
     const visuals = Array.from({ length: loadKartCount + 1 }, (_, index) => {
       const instance = container.instantiateModelsToScene((name) => `kart${index}/${name}`, false, { doNotInstantiate: true });
       const paint=new Map<PBRMaterial,PBRMaterial>();
@@ -228,6 +232,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       pipeline.sharpenEnabled = full; pipeline.sharpen.edgeAmount = .18;
     };
     const presentItems=await addItems(scene,shadow,loadKartCount+1);
+    report?.('items');
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
     const tvCamera = new FreeCamera('Staatsfernsehen camera', new Vector3(0, 5, 0), scene); tvCamera.fov = .5; tvCamera.minZ = .1;
     const feed = new RenderTargetTexture('Staatsfernsehen feed', { width: 768, height: 432 }, scene, false);

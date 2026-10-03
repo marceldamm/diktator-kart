@@ -1,5 +1,9 @@
 # Benutzeroberfläche, Einstellungen und lokale Speicherung
 
+## Früher Start ohne weißen HTML-Blitz – 03.10.2026
+
+Die Ladeoberfläche und deren Grundlayout stehen direkt in index.html, vor dem Babylon-Modul und dessen CSS. Andere Spiel-HTML wird bis zur Szenenbereitschaft verborgen. Konzeptmotiv mit dunklem Verlauf und editierbarer HTML-Typografie, responsiv und mit reduzierter Bewegung. Balken zählt sechs tatsächlich abgeschlossene Abschnitte (Engine/Manifest, Welt, Bäume, Karts, Items, Szenenbereitschaft/erstes Bild), keine geschätzten Downloadprozente. Techniklabor besitzt nur zwei Abschnitte. Bei Modul-/Assetstartfehlern bleiben Fehlermeldung, optionale Fehlerdetails und Erneut laden verfügbar; bei längerem Start nach 45 s Hinweis/Wiederholen, ohne künstlichen Abbruch oder gefälschten Fortschritt. Browserprobe des Produktionsbuilds einschließlich Neustart und Rückkehr zum echten 3D-Menü in docs/evidence/loading-browser-check.json.
+
 ## Aktueller Slice-Ablauf – 03.10.2026
 
 Die Standardansicht hat einen echten 3D-Menühintergrund, Rennen/freie Fahrt, Ladephase, Countdown, drei Runden, HUD/Minikarte/Itemslot, Pause, Ergebnis mit Rundenzeiten/Zielstand und Revanche/Menü. Esc pausiert ein laufendes Rennen im Menü. Ton, Musiklautstärke, Basis-/Standardgrafik, reduzierte Effekte und ruhige Kamera werden lokal gespeichert; echte menschliche Zielzeiten als Streckenbestzeit. Demonstrationsfahrten schreiben keine Bestzeit. Mehrfinger-Touch ist in Chrome emuliert geprüft, nicht auf Handy abgenommen. Fahrer-/Streckenauswahl, vollständige Lautstärkemixer, persönliche Fähigkeiten, Stimmen, Gamepad und Siegertheater fehlen weiterhin. Historische M1/M2-Einträge darunter beschreiben ihre damaligen Stände.

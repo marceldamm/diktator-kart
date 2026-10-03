@@ -20,7 +20,7 @@ Die Repo-Skills heißen $diktator-projektstart und $diktator-projektabschluss. A
 
 **Claude-Stand:** 593-m-Kurs, neue Welt/Karts/sechs fiktive Fahrer, Bot-Drift, Hinterhof-Abkürzung, Stimmen/Publikum, Lenkträgheit und gefederte Karosserie, Rüttelrandsteine, Live-Videowand. Vorliegende Tests und verbleibende Qualitäts-/Gerätegrenzen: [Fortschrittslog](docs/17-progress-log.md). Kein fertiger historischer Kader und keine G–L-Abnahme. Regen/nasse Straße/echtere Fahrer sind nächste Produktionswünsche, keine bereits gebauten Features.
 
-**Nächster zusätzlicher Nutzerauftrag:** Nach der Team-/Starterumstellung einen frühen, stilvollen Ladebildschirm mit gewähltem Konzeptbild und ehrlicher Fortschrittsanzeige ergänzen; aktuell noch nicht implementiert.
+**Früher Ladebildschirm umgesetzt:** Eigenständiges G/J-inspiriertes Konzeptmotiv erscheint bereits vor dem Spielmodul, mit echten Ladeabschnitten und Wiederholen bei Startfehlern. Danach übernimmt das gerenderte 3D-Menü. Die Illustration ist ausdrücklich keine Spielgrafik-Abnahme; Quellen/Belege in art-source/loading-stadium-v1.md und docs/evidence/.
 
 ## Historischer Einstieg vor der Teamumstellung
 

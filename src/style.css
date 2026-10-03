@@ -1,14 +1,6 @@
 :root { font-family: system-ui, sans-serif; color: #f7f0da; background: #08151d; }
 * { box-sizing: border-box; }
 body { margin: 0; }
-.loading-screen { display:none;position:absolute;inset:0;z-index:10;background:#0c2028;align-content:center;text-align:center;color:#d8c294; }
-.is-loading .loading-screen { display:block; }
-.loading-screen h2 { font:27px Georgia,serif; }
-.loading-screen p { font-size:12px;color:#8fa6a7; }
-.loading-mark { font:italic 55px Georgia,serif;border:1px solid #bca875;padding:12px 24px; }
-.loading-line { width:220px;height:2px;background:linear-gradient(90deg,#d8bf8000,#d8bf80,#d8bf8000);margin:26px auto;animation:loading-pulse 1.2s ease-in-out infinite alternate; }
-@keyframes loading-pulse { to {opacity:.25;transform:scaleX(.5);} }
-@media(prefers-reduced-motion:reduce) { .loading-line { animation:none; } }
 .start-menu { display:none; }
 .menu-open .start-menu { display:block;position:absolute;left:5vw;top:50%;transform:translateY(-50%);width:360px;padding:30px 28px;background:linear-gradient(130deg,#0c242eec,#17353bde);border-top:2px solid #c2a669;box-shadow:0 22px 70px #0005;color:#efdbaf; }
 .menu-kicker { font-size:10px;letter-spacing:.26em;color:#b9a778; }

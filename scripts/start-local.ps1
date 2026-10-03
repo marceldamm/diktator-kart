@@ -36,7 +36,7 @@ try {
         $candidateUrl = "http://127.0.0.1:$candidate/"
         if (-not (Busy $candidate)) { if (-not $selectedPort) { $selectedPort = $candidate }; continue }
         $identity = ServerIdentity $candidateUrl
-        if ($identity -and $identity.projectId -eq $state.projectId -and $identity.minimumSourceCommit -eq $state.minimumSourceCommit -and (SameFolder $identity.root)) {
+        if ($identity -and $identity.mode -eq 'dev' -and $identity.projectId -eq $state.projectId -and $identity.minimumSourceCommit -eq $state.minimumSourceCommit -and (SameFolder $identity.root)) {
             $selectedPort = $candidate; $reuse = $true; break
         }
         if (-not $AsJson) { Write-Host "Port $candidate belongs to another/unidentified server; it will not be used or stopped." }
@@ -63,7 +63,7 @@ try {
             for ($attempt = 0; $attempt -lt 100; $attempt++) {
                 try {
                     $identity = (Invoke-WebRequest -Uri ($targetUrl + '__diktator/status') -TimeoutSec 2 -UseBasicParsing).Content | ConvertFrom-Json
-                    if ($identity.projectId -eq 'diktator-kart-babylon' -and [IO.Path]::GetFullPath($identity.root).TrimEnd('\', '/') -eq $expectedRoot.TrimEnd('\', '/')) {
+                    if ($identity.mode -eq 'dev' -and $identity.projectId -eq 'diktator-kart-babylon' -and [IO.Path]::GetFullPath($identity.root).TrimEnd('\', '/') -eq $expectedRoot.TrimEnd('\', '/')) {
                         $paths = @("$env:ProgramFiles\Google\Chrome\Application\chrome.exe", "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe", "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe")
                         $chromePath = $paths | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
                         if ($chromePath) { Start-Process -FilePath $chromePath -ArgumentList @('--new-window', $targetUrl) } else { Start-Process $targetUrl }

@@ -1,0 +1,127 @@
+{
+  "url": "http://127.0.0.1:4174/",
+  "viewport": "1600x900; 390x844 CSS/mobile emulation",
+  "evidence": [
+    {
+      "check": "Styled first paint before game module; other HTML hidden",
+      "loading": true,
+      "message": "Spielmodule und Grafik-Engine starten …",
+      "count": "Bitte warten",
+      "value": 0,
+      "total": 6,
+      "retry": false,
+      "events": [],
+      "scene": false,
+      "vehicles": 1
+    },
+    {
+      "check": "Module download error stays styled and offers retry",
+      "loading": true,
+      "message": "Das Spiel konnte nicht vollständig geladen werden. Prüfe die Verbindung und versuche es erneut.",
+      "count": "Startfehler",
+      "value": 0,
+      "total": 6,
+      "retry": true,
+      "events": [],
+      "scene": false,
+      "vehicles": 1
+    },
+    {
+      "check": "Retry loads all real sections; overlay yields to Babylon menu",
+      "loading": false,
+      "message": "Das Stadion ist bereit.",
+      "count": "6 / 6 Abschnitte",
+      "value": 6,
+      "total": 6,
+      "retry": false,
+      "events": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "scene": true,
+      "vehicles": 6
+    },
+    {
+      "check": "Actual three completed sections before hero asset; no timer progress",
+      "loading": true,
+      "message": "Sechs Fahrer nehmen Platz …",
+      "count": "3 / 6 Abschnitte",
+      "value": 3,
+      "total": 6,
+      "retry": false,
+      "events": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "scene": false,
+      "vehicles": 6
+    },
+    {
+      "check": "Interrupted hero asset stops real progress and offers retry",
+      "loading": true,
+      "message": "Das Spiel konnte nicht vollständig geladen werden. Prüfe die Verbindung und versuche es erneut.",
+      "count": "Startfehler",
+      "value": 3,
+      "total": 6,
+      "retry": true,
+      "events": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "scene": false,
+      "vehicles": 6
+    },
+    {
+      "check": "Scene restart resets sections and completes again",
+      "loading": false,
+      "message": "Das Stadion ist bereit.",
+      "count": "6 / 6 Abschnitte",
+      "value": 6,
+      "total": 6,
+      "retry": false,
+      "events": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "scene": true,
+      "vehicles": 6
+    },
+    {
+      "check": "Lab has only its two actual sections",
+      "loading": false,
+      "message": "Das Stadion ist bereit.",
+      "count": "2 / 2 Abschnitte",
+      "value": 2,
+      "total": 2,
+      "retry": false,
+      "events": [
+        0,
+        1,
+        2
+      ],
+      "scene": true,
+      "vehicles": 6
+    }
+  ]
+}

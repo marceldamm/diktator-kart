@@ -125,9 +125,9 @@ async function checkLauncher(cwd, port) {
     child.on('error', reject); child.on('exit', status => resolve({ status, stdout, stderr }));
   });
 }
-test('launcher: old title and another worktree are never reused; same checkout is reused', { skip: !windows }, async () => {
+test('launcher: old title, other worktree and static preview are never reused; own dev checkout is reused', { skip: !windows }, async () => {
   const f = fixture();
-  for (const [payload, reuse] of [[null, false], [{ ...f.state, root: f.Bob }, false], [{ ...f.state, root: f.Alice }, true]]) {
+  for (const [payload, reuse] of [[null, false], [{ ...f.state, root: f.Bob, mode: 'dev' }, false], [{ ...f.state, root: f.Alice, mode: 'preview' }, false], [{ ...f.state, root: f.Alice }, false], [{ ...f.state, root: f.Alice, mode: 'dev' }, true]]) {
     const server = await fakeServer(payload);
     try {
       const port = server.address().port; const result = await checkLauncher(f.Alice, port);
