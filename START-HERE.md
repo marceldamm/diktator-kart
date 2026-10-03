@@ -57,6 +57,8 @@ verifiziert, offen und nächsten Schritt.
 
 **M2l-Diagnose:** F3 zeigt jetzt ein rollendes Fenster aus bis zu 300 sichtbaren Frames mit P50/P95/P99, langen Frames, Canvas-Auflösung und erkanntem Grafikpfad (falls vom Browser freigegeben). Der Browsercheck prüfte die Anzeige mit einem und sechs Karts. Das scrollbare Panel wurde im Bild `docs/evidence/m2l-f3-diagnose-chrome.png` geprüft; die angezeigten RTX-Werte sind keine Zielhardwaremessung.
 
+**M3-Vorbereitung ohne Produktionsstart:** [Dokument 14](docs/14-character-and-item-catalog.md) schlägt Mussolini/Il Duce GT als ersten Art-Piloten vor. Auswahl, M2-Abnahme und spätere Stilprobe bleiben offen.
+
 **Git-Stand:** M1–M2f sind lokal im Commit `51e22ff` auf `babylon-neustart-2026` gesichert; M2g/h liegen ebenfalls lokal auf diesem Branch. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
 
 ## Kurzer menschlicher M2-Fahrcheck

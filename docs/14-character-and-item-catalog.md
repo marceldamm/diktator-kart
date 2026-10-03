@@ -40,6 +40,22 @@ Quelle: `Diktator-Kart-Legacy/client/src/game/drivers.ts`. Farben und Details si
 | Kim Jong-un | `#263f70` | `#e63f44` | überlanger Auspuff | Sieger vor Rennbeginn |
 | Castro | `#315d42` | `#d7c99a` | aufklappender Aktenkoffer | Dienstältester Boxengassenredner |
 
+## Vorschlag für den ersten M3-Art-Piloten – noch kein Beschluss
+
+**Vorgeschlagen:** Benito Mussolini mit dem überlieferten Arbeitstitel **Il Duce GT**. Die Auswahl des ersten vollständig ausgearbeiteten Fahrers ist noch gemeinsam zu bestätigen; alle sechs bestätigten Fahrer bleiben im geplanten Kader. Die persönliche Herkunft einzelner Altideen von Sarah ist nicht belegt. Deshalb werden die folgenden Ausführungen als Produktionsvorschlag geführt und ändern weder Fahrzeugkonzept noch Fähigkeit.
+
+| Bestandteil | Übernommene Idee und Quelle | Vorschlag für die spätere Stilprobe |
+|---|---|---|
+| Fahrer/Kart | mittelgroßer, sportlich-eleganter, selbstgefälliger Il Duce GT aus dem alten Produktionsauftrag; großer karikierter Kopf und erkennbare Gesichtszüge als bestätigte allgemeine Regel | ein editiertes Fahrer- und Kartmodell als erster Qualitätsmaßstab für Silhouette, Material, Körperhaltung und Animation in allen drei Kameras |
+| Farbe/Detail | Blau `#31557a`, Creme `#e9dfc4` und vibrierende Mini-Lautsprecher sind belegter Altstand in `Diktator-Kart-Legacy/client/src/game/drivers.ts` | diese Farben nur als Ausgangsreferenz testen; Lautsprecher als **ein** bewegliches Detail für Federung/Drift/Boost prüfen, ohne die Farbpalette bereits zu beschließen |
+| Fähigkeit | „Große Pose“ mit kurzem Turbo nach dramatischer Pose ist überlieferte Kreatividee | im Art-Piloten nur lesbare Pose/Bewegung als Möglichkeit skizzieren; Regel, Dauer, Balance und Name bleiben für die spätere gemeinsame Entscheidung offen |
+
+**Warum dieser Pilot:** Die mittlere Kartgröße erlaubt denselben Test für nahe/ferne Verfolger- und Fahrerperspektive, ohne die erste technische Vorlage auf ein besonders schweres oder sehr leichtes Kart zuzuschneiden. Die vorhandenen Lautsprecher liefern einen klar abgrenzbaren Animationstest. Die eigenständige Farb- und Materialwirkung lässt sich im bestätigten Stilraum G–L aus den Spielkameras prüfen. Diese Auswahl begründet Produktionsreihenfolge, keine Rangfolge der Figuren oder Strecken.
+
+**Prüfbare Liefergrenze für M3, nach M2-Abnahme:** editierbare Quelldatei und GLB/GLTF, ein Fahrer/Kart mit einem beweglichen Detail, sichtbare Hände/Lenkrad/Armaturen/Vorderräder aus Fahreraugenhöhe, lesbare Silhouette in beiden Verfolgerkameras, Basis- und Standardmaterialstufe sowie eine kurze Drift-/Hop-/Kontaktprobe in der tatsächlichen Testszene. Kostenlose vorhandene Werkzeuge und dokumentierte Referenz-/Assetherkunft bleiben Pflicht. Die Stilfreigabe erfolgt gemeinsam anhand dieses Piloten; kein Konzeptbild gilt als Nachweis von Echtzeitqualität.
+
+**Inhaltsgrenze:** Die Satire richtet sich gegen Selbstinszenierung und Machtpose. Historische Symbole werden für den Art-Piloten nicht als bloßer Schmuck vorausgesetzt; konkrete Zeichen, Kostümteile, Sprache und Veröffentlichung brauchen die Prüfung aus Dokument 13 und gegebenenfalls gemeinsame Bestätigung bei Sarah-Ideen.
+
 ## Kostümvarianten und spätere Team-Boni aus dem Altprojekt
 
 Quelle: `Diktator-Kart-Legacy/docs/02-gameplay.md`. Diese Ideen bleiben für später bewahrt; Freischaltbedingungen, Gestaltung und tatsächliche Verwendung sind nicht entschieden. Kostüme oder Team-Boni gehören nicht automatisch zum ersten Singleplayer-Umfang.

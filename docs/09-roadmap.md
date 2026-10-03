@@ -61,6 +61,8 @@ Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.
 
+**Vorbereitung, noch kein M3-Start:** Dokument 14 enthält Mussolini/Il Duce GT als begründeten ersten Art-Piloten-Vorschlag mit überlieferten Ideen, Herkunft und klarer Liefergrenze. Die gemeinsame Auswahl und Stilfreigabe sowie die M2-Abnahme stehen aus; keine Art-Produktion wurde begonnen.
+
 **Abnahme:** Stil aus tatsächlichen Spielkameras gemeinsam geprüft; sechs sichtbare Teilnehmer und erste Messwerte. Noch keine fertige Gesamtstrecke behaupten.
 
 ## M4 – Kernrennen

@@ -41,7 +41,8 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 
 ## Vor Art-Pilot / Performance-Abnahme
 
-- [ ] Ersten vollständig auszuarbeitenden Fahrer vorschlagen und Stilprobe gemeinsam abnehmen.
+- [x] Ersten vollständig auszuarbeitenden Fahrer als Vorschlag vorbereiten: Mussolini/Il Duce GT in Dokument 14; keine Auswahl oder Änderung an Sarahs Ideen beschlossen.
+- [ ] Ersten Fahrer gemeinsam auswählen und die spätere Stilprobe aus allen drei Spielkameras abnehmen.
 - [ ] Landmarken, Zeitraum und Symbolgestaltung der Berlin-/Stadionstrecke konkret entwerfen und innerhalb der bestehenden Grenzen prüfen.
 - [ ] Schwachen PC mit integrierter Grafik und Android-Testgerät benennen; konkrete Auflösung, Mindestleistung und Ladezeitziele anhand Messungen bestätigen.
 - [ ] Kostenlose Asset-/Audiopipeline an einem Modell und kurzen Hörproben prüfen; Herkunft/Lizenzen erfassen.

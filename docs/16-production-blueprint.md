@@ -68,6 +68,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 ### M3 – Erster Vertical Slice
 
+**Vorlaufender Vorschlag:** Dokument 14 empfiehlt Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart und trennt Altideen von möglichen Produktionsausführungen. Das ist weder eine gemeinsame Auswahl noch eine Erlaubnis, M2-Abnahme oder Stilprüfung zu überspringen.
+
 **Aufgaben:** ein Diktator/Kart vollständig ausgearbeitet, fünf weitere in einfacherer Darstellung als Bots, ein historischer Berlin-/Stadionabschnitt, Beleuchtung, Materialpass, Atmosphäre und Audio. Drei Kameras einschließlich Cockpit mit Händen, Lenkrad, Armaturen und Vorderrädern prüfen. Start-Items beginnen, vollständiges Dreierset in M4.
 
 **Ergebnis:** ein kleiner Abschnitt mit sechs Teilnehmern vermittelt die Zielrichtung. Stil gemeinsam prüfen, bevor die übrigen fünf Modelle vollständig ausgearbeitet werden.

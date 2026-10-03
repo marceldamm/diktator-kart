@@ -417,6 +417,28 @@
 
 **Empfohlenes Modell:** Sol für beobachtete Korrekturen; Astra für schwierige Abnahmeentscheidungen.
 
+### 2026-10-03 – Erster M3-Art-Pilot als Vorschlag vorbereitet
+
+**Ziel:** Einen unabhängigen offenen Punkt aus Dokument 10 vorbereiten, während menschlicher M2-Fahrcheck und normale-PC-Messung noch fehlen. Keine M3-Produktion beginnen.
+
+**Modell / Arbeitsmodus:** Dokumentationsarbeit auf `babylon-neustart-2026`; Quellen aus Dokument 14, Stilraum G–L, Assetregeln und Inhaltsgrenzen geprüft. Altprojekt bleibt unverändert; nur bereits dokumentierte Altideen wurden als Quelle verwendet.
+
+**Erledigt:** Mussolini/Il Duce GT als erster vollständig auszuarbeitender Fahrer/Kart vorgeschlagen. Überliefertes sportlich-elegantes Konzept, frühere Blau-/Creme-Referenz, bewegliche Mini-Lautsprecher und „Große Pose“ wurden separat von neuen Produktionsvorschlägen dokumentiert. Die Vorlage enthält Begründung, Liefergrenze, Kamera-/Material-/Animationsprüfung und Inhaltsgrenze. Dokument 10 trennt den erledigten Vorschlag von offener gemeinsamer Auswahl und Stilfreigabe.
+
+**Verifiziert:** Die genannten Altideen stehen in Dokument 14 mit Quelle `Diktator-Kart-Legacy/client/src/game/drivers.ts` beziehungsweise altem Produktionsauftrag; G–L sind als Stilraum in Dokument 02 bestätigt. Es wurden keine Assets, Stimmen oder Symbole erstellt oder abgenommen.
+
+**Nicht verifiziert:** persönliche Urheberschaft einzelner Sarah-Ideen, endgültige Fahrerwahl, historische Bildreferenzen/Lizenzen, Material-/Modellqualität, Laufzeitkosten und Stilwirkung aus echten Spielkameras.
+
+**Geänderte Dateien:** `docs/14-character-and-item-catalog.md`, `docs/10-open-questions.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/00-project-framework.md`, `README.md`, `START-HERE.md`, `docs/17-progress-log.md`. Dokumente 02, 05 und 13 wurden für Stil, Assetpipeline und Inhaltsgrenzen geprüft; keine Grundpfeiler geändert.
+
+**Neue Entscheidungen:** keine. Mussolini/Il Duce GT ist ausdrücklich ein Vorschlag; alle sechs bestätigten Fahrer und Sarahs Altideen bleiben unangetastet.
+
+**Offene Probleme:** Zuerst M2 menschlich und auf normalem PC prüfen. Danach erster Pilot gemeinsam auswählen; Stilprobe erst anhand tatsächlicher M3-Assets abnehmen. GitHub-Upload bleibt ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** M2-Fahrcheck und Gerätewerte gemäß Dokument 09 erheben. Den M3-Piloten erst nach M2-Entscheidung und gemeinsamer Auswahl umsetzen.
+
+**Empfohlenes Modell:** Sol für M2-Korrekturen; Astra bei festgefahrener Meilenstein-/Stilentscheidung.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**
