@@ -8,7 +8,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Aktuell:** Panzerfähigkeit fertig; Abgleich der übrigen Archivfunktionen dokumentiert ([Abgleich](docs/sarah-feature-audit.md)); Dokumentation aufgeräumt.
 **Danach:** Erkennbare historische Fahrer (zuerst Hitler) und nächster Grafikpass (Regen/Pfützen/Wolkenschatten); Bots mit Fähigkeiten; weitere Sarah-Fähigkeiten nach gemeinsamer Bestätigung.
-**Arbeitsbranch:** codex/team-marcel-20261003-202647-623. Geprüfte Spielversion 2c6e92d nach main veröffentlicht; Arbeitsbranch bleibt erhalten.
+**Arbeitsbranch:** codex/team-marcel-20261003-232302-374 (Projektstart 04.10., Claude, auf main f784078; 43 Tests und TypeScript bestanden). Noch kein neuer Auftrag; nächster Schritt laut „Danach“.
 
 ## Offen und als Nächstes
 
