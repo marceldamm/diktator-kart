@@ -6,7 +6,7 @@
 2. Vor jeder Änderung: `git status` und `git log -1` prüfen; mit `git fetch origin` und dem Projektstart-Ablauf auf den neuesten gemeinsamen Stand bringen. Nie auf älteren Dateien weiterarbeiten.
 3. Nach jeder abgeschlossenen Teilaufgabe committen, damit die nächste App denselben Stand sieht. Uncommittete fremde Änderungen nicht überschreiben, sondern zuerst sichern/committen.
 4. Immer nur eine KI arbeitet gleichzeitig im Ordner. Die nächste beginnt erst, wenn die vorige committet hat.
-5. Claude ohne Worktree starten. Läuft eine Sitzung doch in `.claude/worktrees/…`, zuerst `git merge --ff-only` auf den Branch des Hauptordners, danach nach jedem Commit den Hauptordner per `git -C <Hauptordner> merge --ff-only <worktree-branch>` nachziehen und nur gegen den Batch-Server testen (Vite ignoriert `.claude/`).
+5. Auch Claude arbeitet direkt im Hauptordner, ohne Worktree. Der frühere Claude-Worktree wurde am 04.10.2026 entfernt.
 
 ## Kurzbefehle
 
