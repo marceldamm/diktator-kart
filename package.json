@@ -10,14 +10,20 @@
     "test:browser": "node tests/browser-smoke.mjs",
     "test:endurance": "node tests/browser-endurance.mjs",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort"
+    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+    "assets:optimize": "node art-source/optimize_assets.mjs"
   },
   "dependencies": {
     "@babylonjs/core": "9.28.0",
     "@babylonjs/loaders": "9.28.0"
   },
   "devDependencies": {
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/extensions": "4.5.1",
+    "@gltf-transform/functions": "4.5.1",
+    "sharp": "0.35.5",
     "typescript": "7.0.2",
     "vite": "8.3.2"
-  }
+  },
+  "overrides": {}
 }

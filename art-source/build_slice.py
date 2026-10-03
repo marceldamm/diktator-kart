@@ -2,7 +2,7 @@
 Run: blender --background --python art-source/build_slice.py
 No third party mesh content. Blender coordinates: X right, Y forward, Z up.
 """
-import bpy, math, os, random
+import bpy, math, os, random, shutil
 from mathutils import Vector
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -139,7 +139,9 @@ def save(name):
             bpy.context.view_layer.objects.active=objects[0]
             bpy.ops.object.join();bpy.context.object.name=key[0]+' / '+key[1]
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT,'art-source',name+'.blend'))
-    bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,name+'.glb'),export_format='GLB',export_yup=True,export_apply=True)
+    raw=os.path.join(ROOT,'.tools','raw-models');os.makedirs(raw,exist_ok=True)
+    bpy.ops.export_scene.gltf(filepath=os.path.join(raw,name+'.glb'),export_format='GLB',export_yup=True,export_apply=True)
+    shutil.copyfile(os.path.join(raw,name+'.glb'),os.path.join(OUT,name+'.glb'))
 
 # Sculpted vintage roadster, designed at the scale of the existing controller.
 kart=empty('hero-kart')

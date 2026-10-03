@@ -86,3 +86,17 @@ export function attachKeyboard(input: InputHub): () => void {
     input.reset();
   };
 }
+
+/** Pointer IDs keep simultaneous touch steering, gas and drift independent. */
+export function attachTouch(input:InputHub,root:HTMLElement):()=>void {
+  const sources=new Map<number,string>();
+  const down=(event:PointerEvent)=>{
+    const button=(event.target as HTMLElement).closest<HTMLButtonElement>('[data-drive-action]');if(!button)return;
+    event.preventDefault();const source=`touch:${event.pointerId}`;sources.set(event.pointerId,source);
+    input.setAction(source,button.dataset.driveAction as Action,true);button.setPointerCapture(event.pointerId);
+  };
+  const up=(event:PointerEvent)=>{const source=sources.get(event.pointerId);if(source){input.releaseSource(source);sources.delete(event.pointerId);}};
+  const release=()=>{for(const source of sources.values())input.releaseSource(source);sources.clear();};
+  root.addEventListener('pointerdown',down);root.addEventListener('pointerup',up);root.addEventListener('pointercancel',up);root.addEventListener('lostpointercapture',up);window.addEventListener('blur',release);
+  return ()=>{release();root.removeEventListener('pointerdown',down);root.removeEventListener('pointerup',up);root.removeEventListener('pointercancel',up);root.removeEventListener('lostpointercapture',up);window.removeEventListener('blur',release);};
+}

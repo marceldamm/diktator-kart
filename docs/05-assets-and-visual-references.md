@@ -1,5 +1,11 @@
 # Assets und visuelle Referenzen
 
+## Laufender großer Slice – 03.10.2026
+
+Kostenlose lokale Pipeline: portable Blender 4.5.3 LTS unter ignoriertem `.tools/`, originale Generatoren und editierbare `.blend` unter `art-source/`, Laufzeit-GLB unter `public/assets/models/`. Poly-Haven-CC0-Baum und Pflaster sind anhand offizieller Quellen dokumentiert. Audio-WAVs original; vorläufige Pianoaufnahme mit CC-BY-4.0-Attribution. `public/assets/CREDITS.md` enthält Herkunft/Bearbeitung. G–L bleibt Bildreferenz und wird nicht als Spieltextur kopiert. Die erzeugte Himmeltextur ist eigenständig.
+
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+
 ## Ziel
 
 Die neue Produktion braucht eine klare Kette von Idee → Referenz → Entwurf → Asset → Integration → Abnahme. Ein Bild im Referenzordner ist eine Stilhilfe, keine automatisch zu kopierende Vorlage und keine Lizenzfreigabe.

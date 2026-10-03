@@ -1,11 +1,12 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
-import { attachKeyboard, InputHub } from './input';
+import { attachKeyboard, attachTouch, InputHub } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
 import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, type RaceProgress } from './track';
 import { KartAudio } from './audio';
+import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -53,6 +54,7 @@ class App {
   private queuedHopPress = false;
   private readonly input = new InputHub();
   private readonly detachKeyboard = attachKeyboard(this.input);
+  private readonly detachTouch=attachTouch(this.input,document.querySelector<HTMLElement>('#touch-controls')!);
   private state: AppState = 'loading';
   private lastAction = 'Keine';
   private manifestName = '–';
@@ -69,15 +71,22 @@ class App {
   private botStuck: number[] = [];
   private recoveryRemaining: number[] = [];
   private photoWasPaused = false;
+  private items:ItemWorld=createItems(LOAD_KART_COUNT+1);
+  private itemMessage='';
+  private itemMessageUntil=0;
+  private reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
   private quality = 1;
   private reducedEffects = false;
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
+    try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
+    document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
     document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = 1 - this.quality; this.applyQuality(); });
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
+    document.querySelector('#item-use')?.addEventListener('click',()=>{this.input.setAction('item-button','item',true);this.input.setAction('item-button','item',false);});
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
       this.audio.setEnabled(!this.audio.enabled); void this.audio.unlock();
       document.querySelector('#sound-toggle')!.textContent = this.audio.enabled ? 'Ton an' : 'Ton aus';
@@ -159,6 +168,7 @@ class App {
     this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -180,7 +190,9 @@ class App {
       this.testScene = created;
       this.applyQuality();
       this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
+      this.applyMotion();
       this.testScene.present(this.kart, this.loadKarts);
+      this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
     } catch (error) {
       if (generation === this.generation) this.show('error', error instanceof Error ? error.message : String(error));
@@ -194,6 +206,11 @@ class App {
     document.querySelector('#effects-toggle')!.textContent = this.reducedEffects ? 'Effekte reduziert' : 'Effekte voll';
     try { localStorage.setItem('dk-quality', String(this.quality)); localStorage.setItem('dk-reduced-effects', this.reducedEffects ? '1' : '0'); } catch { /* Session controls still work. */ }
   }
+  private applyMotion():void {
+    this.camera?.setReducedMotion(this.reducedMotion);
+    document.querySelector('#motion-toggle')!.textContent=this.reducedMotion?'Kamera ruhig':'Kamera dynamisch';
+    try{localStorage.setItem('dk-reduced-motion',this.reducedMotion?'1':'0');}catch{}
+  }
 
   private async startRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
@@ -202,8 +219,10 @@ class App {
     // Reuse assets; reset the simulation without reloading the entire scene.
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0;
+    this.audio.cue('countdown');
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
     this.accumulator = 0; this.queuedHopPress = false;
@@ -218,6 +237,13 @@ class App {
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
     document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : 'STADION GRAND PRIX';
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
+    const item=this.items.slots[0];
+    document.querySelector('#item-name')!.textContent=item?ITEM_NAMES[item]:'Sendung abholen';
+    document.querySelector('#item-icon')!.textContent=item==='direct'?'➤':item==='homing'?'◎':item==='trap'?'§':'✉';
+    const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;itemButton.disabled=!item||this.racePhase!=='race';
+    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?'E · einsetzen':this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
+    const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
+    const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
     document.querySelector('#race-start')!.textContent = this.racePhase === 'practice' ? 'Rennen starten ↵' : 'Neues Rennen ↵';
     const map = document.querySelector<HTMLCanvasElement>('#minimap')!, c = map.getContext('2d')!;
@@ -268,7 +294,11 @@ class App {
       this.accumulator += delta;
       while (this.accumulator >= FIXED_STEP) {
         const countdown = !LAB_WORLD && this.racePhase === 'countdown';
-        if (countdown) { this.countdown -= FIXED_STEP; if (this.countdown <= 0) this.racePhase = 'race'; }
+        if (countdown) {
+          const before=Math.ceil(this.countdown-.4);this.countdown -= FIXED_STEP;
+          if(this.countdown<=0){this.racePhase='race';this.audio.cue('start');}
+          else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before)this.audio.cue('countdown');
+        }
         if (!countdown && this.racePhase !== 'finished') {
         const project = LAB_WORLD ? undefined : projectTrack;
         const traffic = [this.kart, ...this.loadKarts];
@@ -297,10 +327,21 @@ class App {
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
         if (!LAB_WORLD && this.racePhase === 'race') {
+          const all=[this.kart,...this.loadKarts];
+          const ranks=this.progress.map(p=>1+this.progress.filter(other=>other.distance>p.distance).length);
+          const use=all.map((_,i)=>i===0?frame.pressed.has('item')||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
+          const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
+          for(const event of this.items.events) if(event.kart===0) {
+            this.itemMessage=event.kind==='pickup'?`${ITEM_NAMES[event.item]} erhalten`:event.kind==='launch'?'Sendung zugestellt … unterwegs':'Treffer · kurzzeitig geschützt';
+            this.itemMessageUntil=this.items.time+1.8;this.audio.itemEvent(event.kind);
+          }
           this.raceTime += FIXED_STEP;
+          const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore&&!this.progress[0].finished)this.audio.cue('lap');
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
+            this.audio.cue('finish');
             const place = 1 + this.progress.slice(1).filter((p) => p.finished).length;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden in ${this.raceTime.toFixed(2)} Sekunden. Enter startet die Revanche.`;
@@ -312,13 +353,14 @@ class App {
         this.accumulator -= FIXED_STEP;
       }
       this.testScene.present(this.kart, this.loadKarts);
+      this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
       this.camera?.update(this.kart, delta, false, frame.steering);
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
         : this.kart.impactRemaining > 0
-        ? this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'
+        ? this.kart.impactKind === 'item' ? 'Posttreffer – Kart fängt sich' : this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'
           : this.kart.impactKind === 'obstacle' ? 'Hinderniskontakt – Kart fängt sich' : 'Randkontakt – Kart fängt sich'
         : this.kart.turboRemaining > 0
         ? `Mini-Turbo ${this.kart.turboRemaining.toFixed(1)} s`
@@ -345,6 +387,8 @@ class App {
   private dispose(): void {
     ++this.generation;
     this.detachKeyboard();
+    this.detachTouch();
+    this.audio.dispose();
     this.testScene?.scene.dispose();
     this.engine?.stopRenderLoop();
     this.engine?.dispose();

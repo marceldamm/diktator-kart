@@ -1,5 +1,11 @@
 # Performance-Ziele für normale PCs im Browser
 
+## Laufender großer Slice – 03.10.2026
+
+Der neue Slice wurde mit sechs Blender-Karts, Architektur, PBR und Vegetation auf RTX 3070 Laptop GPU bei 1600 × 1000 geprüft. Erstlauf zeigte erhebliche Ausreißer (P95 bis 200 ms). Nach undurchsichtigem Laub und sechs statt zehn Bäumen: P95 20,6/19,9/19,9 ms für nah/fern/Fahrer, Basis-Fahrer 19,4 ms; Rohdaten `evidence/slice-optimized-rtx.json`. Vier Nah-Intervalle >33 ms, andere Fenster keine. Diese kurze Nachprobe ist keine abschließende Dauer-/Zielgeräteabnahme. Drawcallwerte im älteren `slice-full-race-rtx.json` sind kumuliert und ungültig als pro-Frame-Angabe; Nachprobe nutzt korrekte Instrumentierung. Glow wird nur für leuchtende Teile gerendert. 60-/30-FPS-Ziele unverändert.
+
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+
 ## Leitgedanke
 
 Das Spiel soll auf normalen PCs im Browser gut laufen, nicht nur auf High-End-Hardware. „Schön“ bedeutet daher nicht maximal viele Polygone, sondern gute Priorisierung: Kameraqualität, Silhouetten, Lichtstimmung, Materialkontrast, sichtbare Reaktionen und stabile Eingabe.

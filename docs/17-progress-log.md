@@ -539,6 +539,18 @@
 
 **Budget / Fortsetzung:** Offizielle Werte zuletzt 33 % Fünf-Stunden- und 5 % Wochenverbrauch; kein Reset/Zusatzkontingent. Performance korrigieren, dann beschlossenes Start-Itemset und belebtere Streckendetails umsetzen. Keine Übertragung, kein Merge, kein Ruhezustand.
 
+### 2026-10-03 – Vertical Slice: Items, Tribünen, Touch und Modellpipeline
+
+**Umgesetzt:** Drei bestätigte Start-Archetypen als neutrale Rohrpost-/Suchauftrag-/Stempelfallen-Darstellung mit originalen `.blend`/GLB-Modellen. Geteilte Aufnahme-/Verteilungs-/Treffer-/Schutzregeln für alle sechs Teilnehmer, begrenzte Lebensdauer, höchstens sechs Objekte je Typ und feste Renderpools. Neun Postkisten, HUD-Slot, E und anklickbarer Einsatz, Anflugwarnung, Papier-/Schutzeffekt und Original-WAVs. Tribünen mit neutralen Zuschauersilhouetten, Kassen, Parkbänke und Zielbrücke. Ruhige Kamera sowie Mehrfinger-Touch mit Abbruchfreigabe. Grafik/Effekte/Kamera lokal gespeichert. Audioereignisse für Countdown, Start, Runde, Ziel, Hop/Landung ergänzt; keine menschliche Hörabnahme.
+
+**Verifiziert:** 22 Modelltests. Normaler Browserlauf mit Items erreichte drei Runden und Revanche; alle drei Typen gesammelt/eingesetzt, Suchauftrag und Falle trafen, Pause hielt den Itemzustand identisch an, Meshzahl konstant 416, kein Browserfehler. Direkte Rohrpost traf im kontrollierten Modelltest, verfehlte aber in diesem ersten Botrennen durchgehend; Bot-Zielentscheidung anschließend verbessert, Nachprobe offen. Rohdaten `slice-item-race.json`. Touch-Emulation 932 × 430 bestätigte Gas+Lenkung, Touchcancel, Kamera und gespeicherte Settings; kein echtes Handyurteil. `slice-touch-emulation.json`.
+
+**Assetpipeline:** glTF Transform SDK 4.5.1 und Sharp 0.35.5 lokal festgeschrieben: Deduplizierung/Welding, 16-Bit-Positionen, Normal-/UV-Quantisierung und JPEG88-Karten. Editierbare Blenderquellen unverändert erhalten, Exporte zusätzlich in ignoriertem Rohcache. Laufzeitdateigrößen in `slice-asset-optimization.json`. Browser-Sicht-/Funktionsprüfung nach Optimierung bestanden, zuletzt F3 60 FPS / P95 16,8 ms bei sechs Karts und 1600 × 1000. Dieser kurze Wert ersetzt keine Endurance. Unnötige CLI mit gemeldeter anfälliger Abhängigkeit entfernt; SDK-Paketstand laut npm-Audit 0 Schwachstellen.
+
+**Dokumente:** README/START-HERE aktualisiert; 00/02/03/04/05/09/10/12/16 gegen den ausdrücklichen neutralen Produktionsauftrag synchronisiert. Historische Figuren, Sarah-Ideen und G–L-Ziele unverändert. Keine M2/M3/M4-Gesamtabnahme.
+
+**Offen / nächster Schritt:** Schärferer Himmel, klarer Spieleinstieg und unterscheidbare neutrale Karts; anschließend neue Grafik-/Item-Dauerprobe, hörbare Qualität und gemeinsame Stil-/Geräteabnahme. Aktuelle neutrale Gesichter, Zuschauer und Karts sind vorläufige Artassets. Offizieller Budgetstand zuletzt 51 % Fünf-Stunden- und 8 % Wochenverbrauch. Weiterhin nur lokale Checkpoints, kein Push/Merge/Reset/Ruhezustand.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

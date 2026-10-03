@@ -16,3 +16,11 @@ Stand: 03.10.2026. Keine gekauften Modelle, Texturen oder Sounds.
 Blender selbst: https://www.blender.org/ , freie Software, GNU GPL. Das lokale portable Werkzeug liegt unter `.tools/` und wird nicht mit Git verteilt. Die Lizenz des Werkzeugs wird dadurch nicht auf selbst erstellte Modelle übertragen; siehe https://www.blender.org/about/license/ .
 
 Babylon.js / glTF-Loader: Apache-2.0; Paketlizenzen liegen in `node_modules/@babylonjs/*` und werden vom Lockfile festgelegt.
+
+## Erweiterung des neutralen Slices
+
+`models/items.glb`, `models/stadium-props.glb` und zugehörige `.blend`: originale Projektgeometrie aus `art-source/build_items.py` und `build_props.py`. Neutrale Darstellungen der drei bestätigten Item-Archetypen, keine Umbenennung von Sarahs Originalideen und keine historische Figurenfreigabe. Zuschauer sind vereinfachte neutrale Silhouetten.
+
+`audio/pickup.wav`, `launch.wav`, `countdown.wav`, `start.wav`, `lap.wav`, `finish.wav`, `hop.wav`, `land.wav`: originale deterministische WAV-Effekte aus `build_audio.mjs`, vorproduziert und im Spiel abgespielt. Hörqualität nicht abgenommen.
+
+GLB-Optimierung: glTF Transform SDK 4.5.1 (MIT, https://gltf-transform.dev/ ) und Sharp 0.35.5 (Apache-2.0), nur lokale Entwicklung. Originale `.blend` bleiben editierbar; `npm run assets:optimize` verarbeitet den Rohcache. Kein externer Optimierungsdienst.

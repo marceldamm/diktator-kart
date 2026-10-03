@@ -1,5 +1,11 @@
 # Roadmap und Abnahmen
 
+## Laufender großer Slice – 03.10.2026
+
+Der große Nutzerauftrag zieht neutrale M3-Produktion und Teile von M4 ausdrücklich vor: editierbare Artassets und kompletter fiktiver Stadionring mit fünf echten Bots, drei Runden, Platzierung, Ergebnis/Revanche. Browserrennen und Revanche geprüft. Das bestätigte Start-Itemset wird integriert. Die M2-Abnahmelücken bleiben sichtbar und verhindern keine ausdrücklich autorisierte neutrale Umsetzung. M3/M4 werden nicht pauschal als abgenommen markiert.
+
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+
 Diese Übersicht verwendet dieselben Meilensteine wie [16-production-blueprint.md](16-production-blueprint.md) und START-HERE.md. Die Nutzerantworten stehen in [10-open-questions.md](10-open-questions.md).
 
 ## M0 – Wissensbasis und Vorbereitung

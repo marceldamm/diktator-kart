@@ -17,3 +17,4 @@ dist/
 .tools/
 .browser-profile/
 *.blend1
+__pycache__/

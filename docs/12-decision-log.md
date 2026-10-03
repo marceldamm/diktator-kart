@@ -66,3 +66,9 @@
 Die Fähigkeitsentscheidung ist keine pauschale Zustimmung zur Änderung historischer Fähigkeitsnamen oder sämtlicher Altmechaniken. Entsprechende Vorschläge bleiben getrennt zur gemeinsamen Bestätigung offen.
 
 Bei jeder Änderung eines Grundpfeilers: abhängige Dokumente prüfen, Widersprüche markieren, Roadmap und offene Fragen aktualisieren und einen neuen Eintrag mit Datum ergänzen.
+
+## Großer Slice-Auftrag – 03.10.2026
+
+- **Verbindlicher Sitzungsauftrag:** Der Nutzer autorisiert die breite neutrale Produktion auf getrenntem Branch, einschließlich kostenloser Werkzeuge/Assets und vorgezogener Rennschleife. Historische Gestaltung und Sarah-Ideen bleiben gemeinsam zu bestätigen. Betroffen: README, START-HERE, 00, 02, 05, 09, 10, 16, 17.
+- **Technische Umsetzung:** Blender 4.5.3, editierbare Quellen plus GLB, geteilter Fahrcontroller, geschlossene Streckenprojektion, begrenzte Partikel/Itempools, gemeinsame Recovery ohne freien Fortschritt. Quelle/Bearbeitung in Asset-Credits. Keine Änderung an langfristigen Inhalts- oder Performancezielen.
+- **Budgetregel:** Offizielle Accountlimits statt geschätzter Tokens; bei etwa 15 % kleinerem Rest geordnet abschließen und ungefähr 5 % bewahren. Regelmäßige lokale Checkpoints, kein Push/Merge oder Reset.

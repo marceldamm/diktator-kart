@@ -26,6 +26,7 @@ import { SceneInstrumentation } from '@babylonjs/core/Instrumentation/sceneInstr
 import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineInstrumentation';
 import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
+import {addItems} from './item-scene';
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
   const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
@@ -178,6 +179,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
       if (/cloth/.test(m.name)) { m.albedoTexture = fabricMaps.color; m.bumpTexture = fabricMaps.normal; }
     }
     for (const mesh of world.meshes) { mesh.receiveShadows = true; mesh.isPickable = false; if (mesh.getTotalVertices() > 0) shadow.addShadowCaster(mesh); }
+    const props=await ImportMeshAsync('/assets/models/stadium-props.glb',scene);
+    props.meshes.filter(m=>!m.parent).forEach(m=>m.parent=worldOrientation);
+    for(const mesh of props.meshes) {
+      mesh.receiveShadows=true;mesh.isPickable=false;if(mesh.getTotalVertices()>0)shadow.addShadowCaster(mesh);
+      if(mesh.material instanceof PBRMaterial) {
+        if(mesh.material.name.includes('limestone')){mesh.material.albedoTexture=stoneMaps.color;mesh.material.bumpTexture=stoneMaps.normal;}
+        if(/cloth|Spectator/.test(mesh.material.name)){mesh.material.albedoTexture=fabricMaps.color;mesh.material.bumpTexture=fabricMaps.normal;}
+      }
+    }
     addTrackWorld(scene, shadow);
     const treeContainer = await LoadAssetContainerAsync('/assets/models/park-tree.glb', scene);
     for(const material of treeContainer.materials) if(material instanceof PBRMaterial && material.name.includes('leaves')) {
@@ -245,8 +255,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
     sparks.direction1 = new Vector3(-1.5, .3, -1.5); sparks.direction2 = new Vector3(1.5, 1.5, 1.5);
     sparks.gravity = new Vector3(0, -4, 0); sparks.colorDead = new Color4(1, .4, .05, 0); sparks.start();
     let reducedEffects = false;
+    const presentItems=await addItems(scene,shadow,loadKartCount+1);
     return {
       scene,
+      presentItems,
       setQuality(level, reduced) {
         reducedEffects = reduced; sun.shadowEnabled = level > 0; glow.isEnabled = level > 0 && !reduced;
         engine.setHardwareScalingLevel(level === 0 ? Math.max(1, window.devicePixelRatio * 1.35) : 1);

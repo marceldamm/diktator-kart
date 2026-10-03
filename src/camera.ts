@@ -28,6 +28,7 @@ export class KartCamera {
   private readonly realCockpit: boolean;
   private photo = false;
   private photoAngle = .65;
+  private reducedMotion=false;
 
   constructor(scene: Scene, state: KartState, realCockpit = false) {
     this.realCockpit = realCockpit;
@@ -89,6 +90,7 @@ export class KartCamera {
 
   get viewName(): string { return VIEWS[this.view].name; }
   get photoMode(): boolean { return this.photo; }
+  setReducedMotion(reduced:boolean):void { this.reducedMotion=reduced; }
   togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
 
   update(state: KartState, dt: number, immediate = false, steering = 0): void {
@@ -104,14 +106,14 @@ export class KartCamera {
     const firstPerson = this.view === 2;
     const desired = firstPerson
       ? new Vector3(state.x - forwardX * (this.realCockpit ? .42 : .05),
-        (this.realCockpit ? 1.89 : 1.55) + state.height * .9 + state.suspensionOffset * .3,
+        (this.realCockpit ? 1.89 : 1.55) + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
         state.z - forwardZ * (this.realCockpit ? .42 : .05))
       : new Vector3(state.x - forwardX * view.distance,
-        view.height + state.height * 0.35,
+        view.height + state.height * (this.reducedMotion?.05:.35),
         state.z - forwardZ * view.distance);
-    const blend = immediate ? 1 : 1 - Math.exp(-view.follow * dt);
+    const blend = immediate ? 1 : 1 - Math.exp(-(this.reducedMotion?14:view.follow) * dt);
     this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
-    this.camera.fov = (firstPerson && this.realCockpit ? 1.45 : view.fov) + (state.turboRemaining > 0 ? .075 : 0);
+    this.camera.fov = (firstPerson && this.realCockpit ? 1.45 : view.fov) + (!this.reducedMotion&&state.turboRemaining > 0 ? .075 : 0);
     this.camera.setTarget(firstPerson
       ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - (this.realCockpit ? 1.7 : .14),
         this.camera.position.z + forwardZ * 8)

@@ -11,12 +11,14 @@ import { Scene } from '@babylonjs/core/scene';
 import { TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, WHEEL_POSITIONS, type KartState } from './kart-model';
 import { addShowcaseWorld } from './showcase-world';
 import { createSliceScene } from './slice-scene';
+import type {ItemWorld} from './items';
 
 export interface TestScene {
   scene: Scene;
   present(state: KartState, loadKarts: KartState[]): void;
   setPlayerVisible(visible: boolean): void;
   setQuality?(level: number, reducedEffects: boolean): void;
+  presentItems?(world:ItemWorld,karts:KartState[]):void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {

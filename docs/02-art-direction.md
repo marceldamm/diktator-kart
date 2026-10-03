@@ -1,5 +1,11 @@
 # Art Direction
 
+## Laufender großer Slice – 03.10.2026
+
+Die Standardansicht verwendet editierbare Blender-/GLB-Assets statt Quaderkarts: geformter Retro-Roadster, neutraler Fahrerplatzhalter, bewegte Räder/Lenkrad/Schal, echtes CC0-Pflaster, Stein/Stoff, gerichtetes Licht, Schatten und Wolkenhimmel. `docs/evidence/slice-*.png` sind Spielaufnahmen. Der Fahrer ist keine fertige historische Figur. G–L wird noch nicht erreicht; individuelle historische Silhouetten, Gesichts-/Materialpolitur und gemeinsame Stilfreigabe fehlen.
+
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+
 ## Visuelles Ziel
 
 Die Bildsprache verbindet die sofortige Lesbarkeit und das Fahrgefühl von Mario Kart 64 mit deutlich höherer Detailtreue und modernerer Material-, Licht-, Animations- und Effektqualität. Die Switch-Mario-Kart-Spiele sind ein technischer Inspirationspunkt, aber das Ergebnis soll weniger kindlich, erwachsener, eigenständiger und stellenweise realistischer wirken: mehr glaubwürdiges Gewicht, Bodenhaftung und Materialwirkung, aber weiterhin überzeichnet und humorvoll.

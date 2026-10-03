@@ -1,7 +1,7 @@
 :root { font-family: system-ui, sans-serif; color: #f7f0da; background: #08151d; }
 * { box-sizing: border-box; }
 body { margin: 0; }
-#app { position: relative; width: 100vw; height: 100dvh; min-height: 480px; overflow: hidden; }
+#app { position: relative; width: 100vw; height: 100dvh; overflow: hidden; }
 #render-canvas { display: block; width: 100%; height: 100%; outline: none; }
 .panel { position: absolute; top: max(20px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); width: min(400px, calc(100vw - 40px)); max-height: calc(100dvh - max(20px, env(safe-area-inset-top)) - max(20px, env(safe-area-inset-bottom))); overflow: auto; padding: 20px 22px; background: rgba(6, 22, 30, .88); border: 1px solid rgba(126, 214, 217, .4); border-radius: 12px; box-shadow: 0 12px 40px #0008; backdrop-filter: blur(8px); }
 .eyebrow { font-size: .72rem; letter-spacing: .2em; color: #6ed6dc; font-weight: 700; }
@@ -73,5 +73,25 @@ button:disabled { opacity: .5; cursor: default; }
 .credits p { max-width:420px;padding:14px;background:#0c222bea;border:1px solid #d5bc7744;font-size:11px;line-height:1.6; }
 .credits a { color:#efdbab; }
 .photo-mode .credits { display:none !important; }
+.showcase .item-card.slice-only { position:absolute;bottom:132px;left:30px;display:flex;gap:12px;align-items:center;padding:12px 15px;background:#11272fe8;border:1px solid #e2c58c55;min-width:240px; }
+#item-icon { font:32px Georgia,serif;color:#f6dfa9; }
+.item-card strong { display:block;font-size:12px;color:#e9d6a9; }
+.item-card small { display:block;margin-top:5px;font-size:9px;color:#b6c8c4; }
+.item-card button { margin-left:auto;font-size:16px; }
+#item-warning { position:absolute;top:160px;left:50%;transform:translateX(-50%);padding:9px 14px;color:#f5d59c;background:#742c28dc;font-size:12px; }
+.photo-mode .item-card,.photo-mode #item-warning { display:none !important; }
+#touch-controls { display:none; }
+@media(pointer:coarse) {
+  .showcase #touch-controls { display:flex;position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:14px;right:14px;justify-content:space-between;align-items:end;pointer-events:none; }
+  #touch-controls div { display:flex;gap:8px; }
+  .showcase #touch-controls button { pointer-events:auto;touch-action:none;user-select:none;min-width:54px;min-height:54px;background:#102b32c9;border:1px solid #dcc48b88;font-size:14px; }
+  #touch-controls .touch-aux button { min-width:44px;font-size:10px; }
+  .showcase .showcase-controls { display:none; }
+  .showcase .panel { bottom:80px;width:180px;padding:10px; }
+  .showcase .item-card.slice-only { bottom:84px;left:14px;min-width:200px; }
+  .showcase .map-card { display:none; }
+  .showcase .credits { display:none; }
+}
+.photo-mode #touch-controls { display:none !important; }
 .showcase.start-error #status,.showcase.start-error #message { display:block; }
 @media(max-width:900px) { .showcase .brand { top:18px; left:18px; } .brand div { display:none; } .showcase .race-hud { top:16px; padding:9px 14px; } .race-stats { gap:16px; } .race-stats b { font-size:20px; } .showcase .map-card { width:90px; right:14px; top:16px; } #minimap { width:75px; height:115px; } .showcase .panel { right:14px; bottom:14px; width:200px; } .showcase #debug { left:14px; width:min(365px,90vw); } }

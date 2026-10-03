@@ -1,5 +1,30 @@
 {
   "schemaVersion": 1,
   "name": "Stadion-Vertical-Slice mit Blender-Assets",
-  "files": ["models/hero-kart.glb", "models/stadium-world.glb", "models/park-tree.glb", "textures/golden-sky.png", "textures/studio.env", "textures/cobble-color.jpg", "textures/cobble-normal.jpg", "textures/cobble-arm.jpg", "audio/motor.wav", "audio/tire.wav", "audio/impact.wav", "audio/boost.wav", "audio/fig-leaf-rag.mp3", "CREDITS.md"]
+  "files": [
+    "models/hero-kart.glb",
+    "models/stadium-world.glb",
+    "models/park-tree.glb",
+    "textures/golden-sky.png",
+    "textures/studio.env",
+    "textures/cobble-color.jpg",
+    "textures/cobble-normal.jpg",
+    "textures/cobble-arm.jpg",
+    "audio/motor.wav",
+    "audio/tire.wav",
+    "audio/impact.wav",
+    "audio/boost.wav",
+    "audio/fig-leaf-rag.mp3",
+    "CREDITS.md",
+    "models/items.glb",
+    "models/stadium-props.glb",
+    "audio/pickup.wav",
+    "audio/launch.wav",
+    "audio/countdown.wav",
+    "audio/start.wav",
+    "audio/lap.wav",
+    "audio/finish.wav",
+    "audio/hop.wav",
+    "audio/land.wav"
+  ]
 }

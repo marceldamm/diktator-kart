@@ -1,5 +1,5 @@
 """Reduce Poly Haven's CC0 tree to a measured browser asset, preserving its textures."""
-import bpy,os,tempfile
+import bpy,os,tempfile,shutil
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 tempfile.tempdir=os.path.join(ROOT,'.tools','temp');os.makedirs(tempfile.tempdir,exist_ok=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
@@ -33,6 +33,8 @@ bpy.context.preferences.filepaths.save_version=0
 # Pack all maps, so the .blend is editable without the local download cache.
 bpy.ops.file.pack_all()
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT,'art-source','park-tree.blend'))
-bpy.ops.export_scene.gltf(filepath=os.path.join(ROOT,'public','assets','models','park-tree.glb'),export_format='GLB',export_apply=True)
+raw=os.path.join(ROOT,'.tools','raw-models');os.makedirs(raw,exist_ok=True)
+bpy.ops.export_scene.gltf(filepath=os.path.join(raw,'park-tree.glb'),export_format='GLB',export_apply=True)
+shutil.copyfile(os.path.join(raw,'park-tree.glb'),os.path.join(ROOT,'public','assets','models','park-tree.glb'))
 result=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in bpy.context.scene.objects if o.type=='MESH')
 print('TREE_TRIANGLES',total,'=>',result)

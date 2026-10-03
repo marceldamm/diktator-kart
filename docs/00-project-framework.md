@@ -1,5 +1,11 @@
 # Gesamtgerüst und zentrale Arbeitsgrundlage
 
+## Laufender großer Slice – 03.10.2026
+
+Der ausdrückliche große Nutzerauftrag erlaubt einen neutralen, vorgezogenen Vertical Slice auf `codex/stadium-vertical-slice`: Blender-Kart/Fahrerplatzhalter, fiktive Architektur, kompletter 441-m-Kurs und Drei-Runden-Schleife. Diese Produktion ersetzt weder den historischen Startkader noch gemeinsame Stil-, Inhalts- oder Zielhardware-Abnahme. Lokale Commits, kein Push/Merge; `main` und Altarchive unverändert.
+
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+
 ## Zweck
 
 Dieses Dokument verbindet die Grundpfeiler, Detaildokumente, offene Entscheidungen und den späteren Bauplan. Es ist die erste Datei, die bei einer neuen Arbeitsphase gelesen wird. Die kurze öffentliche Zusammenfassung bleibt in `README.md`; dieses Dokument ist die ausführlichere interne Leitplanke.

@@ -19,7 +19,7 @@ export interface KartState {
   impactRemaining: number;
   impactVelocityX: number;
   impactVelocityZ: number;
-  impactKind: 'boundary' | 'obstacle' | 'kart' | null;
+  impactKind: 'boundary' | 'obstacle' | 'kart' | 'item' | null;
 }
 
 export interface DriveInput {

@@ -14,3 +14,12 @@ await wav('tire',2,t=>{filter=filter*.3+noise()*.7;return filter*.4+.12*Math.sin
 await wav('impact',.38,t=>noise()*.7*Math.exp(-t*19)+Math.sin(2*Math.PI*90*t)*.5*Math.exp(-t*24));
 await wav('boost',1.2,(t,d)=>{filter=filter*.55+noise()*.45;return (filter*.6+Math.sin(2*Math.PI*(85*t+30*t*t))*.1)*Math.sin(Math.PI*t/d);});
 console.log('Four original WAV effects written.');
+await wav('pickup',.4,(t,d)=>Math.sin(2*Math.PI*(t<.13?440:t<.26?550:660)*t)*.3*Math.sin(Math.PI*t/d));
+await wav('launch',.35,t=>(noise()*.4+Math.sin(2*Math.PI*(160*t+300*t*t))*.18)*Math.exp(-t*9));
+const bell=(frequency,t)=>Math.sin(2*Math.PI*frequency*t)*Math.exp(-t*5)+.22*Math.sin(2*Math.PI*frequency*2.01*t)*Math.exp(-t*9);
+await wav('countdown',.6,t=>bell(392,t)*.36);
+await wav('start',.85,t=>bell(784,t)*.45);
+await wav('lap',1.1,t=>bell(t<.25?523:t<.5?659:784,t)*.38);
+await wav('finish',1.5,t=>bell(t<.25?523:t<.5?659:t<.75?784:1046,t)*.4);
+await wav('hop',.2,t=>Math.sin(2*Math.PI*(180*t+150*t*t))*.3*Math.exp(-t*16));
+await wav('land',.22,t=>noise()*.2*Math.exp(-t*30)+Math.sin(2*Math.PI*65*t)*.4*Math.exp(-t*22));

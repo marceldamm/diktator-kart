@@ -1,5 +1,11 @@
 # Bauplan und Fahrplan für die Entwicklung
 
+## Laufender großer Slice – 03.10.2026
+
+Auf ausdrücklichen Nutzerauftrag läuft der große neutrale Slice auf `codex/stadium-vertical-slice`, mit editierbaren Blender-/GLB-Assets und vorgezogener Drei-Runden-Rennschleife. Nach jedem größeren Paket: echte Browserprobe, relevante Tests/Build, Laufzeitbilder, offizielles Nutzungslimit und lokaler Git-Checkpoint. Bei etwa 15 % kleinerem Rest keine große neue Aufgabe; Abschluss mit ungefähr 5 % Puffer. Kein Reset, keine Zusatzkosten, kein Push/Merge.
+
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+
 ## Zweck
 
 Dieser Fahrplan beschreibt, was in welcher Reihenfolge passieren muss, damit eine längere autonome ChatGPT-/Codex-Arbeit möglich wird. Er enthält keine unrealistische Zusage eines fertigen Spiels in einer festen Zeit. Zeitangaben sind grobe Arbeitsfenster und hängen von Assets, Hardware, Browser, Fehlern und Nutzerfeedback ab.
