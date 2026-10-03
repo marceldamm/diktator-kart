@@ -24,6 +24,10 @@ export interface KartState {
   scrapeRemaining: number;
   /** Seconds of the visual spin-out after an item hit (presentation only). */
   spinRemaining: number;
+  /** What the last glancing contact touched: barrier scrape or kart bump (sound and sparks). */
+  scrapeKind: 'wall' | 'kart' | null;
+  /** Smoothed steering input for wheels, steering wheel and arms (presentation only). */
+  steer: number;
 }
 
 export interface DriveInput {
@@ -109,7 +113,7 @@ export function initialKartState(): KartState {
     suspensionOffset: 0, suspensionVelocity: 0, bodyPitch: 0, bodyRoll: 0,
     wheelGroundHeights: [0, 0, 0, 0], grounded: true,
     impactRemaining: 0, impactVelocityX: 0, impactVelocityZ: 0,
-    impactKind: null, scrapeRemaining: 0, spinRemaining: 0,
+    impactKind: null, scrapeRemaining: 0, spinRemaining: 0, scrapeKind: null, steer: 0,
   };
 }
 
@@ -242,11 +246,13 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     const tangentX = Math.sin(travelHeading) * speed + closing * wallX, tangentZ = Math.cos(travelHeading) * speed + closing * wallZ;
     const slide = Math.atan2(tangentX, tangentZ);
     travelHeading = slide;
-    heading += Math.atan2(Math.sin(slide - heading), Math.cos(slide - heading)) * .3;
-    speed *= Math.max(.2, .9 - glance * 1.25);
-    impactVelocityX += wallX * Math.min(1.2, closing * .4); impactVelocityZ += wallZ * Math.min(1.2, closing * .4);
-    if (glance > .28) { drifting = false; driftCharge = 0; driftDirection = 0; turboRemaining = 0; }
-    scrapeRemaining = .2;
+    heading += Math.atan2(Math.sin(slide - heading), Math.cos(slide - heading)) * Math.min(1, 6 * dt);
+    // One-time loss when the barrier is first touched, then only light friction while sliding along it.
+    const fresh = (state.scrapeRemaining ?? 0) === 0 || state.scrapeKind !== 'wall';
+    speed *= fresh ? Math.max(.35, 1 - glance * 1.1) : Math.exp(-(.12 + glance * 2.2) * dt);
+    impactVelocityX += wallX * Math.min(.8, closing * .3); impactVelocityZ += wallZ * Math.min(.8, closing * .3);
+    if (glance > .3) { drifting = false; driftCharge = 0; driftDirection = 0; turboRemaining = 0; }
+    scrapeRemaining = .12;
   } else if (collided) {
     // Steep barrier hit: the normal part rebounds, the tangential part survives with friction;
     // a straight head-on hit therefore ends at zero forward speed, oblique ones keep sliding.
@@ -287,7 +293,9 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
   return { x, z, heading, travelHeading, speed, height, hopRemaining, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
-    impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining };
+    impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
+    scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,
+    steer: (state.steer ?? 0) + (steering - (state.steer ?? 0)) * Math.min(1, 12 * dt) };
 }
 
 // Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.
@@ -321,15 +329,15 @@ export function resolveKartContacts(states: KartState[], project: WorldProjectio
         // Equal karts share the normal velocity and keep their tangential speed; strong closings lose more and stagger.
         const crash = closing >= KART_TUNING.crashClosingSpeed;
         {
-          if (closing <= .05) continue;
-          const shared = (leftNormal + rightNormal) / 2, shove = Math.min(crash ? 3.2 : 2.2, closing * (crash ? .3 : .55) + .5);
+          if (closing <= .05 || pass > 0) continue;
+          const shared = (leftNormal + rightNormal) / 2, shove = Math.min(crash ? 2.6 : 1.4, closing * (crash ? .28 : .4) + .3);
           for (const [kart, vx, vz, own, sign] of [[left, lvx, lvz, leftNormal, 1], [right, rvx, rvz, rightNormal, -1]] as const) {
             const nx = vx + (shared - own) * normalX, nz = vz + (shared - own) * normalZ;
             const forward = nx * Math.sin(kart.travelHeading) + nz * Math.cos(kart.travelHeading);
             kart.speed = Math.sign(forward || 1) * Math.hypot(nx, nz) * (crash ? .7 : .96);
             if (Math.abs(kart.speed) > .5) kart.travelHeading = Math.atan2(nx * Math.sign(kart.speed), nz * Math.sign(kart.speed));
             kart.impactVelocityX += normalX * shove * sign; kart.impactVelocityZ += normalZ * shove * sign;
-            kart.scrapeRemaining = .25;
+            kart.scrapeRemaining = .25; kart.scrapeKind = 'kart';
             if (closing > 3.5) { kart.drifting = false; kart.driftCharge = 0; kart.driftDirection = 0; }
             if (crash) { kart.turboRemaining = 0; kart.impactRemaining = KART_TUNING.impactDuration; kart.impactKind = 'kart'; }
           }

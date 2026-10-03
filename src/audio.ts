@@ -21,6 +21,7 @@ export class KartAudio {
   private lastImpact = false;
   private lastBoost = false;
   private lastAirborne=false;
+  private lastBump=false;
   private lastGear = 0;
   private shiftDip = 0;
   private crowdSwell = 0;
@@ -131,7 +132,11 @@ export class KartAudio {
     this.engine.playbackRate.setTargetAtTime(Math.max(.5, rate), t, this.shiftDip > 0 ? .02 : .06);
     this.engineGain.gain.setTargetAtTime(running ? (.13 + Math.min(1, band) * .07 + gear * .012) * (this.shiftDip > 0 ? .7 : 1) : 0, t, .08);
     this.tireGain.gain.setTargetAtTime(running && state.drifting ? .28 : 0, t, .08);
-    this.scrapeGain?.gain.setTargetAtTime(running && state.scrapeRemaining > 0 && speed > 2 ? .2 + Math.min(.25, speed * .015) : 0, t, .04);
+    this.scrapeGain?.gain.setTargetAtTime(running && state.scrapeRemaining > 0 && state.scrapeKind === 'wall' && speed > 2 ? .16 + Math.min(.2, speed * .012) : 0, t, .04);
+    // Kart-to-kart bumps: a soft body thud instead of the metal scrape.
+    const bump = state.scrapeKind === 'kart' && state.scrapeRemaining > .2;
+    if (running && bump && !this.lastBump) this.play(this.impact, .3, 1.35);
+    this.lastBump = bump;
     this.crowdGain?.gain.setTargetAtTime(running ? (.035 + crowdNearness * .16 + this.crowdSwell * .22) * (this.duck > 0 ? .7 : 1) : .02, t, .3);
     const impact = state.impactRemaining > 0, boost = state.turboRemaining > 0;
     if (running && impact && !this.lastImpact) this.play(this.impact, .65);
@@ -142,9 +147,9 @@ export class KartAudio {
     this.lastAirborne=airborne;
     this.lastImpact = impact; this.lastBoost = boost;
   }
-  private play(buffer: AudioBuffer | undefined, volume: number): void {
+  private play(buffer: AudioBuffer | undefined, volume: number, rate = 1): void {
     if (!buffer || !this.context || !this.master) return;
-    const source = this.context.createBufferSource(), gain = this.context.createGain(); source.buffer = buffer; gain.gain.value = volume;
+    const source = this.context.createBufferSource(), gain = this.context.createGain(); source.buffer = buffer; source.playbackRate.value = rate; gain.gain.value = volume;
     source.connect(gain); gain.connect(this.master); source.onended = () => { source.disconnect(); gain.disconnect(); }; source.start();
   }
 }

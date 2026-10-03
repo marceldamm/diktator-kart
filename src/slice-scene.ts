@@ -277,11 +277,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
           v.root.scaling.set(1 - squash * .5, 1 + squash, 1 - squash * .5);
           v.rotation += s.speed * dt / .33;
-          v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? Math.sin(s.heading - s.travelHeading) * .6 : 0; });
+          v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? (s.steer ?? 0) * .42 + Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
-          v.steering.rotation.z = -Math.sin(s.heading - s.travelHeading) * .7;
+          v.steering.rotation.z = -(s.steer ?? 0) * 1.15 - Math.sin(s.heading - s.travelHeading) * .4;
           // Arms follow the wheel; a fresh mini-turbo earns a vertical, pumping fist (sports gesture, never a forward-raised arm).
-          const wheelTurn = Math.sin(s.heading - s.travelHeading);
+          const wheelTurn = (s.steer ?? 0) * .9 + Math.sin(s.heading - s.travelHeading) * .3;
           v.cheer += ((s.turboRemaining > .75 ? 1 : 0) - v.cheer) * Math.min(1, dt * 9);
           if (v.arms[0]) { v.arms[0].rotation.z = wheelTurn * .3; v.arms[0].rotation.x = wheelTurn * .12; }
           if (v.arms[1]) { v.arms[1].rotation.z = wheelTurn * .3 + v.cheer * .35; v.arms[1].rotation.x = -wheelTurn * .12 + v.cheer * (2.15 + Math.sin(time * 14) * .18); }
@@ -309,7 +309,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         boostFire.direction2 = new Vector3(-Math.sin(state.heading) * 3 + .3, .5, -Math.cos(state.heading) * 3 + .3);
         boostFire.emitRate = state.turboRemaining > 0 ? reducedEffects ? 40 : 150 : 0; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 20 : 90 : reducedEffects ? 0 : 8 : 0;
         sparks.emitter = back.add(new Vector3(Math.cos(state.heading) * .85, 0, -Math.sin(state.heading) * .85));
-        const scraping = state.scrapeRemaining > 0 || state.impactRemaining > 0;
+        const scraping = state.scrapeRemaining > 0 && state.scrapeKind === 'wall' || state.impactRemaining > 0;
         sparks.emitRate = state.drifting || scraping ? reducedEffects ? 20 : scraping ? 120 : 70 : 0;
         sparks.color1 = scraping ? new Color4(1, .78, .35, 1) : state.driftCharge >= .7 ? new Color4(1, .6, .12, 1) : new Color4(.15, .8, 1, 1); sparks.color2 = sparks.color1;
       },

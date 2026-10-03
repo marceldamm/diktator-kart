@@ -209,3 +209,15 @@ test('one-sided contact rolls the body; hop clears wheels and landing compresses
   assert.equal(reset.suspensionOffset, 0);
   assert.deepEqual(reset.wheelGroundHeights, [0, 0, 0, 0]);
 });
+
+test('sliding along a barrier keeps most speed; only the first touch costs a little', () => {
+  let state = { ...initialKartState(), x: TEST_AREA_HALF_SIZE - .02, z: -15, heading: .12, travelHeading: .12, speed: 14 };
+  let contacts = 0;
+  for (let i = 0; i < 120; i++) {
+    state = advanceKart(state, { throttle: 1, steering: .15 }, step);
+    if (state.scrapeRemaining > 0) contacts++;
+  }
+  assert.ok(contacts > 60, `barrier contact frames ${contacts}`);
+  assert.ok(state.speed > 12, `speed after two seconds along the barrier ${state.speed}`);
+  assert.equal(state.impactRemaining, 0);
+});
