@@ -237,6 +237,44 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       pipeline.sharpenEnabled = full; pipeline.sharpen.edgeAmount = .18;
     };
     const presentItems=await addItems(scene,shadow,loadKartCount+1);
+    // 'Größenbefehl' parade tank for the player's driver (art-source/build_tank.py).
+    const tankContainer = await LoadAssetContainerAsync('/assets/models/parade-tank.glb', scene);
+    scene.onDisposeObservable.add(() => tankContainer.dispose());
+    const tankInstance = tankContainer.instantiateModelsToScene((name) => `tank0/${name}`, false, { doNotInstantiate: true });
+    const tankRoot = new TransformNode('Parade tank', scene); tankRoot.parent = visuals[0].root;
+    const tankOrientation = new TransformNode('Parade tank orientation', scene); tankOrientation.rotation.y = Math.PI; tankOrientation.parent = tankRoot;
+    tankInstance.rootNodes.forEach((n) => n.parent = tankOrientation);
+    const tankNodes = tankRoot.getDescendants();
+    const tankNode = (name: string) => tankNodes.find((n) => n.name === `tank0/${name}`) as TransformNode | undefined;
+    const tankWheels = tankNodes.filter((n) => /tankWheel-/.test(n.name)) as TransformNode[];
+    const tankTurret = tankNode('tankTurret');
+    for (const n of [...tankWheels, tankTurret]) if (n) n.rotationQuaternion = null;
+    const trackTexture = new DynamicTexture('Tank track link texture', { width: 128, height: 64 }, scene, true);
+    { const c = trackTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#16181a'; c.fillRect(0, 0, 128, 64);
+      for (let i = 0; i < 4; i++) { c.fillStyle = '#3b3f43'; c.fillRect(i * 32 + 2, 4, 22, 56); c.fillStyle = '#5c6066'; c.fillRect(i * 32 + 4, 8, 6, 48); c.fillStyle = '#0c0d0e'; c.fillRect(i * 32 + 26, 0, 4, 64); }
+      trackTexture.wrapU = Texture.WRAP_ADDRESSMODE; trackTexture.update(); }
+    const tankMeshes = tankRoot.getChildMeshes();
+    for (const mesh of tankMeshes) {
+      mesh.isPickable = false; mesh.receiveShadows = true;
+      if (mesh.material instanceof PBRMaterial && /Tank parade enamel/.test(mesh.material.name)) {
+        const m = mesh.material.clone('Tank parade enamel player')!; m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
+        m.clearCoat.isEnabled = true; m.clearCoat.intensity = .6; mesh.material = m;
+      }
+      if (mesh.material instanceof PBRMaterial && /Tank track links/.test(mesh.material.name)) { mesh.material.albedoTexture = trackTexture; mesh.material.albedoColor = Color3.White(); }
+      if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh as Mesh);
+    }
+    tankRoot.setEnabled(false);
+    const kartOnlyMeshes = visuals[0].root.getChildMeshes().filter((m) => !tankMeshes.includes(m) && !m.isDescendantOf(visuals[0].driver));
+    let tankBlend = 0, trackScroll = 0;
+    const smoke = new ParticleSystem('Tank transformation smoke', 220, scene); smoke.particleTexture = particleTexture(scene);
+    smoke.minSize = .8; smoke.maxSize = 2.2; smoke.minLifeTime = .5; smoke.maxLifeTime = 1.2; smoke.emitRate = 0; smoke.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+    smoke.direction1 = new Vector3(-3, 1, -3); smoke.direction2 = new Vector3(3, 3.5, 3); smoke.minEmitPower = 1.5; smoke.maxEmitPower = 3; smoke.minEmitBox = new Vector3(-1.2, 0, -1.6); smoke.maxEmitBox = new Vector3(1.2, 1.2, 1.6);
+    smoke.color1 = new Color4(.82, .78, .72, .55); smoke.color2 = new Color4(.62, .6, .56, .45); smoke.colorDead = new Color4(.6, .58, .55, 0); smoke.start();
+    const trackDust = new ParticleSystem('Tank track dust', 160, scene); trackDust.particleTexture = particleTexture(scene);
+    trackDust.minSize = .35; trackDust.maxSize = 1; trackDust.minLifeTime = .4; trackDust.maxLifeTime = .9; trackDust.emitRate = 0; trackDust.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+    trackDust.direction1 = new Vector3(-1, .3, -1); trackDust.direction2 = new Vector3(1, 1.2, 1);
+    trackDust.color1 = new Color4(.6, .55, .46, .35); trackDust.color2 = new Color4(.7, .66, .58, .28); trackDust.colorDead = new Color4(.65, .6, .5, 0); trackDust.start();
+    let lastStates: KartState[] = [];
     report?.('items');
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
     const tvCamera = new FreeCamera('Staatsfernsehen camera', new Vector3(0, 5, 0), scene); tvCamera.fov = .5; tvCamera.minZ = .1;
@@ -271,6 +309,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         configurePipeline();
       },
       broadcast(kart, text) { following = kart; if (text !== captionText) { captionText = text; paintCaption(text); } },
+      abilityEvent(kind, kart, target) {
+        const at = lastStates[kind === 'crush' ? target ?? kart : kart]; if (!at) return;
+        if (kind === 'crush') { burst(puff, at, reducedEffects ? 10 : 40); burst(paper, at, reducedEffects ? 8 : 25); return; }
+        smoke.emitter = new Vector3(at.x, .4, at.z); smoke.manualEmitCount = reducedEffects ? 40 : 160;
+      },
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
@@ -302,6 +345,20 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const want = new Vector3(k.x + Math.sin(k.heading) * ahead + Math.cos(k.heading) * out * side, up, k.z + Math.cos(k.heading) * ahead - Math.sin(k.heading) * out * side);
           tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height, k.z)); }
         skids.update([state, ...others]);
+        lastStates = [state, ...others];
+        // Parade tank: springy pop-in, kart hidden, driver rises into the hatch, tracks and road wheels roll.
+        { const want = state.tankRemaining > 0 ? 1 : 0; tankBlend += (want - tankBlend) * Math.min(1, dt * 7);
+          const shown = tankBlend > .02; tankRoot.setEnabled(shown);
+          for (const mesh of kartOnlyMeshes) mesh.isVisible = tankBlend < .45;
+          if (shown) {
+            const pop = tankBlend < 1 ? 1 + Math.sin(tankBlend * Math.PI) * .18 : 1; tankRoot.scaling.setAll(Math.max(.05, tankBlend) * pop * 1.15);
+            trackScroll += state.speed * dt; for (const w of tankWheels) w.rotation.x = trackScroll / .3;
+            trackTexture.uOffset = -trackScroll / .9 * 4;
+            if (tankTurret) tankTurret.rotation.y = -(state.steer ?? 0) * .3 + Math.sin(time * .7) * .05;
+            trackDust.emitter = new Vector3(state.x - Math.sin(state.heading) * 1.7, .2, state.z - Math.cos(state.heading) * 1.7);
+          }
+          trackDust.emitRate = shown && Math.abs(state.speed) > 2 ? reducedEffects ? 20 : 70 : 0;
+          visuals[0].driver.position.y = tankBlend * .85; }
         [state, ...others].forEach((s, index) => {
           const v = visuals[index]; if (!v) return;
           contactShadows[index].position.x=s.x;contactShadows[index].position.z=s.z;contactShadows[index].rotation.y=s.heading;

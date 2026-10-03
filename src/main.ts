@@ -8,6 +8,7 @@ import { TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gri
 import { KartAudio } from './audio';
 import { CAST } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
+import { ABILITY_NAME, ABILITY_RULES, abilityReady, createAbilities, stepAbilities, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
@@ -87,6 +88,9 @@ class App {
   private recoveryRemaining: number[] = [];
   private photoWasPaused = false;
   private items:ItemWorld=createItems(LOAD_KART_COUNT+1);
+  private abilities:AbilityWorld=createAbilities(LOAD_KART_COUNT+1);
+  private queuedSpecial=false;
+  private abilityStats={transform:0,revert:0,crush:0};
   private itemMessage='';
   private itemMessageUntil=0;
   private reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -102,7 +106,7 @@ class App {
   private leadCooldown=0;
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -214,7 +218,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0};
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -332,6 +336,14 @@ class App {
     document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?'E · einsetzen':this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
+    { // Ability HUD: name, state and a cooldown/duration bar.
+      const tank=this.kart.tankRemaining>0,ready=abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
+      const card=document.querySelector<HTMLElement>('#ability-card');
+      if(card){card.classList.toggle('active',tank);card.classList.toggle('ready',ready);
+        document.querySelector('#ability-name')!.textContent=ABILITY_NAME;
+        document.querySelector('#ability-info')!.textContent=tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:ready?'Q · Panzer bereit':`Q · bereit in ${Math.ceil(cool)} s`;
+        document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
+    }
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
     document.querySelector('#race-start')!.textContent = this.racePhase === 'practice' ? 'Rennen starten ↵' : 'Neues Rennen ↵';
     const map = document.querySelector<HTMLCanvasElement>('#minimap')!, c = map.getContext('2d')!;
@@ -431,7 +443,7 @@ class App {
         if(this.audio.honk(CAST[0].voice,CAST[0].voiceRate))this.lastAction='Sprachhupe';
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
-      if (frame.pressed.has('special')) this.lastAction = 'Fähigkeits-Eingabe erkannt';
+      if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') { this.queuedSpecial = true; this.lastAction = 'Größenbefehl (Q)'; }
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
       const delta = Math.min(this.engine!.getDeltaTime() / 1000, 0.1);
       this.accumulator += delta;
@@ -473,6 +485,17 @@ class App {
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
+        if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
+          // Q: Sarah's 'Größenbefehl' parade tank for the player's driver; shared protection from items.
+          const all=[this.kart,...this.loadKarts];
+          const changed=stepAbilities(this.abilities,all,all.map((_,i)=>i===0&&this.queuedSpecial),this.items.immune,FIXED_STEP);
+          this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
+          for(const event of this.abilities.events){
+            this.abilityStats[event.kind]++;this.audio.ability(event.kind);this.testScene?.abilityEvent?.(event.kind,event.kart,event.target);
+            if(event.kind==='transform'&&event.kart===0){this.itemMessage='Größenbefehl · Panzer für 8 s';this.itemMessageUntil=this.items.time+2.2;this.audio.cheer(.8);}
+            if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}
+          }
+        }
         if (!LAB_WORLD && this.racePhase === 'race') {
           const all=[this.kart,...this.loadKarts];
           const ranks=this.progress.map(p=>1+this.progress.filter(other=>other.distance>p.distance).length);

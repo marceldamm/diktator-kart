@@ -41,3 +41,18 @@ await wav('land',.22,t=>noise()*.2*Math.exp(-t*30)+Math.sin(2*Math.PI*65*t)*.4*M
   });
   console.log('Crowd and scrape written.');
 }
+
+// Parade tank (Groessenbefehl): transform clank and hiss, heavy run-over thud, diesel and track rumble loop.
+{
+  let lo=0,hiss=0;
+  await wav('tank-transform',1.1,t=>{const n=noise();hiss=hiss*.4+n*.6;lo=lo*.97+n*.03;
+    const clank=[0,.12,.27,.4].reduce((a,s,k)=>a+(t>s?Math.sin(2*Math.PI*(310+k*95)*(t-s))*Math.exp(-(t-s)*18):0),0);
+    return clank*.45+hiss*.22*Math.exp(-Math.abs(t-.65)*5)+lo*1.4*Math.min(1,t*3);});
+  let body=0;
+  await wav('tank-crush',.6,t=>{const n=noise();body=body*.9+n*.1;return Math.sin(2*Math.PI*48*t)*Math.exp(-t*7)*.8+body*2.2*Math.exp(-t*9)+n*.25*Math.exp(-t*20);});
+  let rum=0;
+  await wav('tank-engine',2,t=>{const n=noise();rum=rum*.94+n*.06;
+    const firing=Math.sin(2*Math.PI*38*t)*.4+Math.sin(2*Math.PI*76*t)*.18;const links=Math.max(0,Math.sin(2*Math.PI*8*t))**8*.35*(n*.5+.5);
+    return firing+rum*1.6+links;});
+  console.log('Tank sounds written.');
+}

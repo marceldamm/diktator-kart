@@ -35,6 +35,7 @@ export class KartCamera {
   private chaseHeading=0;
   private fovKick=0;
   private shake=0;
+  private tankBlend=0;
   /** Mouse look: orbit offsets, rear view and zoom (chase views); recentres after a short idle. */
   private lookYaw=0;
   private lookPitch=0;
@@ -127,6 +128,8 @@ export class KartCamera {
     const forwardX = Math.sin(state.heading);
     const forwardZ = Math.cos(state.heading);
     const firstPerson = this.view === 2;
+    // The parade tank is bigger: pull the chase camera back and lift the cockpit eye into the hatch.
+    this.tankBlend += (((state.tankRemaining ?? 0) > 0 ? 1 : 0) - this.tankBlend) * (immediate ? 1 : 1 - Math.exp(-3 * dt));
     // Lagging chase yaw: between body heading and travel direction while drifting.
     const aim = state.drifting ? state.heading + Math.atan2(Math.sin(state.travelHeading - state.heading), Math.cos(state.travelHeading - state.heading)) * .55 : state.heading;
     const yawRate = this.reducedMotion ? 14 : 4.2;
@@ -138,11 +141,11 @@ export class KartCamera {
     const speed = Math.abs(state.speed);
     const desired = firstPerson
       ? new Vector3(state.x - forwardX * (this.realCockpit ? .42 : .05),
-        (this.realCockpit ? 1.97 : 1.55) + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
+        (this.realCockpit ? 1.97 : 1.55) + this.tankBlend * .95 + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
         state.z - forwardZ * (this.realCockpit ? .42 : .05))
-      : new Vector3(state.x - chaseX * (view.distance + speed * .035) * this.zoom,
+      : new Vector3(state.x - chaseX * (view.distance + speed * .035) * this.zoom * (1 + this.tankBlend * .35),
         (view.height + this.lookPitch * 3) * Math.sqrt(this.zoom) + state.height * (this.reducedMotion?.05:.4) + state.suspensionOffset * (this.reducedMotion?0:.25),
-        state.z - chaseZ * (view.distance + speed * .035) * this.zoom);
+        state.z - chaseZ * (view.distance + speed * .035) * this.zoom * (1 + this.tankBlend * .35));
     // Short camera jolt on hard impacts and item hits; calm camera keeps it still.
     if (state.impactRemaining > this.lastImpact + .05 && !this.reducedMotion) this.shake = Math.min(.22, .08 + Math.abs(state.impactVelocityX) * .02 + Math.abs(state.impactVelocityZ) * .02 + (state.impactKind === 'item' ? .1 : 0));
     this.lastImpact = state.impactRemaining; this.shake = Math.max(0, this.shake - dt * .6);

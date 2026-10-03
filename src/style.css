@@ -138,3 +138,17 @@ button:disabled { opacity: .5; cursor: default; }
 @keyframes count-pop { 0% { transform: translate(-50%,-50%) scale(1.35); opacity: 0; } 18% { opacity: 1; } 100% { transform: translate(-50%,-50%) scale(1); opacity: .92; } }
 @media(prefers-reduced-motion:reduce) { #countdown { animation: none; } }
 .showcase.racing #speed { white-space: nowrap; }
+
+/* Ability card (Q): sits above the item card; glows while the tank is active. */
+.showcase .ability-card.slice-only { position:absolute;bottom:205px;left:30px;display:flex;gap:12px;align-items:center;padding:10px 15px;background:#2a1418e8;border:1px solid #e2c58c55;min-width:240px;color:#f1dfb4; }
+#ability-icon { font:28px Georgia,serif;color:#f6dfa9; }
+.ability-card strong { display:block;font-size:12px;letter-spacing:.06em; }
+.ability-card small { display:block;margin-top:4px;font-size:9px;color:#d9c79f; }
+.ability-meter { height:4px;margin-top:6px;background:#4a2a2c;width:150px;overflow:hidden; }
+#ability-fill { height:100%;width:100%;background:#8f6a4a; }
+.ability-card.ready #ability-fill { background:#e8c06c;box-shadow:0 0 8px #e8c06c; }
+.ability-card.active { border-color:#f0c46c;box-shadow:0 0 18px #c8873a88; }
+.ability-card.active #ability-fill { background:#ff9b4a; }
+.ability-key { margin-left:auto;border:1px solid #e2c58c88;padding:4px 8px;font-size:12px; }
+.photo-mode .ability-card,.menu-open .ability-card,.race-finished .ability-card { display:none !important; }
+@media(pointer:coarse) { .showcase .ability-card.slice-only { bottom:150px;left:14px;min-width:200px; } }

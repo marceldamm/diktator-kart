@@ -30,6 +30,10 @@ export interface KartState {
   steer: number;
   /** Current yaw rate (rad/s); follows the steering target with inertia like a road car. */
   yawRate: number;
+  /** Seconds left in the 'Größenbefehl' parade tank form (src/abilities.ts). */
+  tankRemaining: number;
+  /** Seconds a run-over kart stays throttled after being pushed aside by a tank. */
+  slowRemaining: number;
 }
 
 export interface DriveInput {
@@ -119,7 +123,7 @@ export function initialKartState(): KartState {
     suspensionOffset: 0, suspensionVelocity: 0, bodyPitch: 0, bodyRoll: 0,
     wheelGroundHeights: [0, 0, 0, 0], grounded: true,
     impactRemaining: 0, impactVelocityX: 0, impactVelocityZ: 0,
-    impactKind: null, scrapeRemaining: 0, spinRemaining: 0, scrapeKind: null, steer: 0, yawRate: 0,
+    impactKind: null, scrapeRemaining: 0, spinRemaining: 0, scrapeKind: null, steer: 0, yawRate: 0, tankRemaining: 0, slowRemaining: 0,
   };
 }
 
@@ -176,7 +180,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   let turboRemaining = drive < 0 ? 0 : Math.max(0, state.turboRemaining - dt);
 
   if (drive > 0) {
-    const cap = turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : KART_TUNING.maxForwardSpeed;
+    // A tank is heavy but not slow; a kart just pushed aside by one is briefly throttled.
+    const cap = turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : (state.slowRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .62 : (state.tankRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .94 : KART_TUNING.maxForwardSpeed;
     speed = speed < 0
       ? Math.min(0, speed + KART_TUNING.braking * drive * dt)
       : speed > cap
@@ -310,7 +315,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
     scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,
-    steer, yawRate };
+    steer, yawRate,
+    tankRemaining: Math.max(0, (state.tankRemaining ?? 0) - dt), slowRemaining: Math.max(0, (state.slowRemaining ?? 0) - dt) };
 }
 
 // Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.

@@ -79,7 +79,7 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
     for(let i=0;i<karts.length;i++) {
       if((i===o.owner&&o.age<.8)||world.immune[i]>0||karts[i].height>.7)continue;
       if(sweptDistance(karts[i].x,karts[i].z,ax,az,o.x,o.z)>ITEM_RULES.hitRadius)continue;
-      const k=result[i];result[i]={...k,speed:k.speed*ITEM_RULES.hitSpeedFactor,drifting:false,driftCharge:0,turboRemaining:0,impactRemaining:.45,impactKind:'item',spinRemaining:.95};
+      const k=result[i];result[i]=(k.tankRemaining??0)>0?{...k,speed:k.speed*.88,impactRemaining:.12,impactKind:'item'}:{...k,speed:k.speed*ITEM_RULES.hitSpeedFactor,drifting:false,driftCharge:0,turboRemaining:0,impactRemaining:.45,impactKind:'item',spinRemaining:.95};
       world.immune[i]=ITEM_RULES.immunity;world.events.push({kind:'hit',kart:i,item:o.kind,owner:o.owner});world.stats[o.kind].hits++;o.remaining=0;break;
     }
   }

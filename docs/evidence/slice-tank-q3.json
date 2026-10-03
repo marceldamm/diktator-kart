@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-03T22:57:42.212Z",
+  "method": "Real browser, six karts, keyboard Q/W/C, no injected state",
+  "result": {
+    "active": 7.3000000000000025,
+    "crushes": 1,
+    "events": {
+      "transform": 1,
+      "revert": 1,
+      "crush": 1
+    },
+    "reverted": 0,
+    "kartVisible": true,
+    "cooldownText": "Q · bereit in 7 s",
+    "afterRestart": "Q · Panzer bereit"
+  },
+  "errors": []
+}

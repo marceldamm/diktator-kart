@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-03T21:16:04.319Z",
+  "date": "2026-10-03T22:52:11.732Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -11,6 +11,11 @@
       "name": "shepherd",
       "originalBytes": 293452,
       "runtimeBytes": 208808
+    },
+    {
+      "name": "parade-tank",
+      "originalBytes": 511748,
+      "runtimeBytes": 322012
     }
   ]
 }

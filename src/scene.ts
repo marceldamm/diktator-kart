@@ -27,6 +27,8 @@ export interface TestScene {
   resetEffects?(): void;
   /** State TV wall: which kart the live camera follows and the caption under the picture. */
   broadcast?(kart: number, caption: string): void;
+  /** Ability feedback: transformation burst, revert burst, run-over dust. */
+  abilityEvent?(kind: 'transform' | 'revert' | 'crush', kart: number, target?: number): void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {

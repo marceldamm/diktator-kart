@@ -34,6 +34,10 @@
     "audio/crowd.wav",
     "audio/scrape.wav",
     "audio/voice/lines.json",
-    "textures/loading-stadium-v1.webp"
+    "textures/loading-stadium-v1.webp",
+    "models/parade-tank.glb",
+    "audio/tank-transform.wav",
+    "audio/tank-crush.wav",
+    "audio/tank-engine.wav"
   ]
 }

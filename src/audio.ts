@@ -23,6 +23,8 @@ export class KartAudio {
   private lastBoost = false;
   private lastAirborne=false;
   private lastBump=false;
+  private tankGain?: GainNode;
+  private readonly tankCues=new Map<string,AudioBuffer>();
   private lastGear = 0;
   private shiftDip = 0;
   private crowdSwell = 0;
@@ -61,6 +63,12 @@ export class KartAudio {
         if (kind === 'engine') { this.engine = source; this.engineGain = gain; } else if (kind === 'tire') this.tireGain = gain;
         else if (kind === 'scrape') this.scrapeGain = gain; else this.crowdGain = gain;
       }
+      // Parade tank sounds are optional extras: the race works without them.
+      void Promise.all(['tank-transform','tank-crush','tank-engine'].map(async (n) => { try { this.tankCues.set(n, await load(n)); } catch { /* optional */ } })).then(() => {
+        const engine = this.tankCues.get('tank-engine'); if (!engine || !this.master) return;
+        const source = context.createBufferSource(), gain = context.createGain(); source.buffer = engine; source.loop = true; gain.gain.value = 0;
+        source.connect(gain); gain.connect(this.master); source.start(); this.tankGain = gain;
+      });
       // Voice lines stream in after the effects; a missing line is simply skipped.
       void fetch('/assets/audio/voice/lines.json').then((r) => r.json()).then(async (lines: Record<string, unknown>) => {
         for (const id of Object.keys(lines)) {
@@ -125,6 +133,8 @@ export class KartAudio {
     return played;
   }
   cue(kind:'countdown'|'start'|'lap'|'finish'):void { this.play(this.cues.get(kind),.65); }
+  /** Parade tank: transform clank and hiss, revert, heavy run-over thud. */
+  ability(kind:'transform'|'revert'|'crush'):void { this.play(this.tankCues.get(kind==='crush'?'tank-crush':'tank-transform'),kind==='crush'?.75:.7,kind==='revert'?1.25:1); }
   dispose():void {this.music.pause();this.music.src='';void this.context?.close();this.context=undefined;}
   /** crowdNearness 0..1: how close the player is to the grandstands. */
   update(state: KartState, running: boolean, crowdNearness = 0): void {
@@ -149,6 +159,7 @@ export class KartAudio {
     if (running && bump && !this.lastBump) this.play(this.impact, .3, 1.35);
     this.lastBump = bump;
     this.crowdGain?.gain.setTargetAtTime(running ? (.035 + crowdNearness * .16 + this.crowdSwell * .22) * (this.duck > 0 ? .7 : 1) : .02, t, .3);
+    this.tankGain?.gain.setTargetAtTime(running && (state.tankRemaining ?? 0) > 0 ? .3 + Math.min(.2, speed * .012) : 0, t, .15);
     const impact = state.impactRemaining > 0, boost = state.turboRemaining > 0;
     if (running && impact && !this.lastImpact) this.play(this.impact, .65);
     if (running && boost && !this.lastBoost) this.play(this.boost, .45);

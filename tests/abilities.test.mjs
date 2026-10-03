@@ -1,0 +1,36 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { advanceKart, initialKartState } from '../src/kart-model.ts';
+import { ABILITY_RULES, createAbilities, stepAbilities, abilityReady } from '../src/abilities.ts';
+
+const step = 1 / 60;
+test('Q turns the kart into a tank for 8 s with an 18 s cooldown from activation, then reverts', () => {
+  const world = createAbilities(1); let karts = [initialKartState()];
+  karts = stepAbilities(world, karts, [true], [0], step);
+  assert.equal(karts[0].tankRemaining, ABILITY_RULES.tankDuration); assert.equal(world.events[0].kind, 'transform');
+  karts = stepAbilities(world, karts, [true], [0], step); assert.equal(world.events.length, 0, 'no re-trigger while active');
+  let reverted = false, t = 0;
+  for (; t < 20; t += step) {
+    karts = [advanceKart(karts[0], { throttle: 0, steering: 0 }, step)];
+    karts = stepAbilities(world, karts, [false], [0], step);
+    if (world.events.some((e) => e.kind === 'revert')) { reverted = true; break; }
+  }
+  assert.ok(reverted && Math.abs(t - 8) < .1, `reverted after ${t}`);
+  assert.equal(abilityReady(world, 0, karts[0]), false, 'cooldown still running');
+  for (let i = 0; i < 10.1 / step; i++) karts = stepAbilities(world, karts, [false], [0], step);
+  assert.ok(abilityReady(world, 0, karts[0]), 'ready again 18 s after activation');
+});
+
+test('tank shoves and throttles nearby karts once per protection window and respects shared protection', () => {
+  const world = createAbilities(3); const tank = { ...initialKartState(), tankRemaining: 5 };
+  const near = { ...initialKartState(), x: 2, speed: 12 }, shielded = { ...initialKartState(), x: -2, speed: 12 };
+  world.active[0] = true;
+  let karts = stepAbilities(world, [tank, near, shielded], [false, false, false], [0, 0, 1], step);
+  assert.equal(karts[1].speed, 12 * ABILITY_RULES.speedFactor); assert.ok(karts[1].impactVelocityX > 0); assert.equal(karts[1].slowRemaining, ABILITY_RULES.slowDuration);
+  assert.equal(karts[2].speed, 12, 'protected kart untouched');
+  karts = stepAbilities(world, karts, [false, false, false], [0, 0, 1], step);
+  assert.equal(world.events.filter((e) => e.kind === 'crush').length, 0, 'repeat protection');
+  let slowed = { ...karts[1], speed: 15, impactRemaining: 0 };
+  for (let i = 0; i < 60; i++) slowed = advanceKart(slowed, { throttle: 1, steering: 0 }, step);
+  assert.ok(slowed.speed < 11, `throttled while slowed ${slowed.speed}`);
+});
