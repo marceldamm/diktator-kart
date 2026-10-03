@@ -1,5 +1,9 @@
 # Technik: Babylon.js-Neuentwicklung
 
+## Renderinterpolation – 03.10.2026
+
+Physik/Items/Rennen bleiben bei festem 1/60-s-Schritt. Darstellung von Kart/Bots/Federung und Kamera nutzt dieselbe zwischen letztem und aktuellem Zustand interpolierte Pose; alpha=Restzeit/FIXED_STEP. Kein extrapoliertes Kollisions-/Rennverhalten. Große Recovery-Sprünge snapen statt durch die Strecke zu gleiten. Neustart/Rennstart setzen vorherige/angezeigte Snapshots zurück. Renderlatenz maximal ein Physikschritt (~16,7 ms), keine Physik-/Balanceänderung. Debugschnittstelle __DK.render ergänzt Pose/alpha/Schrittanzahl für prüfbare Diagnosen.
+
 ## Laufender großer Slice – 03.10.2026
 
 Runtime lädt GLB mit exakt passendem Babylon-glTF-Loader 9.28.0. Ursprüngliche M2-Physik bleibt im Labor; der Slice nutzt dieselbe Eingabe/Integration mit eigener Streckenprojektion und Bodenhöhen. Rennfortschritt und Itemregeln sind unabhängig vom Renderer. Assetpivots werden im Spiel animiert; statische Kulisse nach Material gebündelt. Scene-/Engine-Instrumentierung erfasst CPU-, GPU- und echte Drawcall-Stichproben; temporäre Effekte haben feste Grenzen.

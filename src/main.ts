@@ -10,6 +10,7 @@ import { CAST } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { attachMouseCamera } from './mouse-camera';
+import { interpolateKart } from './render-state';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -53,6 +54,10 @@ class App {
   private camera: KartCamera | undefined;
   private kart: KartState = initialKartState();
   private loadKarts: KartState[] = initialLoadKarts();
+  private previousKart = this.kart;
+  private previousLoadKarts = this.loadKarts;
+  private renderKart = this.kart;
+  private renderSteps = 0;
   private accumulator = 0;
   private queuedHopPress = false;
   private readonly input = new InputHub();
@@ -97,7 +102,7 @@ class App {
   private leadCooldown=0;
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -207,6 +212,7 @@ class App {
     this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.lapTimes=[];this.lapNoticeUntil=0;
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
+    this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
@@ -287,6 +293,7 @@ class App {
     if (this.camera?.photoMode) this.camera.togglePhoto(); document.body.classList.remove('photo-mode');
     // Reuse assets; reset the simulation without reloading the entire scene.
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
+    this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
@@ -297,6 +304,11 @@ class App {
     this.camera?.update(this.kart, 0, true);
     this.accumulator = 0; this.queuedHopPress = false;
     if (this.state === 'paused') this.togglePause();
+  }
+
+  private resetRenderState(): void {
+    this.previousKart = this.kart; this.previousLoadKarts = this.loadKarts;
+    this.renderKart = this.kart; this.accumulator = 0; this.renderSteps = 0;
   }
 
   private updateRaceHud(): void {
@@ -410,7 +422,7 @@ class App {
         this.mouse.release();
         this.lastAction = `Kamera: ${this.camera?.cycleView() ?? 'Verfolger nah'}`;
         cameraDisplay.textContent = this.camera?.viewName ?? 'Verfolger nah';
-        this.camera?.update(this.kart,0,true,frame.steering);
+        this.camera?.update(this.renderKart,0,true,frame.steering);
         this.testScene.setPlayerVisible(this.camera?.viewName!=='Fahrerperspektive');
       }
     }
@@ -420,7 +432,10 @@ class App {
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
       const delta = Math.min(this.engine!.getDeltaTime() / 1000, 0.1);
       this.accumulator += delta;
+      this.renderSteps = 0;
       while (this.accumulator >= FIXED_STEP) {
+        this.previousKart = this.kart; this.previousLoadKarts = this.loadKarts;
+        this.renderSteps++;
         const countdown = !LAB_WORLD && this.racePhase === 'countdown';
         if (countdown) {
           const before=Math.ceil(this.countdown-.4);this.countdown -= FIXED_STEP;
@@ -498,9 +513,12 @@ class App {
         this.queuedHopPress = false;
         this.accumulator -= FIXED_STEP;
       }
-      this.testScene.present(this.kart, this.loadKarts);
-      this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
-      this.camera?.update(this.kart, delta, false, frame.steering);
+      const alpha = this.accumulator / FIXED_STEP;
+      this.renderKart = interpolateKart(this.previousKart, this.kart, alpha);
+      const renderBots = this.loadKarts.map((kart,i) => interpolateKart(this.previousLoadKarts[i] ?? kart, kart, alpha));
+      this.testScene.present(this.renderKart, renderBots);
+      this.testScene.presentItems?.(this.items,[this.renderKart,...renderBots]);
+      this.camera?.update(this.renderKart, delta, false, frame.steering);
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       this.commentary();
@@ -523,7 +541,7 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
-    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.kart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
+    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) {
       const stand = trackPoint(TRACK.start + 20), nearness = Math.max(0, 1 - Math.hypot(this.kart.x - stand.x, this.kart.z - stand.z) / 70);
       this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness);

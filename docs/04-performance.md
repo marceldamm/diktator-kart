@@ -1,5 +1,9 @@
 # Performance-Ziele für normale PCs im Browser
 
+## Konkretes Mikroruckeln der Position – 03.10.2026
+
+Das zuletzt fertige 60-Hz-Physikbild wurde unabhängig vom Renderrest direkt gezeichnet; dadurch ungleichmäßige räumliche Schritte bei variabler Bildrate. Gemeinsame Renderinterpolation für Kart/Bots und Kamera korrigiert diesen Strukturfehler. Tests halten konstante sichtbare Geschwindigkeit bei 30/60/90/144 Hz und variablen Intervallen. Echter kurzer 6-Kart-Browservergleich bei 16 m/s: mittlere Abweichung bezogen auf Engine-Framezeit vorher 2,50 m/s, danach numerisch ~0. Rohdaten drive-pacing-before/after-interpolation.json. Wandzeit-Bildausgabe bleibt ungleichmäßig (kurze RTX-Stichproben P95 47/42,7 ms, zwei mögliche Browserlasten); keine kontrollierte FPS-Verbesserung oder Hardwareabnahme behaupten. Videowand/GPUlast und echte Zielhardware bleiben gesonderte Risiken.
+
 ## Qualitätsstufe 2 – 03.10.2026
 
 RTX 3070 Laptop, 1600 × 1000, sechs Karts, echtes Drei-Runden-Rennen ([slice-production-race-rtx-q2.json](evidence/slice-production-race-rtx-q2.json)): Standard P50/P95/P99 16,7/16,8/16,9 ms in naher, ferner und Fahrerkamera; im letzten Lauf je zwei Intervalle über 33 ms in naher und ferner Kamera. 371–483 Drawcalls, 0,84–1,03 Mio. aktive Dreiecke, CPU-/GPU-Stichproben 10–15 / 7–9 ms. Basis (Fahrerkamera): 181 Drawcalls, 0,34 Mio. Dreiecke, ein Intervall über 33 ms. Ein Vorlauf vor dem Pflasterpass ergab gleiche Perzentile. Produktionsbuild: Hauptchunk 2.173 kB (543 kB gzip) statt 1.713 kB, vor allem durch die Rendering-Pipeline; Größenwarnung offen.

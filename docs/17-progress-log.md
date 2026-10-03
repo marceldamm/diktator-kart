@@ -729,6 +729,18 @@
 
 **Nächster Schritt:** Das vom Nutzer beschriebene kurzzeitige Zurückbleiben/Aufholen bei gerader Fahrt anhand Simulationsschritten, Renderposition und Kamerazeit messen und beheben. Mausarbeit lokal sichern; gemeinsamer Abschluss nach beiden Paketen.
 
+### 2026-10-03 – Darstellung zwischen Physikschritten statt Positionsruckeln
+
+**Auftrag / Ursache:** Nutzer beschreibt minimales periodisches Stehenbleiben/Zurückbleiben von Kart und Kamera bei gerader Fahrt. Belegt im Code: feste 60-Hz-Simulation, Darstellung jeweils des zuletzt fertigen Schrittes; Restzeit ungenutzt. Nicht jede Millisekundenbeschreibung beweist eine einzelne GPU-Ursache.
+
+**Umgesetzt:** src/render-state.ts interpoliert ausschließlich Darstellungswerte (Pose, Lenkeinschlag, Tempo/Federung) zwischen zwei vollständigen Zuständen. main speichert vorherigen Zustand pro Fixschritt, zeichnet Kart/Bots und Kamera aus derselben Pose; Items bleiben auf derselben autoritativen Simulation. Event-/Treffertimer unverändert, große Teleports direkt statt Wandsweep. Neustart/Rennstart setzen Snapshots zurück. __DK.render zeigt alpha/Schrittanzahl/Renderpose. Physikgleichungen/Rennregeln unverändert; bis zu 16,7 ms Darstellungsverzögerung.
+
+**Verifiziert:** Drei neue Modelltests bestehen: konstante Bewegung bei 30/60/90/144 Hz und ungleichmäßigen Zeiten; Anglewrap, Zustand unverändert und diskrete Treffer; Recovery-Sprung. Produktionsbuild/TypeScript bestanden. Eigener Chrome 9227, 1280 × 800, echte Welt/sechs Karts, kurzer freier Geradeauslauf bei 16 m/s: bezogen auf Engine-Schrittdauer sichtbare Geschwindigkeitsabweichung vorher durchschnittlich 2,50 m/s (8,71–19,83 m/s), nachher numerisch ~0 (16,00–16,00). Autoritative Position darf weiterhin in festen Schritten laufen. Rohdaten docs/evidence/drive-pacing-before.json und drive-pacing-after-interpolation.json; Probe tests/drive-pacing-browser.mjs. Zeitstempel nach Renderende sind keine perfekte Display-/VSync-Messung; Enginezeit und Wandzeit bewusst getrennt ausgewertet.
+
+**Grenzen:** Kurze Frame-Wandzeitstichproben weiterhin P95 47 / 42,7 ms bei möglicher gleichzeitig offener Nutzersitzung. Keine kontrollierte FPS-Abnahme, keine Behauptung völlig ruckelfreier GPU-Bildausgabe. Keine menschliche Komfort-/schwache-PC-/Handyabnahme. 60-FPS-Ziel unverändert. Fahrzeugvibrationen werden auf zusätzlichen ausdrücklichen Wunsch als nächstes reduziert.
+
+**Dateien / nächster Schritt:** render-state.ts/main.ts, tests/render-state.test.mjs/drive-pacing-browser.mjs, Browserrohwerte, docs03/04/17/23. Nutzerergänzungen vollständig in docs/23-current-work-list.md: endgültige linke Look-/rechte Rückblick-Geste mit temporärer Cursorbindung, weniger Wackeln/Acceleration-Pose, beidseitiges Driftladen und Staub, historische Atmosphären-/Satiredetails, Schäferhund-Verfolger. Danach gezielter Gesamttest/Teamabschluss. Der ausdrücklich ignorierte Diktatsatz verändert keine Aufgabe.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**
