@@ -3,7 +3,10 @@ import { BUMP_PROGRESS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack 
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
-export const TRACK = { halfWidth: TRACK_HALF_WIDTH, length: built.length, start: START_PROGRESS, samples: SAMPLES };
+/** Inner face of the barrier wall (lane metres); karts may use the kerbs right up to it. */
+export const TRACK = { halfWidth: TRACK_HALF_WIDTH, wall: TRACK_HALF_WIDTH + 1, length: built.length, start: START_PROGRESS, samples: SAMPLES };
+/** Half the visual kart width (rear tyre outer edge). */
+const KART_SIDE = 1.15;
 export const wrap = (s: number) => ((s % TRACK.length) + TRACK.length) % TRACK.length;
 const signedGap = (s: number) => { const d = wrap(s); return d > TRACK.length / 2 ? d - TRACK.length : d; };
 
@@ -131,12 +134,14 @@ export function curvatureAhead(from: number, distance: number): { curvature: num
 
 export function trackHeightAt(x: number, z: number): number {
   const { s, lane } = trackLocate(x, z), delta = Math.abs(signedGap(s - BUMP_PROGRESS));
-  return delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0;
+  // Painted kerbs are real rumble strips: a ridged 5 cm profile between the road edge and the wall.
+  const kerb = Math.abs(lane) > TRACK.halfWidth && Math.abs(lane) < TRACK.wall ? .035 + .02 * Math.abs(Math.sin(s * Math.PI / 1.2)) : 0;
+  return Math.max(kerb, delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0);
 }
 
 export const projectTrack: WorldProjection = (x, z) => {
   const { s, lane } = trackLocate(x, z);
-  const safe = TRACK.halfWidth - KART_TUNING.collisionRadius;
+  const safe = TRACK.wall - KART_SIDE;
   if (Math.abs(lane) <= safe + 1e-7) return { x, z, normalX: 0, normalZ: 0, kind: null };
   // The alley corridor is open ground too; outside both corridors, push back to the nearer wall.
   const alley = shortcutLocate(x, z), alleySafe = SHORTCUT.halfWidth - KART_TUNING.collisionRadius * .8;

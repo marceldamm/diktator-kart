@@ -68,7 +68,7 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
       }
       o.x+=Math.sin(o.heading)*ITEM_RULES.speed*dt;o.z+=Math.cos(o.heading)*ITEM_RULES.speed*dt;
       // Barriers reflect the pneumatic capsule a few times; nothing crosses the closed park.
-      const at=trackLocate(o.x,o.z),limit=TRACK.halfWidth-.45;
+      const at=trackLocate(o.x,o.z),limit=TRACK.wall-.35;
       if(Math.abs(at.lane)>limit) {
         o.bounces=(o.bounces??0)+1;
         if(o.bounces>ITEM_RULES.maxBounces||Math.abs(at.lane)>TRACK.halfWidth+2)o.remaining=0;

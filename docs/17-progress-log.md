@@ -671,6 +671,8 @@
 
 **Nicht verifiziert:** Menschliches Gefühl der neuen Trägheit und des Wankens; Maus in echtem Chrome mit Zeigerverhalten; Linksklick-Item im Rennen (nutzt denselben Eingabeweg wie E).
 
+**Nachtrag 2d (Nutzerfahrt):** Umsehen mit Totzone gegen Handzittern und ruhigem Zurückschwenken nach 2 s; Rechtsklick ist ein starrer Rückblick entlang der Kartachse ohne Mausversatz. Die Fahrgrenze lag bei 4,75 m (vor dem Randstein), jetzt bis an die Wand (7 m minus halbe Kartbreite 1,15 m); Randsteine sind echte 3,5–5,5-cm-Rüttelwellen für die Radkontakte. Items prallen erst an der Wand ab. 25 Modelltests (Bodenwellentest endet jetzt vor der Haarnadel), Botsimulation 119–127 s ohne Festfahren.
+
 **Nächster Schritt (nach Limit-Reset):** Regen mit nasser Fahrbahn, Pfützen mit Spritzern, Blitz/Donner und Wolkenschatten; Videowand „Staatsfernsehen LIVE“; deutlich echtere Fahrermodelle (MPFB/MakeHuman CC0 prüfen).
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
