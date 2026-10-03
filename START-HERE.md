@@ -2,6 +2,8 @@
 
 ## Kurzbefehle
 
+**Arbeitslisten abarbeiten:** Erst offene kurzfristige Aufgaben aus CURRENT-WORKLIST.md umsetzen, anschließend selbstständig bestätigte Ziele aus LONG-TERM-GOALS.md in prüfbaren Paketen fortsetzen. Langzeitpaket jeweils in die aktuelle Liste übernehmen; Fortschritt, Blocker und nächsten Schritt zeigen. Budget-/Freigaberegeln bleiben gültig. Beispiel: **„Projektstart. Danach arbeite unsere Arbeitslisten ab: zuerst kurzfristig, dann langfristig.“** Projektstart allein synchronisiert und zeigt den Stand.
+
 Die Kurzbefehle **Projektstart** oder **Projekt Start** rufen den sicheren Startablauf auf; **Projektabschluss**, **Projektende** oder **Projekt Ende** den geprüften Abschluss mit Veröffentlichung. Keine langen Prompts nötig. Die vier zentralen Tabs gehören zum Start. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Naechstes anzeigen. Maßgebliche Anleitung: [TEAM-NOTES.md](TEAM-NOTES.md).
 
 Diktierte Wünsche selbstständig in die passende Arbeitsdatei eintragen: „Heute möchte ich …“ in CURRENT-WORKLIST.md, „Langfristiges Ziel: …“ in LONG-TERM-GOALS.md, „Notiere: …“ und „Nachricht an Sarah/Marcel: …“ in TEAM-NOTES.md (Datum, Autor, Zielperson, Status). Nutzer müssen Dateien nicht selbst schreiben. Beim Projektstart offene Notizen und für den Nutzer bestimmte Teamnachrichten kurz anzeigen; Empfang/Antwort nicht erfinden.

@@ -25,7 +25,7 @@ Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssi
 
 - Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
-- Nach Abschluss der aktuellen Liste zwei oder drei passende nächste Pakete aus dieser Liste vorschlagen; ausdrücklich bereits beauftragte Ziele selbstständig fortsetzen. Neue Produktziele brauchen eine bewusste Priorisierung, keine heimliche Umfangserweiterung.
+- „Arbeitslisten abarbeiten“ beauftragt beide Listen: erst ausführbare kurzfristige Aufgaben, danach selbstständig bestätigte Langzeitziele in sinnvollen Paketen umsetzen. Nicht beim Vorschlagen stoppen. Blockierte Aufgaben erhalten und unabhängige Aufgaben fortsetzen; echte Entscheidungen/unbestätigte Vorschläge brauchen Klärung. Ohne diesen Umsetzungsauftrag zwei oder drei nächste Pakete vorschlagen. Budgetregel beachten.
 - Ein gewähltes Paket mit sichtbarem Ergebnis und prüfbarer Abnahme nach CURRENT-WORKLIST.md übernehmen. Erst nach tatsächlicher Prüfung abhaken. Teilumsetzung, Nutzerabnahme und Geräteabnahme auseinanderhalten.
 - Details nicht mehrfach pflegen: Roadmap = Meilenstein-/Abnahmevertrag; diese Datei = gemeinsame Aufgabenübersicht; PROGRESS-LOG.md = technische Belege; TEAM-CHANGES.md = wenige wichtige Änderungen für uns beide.
 

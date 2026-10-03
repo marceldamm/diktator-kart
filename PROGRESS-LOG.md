@@ -6,6 +6,8 @@
 
 ## Neueste Übergabe – 04.10.2026
 
+**Listenfolge verankert (04.10., Marcel):** „Arbeitslisten abarbeiten“ autorisiert kurzfristige Aufgaben und anschließend bestätigte Langzeitziele; Pakete in CURRENT-WORKLIST.md übernehmen, selbstständig umsetzen, verifizieren und dokumentieren. Blockierte Aufgaben erhalten und unabhängig weiterarbeiten; echte Entscheidungen/unbestätigte Vorschläge nicht automatisch freigeben. AGENTS/START-HERE, beide Listen, TEAM-NOTES/TEAM-CHANGES aktualisiert. Nur Dokumentation, keine Spieländerung. Offiziell zu Beginn 6 % Fünf-Stunden-Rest / 71 % Wochenrest; Abschluss dieses kleinen Auftrags, danach keine autonome Großaufgabe. Lokaler Checkpoint, nicht gepusht.
+
 **Qualitätsziel ergänzt (Marcel):** deutlich bessere und realitätsnähere Modelle, historische Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds, Stimmen und Musik anhand der gewählten Bildpräferenz G–L. Fertige Stimmen ohne TTS; vorhandene synthetische Clips sind Zwischenstand. Ziel/Aufgaben in LONG-TERM-GOALS.md, Herkunft in TEAM-NOTES.md, Aufnahme in CURRENT-WORKLIST.md und Kurzverlauf in TEAM-CHANGES.md. Abhängige Vorgaben in README, docs/02/05/07/09/10/12/16 konsistent ergänzt. Spielcode/Assets unverändert, keine neue Sicht-/Hörabnahme. Nächster Schritt: laufende Panzeraufgabe und sichtbare Qualitätspakete ausarbeiten. Offizielle Werte zu Beginn dieses kleinen Dokumentationsauftrags: 9 % Fünf-Stunden-Rest, 71 % Wochenrest; lokale Sicherung, keine große Umsetzung begonnen.
 
 Prüfung dieses Qualitätsziel-Eintrags: git diff --check ohne Fehler; zentrale Dateinavigation, lokale Links, Projektmarker und Logmigration bestanden. Nur Markdown geändert, kein erneuter Spielbuild erforderlich. Lokaler Checkpoint; nicht nach GitHub veröffentlicht.
