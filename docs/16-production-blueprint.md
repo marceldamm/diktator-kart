@@ -23,7 +23,7 @@ Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle
 
 Dieser Fahrplan beschreibt, was in welcher Reihenfolge passieren muss, damit eine längere autonome ChatGPT-/Codex-Arbeit möglich wird. Er enthält keine unrealistische Zusage eines fertigen Spiels in einer festen Zeit. Zeitangaben sind grobe Arbeitsfenster und hängen von Assets, Hardware, Browser, Fehlern und Nutzerfeedback ab.
 
-Der konkrete Ablauf für den ersten Abend steht in [history/20-first-evening-runbook.md](history/history/20-first-evening-runbook.md).
+Der konkrete Ablauf für den ersten Abend steht in [history/20-first-evening-runbook.md](history/20-first-evening-runbook.md).
 
 ## Meilensteine
 
