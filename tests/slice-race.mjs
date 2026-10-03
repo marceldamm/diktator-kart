@@ -19,7 +19,7 @@ try {
     if(data.phase==='finished'){finished=true;break;}
   }
   assert.ok(finished,'Real browser race did not finish in four minutes');
-  assert.equal(samples.at(-1).progress.length,6);assert.ok(samples.at(-1).progress[0].distance>=3*(240+64*Math.PI));
+  assert.equal(samples.at(-1).progress.length,6);assert.ok(samples.at(-1).progress[0].distance>=3*await evaluate(`window.__DK.trackLength`));
   assert.equal(await evaluate(`document.querySelector('#finish-card').hidden`),false);await shot('slice-race-finish');
   assert.equal(await evaluate(`document.querySelectorAll('#finish-results li').length`),6);
   assert.match(await evaluate(`document.querySelector('#finish-detail').textContent`),/Runden \d+\.\d{2} \/ \d+\.\d{2} \/ \d+\.\d{2} s/);
@@ -35,5 +35,5 @@ try {
   await evaluate(`document.querySelector('#quality-toggle').click()`);await delay(2000);endurance.push({quality:'Basis',...await snapshot(),...await frames()});
   await evaluate(`document.querySelector('#quality-toggle').click()`);
   assert.deepEqual(errors,[]);const result={date:new Date().toISOString(),method:'Real-time headless Chrome, demo controller through normal kart input, 3 laps; 300 rAF intervals per camera at 1600x1000',samples,endurance,errors};
-  await writeFile('docs/evidence/slice-production-race-rtx.json',JSON.stringify(result,null,2)+'\n');console.log('FULL_RACE_AND_REMATCH_PASS');
+  await writeFile(`docs/evidence/slice-production-race-rtx${process.env.EVIDENCE_SUFFIX??''}.json`,JSON.stringify(result,null,2)+'\n');console.log('FULL_RACE_AND_REMATCH_PASS');
 } finally {socket.close();}

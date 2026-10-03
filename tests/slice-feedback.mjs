@@ -16,7 +16,8 @@ try{
   await key('keyUp',' ','Space',32);await key('keyUp','d','KeyD',68);await delay(70);
   samples.boost=await kart();assert.ok(samples.boost.turboRemaining>0);await tap('p','KeyP',80);await shot('slice-turbo-feedback');await tap('p','KeyP',80);
   await key('keyDown','w','KeyW',87);await key('keyDown','d','KeyD',68);
-  for(let i=0;i<80;i++){await delay(25);const s=await kart();if(s.impactRemaining>0){samples.contact=s;break;}}
-  assert.equal(samples.contact?.impactKind,'boundary');await key('keyUp','d','KeyD',68);await key('keyUp','w','KeyW',87);await tap('p','KeyP',80);await shot('slice-boundary-feedback');
-  assert.deepEqual(errors,[]);await writeFile('docs/evidence/slice-feedback.json',JSON.stringify({date:new Date().toISOString(),method:'Actual keyboard inputs on one-kart stadium scene; freezes only for readable game screenshots; no injected physics state',samples,errors},null,2)+'\n');console.log('SLICE_HOP_DRIFT_TURBO_BOUNDARY_PASS');
+  // A stopping impact or, since quality level 2, a glancing scrape along the barrier.
+  for(let i=0;i<80;i++){await delay(25);const s=await kart();if(s.impactRemaining>0||s.scrapeRemaining>0){samples.contact=s;break;}}
+  assert.ok(samples.contact?.impactKind==='boundary'||samples.contact?.scrapeRemaining>0,'No barrier contact');await key('keyUp','d','KeyD',68);await key('keyUp','w','KeyW',87);await tap('p','KeyP',80);await shot('slice-boundary-feedback');
+  assert.deepEqual(errors,[]);await writeFile(`docs/evidence/slice-feedback${process.env.EVIDENCE_SUFFIX??''}.json`,JSON.stringify({date:new Date().toISOString(),method:'Actual keyboard inputs on one-kart stadium scene; freezes only for readable game screenshots; no injected physics state',samples,errors},null,2)+'\n');console.log('SLICE_HOP_DRIFT_TURBO_BOUNDARY_PASS');
 }finally{await key('keyUp','w','KeyW',87);await key('keyUp','d','KeyD',68);await key('keyUp',' ','Space',32);socket.close();}

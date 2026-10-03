@@ -22,5 +22,5 @@ try {
   assert.ok(Object.values(last.stats).some(s=>s.hits>0),'No actual racing item hit');assert.equal(last.phase,'finished');
   await shot('slice-item-race-result');await tap('Enter','Enter',13);await delay(1000);
   assert.equal(await evaluate(`window.__DK.items.objects.length`),0);assert.equal(await evaluate(`window.__DK.scene.meshes.length`),meshes);
-  assert.deepEqual(errors,[]);await writeFile('docs/evidence/slice-item-race.json',JSON.stringify({date:new Date().toISOString(),method:'Normal six-kart real-time race, shared item rules and unmodified demo controller',samples,errors},null,2)+'\n');console.log('ITEM_RACE_PAUSE_POOL_REMATCH_PASS');
+  assert.deepEqual(errors,[]);await writeFile(`docs/evidence/slice-item-race${process.env.EVIDENCE_SUFFIX??''}.json`,JSON.stringify({date:new Date().toISOString(),method:'Normal six-kart real-time race, shared item rules and unmodified demo controller',samples,errors},null,2)+'\n');console.log('ITEM_RACE_PAUSE_POOL_REMATCH_PASS');
 }finally{socket.close();}

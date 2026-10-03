@@ -167,8 +167,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
       });
+      // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
+      const bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
       const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|racing suit|Warm skin|Hair|Hat cloth|Cape cloth|Dark leather/.test(mesh.name));
-      return { root, pivots, spins, driver,head, scarf, steering, flames,shadowMeshes, rotation: 0, previousSpeed: 0 };
+      return { root, pivots, spins, driver,head, scarf, steering, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
     const contactCanvas = contactTexture.getContext();
@@ -183,8 +185,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     dust.minSize = .1; dust.maxSize = .4; dust.minLifeTime = .25; dust.maxLifeTime = .6;
     dust.direction1 = new Vector3(-.3, .15, -.3); dust.direction2 = new Vector3(.3, .6, .3);
     dust.color1 = new Color4(.6, .56, .48, .28); dust.color2 = new Color4(.72, .71, .63, .22); dust.colorDead = new Color4(.6, .6, .5, 0); dust.start();
-    const sparks = new ParticleSystem('Drift sparks', 100, scene); sparks.particleTexture = particleTexture(scene);
-    sparks.minSize = .045; sparks.maxSize = .11; sparks.minLifeTime = .1; sparks.maxLifeTime = .36;
+    const sparks = new ParticleSystem('Drift sparks', 140, scene); sparks.particleTexture = particleTexture(scene);
+    sparks.billboardMode = ParticleSystem.BILLBOARDMODE_STRETCHED; sparks.minEmitPower = 2.5; sparks.maxEmitPower = 5;
+    sparks.minSize = .025; sparks.maxSize = .055; sparks.minScaleY = 2.5; sparks.maxScaleY = 4; sparks.minLifeTime = .08; sparks.maxLifeTime = .24;
     sparks.direction1 = new Vector3(-1.5, .3, -1.5); sparks.direction2 = new Vector3(1.5, 1.5, 1.5);
     sparks.gravity = new Vector3(0, -4, 0); sparks.colorDead = new Color4(1, .4, .05, 0); sparks.start();
     let reducedEffects = false;
@@ -235,6 +238,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       setPlayerVisible(visible) {
         // First person uses the real model; hide only the head/body, keep cockpit and wheels.
         visuals[0].head.setEnabled(visible);
+        for (const mesh of visuals[0].bodyMeshes) mesh.isVisible = visible;
       },
       present(state, others) {
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;

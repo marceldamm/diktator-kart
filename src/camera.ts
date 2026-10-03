@@ -121,13 +121,17 @@ export class KartCamera {
     const speed = Math.abs(state.speed);
     const desired = firstPerson
       ? new Vector3(state.x - forwardX * (this.realCockpit ? .42 : .05),
-        (this.realCockpit ? 1.89 : 1.55) + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
+        (this.realCockpit ? 1.97 : 1.55) + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
         state.z - forwardZ * (this.realCockpit ? .42 : .05))
       : new Vector3(state.x - chaseX * (view.distance + speed * .035),
         view.height + state.height * (this.reducedMotion?.05:.4) + state.suspensionOffset * (this.reducedMotion?0:.25),
         state.z - chaseZ * (view.distance + speed * .035));
     const blend = immediate ? 1 : 1 - Math.exp(-(this.reducedMotion?14:view.follow) * dt);
-    this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
+    if (firstPerson) {
+      // The eye is fixed to the seat: no positional lag at speed, only a softened vertical bob.
+      const y = this.camera.position.y + (desired.y - this.camera.position.y) * (immediate ? 1 : 1 - Math.exp(-18 * dt));
+      this.camera.position.set(desired.x, y, desired.z);
+    } else this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
     // Speed widens the view slightly; mini-turbo adds a brief kick. Calm camera keeps a fixed angle.
     const kickTarget = this.reducedMotion ? 0 : Math.min(.1, speed / 20 * .1) + (state.turboRemaining > 0 ? .085 : 0);
     this.fovKick += (kickTarget - this.fovKick) * (immediate ? 1 : 1 - Math.exp(-6 * dt));

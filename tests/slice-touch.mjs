@@ -23,5 +23,5 @@ try {
   await evaluate(`document.querySelector('#quality-toggle').click()`);assert.equal(await evaluate(`localStorage.getItem('dk-quality')`),'0');
   await load();assert.equal(await evaluate(`document.querySelector('#motion-toggle').textContent`),'Kamera ruhig');assert.equal(await evaluate(`document.querySelector('#quality-toggle').textContent`),'Grafik Basis');
   await evaluate(`document.querySelector('#motion-toggle').click();document.querySelector('#quality-toggle').click()`);
-  assert.deepEqual(errors,[]);await writeFile('docs/evidence/slice-touch-emulation.json',JSON.stringify({date:new Date().toISOString(),viewport:'932x430, touch emulated on RTX/Chrome',driven,errors,deviceApproval:false},null,2)+'\n');console.log('TOUCH_LAYOUT_CANCEL_CAMERA_SETTINGS_PASS');
+  assert.deepEqual(errors,[]);await writeFile(`docs/evidence/slice-touch-emulation${process.env.EVIDENCE_SUFFIX??''}.json`,JSON.stringify({date:new Date().toISOString(),viewport:'932x430, touch emulated on RTX/Chrome',driven,errors,deviceApproval:false},null,2)+'\n');console.log('TOUCH_LAYOUT_CANCEL_CAMERA_SETTINGS_PASS');
 }finally{await send('Emulation.setTouchEmulationEnabled',{enabled:false});socket.close();}

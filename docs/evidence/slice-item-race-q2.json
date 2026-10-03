@@ -1,0 +1,2746 @@
+{
+  "date": "2026-10-03T17:33:46.806Z",
+  "method": "Normal six-kart real-time race, shared item rules and unmodified demo controller",
+  "samples": [
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 9.759428426692693,
+      "meshes": 634,
+      "slot": null,
+      "time": 2.4833333333333294
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 1,
+          "launched": 0,
+          "hits": 0
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 0,
+          "hits": 0
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 29.93728211355551,
+      "meshes": 634,
+      "slot": null,
+      "time": 3.983333333333324
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 0,
+          "hits": 0
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 0,
+          "hits": 0
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 51.01990438451958,
+      "meshes": 634,
+      "slot": null,
+      "time": 5.499999999999986
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        1.2666666666666686,
+        0,
+        0,
+        1.2833333333333352
+      ],
+      "progress": 68.40131687110772,
+      "meshes": 634,
+      "slot": null,
+      "time": 6.9999999999999805
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 88.03644986156019,
+      "meshes": 634,
+      "slot": null,
+      "time": 8.51666666666667
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 107.90087749122176,
+      "meshes": 634,
+      "slot": null,
+      "time": 10.016666666666744
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 127.8282515329546,
+      "meshes": 634,
+      "slot": null,
+      "time": 11.533333333333486
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 148.8871565802658,
+      "meshes": 634,
+      "slot": null,
+      "time": 13.050000000000228
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 169.72446839961947,
+      "meshes": 634,
+      "slot": null,
+      "time": 14.550000000000303
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 191.1776740183567,
+      "meshes": 634,
+      "slot": null,
+      "time": 16.0833333333337
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0.18333333333333474,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 236.1123375102161,
+      "meshes": 634,
+      "slot": null,
+      "time": 18.96666666666687
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 0,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 1,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 243.23993680576723,
+      "meshes": 634,
+      "slot": null,
+      "time": 20.65000000000011
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 1,
+          "launched": 0,
+          "hits": 0
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 263.8541136729543,
+      "meshes": 634,
+      "slot": null,
+      "time": 22.16666666666669
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 1,
+          "hits": 1
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        1.7666666666666668,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 284.7055731789494,
+      "meshes": 634,
+      "slot": null,
+      "time": 23.666666666666604
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0.2500000000000014,
+        0.466666666666668,
+        0,
+        0,
+        0
+      ],
+      "progress": 305.8364776260112,
+      "meshes": 634,
+      "slot": null,
+      "time": 25.183333333333184
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 326.71345466153593,
+      "meshes": 634,
+      "slot": null,
+      "time": 26.6833333333331
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 347.8113388427969,
+      "meshes": 634,
+      "slot": null,
+      "time": 28.19999999999968
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 373.3572314833466,
+      "meshes": 634,
+      "slot": null,
+      "time": 29.71666666666626
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 401.48014687431396,
+      "meshes": 634,
+      "slot": null,
+      "time": 31.216666666666175
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 427.19448273775856,
+      "meshes": 634,
+      "slot": null,
+      "time": 32.73333333333276
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 455.5431916590994,
+      "meshes": 634,
+      "slot": null,
+      "time": 34.266666666666005
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 3,
+          "launched": 2,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 480.17263656235195,
+      "meshes": 634,
+      "slot": null,
+      "time": 35.783333333332585
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 1
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 2,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 489.5083793068095,
+      "meshes": 634,
+      "slot": null,
+      "time": 37.2833333333325
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        1.4000000000000015,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 506.8135161066873,
+      "meshes": 634,
+      "slot": null,
+      "time": 38.79999999999908
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 526.4633974299074,
+      "meshes": 634,
+      "slot": null,
+      "time": 40.31666666666566
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 552.5653383656443,
+      "meshes": 634,
+      "slot": null,
+      "time": 41.816666666665576
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 580.1191508431799,
+      "meshes": 634,
+      "slot": null,
+      "time": 43.333333333332156
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 603.4921292061035,
+      "meshes": 634,
+      "slot": null,
+      "time": 44.84999999999874
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 5,
+          "launched": 3,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 624.3061118331899,
+      "meshes": 634,
+      "slot": null,
+      "time": 46.34999999999865
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 4,
+          "hits": 2
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 645.499529338854,
+      "meshes": 634,
+      "slot": "direct",
+      "time": 47.86666666666523
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 5,
+          "hits": 3
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        1.250000000000002,
+        0,
+        0,
+        0
+      ],
+      "progress": 666.6819650577926,
+      "meshes": 634,
+      "slot": null,
+      "time": 49.39999999999848
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 5,
+          "hits": 3
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 687.0539493880792,
+      "meshes": 634,
+      "slot": null,
+      "time": 50.89999999999839
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 5,
+          "hits": 3
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 709.5272687839881,
+      "meshes": 634,
+      "slot": null,
+      "time": 52.41666666666497
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 5,
+          "hits": 3
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 730.6489323455198,
+      "meshes": 634,
+      "slot": null,
+      "time": 53.91666666666489
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 5,
+          "hits": 3
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 751.437707518608,
+      "meshes": 634,
+      "slot": null,
+      "time": 55.4166666666648
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 5,
+          "hits": 3
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 773.4706815748463,
+      "meshes": 634,
+      "slot": null,
+      "time": 56.93333333333138
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 6,
+          "hits": 4
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        1.2666666666666686,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 796.4641184439588,
+      "meshes": 634,
+      "slot": null,
+      "time": 58.4333333333313
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 6,
+          "hits": 4
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 822.2524729870255,
+      "meshes": 634,
+      "slot": null,
+      "time": 59.94999999999788
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 6,
+          "hits": 4
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 845.4031387427214,
+      "meshes": 634,
+      "slot": null,
+      "time": 61.46666666666446
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 7,
+          "launched": 6,
+          "hits": 4
+        },
+        "homing": {
+          "collected": 3,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 865.514011295733,
+      "meshes": 634,
+      "slot": null,
+      "time": 62.98333333333104
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 6,
+          "hits": 4
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 3,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 886.7135042232492,
+      "meshes": 634,
+      "slot": null,
+      "time": 64.49999999999763
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 6,
+          "hits": 4
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 907.7786748617475,
+      "meshes": 634,
+      "slot": null,
+      "time": 65.99999999999754
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 7,
+          "hits": 5
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        1.5666666666666675,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 929.3093610683138,
+      "meshes": 634,
+      "slot": null,
+      "time": 67.51666666666412
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 8,
+          "hits": 6
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0.0666666666666681,
+        1.4000000000000015,
+        0,
+        0,
+        0
+      ],
+      "progress": 950.5983009020733,
+      "meshes": 634,
+      "slot": null,
+      "time": 69.01666666666404
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 8,
+          "hits": 6
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 973.819264682759,
+      "meshes": 634,
+      "slot": null,
+      "time": 70.53333333333062
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 8,
+          "hits": 6
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 997.0506415825475,
+      "meshes": 634,
+      "slot": null,
+      "time": 72.03333333333053
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 8,
+          "hits": 6
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1018.2016387449539,
+      "meshes": 634,
+      "slot": null,
+      "time": 73.54999999999711
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 2,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.5833333333333349
+      ],
+      "progress": 1040.9232241911498,
+      "meshes": 634,
+      "slot": null,
+      "time": 75.04999999999703
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 3,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1044.3742203170857,
+      "meshes": 634,
+      "slot": null,
+      "time": 76.56666666666361
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 2,
+          "hits": 2
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1060.6803371436245,
+      "meshes": 634,
+      "slot": null,
+      "time": 78.08333333333019
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 4,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 2
+        }
+      },
+      "objects": 2,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1084.291013689785,
+      "meshes": 634,
+      "slot": null,
+      "time": 79.59999999999677
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 2,
+      "immune": [
+        0,
+        0,
+        0,
+        1.1000000000000025,
+        0,
+        0
+      ],
+      "progress": 1105.0748087483234,
+      "meshes": 634,
+      "slot": null,
+      "time": 81.11666666666335
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 2,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1125.7647966919867,
+      "meshes": 634,
+      "slot": null,
+      "time": 82.63333333332993
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 2
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 2,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1149.1933039935439,
+      "meshes": 634,
+      "slot": null,
+      "time": 84.13333333332984
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 3
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0.6833333333333352,
+        0,
+        0,
+        0
+      ],
+      "progress": 1170.4875702842119,
+      "meshes": 634,
+      "slot": null,
+      "time": 85.63333333332976
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 3
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1191.39166183948,
+      "meshes": 634,
+      "slot": null,
+      "time": 87.14999999999634
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 3
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1212.5363331059084,
+      "meshes": 634,
+      "slot": null,
+      "time": 88.66666666666292
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 5,
+          "hits": 3
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1233.4639830271838,
+      "meshes": 634,
+      "slot": "homing",
+      "time": 90.16666666666283
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        1.3500000000000016,
+        0,
+        0
+      ],
+      "progress": 1254.8556780779118,
+      "meshes": 634,
+      "slot": null,
+      "time": 91.69999999999608
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1275.6689874790432,
+      "meshes": 634,
+      "slot": null,
+      "time": 93.199999999996
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1297.9327488651177,
+      "meshes": 634,
+      "slot": null,
+      "time": 94.71666666666258
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 9,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1320.3107784943722,
+      "meshes": 634,
+      "slot": null,
+      "time": 96.21666666666249
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 10,
+          "hits": 7
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1342.7484009896998,
+      "meshes": 634,
+      "slot": null,
+      "time": 97.74999999999574
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.6500000000000018
+      ],
+      "progress": 1364.8894960786984,
+      "meshes": 634,
+      "slot": null,
+      "time": 99.26666666666232
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1390.2818220533322,
+      "meshes": 634,
+      "slot": null,
+      "time": 100.7833333333289
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 4,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1414.6462525178986,
+      "meshes": 634,
+      "slot": null,
+      "time": 102.29999999999548
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1436.068338357652,
+      "meshes": 634,
+      "slot": null,
+      "time": 103.81666666666206
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 11,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 4,
+          "hits": 3
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1457.3069527186553,
+      "meshes": 634,
+      "slot": null,
+      "time": 105.33333333332864
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1478.4115814861948,
+      "meshes": 634,
+      "slot": null,
+      "time": 106.84999999999522
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 7,
+          "launched": 6,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 3
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1499.307577815351,
+      "meshes": 634,
+      "slot": null,
+      "time": 108.34999999999513
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 7,
+          "launched": 7,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        1.7833333333333334,
+        0
+      ],
+      "progress": 1520.4012534654373,
+      "meshes": 634,
+      "slot": null,
+      "time": 109.86666666666171
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 7,
+          "launched": 7,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0.2833333333333347,
+        0
+      ],
+      "progress": 1541.3978839005863,
+      "meshes": 634,
+      "slot": null,
+      "time": 111.36666666666163
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 7,
+          "launched": 7,
+          "hits": 4
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1568.9335657623114,
+      "meshes": 634,
+      "slot": null,
+      "time": 112.88333333332821
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 7,
+          "launched": 7,
+          "hits": 5
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0.36666666666666803,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1596.7809317639128,
+      "meshes": 634,
+      "slot": null,
+      "time": 114.39999999999479
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 10,
+          "hits": 8
+        },
+        "homing": {
+          "collected": 8,
+          "launched": 7,
+          "hits": 5
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1623.8533079161107,
+      "meshes": 634,
+      "slot": null,
+      "time": 115.91666666666137
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 8,
+          "launched": 8,
+          "hits": 5
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 1,
+      "immune": [
+        1.4333333333333347,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1648.8543637240628,
+      "meshes": 634,
+      "slot": null,
+      "time": 117.41666666666129
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 8,
+          "launched": 8,
+          "hits": 6
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.6833333333333352
+      ],
+      "progress": 1668.9940242163425,
+      "meshes": 634,
+      "slot": null,
+      "time": 118.94999999999453
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 9,
+          "launched": 8,
+          "hits": 6
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1690.0358391179213,
+      "meshes": 634,
+      "slot": null,
+      "time": 120.46666666666111
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        1.416666666666668,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1705.77180659653,
+      "meshes": 634,
+      "slot": null,
+      "time": 121.96666666666103
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "trap": {
+          "collected": 5,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1723.0200571713485,
+      "meshes": 634,
+      "slot": null,
+      "time": 123.48333333332761
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "trap": {
+          "collected": 6,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1749.0973433439374,
+      "meshes": 634,
+      "slot": null,
+      "time": 124.99999999999419
+    },
+    {
+      "phase": "race",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "trap": {
+          "collected": 6,
+          "launched": 5,
+          "hits": 4
+        }
+      },
+      "objects": 0,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1774.670212468407,
+      "meshes": 634,
+      "slot": null,
+      "time": 126.51666666666077
+    },
+    {
+      "phase": "finished",
+      "stats": {
+        "direct": {
+          "collected": 12,
+          "launched": 11,
+          "hits": 9
+        },
+        "homing": {
+          "collected": 9,
+          "launched": 9,
+          "hits": 7
+        },
+        "trap": {
+          "collected": 6,
+          "launched": 6,
+          "hits": 4
+        }
+      },
+      "objects": 1,
+      "immune": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "progress": 1780.2082206380217,
+      "meshes": 634,
+      "slot": null,
+      "time": 126.88333333332741
+    }
+  ],
+  "errors": []
+}

@@ -3,7 +3,7 @@ import { writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 const targets=await(await fetch('http://127.0.0.1:9223/json')).json();
 const base=process.env.SLICE_URL??'http://127.0.0.1:4173/';
-const target=targets.find(t=>t.type==='page'&&t.url?.startsWith('http://127.0.0.1:'));
+const target=targets.find(t=>t.type==='page'&&(t.url?.startsWith('http://127.0.0.1:')||t.url==='about:blank'));
 assert.ok(target,'Isolated Chrome is missing');
 const socket=new WebSocket(target.webSocketDebuggerUrl);
 await new Promise((resolve,reject)=>{socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});
