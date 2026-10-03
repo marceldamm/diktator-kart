@@ -1,5 +1,9 @@
 # Bauplan und Fahrplan für die Entwicklung
 
+## Qualitätsauftrag – 04.10.2026
+
+M3–M6 erhalten den umfassenden Qualitätspass aus [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md): wesentlich bessere, realitätsnähere Modelle, Charaktere, Fahrzeuge, Strecke/Umgebung, Effekte, Sounds, Stimmen und Musik anhand der gewählten G–L-Bildpräferenz. Für fertige Stimmen kein TTS; menschliche Aufnahmen oder geeignete echte Mitschnitte mit geklärten kostenlosen Nutzungsrechten. Vorhandene synthetische Clips sind Zwischenstand. In sichtbaren Paketen umsetzen, mit echter Fahrt/Spielbildern und menschlicher Hörabnahme prüfen; das flüssige Fahrgefühl und bestehende Leistungsziele bewahren.
+
 ## Unsere vier Arbeitsdateien
 
 Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.

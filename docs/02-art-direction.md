@@ -1,5 +1,9 @@
 # Art Direction
 
+## Höhere Gesamtqualität – 04.10.2026
+
+Marcels Ziel: viel bessere Modelle, erkennbare historische Charaktere, individuelle Fahrzeuge, realitätsnähere Strecke/Architektur/Umgebung sowie hochwertigeres Licht, Effekte und Animation. Maßstab bleibt die gewählte Bildpräferenz G–L (`references/visuals/style-comparison-02-c-a-refined.png`), sichtbar im laufenden Spiel aus allen Kameras. Sounds, Stimmen und Musik sollen dieselbe höhere Qualitätsstufe erreichen. Fertige Stimmen ohne Text-to-Speech; die unten beschriebenen TTS-Assets sind Zwischenumsetzung. Pakete und Abnahmen: [Langfristige Ziele](../LONG-TERM-GOALS.md).
+
 ## Ruhigere Karosserie und sichtbarer Staub – 03.10.2026
 
 Exponentielle statt schwingender visueller Karosserierückkehr, Rollneigung/Vibration stark reduziert. Haube hebt sich dezent mit Beschleunigung/Tempo; Hinterteil senkt sich. Radbaugruppen besitzen getrennten ungefederten Elternknoten und bleiben auf den vier berechneten Bodenkontakten. Hop und tatsächliche Federung bleiben sichtbar. Bestehender Reifenstaub als größere weichere Wolke lesbarer, maximal 150 Partikel, reduzierte Effektstufe sparsamer.

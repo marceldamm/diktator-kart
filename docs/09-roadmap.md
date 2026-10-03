@@ -1,5 +1,9 @@
 # Roadmap und Abnahmen
 
+## Qualitätsziel präzisiert – 04.10.2026
+
+M3–M6 sollen Modelle, historische Fahrer, Fahrzeuge, Strecke/Umfeld, Effekte und gesamtes Audio deutlich hochwertiger und realitätsnäher machen, gemessen an der gewählten Bildpräferenz G–L im laufenden Spiel. Fertige Stimmen ohne Text-to-Speech; synthetische Clips bleiben Zwischenstand. Menschliche Aufnahmen oder geeignete echte Mitschnitte mit geklärten Rechten. Konkrete Pakete/Abnahmen: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md). Bestehende Geräte-/Performanceziele bleiben erhalten.
+
 ## Unsere vier Arbeitsdateien
 
 Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.

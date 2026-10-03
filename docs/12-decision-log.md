@@ -1,5 +1,9 @@
 # Entscheidungslog
 
+## 04.10.2026 – Höhere Gesamtqualität und fertige Stimmen ohne TTS
+
+Auf ausdrücklichen Auftrag von Marcel: viel bessere, realitätsnähere Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds, Stimmen und Musik anhand der gewählten Bildpräferenz G–L. Kein Text-to-Speech als fertige Stimme, einschließlich offline erzeugter Clips; menschliche Aufnahmen/geeignete echte Mitschnitte mit nachvollziehbaren kostenlosen Nutzungsrechten. Bisherige synthetische Produktion bleibt dokumentierter Zwischenstand. Keine neue Sarah-Idee oder fertige Umsetzung behauptet. Betroffen: README, vier Arbeitsdateien, Art Direction, Assetpipeline, Roadmap, bestätigte Entscheidungen, Audio-/Bauplan und PROGRESS-LOG.md. Bestehende Budget-/Performance-/Fairnessziele bleiben erhalten.
+
 ## 03.10.2026 – Vier zentrale Arbeitsdateien und Kurzbefehle
 
 Auf ausdrücklichen Nutzerauftrag: CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md im Hauptordner. Gemeinsame Navigation und Anleitung für Marcel/Sarah; Projektstart/Projektabschluss reichen als alleinstehende KI-Befehle. Start öffnet vier App-Tabs soweit verfügbar. Technischer Verlauf nach PROGRESS-LOG.md umbenannt, alle aktiven Verweise und Git-/Testgates migriert. Benutzer-Notizen mit Herkunft erhalten und zu Aufgaben/Ergebnissen verknüpfen. Betroffen: AGENTS, START-HERE, README, Handbuch, Framework/Roadmap/Blueprint, Teamablauf, beide Repo-Skills, Marker und Git-Skript.

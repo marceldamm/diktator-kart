@@ -1,5 +1,9 @@
 # Entscheidungen und verbleibende Fragen
 
+## Qualitäts- und Stimmenpräzisierung – 04.10.2026
+
+Marcel verlangt deutlich höhere, realitätsnähere Qualität aller Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds, Stimmen und Musik anhand der gewählten G–L-Bildpräferenz. Fertige Stimmen ohne Text-to-Speech (auch offline erzeugtes TTS); aktuelle synthetische Clips sind Zwischenstand. Vorproduzierte menschliche Aufnahmen/geeignete echte Mitschnitte mit geklärten Rechten, bisherige Musikrichtung und kostenloser Rahmen bleiben Grundlage. Diese bestätigte Zielentscheidung nicht erneut als offene Grundsatzfrage stellen. Umsetzung/Abnahmen: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md).
+
 ## Präzisiertes Ziel für Figuren und Welt – 03.10.2026
 
 Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar.

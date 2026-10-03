@@ -8,6 +8,8 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 
 ## 04.10.2026
 
+- **Höheres Qualitätsziel:** Marcel verlangt deutlich bessere, realitätsnähere Modelle, Fahrer, Fahrzeuge, Strecke, Umgebung, Effekte und Audio anhand der gewählten Bildpräferenz. Fertige Stimmen ohne Text-to-Speech; aktuelle synthetische Clips sind Zwischenstand. Maßnahmen in LONG-TERM-GOALS.md.
+
 - **Sarahs Panzeridee wiedergefunden:** Die Verwandlung existiert im alten veröffentlichten Code, fehlt aber im Babylon-Spiel. Wiederherstellung in CURRENT-WORKLIST.md aufgenommen; weitere alte Fähigkeiten/Items und Unterschiede mit Quellen im [Abgleich](docs/sarah-feature-audit.md). Keine Altengine übernommen, keine neue Fähigkeit als fertig gemeldet.
 
 ## 03.10.2026

@@ -71,6 +71,8 @@ Bots brauchen eine begrenzte Vorausschau, Streckenwissen, Recovery und nachvollz
 
 ## Audio und Sprecherin
 
+**Präzisierung 04.10.2026:** Fertige Stimmen ausdrücklich ohne Text-to-Speech, auch ohne offline erzeugtes TTS. Menschliche Aufnahmen oder geeignete echte Mitschnitte mit geklärten kostenlosen Nutzungsrechten. Vorhandene synthetische Stimmen bleiben Zwischenstand. Sounds, Stimmen und Musik insgesamt deutlich hochwertiger ausarbeiten; aktuelle Pakete in [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md).
+
 Audio reagiert auf Geschwindigkeit, Belastung, Untergrund, Drift, Item, Schaden, Wetter und Weltreaktion. Jede Strecke erhält eine eigene Musikidentität. Die Sprecherin ist ereignisgesteuert und präsentiert die Diktatoren nicht als Selbstkritiker; sie verkauft den Rennsieg im Stil einer übertriebenen offiziellen Erfolgsmeldung. Satire entsteht aus Überhöhung, Widerspruch und propagandistischer Sprache, nicht aus einem dauernden Verspotten der Fahrer. Untertitel und separate Lautstärkeeinstellungen bleiben erforderlich.
 
 ## UI und Datenwahrheit

@@ -6,6 +6,10 @@ Kostenlose lokale Pipeline: portable Blender 4.5.3 LTS unter ignoriertem `.tools
 
 Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
+## Verbindliches Stimmenziel – 04.10.2026
+
+Fertige Fahrer-/Sprecherstimmen laut Marcel **ohne Text-to-Speech**, auch ohne offline erzeugte TTS-Clips. Menschliche Aufnahmen oder geeignete echte Mitschnitte mit nachvollziehbaren kostenlosen Nutzungsrechten beschaffen/produzieren; Quellen und Bearbeitung erhalten. Vorhandene Piper-Clips sind Zwischenstand und erfüllen das Endziel nicht. Umfassender Qualitätspass für alle Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds und Musik anhand der gewählten Bildpräferenz: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md).
+
 ## Ziel
 
 Die neue Produktion braucht eine klare Kette von Idee → Referenz → Entwurf → Asset → Integration → Abnahme. Ein Bild im Referenzordner ist eine Stilhilfe, keine automatisch zu kopierende Vorlage und keine Lizenzfreigabe.

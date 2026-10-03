@@ -24,6 +24,8 @@ Dieser Ordner enthält die Planungs- und Wissensbasis sowie seit M1 einen startb
 
 ## Grundpfeiler
 
+**Qualitätspräzisierung 04.10.2026 (Marcel):** Modelle, historische Charaktere, Fahrzeuge, Strecke, Umfeld, Licht/Effekte, Sounds, Stimmen und Musik deutlich hochwertiger und realitätsnäher ausarbeiten, gemessen an der gewählten Bildpräferenz G–L im fahrenden Spiel. Fertige Stimmen ausdrücklich **ohne Text-to-Speech**, auch ohne offline erzeugtes TTS; aktuelle synthetische Clips sind Zwischenstand. Aufgaben/Abnahmen: [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md). Bestehende Performance-, Kosten- und Fairnessziele gelten weiter.
+
 1. **Direktes Fahrgefühl vor Umfang:** Ein Rennen muss sich früh gut steuern, lesen und beenden lassen; Ziel ist etwa 6/10 Realismus zwischen Arcade und Simulation.
 2. **Satirische Erwachsenenwelt mit Ursache und Wirkung:** Bissiger, schwarzer, düsterer und provokanter Humor wird durch Strecke, Fahrer, Items, Audio und sichtbare Reaktionen erzählt.
 3. **Historische Anspielung ohne Verherrlichung:** Reale Diktatoren, Gebäude und Regime dürfen kritisch-satirisch erkennbar sein; rechtsextreme Inhalte, Verherrlichung, Holocaust-/Genozid-Szenarien und menschenverachtende Grenzüberschreitungen sind ausgeschlossen.

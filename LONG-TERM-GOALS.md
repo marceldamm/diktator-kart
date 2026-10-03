@@ -6,6 +6,21 @@
 
 Gemeinsamer Überblick für Marcel, Sarah und jede KI-Sitzung. Die kurzfristige [Aktuelle Arbeitsliste](CURRENT-WORKLIST.md) führt die laufende Umsetzung; diese Liste hält das Gesamtziel und die nächste sinnvolle Ausbaustufe sichtbar. Verbindliche Detailentscheidungen stehen in den verlinkten Fachdateien. Historische Zwischeneinträge sind keine aktuellen Arbeitsaufträge.
 
+## Übergeordnetes Qualitätsziel – Marcel, 04.10.2026
+
+Das gesamte Spiel auf eine deutlich höhere Qualitätsstufe bringen: wesentlich schöner, realistischer, detailreicher und professioneller. Maßstab bleibt die gewählte Bildpräferenz G–L, insbesondere `references/visuals/style-comparison-02-c-a-refined.png`. Das Maximum aus Babylon.js und verfügbaren kostenlosen Werkzeugen herausholen; Qualität in echter Fahrt beurteilen, bestehende Performanceziele erhalten.
+
+- [ ] **Viel bessere Modelle und Charaktere:** glaubwürdige Proportionen, erkennbare historische Gesichter, Haare, Kleidung, Materialien und lebendige Animationen.
+- [ ] **Viel bessere Fahrzeuge:** individuelle Formen, mechanische Bauteile, differenzierte Oberflächen und überzeugende, zurückhaltende Bewegung; editierbare Modellquellen.
+- [ ] **Viel bessere Strecke und Umgebung:** abwechslungsreiche Streckenführung, realitätsnähere Architektur, Boden/Vegetation, räumliche Tiefe, historische Atmosphäre und markante Blickpunkte.
+- [ ] **Viel bessere Effekte und Licht:** hochwertige Schatten/Materialwirkung, Atmosphäre, Staub, Drift, Turbo, Treffer und Wetter; unter Fahrt lesbar und skalierbar.
+- [ ] **Viel bessere Sounds:** Motor, Reifen, Kontakte, Items und Umgebung mit räumlicher Wirkung, Charakter und sauberem Mix.
+- [ ] **Viel bessere Stimmen – kein Text-to-Speech:** menschlich eingesprochene Aufnahmen oder geeignete echte Mitschnitte mit geklärten Nutzungsrechten. Lebendig, freundlich und verständlich. Auch offline erzeugtes TTS erfüllt das Endziel nicht; vorhandene synthetische Clips als Zwischenstand kennzeichnen und für die fertige Fassung ersetzen.
+- [ ] **Viel bessere Musik:** hochwertige, historisch geprägte Musik mit Abwechslung, passenden Übergängen und ausgewogenem Mix; bisheriger Ausschluss elektronischer Stilrichtung bleibt bestehen.
+- [ ] **Zusammenhängende Qualität:** alle Bereiche aufeinander abstimmen und mit der Bildpräferenz vergleichen; echte Laufzeitbilder aller drei Kameras und menschliche Hörabnahme. Platzhalter nicht als fertig abhaken.
+
+Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssiges Fahrgefühl bleiben berücksichtigt. Herkunft: Marcel, keine neue Sarah-Idee behauptet. Ziel dokumentiert; nicht umgesetzt oder abgenommen.
+
 ## So arbeiten wir damit
 
 - Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
