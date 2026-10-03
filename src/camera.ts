@@ -26,6 +26,8 @@ export class KartCamera {
   private readonly wheel: TransformNode;
   private view = 0;
   private readonly realCockpit: boolean;
+  private photo = false;
+  private photoAngle = .65;
 
   constructor(scene: Scene, state: KartState, realCockpit = false) {
     this.realCockpit = realCockpit;
@@ -86,8 +88,16 @@ export class KartCamera {
   }
 
   get viewName(): string { return VIEWS[this.view].name; }
+  get photoMode(): boolean { return this.photo; }
+  togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
 
   update(state: KartState, dt: number, immediate = false, steering = 0): void {
+    if (this.photo) {
+      this.photoAngle += dt * .18;
+      const a=state.heading+this.photoAngle;
+      this.camera.position.set(state.x+Math.sin(a)*4.5,1.8+state.height,state.z+Math.cos(a)*4.5);
+      this.camera.fov=.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height,state.z));return;
+    }
     const view = VIEWS[this.view];
     const forwardX = Math.sin(state.heading);
     const forwardZ = Math.cos(state.heading);

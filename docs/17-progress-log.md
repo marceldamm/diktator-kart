@@ -523,6 +523,22 @@
 
 **Nächster Schritt:** Sichtbare Qualität und Botverkehr verbessern, tatsächliches Dreirundenrennen/Neustart/Lastfenster prüfen und den nächsten funktionierenden Stand sichern. Diese Sitzung läuft weiter.
 
+### 2026-10-03 – Vertical Slice: zweite Laufzeitprüfung
+
+**Umgesetzt:** Fotomodus, echte Fahrerhände/Lenkrad aus dem Kartasset, Bodenwelle mit gemeinsamem Radkontaktmodell, persistente Basis-/Standardgrafik und reduzierte Effekte. Poly-Haven-CC0-Baum mit gepackten Texturen und getrennter Reduktion von Laub/Holz (2.062.487 auf 134.998 Dreiecke); CC0-Pflaster mit Farb-, Normal- und ARM-Karten. Vorläufige Pianoaufnahme „Fig Leaf Rag“ mit sichtbarer CC-BY-4.0-Attribution. Rücksetzung für Mensch und Bots am vorhandenen Streckenfortschritt mit zwei Sekunden Stillstand.
+
+**Verifiziert:** 18 Modelltests und Produktionsbuild. Browserprüfung von drei Kameras, Fahrt, Pause, Countdown, Foto und Szenenneustart bestanden. Ein real zeitlich laufendes Browserrennen mit sechs Teilnehmern erreichte drei Runden, Ergebnis und Revanche ohne Ausnahme; Spielerzeit 97,63 s, zwei Bots zuvor im Ziel, drei weitere kurz davor. Rohdaten: `slice-full-race-rtx.json`. Neue Bilder `slice-*-v3.png` wurden aus dem Spiel aufgenommen.
+
+**Gefundener Fehler / laufende Korrektur:** Der längere Standardgrafiklauf zeigte trotz meist etwa 60 FPS starke Ausreißer (P95 33–200 ms in den drei 300-Frame-Fenstern). Dieser Stand gilt nicht als performanter Abschluss. Laubtransparenz und Baumanzahl werden korrigiert und erneut gemessen; CPU-/GPU-/Drawcall-Instrumentierung ergänzt. Die erste Drawcallangabe in `slice-full-race-rtx.json` war kumuliert und ist kein Drawcalls-pro-Frame-Wert.
+
+**Nachprobe:** Undurchsichtiges Laub und sechs statt zehn Kopien: P95 20,6 / 19,9 / 19,9 ms für nah/fern/Fahrer, Basis-Fahrer 19,4 ms. Erster Nahblick hatte noch vier >33-ms-Intervalle; andere Fenster keine. `slice-optimized-rtx.json` enthält echte Drawcalls pro Frame und CPU-/GPU-Stichproben. Glow-Pass wird anschließend auf tatsächlich leuchtende Teile begrenzt.
+
+**Nicht verifiziert:** Hörqualität, menschlicher Kamerakomfort, normale/schwache PCs, Mobile, G–L-Stilabnahme. Historische Figuren und Landmarken bleiben nicht ausgewählt. Das neutrale Fahrermodell ist ein vorläufiges Artasset, keine fertige historische Figur.
+
+**Dateien:** `src/audio.ts`, `camera.ts`, `input.ts`, `main.ts`, `slice-scene.ts`, `track.ts`, `kart-model.ts`, `scene.ts`, `style.css`, `index.html`, `art-source/prepare_tree.py`, `.blend`/GLB-Baum, Audio/Texturen/Credits/Manifest sowie Browser-/Streckentests und Laufzeitbilder.
+
+**Budget / Fortsetzung:** Offizielle Werte zuletzt 33 % Fünf-Stunden- und 5 % Wochenverbrauch; kein Reset/Zusatzkontingent. Performance korrigieren, dann beschlossenes Start-Itemset und belebtere Streckendetails umsetzen. Keine Übertragung, kein Merge, kein Ruhezustand.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

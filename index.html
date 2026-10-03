@@ -13,6 +13,7 @@
       <div class="map-card slice-only"><canvas id="minimap" width="150" height="230" aria-label="Streckenkarte"></canvas><span>441 m · STADIONRING</span></div>
       <div id="countdown" class="slice-only" hidden>3</div>
       <div id="finish-card" hidden><span>STADION GRAND PRIX</span><h2 id="finish-title">Ziel erreicht</h2><p id="finish-detail"></p></div>
+      <details class="credits slice-only"><summary>Credits</summary><p>Modelle: originale Projektassets; Bäume: <a href="https://polyhaven.com/a/tree_small_02" target="_blank" rel="noreferrer">Poly Haven · CC0</a>. Beleuchtung: BabylonJS Assets · CC BY 4.0.<br>„Fig Leaf Rag“ – Kevin MacLeod (<a href="https://incompetech.com/music/royalty-free/index.html?Search=Search&amp;isrc=USUAN1100701" target="_blank" rel="noreferrer">incompetech.com</a>), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Unveränderte Aufnahme, wiederholt als vorläufige Rennmusik.</p></details>
       <section class="panel" aria-live="polite">
         <div class="eyebrow">DIKTATOR KART / M2 TEST</div>
         <h1>M2 Fahrtest</h1>
@@ -22,18 +23,20 @@
         <p id="drive-mode">Bereit</p>
         <p id="surface">Ebener Boden</p>
         <p id="camera-mode">Verfolger nah</p>
-        <p id="fleet-count">6 Fahrzeuge im Techniktest</p>
+        <p id="fleet-count">6 Fahrzeuge</p>
         <div class="actions">
           <button id="race-start" class="slice-only" type="button">Rennen starten ↵</button>
           <button id="pause" type="button" disabled>Pause</button>
           <button id="restart" type="button" disabled>Neustart</button>
           <button id="sound-toggle" class="slice-only" type="button">Ton an</button>
           <button id="debug-toggle" type="button" disabled>Diagnose</button>
+          <button id="quality-toggle" class="slice-only" type="button">Grafik Standard</button>
+          <button id="effects-toggle" class="slice-only" type="button">Effekte voll</button>
         </div>
         <p class="hint">W/↑ Gas · S/↓ Bremse/Rückwärts · A/D oder ←/→ Lenken<br>Space Hop; halten + lenken: Drift; geladen loslassen: Mini-Turbo<br>Bodenwellen voraus; roter Kollisionsblock rechts der Linie<br>C Kamera nah/fern/Fahrer · E Item · Q Fähigkeit · P Pause · R Neustart · F3 Diagnose</p>
         <pre id="debug" hidden></pre>
       </section>
-      <p class="showcase-controls"><b>W / S</b> Fahren &nbsp; <b>A / D</b> Lenken<br><b>SPACE</b> Hop · halten: Drift · loslassen: Turbo<br><b>C</b> Kamera &nbsp; <b>P</b> Pause &nbsp; <b>R</b> Neustart &nbsp; <b>F3</b> Diagnose</p>
+      <p class="showcase-controls"><b>W / S</b> Fahren &nbsp; <b>A / D</b> Lenken<br><b>SPACE</b> Hop · halten: Drift · loslassen: Turbo<br><b>C</b> Kamera &nbsp; <b>V</b> Foto &nbsp; <b>R</b> Neustart &nbsp; <b>F3</b> Diagnose</p>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

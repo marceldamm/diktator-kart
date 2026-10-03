@@ -4,7 +4,7 @@ import { attachKeyboard, InputHub } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, trackPoint, trackProgress, type RaceProgress } from './track';
+import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
@@ -67,9 +67,16 @@ class App {
   private progress: RaceProgress[] = [];
   private readonly audio = new KartAudio();
   private botStuck: number[] = [];
+  private recoveryRemaining: number[] = [];
+  private photoWasPaused = false;
+  private quality = 1;
+  private reducedEffects = false;
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress }) });
+    try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
+    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = 1 - this.quality; this.applyQuality(); });
+    document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
       this.audio.setEnabled(!this.audio.enabled); void this.audio.unlock();
@@ -89,6 +96,7 @@ class App {
 
   private show(state: AppState, detail: string): void {
     this.state = state;
+    document.body.classList.toggle('start-error',state==='error');
     status.textContent = { loading: 'Lädt …', running: 'Testszene läuft', paused: 'Pausiert', error: 'Startfehler' }[state];
     message.textContent = detail;
     pauseButton.disabled = state === 'loading' || state === 'error';
@@ -147,7 +155,8 @@ class App {
     this.frameTimes = [];
     this.lastFrameAt = 0;
     this.queuedHopPress = false;
-    this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = this.loadKarts.map(() => 0);
+    document.body.classList.remove('photo-mode');
+    this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
@@ -169,6 +178,7 @@ class App {
       const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD);
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
+      this.applyQuality();
       this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
       this.testScene.present(this.kart, this.loadKarts);
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
@@ -177,13 +187,22 @@ class App {
     }
   }
 
+  private applyQuality(): void {
+    if (LAB_WORLD) return;
+    this.testScene?.setQuality?.(this.quality, this.reducedEffects);
+    document.querySelector('#quality-toggle')!.textContent = this.quality ? 'Grafik Standard' : 'Grafik Basis';
+    document.querySelector('#effects-toggle')!.textContent = this.reducedEffects ? 'Effekte reduziert' : 'Effekte voll';
+    try { localStorage.setItem('dk-quality', String(this.quality)); localStorage.setItem('dk-reduced-effects', this.reducedEffects ? '1' : '0'); } catch { /* Session controls still work. */ }
+  }
+
   private async startRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
     await this.audio.unlock();
+    if (this.camera?.photoMode) this.camera.togglePhoto(); document.body.classList.remove('photo-mode');
     // Reuse assets; reset the simulation without reloading the entire scene.
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.botStuck = this.loadKarts.map(() => 0);
+    this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0;
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -231,6 +250,12 @@ class App {
     if (frame.pressed.has('restart')) void this.restart();
     if (frame.pressed.has('pause')) this.togglePause();
     if (frame.pressed.has('debug')) debug.hidden = !debug.hidden;
+    if (!LAB_WORLD && frame.pressed.has('photo')) {
+      const photo=this.camera?.togglePhoto(); document.body.classList.toggle('photo-mode',!!photo);
+      if (photo) { this.photoWasPaused=this.state==='paused'; if(this.state==='running')this.togglePause(); }
+      else if (!this.photoWasPaused && this.state==='paused') this.togglePause();
+      this.testScene?.setPlayerVisible(true);
+    }
     if (this.state === 'running' && this.testScene) {
       if (frame.pressed.has('camera')) {
         this.lastAction = `Kamera: ${this.camera?.cycleView() ?? 'Verfolger nah'}`;
@@ -247,20 +272,27 @@ class App {
         if (!countdown && this.racePhase !== 'finished') {
         const project = LAB_WORLD ? undefined : projectTrack;
         const traffic = [this.kart, ...this.loadKarts];
-        this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : { ...frame, hopPressed: this.queuedHopPress }, FIXED_STEP, project);
+        const terrain = LAB_WORLD ? undefined : trackHeightAt;
+        this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : { ...frame, hopPressed: this.queuedHopPress }, FIXED_STEP, project, terrain);
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
-          let next = advanceKart(other, LAB_WORLD ? { throttle: 1, steering: CONTACT_SCENARIO ? 0 : .75 } : botInput(other, index + 1, traffic), FIXED_STEP, project);
-          if (!LAB_WORLD) {
-            this.botStuck[index] = Math.abs(next.speed) < 1 ? this.botStuck[index] + FIXED_STEP : 0;
-            if (this.botStuck[index] > 4) {
-              const p = trackPoint(trackProgress(next.x, next.z), (index % 2 ? 1 : -1) * 1.8);
-              next = { ...initialKartState(), ...p, travelHeading: p.heading }; this.botStuck[index] = 0;
-              this.progress[index + 1].last = trackProgress(p.x, p.z);
-            }
-          }
+          let next = advanceKart(other, LAB_WORLD ? { throttle: 1, steering: CONTACT_SCENARIO ? 0 : .75 } : botInput(other, index + 1, traffic), FIXED_STEP, project, terrain);
           return next;
         });
+        if(!LAB_WORLD) {
+          const all=[this.kart,...this.loadKarts];
+          const recovered=all.map((s,i)=>{
+            if(this.recoveryRemaining[i]>0) { this.recoveryRemaining[i]=Math.max(0,this.recoveryRemaining[i]-FIXED_STEP);return {...s,speed:0}; }
+            const intendsToDrive=i>0 ? this.racePhase!=='practice'||DEMO : DEMO||frame.throttle>0;
+            this.botStuck[i]=intendsToDrive&&Math.abs(s.speed)<1 ? this.botStuck[i]+FIXED_STEP : 0;
+            if(this.botStuck[i]>4||(i===0&&frame.pressed.has('recover')&&Math.abs(s.speed)<3)) {
+              this.botStuck[i]=0;this.recoveryRemaining[i]=2;
+              return recoverKart(s,all);
+            }
+            return s;
+          });
+          this.kart=recovered[0];this.loadKarts=recovered.slice(1);
+        }
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
@@ -284,7 +316,8 @@ class App {
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
-      modeDisplay.textContent = this.kart.impactRemaining > 0
+      modeDisplay.textContent = this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
+        : this.kart.impactRemaining > 0
         ? this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'
           : this.kart.impactKind === 'obstacle' ? 'Hinderniskontakt – Kart fängt sich' : 'Randkontakt – Kart fängt sich'
         : this.kart.turboRemaining > 0
@@ -300,6 +333,7 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
+    if(this.camera?.photoMode) this.camera.update(this.kart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished');
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {

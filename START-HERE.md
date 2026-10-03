@@ -1,37 +1,22 @@
 # Diktator Kart – Hier starten
 
-## Was du jetzt tun musst
+## Aktueller Einstieg – großer Vertical Slice
 
-1. Für den aktuellen Fahrtest unter Windows **`Diktator-Kart-starten.cmd` doppelklicken**. Beim ersten Mal benötigt `npm ci` Internetzugang. Das Konsolenfenster offen lassen; Google Chrome öffnet die Testszene automatisch. Zum Beenden **Strg+C** im Konsolenfenster drücken und die Windows-Rückfrage mit **J** beantworten.
-2. Für die Weiterentwicklung das Projekt `D:\Diktator-Kart` in **Codex** öffnen und Branch **`babylon-neustart-2026`** prüfen.
-3. Für M2 ein Sol-Modell mit hoher Denkintensität wählen und den Auftrag unten verwenden.
+**Branch:** `codex/stadium-vertical-slice`. Nicht auf `main` wechseln oder Änderungen übertragen; Push/Merge brauchen ausdrückliche Freigabe.
 
-## Auftrag für den nächsten Arbeitslauf
+**Start:** `Diktator-Kart-starten.cmd` doppelklicken. Chrome öffnet `http://127.0.0.1:4173/`; Fenster offen lassen. Enter startet drei Runden gegen fünf Bots. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C nahe/ferne/Fahrer-Kamera, V Fotomodus, B Rücksetzung bei niedrigem Tempo, P Pause, R Szenenneustart. Grafik Basis/Standard, reduzierte Effekte und Ton über HUD.
 
-```text
-Arbeite im lokalen Projekt D:\Diktator-Kart auf dem Branch
-babylon-neustart-2026. Lies AGENTS.md, README.md, docs/00-project-framework.md,
-docs/16-production-blueprint.md, docs/17-progress-log.md und die für M2
-benötigten Detaildokumente.
+**Autonomer Auftrag:** Den ausdrücklich freigegebenen neutralen Stadion-Slice anhand G–L breit ausarbeiten, Laufzeitbilder vergleichen und echte Rennläufe prüfen. Kostenlose Assetpipeline und Quellen dokumentieren. Regelmäßige lokale Commits, keine Übertragung. Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei etwa 15 % Rest geordnet abschließen, etwa 5 % für Nutzernachrichten bewahren. Kein Reset/Zusatzkontingent.
 
-Ziel des nächsten Arbeitspakets M2-Abnahme: Fahre den unten beschriebenen
-menschlichen Fahrcheck für Rand-, Hindernis- und Fahrzeugkontakt, Hop,
-Drift, Mini-Turbo, Federung und alle drei Kameras, sobald ein Mensch am
-Gerät steuern kann; erfinde kein Fahrgefühlurteil. Miss auf einem
-normalen oder schwächeren PC beziehungsweise Mobilgerät, wenn eines
-zugänglich ist. Bewerte danach die vorläufigen Kollisionsformen und
-Kamerabewegungen; dokumentiere nötige Korrekturen als klar abgegrenzte
-M2-Pakete. Die fünf automatisch bewegten Lastkarts sind noch keine
-Rennbots. Übernimm keinen PlayCanvas-/Ammo-Code. Halte START-HERE.md und
-docs/17-progress-log.md aktuell und berichte verifiziert, nicht
-verifiziert, offen und nächsten Schritt.
-```
+**Geprüfter Zwischenstand:** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung. Details und Messgrenzen in `docs/17-progress-log.md`. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
+
+## Historische Zwischenstände vor dem großen Auftrag
 
 ## Wo stehen wir?
 
-**Heute:** M1 geprüft; M2a–l liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts, vorläufigen Kontakten und F3-Diagnose. Ein vollständiges Rennen existiert noch nicht.
+**Heute:** M1 geprüft; M2a–l liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts, vorläufigen Kontakten und F3-Diagnose. Ein vollständiges Rennen existierte zu diesem historischen M2-Stand noch nicht; aktueller Slice siehe oben.
 
-**Aktueller Meilenstein:** M2 – Fahrprototyp.
+**Damals bearbeiteter Meilenstein:** M2 – Fahrprototyp.
 
 **Direktes Ziel:** M2-Abnahmelücken: menschliches Fahrgefühl, Kamerakomfort, Kontaktreaktionen und normale/schwächere Hardware.
 

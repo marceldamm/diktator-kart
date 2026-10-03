@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
-import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace } from '../src/track.ts';
+import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt } from '../src/track.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
   for(let s=0;s<TRACK.length;s+=.5){
@@ -30,4 +30,9 @@ test('reverse and teleporting across the park cannot grant a completed lap',()=>
   assert.ok(race.distance<=0);
   advanceRace(race,{...state,...trackPoint(250)},2);
   assert.ok(race.distance<=0);assert.equal(race.finished,false);
+});
+test('circuit ground profile lifts individual wheels and settles the chassis',()=>{
+  const p=trackPoint(59);let s={...gridKart(0),...p,travelHeading:p.heading,speed:8};let highest=0,tilt=0;
+  for(let i=0;i<180;i++){s=advanceKart(s,{throttle:1,steering:0},1/60,projectTrack,trackHeightAt);highest=Math.max(highest,...s.wheelGroundHeights);tilt=Math.max(tilt,Math.abs(s.bodyPitch));}
+  assert.ok(highest>.2);assert.ok(tilt>.025);assert.ok(Math.abs(s.suspensionOffset)<.01);
 });

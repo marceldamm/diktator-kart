@@ -12,9 +12,12 @@ export class KartAudio {
   private lastImpact = false;
   private lastBoost = false;
   private loading = false;
+  private readonly music = new Audio('/assets/audio/fig-leaf-rag.mp3');
   enabled = true;
+  constructor() { this.music.loop = true; this.music.volume = .14; }
 
   async unlock(): Promise<void> {
+    if (this.enabled && this.music.paused) void this.music.play().catch(() => { /* A new browser gesture can retry. */ });
     if (this.context) { await this.context.resume(); return; }
     if (this.loading) return; this.loading = true;
     try {
@@ -29,8 +32,9 @@ export class KartAudio {
       }
     } catch (error) { console.warn('Audio unavailable', error); }
   }
-  setEnabled(enabled: boolean): void { this.enabled = enabled; if (this.master) this.master.gain.value = enabled ? .35 : 0; }
+  setEnabled(enabled: boolean): void { this.enabled = enabled; this.music.muted = !enabled; if (this.master) this.master.gain.value = enabled ? .35 : 0; }
   update(state: KartState, running: boolean): void {
+    this.music.volume = running ? .14 : .065;
     if (!this.context || !this.engine || !this.engineGain || !this.tireGain) return;
     const t = this.context.currentTime;
     this.engine.playbackRate.setTargetAtTime(.7 + Math.abs(state.speed) * .055, t, .08);

@@ -343,7 +343,7 @@ for x in [-10,10]:
     box('Gate tower',(x,-113,5),(4,5,10),pale,.08)
     box('Gate cornice',(x,-113,10),(5,6,.55),gold,.05)
 arch(0,-113,0,15,9,2,pale)
-text('Gate sign','AMT FUER UEBERHOLGENEHMIGUNGEN',(0,-114.15,10.8),.6,gold)
+text('Gate sign','AMT FUER UEBERHOLGENEHMIGUNGEN',(0,-111.6,10.8),.6,gold,(math.pi/2,0,math.pi))
 for x in [-10,10]:
     cyl('Gate plinth',(x,-113,11.1),1,.9,darkstone)
     # Oversized trophy rather than a historical icon.

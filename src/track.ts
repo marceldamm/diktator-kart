@@ -22,6 +22,11 @@ export function trackProgress(x: number, z: number): number {
   return x >= 0 ? z + 60 : 120 + Math.PI * 32 + 60 - z;
 }
 
+export function trackHeightAt(x: number, z: number): number {
+  const s = trackProgress(x, z), delta = Math.abs(s - 65);
+  return delta < 4 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0;
+}
+
 export const projectTrack: WorldProjection = (x, z) => {
   const cy = Math.max(-60, Math.min(60, z));
   const dx = x, dz = z - cy;
@@ -37,6 +42,18 @@ export const projectTrack: WorldProjection = (x, z) => {
 export function gridKart(index: number): KartState {
   const p = trackPoint(22 - Math.floor(index / 2) * 4.3, index % 2 ? 1.65 : -1.65);
   return { ...initialKartState(), ...p, travelHeading: p.heading };
+}
+
+// Everyone recovers at their current track progress; no free metres or laps.
+export function recoverKart(state: KartState, others: KartState[]): KartState {
+  const s = trackProgress(state.x,state.z);
+  const lanes = [-3.5,0,3.5].map(lane=>({lane,p:trackPoint(s,lane)}));
+  lanes.sort((a,b)=> {
+    const clearance=(p:{x:number;z:number})=>Math.min(20,...others.filter(o=>o!==state).map(o=>Math.hypot(p.x-o.x,p.z-o.z)));
+    return clearance(b.p)-clearance(a.p);
+  });
+  const p=lanes[0].p;
+  return {...initialKartState(),...p,travelHeading:p.heading};
 }
 
 export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {

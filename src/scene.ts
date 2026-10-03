@@ -16,6 +16,7 @@ export interface TestScene {
   scene: Scene;
   present(state: KartState, loadKarts: KartState[]): void;
   setPlayerVisible(visible: boolean): void;
+  setQuality?(level: number, reducedEffects: boolean): void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {

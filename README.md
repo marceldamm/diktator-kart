@@ -1,6 +1,6 @@
 # Diktator Kart – Babylon-Neustart 2026
 
-Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Das Altspiel liegt unter `Diktator-Kart-Legacy/`, zusammen mit Kopien der bisherigen Sicherungen. Die ältere Sicherung `Legacy/` bleibt wegen einer Windows-Verschiebesperre zusätzlich im Hauptverzeichnis erhalten und wird nicht bearbeitet. Die aktive Git-Verwaltung bleibt im Hauptverzeichnis. Seit M2e gibt es hier einen steuerbaren Kart-Techniktest mit Hop, Drift, Mini-Turbo, Federung, drei Kameras und fünf bewegten Lastfahrzeugen, noch kein Rennen.
+Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Die Altarchive bleiben unverändert. Aktuell entsteht auf `codex/stadium-vertical-slice` ein spielbarer neutraler Stadionring mit sechs Karts, drei Runden und Ergebnis/Revanche. Der große Nutzerauftrag erlaubt die vorgezogene neutrale Produktion; historische Figuren-/Landmarkenauswahl, gemeinsame Stilfreigabe und Zielhardware-Abnahme bleiben offen.
 
 Für den täglichen Überblick zuerst [START-HERE.md](START-HERE.md) öffnen. Die gemeinsame Bedienungsanleitung für dich und Sarah steht in [TEAM-HANDBOOK.md](TEAM-HANDBOOK.md).
 
@@ -10,7 +10,7 @@ Diktator Kart wird als eigenständiger satirischer 3D-Arcade-Kart-Racer für den
 
 Dieser Ordner enthält die Planungs- und Wissensbasis sowie seit M1 einen startbaren Babylon.js-Technikgrundstand. Er übernimmt aus dem Altprojekt Ideen und belegte Designentscheidungen, aber keine alte Engine-Implementierung.
 
-**Techniktest starten:** Unter Windows [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken. Das Fenster offen lassen; Chrome öffnet `http://127.0.0.1:4173/`. Beim ersten Start installiert der Launcher die im Lockfile festgelegten kostenlosen npm-Pakete. Technischer Weg: `npm ci`, dann `npm run dev`. W/S beziehungsweise Pfeil hoch/runter fahren, A/D beziehungsweise Pfeil links/rechts lenken. Space löst einen Hop aus; Space nach der Landung mit Lenkung halten und bei geladenem Drift loslassen, um Mini-Turbo zu aktivieren. Zwei markierte Bodenwellen zeigen die Federung. C wechselt zwischen naher/ferner Verfolger- und Fahrerperspektive, P pausiert und R startet neu. `?fleet=1` reduziert die Lastprobe auf ein Fahrzeug.
+**Spiel starten:** [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken und das Fenster offen lassen. Chrome öffnet `http://127.0.0.1:4173/`. Technisch: `npm ci`, `npm run dev`. Enter startet ein Drei-Runden-Rennen. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C Kamera, V Foto, B Rücksetzung bei niedrigem Tempo, P Pause, R kompletter Neustart, F3 Diagnose. Grafik- und Effektstufen werden lokal gespeichert. `?world=lab` bleibt der reproduzierbare Fahrtechniktest, `?demo=1` fährt den Spieler über denselben Botcontroller.
 
 ## Grundpfeiler
 
@@ -65,12 +65,12 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 
 - Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
 - Babylon.js-Neuentwicklung: **M1 geprüft; M2a–l mit Fahrkern, Federung, drei Kameras, Sechs-Fahrzeug-Technikprobe, vorläufigen Kontakten und F3-Diagnose lokal umgesetzt und geprüft**
-- Sichtbare Babylon-Stilskizze: **fiktiver Stadionvorplatz/Boulevard und neutrales Testkart in der Standardansicht; `?world=lab` hält den reproduzierbaren Techniktest bereit. G–L bleibt das deutlich höhere Ziel, keine Stilfreigabe.**
+- Sichtbare Babylon-Stilskizze: **neutraler 441-m-Stadionring mit editierbaren Blender-Karts, Architektur und echten PBR-Oberflächen; `?world=lab` hält den reproduzierbaren Techniktest bereit. G–L bleibt das deutlich höhere Ziel, keine Stilfreigabe.**
 - Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - M3-Vorbereitung: **Vorschlag für den ersten Art-Piloten in [Dokument 14](docs/14-character-and-item-catalog.md); Auswahl und Stilprobe bleiben gemeinsam zu bestätigen**
 - Erste Strecke: **historische Berlin-/Stadionwelt bleibt gesetzt; ein quellenbasierter Routenvorschlag in [Dokument 01](docs/01-game-design.md) ist noch gemeinsam zu prüfen**
 - Alte technische Implementierung: **nicht übernommen**
-- Nächster Schritt: Die Stilskizze mit dem Zielbild G–L aus den echten Spielkameras vergleichen und den ersten vollständigen Fahrer/Kart gemeinsam auswählen; M2-Fahr-/Kameraabnahme und normale/schwächere Hardwaremessung bleiben offen. Auftrag in [START-HERE.md](START-HERE.md).
+- Nächster Schritt: Den großen neutralen Vertical Slice mit Start-Items und Streckenleben vervollständigen und im Browser prüfen; historische Auswahl, gemeinsame Stilabnahme und Zielgeräte bleiben offen. Auftrag in [START-HERE.md](START-HERE.md).
 - Arbeitsmodus für längere Sitzungen: [16-production-blueprint.md](docs/16-production-blueprint.md) lesen und [17-progress-log.md](docs/17-progress-log.md) fortschreiben.
 - Zielplattformen: Google Chrome unter Windows zuerst; mobile Browser werden von Anfang an berücksichtigt.
 - Startbarkeit: Jeder spielbare Stand braucht einen einfachen Startbutton, Launcher oder eine eindeutige Verknüpfung ohne Entwicklerkonsole.

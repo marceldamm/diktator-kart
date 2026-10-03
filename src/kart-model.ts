@@ -86,10 +86,10 @@ export function terrainHeightAt(x: number, z: number): number {
   return height;
 }
 
-function sampleWheelGround(x: number, z: number, heading: number): [number, number, number, number] {
+function sampleWheelGround(x: number, z: number, heading: number, terrain = terrainHeightAt): [number, number, number, number] {
   const cosine = Math.cos(heading);
   const sine = Math.sin(heading);
-  return WHEEL_POSITIONS.map((wheel) => terrainHeightAt(
+  return WHEEL_POSITIONS.map((wheel) => terrain(
     x + wheel.x * cosine + wheel.z * sine,
     z - wheel.x * sine + wheel.z * cosine,
   )) as [number, number, number, number];
@@ -151,7 +151,7 @@ function projectIntoTestArea(rawX: number, rawZ: number): ReturnType<WorldProjec
   return { x, z, normalX, normalZ, kind };
 }
 
-export function advanceKart(state: KartState, input: DriveInput, dt: number, project: WorldProjection = projectIntoTestArea): KartState {
+export function advanceKart(state: KartState, input: DriveInput, dt: number, project: WorldProjection = projectIntoTestArea, terrain = terrainHeightAt): KartState {
   const commandedDrive = Math.max(-1, Math.min(1, input.throttle));
   const drive = state.impactRemaining > 0 ? Math.min(0, commandedDrive) : commandedDrive;
   const steering = Math.max(-1, Math.min(1, input.steering));
@@ -241,7 +241,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   }
   if (impactRemaining === 0) impactKind = null;
   const grounded = hopRemaining === 0;
-  const wheelGroundHeights = sampleWheelGround(x, z, heading);
+  const wheelGroundHeights = sampleWheelGround(x, z, heading, terrain);
   const averageGround = wheelGroundHeights.reduce((sum, contact) => sum + contact, 0) / 4;
   const targetOffset = grounded ? averageGround : 0;
   const landingImpulse = grounded && !state.grounded ? KART_TUNING.landingVelocity : 0;

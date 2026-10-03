@@ -13,7 +13,7 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;};
 const key=async(type,key,code,virtual)=>send('Input.dispatchKeyEvent',{type,key,code,windowsVirtualKeyCode:virtual});
 const tap=async(k,c,v)=>{await key('keyDown',k,c,v);await key('keyUp',k,c,v);await delay(150);};
-const shot=async name=>{await delay(600);const r=await send('Page.captureScreenshot',{format:'png'});await writeFile(`docs/evidence/${name}.png`,Buffer.from(r.data,'base64'));};
+const shot=async name=>{await delay(600);const r=await send('Page.captureScreenshot',{format:'png'});const version=process.env.EVIDENCE_SUFFIX??'-v2';await writeFile(`docs/evidence/${name}${version}.png`,Buffer.from(r.data,'base64'));};
 const load=async(query='')=>{await send('Page.navigate',{url:`http://127.0.0.1:4173/${query}`});for(let i=0;i<120;i++){await delay(250);const status=await evaluate(`document.querySelector('#status').textContent`);if(status==='Testszene läuft')return;if(status==='Startfehler')throw Error(await evaluate(`document.querySelector('#message').textContent`));}throw Error('Start timeout');};
 await send('Runtime.enable');
 await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
@@ -27,6 +27,7 @@ try{
   }else{
     await load();await delay(2000);
     await shot('slice-stadium-near');
+    await tap('v','KeyV',86);assert.equal(await evaluate(`document.body.classList.contains('photo-mode')`),true);await shot('slice-hero-photo');await tap('v','KeyV',86);
     await tap('c','KeyC',67);assert.equal(await evaluate(`document.querySelector('#camera-mode').textContent`),'Verfolger fern');await shot('slice-stadium-far');
     await tap('c','KeyC',67);assert.equal(await evaluate(`document.querySelector('#camera-mode').textContent`),'Fahrerperspektive');await shot('slice-stadium-cockpit');
     await tap('c','KeyC',67);
