@@ -405,7 +405,7 @@
 
 **Verifiziert:** `npm test`: 14 Tests bestanden; `npm run build` erfolgreich. `npm run test:browser` bestätigte Framefenster, endliche P95-Werte, 1280 × 800 Pixel und RTX-Renderer für ein/sechs Karts. Der Screenshot `docs/evidence/m2l-f3-diagnose-chrome.png` zeigt die lesbaren Felder und das scrollbare Panel. Die abgelesenen Werte stammen aus Headless Chrome und sind keine Zielhardware-Abnahme.
 
-**Nicht verifiziert:** F3-Messung auf normalem/schwachem PC oder Mobile, GPU-Zeit/Drawcalls/Speicher und die Leistungsfähigkeit fertiger Assets. `WEBGL_debug_renderer_info` kann auf anderen Browsern fehlen; dann steht „nicht verfügbar“.
+**Nicht verifiziert:** F3-Messung auf normalem/schwachem PC oder Mobile, GPU-Zeit/Drawcalls/Speicher und die Leistungsfähigkeit fertiger Assets. `WEBGL_debug_renderer_info` kann auf anderen Browsern fehlen; dann steht „nicht verfügbar“. Eine lesende Windows-Grafikinventur meldete auf dem Entwicklungsgerät nur die RTX 3070 Laptop GPU; ein separater integrierter/älterer GPU-Testpfad steht hier nicht bereit.
 
 **Geänderte Dateien:** `src/main.ts`, `src/style.css`, `tests/browser-smoke.mjs`, `docs/evidence/m2l-f3-diagnose-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/19-ui-settings-and-save.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Abhängigkeiten geprüft; Grundpfeiler bleiben unverändert.
 

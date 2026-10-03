@@ -6,6 +6,8 @@ Das Spiel soll auf normalen PCs im Browser gut laufen, nicht nur auf High-End-Ha
 
 Die erste Zielkombination ist Google Chrome unter Windows. Android und iPhone im Querformat sind verbindliche Anschlussplattformen, mit identischen Rennregeln und reduzierbarer Grafik. Sie werden schon bei Eingabe, UI, Ladegruppen, Auflösung und Qualitätsstufen berücksichtigt. Ein iPhone 15 Pro steht laut Nutzer als Testgerät zur Verfügung; Android-Testgerät und schwacher PC mit integrierter Grafik sind noch nicht benannt. Es liegen noch keine Babylon-Messungen auf diesen Geräten vor.
 
+Eine lesende Windows-Geräteabfrage am 03.10.2026 meldete auf dem Entwicklungsrechner nur die NVIDIA GeForce RTX 3070 Laptop GPU. Eine integrierte oder ältere GPU ist dort nicht als separater Grafikcontroller verfügbar; die offene normale/schwache PC-Messung braucht daher einen anderen Testplatz.
+
 ## Vorläufige Zielwerte
 
 Diese Werte sind Planungsziele, keine bereits verifizierten Messwerte:
