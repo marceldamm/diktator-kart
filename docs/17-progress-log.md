@@ -585,6 +585,38 @@
 
 **Budget / Sitzungsstatus:** Offizieller letzter Stand beim Abschluss: 88 % Fünf-Stunden-Verbrauch / 14 % Wochenverbrauch, also 12 % / 86 % Rest. Bei Unterschreiten der 15-%-Schwelle keine neue große Aufgabe begonnen; Tests, Belege und Dokumentation geordnet gesichert. Keine kostenpflichtigen Kontingente, kein Reset, kein Ruhezustand. Abschluss folgt mit lokalem Commit; reale Abschlusswerte im Ergebnisbericht.
 
+### 2026-10-03 – Qualitätsstufe 2: Rundkurs, Welt, Figuren und Präsentation
+
+**Ziel:** Vom geprüften Slice `5f14a2d` aus einen deutlich sichtbaren Qualitätssprung aus der fahrenden Spielkamera gegen G–L erreichen, ohne Fahrgrundlage oder bestätigte Entscheidungen aufzugeben.
+
+**Modell / Arbeitsmodus:** Claude Opus 5.5 im Claude-Code-Desktop, eigener Worktree und Branch `claude/diktator-kart-quality-level-f851c0` auf Basis `codex/stadium-vertical-slice`. Lokale Commits `aca7943`, `d19a36a`, `0365360`, `dd7a1f2` und Abschluss-Commit. Kein Push, kein Merge; `main` und Altarchiv unberührt. Isolierter Headless-Chrome (CDP 9223, eigener Profilordner) gegen Vite auf Port 4176.
+
+**Erledigt:**
+- **Strecke:** Gemeinsame Mittellinie `src/track-layout.ts` (geglätteter Catmull-Rom) ersetzt das 441-m-Oval durch einen 593-m-Kurs: Tribünengerade, Palastbogen, S-Kurven im Park, Boulevard durch das Tor „Amt für Überholgenehmigungen“, Brunnen-Haarnadel, Ministeriumsbogen, Archivkehre. Fahrbahn 12 m statt 15 m. Fortschritt, Seitenlage, Projektion, Startaufstellung, Rücksetzung, Bodenwelle und Minikarte arbeiten generisch auf derselben Linie.
+- **Kontakte:** Streifender Bandenkontakt gleitet mit winkelabhängigem Tempoverlust weiter; Frontalaufprall stoppt wie bisher. Kart-zu-Kart: Rempeln mit Impulsaustausch und Seitenstoß; erst ab 7 m/s Annäherung der bisherige harte Stopp. Neues Zustandsfeld `scrapeRemaining` für Funken, Spuren und Rückmeldung.
+- **Bots:** Kurvenvorausschau mit Bremsen, Innenlinie, Drift-Turbo in engen Kurven (vier Drifter, zwei Haftungsfahrer), Zurücksetzen bei Wandblick. Rohrpost prallt bis zu dreimal an Banden ab, Suchauftrag folgt der Strecke, neue Kistenreihen auf Geraden.
+- **Streckenausstattung (`src/track-world.ts`):** Pflaster im realen 2-m-Maßstab mit Fahrspurabnutzung, rot-weiße Randsteine, Banden mit Streifen oder satirischen Tafeln, Herringbone-Promenaden, Laternen mit schwingenden Paradebannern (fiktives Lorbeer-Krone-§-Emblem), Wimpelketten, Startkaro.
+- **Welt (`art-source/build_world.py`):** Palast, Tor über dem Boulevard, Zielbrücke, drei Tribünen mit Publikum, 22 Häuser mit Läden und Fassadenbannern, Brunnen, Park mit „Denkmal des unbekannten Beamten“, Bahnhof, Stadtring; alles relativ zur exportierten Mittellinie (`export_track.mjs` → `track-layout.json`). Gepflasterter Stadtboden mit Rasen nur auf Parkinseln.
+- **Karts/Figuren (`art-source/build_kart.py`, `src/cast.ts`):** Breites Kart mit Ballonreifen, Messingfelgen, Kotflügeln, Seitenkästen, Frontflügel und Nasenemblem; Karikaturfahrer mit großem Kopf, Uniform, Epauletten, Schärpe, Orden und Umhang. Sechs neutrale fiktive Figuren (General, Marschall, Imperator, Kommandant, Diva, Admiralin) mit eigener Kopfbedeckung, Gesicht, Lack, Uniform und Anbau. Klarlack, Umhangbewegung, Stauchen und Neigen.
+- **Präsentation:** Neuer CC0-Himmel (Table Mountain 2), tiefere warme Sonne, Dunst, Rendering-Pipeline mit Bloom/MSAA/FXAA/Vignette/Farbkurven (Basis reduziert), verzögerte Verfolgerkamera mit Tempo-FOV, starre Fahrerperspektive (nur Handschuhe am Lenkrad), Reifenspuren, gestreckte Funken, Turbo-Abgasfeuer, Konfetti bei Start und Ziel, entschlacktes Renn-HUD.
+- **Leistung:** Welt 619k → 202k Dreiecke, Kart 115k → 44k (alle Varianten), Baum 135k → 45k (`decimate_tree.py`). `stadium-props.glb` und `build_props.py` entfallen.
+
+**Verifiziert:** 23 Modelltests und Typecheck. Botsimulation: sechs Bots beenden drei Runden in 116–125 s ohne Hängenbleiben. Echte Browserläufe (Suffix `-q2`): Menü/Foto/drei Kameras/Pause/Countdown/Neustart (`slice-browser`), Hop/Drift/Turbo/Bandenkontakt (`slice-feedback`), erzwungenes und automatisches WebGL1 mit sechs Karts (`slice-compatibility`), vollständiges Drei-Runden-Rennen mit sechs Zeiten und Revanche in rund 135 s (`slice-race`), Item-Rennen mit Pause-Einfrieren und konstanter Meshzahl 634 (`slice-items`: Rohrpost 9/11, Suchauftrag 7/9, Falle 4/6 Treffer), Touch-Emulation 932 × 430. Keine Browserausnahme. RTX 3070 Laptop, 1600 × 1000, Standard: P95 16,8 ms in allen Kameras (fernes Fenster zwei Intervalle über 33 ms), 371–483 Drawcalls, CPU-/GPU-Stichproben 10–15 / 7–9 ms; Basis 181 Drawcalls. Produktionsbuild erfolgreich, Hauptchunk 2.173 kB (543 kB gzip), Größenwarnung offen. Nach dem Pflasterpass wurden Browser-, Feedback- und Rennprüfung wiederholt und bestanden.
+
+**Nicht verifiziert:** Normale/schwache PCs, Android, iPhone, echter Touchbetrieb, Hörqualität, menschliches Fahr- und Kameragefühl auf dem neuen Kurs, Kaltstart auf schwacher Hardware. Die gestalterische Abnahme gegen G–L durch Nutzer und Sarah steht aus. Die sechs Figuren sind neutrale Platzhalter, keine historischen Figuren.
+
+**Geänderte Dateien:** `src/track-layout.ts`, `track.ts`, `track-world.ts`, `effects.ts`, `cast.ts`, `kart-model.ts`, `slice-scene.ts`, `camera.ts`, `main.ts`, `items.ts`, `scene.ts`, `style.css`; `index.html`; `art-source/build_world.py`, `build_kart.py`, `export_track.mjs`, `decimate_tree.py`, `optimize_assets.mjs`, `track-layout.json`, `.blend`-Quellen; GLBs, Himmel- und Pflastertexturen, `CREDITS.md`, `manifest.json`; Unit- und Browsertests; Belege `docs/evidence/*-q2.*`; Dokumente README, START-HERE, 02, 04, 07, 12, 17, evidence/README, art-source/README.
+
+**Neue Entscheidungen:** siehe Dokument 12 (Spline-Rundkurs, gleitende Kontakte, fiktive Platzhalterfiguren, Weltpipeline, gepflasterter Stadtboden).
+
+**Offene Probleme:** Architektur bleibt modular-blockhaft (Fassaden ohne Tiefenrelief), Gesichter einfach, keine Armanimation, Publikum statisch. 400–480 Drawcalls im Standardmodus sind für schwache Geräte zu viel (Instancing/Merging der Kartteile offen). Hauptchunk-Größenwarnung besteht weiter. Audio unverändert.
+
+**Nächster Schritt:** Gemeinsame Sichtung der `-q2`-Spielbilder gegen G–L und eine menschliche Testfahrt auf dem neuen Kurs. Danach Drawcalls der Karts senken (Material-Atlas/Merging), Fassadenrelief, Fahreranimation, Publikumsreaktionen und Messung auf einem normalen PC.
+
+**Empfohlenes Modell:** Für Asset- und Look-Iterationen ein starkes Modell mit Blender-Pipeline; für Messungen und Doku ein Routinemodell.
+
+**Budget:** Offizielle Claude-Werte waren abrufbar (Pro-Plan): beim Start 4 % des Fünf-Stunden-Fensters, vor der Dokumentation 41 %; Woche 6 %. Abschlusswerte stehen im Ergebnisbericht.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

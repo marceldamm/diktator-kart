@@ -2,7 +2,24 @@
 
 03.10.2026. Die PNGs stammen aus dem lokal laufenden Babylon-Spiel in isoliertem Chrome. Keine Konzeptbilder als Spielaufnahmen. Modell-, Fahrer-, Zuschauer- und Stilstände sind weiterhin vorläufig.
 
-## Aktuell ansehen
+## Qualitätsstufe 2 (03.10.2026) – aktuell ansehen
+
+Alle Bilder aus dem laufenden Spiel (isolierter Chrome, RTX 3070 Laptop, 1600 × 1000), Suffix `-q2`.
+
+| Bild | Inhalt |
+|---|---|
+| `slice-main-menu-q2.png` | Menü vor der echten Szene: General mit Schirmmütze, Epauletten, Umhang; neues Kart. |
+| `slice-race-midway-q2.png`, `slice-boulevard-driving-q2.png` | Laufendes Sechs-Kart-Rennen, nahe Verfolgerkamera. |
+| `slice-race-far-q2.png`, `slice-stadium-far-q2.png` | Ferne Verfolgerkamera mit Strecke und Welt. |
+| `slice-race-cockpit-q2.png`, `slice-stadium-cockpit-q2.png` | Fahrerperspektive (nach Kamerakorrektur siehe `slice-stadium-cockpit-q2.png`). |
+| `slice-drift-feedback-q2.png`, `slice-turbo-feedback-q2.png`, `slice-hop-feedback-q2.png`, `slice-boundary-feedback-q2.png` | Echte Tastatureingaben: Drift mit Reifenspuren, Turbo, Hop, Bande. |
+| `slice-items-in-race-q2.png`, `slice-item-race-result-q2.png` | Items im Rennen und Ergebnis. |
+| `slice-race-finish-q2.png` | Echter Drei-Runden-Zielstand mit sechs Zeiten. |
+| `slice-forced-webgl1-q2.png`, `slice-automatic-webgl1-q2.png`, `slice-touch-landscape-q2.png` | WebGL1-Pfad und Touch-Emulation (kein echtes Gerät). |
+
+JSON: `slice-production-race-rtx-q2.json` (Rennen, Revanche, Framefenster), `slice-item-race-q2.json`, `slice-feedback-q2.json`, `slice-compatibility-q2.json`, `slice-touch-emulation-q2.json`. Menü-, Kamera-, Feedback- und Rennbilder wurden nach dem Politurcommit `dd7a1f2` neu erzeugt; Item-, WebGL1- und Touch-Bilder stammen aus dem Lauf davor (Rasen statt Pflaster außerhalb der Parkinseln).
+
+## Vorheriger Slice – Aktuell ansehen (historisch)
 
 | Bild | Inhalt |
 |---|---|

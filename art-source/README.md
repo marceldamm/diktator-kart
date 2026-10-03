@@ -2,31 +2,29 @@
 
 Stand 03.10.2026. Alle Kart-, Gebäude-, Requisiten- und Itemmodelle sind originale Projektgeometrie. Der Parkbaum stammt von Poly Haven (CC0); Herkunft, Audio und Texturen stehen in `../public/assets/CREDITS.md`.
 
-## Quellen und Laufzeit
+## Quellen und Laufzeit (Qualitätsstufe 2)
 
-- `hero-kart.blend`: neutraler Fahrer, Kart und fünf optionale Anbauten. Benannte Pivots für Räder, Lenkrad, Kopf und Schal; im Spiel animiert.
-- `stadium-world.blend`: fiktives Stadion, Boulevard, Tor, Brunnen und Zypressen.
-- `stadium-props.blend`: Tribünen, neutrale Zuschauersilhouetten, Kassen, Zielbrücke, Ladenfassaden, Parkbeete und fiktiver Bahnhof/Stadthintergrund.
-- `items.blend`: vier benannte Eltern `direct`, `homing`, `trap`, `pickup`; drei gemeinsame Spielregeln plus Aufnahmekiste.
-- `park-tree.blend`: reduzierter CC0-Baum mit gepackten Texturen; kann ohne Downloadcache bearbeitet werden.
-- `public/assets/models/*.glb`: optimierte Spielmodelle. Kein Blender zum Spielen erforderlich.
+- `build_kart.py` → `hero-kart.blend`/GLB: Kart, Fahrer und Varianten. Laufzeitvertrag: `wheelPivot-0..3`, `wheelSpin-0..3`, `steeringWheel`, `driverPose`, `headPose`, `scarfFlap` (Umhang), `variant-*` (Anbauten), `cast-*` (Mützen, Frisuren, Gesichter). Umgefärbte Materialien: `Petrol enamel`, `Uniform racing suit`, `Cape cloth`, `Hat cloth`. Besetzung in `src/cast.ts`.
+- `build_world.py` → `stadium-world.blend`/GLB: Palast, Tor, Zielbrücke, Tribünen, Häuser, Park, Bahnhof, Stadtring. Liest `track-layout.json`.
+- `export_track.mjs` → `track-layout.json`: Mittellinie aus `src/track-layout.ts`. Nach jeder Streckenänderung zuerst ausführen, dann `build_world.py`.
+- `decimate_tree.py`: leichtere Laufzeitkopie des CC0-Baums aus `park-tree.blend` (Quelle unverändert).
+- `build_items.py`, `build_audio.mjs`: unverändert. Der frühere Weltteil von `build_slice.py` und `build_props.py` sind abgelöst (Git-Historie bis `5f14a2d`).
+- Streckenmöbel (Fahrbahn, Randsteine, Banden, Promenaden, Laternen, Banner, Wimpel) entstehen zur Laufzeit in `src/track-world.ts` aus derselben Mittellinie.
 
-Blender 4.5.3 LTS wurde kostenlos und portabel unter `.tools/blender-4.5.3-windows-x64` installiert. Das Programm und heruntergeladene Originale sind ignoriert und werden nicht per Git verteilt. Ein neuer Rechner benötigt Blender von https://www.blender.org/download/lts/4-5/ .
+Blender 4.5.3 LTS (kostenlos, portabel unter `.tools/`, nicht in Git).
 
 ## Reproduktion mit PowerShell aus dem Projektordner
 
 ```powershell
-& .\.tools\blender-4.5.3-windows-x64\blender.exe --background --python art-source/build_slice.py
-& .\.tools\blender-4.5.3-windows-x64\blender.exe --background --python art-source/build_props.py
-& .\.tools\blender-4.5.3-windows-x64\blender.exe --background --python art-source/build_items.py
-node art-source/build_audio.mjs
-npm run assets:optimize
+node art-source/export_track.mjs
+& .\.tools\blender-4.5.3-windows-x64\blender.exe --background --python art-source/build_world.py
+& .\.tools\blender-4.5.3-windows-x64\blender.exe --background --python art-source/build_kart.py
+& .\.tools\blender-4.5.3-windows-x64\blender.exe --background art-source/park-tree.blend --python art-source/decimate_tree.py
+node art-source/optimize_assets.mjs
 npm run build
 ```
 
-Generatoren überschreiben die jeweiligen `.blend`-Dateien. Manuelle Blenderänderungen deshalb zuerst separat sichern und direkt als GLB nach `.tools/raw-models/<name>.glb` exportieren, danach nur `assets:optimize` ausführen. GLB-Export mit Y-Up und angewendeten Modifikatoren; benannte Eltern erhalten.
-
-Die Optimierung liest den Rohcache, dedupliziert/weldet und quantisiert Positionen mit 16 Bit, Normalen mit 12 Bit und passende UVs mit 14 Bit. JPEG88 wird nur für geeignete Karten verwendet; Laub mit Alphakanal bleibt erhalten. Quantisierung und JPEG sind nicht verlustfrei. Rohdateien und Werkzeugcache sind ignoriert, editierbare Quellen und optimierte Modelle werden lokal committed. Größen stehen in `../docs/evidence/slice-asset-optimization.json`.
+`optimize_assets.mjs` akzeptiert optional Modellnamen (z. B. `node art-source/optimize_assets.mjs hero-kart`). Unter Windows darf kein Browser die GLB gerade geöffnet halten, sonst schlägt das Schreiben fehl.
 
 ## Externe Quelldaten
 

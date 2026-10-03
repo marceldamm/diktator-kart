@@ -1,5 +1,13 @@
 # Art Direction
 
+## Qualitätsstufe 2 – 03.10.2026
+
+Laufzeitbilder: [Belege, Abschnitt Qualitätsstufe 2](evidence/README.md). Die Welt folgt jetzt einem 593-m-Rundkurs mit komponierten Blickpunkten: Palast am Ende der Tribünengerade, Tor über dem Boulevard, Häuserschlucht, Brunnen-Haarnadel. Lesbare Grenzen durch rot-weiße Randsteine, gestreifte Banden und Satire-Tafeln („Jubel ist Pflicht“, „Überholen nur mit Stempel“). Paradebanner mit einem originalen fiktiven Emblem (Lorbeer, Krone, Paragraf) ersetzen jede historische Symbolik.
+
+Karts: breite Spur, Ballonreifen, Messingfelgen, Kotflügel, Frontflügel, Nasenemblem, Klarlack. Figuren: große Köpfe, Uniform, Goldepauletten, Schärpe, Orden, Umhang; sechs neutrale fiktive Silhouetten über Kopfbedeckung (Schirmmütze, Pelzmütze, Lorbeerkranz, Barett, Diva-Frisur, Marinemütze) und Farben. Licht: warmer Nachmittag, CC0-Wolkenhimmel, Dunst, Bloom, Vignette und Farbkurven auf Standard; Basis verzichtet darauf.
+
+G–L bleibt nicht erreicht: Fassaden ohne Relief, einfache Gesichter, statisches Publikum, keine Armanimation, kein Wetter. Die Figuren sind Platzhalter bis zur gemeinsamen historischen Besetzung.
+
 ## Geprüfter Slice-Abschluss – 03.10.2026
 
 Die Standardansicht verwendet editierbare Blender-/GLB-Assets: geformter Retro-Roadster mit neutralem Fahrer, Messingornamenten, sichtbaren Rädern, Händen, Lenkrad und Schal. Sechs Lackierungen und fünf zusätzliche Anbauten unterscheiden die Teilnehmer. Stadion, Boulevard, Ladenfronten, Markisen, Bahnhof, Tribünen und Park ergänzen die fiktive Welt. CC0-Pflaster, Baum und scharfer CC0-Wolkenhimmel sind mit Quellen dokumentiert. Aktuelle Bilder: [Laufzeitbelege](evidence/README.md), insbesondere slice-main-menu-v18.png und slice-race-stadium-v18.png.

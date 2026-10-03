@@ -1,5 +1,12 @@
 # Gameplay-Systeme und Zuständigkeiten
 
+## Qualitätsstufe 2 – 03.10.2026
+
+- **Strecke:** gemeinsame Mittellinie `src/track-layout.ts`; `track.ts` liefert Fortschritt, Seitenlage (`trackLocate`), Kurvenvorschau, Projektion, Startaufstellung und Rücksetzung generisch.
+- **Kontakte:** flacher Bandenkontakt gleitet mit Tempoverlust (`scrapeRemaining`), frontal weiterhin Stopp mit Rückstoß. Kart-Rempler tauschen Impuls und schieben seitlich; harter Stopp erst ab 7 m/s Annäherung (`KART_TUNING.crashClosingSpeed`).
+- **Bots:** bremsen vor engen Kurven, wählen Innenlinie, vier von sechs nutzen Drift-Turbo, festgefahrene Bots setzen zurück.
+- **Items:** Rohrpost prallt bis zu dreimal ab, Suchauftrag folgt der Strecke bis kurz vor das Ziel, Kistenreihen bei 72/330/520 m. Alle Regeln weiter gemeinsam für Mensch und Bots.
+
 ## Rennzustände
 
 Vorgesehene Zustände: Menü, Laden, Einführung, Countdown, Rennen, Pause, Zieleinlauf, Siegerehrung, Rennbericht. Jeder Zustand hat klare Ein-/Austrittsregeln und räumt temporäre Ressourcen auf.

@@ -1,6 +1,16 @@
 # Diktator Kart – Hier starten
 
-## Aktueller Einstieg – großer Vertical Slice
+## Aktueller Einstieg – Qualitätsstufe 2 (03.10.2026)
+
+**Branch:** `claude/diktator-kart-quality-level-f851c0` (Worktree unter `.claude/worktrees/`), aufbauend auf `codex/stadium-vertical-slice`. Lokal committet; Push/Merge nur nach ausdrücklicher Freigabe.
+
+**Start:** `Diktator-Kart-starten.cmd` im Worktree doppelklicken (oder `npm ci`, `npm run dev`) → `http://127.0.0.1:4173/`. Bedienung unverändert: Enter Rennen, W/S, A/D, Space Hop/Drift/Turbo, E Item, C Kamera, V Foto, P Pause, R Neustart, Esc Menü, F3 Diagnose.
+
+**Neu:** 593-m-Rundkurs mit Palastbogen, S-Kurven, Tor-Boulevard und zwei Haarnadeln; gleitende Banden- und Rempelkontakte; Bots mit Drift-Turbo; neue Welt entlang der Strecke (Tribünen mit Publikum, Tor, Häuser mit Bannern, Park, Bahnhof); neues Kart und sechs fiktive Karikaturfiguren; warmes Nachmittagslicht, Bloom/Farbabstimmung, dynamische Kamera, Reifenspuren, Funken, Turbo-Feuer, Konfetti. Beste Spielbilder: `docs/evidence/README.md` (Abschnitt Qualitätsstufe 2). Verifikation und Grenzen: `docs/17-progress-log.md`.
+
+**Offen:** Stilabnahme gegen G–L durch Nutzer/Sarah, menschliche Testfahrt, schwache PCs/Mobile, Audio, Drawcalls der Karts, Fassadenrelief und Fahreranimation. Historische Figuren bleiben unbesetzt; die sechs Figuren sind neutrale Platzhalter.
+
+## Vorheriger Einstieg – großer Vertical Slice
 
 **Branch:** `codex/stadium-vertical-slice`. Nicht auf `main` wechseln oder Änderungen übertragen; Push/Merge brauchen ausdrückliche Freigabe.
 

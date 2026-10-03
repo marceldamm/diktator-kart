@@ -1,6 +1,6 @@
 # Diktator Kart – Babylon-Neustart 2026
 
-Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Die Altarchive bleiben unverändert. Aktuell entsteht auf `codex/stadium-vertical-slice` ein spielbarer neutraler Stadionring mit sechs Karts, drei Runden und Ergebnis/Revanche. Der große Nutzerauftrag erlaubt die vorgezogene neutrale Produktion; historische Figuren-/Landmarkenauswahl, gemeinsame Stilfreigabe und Zielhardware-Abnahme bleiben offen.
+Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Die Altarchive bleiben unverändert. Aktuell entsteht auf `codex/stadium-vertical-slice` ein spielbarer neutraler Stadionslice; Qualitätsstufe 2 auf `claude/diktator-kart-quality-level-f851c0` bringt einen 593-m-Rundkurs, eine neue Welt, ein neues Kart und sechs fiktive Platzhalterfiguren. Der große Nutzerauftrag erlaubt die vorgezogene neutrale Produktion; historische Figuren-/Landmarkenauswahl, gemeinsame Stilfreigabe und Zielhardware-Abnahme bleiben offen.
 
 Für den täglichen Überblick zuerst [START-HERE.md](START-HERE.md) öffnen. Die gemeinsame Bedienungsanleitung für dich und Sarah steht in [TEAM-HANDBOOK.md](TEAM-HANDBOOK.md).
 
@@ -65,7 +65,7 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 
 - Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
 - Babylon.js-Neuentwicklung: **M1 geprüft; M2a–l mit Fahrkern, Federung, drei Kameras, Sechs-Fahrzeug-Technikprobe, vorläufigen Kontakten und F3-Diagnose lokal umgesetzt und geprüft**
-- Sichtbare Babylon-Stilskizze: **neutraler 441-m-Stadionring mit editierbaren Blender-Karts, Architektur und echten PBR-Oberflächen; `?world=lab` hält den reproduzierbaren Techniktest bereit. G–L bleibt das deutlich höhere Ziel, keine Stilfreigabe.**
+- Sichtbare Babylon-Stilskizze: **neutraler 593-m-Rundkurs (Qualitätsstufe 2) mit editierbaren Blender-Karts, sechs fiktiven Figuren, streckenbezogener Architektur und echten PBR-Oberflächen; `?world=lab` hält den reproduzierbaren Techniktest bereit. G–L bleibt das deutlich höhere Ziel, keine Stilfreigabe.**
 - Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - M3-Vorbereitung: **Vorschlag für den ersten Art-Piloten in [Dokument 14](docs/14-character-and-item-catalog.md); Auswahl und Stilprobe bleiben gemeinsam zu bestätigen**
 - Erste Strecke: **historische Berlin-/Stadionwelt bleibt gesetzt; ein quellenbasierter Routenvorschlag in [Dokument 01](docs/01-game-design.md) ist noch gemeinsam zu prüfen**
