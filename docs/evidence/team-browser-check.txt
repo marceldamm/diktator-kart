@@ -1,0 +1,26 @@
+Status: running
+Engine: Babylon 9.28.0
+WebGL: 2
+Grafik: ANGLE (NVIDIA, NVIDIA GeForce RTX 3070 Laptop GPU (0x0000249D) Direct3D11 vs_5_0 ps_5_0, D3D11)
+Auflösung: 1600 × 1000 Pixel · DPR 1.00
+FPS: 49
+Framefenster: 300/300 · P50 17.8 ms · P95 32.5 ms · P99 40.3 ms
+>25 ms: 41 · >33 ms: 14
+Meshes: 698
+Fahrzeuge: 6
+Assetgruppe: Stadion-Vertical-Slice, Qualitätsstufe 2
+Tempo: 16.00 m/s
+Position: -32.88, 71.84 m
+Richtung: -2.67 rad
+Hop: 0.39 m
+Federung: 0.000 m / 0.00 m/s
+Radkontakte: 0.00, 0.00, 0.00, 0.00 m
+Karosserieneigung: 0.000 / 0.000 rad
+Randstoß: 0.00 s
+Drift: aus
+Turbo: 0.00 s
+Gas/Bremse: 0
+Lenkung: 0
+Hop/Drift-Taste: false
+Letzte Aktion: Keine
+SLICE_BROWSER_PASS

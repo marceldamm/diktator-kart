@@ -1,7 +1,7 @@
 // Purpose-built local Chrome checks and real in-game evidence.
 import { writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
-const targets=await(await fetch('http://127.0.0.1:9223/json')).json();
+const targets=await(await fetch(`http://127.0.0.1:${process.env.CDP_PORT??9223}/json`)).json();
 const base=process.env.SLICE_URL??'http://127.0.0.1:4173/';
 const target=targets.find(t=>t.type==='page'&&(t.url?.startsWith('http://127.0.0.1:')||t.url==='about:blank'));
 assert.ok(target,'Isolated Chrome is missing');

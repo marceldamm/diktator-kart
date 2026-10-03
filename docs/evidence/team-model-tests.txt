@@ -1,0 +1,37 @@
+
+> diktator-kart-babylon@0.1.0 test
+> node --test --test-isolation=none tests/*.test.mjs
+
+✔ a tap between frames is visible once and actions remain separate (1.8667ms)
+✔ item boxes allocate the same slot for a human or a bot, with bounded shared respawn (1.5163ms)
+✔ swept projectiles hit one target, consume the object and protect from chained hits (1.0976ms)
+✔ homing uses a limited target and turn rate; traps expire and object counts are bounded (11.8076ms)
+✔ recovery preserves track progress and supplies no forward speed (0.6567ms)
+✔ gas accelerates to its cap; brake slows before reverse (3.291ms)
+✔ steering needs movement and reverses direction while backing up (0.9883ms)
+✔ coasting slows and the visible test boundary stops the kart (2.7451ms)
+✔ boundary impact briefly rebounds, cancels drift/turbo and recovers (0.5048ms)
+✔ marked side obstacle stops a directed kart without blocking the straight lane (1.3101ms)
+✔ two approaching karts share one contact rule and separate after impact (0.7245ms)
+✔ kart contact leaves distant karts unchanged and handles coincident centres (1.1207ms)
+✔ six moving karts stay finite and within the test area during a long simulation (92.1884ms)
+✔ Space starts one visible hop and holding it does not repeat the hop (0.6969ms)
+✔ a short drift releases without turbo (0.3028ms)
+✔ a sustained directed drift charges mini-turbo; brake cancels it (0.7673ms)
+✔ marked bumps lift individual wheels and the chassis settles after contact (0.9168ms)
+✔ one-sided contact rolls the body; hop clears wheels and landing compresses suspension (0.3572ms)
+✔ sliding along a barrier keeps most speed; only the first touch costs a little (0.9858ms)
+✔ track progress is continuous around the complete course; inner and outer barriers contain karts (52.6054ms)
+✔ five bots complete three laps using the shared kart controller without teleportation (669.1204ms)
+✔ reverse and teleporting across the park cannot grant a completed lap (0.6934ms)
+✔ finish order uses crossing time even if a later kart overshoots farther (0.2199ms)
+✔ circuit ground profile lifts individual wheels and settles the chassis (1.4955ms)
+✔ backyard shortcut is open, maps progress monotonically and caps speed without turbo (1.4126ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 941.298

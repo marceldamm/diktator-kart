@@ -1,5 +1,10 @@
 # Roadmap und Abnahmen
 
+## Gemeinsame Hauptbasis – 03.10.2026
+
+Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.
+
+
 ## Laufender großer Slice – 03.10.2026
 
 Der große Nutzerauftrag zieht neutrale M3-Produktion und Teile von M4 ausdrücklich vor: editierbare Artassets und kompletter fiktiver Stadionring mit fünf echten Bots, drei Runden, Platzierung, Ergebnis/Revanche. Browserrennen und Revanche geprüft. Das bestätigte Start-Itemset ist mit gemeinsamen Regeln, neutralen GLBs, festem Pool, HUD und Audio integriert; Modelltest und echte Rennen prüfen Aufnahme/Einsatz/Treffer/Pause/Revanche. Die M2-Abnahmelücken bleiben sichtbar und verhindern keine ausdrücklich autorisierte neutrale Umsetzung. M3/M4 werden nicht pauschal als abgenommen markiert.

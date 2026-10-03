@@ -1,5 +1,10 @@
 # Bauplan und Fahrplan für die Entwicklung
 
+## Gemeinsame Hauptbasis – 03.10.2026
+
+Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.
+
+
 ## Laufender großer Slice – 03.10.2026
 
 Auf ausdrücklichen Nutzerauftrag läuft der große neutrale Slice auf `codex/stadium-vertical-slice`, mit editierbaren Blender-/GLB-Assets und vorgezogener Drei-Runden-Rennschleife. Nach jedem größeren Paket: echte Browserprobe, relevante Tests/Build, Laufzeitbilder, offizielles Nutzungslimit und lokaler Git-Checkpoint. Bei etwa 15 % kleinerem Rest keine große neue Aufgabe; Abschluss mit ungefähr 5 % Puffer. Kein Reset, keine Zusatzkosten, kein Push/Merge.

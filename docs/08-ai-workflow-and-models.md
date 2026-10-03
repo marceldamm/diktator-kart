@@ -1,5 +1,10 @@
 # KI-Arbeitsweise und Modellstrategie
 
+## Gemeinsame Hauptbasis – 03.10.2026
+
+Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.
+
+
 ## Grundhaltung
 
 Die KI ist nicht nur Codegenerator. Sie hilft beim Denken, indem sie Annahmen offenlegt, Abhängigkeiten erkennt, fehlende Fragen ergänzt, Widersprüche markiert und Dokumentation aktuell hält. Sie muss zwischen verifiziertem Befund, geplanter Entscheidung, Vorschlag und offener Frage unterscheiden.

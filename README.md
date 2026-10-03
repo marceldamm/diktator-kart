@@ -1,6 +1,8 @@
 # Diktator Kart – Babylon-Neustart 2026
 
-Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Die Altarchive bleiben unverändert. Aktuell entsteht auf `codex/stadium-vertical-slice` ein spielbarer neutraler Stadionslice; Qualitätsstufe 2 auf `claude/diktator-kart-quality-level-f851c0` bringt einen 593-m-Rundkurs, eine neue Welt, ein neues Kart und sechs fiktive Platzhalterfiguren. Der große Nutzerauftrag erlaubt die vorgezogene neutrale Produktion; historische Figuren-/Landmarkenauswahl, gemeinsame Stilfreigabe und Zielhardware-Abnahme bleiben offen.
+Gemeinsame aktive Basis ist jetzt **main** in **marceldamm/diktator-kart**: Claudes Q2d-Spielstand plus Teamablauf. Marcels Arbeitsordner ist D:\Diktator-Kart; Sarah verwendet ihren eigenen Checkout. **Alte Stände/Engine und Altarchive sind nur historische Referenzen, werden nicht mehr bearbeitet oder als Spiel gestartet.** Der neue Stand umfasst den 593-m-Kurs, sechs neutrale Figuren, Stimmen, verbesserte Kontakte/Lenkträgheit, Hinterhof-Abkürzung und Live-Videowand. Historische Gestaltung, Sarah-Ideen, Stil-/Geräteabnahme bleiben gesondert zu bestätigen.
+
+**Abends in Codex:** „Projektstart. Danach: [Aufgabe].“ **Am Ende:** „Projektabschluss. Prüfe, dokumentiere und veröffentliche meine Änderungen im gemeinsamen main.“ Ausführbarer Einstieg: Projekt-starten.cmd / Projekt-abschliessen.cmd; Details und Sarahs einmaliger Umstieg in [Teamablauf](docs/21-team-workflow.md).
 
 Für den täglichen Überblick zuerst [START-HERE.md](START-HERE.md) öffnen. Die gemeinsame Bedienungsanleitung für dich und Sarah steht in [TEAM-HANDBOOK.md](TEAM-HANDBOOK.md).
 
@@ -10,7 +12,7 @@ Diktator Kart wird als eigenständiger satirischer 3D-Arcade-Kart-Racer für den
 
 Dieser Ordner enthält die Planungs- und Wissensbasis sowie seit M1 einen startbaren Babylon.js-Technikgrundstand. Er übernimmt aus dem Altprojekt Ideen und belegte Designentscheidungen, aber keine alte Engine-Implementierung.
 
-**Spiel starten:** [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken und das Fenster offen lassen. Chrome öffnet `http://127.0.0.1:4173/`. Technisch: `npm ci`, `npm run dev`. Enter startet ein Drei-Runden-Rennen. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C Kamera, V Foto, B Rücksetzung bei niedrigem Tempo, P Pause, R kompletter Neustart, F3 Diagnose. E verwendet den gemeinsamen Itemslot. Esc öffnet das Menü. Grafik-/Effektstufen, Kameraruhe, Ton und Musiklautstärke werden lokal gespeichert. `?world=lab` bleibt der reproduzierbare Fahrtechniktest, `?demo=1` fährt den Spieler über denselben Botcontroller.
+**Spiel starten:** [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken und das Fenster offen lassen. Chrome öffnet die im Starter angezeigte URL (gewöhnlich http://127.0.0.1:4173/; bei anderem Server ein freier Port). Nur exakt derselbe Checkout wird wiederverwendet. Technisch: `npm ci`, `npm run dev`. Enter startet ein Drei-Runden-Rennen. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C Kamera, V Foto, B Rücksetzung bei niedrigem Tempo, P Pause, R kompletter Neustart, F3 Diagnose. E verwendet den gemeinsamen Itemslot. Esc öffnet das Menü. Grafik-/Effektstufen, Kameraruhe, Ton und Musiklautstärke werden lokal gespeichert. `?world=lab` bleibt der reproduzierbare Fahrtechniktest, `?demo=1` fährt den Spieler über denselben Botcontroller.
 
 ## Grundpfeiler
 

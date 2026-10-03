@@ -1,0 +1,15 @@
+✔ team: dirty local work is preserved and cannot be switched or published (6459.9647ms)
+✔ team: disjoint parallel changes integrate, verify and publish as fast-forward (11933.9655ms)
+✔ team: overlapping conflicting edits are reported and remote main stays intact (8129.7823ms)
+✔ team: pre-baseline legacy work is archived, not copied into new project (5161.2234ms)
+✔ team: concurrent update during build prevents an outdated main push (9148.6505ms)
+✔ team: failed verification cannot publish (7227.81ms)
+✔ launcher: old title and another worktree are never reused; same checkout is reused (5101.9504ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53211.554

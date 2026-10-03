@@ -1,5 +1,10 @@
 # Extraktion aus dem Altprojekt
 
+## Gemeinsame Hauptbasis – 03.10.2026
+
+Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.
+
+
 ## Quellenlage
 
 Zunächst wurden Projektindex, kreative Produktionsaufträge und Dateien unter `game-review/` im Projektspiegel ausgewertet; `sources/` war leer. Bei der Gesamtprüfung am 03.10.2026 wurden zusätzlich die Dokumente und Fahrerdefinitionen des alten Checkouts auf D: gelesen. Nach der Trennung liegen sie unter `Diktator-Kart-Legacy/`. Die frühere Sicherung bleibt unter `Diktator-Kart-Legacy/Sicherung-vor-Umzug-2026-10-03/` erhalten. Diese Lektüre ist kein erneuter Live-Test.

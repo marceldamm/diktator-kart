@@ -1,5 +1,10 @@
 # Entscheidungen und verbleibende Fragen
 
+## Gemeinsame Hauptbasis – 03.10.2026
+
+Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.
+
+
 ## Laufender großer Slice – 03.10.2026
 
 Der Nutzer hat den großen neutralen Vertical Slice ausdrücklich gestartet: kostenlose Werkzeuge/Assets dürfen installiert und verwendet werden, lokale Branch-Checkpoints ohne Push/Merge. Das ist keine Wahl eines historischen Art-Piloten und keine Änderung von Sarahs Ideen. Die 15 bestätigten Antworten bleiben gültig. Technische Details und vorläufige Balance autonom umsetzen; gemeinsame Stil-/Inhaltsabnahme und Geräteprüfungen offen.

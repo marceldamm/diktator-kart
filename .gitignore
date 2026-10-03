@@ -18,3 +18,9 @@ dist/
 .browser-profile/
 *.blend1
 __pycache__/
+
+# Local AI checkouts/configuration and team reports are not shared game source.
+.claude/worktrees/
+.claude/settings.local.json
+.claude/launch.json
+.codex/worktrees/

@@ -86,3 +86,13 @@ Bei jeder Änderung eines Grundpfeilers: abhängige Dokumente prüfen, Widerspr�
 ### 2026-10-03 – Neutrale Slice-Präsentation und Rangfolge
 
 Technische Produktionsentscheidung im freigegebenen Slice: Original-Blenderkarts mit neutralen Anbauten, echte 3D-Menüszene, CC0-Himmel und Stadt-/Shopmodule; keine historische Figuren-/Symbolauswahl. Gemeinsame Rennrangfolge wertet abgeschlossene Runden nach Zielzeit, laufende nach Streckendistanz aus. Lokale Bestzeit nur aus menschlicher Fahrt, Demonstration ausdrücklich gekennzeichnet. Quelle/Export/Quantisierungsgrenzen in art-source/README.md und Credits; betroffene docs/02/04/05/09/14/15/17/19 geprüft. Standard-60-FPS-Ziel unverändert, letzte Messlücke ausdrücklich dokumentiert.
+
+## 2026-10-03 – Gemeinsame Babylon-Hauptbasis und KI-Teamablauf
+
+**Nutzerentscheidung:** Claudes aktueller Q2d-Stand wird zur neuen main-Version; bisheriger auf GitHub vorhandener Hauptstand separat als Sarah/main-Archiv erhalten. Keine Übernahme alter Engine-Inhalte. Entwicklung ausschließlich im neuen Babylon-Projekt; Altstände unveränderliche historische Referenzen.
+
+**Umsetzung:** Archive e292070/2d95e8a/c13d47e vor Hauptumstellung auf GitHub gesichert. Einmaliger ours-Merge erhält alte Historie, aber vollständig Claudes Quellbaum. Reguläre Team-Merges erhalten künftig beide aktuellen Babylon-Änderungen und verwenden diese Sonderstrategie nicht. Projektmarkierung, Starter-Rootprüfung, Repo-Skills und Start-/Abschlussbatches; normaler Fast-Forward-Push mit erneuter Abruf-/Prüfung schützt parallele Arbeit.
+
+**Freigabe:** Projektabschluss ist der ausdrückliche Auftrag zum geprüften Upload/integrativen main-Update. Kein wiederholtes Freigabeproblem für denselben Ablauf; keine Autorisierung für Force-Push, fremde Ziele oder Verwerfen fremder Arbeit. Sarahs private lokale Änderungen bleiben durch ihren ersten Projektstart zu sichern.
+
+**Betroffen:** AGENTS/CLAUDE/README/START-HERE/TEAM-HANDBOOK; docs/00/08/09/10/11/12/16/17/18/21; project-state.json, Skripte, Batches, Repo-Skills, Vite-Identität. Inhalts-/Stil-/Geräteziele bleiben unverändert.

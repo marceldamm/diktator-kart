@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "projectId": "diktator-kart-babylon",
+  "engine": "babylonjs",
+  "activeSource": "src",
+  "edition": "Babylon Q2d - gemeinsame Hauptbasis",
+  "repositoryUrl": "https://github.com/marceldamm/diktator-kart.git",
+  "mainBranch": "main",
+  "minimumSourceCommit": "c13d47e8cbd33dc9899320d73fe718d54b4b93ba",
+  "baselineTag": "babylon-team-baseline-2026-10-03",
+  "legacyPolicy": "read-only-history; never develop, start, or publish legacy as the active game"
+}

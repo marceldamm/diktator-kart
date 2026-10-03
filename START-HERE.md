@@ -1,4 +1,31 @@
-# Diktator Kart – Hier starten
+# Diktator Kart – gemeinsamer Einstieg
+
+## Jetzt verbindlich
+
+**Aktiver Stand:** neuer Babylon-Q2d-Stand auf GitHub main, Ursprung Claude c13d47e. Das bisherige Hauptspiel und alle Altarchive sind ausschließlich historische Referenzen: nicht bearbeiten, nicht starten, nicht automatisch migrieren. Technische Kennzeichnung in project-state.json.
+
+**Arbeitsbeginn in Codex:**
+
+    Projektstart. Synchronisiere unseren gemeinsamen Babylon-Stand und sichere lokale Arbeit. Danach: [Aufgabe].
+
+**Arbeitsende in Codex:**
+
+    Projektabschluss. Prüfe, dokumentiere und veröffentliche meine Änderungen im gemeinsamen main.
+
+Die Repo-Skills heißen $diktator-projektstart und $diktator-projektabschluss. Alternativ: Projekt-starten.cmd / Projekt-abschliessen.cmd. Bei Konflikten oder ungesicherten Dateien hilft die KI; die Batches überschreiben nichts blind. Regeln, GitHub-Sicherungen und Sarahs einmaliger Umstieg: [docs/21-team-workflow.md](docs/21-team-workflow.md).
+
+**Spiel starten:** Diktator-Kart-starten.cmd im aktiven Hauptordner. Es öffnet den ausgecheckten neuen Stand, keinen fest eingetragenen Worktree. Root-/Versionsprüfung verhindert die Wiederverwendung eines fremden/alten Servers; angezeigte URL verwenden. Abhängigkeiten werden aus dem Lockfile installiert. Fenster offen lassen.
+
+**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E oder Linksklick Item, C drei Kameras, Maus Umsehen, Rechtsklick Rückblick, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
+
+**Claude-Stand:** 593-m-Kurs, neue Welt/Karts/sechs fiktive Fahrer, Bot-Drift, Hinterhof-Abkürzung, Stimmen/Publikum, Lenkträgheit und gefederte Karosserie, Rüttelrandsteine, Live-Videowand. Vorliegende Tests und verbleibende Qualitäts-/Gerätegrenzen: [Fortschrittslog](docs/17-progress-log.md). Kein fertiger historischer Kader und keine G–L-Abnahme. Regen/nasse Straße/echtere Fahrer sind nächste Produktionswünsche, keine bereits gebauten Features.
+
+**Nächster zusätzlicher Nutzerauftrag:** Nach der Team-/Starterumstellung einen frühen, stilvollen Ladebildschirm mit gewähltem Konzeptbild und ehrlicher Fortschrittsanzeige ergänzen; aktuell noch nicht implementiert.
+
+## Historischer Einstieg vor der Teamumstellung
+
+Die folgenden Hinweise dokumentieren frühere Sitzungen; Branch-, Startpfad- und Pushregeln darin sind überholt. Aktuelle Regeln stehen oben und in AGENTS.md.
+
 
 ## Aktueller Einstieg – Qualitätsstufe 2 (03.10.2026)
 

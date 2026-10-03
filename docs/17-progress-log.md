@@ -677,6 +677,28 @@
 
 **Nächster Schritt (nach Limit-Reset):** Regen mit nasser Fahrbahn, Pfützen mit Spritzern, Blitz/Donner und Wolkenschatten; Videowand „Staatsfernsehen LIVE“; deutlich echtere Fahrermodelle (MPFB/MakeHuman CC0 prüfen).
 
+### 2026-10-03 – Claudes Q2d als gemeinsame Hauptbasis, Starter und Team-Git
+
+**Nutzerauftrag:** Claudes aktuelles Spiel statt altem Starterstand nutzen; bisherigen GitHub-main als Sarah-Stand sichern, ohne alte Inhalte zu übernehmen; neuen main publizieren und einfachen KI-Start-/Abschlussablauf für beide PCs bereitstellen. Zusätzlich ausdrücklich: alte Engine/Altstände nur historische Referenzen, nicht mehr bearbeiten. Konzeptbild-Ladebildschirm als nachgelagerter Auftrag, erst nach dieser Umstellung.
+
+**Ausgang / Sicherung:** Root auf 5f14a2d, Claude-Worktree auf c13d47e; Claude-Spieldateien committet, lediglich lokale .claude/launch.json untracked. Origin https://github.com/marceldamm/diktator-kart.git nach fetch: main e292070; lokales main 2d95e8a divergiert. Vor Umstellung auf GitHub publizierte Archive: archive/sarah-main-vor-babylon-2026-10-03 → e292070, archive/lokaler-main-vor-babylon-2026-10-03 → 2d95e8a, archive/claude-quality-2026-10-03 → c13d47e. „Sarah“ bezeichnet den vom Nutzer genannten bisherigen gemeinsamen Stand; Commitautoren belegen nicht jeden Beitrag als Sarah. Private ungesicherte Dateien auf ihrem PC sind nicht zugänglich und beim ersten lokalen Projektstart dort zu sichern.
+
+**Umgesetzt:** Vollständigen Claude-Baum in codex/team-baseline-2026-10-03 übernommen. Einmaliger ours-Merge 13a123a verbindet origin/main-Historie, ohne dessen alte Spielinhalte zu übernehmen; keine Historie gelöscht/erzwungen. project-state.json kennzeichnet Babylon/mainline und Mindestabstammung c13d47e. Starter arbeitet vom eigenen Hauptordner; HTTP-Identität prüft exakten Root/Edition/Commit statt nur Titel/Manifest. Fremde/alte Server bleiben bestehen, freier Port wird angezeigt. Aktueller Devserver wieder auf 4173 mit neuem Q2d-Spiel. Vite beobachtet ignorierte Tools/Browserprofile/Worktrees nicht mehr. Node-Pakete aus unverändertem Lockfile installiert; npm-Audit 0 Schwachstellen. Ein von Codex stammender alter Preview auf 4174 wurde gezielt beendet, weil er den npm-Bindingtausch blockierte; keine Benutzer-Chrome-Sitzung beendet.
+
+**Teamablauf:** Projektstart/Projektabschluss als zwei Repo-Skills und Batches. Start fetch/Status/Überschneidungen, Sicherung, eigener Arbeitsbranch; alte Arbeit archivieren statt Engine-Code migrieren. Abschluss dokumentierter Commit, normaler Merge, Tests/Build, Branch-Push und Fast-Forward-main mit erneuter Remoteprüfung. Uncommittete Dateien, Konflikte, Testfehler und concurrent main stoppen ohne Datenverlust. Netzwerk/Branchschutz nicht umgehen. Dauerregeln in AGENTS/CLAUDE/README/START-HERE/TEAM-HANDBOOK; Details docs/21, Spiel-/Toolübersicht docs/22. Grundpfeiler 00/08/09/10/11/12/16/18 geprüft und aktuellen Einstieg ergänzt; historische Logs erhalten.
+
+**Erneut verifiziert:** 25 Modelltests und Produktionsbuild bestanden. Sieben isolierte lokale Git-/Startertests bestanden (keine echten GitHub-Testmutationen): Dirty-Schutz, parallele Integration/FF-Publikation, echter Konflikt, Altstand-Archivierung ohne Kopie, concurrent main während Build, Testfehler, Port-/Root-Unterscheidung. Beide Skills bestehen offiziellen quick_validate.py. Starter -CheckOnly erkennt aktuellen Root auf 4173 als denselben Checkout. Browser auf isoliertem Chrome 9226: Menü/Fahrt/drei Kameras/Foto/Pause/Countdown/Szenenneustart mit sechs Karts bestanden, keine Ausnahme. Neue Spielbilder *-team.png. Claudes ausführliche Renn-/Item-/WebGL-/Touchbelege bleiben als dort dokumentierte Ergebnisse erhalten; in dieser Teamumstellung nicht erneut alle wiederholt.
+
+**Messgrenzen:** RTX 3070 Laptop, 1600 × 1000; kurzer F3-Stand 49 FPS/P95 32,5 ms/P99 40,3 ms (kein kontrollierter Dauerlauf). Keine Garantie stabiler 60 FPS. Build-Hauptchunk 2,19 MB/549 kB gzip, Größenwarnung bleibt. Schwache PCs/echte Mobilgeräte, Audiohörqualität, menschlicher Komfort und G–L offen. Videowand kostet Zusatzrenderpass; kein neues Performanceziel beschlossen.
+
+**Geänderte Dateien:** Team-/Startskripte/Batches; project-state.json, vite.config.ts, .gitignore, tests/team-workflow.test.mjs und konfigurierbarer CDP-Port; Repo-Skills; AGENTS/CLAUDE/README/START-HERE/TEAM-HANDBOOK und betroffene Dokumente/Belege. Spielmodelle und Fahrkern aus Claude unverändert übernommen. Der aktive historische Kader ist nicht endgültig produziert; fiktive Figuren bleiben Platzhalter.
+
+**Publikation:** Initiale main-Übernahme vom Nutzer ausdrücklich freigegeben; nach diesem verifizierten Checkpoint normaler Push und Rückprüfung, Basistag babylon-team-baseline-2026-10-03. Keine pauschale zukünftige Altcode-Migration; reguläre aktuelle Teamänderungen werden inhaltlich integriert. GitHub-Erfolg erst nach Rücklesen im Ergebnisbericht bestätigen.
+
+**Nächster Schritt:** Nach bestätigter Hauptumstellung den gewünschten frühen Konzeptbild-Ladebildschirm samt ehrlicher Fortschrittsanzeige bauen. Sarah einmal Initialumstieg aus docs/21 ausführen lassen; danach täglicher Projektstart/Projektabschluss. Regen/echtere Fahrer/Abkürzungsbots bleiben anschließende Produktionswünsche, keine bereits fertigen Features.
+
+**Budget:** Letzte offizielle Abfrage: 12 % Fünf-Stunden-/16 % Wochenverbrauch, kein Reset/Zusatzkontingent. Kein Ruhezustand.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

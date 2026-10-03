@@ -2,7 +2,15 @@
 
 ## Zweck
 
-Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentwicklung von Diktator Kart. Er ist zunächst kein fertiger Spiel-Checkout. Die Dokumente sollen Entscheidungen verständlich, prüfbar und über mehrere Arbeitssitzungen hinweg konsistent halten.
+Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentwicklung von Diktator Kart. Er enthält jetzt den aktiven Babylon-Spiel-Checkout samt Produktionsquellen. Die Dokumente sollen Entscheidungen verständlich, prüfbar und über mehrere Arbeitssitzungen hinweg konsistent halten.
+
+## Verbindliche aktive Basis und Teamablauf (03.10.2026)
+
+- Ausschließlich die neue Babylon-Hauptbasis von origin/main in marceldamm/diktator-kart entwickeln. Aktive Verzeichnisse: src/, public/, art-source/; Kennzeichnung und Mindestabstammung in project-state.json.
+- Alte PlayCanvas-Checkouts, Diktator-Kart-Legacy/, Legacy/, archive/* und Stände vor der gemeinsamen Babylon-Basis sind unveränderliche historische Referenzen. Dort nicht entwickeln, starten oder veröffentlichen. Änderungen ausschließlich am neuen Projekt. Keine automatische Übernahme alten Engine-Codes.
+- Vor Arbeitsbeginn Projektstart: neuesten GitHub-Stand holen, lokale Arbeit sichern, Überschneidungen vergleichen und aktuelle Babylon-Änderungen integrieren. Altcode zuerst archivieren, anschließend auf neuer Basis arbeiten. Details: docs/21-team-workflow.md.
+- Projektabschluss autorisiert nach Dokumentation/Prüfung die sichere Veröffentlichung des Arbeitsbranches und des zusammengeführten neuen main. Kein erneutes Nachfragen für diesen ausdrücklich beauftragten Ablauf. Kein Force-Push, keine Umgehung von Branchschutz, keine blinde Konfliktauswahl. Alte pauschale „kein Push/Merge“-Sitzungsregeln sind für diesen neuen Teamabschluss überholt.
+- Fehlende Zugänge, echte widersprüchliche Kreativentscheidungen und ungelöste Konflikte konkret melden; Arbeit erhalten. Keine Aktualität oder Veröffentlichung behaupten, die nicht geprüft wurde.
 
 ## Umgang mit dem Altprojekt
 
@@ -28,7 +36,7 @@ Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 ## Dokumentationspflege
 
 - Verbindlicher Arbeitsordner auf diesem PC ist `D:\Diktator-Kart`. Das neue Projekt liegt direkt dort; `Diktator-Kart-Legacy/` ist ausschließlich Altarchiv. Der ChatGPT-Projektspiegel ist keine zweite aktive Projektbasis.
-- Für den Babylon-Neustart gelten Branch-Arbeit und getrennte Freigabe der Übernahme nach `main`. Die alte Regel „push direkt nach main“ im übergeordneten Altprojekt gilt hier nicht.
+- Für den Babylon-Neustart gelten eigene Arbeitsbranches und der geprüfte Teamabschluss aus docs/21-team-workflow.md. Die ausdrückliche Abschlussanweisung autorisiert die Übernahme; keine ungeprüften direkten Änderungen an main.
 - Derzeit nur vorhandene oder kostenlose Werkzeuge und Assets einsetzen; keine Käufe, kostenpflichtigen Dienste oder zusätzlichen Abonnements voraussetzen.
 - Änderungen an Sarahs ursprünglichen Ideen als Vorschlag mit Originalidee und Begründung dokumentieren; erst nach gemeinsamer Bestätigung durch beide als beschlossen behandeln. Unklare Herkunft ehrlich kennzeichnen.
 - Die bestätigten 15 Designentscheidungen aus `docs/10-open-questions.md` nicht erneut als unbeantwortete Grundsatzfragen stellen. Technische Detailentscheidungen und vorläufige Balancewerte selbstständig begründet treffen.

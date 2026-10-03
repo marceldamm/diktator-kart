@@ -79,47 +79,19 @@ Codex darf keine Sicherheitskontrollen umgehen, keine fremden Konten verwenden, 
 
 ## 6. GitHub als gemeinsame Arbeitsbasis
 
-GitHub wird ein eigener Grundpfeiler und Meilenstein. Ziel ist, dass du und Sarah denselben Entwicklungsstand sicher teilen könnt.
+**Jetzt verbindlich:** main im Repository marceldamm/diktator-kart enthält ausschließlich das neue Babylon-Spiel. Der frühere Stand ist separat archiviert und nur historische Referenz. Dort keine Änderungen und keinen Spielstart. Die tägliche Git-Hilfe steht in [docs/21-team-workflow.md](docs/21-team-workflow.md).
 
-### Vorgesehener Ablauf
+Auf beiden PCs im eigenen Checkout arbeiten. Vor jeder Sitzung neuesten main holen und eigene Änderungen sichern/integrieren. Größere Arbeit auf eigenem Branch; Tests, echte Belege und Dokumentation vor Veröffentlichung. Der ausdrückliche Projektabschluss autorisiert Push und geprüfte Zusammenführung; kein Force-Push und keine pauschale Konfliktauswahl. Bei Branchschutz PR/Freigabe statt Umgehung.
 
-1. Das bestehende Repository `marceldamm/diktator-kart` mit dem Branch `babylon-neustart-2026` verwenden; kein zweites Repository ist dafür erforderlich.
-2. Sarahs Zugang und passende Rechte prüfen; vorhandene Zusammenarbeit nicht als fehlenden Zugang interpretieren.
-3. `main` als stabilen Stand schützen.
-4. Jede größere Arbeit in einem eigenen Branch beginnen, zum Beispiel `feature/babylon-foundation` oder `docs/item-system`.
-5. Kleine, verständliche Commits mit beschreibenden Nachrichten erstellen.
-6. Branch pushen und einen Pull Request öffnen.
-7. Die andere Person prüft Beschreibung, Dateien, Tests und offene Punkte.
-8. Erst danach in `main` zusammenführen.
+## 7. Euer täglicher Ablauf
 
-### Zusammenarbeit ohne Konflikte
+**Beginn:** „Projektstart. Synchronisiere unseren gemeinsamen Babylon-Stand und sichere lokale Arbeit. Danach: [Aufgabe].“
 
-Nicht gleichzeitig dieselben Dateien im selben lokalen Checkout bearbeiten. Entweder arbeitet immer nur eine Person im gemeinsamen Ordner, oder ihr nutzt getrennte Klone/Worktrees und synchronisiert über Branches und Pull Requests.
+**Ende:** „Projektabschluss. Prüfe, dokumentiere und veröffentliche meine Änderungen im gemeinsamen main.“
 
-Vor Arbeitsbeginn: Änderungen holen und Status prüfen. Nach Arbeitsende: committen, pushen, Fortschrittslog aktualisieren und den nächsten Schritt nennen. Große Binärdateien wie Referenzbilder, Audio und GLB-Dateien brauchen eine bewusste Repository-Entscheidung; sie dürfen nicht unkontrolliert anwachsen.
+Die Repo-Skills $diktator-projektstart und $diktator-projektabschluss werden mit Git verteilt. Alternativ die Batches Projekt-starten.cmd und Projekt-abschliessen.cmd nutzen; Konflikte und uncommittete Arbeit dann von der KI prüfen lassen.
 
-## 7. Sarahs täglicher Ablauf
-
-Sarah kann sagen:
-
-```text
-Öffne das Projekt Diktator Kart – Babylon-Neustart.
-Lies START-HERE.md, TEAM-HANDBOOK.md und docs/17-progress-log.md.
-Erkläre mir kurz, wo wir stehen und welche Entscheidungen noch offen sind.
-Danach möchte ich folgende Änderung besprechen: [Idee oder Aufgabe].
-Übernimm meine Aussagen in die passenden Dokumente, markiere neue offene Fragen
-und ändere keine Technik, ohne die Abhängigkeiten zu prüfen.
-```
-
-Für echte Codearbeit ergänzt sie:
-
-```text
-Arbeite im lokalen Babylon-Projekt.
-Erstelle zuerst einen Arbeitsplan und nenne betroffene Dateien.
-Arbeite danach selbstständig, teste die Änderung und aktualisiere
-docs/17-progress-log.md. Melde am Ende verifiziert, offen, blockiert,
-geänderte Dateien und nächsten Schritt.
-```
+Sarahs erster Umstieg: lokalen bisherigen Stand inklusive ungesicherter Dateien archivieren, origin/main holen, neue Regeln aus dem Remote lesen und auf einem neuen Babylon-Arbeitsbranch fortsetzen. Der kopierbare Initialbefehl steht in Dokument 21. Alte Änderungen werden nicht blind migriert; Ideen können als Herkunft-markierte Vorschläge übernommen werden.
 
 ## 8. Gemeinsame Wahrheit
 
@@ -137,14 +109,9 @@ Wenn du oder Sarah eine Grundidee ändert, muss Codex prüfen:
 
 ## 9. GitHub-Meilenstein
 
-**Status:** Branch `babylon-neustart-2026` ist erstellt und nach GitHub veröffentlicht.
+Die gemeinsame Babylon-Hauptbasis wurde vom Nutzer am 03.10.2026 ausdrücklich beauftragt. main wird aus Claudes Stand c13d47e aufgebaut; bisheriger GitHub-main e292070, lokaler main 2d95e8a und Claude-Stand sind auf separaten archive/*-Branches gesichert. Herkunft und Prüfergebnisse im Fortschrittslog und Dokument 21. Unveröffentlichte Dateien auf Sarahs PC sind nicht in dieser Sicherung enthalten und müssen beim ersten Projektstart dort erhalten werden.
 
-**Erster Planungsstand:** `8f94780` – Add Babylon Neustart planning foundation. Den aktuellen Commit zeigt GitHub im Branch.
-
-**Repository:** [github.com/marceldamm/diktator-kart](https://github.com/marceldamm/diktator-kart/tree/babylon-neustart-2026)
-
-**Wichtig:** `main` wurde nicht verändert. Ein Abruf kann die Branchdaten herunterladen, wechselt Sarahs Arbeitsstand aber nicht automatisch. Sie muss den Branch bewusst auswählen oder später eine Zusammenführung übernehmen.
-**Noch offen:** Sarahs Zugriff prüfen (nicht als fehlend voraussetzen), Branchstrategie gemeinsam bestätigen, Umgang mit großen Assets festlegen und entscheiden, wann dieser Stand nach `main` übernommen wird.
+Repository: https://github.com/marceldamm/diktator-kart . Keine zweite aktive Engine oder Projektbasis.
 
 ## 10. Bestätigte Zusammenarbeit und Produktionsgrenzen
 

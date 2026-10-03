@@ -2,7 +2,11 @@
 
 03.10.2026. Die PNGs stammen aus dem lokal laufenden Babylon-Spiel in isoliertem Chrome. Keine Konzeptbilder als Spielaufnahmen. Modell-, Fahrer-, Zuschauer- und Stilstände sind weiterhin vorläufig.
 
-## Qualitätsstufe 2 (03.10.2026) – aktuell ansehen
+## Team-/Starterumstellung – erneute Laufzeitprobe
+
+Suffix -team: aktueller Hauptordner mit vollständig übernommenem Claude-Q2d. Menü, drei Kameras, Foto, Fahrt, Countdown und Neustart erneut geprüft; keine Browserausnahme. slice-main-menu-team.png und slice-boulevard-driving-team.png zeigen diesen Stand. slice-six-kart-diagnostics-team.png enthält das kurze F3-Fenster (49 FPS, P95 32,5 ms auf RTX); keine Endurance-/Zielgeräteabnahme. Team-/Portfälle wurden zusätzlich mit lokalen Test-Repositories geprüft; Details docs/17 und docs/21.
+
+## Qualitätsstufe 2 (03.10.2026) – Claude-Belege
 
 Alle Bilder aus dem laufenden Spiel (isolierter Chrome, RTX 3070 Laptop, 1600 × 1000), Suffix `-q2`.
 
