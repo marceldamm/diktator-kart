@@ -41,3 +41,7 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Gemeinsam gesichert:** Geprüfter neuer Spielstand und vier Arbeitsdateien auf GitHub main veröffentlicht. Der nächste Abend beginnt mit „Projekt Start“. Historische Fahrer und weitere Grafikarbeit bleiben nächste Aufgaben.
 
 - **Limitregel für beide:** Offizielle eigene Kontowerte prüfen, ab etwa 15 % geordnet abschließen, mindestens etwa 5 % Reserve anstreben. Marcels Nachricht und einmaliger Sarah-Umstiegsbefehl stehen in TEAM-NOTES.md; ihr lokaler Stand wird erst bei ihr wirklich gesichert.
+
+- **Panzer ist zurück:** Sarahs „Größenbefehl“ auf Q – acht Sekunden Paradepanzer mit Ketten, Rauch und Klang, schiebt Gegner kontrolliert weg; danach 18 Sekunden Abklingzeit. Im HUD links unten sichtbar.
+
+- **Doku entschlackt:** Alte Logeinträge und frühere Einstiege liegen jetzt unter `docs/history/`; die Hauptdateien sind kürzer.

@@ -65,6 +65,7 @@ Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten h
 | 2026-10-03 | Jubelgesten der Fahrer sind senkrechte Faust- oder Winkbewegungen, nie ein vorwärts erhobener Arm. | Inhaltsgrenze gegen Gruß-Assoziationen; Satire ohne Verherrlichung. | 13, 17 |
 | 2026-10-03 | Erste Abkürzung: Hinterhofgasse durch die Brunnen-Haarnadel mit Tempolimit außer bei Mini-Turbo; Fortschritt auf der Gasse linear auf den übersprungenen Abschnitt abgebildet. | Nutzerwunsch nach Abkürzung; Risiko/Nutzen über Enge und Pflasterbremse statt Sperre. Bots vorerst nur auf der Hauptstrecke. | 01, 07, 17 |
 | 2026-10-03 | Bandengleiten: einmaliger Verlust beim ersten Kontakt, danach nur leichte Reibung; Lenkeingabe als `steer` im Zustand für sichtbare Räder/Lenkrad. | Nutzerfahrt: paralleles Berühren darf nicht bremsen wie ein Aufprall; Lenkung muss sichtbar sein. | 07, 17 |
+| 2026-10-04 | Sarahs „Größenbefehl“-Panzer ist die erste Q-Fähigkeit (Spielerfigur), Archivwerte 8 s/18 s/2,4 s vorläufig, Schutz wie bei Items; übrige Archivfähigkeiten bleiben Vorschläge. | Belegte Sarah-Idee professionell wiederhergestellt; keine stille Umdeutung weiterer Ideen ohne Fahrerwahl/Bestätigung. | 07, 14, sarah-feature-audit, CURRENT-WORKLIST |
 
 ## Pflegehinweis
 
