@@ -3,7 +3,7 @@
 // Run: node art-source/build_voices.mjs   (needs .tools/piper; see art-source/README.md)
 // Lines are satire of bureaucratic self-importance; no historical person, quote or slogan.
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -14,7 +14,7 @@ const out = join(root, 'public', 'assets', 'audio', 'voice');
 mkdirSync(out, { recursive: true });
 const EMOTION = { amused: 0, angry: 1, disgusted: 2, drunk: 3, neutral: 4, sleepy: 5, surprised: 6, whisper: 7 };
 const VOICE = {
-  announcer: { model: 'de_DE-kerstin-low', length: 1.02 },
+  announcer: { model: 'de_DE-kerstin-low', length: 1.06 },
   male: { model: 'de_DE-thorsten_emotional-medium' },
   narrator: { model: 'de_DE-thorsten-high', length: .98 },
   female: { model: 'de_DE-kerstin-low', length: .95 },
@@ -22,19 +22,25 @@ const VOICE = {
 
 /** id -> [voice, text, emotion?] */
 const LINES = {
-  'announcer-welcome': ['announcer', 'Willkommen im Stadion der Eitelkeit! Sechs Fahrer, drei Runden, null Widerspruch.'],
-  'announcer-grid': ['announcer', 'Bitte nehmen Sie Ihre genehmigten Startplätze ein.'],
+  'announcer-welcome': ['announcer', 'Hallo zusammen! Willkommen im Stadion der Eitelkeit. Sechs Fahrer, drei Runden. Viel Spaß!'],
+  'announcer-grid': ['announcer', 'Alle bereit? Dann ab an den Start!'],
   'announcer-3': ['announcer', 'Drei!'],
   'announcer-2': ['announcer', 'Zwei!'],
   'announcer-1': ['announcer', 'Eins!'],
-  'announcer-go': ['announcer', 'Los! Der Antrag ist genehmigt!'],
-  'announcer-lap2': ['announcer', 'Zweite Runde. Jubel ist weiterhin Pflicht.'],
-  'announcer-final': ['announcer', 'Letzte Runde! Bitte applaudieren Sie vorschriftsmäßig.'],
-  'announcer-lead': ['announcer', 'Neue Führung! Die Geschichtsbücher werden bereits umgeschrieben.'],
-  'announcer-delivery': ['announcer', 'Zustellung erfolgreich!'],
-  'announcer-stamp': ['announcer', 'Stempelfalle! Antrag abgelehnt.'],
-  'announcer-win': ['announcer', 'Sieg! Das Ergebnis stand selbstverständlich schon vorher fest.'],
-  'announcer-finish': ['announcer', 'Ziel erreicht. Ihre Platzierung wird nun geprüft.'],
+  'announcer-go': ['announcer', 'Los geht es! Gebt Gas!'],
+  'announcer-lap2': ['announcer', 'Schon die zweite Runde! Weiter so!'],
+  'announcer-final': ['announcer', 'Letzte Runde! Jetzt noch einmal alles geben!'],
+  'announcer-lead': ['announcer', 'Da ist die neue Führung! Die Statistik wird schon korrigiert.'],
+  'announcer-delivery': ['announcer', 'Volltreffer! Die Post ist da.'],
+  'announcer-stamp': ['announcer', 'Oh! Ein Stempel auf der Strecke.'],
+  'announcer-win': ['announcer', 'Geschafft! Herzlichen Glückwunsch. Ein Sieg ohne Sondererlaubnis!'],
+  'announcer-finish': ['announcer', 'Und im Ziel! Schön, dass ihr dabei wart.'],
+  'general-horn': ['male', 'Platz da! Mein Antrag ist dringend!', 'amused'],
+  'marschall-horn': ['male', 'Zur Seite! Der Plan wartet nicht!', 'neutral'],
+  'imperator-horn': ['male', 'Achtung! Mein Lorbeer hat Vorfahrt!', 'amused'],
+  'kommandant-horn': ['male', 'Bitte den Weg frei stempeln!', 'neutral'],
+  'diva-horn': ['female', 'Hallo! Der rote Teppich ist zu schmal!'],
+  'admiralin-horn': ['female', 'Aus dem Weg! Volle Kraft voraus!'],
   'general-hit': ['male', 'Das ist Hochverrat!', 'angry'],
   'general-pass': ['male', 'Platz da! Ich habe Vorfahrt per Dekret!', 'angry'],
   'general-boost': ['male', 'Vorwärts, im Namen der Ordnung!', 'neutral'],
@@ -56,11 +62,17 @@ const LINES = {
   'admiralin-win': ['female', 'Kurs gehalten. Wie befohlen.'],
 };
 
+const selected=process.argv.slice(2);
 for (const [id, [voice, text, emotion]] of Object.entries(LINES)) {
+  if(selected.length&&!selected.some(prefix=>id.startsWith(prefix)))continue;
   const v = VOICE[voice];
   const args = ['--model', join(tools, `${v.model}.onnx`), '--output_file', join(out, `${id}.wav`), '--length_scale', String(v.length ?? 1)];
   if (emotion) args.push('--speaker', String(EMOTION[emotion]));
   execFileSync(piper, args, { input: text, stdio: ['pipe', 'ignore', 'ignore'] });
+  // Piper peaks near full scale. Leave headroom for browser sample-rate conversion and the mix.
+  const path=join(out, `${id}.wav`),wav=readFileSync(path);
+  for(let offset=12;offset+8<=wav.length;){const size=wav.readUInt32LE(offset+4);if(wav.toString('ascii',offset,offset+4)==='data'){let peak=1;for(let i=offset+8;i<offset+8+size;i+=2)peak=Math.max(peak,Math.abs(wav.readInt16LE(i)));const gain=.8*32767/peak;for(let i=offset+8;i<offset+8+size;i+=2)wav.writeInt16LE(Math.round(wav.readInt16LE(i)*gain),i);break;}offset+=8+size+(size%2);}
+  for(let retry=0;;retry++){try{writeFileSync(path,wav);break;}catch(error){if(retry>=10)throw error;Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,100);}}
 }
 writeFileSync(join(out, 'lines.json'), JSON.stringify(Object.fromEntries(Object.entries(LINES).map(([id, [voice, text, emotion]]) => [id, { voice, text, emotion: emotion ?? null }])), null, 2) + '\n');
 console.log(`${Object.keys(LINES).length} voice lines written to public/assets/audio/voice`);

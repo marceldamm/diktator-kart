@@ -13,7 +13,7 @@ Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q
 
 Der Nutzer hat den großen neutralen Vertical Slice ausdrücklich gestartet: kostenlose Werkzeuge/Assets dürfen installiert und verwendet werden, lokale Branch-Checkpoints ohne Push/Merge. Das ist keine Wahl eines historischen Art-Piloten und keine Änderung von Sarahs Ideen. Die 15 bestätigten Antworten bleiben gültig. Technische Details und vorläufige Balance autonom umsetzen; gemeinsame Stil-/Inhaltsabnahme und Geräteprüfungen offen.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
 Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworten werden nicht erneut als offene Grundsatzfragen geführt.
 

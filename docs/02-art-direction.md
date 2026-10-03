@@ -26,7 +26,7 @@ Die Standardansicht verwendet editierbare Blender-/GLB-Assets: geformter Retro-R
 
 G–L wird weiterhin deutlich nicht erreicht. Neutraler Fahrer, Zuschauer und Architekturmodule sind vorläufige Artassets; keine fertigen historischen Figuren oder bestätigten Landmarken. Besonders fehlen ausgearbeitete Charaktere, weniger repetitive Architektur, abwechslungsreichere Streckenführung sowie abgestimmte Material-/Animationspolitur. Gemeinsame Stilabnahme bleibt offen; keine Absenkung des Bildziels.
 
-Historische Zwischenstände bleiben erhalten. Verifizierte Ergebnisse und Grenzen: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände bleiben erhalten. Verifizierte Ergebnisse und Grenzen: [Fortschrittslog](../PROGRESS-LOG.md).
 
 ## Visuelles Ziel
 
@@ -98,3 +98,7 @@ Die nächste Stilprüfung soll gezielt C + A verbinden, nicht sechs neue zufäll
 Die zweite Vergleichsrunde G–L wird als gemeinsamer Hauptstil des Projekts angenommen. Das Zielbild ist eine farbige, detailreiche, erwachsene 3D-Welt mit hochwertigen Materialien, charaktervollen Karts, klaren Silhouetten, atmosphärischem Licht und sichtbaren, aber kontrollierten Effekten. Die Varianten G–L sind dabei ein Stilraum und kein Zwang, jede dargestellte Einzelwirkung vollständig gleichzeitig zu bauen.
 
 Die Machbarkeit wird über einen Vertical Slice geprüft. Nicht jedes Konzeptbilddetail muss in Echtzeit, auf jeder Qualitätsstufe oder auf schwacher Hardware identisch erscheinen. Priorität haben Fahrbarkeit, Lesbarkeit, Materialwirkung, Lichtstimmung und wenige starke Effekte vor einer Überladung der Szene.
+
+## Ergänztes Straßenbild – 03.10.2026
+
+Vier Litfaßsäulen mit eigener Zeitungstypografie und kritischen Personenkult-/Bürokratieplakaten, zwei Haltestellen-/Bankgruppen, eigenständiger Adler als Architekturornament ohne Regimezeichen. Editierbar in src/period-details.ts. Fünf Materialgruppen, keine zusätzliche Physikkollision. Tatsächliche Nahbilder period-boulevard-v1.png/period-eagle-v1.png in evidence. Das ist zusätzliche Ausstattung, keine vollständige historische oder G–L-Rekonstruktion.

@@ -427,6 +427,9 @@ class App {
       }
     }
     if (this.state === 'running' && this.testScene) {
+      if(frame.pressed.has('horn')&&!this.camera?.introMode&&!this.camera?.photoMode){
+        if(this.audio.honk(CAST[0].voice,CAST[0].voiceRate))this.lastAction='Sprachhupe';
+      }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special')) this.lastAction = 'Fähigkeits-Eingabe erkannt';
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;

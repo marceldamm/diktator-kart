@@ -4,11 +4,11 @@
 
 Für unsere längere technische Umsetzung verwenden wir GPT-6.1 Sol mit hoher Denkintensität als praktische Ausgangswahl. GPT-6 Astra eignet sich für schwierige Gesamtanalysen, festgefahrene Probleme oder Architekturprüfungen; Luna für fokussierte Routine. Das ist eine Aufgabenempfehlung, keine allgemeine Rangliste oder Garantie perfekter Ergebnisse. Höhere Denkintensität kostet mehr Zeit/Nutzung; Modellverfügbarkeit und Planlimits im eigenen Konto prüfen. Quellen (03.10.2026): [OpenAI-Modellwahl](https://developers.openai.com/api/docs/guides/model-selection), [Work/Codex-Nutzung](https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex).
 
-Guter Arbeitsauftrag: ein sichtbares Ziel, die aktuelle Liste und ein prüfbares Ergebnis nennen. Beispiel: „Projektstart. Arbeite an [Paket aus CURRENT-WORKLIST.md]. Ziel: [im Spiel sichtbare Verbesserung]. Prüfe Fahrt und Kameras im Browser, sichere lokale Checkpoints und aktualisiere unsere drei Arbeitsdateien. Gewöhnliche technische Entscheidungen triff selbstständig.“ Keine perfekte Grafik versprechen lassen; echte Spielbilder und Tests verlangen.
+Guter Arbeitsauftrag: ein sichtbares Ziel, die aktuelle Liste und ein prüfbares Ergebnis nennen. Beispiel: „Projektstart. Arbeite an [Paket aus CURRENT-WORKLIST.md]. Ziel: [im Spiel sichtbare Verbesserung]. Prüfe Fahrt und Kameras im Browser, sichere lokale Checkpoints und aktualisiere unsere vier Arbeitsdateien. Gewöhnliche technische Entscheidungen triff selbstständig.“ Keine perfekte Grafik versprechen lassen; echte Spielbilder und Tests verlangen.
 
-## Unsere drei Arbeitsdateien
+## Unsere vier Arbeitsdateien
 
-Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 Dieses Dokument ist die gemeinsame Bedienungsanleitung für die Arbeit am Projekt. Es erklärt, wie ihr beide denselben Wissensstand nutzt, Codex/ChatGPT richtig einsetzt und Änderungen über GitHub synchronisiert.
 
@@ -18,7 +18,7 @@ Auf diesem PC ist `D:\Diktator-Kart` das Hauptverzeichnis des neuen Projekts. Da
 
 1. `START-HERE.md` – aktueller Status und nächster Schritt
 2. `TEAM-HANDBOOK.md` – dieses Arbeits- und Modellhandbuch
-3. `docs/17-progress-log.md` – vollständige Projekthistorie
+3. `PROGRESS-LOG.md` – vollständige Projekthistorie
 4. `docs/10-open-questions.md` – Entscheidungen, die noch fehlen
 
 Sarah muss nicht alle Detaildateien auswendig lesen. Sie beginnt mit diesen vier Dateien und öffnet danach nur die Dokumente, die zur aktuellen Aufgabe gehören.
@@ -115,7 +115,7 @@ Wenn du oder Sarah eine Grundidee ändert, muss Codex prüfen:
 - betroffene Detaildokumente
 - `docs/09-roadmap.md`
 - `docs/10-open-questions.md`
-- `docs/17-progress-log.md`
+- `PROGRESS-LOG.md`
 
 ## 9. GitHub-Meilenstein
 

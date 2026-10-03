@@ -53,14 +53,14 @@ function EnsureDependencies {
 function ShowWorkLists {
     $activeState = ReadState 'HEAD'
     if (-not $activeState.teamLists) { return } # Older marker/isolated fixtures remain compatible.
-    $required = @('CURRENT-WORKLIST.md', 'LONG-TERM-GOALS.md', 'TEAM-CHANGES.md')
+    $required = @('CURRENT-WORKLIST.md', 'LONG-TERM-GOALS.md', 'TEAM-CHANGES.md', 'TEAM-NOTES.md')
     foreach ($file in $required) {
         if ($activeState.teamLists -notcontains $file -or -not (Test-Path -LiteralPath $file -PathType Leaf)) {
             throw "Gemeinsame Arbeitsdatei fehlt: $file. Codex muss die aktuelle Wissensbasis wiederherstellen; kein Abschluss."
         }
     }
-    Write-Host 'Gemeinsame Arbeitsdateien: CURRENT-WORKLIST.md / LONG-TERM-GOALS.md / TEAM-CHANGES.md.'
-    Write-Host 'Codex: diese drei Dateien als App-Tabs oeffnen und lesen, Status/Naechstes aktualisieren; technische Belege nur in Log 17.'
+    Write-Host 'Gemeinsame Arbeitsdateien: CURRENT-WORKLIST.md / LONG-TERM-GOALS.md / TEAM-CHANGES.md / TEAM-NOTES.md.'
+    Write-Host 'Codex: diese vier Dateien als App-Tabs oeffnen und lesen, Status/Naechstes aktualisieren; technische Belege nur in PROGRESS-LOG.md.'
 }
 
 try {
@@ -129,7 +129,7 @@ try {
         $session = [ordered]@{ owner = $Owner; branch = (Git @('branch', '--show-current')); startingHead = (Git @('rev-parse', 'HEAD')); remoteAtStart = $remote; startedUtc = [DateTime]::UtcNow.ToString('o') }
         $session | ConvertTo-Json | Set-Content -LiteralPath '.tools/team-session.json' -Encoding UTF8
         ShowWorkLists
-        Write-Host "Bereit: $($session.branch). Read START-HERE.md, CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md and the latest progress entry. Develop only this Babylon project."
+        Write-Host "Bereit: $($session.branch). Read START-HERE.md, CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md, TEAM-NOTES.md and the latest progress entry. Develop only this Babylon project."
         exit 0
     }
     if (-not $isNew -or $branch -eq 'main' -or $branch -match '^(archive/|legacy-)') { throw 'Publication requires a new Babylon work branch. Old/main/archive work is refused.' }
@@ -138,8 +138,8 @@ try {
         $merge = GitResult @('merge', '--no-edit', 'origin/main')
         if ($merge.Code -ne 0) { throw "Concurrent work needs Codex conflict resolution; no main push. $($merge.Text)" }
     }
-    $logChanged = Git @('diff', '--name-only', 'origin/main..HEAD', '--', 'docs/17-progress-log.md')
-    if (-not $logChanged) { throw 'Add a verified handoff entry to docs/17-progress-log.md and commit before publishing.' }
+    $logChanged = Git @('diff', '--name-only', 'origin/main..HEAD', '--', 'PROGRESS-LOG.md')
+    if (-not $logChanged) { throw 'Add a verified handoff entry to PROGRESS-LOG.md and commit before publishing.' }
     ShowWorkLists
     EnsureDependencies
     & npm.cmd test

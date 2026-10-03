@@ -1,8 +1,8 @@
 # Roadmap und Abnahmen
 
-## Unsere drei Arbeitsdateien
+## Unsere vier Arbeitsdateien
 
-Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 ## Präzisiertes Ziel für Figuren und Welt – 03.10.2026
 
@@ -17,7 +17,7 @@ Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q
 
 Der große Nutzerauftrag zieht neutrale M3-Produktion und Teile von M4 ausdrücklich vor: editierbare Artassets und kompletter fiktiver Stadionring mit fünf echten Bots, drei Runden, Platzierung, Ergebnis/Revanche. Browserrennen und Revanche geprüft. Das bestätigte Start-Itemset ist mit gemeinsamen Regeln, neutralen GLBs, festem Pool, HUD und Audio integriert; Modelltest und echte Rennen prüfen Aufnahme/Einsatz/Treffer/Pause/Revanche. Die M2-Abnahmelücken bleiben sichtbar und verhindern keine ausdrücklich autorisierte neutrale Umsetzung. M3/M4 werden nicht pauschal als abgenommen markiert.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
 Diese Übersicht verwendet dieselben Meilensteine wie [16-production-blueprint.md](16-production-blueprint.md) und START-HERE.md. Die Nutzerantworten stehen in [10-open-questions.md](10-open-questions.md).
 
@@ -52,7 +52,7 @@ Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verf
 | Normale/schwächere PC-Hardware | Gerät/GPU, Chrome-Version, Auflösung, Grafikmodus, 1/6 Karts und drei Kameras protokollieren; F3-Framefenster nach mindestens fünf Sekunden sichtbarer Fahrt ablesen; vorläufiges Ziel aus Dokument 04: 60 FPS Standard, stabil 30 FPS auf schwächerer Hardware | offen; RTX-Headless ersetzt dies nicht |
 | Mobile Frühprobe | Android/iPhone im Querformat mit Start, Sichtbarkeit und Eingabe prüfen, sobald Testgeräte/Touchsteuerung vorhanden sind; vollständige mobile Abnahme bleibt M7 | offen |
 
-Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und eine erste Messung auf einem normalen PC tatsächlich beurteilt sein. Fehlende schwächere/Mobilgeräte bleiben ausdrücklich offen; ihre Leistungsziele werden dadurch nicht abgesenkt. Gerät, Datum, Beobachtung und Beleg gehören in `17-progress-log.md`; daraus folgende Änderungen werden als einzelne M2-Korrekturen geplant.
+Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und eine erste Messung auf einem normalen PC tatsächlich beurteilt sein. Fehlende schwächere/Mobilgeräte bleiben ausdrücklich offen; ihre Leistungsziele werden dadurch nicht abgesenkt. Gerät, Datum, Beobachtung und Beleg gehören in `PROGRESS-LOG.md`; daraus folgende Änderungen werden als einzelne M2-Korrekturen geplant.
 
 **Zwischenstand M2a, 03.10.2026:** Steuerbares Test-Kart, begrenzte Fläche, getrennte Fahrzustands-/Darstellungs-/Kamerabausteine, Browserprüfung und gezielte Modelltests vorhanden. Hop, Drift und Mini-Turbo waren zu diesem Zeitpunkt noch offen und wurden in M2b ergänzt. Federung, drei echte Kameras, sechs Fahrzeuge und Lastmessung fehlen weiterhin.
 

@@ -34,6 +34,7 @@ export class KartAudio {
   readonly spoken: string[] = [];
   get voiceCount(): number { return this.voices.size; }
   private loading = false;
+  private lastHorn = -Infinity;
   private readonly music = new Audio('/assets/audio/fig-leaf-rag.mp3');
   private musicVolume=.14;
   enabled = true;
@@ -78,14 +79,14 @@ export class KartAudio {
       for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 3.2) * (i < 240 ? i / 240 : 1);
     }
     hall.buffer = impulse;
-    const hallReturn = context.createGain(); hallReturn.gain.value = .32; hall.connect(hallReturn); hallReturn.connect(master);
-    const high = context.createBiquadFilter(); high.type = 'highpass'; high.frequency.value = 320;
-    const low = context.createBiquadFilter(); low.type = 'lowpass'; low.frequency.value = 3800;
+    const hallReturn = context.createGain(); hallReturn.gain.value = .12; hall.connect(hallReturn); hallReturn.connect(master);
+    const high = context.createBiquadFilter(); high.type = 'highpass'; high.frequency.value = 120;
+    const low = context.createBiquadFilter(); low.type = 'lowpass'; low.frequency.value = 8500;
     const drive = context.createWaveShaper(); const curve = new Float32Array(256);
-    for (let i = 0; i < 256; i++) { const x = i / 127.5 - 1; curve[i] = Math.tanh(x * 1.8) / Math.tanh(1.8); }
+    for (let i = 0; i < 256; i++) { const x = i / 127.5 - 1; curve[i] = Math.tanh(x * 1.05) / Math.tanh(1.05); }
     drive.curve = curve;
-    const pa = context.createGain(); pa.gain.value = 1.35;
-    const slap = context.createDelay(); slap.delayTime.value = .17; const slapGain = context.createGain(); slapGain.gain.value = .22;
+    const pa = context.createGain(); pa.gain.value = 1.1;
+    const slap = context.createDelay(); slap.delayTime.value = .065; const slapGain = context.createGain(); slapGain.gain.value = .08;
     high.connect(low); low.connect(drive); drive.connect(pa); pa.connect(master); pa.connect(hall); pa.connect(slap); slap.connect(slapGain); slapGain.connect(master);
     this.announcerBus = high;
     const room = context.createGain(); room.gain.value = 1.15; const roomSend = context.createGain(); roomSend.gain.value = .12;
@@ -116,6 +117,13 @@ export class KartAudio {
   setMusicVolume(volume:number):void {this.musicVolume=Math.max(0,Math.min(1,volume));this.music.volume=this.musicVolume;}
   itemEvent(kind:'pickup'|'launch'|'hit'):void { this.play(kind==='pickup'?this.pickup:kind==='launch'?this.launch:this.impact,.65); }
   dogBark():void { this.play(this.bark,.85); }
+  /** Original temporary parody, not an authentic historical recording. No key-repeat spam. */
+  honk(prefix:string,rate=1):boolean {
+    if(!this.context || this.context.currentTime-this.lastHorn<2.5)return false;
+    const played=this.voice(`${prefix}-horn`,{channel:'driver',rate,volume:1.1});
+    if(played)this.lastHorn=this.context.currentTime;
+    return played;
+  }
   cue(kind:'countdown'|'start'|'lap'|'finish'):void { this.play(this.cues.get(kind),.65); }
   dispose():void {this.music.pause();this.music.src='';void this.context?.close();this.context=undefined;}
   /** crowdNearness 0..1: how close the player is to the grandstands. */

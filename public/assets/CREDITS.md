@@ -39,3 +39,9 @@ GLB-Optimierung: glTF Transform SDK 4.5.1 (MIT, https://gltf-transform.dev/ ) un
 | `audio/voice/*.wav`, `audio/voice/lines.json` | Offline mit Piper TTS 2023.11.14-2 (https://github.com/rhasspy/piper , MIT) synthetisiert. Stimmen aus https://huggingface.co/rhasspy/piper-voices (Repository MIT): `de_DE-kerstin-low` (Datensatz CC0, https://github.com/rhasspy/dataset-voice-kerstin), `de_DE-thorsten_emotional-medium` (Thorsten-Voice, CC0, https://github.com/thorstenMueller/Thorsten-Voice). | Eigene satirische Texte, keine historischen Zitate oder Personen. Reproduzierbar mit `art-source/build_voices.mjs`. Im Spiel: Stadion-Lautsprecherkette (Band, Sättigung, Hall) für die Sprecherin; Tonhöhe je Figur. Hörqualität nicht menschlich abgenommen. |
 | `audio/crowd.wav`, `audio/scrape.wav` | Originale deterministische Klänge aus `art-source/build_audio.mjs`. | Publikumsteppich (Schleife) und metallisches Bandenschleifen. |
 
+
+## Neue Straßenmöbel
+
+Litfaßsäulen, Plakattexte/-grafiken, Bänke, Haltestellen und eigenständiger Adler: originale editierbare Projektgeometrie und Canvas-Typografie in src/period-details.ts. Keine historischen Embleme oder fremden Bilder verwendet.
+
+Sprachupdate: eigene freundliche kurze Sprechertexte und sechs eigene Parodie-Sprachhupen, offline Piper, unveränderte Nutzungsgrundlagen oben. WAV-Peak .8, reduzierter Lautsprecherhall/Drive. Keine historischen Mitschnitte übernommen; Yle-/NARA-Recherche ohne festgestellte freie Spielfreigabe, siehe PROGRESS-LOG.md.

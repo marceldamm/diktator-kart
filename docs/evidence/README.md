@@ -51,3 +51,7 @@ JSON: `slice-production-race-rtx-q2.json` (Rennen, Revanche, Framefenster), `sli
 `slice-final-race-rtx.json`: früherer Architekturpass v11 mit korrekten Drawcalls, aber noch vor letzter Schatten-/Ready-Korrektur. `slice-full-race-rtx.json`: älterer Lauf; damalige Drawcalls waren kumuliert und dürfen nicht als pro-Frame-Werte verwendet werden. Diese historischen Dateien bleiben erhalten.
 
 Ein 60-FPS-F3-Standbild ersetzt keinen Kaltlauf. RTX, Headless und Touch-Emulation ersetzen keine normale/schwache PC-, Android-, iPhone-, Hör- oder menschliche Komfortabnahme. G–L bleibt ein wesentlich höheres Qualitätsziel.
+
+## Fahrtest-Ergänzungen und Teamablauf – 03.10.2026
+
+Aktueller technischer Nachweis in [PROGRESS-LOG.md](../../PROGRESS-LOG.md). mouse-camera-final-check.json und drive-polish-check.json belegen Maus/Drift/Radkontakt; shepherd-browser-check.json die bestehenden Itemtreffer mit Hundendarstellung. shepherd-art-inspection-v1.png zeigt das eigene stilisierte Hundemodell in der tatsächlichen pausierten Sechskart-Welt mit QA-Platzierung/Inspektionskamera. period-boulevard-v1.png/period-eagle-v1.png sind entsprechende Artinspektionen der zusätzlichen Straßenmöbel. voice-horn-check.json belegt F-Abklingzeit/Clipdekodierung, keine Hörabnahme oder historische Mitschnitte. Keine schwache-PC-/Mobil-Abnahme.

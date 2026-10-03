@@ -8,7 +8,7 @@ Physik/Items/Rennen bleiben bei festem 1/60-s-Schritt. Darstellung von Kart/Bots
 
 Runtime lädt GLB mit exakt passendem Babylon-glTF-Loader 9.28.0. Ursprüngliche M2-Physik bleibt im Labor; der Slice nutzt dieselbe Eingabe/Integration mit eigener Streckenprojektion und Bodenhöhen. Rennfortschritt und Itemregeln sind unabhängig vom Renderer. Assetpivots werden im Spiel animiert; statische Kulisse nach Material gebündelt. Scene-/Engine-Instrumentierung erfasst CPU-, GPU- und echte Drawcall-Stichproben; temporäre Effekte haben feste Grenzen.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
 ## Festlegung
 

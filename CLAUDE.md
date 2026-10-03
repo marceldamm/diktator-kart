@@ -1,6 +1,6 @@
 # Verbindlicher Einstieg fuer Claude Code
 
-Lies vor jeder Aenderung `AGENTS.md`, `START-HERE.md`, `docs/17-progress-log.md` und fuer Git-Abgleich `docs/21-team-workflow.md`. Diese Dateien gelten auch fuer Claude.
+Lies vor jeder Aenderung `AGENTS.md`, `START-HERE.md`, `PROGRESS-LOG.md` und fuer Git-Abgleich `docs/21-team-workflow.md`. Diese Dateien gelten auch fuer Claude.
 
 Das aktive Spiel ist ausschliesslich der Babylon-Neustart im Repository-Hauptverzeichnis (`src/`, `public/`, `art-source/`, `project-state.json`). Der Stand vor der gemeinsamen Babylon-Hauptbasis sowie `Diktator-Kart-Legacy/`, `Legacy/`, `archive/*` und alte PlayCanvas-Checkouts sind unveraenderliche historische Referenzen. Dort nicht entwickeln, starten oder deren Engine-Code in das neue Spiel migrieren.
 

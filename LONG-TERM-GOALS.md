@@ -1,14 +1,18 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
+
+[Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
+
 Gemeinsamer Überblick für Marcel, Sarah und jede KI-Sitzung. Die kurzfristige [Aktuelle Arbeitsliste](CURRENT-WORKLIST.md) führt die laufende Umsetzung; diese Liste hält das Gesamtziel und die nächste sinnvolle Ausbaustufe sichtbar. Verbindliche Detailentscheidungen stehen in den verlinkten Fachdateien. Historische Zwischeneinträge sind keine aktuellen Arbeitsaufträge.
 
 ## So arbeiten wir damit
 
-- Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste und den kurzen [Änderungsverlauf](TEAM-CHANGES.md) lesen.
+- Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
 - Nach Abschluss der aktuellen Liste zwei oder drei passende nächste Pakete aus dieser Liste vorschlagen; ausdrücklich bereits beauftragte Ziele selbstständig fortsetzen. Neue Produktziele brauchen eine bewusste Priorisierung, keine heimliche Umfangserweiterung.
 - Ein gewähltes Paket mit sichtbarem Ergebnis und prüfbarer Abnahme nach CURRENT-WORKLIST.md übernehmen. Erst nach tatsächlicher Prüfung abhaken. Teilumsetzung, Nutzerabnahme und Geräteabnahme auseinanderhalten.
-- Details nicht mehrfach pflegen: Roadmap = Meilenstein-/Abnahmevertrag; diese Datei = gemeinsame Aufgabenübersicht; Log 17 = technische Belege; TEAM-CHANGES.md = wenige wichtige Änderungen für uns beide.
+- Details nicht mehrfach pflegen: Roadmap = Meilenstein-/Abnahmevertrag; diese Datei = gemeinsame Aufgabenübersicht; PROGRESS-LOG.md = technische Belege; TEAM-CHANGES.md = wenige wichtige Änderungen für uns beide.
 
 ## Leitbild und feste Grundlage
 

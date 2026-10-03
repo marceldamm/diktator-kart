@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-03T21:48:34.367Z",
+  "voices": 38,
+  "before": 0,
+  "held": 1,
+  "after": 2,
+  "clips": [
+    {
+      "id": "general",
+      "duration": 2.698770833333333,
+      "peak": 0.8022046089172363
+    },
+    {
+      "id": "marschall",
+      "duration": 2.524625,
+      "peak": 0.8002495765686035
+    },
+    {
+      "id": "imperator",
+      "duration": 2.3388541666666667,
+      "peak": 0.8062938451766968
+    },
+    {
+      "id": "kommandant",
+      "duration": 1.6628541666666667,
+      "peak": 0.80232834815979
+    },
+    {
+      "id": "diva",
+      "duration": 2.864,
+      "peak": 0.8059026002883911
+    },
+    {
+      "id": "admiralin",
+      "duration": 2.624,
+      "peak": 0.8173706531524658
+    }
+  ],
+  "errors": [],
+  "limitations": "Generated temporary parody, no authentic historical audio; pronunciation and pleasantness need human listening."
+}

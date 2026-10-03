@@ -1,5 +1,9 @@
 # Entscheidungslog
 
+## 03.10.2026 – Vier zentrale Arbeitsdateien und Kurzbefehle
+
+Auf ausdrücklichen Nutzerauftrag: CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md im Hauptordner. Gemeinsame Navigation und Anleitung für Marcel/Sarah; Projektstart/Projektabschluss reichen als alleinstehende KI-Befehle. Start öffnet vier App-Tabs soweit verfügbar. Technischer Verlauf nach PROGRESS-LOG.md umbenannt, alle aktiven Verweise und Git-/Testgates migriert. Benutzer-Notizen mit Herkunft erhalten und zu Aufgaben/Ergebnissen verknüpfen. Betroffen: AGENTS, START-HERE, README, Handbuch, Framework/Roadmap/Blueprint, Teamablauf, beide Repo-Skills, Marker und Git-Skript.
+
 ## 03.10.2026 – Realitätsnahe historische Fahrer statt fiktiver Ersatzfiguren
 
 Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar. Betroffen: README, docs02/09/10/14/17/23. Umsetzung noch ausstehend.

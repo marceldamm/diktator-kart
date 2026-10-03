@@ -1,12 +1,12 @@
 {
   "announcer-welcome": {
     "voice": "announcer",
-    "text": "Willkommen im Stadion der Eitelkeit! Sechs Fahrer, drei Runden, null Widerspruch.",
+    "text": "Hallo zusammen! Willkommen im Stadion der Eitelkeit. Sechs Fahrer, drei Runden. Viel Spaß!",
     "emotion": null
   },
   "announcer-grid": {
     "voice": "announcer",
-    "text": "Bitte nehmen Sie Ihre genehmigten Startplätze ein.",
+    "text": "Alle bereit? Dann ab an den Start!",
     "emotion": null
   },
   "announcer-3": {
@@ -26,42 +26,72 @@
   },
   "announcer-go": {
     "voice": "announcer",
-    "text": "Los! Der Antrag ist genehmigt!",
+    "text": "Los geht es! Gebt Gas!",
     "emotion": null
   },
   "announcer-lap2": {
     "voice": "announcer",
-    "text": "Zweite Runde. Jubel ist weiterhin Pflicht.",
+    "text": "Schon die zweite Runde! Weiter so!",
     "emotion": null
   },
   "announcer-final": {
     "voice": "announcer",
-    "text": "Letzte Runde! Bitte applaudieren Sie vorschriftsmäßig.",
+    "text": "Letzte Runde! Jetzt noch einmal alles geben!",
     "emotion": null
   },
   "announcer-lead": {
     "voice": "announcer",
-    "text": "Neue Führung! Die Geschichtsbücher werden bereits umgeschrieben.",
+    "text": "Da ist die neue Führung! Die Statistik wird schon korrigiert.",
     "emotion": null
   },
   "announcer-delivery": {
     "voice": "announcer",
-    "text": "Zustellung erfolgreich!",
+    "text": "Volltreffer! Die Post ist da.",
     "emotion": null
   },
   "announcer-stamp": {
     "voice": "announcer",
-    "text": "Stempelfalle! Antrag abgelehnt.",
+    "text": "Oh! Ein Stempel auf der Strecke.",
     "emotion": null
   },
   "announcer-win": {
     "voice": "announcer",
-    "text": "Sieg! Das Ergebnis stand selbstverständlich schon vorher fest.",
+    "text": "Geschafft! Herzlichen Glückwunsch. Ein Sieg ohne Sondererlaubnis!",
     "emotion": null
   },
   "announcer-finish": {
     "voice": "announcer",
-    "text": "Ziel erreicht. Ihre Platzierung wird nun geprüft.",
+    "text": "Und im Ziel! Schön, dass ihr dabei wart.",
+    "emotion": null
+  },
+  "general-horn": {
+    "voice": "male",
+    "text": "Platz da! Mein Antrag ist dringend!",
+    "emotion": "amused"
+  },
+  "marschall-horn": {
+    "voice": "male",
+    "text": "Zur Seite! Der Plan wartet nicht!",
+    "emotion": "neutral"
+  },
+  "imperator-horn": {
+    "voice": "male",
+    "text": "Achtung! Mein Lorbeer hat Vorfahrt!",
+    "emotion": "amused"
+  },
+  "kommandant-horn": {
+    "voice": "male",
+    "text": "Bitte den Weg frei stempeln!",
+    "emotion": "neutral"
+  },
+  "diva-horn": {
+    "voice": "female",
+    "text": "Hallo! Der rote Teppich ist zu schmal!",
+    "emotion": null
+  },
+  "admiralin-horn": {
+    "voice": "female",
+    "text": "Aus dem Weg! Volle Kraft voraus!",
     "emotion": null
   },
   "general-hit": {

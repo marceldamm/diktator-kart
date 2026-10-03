@@ -1,10 +1,10 @@
 # Gemeinsamer Arbeitsablauf fuer Marcel und Sarah
 
-## Unsere drei Arbeitsdateien
+## Unsere vier Arbeitsdateien
 
-Beim KI-Befehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md als drei Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
+Beim KI-Kurzbefehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md als vier Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
 
-Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 Verbindlich seit 03.10.2026, ausdruecklicher Nutzerauftrag. Ziel: dieselbe neue Babylon-Hauptbasis, sichere Zusammenarbeit und KI-Hilfe bei Git-Konflikten.
 
@@ -48,7 +48,7 @@ Die Batch `Projekt-starten.cmd` erledigt den einfachen Fall. Bei ungesicherten D
 
 ## Was beim Projektabschluss passiert
 
-1. Arbeitsdiff pruefen, notwendige Tests/Browserprobe machen, beobachtete Ergebnisse dokumentieren. `docs/17-progress-log.md` muss Ergebnisse, Annahmen, betroffene Dateien, Probleme und naechsten Schritt enthalten. Neue Quellen/Lizenzen dokumentieren.
+1. Arbeitsdiff pruefen, notwendige Tests/Browserprobe machen, beobachtete Ergebnisse dokumentieren. `PROGRESS-LOG.md` muss Ergebnisse, Annahmen, betroffene Dateien, Probleme und naechsten Schritt enthalten. Neue Quellen/Lizenzen dokumentieren.
 2. Funktionierenden lokalen Commit erstellen; alle benoetigten Laufzeitassets und editierbaren Quellen einschliessen, keine .tools/node_modules/Worktrees oder Zugangsdaten.
 3. Aktuellen main erneut holen und Aenderungen der anderen Person integrieren. Nach Konfliktloesung Tests erneut pruefen. Der Hauptstand bleibt bis zum erfolgreichen Abschluss erhalten.
 4. `scripts/team-workflow.ps1 -Action Finish`: Sicherungsbranch, normaler Merge, Unit-Tests und Produktionsbuild. Arbeitsbranch auf GitHub sichern; dann **normaler Fast-Forward-Push** nach main. Kein Force-Push.

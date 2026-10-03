@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import {writeFile} from 'node:fs/promises';
+import{send,evaluate,load,delay,key,tap,socket,errors}from'./cdp.mjs';
+await send('Runtime.enable');await send('Page.bringToFront');await load();
+const button=await evaluate(`(()=>{const r=document.querySelector('#menu-practice').getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()`);
+await send('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...button});
+await send('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...button});
+for(let i=0;i<80&&await evaluate(`window.__DK.voices`)<38;i++)await delay(250);
+const voices=await evaluate(`window.__DK.voices`);assert.ok(voices>=38,'all optional clips loaded');
+await delay(4500);
+const before=await evaluate(`window.__DK.spoken.filter(id=>id==='general-horn').length`);
+await key('keyDown','f','KeyF',70);await delay(180);
+for(let i=0;i<3;i++)await key('keyDown','f','KeyF',70);
+await delay(350);await key('keyUp','f','KeyF',70);await tap('f','KeyF',70);
+const held=await evaluate(`window.__DK.spoken.filter(id=>id==='general-horn').length`);assert.equal(held,before+1,'hold/repeat/cooldown gives one horn');
+await delay(5500);await tap('f','KeyF',70);
+const after=await evaluate(`window.__DK.spoken.filter(id=>id==='general-horn').length`);assert.equal(after,before+2,'new press after cooldown works');
+await tap('p','KeyP',80);await tap('f','KeyF',70);assert.equal(await evaluate(`window.__DK.spoken.filter(id=>id==='general-horn').length`),after,'pause does not honk');
+const clips=await evaluate(`(async()=>{const ctx=new AudioContext(),ids=['general','marschall','imperator','kommandant','diva','admiralin'];const result=[];for(const id of ids){const b=await ctx.decodeAudioData(await(await fetch('/assets/audio/voice/'+id+'-horn.wav')).arrayBuffer());let peak=0;for(const x of b.getChannelData(0))peak=Math.max(peak,Math.abs(x));result.push({id,duration:b.duration,peak});}await ctx.close();return result;})()`);
+assert.ok(clips.every(c=>c.duration>1&&c.duration<7&&c.peak>0&&c.peak<=1));assert.equal(errors.length,0);
+await writeFile('docs/evidence/voice-horn-check.json',JSON.stringify({date:new Date().toISOString(),voices,before,held,after,clips,errors,limitations:'Generated temporary parody, no authentic historical audio; pronunciation and pleasantness need human listening.'},null,2));
+console.log(JSON.stringify({voices,before,held,after,clips,errors}));socket.close();
+

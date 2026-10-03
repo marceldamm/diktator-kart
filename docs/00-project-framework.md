@@ -1,8 +1,8 @@
 # Gesamtgerüst und zentrale Arbeitsgrundlage
 
-## Unsere drei Arbeitsdateien
+## Unsere vier Arbeitsdateien
 
-Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 ## Gemeinsame Hauptbasis – 03.10.2026
 
@@ -13,7 +13,7 @@ Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q
 
 Der ausdrückliche große Nutzerauftrag erlaubt einen neutralen, vorgezogenen Vertical Slice auf `codex/stadium-vertical-slice`: Blender-Kart/Fahrerplatzhalter, fiktive Architektur, kompletter 441-m-Kurs und Drei-Runden-Schleife. Diese Produktion ersetzt weder den historischen Startkader noch gemeinsame Stil-, Inhalts- oder Zielhardware-Abnahme. Lokale Commits, kein Push/Merge; `main` und Altarchive unverändert.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
 ## Zweck
 
@@ -88,7 +88,7 @@ Alte Technik ist keine Autorität für die neue Architektur.
 - M3-Vorbereitung: Mussolini/Il Duce GT ist in Dokument 14 als erster Art-Pilot vorgeschlagen, nicht ausgewählt; M2-Abnahme und gemeinsame Stilprüfung bleiben vorgelagert
 - Sichtbarer Zwischenstand: eine neutrale Babylon-Vorplatz-Stilskizze nutzt den bestätigten G–L-Stilraum als Ziel, erfüllt ihn aber noch nicht; `?world=lab` erhält die reproduzierbare M2-Testumgebung. Fahrer-/Streckenwahl und M2-Abnahme bleiben offen
 - Erste Strecke: Dokument 01 enthält einen quellenbasierten Vorschlag für eine fiktive Stadion-/Boulevardroute; Landmarken, Zeitbild, Zeichen und Layout sind nicht beschlossen
-- Laufende Historie: in `17-progress-log.md`
+- Laufende Historie: in `PROGRESS-LOG.md`
 - Nächster Arbeitsschritt innerhalb M2: Fahrgefühl, Kamerakomfort und Kontaktreaktionen durch einen Menschen sowie Leistung auf normalem/schwachem PC und Mobilgeräten prüfen; die Headless-RTX-Probe ist keine Zielhardware-Abnahme
 
 ## Definition eines „fertigen“ Arbeitsstands

@@ -1,5 +1,9 @@
 # Fortschrittslog und globale Projekthistorie
 
+**Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
+
+[Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
+
 ## Aktueller globaler Stand – 03.10.2026
 
 ### Verifiziert
@@ -163,7 +167,7 @@
 
 **Nicht verifiziert:** WebGL1-Fallback, Windows-Doppelklick durch einen zweiten Nutzer, Verhalten auf schwachem PC/Android/iPhone, tatsächliche Ziel-FPS und Ladezeitbudget, Fahrsimulation und Touch. FPS aus dem In-App-Browser sind keine Zielhardware-Messung.
 
-**Geänderte Dateien:** `package.json`, `package-lock.json`, `tsconfig.json`, `index.html`, `src/input.ts`, `src/scene.ts`, `src/main.ts`, `src/style.css`, `public/assets/manifest.json`, `Diktator-Kart-starten.cmd`, `scripts/start-local.ps1`, `.gitignore`, `docs/evidence/m1-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/09-roadmap.md`, `docs/10-open-questions.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`, `docs/18-work-environment-and-operations.md`, `docs/19-ui-settings-and-save.md`, `docs/20-first-evening-runbook.md`.
+**Geänderte Dateien:** `package.json`, `package-lock.json`, `tsconfig.json`, `index.html`, `src/input.ts`, `src/scene.ts`, `src/main.ts`, `src/style.css`, `public/assets/manifest.json`, `Diktator-Kart-starten.cmd`, `scripts/start-local.ps1`, `.gitignore`, `docs/evidence/m1-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/09-roadmap.md`, `docs/10-open-questions.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`, `docs/18-work-environment-and-operations.md`, `docs/19-ui-settings-and-save.md`, `docs/20-first-evening-runbook.md`.
 
 **Neue Entscheidungen:** exakte lokale Paketversionen, WebGL2 mit Engine-Start-Fallback auf WebGL1, noch keine Physikbibliothek, versioniertes Asset-Manifest, gemeinsame Eingabeaktionen und vorläufige C/E/Q-Belegung; Begründungen in Dokument 03 und 12.
 
@@ -185,7 +189,7 @@
 
 **Nicht verifiziert:** subjektives Fahrgefühl bei längerer manueller Fahrt durch Nutzer, kontrollierte FPS/Ladezeit auf normalem PC, schwachem PC und Mobilgeräten, echtes Kollisionsmodell, Federung, Hop, Drift, Mini-Turbo und drei vollständige Kameramodi. Die beobachteten rund 20–30 FPS des In-App-Browsers sind kein Zielhardware-Benchmark.
 
-**Geänderte Dateien:** `src/kart-model.ts`, `src/camera.ts`, `src/scene.ts`, `src/main.ts`, `src/input.ts`, `src/style.css`, `index.html`, `public/assets/manifest.json`, `tests/kart-model.test.mjs`, `tests/input.test.mjs`, `package.json`, `docs/evidence/m2-fahrtest-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+**Geänderte Dateien:** `src/kart-model.ts`, `src/camera.ts`, `src/scene.ts`, `src/main.ts`, `src/input.ts`, `src/style.css`, `index.html`, `public/assets/manifest.json`, `tests/kart-model.test.mjs`, `tests/input.test.mjs`, `package.json`, `docs/evidence/m2-fahrtest-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`.
 
 **Neue Entscheidungen:** eigener Fahrkern mit vorläufigen Beschleunigungs-, Brems-, Geschwindigkeits- und Lenkgrenzen; feste Simulation; vorläufige Rasterfläche und zwei Test-Verfolgerabstände. Begründung und Zahlen in Dokument 03/12. Keine Änderung an Sarahs Ideen oder den bestätigten 15 Grundsatzentscheidungen.
 
@@ -207,7 +211,7 @@
 
 **Nicht verifiziert:** subjektives Fahrgefühl über längere manuelle Fahrt, Balance der vorläufigen Werte, reale Performance auf normalem/schwachem PC und Mobilgeräten, Federung, Untergründe, echte Hinderniskollisionen, drei vollständige Spielkameras und Lastmessung mit sechs Fahrzeugen. Die Screenshot-/Browsertestwerte sind keine Zielhardware-FPS-Messung.
 
-**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `src/style.css`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, `package.json`, drei `docs/evidence/m2b-*-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `src/style.css`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, `package.json`, drei `docs/evidence/m2b-*-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`.
 
 **Neue Entscheidungen:** vorläufiger 0,42-s-Hop bis 0,6 m; Drift ab 5 m/s nach Landung, mindestens 0,7 s gleichgerichtete Ladung; 1,2 s Turbo mit 4 m/s Sofortbonus und 20 m/s Obergrenze. Begründung und Zustandsregeln in Dokument 03 und 12. Keine Änderung an Sarahs Ideen oder den bestätigten 15 Grundsatzentscheidungen.
 
@@ -229,7 +233,7 @@
 
 **Nicht verifiziert:** subjektives Fahrgefühl bei längerer manueller Fahrt, echte Hardware-FPS auf normalem/schwachem PC oder Mobilgeräten, GPU-Zeit/Drawcalls/Speicher/Ladezeit, Cockpitqualität, Kamera bei Wandkontakt, Touch, reale Reifen-/Gripwirkung, Kollision unter Karts und Botverhalten. Die 60 FPS im Headless-Test sind keine Zielhardware-Abnahme. Der minifizierte Haupteinstieg liegt bei rund 1,021 MB (249 kB gzip) und löst weiter die Vite-Größenwarnung aus. Die vorläufigen Bodenwellen und Federungswerte sind keine Balanceentscheidung.
 
-**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/camera.ts`, `src/main.ts`, `src/style.css`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, neue `docs/evidence/m2c-*`, `m2d-*`, `m2e-*`, sowie `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/02-art-direction.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. Dokument 10 wurde auf Abhängigkeiten geprüft; seine offene Aufgabe zu Kamera-/Touch-Abnahme bleibt korrekt offen.
+**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/camera.ts`, `src/main.ts`, `src/style.css`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, neue `docs/evidence/m2c-*`, `m2d-*`, `m2e-*`, sowie `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/02-art-direction.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`. Dokument 10 wurde auf Abhängigkeiten geprüft; seine offene Aufgabe zu Kamera-/Touch-Abnahme bleibt korrekt offen.
 
 **Neue Entscheidungen:** vorläufige Bodenwellen- und Federungsparameter, drei technische Kamerapositionen mit gedämpfter Fahrerperspektive und ein 1-/6-Fahrzeug-Vergleichspfad; Begründungen in Dokument 03 und 12. Keine Änderung an Sarahs Ideen oder den 15 bestätigten Grundsatzentscheidungen.
 
@@ -251,7 +255,7 @@
 
 **Nicht verifiziert:** längere manuelle Fahrgefühlprüfung, kontrollierte Messung auf normalem/schwachem Ziel-PC und Mobilgeräten, GPU-Zeit/Drawcalls/Speicher/Ladezeit, Kamerakomfort bei echten Kollisionen, Bots bei Randkontakt, gegenseitige Fahrzeug- und Streckenkollision. Der Randstoß ist ein vorläufiger Testflächenmechanismus, kein allgemeines Kollisionssystem.
 
-**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, `docs/evidence/m2f-randkontakt-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, `docs/evidence/m2f-randkontakt-chrome.png`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`.
 
 **Neue Entscheidungen:** vorläufig 0,22 s Gasunterbrechung und höchstens 2,5 m/s Rückstoß; begründet als lesbares Arcade-Feedback, nicht als realistische Kollisionsphysik. Dokument 03/12 aktualisiert. Keine Änderung der bestätigten Designentscheidungen.
 
@@ -275,7 +279,7 @@
 
 **Nicht verifiziert:** menschliches Fahrgefühl, interaktive Kameraruhe, normale/schwächere PCs, Android/iPhone, GPU-Zeit, Drawcalls, Ladezeit und Speicher sowie fertige Fahrzeug-/Streckenlast. Das 60-Hz-Limit verhindert eine Aussage zu Leistungsreserven. Der Headless-Test prüft einen echten NVIDIA-Grafikpfad, aber keine menschliche Bedienung.
 
-**Geänderte Dateien:** `tests/browser-endurance.mjs`, `package.json`, `docs/evidence/m2f-rtx-endurance.json`, `README.md`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+**Geänderte Dateien:** `tests/browser-endurance.mjs`, `package.json`, `docs/evidence/m2f-rtx-endurance.json`, `README.md`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`.
 
 **Neue Entscheidungen:** 300 aufeinanderfolgende Frames pro 1-/6-Kart- und Kamera-Kombination als wiederholbare M2-Messmethode; Dokument 12 enthält die Begründung. Keine Veränderung der Ziel-FPS oder des Umfangs.
 
@@ -297,7 +301,7 @@
 
 **Nicht verifiziert:** menschliches Fahrgefühl und Kamerakomfort, Leistung auf normalem/schwachem PC und Android/iPhone, GPU-Zeit/Drawcalls/Speicher/Ladezeit, fertige Kart-/Streckenlast, komplexe Mehrfach- und Streckenwandkollision, vertikale Überfahrten, Schaden und Renn-KI. Die RTX-Messungen reichen für keine M2-Gesamtabnahme. Die Vite-Warnung für den rund 1,024-MB-Haupteinstieg bleibt bestehen.
 
-**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, neues `tests/browser-endurance.mjs`, `package.json`, neue M2g/h-Browserbilder und neue `m2f-rtx-endurance.json`, `m2g-rtx-endurance.json`, `m2h-rtx-endurance.json` in `docs/evidence/`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. Ältere Screenshots wurden auf ihrem Commit-Stand belassen; erneutes Schreiben verlangt `UPDATE_EVIDENCE=1`. Dokument 10 wurde auf Abhängigkeiten geprüft; die dort offenen Geräte- und Komfortfragen bleiben korrekt offen.
+**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, neues `tests/browser-endurance.mjs`, `package.json`, neue M2g/h-Browserbilder und neue `m2f-rtx-endurance.json`, `m2g-rtx-endurance.json`, `m2h-rtx-endurance.json` in `docs/evidence/`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`. Ältere Screenshots wurden auf ihrem Commit-Stand belassen; erneutes Schreiben verlangt `UPDATE_EVIDENCE=1`. Dokument 10 wurde auf Abhängigkeiten geprüft; die dort offenen Geräte- und Komfortfragen bleiben korrekt offen.
 
 **Neue Entscheidungen:** vorläufige Kreis-/Rechteck- und Kreis-/Kreis-Kontakte mit gleichem Rückstoß für Spieler und Lastkarts; Begründungen in Dokument 03 und 12. Keine Änderung an Sarahs Ideen, bestätigten 15 Grundsatzentscheidungen oder Performancezielen.
 
@@ -319,7 +323,7 @@
 
 **Nicht verifiziert:** automatische Umschaltung bei echtem WebGL2-Startfehler, Shader-/Leistungskompatibilität auf älteren oder schwachen GPUs, Mobile, menschliches Fahrgefühl.
 
-**Geänderte Dateien:** `src/main.ts`, `tests/browser-smoke.mjs`, `docs/evidence/m2i-webgl1-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+**Geänderte Dateien:** `src/main.ts`, `tests/browser-smoke.mjs`, `docs/evidence/m2i-webgl1-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`.
 
 **Neue Entscheidungen:** Nur der Testparameter `?webgl=1`; der WebGL2-Vorrang und M1-Fallback bleiben unverändert.
 
@@ -341,7 +345,7 @@
 
 **Nicht verifiziert:** extreme, überbestimmte Mehrfachkontakte außerhalb des geprüften Pfads, vollständige Streckenwände, echte Zielhardware, menschliche Fahr-/Kamerabewertung und fertige Spielgrafik.
 
-**Geänderte Dateien:** `src/kart-model.ts`, `tests/kart-model.test.mjs`, `docs/evidence/m2j-rtx-endurance.json`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Grundpfeiler-/Abnahmefolgen geprüft; ihre Aussagen bleiben passend.
+**Geänderte Dateien:** `src/kart-model.ts`, `tests/kart-model.test.mjs`, `docs/evidence/m2j-rtx-endurance.json`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`. README, Dokument 00 und 10 wurden auf Grundpfeiler-/Abnahmefolgen geprüft; ihre Aussagen bleiben passend.
 
 **Neue Entscheidungen:** bis zu vier gemeinsame Positionsdurchläufe als vorläufige M2-Korrektur; Begründung in Dokument 03 und 12. Keine Änderung an Sarahs Ideen oder den bestätigten Grundsatzentscheidungen.
 
@@ -363,7 +367,7 @@
 
 **Nicht verifiziert:** menschliche Bewertung von Fahrgefühl und Kamerakomfort, normale/schwächere PC-Leistung und mobile Start-/Eingabeprüfung. Kein M2-Abnahmehaken wurde für diese Punkte gesetzt.
 
-**Geänderte Dateien:** `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/12-decision-log.md`, `docs/17-progress-log.md`.
+**Geänderte Dateien:** `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/12-decision-log.md`, `PROGRESS-LOG.md`.
 
 **Neue Entscheidungen:** getrennte, belegpflichtige M2-Abnahmefelder; Begründung in Dokument 12. Keine Senkung der FPS-Ziele und keine Vorverlegung der vollständigen Mobilabnahme aus M7.
 
@@ -385,7 +389,7 @@
 
 **Nicht verifiziert:** Kameraruhe im Zeitverlauf, Komfort bei echter Bedienung, Wandkontakt außerhalb der Testfläche, fertige Cockpitqualität und Zielhardwareleistung. Der kurze Browserlauf war keine neue kontrollierte Lastmessung.
 
-**Geänderte Dateien:** `tests/browser-smoke.mjs`, zwei neue M2k-Bilder in `docs/evidence/`, `START-HERE.md`, `docs/02-art-direction.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Abnahmefolgen geprüft; Grundpfeiler bleiben unverändert.
+**Geänderte Dateien:** `tests/browser-smoke.mjs`, zwei neue M2k-Bilder in `docs/evidence/`, `START-HERE.md`, `docs/02-art-direction.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`. README, Dokument 00 und 10 wurden auf Abnahmefolgen geprüft; Grundpfeiler bleiben unverändert.
 
 **Neue Entscheidungen:** keine; nur zusätzlicher technischer Sichtbeleg für die bereits bestätigten drei Kameras.
 
@@ -407,7 +411,7 @@
 
 **Nicht verifiziert:** F3-Messung auf normalem/schwachem PC oder Mobile, GPU-Zeit/Drawcalls/Speicher und die Leistungsfähigkeit fertiger Assets. `WEBGL_debug_renderer_info` kann auf anderen Browsern fehlen; dann steht „nicht verfügbar“. Eine lesende Windows-Grafikinventur meldete auf dem Entwicklungsgerät nur die RTX 3070 Laptop GPU; ein separater integrierter/älterer GPU-Testpfad steht hier nicht bereit.
 
-**Geänderte Dateien:** `src/main.ts`, `src/style.css`, `tests/browser-smoke.mjs`, `docs/evidence/m2l-f3-diagnose-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/19-ui-settings-and-save.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Abhängigkeiten geprüft; Grundpfeiler bleiben unverändert.
+**Geänderte Dateien:** `src/main.ts`, `src/style.css`, `tests/browser-smoke.mjs`, `docs/evidence/m2l-f3-diagnose-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/19-ui-settings-and-save.md`, `PROGRESS-LOG.md`. README, Dokument 00 und 10 wurden auf Abhängigkeiten geprüft; Grundpfeiler bleiben unverändert.
 
 **Neue Entscheidungen:** 300 sichtbare Frames als gleitendes lokales Diagnosefenster; Begründung in Dokument 12. Die bisherige CDP-Rohdatenprobe bleibt getrennt.
 
@@ -429,7 +433,7 @@
 
 **Nicht verifiziert:** persönliche Urheberschaft einzelner Sarah-Ideen, endgültige Fahrerwahl, historische Bildreferenzen/Lizenzen, Material-/Modellqualität, Laufzeitkosten und Stilwirkung aus echten Spielkameras.
 
-**Geänderte Dateien:** `docs/14-character-and-item-catalog.md`, `docs/10-open-questions.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/00-project-framework.md`, `README.md`, `START-HERE.md`, `docs/17-progress-log.md`. Dokumente 02, 05 und 13 wurden für Stil, Assetpipeline und Inhaltsgrenzen geprüft; keine Grundpfeiler geändert.
+**Geänderte Dateien:** `docs/14-character-and-item-catalog.md`, `docs/10-open-questions.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/00-project-framework.md`, `README.md`, `START-HERE.md`, `PROGRESS-LOG.md`. Dokumente 02, 05 und 13 wurden für Stil, Assetpipeline und Inhaltsgrenzen geprüft; keine Grundpfeiler geändert.
 
 **Neue Entscheidungen:** keine. Mussolini/Il Duce GT ist ausdrücklich ein Vorschlag; alle sechs bestätigten Fahrer und Sarahs Altideen bleiben unangetastet.
 
@@ -451,7 +455,7 @@
 
 **Nicht verifiziert:** endgültiges Zeitbild, Landmarken-/Symbolwahl, Abkürzungssicherheit, Route/Fahrdauer, Assetrechte, Stilwirkung in Babylon und historische Genauigkeit einer späteren konkreten Szene. Es wurde keine Strecke gebaut oder abgenommen.
 
-**Geänderte Dateien:** `docs/01-game-design.md`, `docs/10-open-questions.md`, `docs/13-world-and-content-boundaries.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/00-project-framework.md`, `README.md`, `START-HERE.md`, `docs/17-progress-log.md`. Dokumente 02, 05 und 11 wurden auf Abhängigkeiten geprüft. Dokument 12 braucht keinen neuen Entscheidungseintrag, da nur ein Vorschlag vorliegt.
+**Geänderte Dateien:** `docs/01-game-design.md`, `docs/10-open-questions.md`, `docs/13-world-and-content-boundaries.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/00-project-framework.md`, `README.md`, `START-HERE.md`, `PROGRESS-LOG.md`. Dokumente 02, 05 und 11 wurden auf Abhängigkeiten geprüft. Dokument 12 braucht keinen neuen Entscheidungseintrag, da nur ein Vorschlag vorliegt.
 
 **Neue Entscheidungen:** keine. Die bestätigte Berlin-/Stadionrichtung, Inhaltsgrenzen und Reihenfolge M2 → M3 → M4 bleiben unverändert.
 
@@ -473,7 +477,7 @@
 
 **Nicht verifiziert:** Fahrgefühl von Hop, geladenem Drift und Turbo; Komfort in jedem der drei Kameramodi unter Kurve/Hop/Kontakt; getrennte Bewertung von Rand-, Block- und Fahrzeugstoß; kontrollierte F3-Fahrtmessung; Leistung auf normalem/schwachem PC und Mobilgeräten. Der vorbereitete WebGL2-Ausfalltest wurde noch nicht ausgeführt. Chrome-Version und genaue Testdauer wurden nicht gemeldet.
 
-**Geänderte Dateien:** `tests/browser-smoke.mjs`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/17-progress-log.md`, `README.md`, `START-HERE.md` und neues Bild `docs/evidence/m2-human-f3-rtx-2026-10-03.png`. Dokument 10 und 16 wurden gegen die unveränderten Abnahmegrenzen geprüft.
+**Geänderte Dateien:** `tests/browser-smoke.mjs`, `docs/04-performance.md`, `docs/09-roadmap.md`, `PROGRESS-LOG.md`, `README.md`, `START-HERE.md` und neues Bild `docs/evidence/m2-human-f3-rtx-2026-10-03.png`. Dokument 10 und 16 wurden gegen die unveränderten Abnahmegrenzen geprüft.
 
 **Neue Entscheidungen:** keine Grundsatz- oder Balanceänderung; Rückwärtsgeschwindigkeit bleibt vorläufig.
 
@@ -575,7 +579,7 @@
 
 **Leistung / Grenzen:** Kontrollierter Produktions-Dreirundenlauf ohne parallelen Blender-Build oder Screenshots: RTX 3070 Laptop GPU, 1600 × 1000, 14 rAF-Fenster; erste Standard-P95 37,4/66,7/33,5 ms, später überwiegend 16,8–19,2 ms. Basis nach Revanche 18,2–18,4 ms. Keine Browserausnahme. Stabile 60 FPS ab Start nicht bestanden. Messung vor finalem Scene-Ready-Gate; dessen bessere Kaltlaufwerte sind nicht verifiziert. Produktions-Rennmessung slice-production-race-rtx.json teilweise durch Blender belastet, nur Funktionsbeleg. Frühere kumulierte Drawcalls ungültig als pro-Frame-Angaben. Hauptchunk 1.713 kB / 405 kB gzip bleibt zu groß. Kein schwacher PC, Android/iPhone, menschlicher Kamerakomfort oder Hörtest abgenommen.
 
-**Geänderte Dateien seit letztem Checkpoint:** art-source/build_props.py, stadium-props.blend und Laufzeit-GLB; scripts/start-local.ps1; src/main.ts und slice-scene.ts; Browser-/CDP-/Rennprüfungen sowie neue slice-feedback.mjs, slice-compatibility.mjs, slice-performance-loop.mjs. Aktuelle Bilder und Rohdaten; START-HERE.md, docs/02-art-direction.md, 04-performance.md, 17-progress-log.md, evidence/README.md und cloud-project-description.md. Frühere Asset-/Grundpfeileränderungen stehen in den vorangehenden Einträgen.
+**Geänderte Dateien seit letztem Checkpoint:** art-source/build_props.py, stadium-props.blend und Laufzeit-GLB; scripts/start-local.ps1; src/main.ts und slice-scene.ts; Browser-/CDP-/Rennprüfungen sowie neue slice-feedback.mjs, slice-compatibility.mjs, slice-performance-loop.mjs. Aktuelle Bilder und Rohdaten; START-HERE.md, docs/02-art-direction.md, 04-performance.md, PROGRESS-LOG.md, evidence/README.md und cloud-project-description.md. Frühere Asset-/Grundpfeileränderungen stehen in den vorangehenden Einträgen.
 
 **Annahmen / nicht verifiziert:** Gesicht/Zuschauer sind neutrale vorläufige Artassets, keine fertigen historischen Figuren. Satire-/Landmarkengestaltung keine gemeinsame historische Freigabe. Direkte Botprojektile verfehlten in beobachteten Rennen trotz Modell-Treffertest; menschliche Spielbalance offen. Audio läuft technisch, Qualität nicht angehört. Keine neue M2/M3/M4-Gesamtabnahme und kein behauptetes G–L-Ergebnis.
 
@@ -775,7 +779,7 @@
 
 **Auftrag / Umsetzung:** Marcel will eine aktuelle Liste, große Langzeitliste und kurzen elementaren Änderungsverlauf statt technischer Überdokumentation. docs23 weitergeführt, docs24 aus Roadmap/Grundpfeilern/Katalog und Nutzerwünschen erstellt, docs25 wenige Teamänderungen. Nachricht an Sarah mit beiden KI-Befehlen/Umstieg/Modellwahl direkt in docs23. Kein Versand.
 
-**Verankert:** AGENTS/START-HERE/README/Handbuch/Framework/Roadmap/Blueprint/Teamablauf und beide Repo-Skills. project-state nennt die drei Dateien; Git-Start/Finish zeigen sie an und prüfen beim neuen Marker ihre Existenz. KI liest/aktualisiert sie inhaltlich; Batch behauptet keine autonome kreative Konfliktlösung. Log 17 bleibt technische Belegquelle, TEAM-CHANGES.md kurz.
+**Verankert:** AGENTS/START-HERE/README/Handbuch/Framework/Roadmap/Blueprint/Teamablauf und beide Repo-Skills. project-state nennt die drei Dateien; Git-Start/Finish zeigen sie an und prüfen beim neuen Marker ihre Existenz. KI liest/aktualisiert sie inhaltlich; Batch behauptet keine autonome kreative Konfliktlösung. PROGRESS-LOG.md bleibt technische Belegquelle, TEAM-CHANGES.md kurz.
 
 **Verifiziert / Grenzen:** Modellhinweise mit offiziellen OpenAI-Seiten abgeglichen; Sol für qualitäts-/zeitbewusste Arbeit, Astra für schwierige Aufgaben, keine Ranglistengarantie. Beide Repo-Skills mit quick_validate validiert; neue Skriptregression besteht: fehlender Teamverlauf stoppt Veröffentlichung und erhält Remote-main. Die drei Dateien anschließend ohne Nummer in den Hauptordner verschoben, alle aktiven Verweise/Marker/Tests migriert. Öffnen als App-Tabs dreimal angefordert; Tool meldete queued, Anzeige beim Zurückkehren in diese Sitzung. Sarahs tatsächlicher PC/Account noch nicht getestet.
 
@@ -783,11 +787,31 @@
 
 **Umgesetzt:** Eigener schwarz-brauner Schäferhund in Blender mit spitzer Ohr-/Schnauzensilhouette, Fellflächen, Augen, Halsband, vier Beinpivots und Schwanz. Editierbare .blend, reproduzierbarer Erzeuger, optimiertes GLB 208.808 Bytes. Spieler direct/homing laufen mit Hundedarstellung am Boden; identische unveränderte Itemsimulation, Bots bisherige postalische Formen. Eigener .68-s-Doppelbelllaut, HUD/Hinweise, begrenzte Comic-Trefferwolke. Zwei feste Hundepools, keine Meshallocation beim Fahren.
 
-**Verifiziert:** TypeScript/Produktionsbuild bestanden. Eigener Chrome 9227, normale Welt/sechs Karts, kontrollierte Slots/Positionen: echtes E startet direct/homing, Hundeknoten laufen, bestehende Trefferlogik trifft gezielt auf Pfad positionierten Gegner, Meshzahl konstant; WAV per AudioContext dekodiert, Peak <1. Browserbeleg shepherd-browser-check.json. Keine angebliche menschliche Hör-/Modellrealismusabnahme. Früher direkter Test ohne kontrolliertes Ziel verfehlte bewegten Bot; das beweist keine garantierte Trefferquote. Screenshots stammen aus Spiel, normale Kameras zeigen Hund teils verdeckt/kurz; Nahprüfung folgt.
+**Verifiziert:** TypeScript/Produktionsbuild bestanden. Eigener Chrome 9227, normale Welt/sechs Karts, kontrollierte Slots/Positionen: echtes E startet direct/homing, Hundeknoten laufen, bestehende Trefferlogik trifft gezielt auf Pfad positionierten Gegner, Meshzahl konstant; WAV per AudioContext dekodiert, Peak <1. Browserbeleg shepherd-browser-check.json. Keine angebliche menschliche Hör-/Modellrealismusabnahme. Früher direkter Test ohne kontrolliertes Ziel verfehlte bewegten Bot; das beweist keine garantierte Trefferquote. Screenshots stammen aus Spiel, normale Kameras zeigen Hund teils verdeckt/kurz; Nahprüfung ergänzt: shepherd-art-inspection-v1.png zeigt den tatsächlichen laufzeitgerenderten eigenen Hund, pausierte normale Sechskart-Szene mit gezielter Prüfplatzierung/Inspektionskamera. Klar stilisierte Form; kein realitätsnahes Tiermodell behauptet.
 
 **Nutzerwunsch Sichtbarkeit:** Unsichtbaren eigenen Headless-Test-Chrome beendet, sichtbaren isolierten Chrome 9228 geöffnet. Nutzer kann nächste Tests dort verfolgen; bisheriger Nutzerspieltab unverändert.
 
 **Dateien / nächste Arbeit:** build_shepherd.py/blend/glb, Bell-Erzeuger/WAV, item-scene/audio/main, Manifest/Quellen/Browserbelege. Nächste Pakete: historische Atmosphäre/Adler, realistischer Fahrerpass, Sprache/F-Hupe.
+
+### 2026-10-03 – Straßenmöbel und zentrale Startdateien
+
+**Umgesetzt:** Zusätzliche editierbare Litfaßsäulen, originale Plakattypografie/Satire, Haltestellen, Bänke, eigenständiger Adler ohne Regimezeichen; fünf zusammengefasste Materialmeshes. Unveränderte Physikgrenzen. Nutzers Ergänzungen zur Sarah-Nachricht sprachlich geordnet; technischer Detailablauf bleibt docs/21-team-workflow.md, drei zentrale Arbeitslisten liegen im Hauptordner.
+
+**Verifiziert:** Sichtbarer Chrome 9228, normale Welt/sechs Karts; fünf neue Meshes mit Geometrie, keine Browserexceptions. Pausierte tatsächliche Spielszene mit gezielt positionierter Inspektionskamera fotografiert. Erste Bildprüfung zeigte spiegelverkehrte Plakate/verdeckt stehenden Adler; UV-Offset und Platzierung korrigiert, neue Bilder geprüft. Belege period-browser-check.json, period-boulevard-v1.png, period-eagle-v1.png. Build folgt mit Sprachpaket. Keine historische-/Geräteabnahme.
+
+**Offen / nächster Schritt:** Verständlichere Sprachmischung, F-Sprachhupe; realitätsnahe Fahrer bleiben offen.
+
+### 2026-10-03 – Vier-Dateien-Teamablauf und Sprachhupe
+
+**Nutzerauftrag:** Gemeinsame Anleitung/Notizen statt separater Sarah-Nachricht, vier zentrale Tabs, kurze KI-Befehle und Navigation, technische Fortschrittsdatei ohne Nummer. TEAM-NOTES.md enthält geordnete Anleitung für Marcel/Sarah und datierte Notizvorlage. CURRENT-WORKLIST.md auf lesbare Aufgaben/Status gekürzt; technische Belege bleiben hier. PROGRESS-LOG.md aus docs verschoben; aktive Markdownlinks, Skriptgates/Testfixtures und Skills migriert. Vier-Dateien-Pflicht in project-state/AGENTS/START-HERE/Framework/Roadmap/Blueprint/Teamablauf. Legacy unverändert.
+
+**Audio umgesetzt:** F-Eingabekante, 2,5-s-Abklingzeit plus vorhandene Sprachkanalbelegung, kein Hupen in Pause/Menü/Foto. Sechs kurze individuelle eigene synthetische Parodien. Kürzere/freundliche Sprechertexte; weniger Hall/Slap/Drive, größeres Sprachfrequenzband. Piper-WAVs auf .8 Peak normalisiert, damit Browser-Resampling/Mix Puffer behält. Windows-Dateizugriff kurz wiederholbar; erste Regeneration wurde dadurch ordentlich abgeschlossen.
+
+**Verifiziert:** Sichtbarer Chrome 9228: 38 Stimmen geladen; F-Halten/Keyrepeat/schnelle neue Betätigung ergibt einen Clip, nach Abklingzeit zweiten, Pause keinen. Alle sechs Hupeclips dekodiert, 1,66–2,86 s, Peak nach Resampling .80–.82. voice-horn-check.json. Erste Messung hatte durch Resampling Spitzen >1; Quelldateien mit Puffer neu generiert und Test wiederholt, keine Schwelle gelockert. Menschliche Hörabnahme bleibt offen; keine historische Authentizität behauptet. Produktionsbuild bestanden. Beide aktualisierten Repo-Skills mit quick_validate validiert. Alle vier Navigationsheader, lokale Links, Marker und Fortschrittsmigration geprüft. Teamgates folgen beim Abschluss.
+
+**Mitschnitt-Recherche:** Yle belegt das Hitler/Mannerheim-Gespräch 1942 (https://yle.fi/a/20-270673); die betrachtete Archivseite erteilt keine freie Spiellizenz. NARA weist bei Spezialmedien auf unterschiedliche Rechte und Nutzung außerhalb USA hin (https://www.archives.gov/research/motion-pictures/permissions). Keine fremden Tondateien importiert. Authentische harmlose Sprachhupen bleiben ein offener Quellen-/Rechteauftrag.
+
+**Dateien / Grenzen:** root TEAM-NOTES/PROGRESS-LOG und drei Arbeitsdateien, aktive Fachverweise, Skript/Skill/Testverträge; input/main/audio/voice-Erzeuger/WAVs/Index/Credits/Browsertest. Keine PC-Geräteabnahme, keine realitätsnahen Fahrer gebaut. Nächster Schritt Figuren-/Grafikpass nach geordnetem Abschluss.
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 

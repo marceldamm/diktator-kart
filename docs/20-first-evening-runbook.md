@@ -27,7 +27,7 @@ Globale Installationen werden vermieden, wenn eine projektlokale npm-Abhängigke
 
 ### Block 1 – 30 Minuten: Kontextaufnahme
 
-Lesen: `README.md`, `AGENTS.md`, `docs/00-project-framework.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`, `docs/10-open-questions.md`, `docs/14-character-and-item-catalog.md`, `docs/15-item-feasibility-and-production.md`.
+Lesen: `README.md`, `AGENTS.md`, `docs/00-project-framework.md`, `docs/16-production-blueprint.md`, `PROGRESS-LOG.md`, `docs/10-open-questions.md`, `docs/14-character-and-item-catalog.md`, `docs/15-item-feasibility-and-production.md`.
 
 Ergebnis: Das Modell schreibt eine kurze Liste aus verbindlich, offen, blockiert und heute nicht relevant. Es darf keine neue Technikentscheidung stillschweigend aus Gewohnheit treffen.
 
@@ -53,7 +53,7 @@ Empfohlenes Ziel: M1 abschließen und höchstens den Anfang von M2 beginnen. Der
 
 ### Block 7 – 20–30 Minuten: Übergabe
 
-`17-progress-log.md` aktualisieren, geänderte Dateien nennen, Tests und Nicht-Tests trennen, offene Probleme notieren, nächsten Auftrag formulieren. Erst dann gilt der Abend als sauber abgeschlossen.
+`PROGRESS-LOG.md` aktualisieren, geänderte Dateien nennen, Tests und Nicht-Tests trennen, offene Probleme notieren, nächsten Auftrag formulieren. Erst dann gilt der Abend als sauber abgeschlossen.
 
 ## Modellwahl für den ersten Abend
 
@@ -70,7 +70,7 @@ Eine lange autonome Session kann mehrere Stunden arbeiten, aber „die ganze Nac
 ```text
 Arbeite im Projekt Diktator Kart – Babylon-Neustart 2026.
 Lies zuerst README.md, AGENTS.md, docs/00-project-framework.md,
-docs/16-production-blueprint.md und docs/17-progress-log.md.
+docs/16-production-blueprint.md und PROGRESS-LOG.md.
 
 Ziel: M0 abschließen und M1 beginnen.
 Erstelle einen eigenständigen, startbaren Babylon.js-Grundstand.

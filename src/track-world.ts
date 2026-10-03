@@ -13,6 +13,7 @@ import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGener
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
 import { LANDMARKS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
+import {addPeriodDetails} from './period-details';
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
 export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[] }
@@ -101,6 +102,7 @@ function without(from: number, to: number, gaps: [number, number][]): [number, n
 }
 
 export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld {
+  addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
   const road = pbr(scene, 'Cobblestone boulevard', '#d8d2c2', 0, 1);

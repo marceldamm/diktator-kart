@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-03T21:56:52.984Z",
+  "world": "normal six-kart world, paused for art inspection",
+  "meshes": [
+    {
+      "name": "Period stone furniture",
+      "vertices": 860
+    },
+    {
+      "name": "Period painted iron furniture",
+      "vertices": 1396
+    },
+    {
+      "name": "Period brass details and independent eagle",
+      "vertices": 3600
+    },
+    {
+      "name": "Period satirical posters",
+      "vertices": 536
+    },
+    {
+      "name": "Period wooden benches",
+      "vertices": 336
+    }
+  ],
+  "errors": [],
+  "limitations": "Inspection camera is deliberately positioned; historical replicas and low-end performance are not claimed."
+}

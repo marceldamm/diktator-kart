@@ -30,7 +30,7 @@ function fixture() {
   put(seed, '.gitignore', '.tools/\nnode_modules/\n');
   put(seed, 'src/main.ts', '// Babylon fixture\n');
   put(seed, 'shared.txt', 'base\n');
-  put(seed, 'docs/17-progress-log.md', '# Progress\nbase\n');
+  put(seed, 'PROGRESS-LOG.md', '# Progress\nbase\n');
   put(seed, 'package.json', JSON.stringify({ scripts: { test: 'node -e "process.exit(0)"', build: 'node -e "process.exit(0)"' } }));
   commit(seed, 'foundation');
   const minimum = git(seed, 'rev-parse', 'HEAD');
@@ -48,15 +48,15 @@ function fixture() {
 const run = (cwd, action, good = true) => command(root, 'powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', workflow, '-Action', action, '-ProjectRoot', cwd], good);
 const remoteHead = f => git(f.remote, 'rev-parse', 'main');
 
-test('team: new work-list marker prevents publication when a shared work file is missing', { skip: !windows }, () => {
+for(const missing of ['TEAM-CHANGES.md','TEAM-NOTES.md'])test(`team: missing ${missing} prevents publication`, { skip: !windows }, () => {
   const f=fixture();
-  put(f.Bob,'project-state.json',JSON.stringify({...f.state,teamLists:['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md']}));
-  put(f.Bob,'CURRENT-WORKLIST.md','# Current\n');put(f.Bob,'LONG-TERM-GOALS.md','# Goals\n');
-  commit(f.Bob,'new work-list contract but missing team history');git(f.Bob,'push','origin','main');
+  put(f.Bob,'project-state.json',JSON.stringify({...f.state,teamLists:['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md','TEAM-NOTES.md']}));
+  for(const file of ['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md','TEAM-NOTES.md'])if(file!==missing)put(f.Bob,file,'# Shared work file\n');
+  commit(f.Bob,'new work-list contract but missing '+missing);git(f.Bob,'push','origin','main');
   git(f.Alice,'fetch','origin');git(f.Alice,'switch','-c','codex/team-alice-list-test','origin/main');
-  put(f.Alice,'docs/17-progress-log.md','# Progress\nVerified draft\n');commit(f.Alice,'documented work');
+  put(f.Alice,'PROGRESS-LOG.md','# Progress\nVerified draft\n');commit(f.Alice,'documented work');
   const before=remoteHead(f),result=run(f.Alice,'Finish',false);
-  assert.notEqual(result.status,0);assert.match(result.stdout,/TEAM-CHANGES.md/);assert.equal(remoteHead(f),before);
+  assert.notEqual(result.status,0);assert.ok(result.stdout.includes(missing));assert.equal(remoteHead(f),before);
 });
 
 test('team: dirty local work is preserved and cannot be switched or published', { skip: !windows }, () => {
@@ -76,7 +76,7 @@ test('team: disjoint parallel changes integrate, verify and publish as fast-forw
   const bob = remoteHead(f); run(f.Alice, 'Start');
   assert.equal(readFileSync(join(f.Alice, 'alice.txt'), 'utf8'), 'Alice');
   assert.equal(readFileSync(join(f.Alice, 'bob.txt'), 'utf8'), 'Bob');
-  put(f.Alice, 'docs/17-progress-log.md', '# Progress\nbase\nAlice verified both\n'); commit(f.Alice, 'verified handoff');
+  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nAlice verified both\n'); commit(f.Alice, 'verified handoff');
   const result = run(f.Alice, 'Finish'); assert.match(result.stdout, /VEROEFFENTLICHT/);
   assert.equal(remoteHead(f), git(f.Alice, 'rev-parse', 'HEAD'));
   assert.equal(command(f.remote, 'git', ['merge-base', '--is-ancestor', bob, 'main'], false).status, 0);
@@ -106,7 +106,7 @@ test('team: concurrent update during build prevents an outdated main push', { sk
   put(f.Bob, 'concurrent.txt', 'new remote work'); commit(f.Bob, 'concurrent work');
   put(f.Alice, 'race-build.mjs', `import{execFileSync}from'node:child_process';execFileSync('git',['-C',${JSON.stringify(f.Bob)},'push','origin','main']);`);
   put(f.Alice, 'package.json', JSON.stringify({ scripts: { test: 'node -e "process.exit(0)"', build: 'node race-build.mjs' } }));
-  put(f.Alice, 'docs/17-progress-log.md', '# Progress\nbase\nAlice handoff\n'); commit(f.Alice, 'ready for publication');
+  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nAlice handoff\n'); commit(f.Alice, 'ready for publication');
   const local = git(f.Alice, 'rev-parse', 'HEAD'); const result = run(f.Alice, 'Finish', false);
   assert.notEqual(result.status, 0); assert.match(result.stdout, /advanced during verification/);
   assert.equal(remoteHead(f), git(f.Bob, 'rev-parse', 'HEAD'));
@@ -115,7 +115,7 @@ test('team: concurrent update during build prevents an outdated main push', { sk
 test('team: failed verification cannot publish', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start'); const before = remoteHead(f);
   put(f.Alice, 'package.json', JSON.stringify({ scripts: { test: 'node -e "process.exit(1)"', build: 'node -e "process.exit(0)"' } }));
-  put(f.Alice, 'docs/17-progress-log.md', '# Progress\nbase\nnot verified\n'); commit(f.Alice, 'failing change');
+  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nnot verified\n'); commit(f.Alice, 'failing change');
   assert.notEqual(run(f.Alice, 'Finish', false).status, 0); assert.equal(remoteHead(f), before);
 });
 

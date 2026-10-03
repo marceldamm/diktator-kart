@@ -1,8 +1,8 @@
 # Bauplan und Fahrplan für die Entwicklung
 
-## Unsere drei Arbeitsdateien
+## Unsere vier Arbeitsdateien
 
-Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 ## Gemeinsame Hauptbasis – 03.10.2026
 
@@ -13,7 +13,7 @@ Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q
 
 Auf ausdrücklichen Nutzerauftrag läuft der große neutrale Slice auf `codex/stadium-vertical-slice`, mit editierbaren Blender-/GLB-Assets und vorgezogener Drei-Runden-Rennschleife. Nach jedem größeren Paket: echte Browserprobe, relevante Tests/Build, Laufzeitbilder, offizielles Nutzungslimit und lokaler Git-Checkpoint. Bei etwa 15 % kleinerem Rest keine große neue Aufgabe; Abschluss mit ungefähr 5 % Puffer. Kein Reset, keine Zusatzkosten, kein Push/Merge.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
 ## Zweck
 
@@ -169,7 +169,7 @@ Das Modell wird nach Aufgabenrisiko gewählt, nicht pauschal für das ganze Proj
 
 ## Täglicher Arbeitsablauf
 
-1. `README.md`, `00-project-framework.md`, `17-progress-log.md` und das betroffene Detaildokument lesen.
+1. `README.md`, `00-project-framework.md`, `PROGRESS-LOG.md` und das betroffene Detaildokument lesen.
 2. Eine konkrete Aufgabe mit Ziel, Nicht-Ziel und Abnahmekriterium auswählen.
 3. Vorhandenen Stand prüfen; keine alte Technik blind kopieren.
 4. Kleinsten sinnvollen Schritt umsetzen.
@@ -182,7 +182,7 @@ Das Modell wird nach Aufgabenrisiko gewählt, nicht pauschal für das ganze Proj
 ```text
 Projekt: Diktator Kart – Babylon-Neustart 2026
 Heute ist: [Datum]
-Letzter Stand: [kurzer Eintrag aus 17-progress-log.md]
+Letzter Stand: [kurzer Eintrag aus PROGRESS-LOG.md]
 Aufgabe: [eine konkrete Aufgabe]
 Nicht-Ziel: [was heute nicht angefasst wird]
 Modellwunsch: Luna / Sol / Astra / nach eigener Einschätzung

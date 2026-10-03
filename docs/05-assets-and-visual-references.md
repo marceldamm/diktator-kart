@@ -4,7 +4,7 @@
 
 Kostenlose lokale Pipeline: portable Blender 4.5.3 LTS unter ignoriertem `.tools/`, originale Generatoren und editierbare `.blend` unter `art-source/`, Laufzeit-GLB unter `public/assets/models/`. Poly-Haven-CC0-Baum und Pflaster sind anhand offizieller Quellen dokumentiert. Audio-WAVs original; vorläufige Pianoaufnahme mit CC-BY-4.0-Attribution. `public/assets/CREDITS.md` enthält Herkunft/Bearbeitung. G–L bleibt Bildreferenz und wird nicht als Spieltextur kopiert. Der aktuelle Himmel nutzt ein offizielles Poly-Haven-CC0-Panorama in 4K/2K; die frühere Imagegen-Textur wird nicht mehr geladen. Reproduktions- und Bearbeitungshinweise in `art-source/README.md`; lokale GLB-Optimierung mit glTF Transform SDK/Sharp, keine externe Produktionsplattform.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
 ## Ziel
 

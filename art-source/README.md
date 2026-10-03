@@ -44,3 +44,5 @@ Der aktuelle Himmel verwendet die offizielle Tonemapped-JPG-Variante von Poly Ha
 Artassets im laufenden Spiel mit C (nah/fern/Fahrer) und V (Foto) prüfen. V pausiert die Simulation, zeigt aber dieselbe Babylon-Szene; keine externe Konzeptdarstellung. `tests/slice-browser.mjs`, `slice-race.mjs`, `slice-items.mjs` und `slice-touch.mjs` nutzen einen isolierten Chrome-CDP-Testbrowser auf Port 9223; Vite auf 4173. Nicht gleichzeitig auf dieselbe Browserseite ausführen. Der normale Launcher braucht diese Testwerkzeuge nicht.
 
 Die neutralen Gesichter, Zubehörvarianten und Zuschauersilhouetten sind vorläufige Artassets. Historische Charakterwahl, Sarahs Ideen, Hörqualität und G–L-Stilabnahme bleiben gesondert zu prüfen.
+
+Weitere editierbare Straßenmöbel/Adler und eigene Plakatgrafiken: src/period-details.ts; fünf nach Material zusammengefasste Laufzeitmeshes.

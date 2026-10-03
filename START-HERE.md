@@ -1,10 +1,14 @@
 # Diktator Kart – gemeinsamer Einstieg
 
-## Unsere drei Arbeitsdateien
+## Kurzbefehle
 
-Beim KI-Befehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md als drei Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
+Ein alleinstehendes **Projektstart** ruft den sicheren Startablauf auf; **Projektabschluss** den geprüften Abschluss mit Veröffentlichung. Keine langen Prompts nötig. Die vier zentralen Tabs gehören zum Start. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Naechstes anzeigen. Maßgebliche Anleitung: [TEAM-NOTES.md](TEAM-NOTES.md).
 
-Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+## Unsere vier Arbeitsdateien
+
+Beim KI-Kurzbefehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md als vier Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
+
+Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 ## Jetzt verbindlich
 
@@ -22,9 +26,9 @@ Die Repo-Skills heißen $diktator-projektstart und $diktator-projektabschluss. A
 
 **Spiel starten:** Diktator-Kart-starten.cmd im aktiven Hauptordner. Es öffnet den ausgecheckten neuen Stand, keinen fest eingetragenen Worktree. Root-/Versionsprüfung verhindert die Wiederverwendung eines fremden/alten Servers; angezeigte URL verwenden. Abhängigkeiten werden aus dem Lockfile installiert. Fenster offen lassen.
 
-**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E Item, C drei Kameras, linke Maustaste halten zum Umsehen, rechte Maustaste/X halten Rückblick, E Items, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
+**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E Item, F Sprachhupe, C drei Kameras, linke Maustaste halten zum Umsehen, rechte Maustaste/X halten Rückblick, E Items, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
 
-**Claude-Stand:** 593-m-Kurs, neue Welt/Karts/sechs fiktive Fahrer, Bot-Drift, Hinterhof-Abkürzung, Stimmen/Publikum, Lenkträgheit und gefederte Karosserie, Rüttelrandsteine, Live-Videowand. Vorliegende Tests und verbleibende Qualitäts-/Gerätegrenzen: [Fortschrittslog](docs/17-progress-log.md). Kein fertiger historischer Kader und keine G–L-Abnahme. Regen/nasse Straße/echtere Fahrer sind nächste Produktionswünsche, keine bereits gebauten Features.
+**Claude-Stand:** 593-m-Kurs, neue Welt/Karts/sechs fiktive Fahrer, Bot-Drift, Hinterhof-Abkürzung, Stimmen/Publikum, Lenkträgheit und gefederte Karosserie, Rüttelrandsteine, Live-Videowand. Vorliegende Tests und verbleibende Qualitäts-/Gerätegrenzen: [Fortschrittslog](PROGRESS-LOG.md). Kein fertiger historischer Kader und keine G–L-Abnahme. Regen/nasse Straße/echtere Fahrer sind nächste Produktionswünsche, keine bereits gebauten Features.
 
 **Früher Ladebildschirm umgesetzt:** Eigenständiges G/J-inspiriertes Konzeptmotiv erscheint bereits vor dem Spielmodul, mit echten Ladeabschnitten und Wiederholen bei Startfehlern. Danach übernimmt das gerenderte 3D-Menü. Die Illustration ist ausdrücklich keine Spielgrafik-Abnahme; Quellen/Belege in art-source/loading-stadium-v1.md und docs/evidence/.
 
@@ -39,7 +43,7 @@ Die folgenden Hinweise dokumentieren frühere Sitzungen; Branch-, Startpfad- und
 
 **Start:** `Diktator-Kart-starten.cmd` im Worktree doppelklicken (oder `npm ci`, `npm run dev`) → `http://127.0.0.1:4173/`. Bedienung unverändert: Enter Rennen, W/S, A/D, Space Hop/Drift/Turbo, E Item, C Kamera, V Foto, P Pause, R Neustart, Esc Menü, F3 Diagnose.
 
-**Neu:** 593-m-Rundkurs mit Palastbogen, S-Kurven, Tor-Boulevard und zwei Haarnadeln; gleitende Banden- und Rempelkontakte; Bots mit Drift-Turbo; neue Welt entlang der Strecke (Tribünen mit Publikum, Tor, Häuser mit Bannern, Park, Bahnhof); neues Kart und sechs fiktive Karikaturfiguren; warmes Nachmittagslicht, Bloom/Farbabstimmung, dynamische Kamera, Reifenspuren, Funken, Turbo-Feuer, Konfetti. Beste Spielbilder: `docs/evidence/README.md` (Abschnitt Qualitätsstufe 2). Verifikation und Grenzen: `docs/17-progress-log.md`.
+**Neu:** 593-m-Rundkurs mit Palastbogen, S-Kurven, Tor-Boulevard und zwei Haarnadeln; gleitende Banden- und Rempelkontakte; Bots mit Drift-Turbo; neue Welt entlang der Strecke (Tribünen mit Publikum, Tor, Häuser mit Bannern, Park, Bahnhof); neues Kart und sechs fiktive Karikaturfiguren; warmes Nachmittagslicht, Bloom/Farbabstimmung, dynamische Kamera, Reifenspuren, Funken, Turbo-Feuer, Konfetti. Beste Spielbilder: `docs/evidence/README.md` (Abschnitt Qualitätsstufe 2). Verifikation und Grenzen: `PROGRESS-LOG.md`.
 
 **Neu in 2b:** Stadionsprecherin und Fahrerstimmen (TTS, CC0), Motor mit Getriebeklang, Publikum, kein abruptes Stehenbleiben mehr (Gleiten, Rückprall, Dreher bei Treffern), Arme lenken mit, Turbo-Faust, Papierexplosion, Fahnen, Goldstatuen.
 
@@ -57,7 +61,7 @@ Die folgenden Hinweise dokumentieren frühere Sitzungen; Branch-, Startpfad- und
 
 **Autonomer Auftrag:** Den ausdrücklich freigegebenen neutralen Stadion-Slice anhand G–L breit ausarbeiten, Laufzeitbilder vergleichen und echte Rennläufe prüfen. Kostenlose Assetpipeline und Quellen dokumentieren. Regelmäßige lokale Commits, keine Übertragung. Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei etwa 15 % Rest geordnet abschließen, etwa 5 % für Nutzernachrichten bewahren. Kein Reset/Zusatzkontingent.
 
-**Geprüfter Sitzungsabschluss (03.10.2026):** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung, drei Start-Items, Tribünen, Ladenfassaden, Bahnhof und echter Menü-/Ergebnisablauf. 23 Modelltests, Produktionsbuild, Drei-Runden-Rennen/Revanche, alle Kameras, kompletter Neustart, Hop/Drift/Turbo, Touch-Emulation und WebGL1/Fallback geprüft. Beste echte Spielbilder und Messgrenzen: `docs/evidence/README.md`; Abschluss: `docs/17-progress-log.md`. Stabile 60 FPS ab Start sind noch nicht erreicht. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
+**Geprüfter Sitzungsabschluss (03.10.2026):** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung, drei Start-Items, Tribünen, Ladenfassaden, Bahnhof und echter Menü-/Ergebnisablauf. 23 Modelltests, Produktionsbuild, Drei-Runden-Rennen/Revanche, alle Kameras, kompletter Neustart, Hop/Drift/Turbo, Touch-Emulation und WebGL1/Fallback geprüft. Beste echte Spielbilder und Messgrenzen: `docs/evidence/README.md`; Abschluss: `PROGRESS-LOG.md`. Stabile 60 FPS ab Start sind noch nicht erreicht. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
 
 **Nächste Produktion:** Charakter-/Kartpolitur gegen G–L, abwechslungsreicheres Streckenlayout und Material-/Animationspass; parallel Kaltlauf/LOD/Ladegruppen auf echter Zielhardware prüfen. Diese Sitzung wurde mit lokalem Commit und Budgetreserve geordnet abgeschlossen.
 
@@ -144,7 +148,7 @@ Die getrennten technischen und menschlichen M2-Abnahmepunkte stehen in [docs/09-
 
 - **Diese Datei:** aktueller Stand und der nächste kopierfertige Auftrag.
 - **[README.md](README.md):** Grundidee und verbindliche Spielziele.
-- **[docs/17-progress-log.md](docs/17-progress-log.md):** vollständige Historie und Übergabe zwischen Arbeitssitzungen.
+- **[PROGRESS-LOG.md](PROGRESS-LOG.md):** vollständige Historie und Übergabe zwischen Arbeitssitzungen.
 
 Weitere Detaildateien öffnet Codex selbst, wenn sie für die aktuelle Aufgabe gebraucht werden.
 
