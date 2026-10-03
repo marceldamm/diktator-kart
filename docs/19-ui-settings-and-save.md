@@ -1,5 +1,9 @@
 # Benutzeroberfläche, Einstellungen und lokale Speicherung
 
+## Aktueller Slice-Ablauf – 03.10.2026
+
+Die Standardansicht hat einen echten 3D-Menühintergrund, Rennen/freie Fahrt, Ladephase, Countdown, drei Runden, HUD/Minikarte/Itemslot, Pause, Ergebnis mit Rundenzeiten/Zielstand und Revanche/Menü. Esc pausiert ein laufendes Rennen im Menü. Ton, Musiklautstärke, Basis-/Standardgrafik, reduzierte Effekte und ruhige Kamera werden lokal gespeichert; echte menschliche Zielzeiten als Streckenbestzeit. Demonstrationsfahrten schreiben keine Bestzeit. Mehrfinger-Touch ist in Chrome emuliert geprüft, nicht auf Handy abgenommen. Fahrer-/Streckenauswahl, vollständige Lautstärkemixer, persönliche Fähigkeiten, Stimmen, Gamepad und Siegertheater fehlen weiterhin. Historische M1/M2-Einträge darunter beschreiben ihre damaligen Stände.
+
 ## Grundsatz
 
 Das Spiel muss vom Start bis zum Rennen ohne Entwicklerkonsole verständlich bedienbar sein. UI ist kein nachträglicher Aufsatz, sondern Teil der Spielbarkeit und der satirischen Präsentation.

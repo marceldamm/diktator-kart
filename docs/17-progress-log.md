@@ -551,6 +551,20 @@
 
 **Offen / nächster Schritt:** Schärferer Himmel, klarer Spieleinstieg und unterscheidbare neutrale Karts; anschließend neue Grafik-/Item-Dauerprobe, hörbare Qualität und gemeinsame Stil-/Geräteabnahme. Aktuelle neutrale Gesichter, Zuschauer und Karts sind vorläufige Artassets. Offizieller Budgetstand zuletzt 51 % Fünf-Stunden- und 8 % Wochenverbrauch. Weiterhin nur lokale Checkpoints, kein Push/Merge/Reset/Ruhezustand.
 
+### 2026-10-03 – Vertical Slice: Menü, Kartvarianten und Stadtpass
+
+**Umgesetzt:** Echter 3D-Menühintergrund mit Rennen/Erkundung, Esc-Rückkehr und Optionszugriff; persistente Ton-/Musikpräferenzen. Geformter neutraler Kopf mit eigener Kopfbewegung, fünf Kartanbauten, originale Messingornamente. Neue CC0-Himmelvarianten 4K/2K. Editierbare Ladenfronten, Markisen, Parkbeete, fiktiver Bahnhof und Stadtsilhouette. Ergebnis mit drei Rundenzeiten, Zielstand und lokaler menschlicher Bestzeit; Demo speichert keine Bestzeit. Drift-/Boostbalken und Rundenhinweis.
+
+**Verifiziert:** Browser-Sichtprobe v10 bestätigte Start, Fahrt, drei Kameras, Foto, Pause, Countdown und vollständigen Szenenneustart; eine zu kurze feste Neustartwartezeit wurde durch Zustandsprüfung ersetzt. Ein weiterer echter Item-Rennlauf mit neuen Kartvarianten erreichte drei Runden und Revanche, konstante 506 Meshes, alle Archetypen eingesetzt; direkte Botprojektile trafen auch mit neuer Zielentscheidung nicht. Danach finaler Architektur-/Menüpass: Browserrennen 102,85 s, alle sechs Teilnehmer mit echten Zielzeiten, Ergebnis/Rundenzeiten/Revanche bestanden, keine Ausnahme. Bilder v11, Rohdaten slice-final-race-rtx.json. 23 Modelltests und Build bestanden (großer Hauptchunk weiterhin Warnung).
+
+**Gefunden / korrigiert / offen:** Der Ziel-HUD berechnete zuerst nach Überfahrdistanz und zeigte im Ergebnisbild fälschlich Platz 4 statt 6. Gemeinsame Rangfunktion nach Zielzeit korrigiert und mit Regressionstest gesichert; neue Laufzeitprobe folgt. Standardgrafik nach neuen Details verfehlt noch stabile 60 FPS: P95 33,5/34,0/33,4 ms, Basis-Fahrer 16,8 ms. Korrekte CPU-/GPU-/Drawcallwerte in final-race; Renderkosten werden gezielt isoliert. Das ist keine Performanceabnahme. Schattenbereich bereits auf nahe Bäume/große Kartteile begrenzt; weitere Nachprobe läuft.
+
+**Dateien:** art-source/build_slice.py, build_props.py, mesh_tools.py, README.md und zugehörige .blend/GLBs; Himmel/Credits/Manifest; main/camera/audio/input/scene/slice-scene/style; index.html; Browser-/Streckentests und Spielbilder; README/START-HERE, docs/05/09/14/15/19 synchronisiert. Keine Änderung im Altarchiv, kein Push/Merge.
+
+**Nicht abgenommen:** neutrale Gesichter/Zuschauer statt fertiger historischer Charaktere, G–L deutlich nicht erreicht, Hörqualität, Kamerakomfort, schwache PCs und echte Mobilgeräte. Neue Laden-/Bahnhofgeometrie original und editierbar, keine historische Landmarkenfreigabe.
+
+**Budget / nächster Schritt:** Offiziell zuletzt 68 % Fünf-Stunden- und 11 % Wochenverbrauch. Renderkosten reduzieren, Rang-/Kamera-/Neustart-/WebGL1-Nachprobe, beste echte Laufzeitbilder sichern und geordnet abschließen. Diese Sitzung läuft weiter.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

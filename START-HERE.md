@@ -4,11 +4,11 @@
 
 **Branch:** `codex/stadium-vertical-slice`. Nicht auf `main` wechseln oder Änderungen übertragen; Push/Merge brauchen ausdrückliche Freigabe.
 
-**Start:** `Diktator-Kart-starten.cmd` doppelklicken. Chrome öffnet `http://127.0.0.1:4173/`; Fenster offen lassen. Enter startet drei Runden gegen fünf Bots. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C nahe/ferne/Fahrer-Kamera, V Fotomodus, B Rücksetzung bei niedrigem Tempo, P Pause, R Szenenneustart. Grafik Basis/Standard, reduzierte Effekte und Ton über HUD.
+**Start:** `Diktator-Kart-starten.cmd` doppelklicken. Chrome öffnet `http://127.0.0.1:4173/`; Fenster offen lassen. Enter startet drei Runden gegen fünf Bots. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C nahe/ferne/Fahrer-Kamera, V Fotomodus, B Rücksetzung bei niedrigem Tempo, P Pause, R Szenenneustart. E verwendet Items, Esc öffnet das Menü. Grafik Basis/Standard, reduzierte Effekte, ruhige Kamera, Ton und Musiklautstärke stehen unter Optionen.
 
 **Autonomer Auftrag:** Den ausdrücklich freigegebenen neutralen Stadion-Slice anhand G–L breit ausarbeiten, Laufzeitbilder vergleichen und echte Rennläufe prüfen. Kostenlose Assetpipeline und Quellen dokumentieren. Regelmäßige lokale Commits, keine Übertragung. Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei etwa 15 % Rest geordnet abschließen, etwa 5 % für Nutzernachrichten bewahren. Kein Reset/Zusatzkontingent.
 
-**Geprüfter Zwischenstand:** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung. Details und Messgrenzen in `docs/17-progress-log.md`. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
+**Geprüfter Zwischenstand:** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung, drei Start-Items, Tribünen, Ladenfassaden, Bahnhof und echter Menü-/Ergebnisablauf. Details und Messgrenzen in `docs/17-progress-log.md`. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
 
 ## Historische Zwischenstände vor dem großen Auftrag
 

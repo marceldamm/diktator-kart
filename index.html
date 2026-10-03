@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Diktator Kart · Stadion der Eitelkeit</title>
   </head>
-  <body>
+  <body class="is-loading">
     <main id="app">
       <canvas id="render-canvas" aria-label="Babylon.js-Testszene"></canvas>
+      <div class="loading-screen"><span class="loading-mark">DK</span><h2>Das Stadion wird vorbereitet</h2><div class="loading-line"></div><p>Karts, Tribünen und Rennstrecke werden geladen.</p></div>
+      <section class="start-menu"><span class="menu-kicker">DIKTATOR KART</span><h1>Stadion der<br><em>Eitelkeit</em></h1><p class="menu-flavor">Sechs Fahrer. Drei Runden.<br>Der erste Platz braucht keine Genehmigung.</p><button id="menu-race" type="button">Grand Prix starten <span>↵</span></button><button id="menu-practice" type="button">Strecke erkunden</button><div id="menu-options"></div><small>WASD / Pfeile · Space für Hop & Drift<br>Items mit E · drei Kameras mit C</small><div class="menu-seal">AMTLICH<br><b>UNORDENTLICH</b></div></section>
       <div class="brand slice-only"><span class="brand-mark">DK</span><div><strong>DIKTATOR KART</strong><span>STADION DER EITELKEIT</span></div></div>
       <div class="race-hud slice-only"><span id="race-label">FREIE FAHRT</span><div class="race-stats"><div><b id="place">1</b><small>PLATZ / 6</small></div><div><b id="lap">1 / 3</b><small>RUNDE</small></div><div><b id="race-time">0:00.00</b><small>ZEIT</small></div></div></div>
       <div class="map-card slice-only"><canvas id="minimap" width="150" height="230" aria-label="Streckenkarte"></canvas><span>441 m · STADIONRING</span></div>
       <div id="countdown" class="slice-only" hidden>3</div>
+      <div id="lap-notice" class="slice-only" hidden></div>
       <div class="item-card slice-only"><span id="item-icon">✉</span><div><strong id="item-name">Sendung abholen</strong><small id="item-info">Leuchtende Postkisten auf der Strecke</small></div><button id="item-use" type="button" disabled aria-label="Item einsetzen">E</button></div>
       <div id="item-warning" class="slice-only" hidden></div>
-      <div id="finish-card" hidden><span>STADION GRAND PRIX</span><h2 id="finish-title">Ziel erreicht</h2><p id="finish-detail"></p></div>
-      <details class="credits slice-only"><summary>Credits</summary><p>Modelle: originale Projektassets; Bäume: <a href="https://polyhaven.com/a/tree_small_02" target="_blank" rel="noreferrer">Poly Haven · CC0</a>. Beleuchtung: BabylonJS Assets · CC BY 4.0.<br>„Fig Leaf Rag“ – Kevin MacLeod (<a href="https://incompetech.com/music/royalty-free/index.html?Search=Search&amp;isrc=USUAN1100701" target="_blank" rel="noreferrer">incompetech.com</a>), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Unveränderte Aufnahme, wiederholt als vorläufige Rennmusik.</p></details>
+      <div id="finish-card" hidden><span>STADION GRAND PRIX</span><h2 id="finish-title">Ziel erreicht</h2><p id="finish-detail"></p><ol id="finish-results" aria-label="Stand bei deiner Zielankunft"></ol><p id="finish-best"></p><button id="finish-retry" type="button">Revanche ↵</button><button id="finish-menu" type="button">Zum Menü</button></div>
+      <details class="credits slice-only"><summary>Credits</summary><p>Modelle: originale Projektassets. <a href="https://polyhaven.com/" target="_blank" rel="noreferrer">Powered by Poly Haven · CC0</a>: Tree Small 02, Cobblestone Floor 08, Kloofendal 48d Partly Cloudy Puresky. Beleuchtung: BabylonJS Assets · CC BY 4.0.<br>„Fig Leaf Rag“ – Kevin MacLeod (<a href="https://incompetech.com/music/royalty-free/index.html?Search=Search&amp;isrc=USUAN1100701" target="_blank" rel="noreferrer">incompetech.com</a>), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Unveränderte Aufnahme, wiederholt als vorläufige Rennmusik.</p></details>
       <section class="panel" aria-live="polite">
         <div class="eyebrow">DIKTATOR KART / M2 TEST</div>
         <h1>M2 Fahrtest</h1>
@@ -23,19 +26,18 @@
         <p id="message">Die Testszene wird vorbereitet.</p>
         <p id="speed">0 km/h</p>
         <p id="drive-mode">Bereit</p>
+        <div class="drift-meter slice-only" id="drift-meter" hidden><div id="drift-fill"></div></div>
         <p id="surface">Ebener Boden</p>
         <p id="camera-mode">Verfolger nah</p>
         <p id="fleet-count">6 Fahrzeuge</p>
         <div class="actions">
           <button id="race-start" class="slice-only" type="button">Rennen starten ↵</button>
           <button id="pause" type="button" disabled>Pause</button>
+          <button id="menu-button" class="slice-only" type="button">Menü Esc</button>
           <button id="restart" type="button" disabled>Neustart</button>
-          <button id="sound-toggle" class="slice-only" type="button">Ton an</button>
           <button id="debug-toggle" type="button" disabled>Diagnose</button>
-          <button id="quality-toggle" class="slice-only" type="button">Grafik Standard</button>
-          <button id="effects-toggle" class="slice-only" type="button">Effekte voll</button>
-          <button id="motion-toggle" class="slice-only" type="button">Kamera dynamisch</button>
         </div>
+        <div id="options-anchor"><details id="options" class="slice-only"><summary>Optionen</summary><div class="actions"><button id="sound-toggle" type="button">Ton an</button><button id="quality-toggle" type="button">Grafik Standard</button><button id="effects-toggle" type="button">Effekte voll</button><button id="motion-toggle" type="button">Kamera dynamisch</button></div><label>Musik <input id="music-volume" type="range" min="0" max="100" value="14" aria-label="Musiklautstärke"></label></details></div>
         <p class="hint">W/↑ Gas · S/↓ Bremse/Rückwärts · A/D oder ←/→ Lenken<br>Space Hop; halten + lenken: Drift; geladen loslassen: Mini-Turbo<br>Bodenwellen voraus; roter Kollisionsblock rechts der Linie<br>C Kamera nah/fern/Fahrer · E Item · Q Fähigkeit · P Pause · R Neustart · F3 Diagnose</p>
         <pre id="debug" hidden></pre>
       </section>

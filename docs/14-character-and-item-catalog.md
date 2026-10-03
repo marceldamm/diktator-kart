@@ -1,5 +1,9 @@
 # Übernommener Fahrer-, Kart- und Itemkatalog
 
+## Neutraler Slice-Pass – 03.10.2026
+
+Der ausdrückliche aktuelle Nutzerauftrag erlaubt einen eigenständigen neutralen Fahrerplatzhalter. Sechs Karts teilen das Original-Roadsterasset, mit sechs Farben und fünf optionalen Anbauten (Radiohörner, Ersatzrad, Gepäck, hohe Auspuffe, neutrale Wimpel). Kopf, Schal, Hände/Lenkrad und vier Räder sind getrennt animiert. Das ersetzt keine historische Charakterwahl und benennt Sarahs Katalog nicht um. Die im Spiel verwendeten Rohrpost-/Suchauftrag-/Stempelfallenformen stellen die drei bestätigten gemeinsamen Archetypen vorläufig dar.
+
 ## Herkunft und Status
 
 Dieser Katalog extrahiert die verwertbaren Ideen aus dem alten Produktionsauftrag. Er ist die kreative Quelle für die Babylon.js-Neuentwicklung, keine Aufforderung, alte Klassen oder alte Balancewerte zu kopieren. Alle Fähigkeiten müssen neu bewertet, fair umgesetzt, historisch verantwortbar gestaltet und mit dem neuen Fahrgefühl abgestimmt werden.

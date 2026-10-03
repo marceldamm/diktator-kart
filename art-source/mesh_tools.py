@@ -58,6 +58,20 @@ def box(name,pos,size,m,bevel=.04,parent=None):
     return finish(o,name,m,parent)
 
 def ellipsoid(name,pos,size,m,parent=None,segments=24):
+    if BUILD_WORLD:
+        x,y,z=pos;rx,ry,rz=size;vs=[];fs=[];rings=12
+        for i in range(rings+1):
+            a=i*math.pi/rings
+            for j in range(segments):
+                b=j*2*math.pi/segments
+                vs.append((x+rx*math.sin(a)*math.cos(b),y+ry*math.sin(a)*math.sin(b),z+rz*math.cos(a)))
+        for i in range(rings):
+            for j in range(segments):
+                k=i*segments+j;n=i*segments+(j+1)%segments
+                fs.append((k,n,n+segments,k+segments))
+        o=mesh(name,vs,fs,m,parent)
+        for p in o.data.polygons:p.use_smooth=True
+        return o
     bpy.ops.mesh.primitive_uv_sphere_add(segments=segments,ring_count=12,location=pos)
     o=bpy.context.object; o.scale=size
     for p in o.data.polygons:p.use_smooth=True

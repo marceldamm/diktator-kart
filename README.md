@@ -10,7 +10,7 @@ Diktator Kart wird als eigenständiger satirischer 3D-Arcade-Kart-Racer für den
 
 Dieser Ordner enthält die Planungs- und Wissensbasis sowie seit M1 einen startbaren Babylon.js-Technikgrundstand. Er übernimmt aus dem Altprojekt Ideen und belegte Designentscheidungen, aber keine alte Engine-Implementierung.
 
-**Spiel starten:** [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken und das Fenster offen lassen. Chrome öffnet `http://127.0.0.1:4173/`. Technisch: `npm ci`, `npm run dev`. Enter startet ein Drei-Runden-Rennen. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C Kamera, V Foto, B Rücksetzung bei niedrigem Tempo, P Pause, R kompletter Neustart, F3 Diagnose. Grafik- und Effektstufen werden lokal gespeichert. `?world=lab` bleibt der reproduzierbare Fahrtechniktest, `?demo=1` fährt den Spieler über denselben Botcontroller.
+**Spiel starten:** [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken und das Fenster offen lassen. Chrome öffnet `http://127.0.0.1:4173/`. Technisch: `npm ci`, `npm run dev`. Enter startet ein Drei-Runden-Rennen. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C Kamera, V Foto, B Rücksetzung bei niedrigem Tempo, P Pause, R kompletter Neustart, F3 Diagnose. E verwendet den gemeinsamen Itemslot. Esc öffnet das Menü. Grafik-/Effektstufen, Kameraruhe, Ton und Musiklautstärke werden lokal gespeichert. `?world=lab` bleibt der reproduzierbare Fahrtechniktest, `?demo=1` fährt den Spieler über denselben Botcontroller.
 
 ## Grundpfeiler
 

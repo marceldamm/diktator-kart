@@ -27,8 +27,8 @@ function material(scene: Scene, name: string, color: Color3): StandardMaterial {
   return result;
 }
 
-export async function createTestScene(engine: Engine, loadKartCount = 0, showcase = true): Promise<TestScene> {
-  if (showcase) return createSliceScene(engine, loadKartCount);
+export async function createTestScene(engine: Engine, loadKartCount = 0, showcase = true, quality=1): Promise<TestScene> {
+  if (showcase) return createSliceScene(engine, loadKartCount,quality);
   const scene = new Scene(engine);
   scene.clearColor = new Color4(0.53, 0.68, 0.78, 1);
   const sky = new HemisphericLight('sky-light', new Vector3(0.2, 1, 0.4), scene);

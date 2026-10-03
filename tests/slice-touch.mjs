@@ -5,6 +5,7 @@ import {send,delay,evaluate,shot,load,errors,socket} from './cdp.mjs';
 try {
   await send('Runtime.enable');await send('Emulation.setDeviceMetricsOverride',{width:932,height:430,deviceScaleFactor:1,mobile:true});
   await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});await load();await delay(1500);
+  await evaluate(`document.querySelector('#menu-practice').click()`);
   assert.equal(await evaluate(`getComputedStyle(document.querySelector('#touch-controls')).display`),'flex');
   assert.equal(await evaluate(`document.querySelector('#app').getBoundingClientRect().height`),430);
   await evaluate(`document.querySelector('#race-start').click()`);await delay(4500);

@@ -78,6 +78,15 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
 }
 
 export interface RaceProgress { last: number; distance: number; finished: boolean; finishTime: number | null }
+// Finished participants are ordered by crossing time, never by overshoot distance.
+export function rankRace(progress:RaceProgress[]):number[] {
+  return progress.map((_,i)=>i).sort((a,b)=>{
+    const pa=progress[a],pb=progress[b];
+    if(pa.finished!==pb.finished)return pa.finished?-1:1;
+    if(pa.finished)return (pa.finishTime??Infinity)-(pb.finishTime??Infinity)||a-b;
+    return pb.distance-pa.distance||a-b;
+  });
+}
 export function createRaceProgress(state: KartState): RaceProgress {
   const last = trackProgress(state.x, state.z);
   return { last, distance: last - 22, finished: false, finishTime: null };

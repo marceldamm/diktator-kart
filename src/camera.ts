@@ -29,6 +29,8 @@ export class KartCamera {
   private photo = false;
   private photoAngle = .65;
   private reducedMotion=false;
+  private intro=false;
+  private introAngle=.68;
 
   constructor(scene: Scene, state: KartState, realCockpit = false) {
     this.realCockpit = realCockpit;
@@ -90,15 +92,17 @@ export class KartCamera {
 
   get viewName(): string { return VIEWS[this.view].name; }
   get photoMode(): boolean { return this.photo; }
+  get introMode():boolean {return this.intro;}
+  setIntroMode(intro:boolean):void {this.intro=intro;this.cockpit.setEnabled(!intro&&this.view===2&&!this.realCockpit);}
   setReducedMotion(reduced:boolean):void { this.reducedMotion=reduced; }
   togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
 
   update(state: KartState, dt: number, immediate = false, steering = 0): void {
-    if (this.photo) {
-      this.photoAngle += dt * .18;
-      const a=state.heading+this.photoAngle;
-      this.camera.position.set(state.x+Math.sin(a)*4.5,1.8+state.height,state.z+Math.cos(a)*4.5);
-      this.camera.fov=.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height,state.z));return;
+    if (this.photo||this.intro) {
+      if(this.photo)this.photoAngle+=dt*.18;else this.introAngle=.68+Math.sin(performance.now()/14000)*.12;
+      const a=state.heading+(this.photo?this.photoAngle:this.introAngle),distance=this.intro?5.7:4.5;
+      this.camera.position.set(state.x+Math.sin(a)*distance,(this.intro?2.2:1.8)+state.height,state.z+Math.cos(a)*distance);
+      this.camera.fov=this.intro?.73:.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height,state.z));return;
     }
     const view = VIEWS[this.view];
     const forwardX = Math.sin(state.heading);

@@ -142,8 +142,9 @@ function particleTexture(scene: Scene): DynamicTexture {
   c.fillStyle = gradient; c.fillRect(0, 0, 64, 64); t.hasAlpha = true; t.update(); return t;
 }
 
-export async function createSliceScene(engine: Engine, loadKartCount: number): Promise<TestScene> {
+export async function createSliceScene(engine: Engine, loadKartCount: number, quality=1): Promise<TestScene> {
   const scene = new Scene(engine);
+  scene.skipPointerMovePicking=true;
   try {
     scene.clearColor = new Color4(.58, .69, .76, 1);
     scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0028; scene.fogColor = new Color3(.71, .73, .7);
@@ -164,8 +165,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
     shadow.darkness = .05;
     const sky = MeshBuilder.CreateSphere('Panoramic sky', { diameter: 900, segments: 32, sideOrientation: Mesh.BACKSIDE }, scene);
     const skyMaterial = new StandardMaterial('Golden sky', scene); skyMaterial.disableLighting = true;
-    const skyTexture = new Texture('/assets/textures/golden-sky.png', scene, false, false);
-    skyTexture.vScale = 1; skyTexture.vOffset = -.06; skyTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
+    let skyQuality=quality;
+    let skyTexture = new Texture(`/assets/textures/sky-${quality?'4k':'2k'}.jpg`, scene, false, false);
+    skyTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
     skyMaterial.emissiveTexture = skyTexture;
     skyMaterial.emissiveColor = Color3.Black(); skyMaterial.backFaceCulling = false; skyMaterial.fogEnabled = false; sky.material = skyMaterial; sky.infiniteDistance = true;
     const world = await ImportMeshAsync('/assets/models/stadium-world.glb', scene);
@@ -189,6 +191,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
       }
     }
     addTrackWorld(scene, shadow);
+    const staticShadowMeshes=[...(shadow.getShadowMap()?.renderList??[])];
+    const treeShadows: {root:TransformNode;meshes:Mesh[]}[]=[];
     const treeContainer = await LoadAssetContainerAsync('/assets/models/park-tree.glb', scene);
     for(const material of treeContainer.materials) if(material instanceof PBRMaterial && material.name.includes('leaves')) {
       material.transparencyMode=PBRMaterial.PBRMATERIAL_OPAQUE;
@@ -199,7 +203,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
       const root = new TransformNode(`Park tree ${x} ${z}`, scene); instance.rootNodes.forEach((n) => n.parent = root);
       const bounds = root.getHierarchyBoundingVectors(); const height = bounds.max.y - bounds.min.y;
       root.scaling.setAll(9 / Math.max(1, height)); root.position.set(x, -bounds.min.y * root.scaling.y, z); root.rotation.y = z * .19;
-      for (const mesh of root.getChildMeshes()) { mesh.receiveShadows = true; mesh.isPickable = false; shadow.addShadowCaster(mesh); }
+      const meshes=root.getChildMeshes().filter((m):m is Mesh=>m instanceof Mesh);
+      for (const mesh of meshes) { mesh.receiveShadows = true; mesh.isPickable = false; }
+      treeShadows.push({root,meshes});
     }
     scene.onDisposeObservable.add(() => treeContainer.dispose());
     const timings=new SceneInstrumentation(scene);timings.captureFrameTime=true;timings.captureRenderTime=true;
@@ -211,7 +217,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
     const colors = ['#125965', '#862e38', '#c1ae78', '#435940', '#384b74', '#5a365a'];
     const visuals = Array.from({ length: loadKartCount + 1 }, (_, index) => {
-      const instance = container.instantiateModelsToScene((name) => `kart${index}/${name}`, true, { doNotInstantiate: true });
+      const instance = container.instantiateModelsToScene((name) => `kart${index}/${name}`, false, { doNotInstantiate: true });
+      const paint=new Map<PBRMaterial,PBRMaterial>();
       const root = new TransformNode(`raceKart-${index}`, scene);
       const orientation = new TransformNode(`modelOrientation-${index}`, scene); orientation.rotation.y = Math.PI; orientation.parent = root;
       instance.rootNodes.forEach((node) => node.parent = orientation);
@@ -219,14 +226,23 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
       const pivots = Array.from({ length: 4 }, (_, i) => nodes.find((n) => n.name === `kart${index}/wheelPivot-${i}`) as TransformNode);
       const spins = Array.from({ length: 4 }, (_, i) => nodes.find((n) => n.name === `kart${index}/wheelSpin-${i}`) as TransformNode);
       const driver = nodes.find((n) => n.name === `kart${index}/driverPose`) as TransformNode;
+      const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
+      const variants=['radio','spare','luggage','fin','parade','none'];
+      for(const kind of ['radio','spare','luggage','fin','parade']) {
+        const node=nodes.find(n=>n.name===`kart${index}/variant-${kind}`) as TransformNode|undefined;node?.setEnabled(kind===variants[index]);
+      }
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const steering = nodes.find((n) => n.name === `kart${index}/steeringWheel`) as TransformNode;
-      if (pivots.some((n) => !n) || spins.some((n) => !n) || !driver || !steering) throw new Error('Kart articulation nodes are missing');
-      for (const node of [...pivots, ...spins, driver, scarf, steering]) if (node) node.rotationQuaternion = null;
+      if (pivots.some((n) => !n) || spins.some((n) => !n) || !driver || !head || !steering) throw new Error('Kart articulation nodes are missing');
+      for (const node of [...pivots, ...spins, driver, head, scarf, steering]) if (node) node.rotationQuaternion = null;
       for (const mesh of root.getChildMeshes()) {
-        shadow.addShadowCaster(mesh); mesh.receiveShadows = true; mesh.isPickable = false;
+        mesh.receiveShadows = true; mesh.isPickable = false;
         if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh);
-        if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Petrol enamel')) mesh.material.albedoColor = Color3.FromHexString(colors[index]);
+        if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Petrol enamel')) {
+          const source=mesh.material;let material=paint.get(source);
+          if(!material){material=source.clone(`Kart ${index} enamel`)!;material.albedoColor=Color3.FromHexString(colors[index]);paint.set(source,material);}
+          mesh.material=material;
+        }
         if (mesh.material instanceof PBRMaterial && /racing suit|leather/.test(mesh.material.name)) {
           mesh.material.albedoTexture = fabricMaps.color; mesh.material.bumpTexture = fabricMaps.normal;
         }
@@ -236,7 +252,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
         flame.parent = root; flame.position.set(x, .62, -1.62); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
       });
-      return { root, pivots, spins, driver, scarf, steering, flames, rotation: 0, previousSpeed: 0 };
+      const shadowMeshes=root.getChildMeshes().filter(mesh=>/Petrol enamel|Tire rubber|racing suit|Warm skin|helmet|Dark leather/.test(mesh.name));
+      return { root, pivots, spins, driver,head, scarf, steering, flames,shadowMeshes, rotation: 0, previousSpeed: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
     const contactCanvas = contactTexture.getContext();
@@ -256,19 +273,23 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
     sparks.gravity = new Vector3(0, -4, 0); sparks.colorDead = new Color4(1, .4, .05, 0); sparks.start();
     let reducedEffects = false;
     const presentItems=await addItems(scene,shadow,loadKartCount+1);
+    const itemShadowMeshes=(shadow.getShadowMap()?.renderList??[]).filter(mesh=>!staticShadowMeshes.includes(mesh));
+    for(const mesh of [...world.meshes,...props.meshes]){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     return {
       scene,
       presentItems,
       setQuality(level, reduced) {
+        if(level!==skyQuality) {
+          const old=skyTexture;skyTexture=new Texture(`/assets/textures/sky-${level?'4k':'2k'}.jpg`,scene,false,false);skyTexture.wrapV=Texture.CLAMP_ADDRESSMODE;
+          skyMaterial.emissiveTexture=skyTexture;old.dispose();skyQuality=level;
+        }
         reducedEffects = reduced; sun.shadowEnabled = level > 0; glow.isEnabled = level > 0 && !reduced;
         engine.setHardwareScalingLevel(level === 0 ? Math.max(1, window.devicePixelRatio * 1.35) : 1);
         for (const system of scene.particleSystems) if (system.name === 'Fountain spray') system.emitRate = reduced ? 15 : level === 0 ? 30 : 65;
       },
       setPlayerVisible(visible) {
         // First person uses the real model; hide only the head/body, keep cockpit and wheels.
-        visuals[0].driver.getChildMeshes().forEach((mesh) => {
-          if (/Warm skin|Hair and leather|Smoked goggles|Brushed champagne/.test(mesh.name)) mesh.setEnabled(visible);
-        });
+        visuals[0].head.setEnabled(visible);
       },
       present(state, others) {
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
@@ -286,10 +307,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number): P
           v.steering.rotation.z = -Math.sin(s.heading - s.travelHeading) * .7;
           v.driver.rotation.x = Math.max(-.09, Math.min(.09, (v.previousSpeed - s.speed) * .025));
           v.driver.rotation.z = s.drifting ? s.driftDirection * .08 : Math.sin(time * 5) * Math.abs(s.speed) * .0008;
+          v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;
+          v.head.rotation.x=s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
           if (v.scarf) v.scarf.rotation.z = Math.sin(time * 12) * Math.abs(s.speed) * .008;
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
         });
+        const map=shadow.getShadowMap();
+        if(map)map.renderList=[...staticShadowMeshes,
+          ...treeShadows.filter(t=>Math.hypot(t.root.position.x-state.x,t.root.position.z-state.z)<44).flatMap(t=>t.meshes),
+          ...visuals.filter(v=>Math.hypot(v.root.position.x-state.x,v.root.position.z-state.z)<45).flatMap(v=>v.shadowMeshes),
+          ...itemShadowMeshes.filter(mesh=>mesh.isEnabled())];
         const back = new Vector3(state.x - Math.sin(state.heading), .2 + state.height, state.z - Math.cos(state.heading));
         dust.emitter = back; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 20 : 90 : reducedEffects ? 0 : 8 : 0;
         sparks.emitter = back.add(new Vector3(Math.cos(state.heading) * .85, 0, -Math.sin(state.heading) * .85));

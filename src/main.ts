@@ -1,10 +1,10 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
-import { attachKeyboard, attachTouch, InputHub } from './input';
+import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, type RaceProgress } from './track';
+import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace,type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 
@@ -77,19 +77,35 @@ class App {
   private reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
   private quality = 1;
   private reducedEffects = false;
+  private menuWasPaused=false;
+  private lapTimes:number[]=[];
+  private lapNoticeUntil=0;
+  private lapNotice='';
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
+    try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
+    document.querySelector('#sound-toggle')!.textContent=this.audio.enabled?'Ton an':'Ton aus';
+    const musicVolume=document.querySelector<HTMLInputElement>('#music-volume')!;
+    try{const saved=Number(localStorage.getItem('dk-music-volume')??'14');musicVolume.value=String(Math.max(0,Math.min(100,saved)));}catch{}
+    this.audio.setMusicVolume(Number(musicVolume.value)/100);
+    musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
     document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = 1 - this.quality; this.applyQuality(); });
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
+    document.querySelector('#menu-race')?.addEventListener('click',()=>void this.startRace());
+    document.querySelector('#menu-practice')?.addEventListener('click',()=>this.closeMenu());
+    document.querySelector('#menu-button')?.addEventListener('click',()=>this.openMenu());
+    document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.startRace());
+    document.querySelector('#finish-menu')?.addEventListener('click',()=>this.openMenu());
     document.querySelector('#item-use')?.addEventListener('click',()=>{this.input.setAction('item-button','item',true);this.input.setAction('item-button','item',false);});
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
       this.audio.setEnabled(!this.audio.enabled); void this.audio.unlock();
       document.querySelector('#sound-toggle')!.textContent = this.audio.enabled ? 'Ton an' : 'Ton aus';
+      try{localStorage.setItem('dk-audio',this.audio.enabled?'1':'0');}catch{}
     });
     window.addEventListener('keydown', (event) => {
       if (!LAB_WORLD) void this.audio.unlock();
@@ -105,6 +121,7 @@ class App {
 
   private show(state: AppState, detail: string): void {
     this.state = state;
+    document.body.classList.toggle('is-loading',state==='loading');
     document.body.classList.toggle('start-error',state==='error');
     status.textContent = { loading: 'Lädt …', running: 'Testszene läuft', paused: 'Pausiert', error: 'Startfehler' }[state];
     message.textContent = detail;
@@ -165,7 +182,9 @@ class App {
     this.lastFrameAt = 0;
     this.queuedHopPress = false;
     document.body.classList.remove('photo-mode');
+    document.body.classList.remove('menu-open');
     this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
+    this.lapTimes=[];this.lapNoticeUntil=0;
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
@@ -185,7 +204,7 @@ class App {
         this.rendererName = this.readRendererName();
         this.engine.runRenderLoop(() => this.frame());
       }
-      const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD);
+      const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD,this.quality);
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
       this.applyQuality();
@@ -194,6 +213,7 @@ class App {
       this.testScene.present(this.kart, this.loadKarts);
       this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
+      if(!LAB_WORLD&&!DEMO)this.openMenu();
     } catch (error) {
       if (generation === this.generation) this.show('error', error instanceof Error ? error.message : String(error));
     }
@@ -211,10 +231,29 @@ class App {
     document.querySelector('#motion-toggle')!.textContent=this.reducedMotion?'Kamera ruhig':'Kamera dynamisch';
     try{localStorage.setItem('dk-reduced-motion',this.reducedMotion?'1':'0');}catch{}
   }
+  private openMenu():void {
+    if(LAB_WORLD||this.state==='loading'||!this.camera)return;
+    if(this.camera.introMode)return;
+    if(this.camera.photoMode)this.camera.togglePhoto();document.body.classList.remove('photo-mode');
+    this.menuWasPaused=this.state==='paused';this.input.reset();if(this.state==='running'&&this.racePhase!=='practice')this.togglePause();
+    this.camera.setIntroMode(true);this.testScene?.setPlayerVisible(true);document.body.classList.add('menu-open');
+    document.querySelector('#menu-options')!.append(document.querySelector('#options')!);
+    document.querySelector('#menu-practice')!.textContent=this.racePhase==='practice'?'Strecke erkunden':'Weiterfahren';
+    document.querySelector('#finish-card')?.setAttribute('hidden','');
+  }
+  private closeMenu():void {
+    if(!this.camera?.introMode)return;this.camera.setIntroMode(false);document.body.classList.remove('menu-open');
+    document.querySelector('#options-anchor')!.append(document.querySelector('#options')!);
+    this.camera.update(this.kart,0,true);if(this.state==='paused'&&!this.menuWasPaused)this.togglePause();
+    if(this.racePhase==='finished')document.querySelector('#finish-card')?.removeAttribute('hidden');
+  }
 
   private async startRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
+    const generation=this.generation;
     await this.audio.unlock();
+    if(generation!==this.generation||!this.testScene)return;
+    this.closeMenu();
     if (this.camera?.photoMode) this.camera.togglePhoto(); document.body.classList.remove('photo-mode');
     // Reuse assets; reset the simulation without reloading the entire scene.
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
@@ -222,6 +261,7 @@ class App {
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0;
+    this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -231,11 +271,16 @@ class App {
 
   private updateRaceHud(): void {
     if (LAB_WORLD) return;
-    const place = 1 + this.progress.slice(1).filter((p) => p.distance >= this.progress[0].distance).length;
+    const place=rankRace(this.progress).indexOf(0)+1;
+    document.body.classList.toggle('race-finished',this.racePhase==='finished');
     document.querySelector('#place')!.textContent = `${place}`;
     document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
     document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : 'STADION GRAND PRIX';
+    const notice=document.querySelector<HTMLElement>('#lap-notice')!;notice.hidden=this.racePhase!=='race'||this.raceTime>=this.lapNoticeUntil;notice.textContent=this.lapNotice;
+    const meter=document.querySelector<HTMLElement>('#drift-meter')!;meter.hidden=!this.kart.drifting&&this.kart.turboRemaining<=0;
+    meter.classList.toggle('charged',this.kart.driftCharge>=KART_TUNING.driftChargeTime||this.kart.turboRemaining>0);
+    document.querySelector<HTMLElement>('#drift-fill')!.style.width=`${100*(this.kart.turboRemaining>0?this.kart.turboRemaining/KART_TUNING.turboDuration:this.kart.driftCharge/KART_TUNING.driftChargeTime)}%`;
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
     document.querySelector('#item-name')!.textContent=item?ITEM_NAMES[item]:'Sendung abholen';
@@ -273,6 +318,8 @@ class App {
     } else if (this.state !== 'running' || document.hidden) this.frameTimes = [];
     this.lastFrameAt = now;
     const frame = this.input.read();
+    if(frame.pressed.has('menu')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}
+    if(this.camera?.introMode&&(['accelerate','brake','steerLeft','steerRight','camera','photo'] as Action[]).some(a=>frame.pressed.has(a)))this.closeMenu();
     if (frame.pressed.has('restart')) void this.restart();
     if (frame.pressed.has('pause')) this.togglePause();
     if (frame.pressed.has('debug')) debug.hidden = !debug.hidden;
@@ -338,13 +385,24 @@ class App {
           this.raceTime += FIXED_STEP;
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
-          if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore&&!this.progress[0].finished)this.audio.cue('lap');
+          if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore){
+            const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
+            this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
+            this.lapNoticeUntil=this.raceTime+3;
+            if(!this.progress[0].finished)this.audio.cue('lap');
+          }
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
             this.audio.cue('finish');
-            const place = 1 + this.progress.slice(1).filter((p) => p.finished).length;
+            const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
-            document.querySelector('#finish-detail')!.textContent = `Drei Runden in ${this.raceTime.toFixed(2)} Sekunden. Enter startet die Revanche.`;
+            document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
+            const names=['Du · Funkwagen','Reservefahrer','Archivexpress','Werkstattwagen','Paradewagen','Kurierwagen'];
+            const ranking=rankRace(this.progress).map(i=>({p:this.progress[i],i}));
+            const list=document.querySelector('#finish-results')!;list.replaceChildren();
+            for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;row.append(label,time);list.append(row);}
+            let best:number|null=null;try{const value=Number(localStorage.getItem('dk-best-stadium-v1'));if(value>0&&Number.isFinite(value))best=value;if(!DEMO&&(best===null||this.raceTime<best)){best=this.raceTime;localStorage.setItem('dk-best-stadium-v1',String(best));}}catch{}
+            document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Deine Bestzeit ${best.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
             document.querySelector('#finish-card')!.removeAttribute('hidden');
           }
         }
@@ -375,7 +433,7 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
-    if(this.camera?.photoMode) this.camera.update(this.kart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
+    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.kart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished');
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {

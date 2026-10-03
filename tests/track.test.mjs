@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
-import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt } from '../src/track.ts';
+import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace } from '../src/track.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
   for(let s=0;s<TRACK.length;s+=.5){
@@ -30,6 +30,12 @@ test('reverse and teleporting across the park cannot grant a completed lap',()=>
   assert.ok(race.distance<=0);
   advanceRace(race,{...state,...trackPoint(250)},2);
   assert.ok(race.distance<=0);assert.equal(race.finished,false);
+});
+test('finish order uses crossing time even if a later kart overshoots farther',()=>{
+  const p=(distance,finished,finishTime)=>({last:0,distance,finished,finishTime});
+  const progress=[p(1323.5,true,103),p(1323.2,true,98),p(1323.4,true,100),p(1310,false,null)];
+  assert.deepEqual(rankRace(progress),[1,2,0,3]);
+  assert.deepEqual(rankRace([p(2,false,null),p(2,false,null)]),[0,1]);
 });
 test('circuit ground profile lifts individual wheels and settles the chassis',()=>{
   const p=trackPoint(59);let s={...gridKart(0),...p,travelHeading:p.heading,speed:8};let highest=0,tilt=0;

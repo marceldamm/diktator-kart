@@ -172,7 +172,29 @@ for s in [-1,1]:
     box('Rear mudguard',(s*.86,-.65,.64),(.42,.66,.07),teal,.03,kart)
 box('Nose ivory inset',(0,.86,.78),(.34,.69,.045),cream,.12,kart)
 for x in [-.14,-.07,0,.07,.14]:tube('Front grille rib',[(x,1.4,.38),(x,1.38,.49),(x,1.28,.61)],.012,gold,kart)
-torus('Hood badge',(0,.84,.81),.08,.013,gold,kart)
+def hood_surface(x,y):
+    for i in range(len(sections)-1):
+        a,b=sections[i],sections[i+1]
+        if a[0]<=y<=b[0]:
+            t=(y-a[0])/(b[0]-a[0]);w=a[1]+(b[1]-a[1])*t;lo=a[2]+(b[2]-a[2])*t;hi=a[3]+(b[3]-a[3])*t
+            return (lo+hi)/2+(hi-lo)/2*math.sqrt(max(0,1-(x/w)**2))+.018
+    return .8
+# Original machine-age ornament, deliberately without historical heraldry.
+torus('Hood brass seal',(0,.88,hood_surface(0,.88)+.014),.095,.013,gold,kart)
+for j in range(12):
+    a=j*math.pi/6;x=.11*math.sin(a);y=.88+.11*math.cos(a)
+    tooth=box('Mechanical seal tooth',(x,y,hood_surface(x,y)+.01),(.035,.027,.018),gold,.004,kart);tooth.rotation_euler[2]=-a
+for side in [-1,1]:
+    for shift in [0,.16]:
+        points=[]
+        for j in range(22):
+            t=j/21;a=t*math.pi*1.6;radius=.13*(1-t*.64)
+            x=side*(.19+radius*math.cos(a));y=.45+shift+radius*math.sin(a)
+            points.append((x,y,hood_surface(x,y)))
+        tube('Hood scrollwork',points,.011,gold,kart)
+    for j in range(3):
+        y=.19+j*.072;x=side*.32
+        tube('Hood louvre brass rim',[(x-side*.07,y,hood_surface(x-side*.07,y)),(x+side*.07,y,hood_surface(x+side*.07,y))],.012,gold,kart)
 box('Seat cushion',(0,-.52,.79),(.59,.7,.16),black,.07,kart)
 box('Seat back',(0,-.9,1.02),(.65,.16,.54),black,.08,kart)
 for x in [-.19,0,.19]:tube('Seat stitching',[(x,-.985,.82),(x,-.985,1.04),(x,-.985,1.22)],.009,gold,kart)
@@ -202,7 +224,15 @@ for x in [-.17,.17]:
     tube('Racing arm',[(x*1.8,-.43,1.45),(x*2,-.03,1.2),(x*1.25,.25,1.19)],.095,coat,driver)
     ellipsoid('Gloved hand',(x*1.27,.24,1.2),(.09,.09,.07),black,driver)
 ellipsoid('Neck',(0,-.44,1.62),(.11,.11,.13),skin,driver)
-ellipsoid('Driver caricature head',(0,-.43,1.94),(.285,.245,.32),skin,driver)
+vs=[];fs=[]
+for z,rx,ry in [(1.64,.1,.12),(1.7,.18,.17),(1.79,.24,.215),(1.94,.29,.245),(2.06,.28,.24),(2.18,.245,.215),(2.26,.16,.14),(2.285,.035,.035)]:
+    for i in range(24):
+        a=i*math.pi/12;vs.append((rx*math.cos(a),-.43+ry*math.sin(a),z))
+for ring in range(7):
+    for i in range(24):fs.append((ring*24+i,ring*24+(i+1)%24,(ring+1)*24+(i+1)%24,(ring+1)*24+i))
+fs.extend([tuple(reversed(range(24))),tuple(168+i for i in range(24))])
+face=mesh('Driver caricature head',vs,fs,skin,driver)
+for p in face.data.polygons:p.use_smooth=True
 ellipsoid('Leather aviator helmet',(0,-.48,2.08),(.3,.24,.24),hair,driver)
 for x in [-.28,.28]:ellipsoid('Helmet ear',(x,-.44,1.97),(.045,.105,.11),hair,driver)
 for x in [-.12,.12]:
@@ -210,7 +240,7 @@ for x in [-.12,.12]:
     ellipsoid('Goggle glass',(x,-.154,2.02),(.093,.016,.053),glass,driver)
 ellipsoid('Nose',(0,-.145,1.94),(.065,.08,.06),skin,driver)
 for x in [-.055,.055]:ellipsoid('Moustache',(x,-.18,1.865),(.072,.023,.03),hair,driver)
-tube('Smirk',[(-.07,-.203,1.82),(0,-.215,1.805),(.07,-.203,1.83)],.009,hair,driver)
+tube('Smirk',[(-.07,-.179,1.82),(0,-.185,1.805),(.07,-.179,1.83)],.009,hair,driver)
 scarf=empty('scarfFlap',parent=driver)
 tube('Ivory scarf tail',[(.15,-.57,1.6),(.23,-.95,1.54),(.44,-1.23,1.66)],.075,cream,scarf)
 for x in [-.32,.32]:
@@ -224,6 +254,43 @@ for side in [-1,1]:
         a=j*math.pi/3
         ellipsoid('Chassis ornament',(side*.45+.13*math.cos(a),-1.39,.56+.13*math.sin(a)),(.027,.012,.046),gold,kart,segments=12)
 for z in [1.15,1.28,1.4]:ellipsoid('Suit button',(0,-.18,z),(.025,.017,.025),gold,driver)
+for side in [-1,1]:
+    tube('Helmet goggle strap',[(side*.27,-.44,2.01),(side*.265,-.3,2.01),(side*.21,-.205,2.02)],.023,hair,driver)
+    tube('Helmet chin strap',[(side*.26,-.36,1.92),(side*.2,-.3,1.71),(side*.08,-.32,1.65)],.013,hair,driver)
+    for j in range(3):
+        tube('Glove stitch',[(side*(.20+j*.018),.20,1.255),(side*(.20+j*.018),.27,1.245)],.003,cream,driver)
+# Keep head articulation and first-person visibility independent from gloved hands.
+head=empty('headPose',(0,-.43,1.94),driver);bpy.context.view_layer.update()
+for o in list(bpy.context.scene.objects):
+    if o.parent==driver and o.name.startswith(('Driver caricature head','Leather aviator','Helmet','Goggle','Nose','Moustache','Smirk','Neck')):
+        o.parent=head;o.matrix_parent_inverse=head.matrix_world.inverted()
+
+# Five optional neutral accessories supply six readable provisional racing silhouettes.
+radio=empty('variant-radio',parent=kart)
+box('Receiver casing',(0,-1.05,.95),(.6,.3,.3),black,.045,radio)
+for side in [-1,1]:
+    cyl('Brass broadcast horn',(side*.6,-.92,.99),.18,.37,gold,radio,'Y',r2=.07)
+    torus('Horn mouth rim',(side*.6,-.735,.99),.18,.014,chrome,radio,'Y')
+    tube('Horn support',[(side*.45,-1.1,.65),(side*.6,-.92,.86)],.03,chrome,radio)
+tube('Receiver aerial',[(.22,-1.12,1.04),(.22,-1.12,1.5),(.31,-1.12,1.61)],.009,chrome,radio)
+spare=empty('variant-spare',parent=kart)
+torus('Spare tire',(0,-1.44,.87),.26,.095,rubber,spare,'Y')
+cyl('Spare wheel hub',(0,-1.48,.87),.17,.13,gold,spare,'Y')
+for j in range(8):
+    a=j*math.pi/4;tube('Spare spokes',[(0,-1.57,.87),(.15*math.sin(a),-1.57,.87+.15*math.cos(a))],.013,chrome,spare)
+luggage=empty('variant-luggage',parent=kart)
+for i in range(3):
+    box('Leather luggage',(0,-1.23,.76+i*.18),(.72-i*.08,.35,.16),black if i%2 else cream,.035,luggage)
+    for x in [-.23,.23]:box('Luggage brass straps',(x,-1.23,.77+i*.18),(.026,.37,.165),gold,.006,luggage)
+fin=empty('variant-fin',parent=kart)
+for side in [-1,1]:
+    tube('Tall racing exhaust',[(side*.72,-.88,.56),(side*.77,-1.12,.85),(side*.77,-1.12,1.55)],.075,chrome,fin)
+    cyl('Exhaust mouth',(side*.77,-1.12,1.54),.066,.06,black,fin)
+parade=empty('variant-parade',parent=kart)
+for side in [-1,1]:
+    tube('Race pennant pole',[(side*.73,-.74,.62),(side*.73,-.74,2.06)],.018,gold,parade)
+    vs=[(side*.73+i*.09,-.74+math.sin(i)*.03,1.73+j*.29) for j in [0,1] for i in range(5)]
+    mesh('Neutral burgundy pennant',vs,[(i,i+1,i+6,i+5) for i in range(4)],red,parade)
 steering=empty('steeringWheel',(0,.22,1.21),kart)
 torus('Steering leather rim',(0,0,0),.22,.025,black,steering,'Y')
 for a in [0,2.1,4.2]:tube('Steering spoke',[(0,0,0),(.2*math.sin(a),0,.2*math.cos(a))],.018,chrome,steering)

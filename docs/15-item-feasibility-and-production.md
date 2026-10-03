@@ -1,5 +1,9 @@
 # Sarahs Itemideen – machbare Produktionsfassung
 
+## Integrierte gemeinsame Startregeln – 03.10.2026
+
+Im aktuellen neutralen Slice: ein Slot je Fahrer, neun regenerierende Postkisten, direkte Rohrpost, begrenzt nachführender Suchauftrag und Stempelfalle. Gemeinsame Trefferregeln für Mensch/Bots: Projektilverbrauch, kurzzeitige Verlangsamung, Drift-/Boostabbruch, 1,8 s Schutz; ausreichend hoher Hop vermeidet den Treffer. Je Typ höchstens sechs aktive Objekte, feste Meshpools, TTL und Warnanzeige. Neutrale Original-GLBs/WAVs mit editierbaren Quellen; keine fahrerspezifische historische Darstellung und keine persönliche Spezialfähigkeit. Verifiziert durch Modelltests und echte Drei-Runden-Browserläufe. Direkte Botprojektile verfehlten in den beobachteten Rennen; das wird nicht als Trefferabnahme dargestellt. Balancewerte sind vorläufig.
+
 ## Ziel
 
 Die ursprünglichen Itemideen bleiben erhalten. Sie werden so übersetzt, dass Effekte und Animationen sichtbar und charaktervoll sind, ohne jedes Item zu einer komplizierten Physiksimulation zu machen. Ein Item besteht grundsätzlich aus Daten, Auslöser, Wirkung, Gegenmaßnahme, Präsentation, Audio, UI und sauberem Ende.

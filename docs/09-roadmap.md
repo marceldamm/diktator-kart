@@ -2,7 +2,7 @@
 
 ## Laufender großer Slice – 03.10.2026
 
-Der große Nutzerauftrag zieht neutrale M3-Produktion und Teile von M4 ausdrücklich vor: editierbare Artassets und kompletter fiktiver Stadionring mit fünf echten Bots, drei Runden, Platzierung, Ergebnis/Revanche. Browserrennen und Revanche geprüft. Das bestätigte Start-Itemset wird integriert. Die M2-Abnahmelücken bleiben sichtbar und verhindern keine ausdrücklich autorisierte neutrale Umsetzung. M3/M4 werden nicht pauschal als abgenommen markiert.
+Der große Nutzerauftrag zieht neutrale M3-Produktion und Teile von M4 ausdrücklich vor: editierbare Artassets und kompletter fiktiver Stadionring mit fünf echten Bots, drei Runden, Platzierung, Ergebnis/Revanche. Browserrennen und Revanche geprüft. Das bestätigte Start-Itemset ist mit gemeinsamen Regeln, neutralen GLBs, festem Pool, HUD und Audio integriert; Modelltest und echte Rennen prüfen Aufnahme/Einsatz/Treffer/Pause/Revanche. Die M2-Abnahmelücken bleiben sichtbar und verhindern keine ausdrücklich autorisierte neutrale Umsetzung. M3/M4 werden nicht pauschal als abgenommen markiert.
 
 Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
 
