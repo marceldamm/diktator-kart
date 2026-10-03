@@ -5,6 +5,8 @@ description: Pruefe und dokumentiere Diktator-Kart-Aenderungen, integriere den n
 
 # Diktator Kart: Projektabschluss
 
+Verbindlich: gemeinsame Budgetregel in AGENTS.md lesen und anwenden. Zu Beginn und nach groesseren Paketen echte Fuenf-Stunden-/Wochenwerte des aktuellen Nutzerkontos pruefen; kleinerer Rest entscheidet. Ab etwa 15% keine neue grosse Aufgabe, geordnet pruefen/dokumentieren/lokal sichern und mit Ziel mindestens 5% Rest stoppen. Fehlende echte Werte frueh melden, hoechstens einmal fragen; keine erfundenen Prozentwerte, Resets oder Zusatzkontingente. Sarahs Werte nicht aus Marcels letzter Sitzung uebernehmen.
+
 Schon der alleinstehende entsprechende Kurzbefehl startet diesen Ablauf. Projektabschluss, Projektende und Projekt Ende sind gleichwertig; das ist der ausdrueckliche Auftrag zum geprueften Veroeffentlichen. TEAM-NOTES.md ist die gemeinsame Anleitung; offene Nutzer-Notizen lesen, Herkunft bewahren und der passenden Arbeitsliste zuordnen. Beim Start offene Nachrichten an den bekannten aktuellen Nutzer kurz zeigen. Diktierte Teamnachrichten hier mit Autor/Datum/Zielperson/Status speichern; gelesen/beantwortet erst nach Nutzerbestaetigung.
 
 Vor dem Commit CURRENT-WORKLIST.md mit erledigten/geprueften und offenen Aufgaben samt naechstem Schritt aktualisieren; erreichte/geaenderte langfristige Ziele in LONG-TERM-GOALS.md abgleichen. Nur elementare Nutzerentscheidungen und sichtbare Funktionsaenderungen kurz in TEAM-CHANGES.md aufnehmen. TEAM-NOTES.md erhaelt die Nutzer-Notizen; zugeordnete/abgeschlossene Notizen mit Verweisen kennzeichnen, nicht mit Technikprotokollen fuellen. Technische Belege bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem getesteten Spielstand synchronisieren und veroeffentlichen.

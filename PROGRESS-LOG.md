@@ -845,6 +845,14 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 **Nächster Schritt:** Projekt Start. Danach erste erkennbare historische Fahrerproduktion und nächster Grafikpass; Sprecherin/F-Parodie im Fahrtest anhören, konkrete Aussprachefehler notieren. Abschließende Arbeitslisten-/Veröffentlichungsnotiz als dokumentationsreiner Folgcommit, Spiel-/Asset-/Skriptstand bleibt der oben geprüfte.
 
+### 2026-10-04 – Dauerhafte Budgetregel und Sarahs Erstumstieg
+
+**Befund:** 15-/5-Prozent-Regel war lediglich in älterem START-HERE-Sitzungsabschnitt enthalten, nicht eindeutig allgemeiner Startvertrag. Auf Marcels Auftrag nun für beide in AGENTS/START-HERE/Handbuch/Skills und kurz oben in TEAM-NOTES verankert: aktuelle eigene offizielle Kontowerte, kleinerer Rest, Checkpoints und Abschlussreserve, fehlende Werte einmal erfragen, keine Resets/Zusatzkosten.
+
+**Erstumstieg:** Marcels ausdrücklich beauftragte Nachricht und kurzer selbsttragender Prompt mit Repositoryadresse in TEAM-NOTES. Lokales Bewahren plus einmalig ausdrücklich autorisierter neuer GitHub-Archivbranch; Archivverifikation, Herkunftsdokumentation der Ideen, keine Altengine-Integration; vier Tabs/Zweckerklärung/Nachricht anzeigen. Skills/Teamablauf zwischen gewöhnlichem lokalem Projektstart und diesem expliziten Archiv-Push unterschieden. Sarahs PC/Dateien nicht zugänglich; nicht als migriert oder gesichert behauptet.
+
+**Prüfung / Veröffentlichung:** Reine Markdown-/Skill-Instruktionsänderung, Spiel/Skripte/Tests unverändert zum geprüften 41-Test-Stand. Alle vier Navigationsheader/lokalen Links und der Marker geprüft; beide angepassten Skills mit quick_validate bestanden. GitHub-Publikation dieser Anleitung erfolgt als regulärer Dokumentationscommit mit Remotevergleich; aktuelles main bleibt einzige aktive Spielbasis.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

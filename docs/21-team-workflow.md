@@ -97,3 +97,7 @@ Netzwerk-/Loginfehler: lokalen Stand erhalten, fehlgeschlagene Synchronisierung 
 Offizielle Repo-Skill-Einbindung: https://learn.chatgpt.com/docs/build-skills . Ein erneuter Codex-Start kann erforderlich sein, wenn neue Skills nicht erscheinen; der ausgeschriebene KI-Befehl bleibt nutzbar.
 
 **Starter-Nachprüfung:** Die HTTP-Kennung enthält mode=dev/preview. Diktator-Kart-starten.cmd verwendet ausschließlich den aktuellen Entwicklungsserver desselben Checkouts; statische Produktionspreviews werden nicht wiederverwendet, weil dist älter als die Quellen sein kann. Alte Server ohne mode-Kennung bleiben unverändert und werden umgangen.
+
+## Sarahs erster Umstieg mit Archiv-Push
+
+Der einmalige Prompt in TEAM-NOTES.md autorisiert neben lokalem Erhalt auch die Veröffentlichung eines neu benannten Sarah-Archivbranches. Das normale Projektstart hat weiterhin keine allgemeine Push-Erlaubnis. Sarahs tatsächliche lokale Dateien müssen auf ihrem PC geprüft/gesichert werden; vorhandene Marcels Archivbranches ersetzen dies nicht. Geheimnisse/Tools/Abhängigkeiten nicht blind hochladen, benötigte ignorierte Dateien lokal bewahren. Archiv-SHA/Remote prüfen, anschließend origin/main als alleinige aktive neue Basis nutzen; alten Engine-Code nicht zusammenführen. Bisherige Ideen anhand belegter Quellen in die Wissensbasis aufnehmen, Archivverweis und Zusammenfassung in TEAM-NOTES.md. Bei Uploadgrenzen/fehlendem Zugang lokal erhalten und ehrlich berichten. Vor dem Start gilt die Budgetregel aus AGENTS.md für Sarahs eigenes Konto.

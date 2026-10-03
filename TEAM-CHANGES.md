@@ -31,3 +31,5 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 ## 04.10.2026
 
 - **Gemeinsam gesichert:** Geprüfter neuer Spielstand und vier Arbeitsdateien auf GitHub main veröffentlicht. Der nächste Abend beginnt mit „Projekt Start“. Historische Fahrer und weitere Grafikarbeit bleiben nächste Aufgaben.
+
+- **Limitregel für beide:** Offizielle eigene Kontowerte prüfen, ab etwa 15 % geordnet abschließen, mindestens etwa 5 % Reserve anstreben. Marcels Nachricht und einmaliger Sarah-Umstiegsbefehl stehen in TEAM-NOTES.md; ihr lokaler Stand wird erst bei ihr wirklich gesichert.

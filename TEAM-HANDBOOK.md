@@ -132,3 +132,11 @@ Repository: https://github.com/marceldamm/diktator-kart . Keine zweite aktive En
 - Die 15 bestätigten Designentscheidungen stehen in `docs/10-open-questions.md`. Technische Detailfragen bearbeitet die KI selbstständig innerhalb dieser Grenzen.
 - Der aktive Git-Ordner bleibt im Hauptverzeichnis. Die frühere Legacy-Kopie bleibt als lokale Sicherung im Archiv; dort enthaltene Git-Metadaten sind keine zweite aktive Arbeitsbasis. Der Archivinhalt wird nicht pauschal per „git add .“ veröffentlicht.
 - Vor Übernahme nach main müssen auch ältere Unterschiede der Branchhistorie geprüft werden. Ein veröffentlichter Planungsbranch ist noch keine Freigabe zum Zusammenführen.
+
+## Gemeinsame Budgetregel für autonome Arbeit
+
+Gilt für Marcel und Sarah automatisch beim Projektstart und während ausdrücklich beauftragter autonomer Arbeit. Zu Beginn und nach jedem größeren Paket die offiziellen Codex-Werte des aktuellen Kontos für Fünf-Stunden- und Wochenlimit prüfen, sofern verfügbar (get_usage_limits oder tatsächliche Usage-Anzeige). Maßgeblich ist der kleinere Restwert. Es gelten Sarahs eigene Kontowerte, nicht Marcels letzte Zahlen. Kontextgröße und geschätzte Tokens sind kein Planlimit; keine Prozentwerte erfinden.
+
+Bei ungefähr **15 % Rest** in einem der beiden Limits keine neue große Aufgabe anfangen. Laufende Änderung fertigstellen, wichtigste Prüfungen/Spielbelege sichern, vier Arbeitsdateien und PROGRESS-LOG.md aktualisieren und lokalen Git-Checkpoint erstellen. Einen bereits autorisierten Teamabschluss rechtzeitig durchführen; Upload nur mit entsprechender Freigabe, keine Budgetregel als zusätzliche Push-Erlaubnis auslegen. Mit dem Ziel stoppen, **mindestens etwa 5 % Rest** für eigene Nutzernachrichten zu lassen. Checkpoints regelmäßig bereits während der Arbeit sichern.
+
+Wenn echte Werte nicht abrufbar sind, dies früh sagen, höchstens einmal nach den angezeigten Werten fragen und vorsichtigen Abschluss-Puffer nutzen. Keine Zusatzkontingente aktivieren, keine Resets oder kostenpflichtigen Dienste auslösen. Bei unerwarteter Sperre beim nächsten Kontakt ehrlich gesicherten und ungesicherten Stand nennen. Diese Regel garantiert keinen exakten Restwert; Prüfung und Abschluss brauchen selbst Kontingent.

@@ -6,6 +6,14 @@ Die Kurzbefehle **Projektstart** oder **Projekt Start** rufen den sicheren Start
 
 Diktierte Wünsche selbstständig in die passende Arbeitsdatei eintragen: „Heute möchte ich …“ in CURRENT-WORKLIST.md, „Langfristiges Ziel: …“ in LONG-TERM-GOALS.md, „Notiere: …“ und „Nachricht an Sarah/Marcel: …“ in TEAM-NOTES.md (Datum, Autor, Zielperson, Status). Nutzer müssen Dateien nicht selbst schreiben. Beim Projektstart offene Notizen und für den Nutzer bestimmte Teamnachrichten kurz anzeigen; Empfang/Antwort nicht erfinden.
 
+## Gemeinsame Budgetregel für autonome Arbeit
+
+Gilt für Marcel und Sarah automatisch beim Projektstart und während ausdrücklich beauftragter autonomer Arbeit. Zu Beginn und nach jedem größeren Paket die offiziellen Codex-Werte des aktuellen Kontos für Fünf-Stunden- und Wochenlimit prüfen, sofern verfügbar (get_usage_limits oder tatsächliche Usage-Anzeige). Maßgeblich ist der kleinere Restwert. Es gelten Sarahs eigene Kontowerte, nicht Marcels letzte Zahlen. Kontextgröße und geschätzte Tokens sind kein Planlimit; keine Prozentwerte erfinden.
+
+Bei ungefähr **15 % Rest** in einem der beiden Limits keine neue große Aufgabe anfangen. Laufende Änderung fertigstellen, wichtigste Prüfungen/Spielbelege sichern, vier Arbeitsdateien und PROGRESS-LOG.md aktualisieren und lokalen Git-Checkpoint erstellen. Einen bereits autorisierten Teamabschluss rechtzeitig durchführen; Upload nur mit entsprechender Freigabe, keine Budgetregel als zusätzliche Push-Erlaubnis auslegen. Mit dem Ziel stoppen, **mindestens etwa 5 % Rest** für eigene Nutzernachrichten zu lassen. Checkpoints regelmäßig bereits während der Arbeit sichern.
+
+Wenn echte Werte nicht abrufbar sind, dies früh sagen, höchstens einmal nach den angezeigten Werten fragen und vorsichtigen Abschluss-Puffer nutzen. Keine Zusatzkontingente aktivieren, keine Resets oder kostenpflichtigen Dienste auslösen. Bei unerwarteter Sperre beim nächsten Kontakt ehrlich gesicherten und ungesicherten Stand nennen. Diese Regel garantiert keinen exakten Restwert; Prüfung und Abschluss brauchen selbst Kontingent.
+
 ## Unsere vier Arbeitsdateien
 
 Beim KI-Kurzbefehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md als vier Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
@@ -61,7 +69,7 @@ Die folgenden Hinweise dokumentieren frühere Sitzungen; Branch-, Startpfad- und
 
 **Start:** `Diktator-Kart-starten.cmd` doppelklicken. Chrome öffnet `http://127.0.0.1:4173/`; Fenster offen lassen. Enter startet drei Runden gegen fünf Bots. W/S fahren, A/D lenken, Space Hop/Drift/Turbo, C nahe/ferne/Fahrer-Kamera, V Fotomodus, B Rücksetzung bei niedrigem Tempo, P Pause, R Szenenneustart. E verwendet Items, Esc öffnet das Menü. Grafik Basis/Standard, reduzierte Effekte, ruhige Kamera, Ton und Musiklautstärke stehen unter Optionen.
 
-**Autonomer Auftrag:** Den ausdrücklich freigegebenen neutralen Stadion-Slice anhand G–L breit ausarbeiten, Laufzeitbilder vergleichen und echte Rennläufe prüfen. Kostenlose Assetpipeline und Quellen dokumentieren. Regelmäßige lokale Commits, keine Übertragung. Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei etwa 15 % Rest geordnet abschließen, etwa 5 % für Nutzernachrichten bewahren. Kein Reset/Zusatzkontingent.
+**Autonomer Auftrag:** Den ausdrücklich freigegebenen neutralen Stadion-Slice anhand G–L breit ausarbeiten, Laufzeitbilder vergleichen und echte Rennläufe prüfen. Kostenlose Assetpipeline und Quellen dokumentieren. Regelmäßige lokale Commits; Veröffentlichung ausschließlich über den autorisierten geprüften Teamabschluss. Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei etwa 15 % Rest geordnet abschließen, etwa 5 % für Nutzernachrichten bewahren. Kein Reset/Zusatzkontingent.
 
 **Geprüfter Sitzungsabschluss (03.10.2026):** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung, drei Start-Items, Tribünen, Ladenfassaden, Bahnhof und echter Menü-/Ergebnisablauf. 23 Modelltests, Produktionsbuild, Drei-Runden-Rennen/Revanche, alle Kameras, kompletter Neustart, Hop/Drift/Turbo, Touch-Emulation und WebGL1/Fallback geprüft. Beste echte Spielbilder und Messgrenzen: `docs/evidence/README.md`; Abschluss: `PROGRESS-LOG.md`. Stabile 60 FPS ab Start sind noch nicht erreicht. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
 
