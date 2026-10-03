@@ -331,7 +331,7 @@ try {
       const original = HTMLCanvasElement.prototype.getContext;
       window.__blockedWebgl2Calls = 0;
       HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
-        if (kind === 'webgl2') {
+        if (kind === 'webgl2' || kind === 'experimental-webgl2') {
           window.__blockedWebgl2Calls++;
           return null;
         }

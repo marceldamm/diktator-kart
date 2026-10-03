@@ -1,10 +1,12 @@
 # Art Direction
 
-## Laufender großer Slice – 03.10.2026
+## Geprüfter Slice-Abschluss – 03.10.2026
 
-Die Standardansicht verwendet editierbare Blender-/GLB-Assets statt Quaderkarts: geformter Retro-Roadster, neutraler Fahrerplatzhalter, bewegte Räder/Lenkrad/Schal, echtes CC0-Pflaster, Stein/Stoff, gerichtetes Licht, Schatten und Wolkenhimmel. `docs/evidence/slice-*.png` sind Spielaufnahmen. Der Fahrer ist keine fertige historische Figur. G–L wird noch nicht erreicht; individuelle historische Silhouetten, Gesichts-/Materialpolitur und gemeinsame Stilfreigabe fehlen.
+Die Standardansicht verwendet editierbare Blender-/GLB-Assets: geformter Retro-Roadster mit neutralem Fahrer, Messingornamenten, sichtbaren Rädern, Händen, Lenkrad und Schal. Sechs Lackierungen und fünf zusätzliche Anbauten unterscheiden die Teilnehmer. Stadion, Boulevard, Ladenfronten, Markisen, Bahnhof, Tribünen und Park ergänzen die fiktive Welt. CC0-Pflaster, Baum und scharfer CC0-Wolkenhimmel sind mit Quellen dokumentiert. Aktuelle Bilder: [Laufzeitbelege](evidence/README.md), insbesondere slice-main-menu-v18.png und slice-race-stadium-v18.png.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+G–L wird weiterhin deutlich nicht erreicht. Neutraler Fahrer, Zuschauer und Architekturmodule sind vorläufige Artassets; keine fertigen historischen Figuren oder bestätigten Landmarken. Besonders fehlen ausgearbeitete Charaktere, weniger repetitive Architektur, abwechslungsreichere Streckenführung sowie abgestimmte Material-/Animationspolitur. Gemeinsame Stilabnahme bleibt offen; keine Absenkung des Bildziels.
+
+Historische Zwischenstände bleiben erhalten. Verifizierte Ergebnisse und Grenzen: [Fortschrittslog](17-progress-log.md).
 
 ## Visuelles Ziel
 

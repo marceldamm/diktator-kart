@@ -100,6 +100,7 @@ function addTrackWorld(scene: Scene, shadow: ShadowGenerator): void {
   }
   // Tangible track signage. Satire is fictional; no historic insignia are used.
   const signTexture = new DynamicTexture('Civic poster', { width: 512, height: 512 }, scene, true);
+  signTexture.vScale=-1;signTexture.vOffset=1;
   const c = signTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#731e29'; c.fillRect(0, 0, 512, 512);
   c.strokeStyle = '#d7b573'; c.lineWidth = 12; c.strokeRect(22, 22, 468, 468);
   c.fillStyle = '#efdfb6'; c.textAlign = 'center'; c.font = 'bold 48px Georgia';
@@ -149,22 +150,23 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     scene.clearColor = new Color4(.58, .69, .76, 1);
     scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0028; scene.fogColor = new Color3(.71, .73, .7);
     scene.environmentTexture = CubeTexture.CreateFromPrefilteredData('/assets/textures/studio.env', scene);
-    scene.environmentIntensity = .65;
+    scene.environmentIntensity = .45;
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
     scene.imageProcessingConfiguration.toneMappingType = 1;
-    scene.imageProcessingConfiguration.exposure = 1.15;
-    scene.imageProcessingConfiguration.contrast = 1.12;
+    scene.imageProcessingConfiguration.exposure = 1.08;
+    scene.imageProcessingConfiguration.contrast = 1.16;
     const hemisphere = new HemisphericLight('Blue sky fill', new Vector3(0, 1, 0), scene);
-    hemisphere.diffuse = new Color3(.71, .81, 1); hemisphere.groundColor = new Color3(.32, .25, .18); hemisphere.intensity = .45;
+    hemisphere.diffuse = new Color3(.71, .81, 1); hemisphere.groundColor = new Color3(.32, .25, .18); hemisphere.intensity = .32;
     const sun = new DirectionalLight('Late afternoon sun', new Vector3(-.65, -1, .45), scene);
     sun.position.set(45, 70, -35); sun.diffuse = new Color3(1, .82, .58); sun.intensity = 3.1;
     sun.orthoLeft = -48; sun.orthoRight = 48; sun.orthoTop = 60; sun.orthoBottom = -60;
     sun.shadowMinZ = 1; sun.shadowMaxZ = 200; sun.autoUpdateExtends = false; sun.shadowOrthoScale = 0;
-    const shadow = new ShadowGenerator(engine.webGLVersion > 1 ? 2048 : 1024, sun);
-    shadow.usePercentageCloserFiltering = engine.webGLVersion > 1; shadow.bias = .0001; shadow.normalBias = .008;
+    const shadow = new ShadowGenerator(engine.webGLVersion > 1 ? 1536 : 1024, sun);
+    shadow.usePercentageCloserFiltering = engine.webGLVersion > 1; shadow.bias = .0006; shadow.normalBias = .04;
+    shadow.filteringQuality=ShadowGenerator.QUALITY_MEDIUM;
     shadow.darkness = .05;
     const sky = MeshBuilder.CreateSphere('Panoramic sky', { diameter: 900, segments: 32, sideOrientation: Mesh.BACKSIDE }, scene);
-    const skyMaterial = new StandardMaterial('Golden sky', scene); skyMaterial.disableLighting = true;
+    const skyMaterial = new StandardMaterial('Cloud sky', scene); skyMaterial.disableLighting = true;
     let skyQuality=quality;
     let skyTexture = new Texture(`/assets/textures/sky-${quality?'4k':'2k'}.jpg`, scene, false, false);
     skyTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
@@ -264,7 +266,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // Container buffers stay shared by clones and are released with the scene.
     scene.onDisposeObservable.add(() => container.dispose());
     const dust = new ParticleSystem('Tire smoke and dust', 150, scene); dust.particleTexture = particleTexture(scene);
-    dust.minSize = .12; dust.maxSize = .65; dust.minLifeTime = .25; dust.maxLifeTime = .75;
+    dust.blendMode=ParticleSystem.BLENDMODE_STANDARD;
+    dust.minSize = .1; dust.maxSize = .4; dust.minLifeTime = .25; dust.maxLifeTime = .6;
     dust.direction1 = new Vector3(-.3, .15, -.3); dust.direction2 = new Vector3(.3, .6, .3);
     dust.color1 = new Color4(.6, .56, .48, .28); dust.color2 = new Color4(.72, .71, .63, .22); dust.colorDead = new Color4(.6, .6, .5, 0); dust.start();
     const sparks = new ParticleSystem('Drift sparks', 100, scene); sparks.particleTexture = particleTexture(scene);

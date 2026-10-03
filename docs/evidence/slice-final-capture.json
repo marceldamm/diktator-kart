@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-03T16:14:08.195Z",
+  "method": "Production game, unmodified demo controller through normal input; screenshot during actual race",
+  "state": {
+    "phase": "race",
+    "progress": 93.39401150450638,
+    "karts": 6,
+    "camera": "Verfolger nah"
+  },
+  "errors": []
+}

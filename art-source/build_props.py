@@ -86,7 +86,7 @@ for side in [-1,1]:
                 awning=box('Shop striped awning',(face-side*.8,y+dy-1.5+j*.6,3.2),(1.7,.59,.13),cloth if (j+idx)%2 else cream,.01)
                 awning.rotation_euler[1]=side*.18
             box('Shop valance',(face-side*1.62,y+dy,3.05),(.08,3.6,.34),cloth,.01)
-        text(['ANTRAG & SOHN','CAFÉ AKTENPAUSE','WERKSTATT 08/15','POST AM RING'][idx%4],(face-side*.2,y,3.64),.41,(math.pi/2,0,side*math.pi/2))
+        text(['ANTRAG & SOHN','CAFÉ AKTENPAUSE','WERKSTATT 08/15','POST AM RING'][idx%4],(face-side*.2,y,3.64),.41,(math.pi/2,0,-side*math.pi/2))
         box('Shopfront cornice',(face-side*.2,y,4),(1,15.4,.24),stone,.025)
 
 # Fictional railway hall behind the southern trophy gate; no historic landmark copy.

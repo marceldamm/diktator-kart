@@ -212,6 +212,8 @@ class App {
       this.applyMotion();
       this.testScene.present(this.kart, this.loadKarts);
       this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
+      await this.testScene.scene.whenReadyAsync();
+      if(generation!==this.generation)return;
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
       if(!LAB_WORLD&&!DEMO)this.openMenu();
     } catch (error) {
@@ -329,11 +331,15 @@ class App {
       else if (!this.photoWasPaused && this.state==='paused') this.togglePause();
       this.testScene?.setPlayerVisible(true);
     }
-    if (this.state === 'running' && this.testScene) {
+    if ((this.state === 'running'||this.state==='paused')&&this.testScene) {
       if (frame.pressed.has('camera')) {
         this.lastAction = `Kamera: ${this.camera?.cycleView() ?? 'Verfolger nah'}`;
         cameraDisplay.textContent = this.camera?.viewName ?? 'Verfolger nah';
+        this.camera?.update(this.kart,0,true,frame.steering);
+        this.testScene.setPlayerVisible(this.camera?.viewName!=='Fahrerperspektive');
       }
+    }
+    if (this.state === 'running' && this.testScene) {
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special')) this.lastAction = 'Fähigkeits-Eingabe erkannt';
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;

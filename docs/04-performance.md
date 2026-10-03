@@ -1,10 +1,12 @@
 # Performance-Ziele für normale PCs im Browser
 
-## Laufender großer Slice – 03.10.2026
+## Geprüfter Slice-Abschluss – 03.10.2026
 
-Der neue Slice wurde mit sechs Blender-Karts, Architektur, PBR und Vegetation auf RTX 3070 Laptop GPU bei 1600 × 1000 geprüft. Erstlauf zeigte erhebliche Ausreißer (P95 bis 200 ms). Nach undurchsichtigem Laub und sechs statt zehn Bäumen: P95 20,6/19,9/19,9 ms für nah/fern/Fahrer, Basis-Fahrer 19,4 ms; Rohdaten `evidence/slice-optimized-rtx.json`. Vier Nah-Intervalle >33 ms, andere Fenster keine. Diese kurze Nachprobe ist keine abschließende Dauer-/Zielgeräteabnahme. Drawcallwerte im älteren `slice-full-race-rtx.json` sind kumuliert und ungültig als pro-Frame-Angabe; Nachprobe nutzt korrekte Instrumentierung. Glow wird nur für leuchtende Teile gerendert. 60-/30-FPS-Ziele unverändert.
+Produktionspreview, RTX 3070 Laptop GPU, 1600 × 1000, sechs Karts. Der kontrollierte Drei-Runden-Lauf ohne gleichzeitige Screenshots oder Asset-Builds umfasst 14 Framefenster (meist 300 Intervalle, letztes 115). Erste Standardfenster: P95 37,4 / 66,7 / 33,5 ms; spätere überwiegend 16,8–19,2 ms. Drei Basisfenster nach Revanche: 18,2–18,4 ms. Rohdaten: [slice-controlled-pacing.json](evidence/slice-controlled-pacing.json). Stabile 60 FPS ab Start sind nicht abgenommen. CPU-/GPU-/Drawcallwerte sind Frame-Stichproben, keine Fenster-Mediane.
 
-Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](17-progress-log.md).
+Korrekturen: undurchsichtiges Laub, sechs statt zehn Bäume, begrenzte Schattenwerfer, mittlere PCF-Filterung, geteilte Materialien, eingefrorene statische Weltmatrizen und begrenzter Glow. Der Messlauf liegt vor dem zuletzt ergänzten initialen Scene-Ready-Gate; Start/Kameras/Neustart danach bestanden, ein verbesserter vollständiger Kaltlauf ist nicht belegt. Der separate Produktions-Rennlauf wurde teilweise durch Blender-Export belastet und zählt nur als Funktionsbeleg. Historische kumulierte Drawcallwerte in slice-full-race-rtx.json sind keine Werte pro Frame.
+
+Build und 23 Modelltests bestanden; Hauptchunk weiterhin 1.713 kB (405 kB gzip), Größenwarnung offen. WebGL1 und automatischer Fallback mit sechs GLB-Karts funktionierten auf diesem RTX-Gerät. Das ist keine Abnahme schwacher PCs oder Mobilgeräte. 60-/30-FPS-Ziele bleiben unverändert. Vollständige Belegübersicht: [Laufzeitbelege](evidence/README.md).
 
 ## Leitgedanke
 

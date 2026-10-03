@@ -565,6 +565,26 @@
 
 **Budget / nächster Schritt:** Offiziell zuletzt 68 % Fünf-Stunden- und 11 % Wochenverbrauch. Renderkosten reduzieren, Rang-/Kamera-/Neustart-/WebGL1-Nachprobe, beste echte Laufzeitbilder sichern und geordnet abschließen. Diese Sitzung läuft weiter.
 
+### 2026-10-03 – Vertical Slice: verifizierter Abschluss und Übergabe
+
+**Ziel / Arbeitsmodus:** Großen neutralen Stadion-Slice unmittelbar spielbar ausarbeiten; bestehende Fahrphysik erhalten, G–L als unverändertes Ziel. Autonom im gewählten Modell, ausschließlich Branch codex/stadium-vertical-slice. Lokale Checkpoints d9788c1, d4ed11f, 5e4e0dd und daf9307; anschließend Abschluss-Commit. Kein Push, Merge oder Eingriff ins Altarchiv.
+
+**Abgeschlossen:** Sechs editierbare Karts mit Originalanbauten, neutraler Fahrer, fiktive Stadion-/Boulevardwelt, PBR-Pflaster/CC0-Baum/Himmel, Publikum, Bahnhof, Ladenfronten und Satiredetails. Menü, freie Fahrt, Countdown, echte drei Runden, Zielstand mit sechs Teilnehmern, Revanche, gemeinsame Botphysik, drei Items und gespeicherte Optionen. Fahrerperspektive mit echten Händen/Lenkrad/Rädern. Begrenzte Partikel/Audio und sichtbare Federung/Hop/Drift/Turbo/Kontakte. Letzte Korrekturen: lesbare Shop-/Posterflächen, Schattenbias/PCF, Kamerawechsel auch pausiert, initiales Scene-Ready-Gate und Starter erkennt bereits laufenden eigenen Projektserver.
+
+**Verifiziert:** 23 Modelltests bestanden, Produktionsbuild bestanden (Chunkwarnung offen). Isolierter Chrome auf Produktionspreview: Start/Fahrt, nahe/ferne/Fahrer-Kamera, Foto, Pause/Resume, Countdown und vollständiger Szenenneustart v18 bestanden. Echtes Drei-Runden-Rennen samt Ergebnis/Revanche und HUD-/Ergebnisranggleichheit v16 bestanden; Rang nach Zielzeit zusätzlich im Modell regressionsgesichert. Hop, Driftaufladung, Turbo und Randkontakt mit tatsächlichen Tastatureingaben v15 geprüft. WebGL1 erzwungen und automatischer Fallback nach synthetischer WebGL2-Sperre v17 mit sechs Karts/Fahrt/Kameras bestanden. Touch-Emulation 932 × 430: Mehrfinger-Gas/Lenkung, Abbruch, Kamera und Settings-Persistenz bestanden. Starter -CheckOnly akzeptiert den bereits laufenden eigenen Server. Laufzeitbilder/JSON unter docs/evidence/, indexiert in README.md dort. slice-race-stadium-v18.png zeigt normalen Sechs-Kart-Rennzustand bei 50 km/h, keine eingespritzten Fahrzeugposen.
+
+**Leistung / Grenzen:** Kontrollierter Produktions-Dreirundenlauf ohne parallelen Blender-Build oder Screenshots: RTX 3070 Laptop GPU, 1600 × 1000, 14 rAF-Fenster; erste Standard-P95 37,4/66,7/33,5 ms, später überwiegend 16,8–19,2 ms. Basis nach Revanche 18,2–18,4 ms. Keine Browserausnahme. Stabile 60 FPS ab Start nicht bestanden. Messung vor finalem Scene-Ready-Gate; dessen bessere Kaltlaufwerte sind nicht verifiziert. Produktions-Rennmessung slice-production-race-rtx.json teilweise durch Blender belastet, nur Funktionsbeleg. Frühere kumulierte Drawcalls ungültig als pro-Frame-Angaben. Hauptchunk 1.713 kB / 405 kB gzip bleibt zu groß. Kein schwacher PC, Android/iPhone, menschlicher Kamerakomfort oder Hörtest abgenommen.
+
+**Geänderte Dateien seit letztem Checkpoint:** art-source/build_props.py, stadium-props.blend und Laufzeit-GLB; scripts/start-local.ps1; src/main.ts und slice-scene.ts; Browser-/CDP-/Rennprüfungen sowie neue slice-feedback.mjs, slice-compatibility.mjs, slice-performance-loop.mjs. Aktuelle Bilder und Rohdaten; START-HERE.md, docs/02-art-direction.md, 04-performance.md, 17-progress-log.md, evidence/README.md und cloud-project-description.md. Frühere Asset-/Grundpfeileränderungen stehen in den vorangehenden Einträgen.
+
+**Annahmen / nicht verifiziert:** Gesicht/Zuschauer sind neutrale vorläufige Artassets, keine fertigen historischen Figuren. Satire-/Landmarkengestaltung keine gemeinsame historische Freigabe. Direkte Botprojektile verfehlten in beobachteten Rennen trotz Modell-Treffertest; menschliche Spielbalance offen. Audio läuft technisch, Qualität nicht angehört. Keine neue M2/M3/M4-Gesamtabnahme und kein behauptetes G–L-Ergebnis.
+
+**Offene größte Schritte:** (1) ausgearbeitete Charaktere, Kart-/Material- und Animationspolitur gegen G–L; (2) weniger repetitive, abwechslungsreichere Strecke mit komponierten Blickpunkten; (3) Kaltlauf-/LOD-/Ladegruppenoptimierung und echte normale/schwache PC- und Mobilprüfung. Bot-Drift und direkter Projektileinsatz brauchen weitere Spielarbeit. Nach Zustimmung später historische Inhalte gemeinsam festlegen.
+
+**Nächster Start:** Diktator-Kart-starten.cmd oder http://127.0.0.1:4173/. Zuerst aktuelle Laufzeitbilder und Abschlussgrenzen lesen, dann größtes sichtbares Qualitätsdefizit bearbeiten. main und Legacy bleiben unberührt; Übertragung ausdrücklich freigeben lassen.
+
+**Budget / Sitzungsstatus:** Offizieller letzter Stand beim Abschluss: 88 % Fünf-Stunden-Verbrauch / 14 % Wochenverbrauch, also 12 % / 86 % Rest. Bei Unterschreiten der 15-%-Schwelle keine neue große Aufgabe begonnen; Tests, Belege und Dokumentation geordnet gesichert. Keine kostenpflichtigen Kontingente, kein Reset, kein Ruhezustand. Abschluss folgt mit lokalem Commit; reale Abschlusswerte im Ergebnisbericht.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

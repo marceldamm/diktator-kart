@@ -8,7 +8,9 @@
 
 **Autonomer Auftrag:** Den ausdrücklich freigegebenen neutralen Stadion-Slice anhand G–L breit ausarbeiten, Laufzeitbilder vergleichen und echte Rennläufe prüfen. Kostenlose Assetpipeline und Quellen dokumentieren. Regelmäßige lokale Commits, keine Übertragung. Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei etwa 15 % Rest geordnet abschließen, etwa 5 % für Nutzernachrichten bewahren. Kein Reset/Zusatzkontingent.
 
-**Geprüfter Zwischenstand:** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung, drei Start-Items, Tribünen, Ladenfassaden, Bahnhof und echter Menü-/Ergebnisablauf. Details und Messgrenzen in `docs/17-progress-log.md`. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
+**Geprüfter Sitzungsabschluss (03.10.2026):** editierbare Blender-Modelle, PBR-Pflaster, Wolkenhimmel, sechs Fahrzeuge, drei Kameras, freie Fahrt/Countdown/Drei-Runden-Ergebnis/Revanche, Audiofreischaltung, Foto, gemeinsame Rücksetzung, drei Start-Items, Tribünen, Ladenfassaden, Bahnhof und echter Menü-/Ergebnisablauf. 23 Modelltests, Produktionsbuild, Drei-Runden-Rennen/Revanche, alle Kameras, kompletter Neustart, Hop/Drift/Turbo, Touch-Emulation und WebGL1/Fallback geprüft. Beste echte Spielbilder und Messgrenzen: `docs/evidence/README.md`; Abschluss: `docs/17-progress-log.md`. Stabile 60 FPS ab Start sind noch nicht erreicht. Historische Figuren sind weiterhin Platzhalter; G–L ist noch nicht erreicht, Stil-/Zielhardware-Abnahme offen.
+
+**Nächste Produktion:** Charakter-/Kartpolitur gegen G–L, abwechslungsreicheres Streckenlayout und Material-/Animationspass; parallel Kaltlauf/LOD/Ladegruppen auf echter Zielhardware prüfen. Diese Sitzung wurde mit lokalem Commit und Budgetreserve geordnet abgeschlossen.
 
 ## Historische Zwischenstände vor dem großen Auftrag
 
