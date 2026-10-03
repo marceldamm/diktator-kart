@@ -1,5 +1,9 @@
 # Entscheidungen und verbleibende Fragen
 
+## Präzisiertes Ziel für Figuren und Welt – 03.10.2026
+
+Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar.
+
 ## Gemeinsame Hauptbasis – 03.10.2026
 
 Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.

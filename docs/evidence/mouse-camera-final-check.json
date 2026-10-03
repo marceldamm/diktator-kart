@@ -1,0 +1,31 @@
+{
+  "controls": "LMB hold free look; RMB/X hold rear; E item; temporary native Pointer Lock only while held",
+  "viewport": "1280x800",
+  "fleet": 1,
+  "evidence": [
+    {
+      "view": "Verfolger nah",
+      "hover": 0,
+      "held": 0.720000039113172,
+      "centred": 0.0007838866110851246,
+      "rear": 3.1415926535667187
+    },
+    {
+      "view": "Verfolger fern",
+      "hover": 0,
+      "held": 0.7199999260625664,
+      "centred": 0.0018840415113472314,
+      "rear": 3.141592652355991
+    },
+    {
+      "view": "Fahrerperspektive",
+      "hover": 0,
+      "held": 0.7200000020789398,
+      "centred": 0,
+      "rear": 3.1415926481672263
+    }
+  ],
+  "menuAndFocusRelease": true,
+  "itemSeparate": true,
+  "runtimeErrors": []
+}

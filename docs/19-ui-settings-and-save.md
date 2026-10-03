@@ -1,8 +1,10 @@
 # Benutzeroberfläche, Einstellungen und lokale Speicherung
 
-## Bewusste Mausgeste – 03.10.2026
+## Endgültige Mausgeste – 03.10.2026
 
-Umsehen im Rennen/freier Fahrt nur mit rechter Maustaste halten + ziehen (an der freien Kamera von BeamNG orientiertes Bedienmuster, https://www.beamng.com/game/support/portal/gameplay/photomode/). Linksklick/E bleiben Items; X halten Rückblick; Mausrad Zoom. Der Cursor bleibt sichtbar, ohne Pointer Lock. Pointer Capture hält eine gestartete Geste über dem Canvasrand zusammen; Loslassen/Fokusverlust/Menü/Pause/Neustart/Kamerawechsel beenden sie. Während des Haltens bleibt die gewählte Blickrichtung; danach weiche Rückzentrierung. Menüs/Fotoautomatik erhalten keine Drag-Eingabe. Spielhinweise, README/START-HERE/aktueller Hand-off synchronisiert.
+Linke Maustaste halten: frei umsehen. Rechte Maustaste oder X halten: Rückblick. E: Item. Der Cursor wird nur während der Mausgeste unsichtbar und an seiner ursprünglichen Position festgehalten (temporärer nativer Pointer Lock); Loslassen zeigt ihn dort wieder. Loslassen/Fokusverlust/Menü/Pause/Neustart/Kamerawechsel beenden die Geste. Freiere Rundumsicht und vertikaler Blick; nach Loslassen weich nach vorn.
+
+Technik: Pointer Lock beendet zuvor gesetzten Pointer Capture automatisch (W3C Pointer Events, https://www.w3.org/TR/pointerevents/). Das lostpointercapture-Ereignis während aktiver Bindung ist deshalb kein Loslassen. Diese falsche Behandlung verursachte den vom Nutzer beobachteten kurzen Rückblick. Eigener Chrome: alle drei Ansichten, Halten, Freigabe, Menü, Fokusverlust, E und keine dauernde Bindung geprüft; Rohdaten docs/evidence/mouse-camera-final-check.json. Headless-Prüfung braucht aktive Dokumentfokussierung, sonst lehnt Chrome Lock mit WrongDocumentError ab. Betriebssystem-Cursorpixel nicht per Headless-Bild überprüfbar; Wiederherstellung folgt der nativen API.
 
 ## Früher Start ohne weißen HTML-Blitz – 03.10.2026
 

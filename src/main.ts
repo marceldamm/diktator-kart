@@ -67,7 +67,7 @@ class App {
     enabled: () => this.state === 'running' && !!this.camera && !this.camera.introMode && !this.camera.photoMode,
     look: (dx,dy) => this.camera?.look(dx,dy),
     dragging: active => this.camera?.setLooking(active),
-    item: () => { this.input.setAction('mouse-item','item',true); this.input.setAction('mouse-item','item',false); },
+    rear: active => this.input.setAction('mouse-rear','lookBack',active),
     zoom: delta => this.camera?.zoomBy(delta),
   });
   private state: AppState = 'loading';

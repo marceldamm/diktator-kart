@@ -16,7 +16,7 @@ Die Repo-Skills heißen $diktator-projektstart und $diktator-projektabschluss. A
 
 **Spiel starten:** Diktator-Kart-starten.cmd im aktiven Hauptordner. Es öffnet den ausgecheckten neuen Stand, keinen fest eingetragenen Worktree. Root-/Versionsprüfung verhindert die Wiederverwendung eines fremden/alten Servers; angezeigte URL verwenden. Abhängigkeiten werden aus dem Lockfile installiert. Fenster offen lassen.
 
-**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E oder Linksklick Item, C drei Kameras, rechte Maustaste halten + ziehen zum Umsehen, X halten Rückblick, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
+**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E oder Linksklick Item, C drei Kameras, linke Maustaste halten zum Umsehen, rechte Maustaste/X halten Rückblick, E Items, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
 
 **Claude-Stand:** 593-m-Kurs, neue Welt/Karts/sechs fiktive Fahrer, Bot-Drift, Hinterhof-Abkürzung, Stimmen/Publikum, Lenkträgheit und gefederte Karosserie, Rüttelrandsteine, Live-Videowand. Vorliegende Tests und verbleibende Qualitäts-/Gerätegrenzen: [Fortschrittslog](docs/17-progress-log.md). Kein fertiger historischer Kader und keine G–L-Abnahme. Regen/nasse Straße/echtere Fahrer sind nächste Produktionswünsche, keine bereits gebauten Features.
 

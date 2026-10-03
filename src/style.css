@@ -22,7 +22,7 @@ body { margin: 0; }
 @media(max-height:600px) { .menu-open .start-menu { width:290px;padding:20px; } .start-menu h1 { font-size:32px;margin:12px 0; } .menu-flavor { margin-bottom:12px; } .menu-seal { display:none; } .start-menu small { margin-top:12px; } }
 #app { position: relative; width: 100vw; height: 100dvh; overflow: hidden; }
 #render-canvas { display: block; width: 100%; height: 100%; outline: none; }
-#render-canvas.camera-dragging { cursor: grabbing; }
+#render-canvas.camera-dragging { cursor: none; }
 .panel { position: absolute; top: max(20px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); width: min(400px, calc(100vw - 40px)); max-height: calc(100dvh - max(20px, env(safe-area-inset-top)) - max(20px, env(safe-area-inset-bottom))); overflow: auto; padding: 20px 22px; background: rgba(6, 22, 30, .88); border: 1px solid rgba(126, 214, 217, .4); border-radius: 12px; box-shadow: 0 12px 40px #0008; backdrop-filter: blur(8px); }
 .eyebrow { font-size: .72rem; letter-spacing: .2em; color: #6ed6dc; font-weight: 700; }
 h1 { font-size: 1.4rem; margin: .5rem 0 1rem; }

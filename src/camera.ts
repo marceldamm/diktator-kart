@@ -109,9 +109,9 @@ export class KartCamera {
   get introMode():boolean {return this.intro;}
   setIntroMode(intro:boolean):void {this.resetLook();this.intro=intro;this.cockpit.setEnabled(!intro&&this.view===2&&!this.realCockpit);}
   setReducedMotion(reduced:boolean):void { this.reducedMotion=reduced; }
-  look(dx:number,dy:number):void { if(Math.abs(dx)+Math.abs(dy)<3)return; this.lookYaw=Math.max(-2.6,Math.min(2.6,this.lookYaw+dx*.006)); this.lookPitch=Math.max(-.35,Math.min(.6,this.lookPitch+dy*.004)); this.lookIdle=0; }
+  look(dx:number,dy:number):void { this.lookYaw+=dx*.0045; this.lookPitch=Math.max(-.6,Math.min(.8,this.lookPitch+dy*.0035)); this.lookIdle=0; }
   setLookBack(back:boolean):void { this.lookBack=back; }
-  setLooking(active:boolean):void { this.looking=active; this.lookIdle=0; }
+  setLooking(active:boolean):void { this.looking=active; if(!active)this.lookYaw=Math.atan2(Math.sin(this.lookYaw),Math.cos(this.lookYaw)); this.lookIdle=0; }
   resetLook():void { this.lookYaw=0; this.lookPitch=0; this.lookIdle=0; this.looking=false; this.lookBack=false; }
   zoomBy(delta:number):void { this.zoom=Math.max(.6,Math.min(1.9,this.zoom*(delta>0?1.08:1/1.08))); }
   togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
@@ -161,10 +161,9 @@ export class KartCamera {
       ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - (this.realCockpit ? 1.7 : .14),
         this.camera.position.z + forwardZ * 8)
       : new Vector3(state.x + chaseX * view.look, view.lookHeight + state.height * 0.5, state.z + chaseZ * view.look));
-    if (firstPerson && (this.lookBack || Math.abs(this.lookYaw) > .01)) {
-      // In the cockpit the mouse turns the driver's head; the right button looks over the shoulder.
-      const yaw = this.lookBack ? state.heading + Math.PI : state.heading + this.lookYaw * .8;
-      this.camera.setTarget(new Vector3(this.camera.position.x + Math.sin(yaw) * 8, this.camera.position.y - 1.2 - this.lookPitch * 4, this.camera.position.z + Math.cos(yaw) * 8));
+    if (firstPerson && (this.lookBack || Math.abs(this.lookYaw) > .01 || Math.abs(this.lookPitch) > .01)) {
+      const yaw = this.lookBack ? state.heading + Math.PI : state.heading + this.lookYaw;
+      this.camera.setTarget(new Vector3(this.camera.position.x + Math.sin(yaw) * 8, this.camera.position.y + Math.tan(-.15-this.lookPitch) * 8, this.camera.position.z + Math.cos(yaw) * 8));
     }
     this.wheel.rotation.z = -steering * 0.45;
   }

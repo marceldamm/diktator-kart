@@ -739,7 +739,23 @@
 
 **Grenzen:** Kurze Frame-Wandzeitstichproben weiterhin P95 47 / 42,7 ms bei möglicher gleichzeitig offener Nutzersitzung. Keine kontrollierte FPS-Abnahme, keine Behauptung völlig ruckelfreier GPU-Bildausgabe. Keine menschliche Komfort-/schwache-PC-/Handyabnahme. 60-FPS-Ziel unverändert. Fahrzeugvibrationen werden auf zusätzlichen ausdrücklichen Wunsch als nächstes reduziert.
 
-**Dateien / nächster Schritt:** render-state.ts/main.ts, tests/render-state.test.mjs/drive-pacing-browser.mjs, Browserrohwerte, docs03/04/17/23. Nutzerergänzungen vollständig in docs/23-current-work-list.md: endgültige linke Look-/rechte Rückblick-Geste mit temporärer Cursorbindung, weniger Wackeln/Acceleration-Pose, beidseitiges Driftladen und Staub, historische Atmosphären-/Satiredetails, Schäferhund-Verfolger. Danach gezielter Gesamttest/Teamabschluss. Der ausdrücklich ignorierte Diktatsatz verändert keine Aufgabe.
+**Dateien / nächster Schritt:** render-state.ts/main.ts, tests/render-state.test.mjs/drive-pacing-browser.mjs, Browserrohwerte, docs03/04/17/23. Nutzerergänzungen vollständig in docs/23-current-work-list.md: endgültige linke Look-/rechte Rückblick-Geste mit temporärer Cursorbindung, weniger Wackeln/Acceleration-Pose, beidseitiges Driftladen und Staub, historische Atmosphären-/Satiredetails, Schäferhund-Verfolger. Danach gezielter Gesamttest/Teamabschluss.
+
+### 2026-10-03 – Aktueller menschlicher Fahrbefund und präzisiertes Modellziel
+
+**Nutzerbefund:** Nach Renderinterpolation wesentlich flüssiger, deutlich besseres Fahrgefühl. Das ist eine menschliche Rückmeldung, keine GPU-/Geräteabnahme. Neuer konkreter Mausfehler: rechter Rückblick bricht sofort ab; links noch kein Umschauen. Aktive Korrektur und Browserregression folgen.
+
+**Zieländerung:** Erkennbare, realitätsnahe Abbilder echter historischer Personen und glaubwürdige Spielwelt gewünscht, insbesondere Hitler statt erfundener Ersatzperson. Die missverständliche Formulierung in der laufenden Liste entfernt; Modellqualität wird nicht als bereits erreicht ausgegeben. README, Art Direction, Roadmap, Fragen/Katalog geprüft und mit ausdrücklicher Präzisierung versehen. Aktueller Stand und Ziel getrennt; Sarahs ursprüngliche Ideen bleiben nachvollziehbar.
+
+**Nächster Schritt:** Mausfehler abschließen, Fahrzeugpose/Drift/Staub, historische Umgebungsdetails, Schäferhund und realitätsnaher Fahrerpass im Rahmen des offiziellen Restbudgets.
+
+### 2026-10-03 – Endgültige Mausbelegung und abgebrochenen Rückblick korrigiert
+
+**Umgesetzt:** Linke Taste frei umsehen, rechte Taste/X Rückblick, E Items. Temporärer nativer Pointer Lock während Halten; Cursor unsichtbar, native Rückkehr an Ursprungsposition. Freiere Rundumsicht/vertikaler Blick; weiche Rückzentrierung, Freigabe an Menü/Blur/Neustart. W3C-belegter Fehler: Lock beendet Pointer Capture; lostpointercapture darf dabei nicht die laufende Geste beenden. Das erklärt und korrigiert den vom Nutzer gemeldeten sofortigen Rücksprung.
+
+**Verifiziert:** tests/mouse-camera-browser.mjs besteht in eigenem fokussierten Chrome 9227: alle drei Kameras, Hover unverändert, linke Geste stabil >2 Sekunden, rechte Rücksicht stabil, Loslassen zentriert; Menü/Fokusverlust lösen Bindung, E bleibt Item. Keine Runtimefehler. Rohdaten docs/evidence/mouse-camera-final-check.json. Nicht behauptet: sichtbare OS-Cursorpixel per Headless überprüft; Wiederherstellung durch native Browser-API, noch Nutzercheck im eigenen Browser.
+
+**Dateien / nächster Schritt:** mouse-camera/camera/main/style, index, Browserregression, README/START-HERE/docs19/22/23/17. Danach Karosserie/Drift/Staub.
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
