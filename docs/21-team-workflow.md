@@ -8,6 +8,10 @@ Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchro
 
 Verbindlich seit 03.10.2026, ausdruecklicher Nutzerauftrag. Ziel: dieselbe neue Babylon-Hauptbasis, sichere Zusammenarbeit und KI-Hilfe bei Git-Konflikten.
 
+## Ein Arbeitsordner für alle – verbindlich seit 04.10.2026
+
+Spiel, Batch, ChatGPT-/Codex-App und Claude-App arbeiten ausschließlich im Hauptordner des Repositorys (bei Marcel `D:\Diktator-Kart`, bei Sarah ihr eigener Repository-Ordner). **Claude-Sitzungen ohne Worktree starten** (in der Claude-App beim Sitzungsstart den Worktree-Modus ausschalten bzw. den Hauptordner als Projekt wählen). Grund: `vite.config.ts` ignoriert `.claude/`-Pfade; ein Worktree-Server zeigt dann veraltete Dateien, und Batch/Apps sehen unterschiedliche Stände. Falls eine Sitzung doch in einem Worktree läuft: nach jedem Commit den Hauptordner per `git merge --ff-only <branch>` nachziehen und nur gegen den Batch-Server (Port 4173) testen. Nie zwei KIs gleichzeitig im selben Ordner arbeiten lassen.
+
 ## Welche Version gilt?
 
 - `origin/main` im Repository **marceldamm/diktator-kart** ist die gemeinsame, gepruefte Babylon-Version.

@@ -93,6 +93,12 @@ Projekt Start. Ich bin Sarah. Sichere zuerst meinen bisherigen Stand lokal und a
 ```
 
 
+### 04.10.2026 – Nachricht von Marcel (über Claude) an Sarah
+
+Hallo Sarah! Dein Panzer ist zurück: Drück im Rennen **Q** – der General wird für acht Sekunden zum Paradepanzer („Größenbefehl“), rollt mit Ketten, Rauch und Getöse durchs Feld und schiebt Gegner zur Seite; danach 18 Sekunden Pause. Außerdem neu: **Regen** (Optionen → Wetter Regen) mit nasser Straße, Pfützen und Gewitter, aufgeräumte Doku und ein gemeinsamer Arbeitsordner. Einfach „Projekt Start“ sagen, dann bist du auf unserem Stand. Viel Spaß beim Ausprobieren! – Marcel
+
+**Status:** offen, für Sarah.
+
 ## Unsere Notizen
 
 ### 04.10.2026 – Marcel: nächste Qualitätsstufe

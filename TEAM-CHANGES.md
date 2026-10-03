@@ -45,3 +45,7 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Panzer ist zurück:** Sarahs „Größenbefehl“ auf Q – acht Sekunden Paradepanzer mit Ketten, Rauch und Klang, schiebt Gegner kontrolliert weg; danach 18 Sekunden Abklingzeit. Im HUD links unten sichtbar.
 
 - **Doku entschlackt:** Alte Logeinträge und frühere Einstiege liegen jetzt unter `docs/history/`; die Hauptdateien sind kürzer.
+
+- **Regen:** In den Optionen „Wetter Regen“ wählen: nasse, glänzende Straße, Pfützen, Blitz und Donner.
+
+- **Ein Ordner für alles:** Spiel, ChatGPT-App und Claude-App immer im Hauptordner; Claude ohne Worktree starten.

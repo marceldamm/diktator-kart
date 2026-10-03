@@ -230,6 +230,14 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 **Nicht verifiziert:** menschliches Fahrgefühl des Panzers, Hörprobe der neuen Klänge, Bots mit Fähigkeiten (noch keine), Balance. Spielerfigur ist weiterhin der neutrale „General“-Platzhalter; erkennbarer historischer Fahrer bleibt offen.
 
+### 2026-10-04 – Regen und einheitlicher Arbeitsordner (Claude)
+
+**Umgesetzt:** Wetteroption Sonne/Regen (persistiert, `?weather=rain`): gedämpfte Sonne, graublaue Himmelsaufhellung, dichter Dunst, nasse Pflaster/Promenaden (dunkler, Rauigkeit 0,32/0,4), zehn Pfützen auf der Fahrlinie mit Spritzern sowie Wasserbremse und Grip-Verlust, Regenschlieren um die Kamera, Blitze alle 9–23 s mit verzögertem Donner, Regenschleife (originale WAVs aus `build_audio.mjs`). Arbeitsordnerregel in `docs/21-team-workflow.md`.
+
+**Verifiziert:** 43 Modelltests, Typecheck. Batch-Server (Hauptordner, Port 4173) mit `?demo=1&weather=rain`: Option „Wetter Regen“, Rennen läuft, 2 365 aktive Regenpartikel, Spielbild betrachtet. Ursache früherer Standabweichung gefunden: `vite.config.ts` ignoriert `.claude/`; Worktree-Server lieferte alte Dateien.
+
+**Nicht verifiziert:** Hörprobe Regen/Donner, menschliches Fahrgefühl in Pfützen, Leistung auf schwachen Geräten mit 3 600 Regenpartikeln/s. Wolkenschatten noch nicht gebaut.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**
