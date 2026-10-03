@@ -14,6 +14,8 @@ Der ausdrückliche aktuelle Nutzerauftrag erlaubt einen eigenständigen neutrale
 
 ## Herkunft und Status
 
+**Nachprüfung 04.10.2026:** Die unten erhaltene Zwölferliste stammt aus einem älteren kreativen Auftrag. Der zuletzt veröffentlichte Altstand e292070 enthält für Hitler stattdessen **Größenbefehl: acht Sekunden Panzerverwandlung**, von Sarah über Marcel als eigene Umsetzung gemeldet. Marcel beauftragt die Wiederherstellung im neuen Spiel; dort erkennt Q bislang nur die Eingabe. „Endlose Rede“ bleibt als frühere Idee erhalten und beschreibt nicht den letzten implementierten Altstand. Auch die anderen fünf Startfähigkeiten weichen teils ab. Verbindlicher Quellen-/Statusabgleich: [sarah-feature-audit.md](sarah-feature-audit.md); keine automatische Freigabe aller alten Wirkungen.
+
 Dieser Katalog extrahiert die verwertbaren Ideen aus dem alten Produktionsauftrag. Er ist die kreative Quelle für die Babylon.js-Neuentwicklung, keine Aufforderung, alte Klassen oder alte Balancewerte zu kopieren. Alle Fähigkeiten müssen neu bewertet, fair umgesetzt, historisch verantwortbar gestaltet und mit dem neuen Fahrgefühl abgestimmt werden.
 
 Die zwölf Figuren sind historische Diktatoren als satirische Fahrerfiguren. Namen, konkrete Symbole, Kleidung und historische Schauplätze brauchen vor Veröffentlichung eine eigene Inhalts- und Rechtsprüfung. Die Satire richtet sich gegen Diktatoren, Machtstrukturen, Personenkult, Propaganda, Bürokratie und autoritäre Systeme.

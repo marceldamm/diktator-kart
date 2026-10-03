@@ -6,6 +6,10 @@
 
 Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Änderungen, jeweils wenige Zeilen. Kein Werkzeug-/Testprotokoll. Technische Belege und offene Annahmen stehen in [PROGRESS-LOG.md](PROGRESS-LOG.md), laufende Aufgaben in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md), Zukunftsziele in [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md).
 
+## 04.10.2026
+
+- **Sarahs Panzeridee wiedergefunden:** Die Verwandlung existiert im alten veröffentlichten Code, fehlt aber im Babylon-Spiel. Wiederherstellung in CURRENT-WORKLIST.md aufgenommen; weitere alte Fähigkeiten/Items und Unterschiede mit Quellen im [Abgleich](docs/sarah-feature-audit.md). Keine Altengine übernommen, keine neue Fähigkeit als fertig gemeldet.
+
 ## 03.10.2026
 
 - **Gemeinsame neue Basis:** Claudes Babylon-Stadionstand wurde zur neuen GitHub-Hauptversion. Frühere Hauptstände sind archiviert; alte Engine und Altordner werden nur historisch gelesen.

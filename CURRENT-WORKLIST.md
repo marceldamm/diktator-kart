@@ -6,8 +6,8 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
-**Aktuell:** Heutiger Teamstand geprüft und auf GitHub main gesichert.
-**Danach:** Erkennbare historische Fahrer und der nächste Grafikpass.
+**Aktuell:** Sarahs gemeldete Panzerfähigkeit im veröffentlichten Altarchiv belegt; Claude-Übergabe vorbereitet, keine neue Spielimplementierung.
+**Danach:** Panzerfähigkeit im neuen Babylon-Spiel wiederherstellen; erkennbare historische Fahrer und nächster Grafikpass. Befunde: [Altstand-Abgleich](docs/sarah-feature-audit.md).
 **Arbeitsbranch:** codex/team-marcel-20261003-202647-623. Geprüfte Spielversion 2c6e92d nach main veröffentlicht; Arbeitsbranch bleibt erhalten.
 
 ## Offen und als Nächstes
@@ -32,6 +32,9 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 ## Neue Aufträge
 
 Hier ergänzt die KI neue konkrete Nutzerwünsche mit Herkunft und Status. Vorhandene Notizen nicht als Zustimmung oder erledigten Auftrag ausgeben.
+
+- [x] 04.10.: Auf Marcels Auftrag Sarahs gemeldete letzte Git-Änderungen prüfen und Claude-Übergabe vorbereiten. Panzer im Archiv e292070 belegt; persönliche Urheberschaft aus Sarahs übermittelter Aussage, Git-Autor Marcel. Weitere Fähigkeiten/Items und Botänderungen mit Quellen dokumentiert.
+- [ ] Hitlers Panzerverwandlung professionell im Babylon-Spiel wiederherstellen: Q, zunächst 8 s Dauer/18 s Cooldown als vorläufige Altwerte, editierbares Modell, Animation/HUD, gemeinsame Treffer-/Schutzregeln, Rückverwandlung/Reset und alle Kameras prüfen. Alte „Endlose Rede“ nicht als aktuelle Panzerumsetzung behandeln. Details im [Abgleich](docs/sarah-feature-audit.md).
 
 - [x] Gemeinsame Budgetregel in Projekt-/Skill-Einstieg verankert; offene Nachricht von Marcel und einmaligen Sarah-Archiv-/Umstiegsbefehl in TEAM-NOTES.md aufgenommen.
 - [ ] Sarahs tatsächlicher erster Umstieg auf ihrem PC: lokale Arbeit erhalten, neues GitHub-Archiv verifizieren, Ideen/Herkunft dokumentieren und neue main-Basis öffnen. Hier nicht als bereits erfolgt melden.
