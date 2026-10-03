@@ -4,6 +4,8 @@
 
 - **Strecke:** gemeinsame Mittellinie `src/track-layout.ts`; `track.ts` liefert Fortschritt, Seitenlage (`trackLocate`), Kurvenvorschau, Projektion, Startaufstellung und Rücksetzung generisch.
 - **Kontakte:** flacher Bandenkontakt gleitet mit Tempoverlust (`scrapeRemaining`); steiler Aufprall behält den tangentialen Anteil (× 0,6) mit Rückprall, rein frontal endet die Vorwärtsfahrt mit Rückstoß. Kart-Kontakte tauschen immer Impuls; ab 7 m/s Annäherung (`KART_TUNING.crashClosingSpeed`) mit 30 % Verlust, Turboabbruch und kurzem Stoßzustand. Itemtreffer: Tempo × 0,6 und sichtbarer Dreher (`spinRemaining`).
+- **Abkürzung:** `SHORTCUT` in `track-layout.ts`; `shortcutLocate`, `inShortcut`, `applySurfaceDrag` in `track.ts`. Gasse ist offener Korridor in `projectTrack`, Fortschritt linear auf 343–452 m abgebildet, Tempolimit 10,5 m/s ohne Turbo.
+- **Lenkung/Gleiten:** `steer` im Zustand; Bandengleiten mit einmaligem Verlust, danach leichte Reibung; Kart-Rempler einmal pro Schritt.
 - **Bots:** bremsen vor engen Kurven, wählen Innenlinie, vier von sechs nutzen Drift-Turbo, festgefahrene Bots setzen zurück.
 - **Items:** Rohrpost prallt bis zu dreimal ab, Suchauftrag folgt der Strecke bis kurz vor das Ziel, Kistenreihen bei 72/330/520 m. Alle Regeln weiter gemeinsam für Mensch und Bots.
 

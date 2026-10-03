@@ -10,6 +10,8 @@
 
 **Neu in 2b:** Stadionsprecherin und Fahrerstimmen (TTS, CC0), Motor mit Getriebeklang, Publikum, kein abruptes Stehenbleiben mehr (Gleiten, Rückprall, Dreher bei Treffern), Arme lenken mit, Turbo-Faust, Papierexplosion, Fahnen, Goldstatuen.
 
+**Neu in 2c:** Gleiten an der Bande ohne Abbremsen, weichere Rempler, sichtbare Lenkung (Räder, Lenkrad, Arme), ganze Figuren mit Beinen und mehr Uniform-/Gesichtsdetails, Abkürzung „Hinterhofgasse“ durch die Brunnen-Haarnadel.
+
 **Offen:** Hörprobe der Stimmen durch dich, Stilabnahme gegen G–L durch Nutzer/Sarah, menschliche Testfahrt, schwache PCs/Mobile, Audio, Drawcalls der Karts, Fassadenrelief und Fahreranimation. Historische Figuren bleiben unbesetzt; die sechs Figuren sind neutrale Platzhalter.
 
 ## Vorheriger Einstieg – großer Vertical Slice

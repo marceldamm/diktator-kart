@@ -636,6 +636,25 @@
 
 **Nächster Schritt:** Nutzer hört Sprecherin und Fahrerstimmen probe und entscheidet über Stil/Lautstärke; danach Drawcall-Reduktion, Schadensstufen, mehr Figurenanimation.
 
+### 2026-10-03 – Qualitätsstufe 2c: Fahrbericht umgesetzt (Bande, Rempeln, Lenkung, ganze Figuren, Abkürzung)
+
+**Anlass:** Erste Nutzerfahrt auf Q2b: paralleles Berühren der Bande bremst sofort ab (frontal ist richtig), Kart-Berührungen klingen und fühlen sich komisch an, Lenkrad und Vorderräder folgen dem Lenken nicht, Figuren wirken unten abgeschnitten, Wunsch nach Abkürzung und mehr Detail.
+
+**Erledigt:**
+- **Bande:** Ursache gefunden – der Gleitverlust wurde in jedem 1/60-s-Schritt erneut angewendet (≈ 10 % pro Schritt). Jetzt einmaliger winkelabhängiger Verlust beim ersten Kontakt, danach nur leichte Reibung (`exp(-(0,12 + 2,2·Winkel)·dt)`); frontal unverändert Stopp mit Rückprall. Regressionstest: zwei Sekunden an der Bande, Tempo bleibt über 12 m/s.
+- **Rempeln:** Impulsaustausch nur noch einmal pro Schritt statt bis zu viermal, kleinerer Seitenstoß, eigenes dumpfes Rempelgeräusch statt Metallschleifen (`scrapeKind`).
+- **Lenkung sichtbar:** Neues Zustandsfeld `steer` (geglättete Eingabe) dreht Vorderräder, Lenkrad und Arme in allen Kameras, auch in der Fahrerperspektive.
+- **Figuren:** Ganze Beine (Oberschenkel, angehobenes Knie, Schienbein, Stiefel, Goldstreifen), Bauch, doppelreihige Knöpfe, Ordensspange und hängende Orden, Fangschnur, Kragenspiegel, Augen mit Iris und schweren Lidern, Knollennase, Doppelkinn, selbstgefälliges Grinsen, höhere Schirmmütze.
+- **Abkürzung:** Hinterhofgasse durch die Brunnen-Haarnadel (43 m statt 109 m Strecke), 6 m breit, heckengesäumt, dunkleres Kopfsteinpflaster mit Tempolimit 10,5 m/s außer bei Mini-Turbo; Schilder „Abkürzung – nur mit Sondergenehmigung“; Lücken in Bande, Randstein und Promenade; gestrichelt auf der Minikarte; Blender-Welt hält die Gasse frei. Fortschritt wird auf der Gasse linear auf den übersprungenen Abschnitt abgebildet (kein Rundenverlust, kein Teleport). Bots nutzen die Gasse noch nicht.
+
+**Verifiziert:** 25 Modelltests (neu: Bandengleiten, Gasse offen/monoton/gebremst). Botsimulation stabil (115–125 s). Laufzeitbilder der Gasse (Einfahrt mit Schild, Gasse mit Hecken), der Beine und Uniformdetails aus dem Spiel; ein Fehler (Hecken per Alpha-Test unsichtbar) dabei gefunden und behoben. Browserprüfungen `-q2` erneut bestanden: Kameras/Pause/Countdown/Neustart, Hop/Drift/Turbo/Bande, volles Rennen mit Revanche, Item-Rennen (Rohrpost 5/10, Suchauftrag 6/10, Falle 5/6 Treffer). RTX 3070 Laptop, 1600 × 1000: P95/P99 16,8/16,9 ms in allen Standardkameras ohne Intervall über 33 ms in diesem Lauf, 452–479 Drawcalls; Basis 299 Drawcalls.
+
+**Budget beim Abschluss:** Fünf-Stunden-Fenster 83 % vor der Abschlussprüfung, Woche 11 %; Arbeit bewusst vor 95 % beendet.
+
+**Nächster Schritt:** Testfahrt mit Bande, Rempeln, Gasse und Stimmen; danach Bots auf die Abkürzung, Schadensstufen, Drawcalls senken, Grafiksprung jenseits des Mario-Kart-Looks (Materialtiefe, Atmosphäre/Wetter, dichtere Architektur und Publikum).
+
+**Nicht verifiziert:** Menschliches Gefühl der neuen Bandenregel und der Gasse; Balancing der Abkürzung; Bots auf der Abkürzung.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

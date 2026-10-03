@@ -51,6 +51,8 @@
 | 2026-10-03 | Sprecherin und Fahrerstimmen entstehen vorläufig offline mit Piper TTS und CC0-Stimmen (Kerstin, Thorsten emotional); Texte eigene Satire. | Kostenloser, reproduzierbarer Einstieg in die beschlossene Sprachausgabe ohne Sprecherkosten; professionelle Parodiestimmen bleiben das spätere Ziel. | 02, 17, CREDITS, art-source/README |
 | 2026-10-03 | Kein Vollstopp mehr bei schrägem Bandenkontakt, harten Kart-Zusammenstößen und Itemtreffern (Dreher mit Ausrollen). | Nutzerwunsch: Karts sollen nicht abrupt stehen bleiben; frontale Physik bleibt plausibel mit Rückprall. | 07, 17 |
 | 2026-10-03 | Jubelgesten der Fahrer sind senkrechte Faust- oder Winkbewegungen, nie ein vorwärts erhobener Arm. | Inhaltsgrenze gegen Gruß-Assoziationen; Satire ohne Verherrlichung. | 13, 17 |
+| 2026-10-03 | Erste Abkürzung: Hinterhofgasse durch die Brunnen-Haarnadel mit Tempolimit außer bei Mini-Turbo; Fortschritt auf der Gasse linear auf den übersprungenen Abschnitt abgebildet. | Nutzerwunsch nach Abkürzung; Risiko/Nutzen über Enge und Pflasterbremse statt Sperre. Bots vorerst nur auf der Hauptstrecke. | 01, 07, 17 |
+| 2026-10-03 | Bandengleiten: einmaliger Verlust beim ersten Kontakt, danach nur leichte Reibung; Lenkeingabe als `steer` im Zustand für sichtbare Räder/Lenkrad. | Nutzerfahrt: paralleles Berühren darf nicht bremsen wie ein Aufprall; Lenkung muss sichtbar sein. | 07, 17 |
 
 ## Pflegehinweis
 
