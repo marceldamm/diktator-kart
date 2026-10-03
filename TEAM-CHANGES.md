@@ -25,3 +25,5 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Straßenbild:** Litfaßsäulen mit satirischen Plakaten, Haltestellen und Bänke ergänzen die Strecke; ein eigenständiges Adlerornament ohne Regimezeichen.
 
 - **Sprachhupe:** F spielt einen individuellen vorläufigen Parodieclip mit Abklingzeit. Sprechertexte freundlicher/kürzer, Hall und Verzerrung reduziert; echte historische Mitschnitte und Hörabnahme bleiben offen.
+
+- **Diktieren genügt:** Wünsche, Langfristziele und Nachrichten füreinander trägt die KI ein. Schnellhilfe oben in TEAM-NOTES.md; auch „Projekt Start“ und „Projekt Ende“ sind gültige Kurzbefehle.

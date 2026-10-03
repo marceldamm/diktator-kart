@@ -5,7 +5,7 @@ description: Synchronisiere beim Diktator-Kart-Projektstart Marcels oder Sarahs 
 
 # Diktator Kart: Projektstart
 
-Schon der alleinstehende entsprechende Kurzbefehl startet diesen Ablauf. TEAM-NOTES.md ist die gemeinsame Anleitung; offene Nutzer-Notizen lesen, Herkunft bewahren und der passenden Arbeitsliste zuordnen.
+Schon der alleinstehende entsprechende Kurzbefehl startet diesen Ablauf. Projektstart und Projekt Start sind gleichwertig. TEAM-NOTES.md ist die gemeinsame Anleitung; offene Nutzer-Notizen lesen, Herkunft bewahren und der passenden Arbeitsliste zuordnen. Beim Start offene Nachrichten an den bekannten aktuellen Nutzer kurz zeigen. Diktierte Teamnachrichten hier mit Autor/Datum/Zielperson/Status speichern; gelesen/beantwortet erst nach Nutzerbestaetigung.
 
 Nach erfolgreicher Synchronisierung die vier Arbeitsdateien als Dateitabs in der Codex-Windows-App oeffnen, wenn open_in_codex verfuegbar ist (absolute Pfade des aktiven Checkouts; keine alten Worktreepfade). Alle vier einzeln oeffnen; keine andere Sitzung ansteuern. Ist das Werkzeug nicht verfuegbar, die Dateien verlinken und die Grenze ehrlich nennen. Danach die vier Arbeitsdateien lesen: CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md. Aktuellen Auftrag und naechsten Schritt in CURRENT-WORKLIST.md setzen; bei leerer Liste passende Pakete aus LONG-TERM-GOALS.md vorschlagen. Neue konkrete Nutzerauftraege in CURRENT-WORKLIST.md, Zukunftsideen in LONG-TERM-GOALS.md; alte Notizen nicht als erledigt oder aktuelle Vorgaben ausgeben.
 

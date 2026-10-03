@@ -813,6 +813,22 @@
 
 **Dateien / Grenzen:** root TEAM-NOTES/PROGRESS-LOG und drei Arbeitsdateien, aktive Fachverweise, Skript/Skill/Testverträge; input/main/audio/voice-Erzeuger/WAVs/Index/Credits/Browsertest. Keine PC-Geräteabnahme, keine realitätsnahen Fahrer gebaut. Nächster Schritt Figuren-/Grafikpass nach geordnetem Abschluss.
 
+### 2026-10-04 – Schnellhilfe und diktierte Teamnachrichten
+
+**Marcel ergänzt:** Dateien müssen nicht manuell beschrieben werden. Oben in TEAM-NOTES.md kurze Befehle für Start/Ende, Tagesaufträge, Langfristziele, Notizen und Teamnachrichten sowie Erklärung der drei Batches ergänzt. Projekt Start und Projekt Ende/Projektende als gleichwertige KI-Auslöser in AGENTS/START-HERE und Skills verankert. Nachrichten werden hier für das andere Teammitglied gespeichert und beim nächsten Start gezeigt; gelesen/beantwortet nur nach Bestätigung. Keine automatische externe Zustellung behauptet.
+
+**Verifiziert:** Vier-Dateien-Teamworkflow bestand zuvor alle neun isolierten Git-/Launcherregressionen, einschließlich fehlendem TEAM-NOTES und TEAM-CHANGES. Produktionsbuild und Linkmigration bestanden; Tabs wurden als queued angefordert. Geprüfter lokaler Checkpoint 9d849cb bewahrt vorherige Pakete. Neue Kurzbefehle sind KI-Instruktionen, keine Shellkommandos; tatsächlicher Sarah-PC noch nicht getestet.
+
+### 2026-10-04 – Aktuelle Spiel-/Teamregression vor Veröffentlichung
+
+**Verifiziert:** Neun Team-/Launcherregressionen bestehen: parallele getrennte Arbeit normal zusammenführen, echte Konflikte erhalten, unsichere/alte Arbeit nicht veröffentlichen, fehlende TEAM-NOTES/TEAM-CHANGES stoppen den Push, Remoteänderung während Build stoppen, alter/fremder Previewserver nicht wiederverwenden. Beide aktualisierten Skills validiert; Navigation/lokale Links aller fünf Rootdateien und Marker/Umbenennung geprüft.
+
+**Laufzeit:** slice-browser.mjs auf aktuellem dev-Stand bestanden: normales Menü, nahe/ferne/Fahrerkamera, Fotomodus, echte W-Fahrt, Renncountdown, Pause und kompletter Szenenneustart. Acht neue tatsächliche Screenshots *-drive-polish.png, kein Konzeptbild. final-six-kart-browser.mjs: sechs tatsächliche bewegte Demo-Rennteilnehmer, 1600x1000, je 300 rAF-Bilder nach 1,5-s-Aufwärmen in allen drei Kameras; 967 Meshes konstant, alle Positionen/Geschwindigkeiten endlich, Spieler legt >250 m zurück. Verfolger nah: P50/P95/P99 16.7/16.8/33.4 ms; Verfolger fern: P50/P95/P99 16.7/16.8/16.8 ms; Fahrerperspektive: P50/P95/P99 16.7/16.8/16.9 ms. Raw final-six-kart-load.json. Kurzer Lastlauf, keine volle Drei-Runden-/Kaltlauf-/schwache-PC-/Mobil-Abnahme. Keine Screenshots oder Builds während der Messfenster. Chrome-Fokusemulation hält die Tests bei verdecktem Fenster aktiv; deshalb keine unbedingte menschliche FPS-Abnahme.
+
+**Artprüfung:** Eigenen sichtbaren Chrome wiederhergestellt; erste Nahprüfung bei verdecktem Fenster zeigte nur die alte Szene, nicht den injizierten Hund. Nach bestätigter laufender Rennphase/Fokusverwaltung neu aufgenommen: shepherd-art-inspection-v1.png zeigt tatsächlich den stilisierten Schäferhund. Nicht als realitätsnahes Tiermodell bezeichnet. Straßenmöbelbilder und normaler Fahrerblick nochmals angesehen; reale historische Fahrer und G–L-Qualität bleiben unerreicht.
+
+**Abschluss:** Funktionierender Checkpoint 9d849cb; aktuelle Schnellhilfe/Belege werden zusätzlich lokal gesichert. Team-Finish holt vor Veröffentlichung aktuellen main und führt die volle Test-/Build-Prüfung aus. Ergebnis erst nach tatsächlichem Remotevergleich als veröffentlicht melden. Nächste Aufgabe: erkennbare historische Fahrer, höherwertige Welt/Materialien; Stimme menschlich anhören, Quellen für echte Sprachhupen klären.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

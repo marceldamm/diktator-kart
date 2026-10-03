@@ -1,11 +1,11 @@
 ---
 name: diktator-projektabschluss
-description: Pruefe und dokumentiere Diktator-Kart-Aenderungen, integriere den neuesten Teamstand und veroeffentliche den getesteten Babylon-Stand nach GitHub main. Verwenden beim ausdruecklichen Projektabschluss oder Auftrag zum Hochladen und Zusammenfuehren dieses Projekts.
+description: Pruefe und dokumentiere Diktator-Kart-Aenderungen, integriere den neuesten Teamstand und veroeffentliche den getesteten Babylon-Stand nach GitHub main. Verwenden beim ausdruecklichen Projektabschluss, Projektende, Projekt Ende oder Auftrag zum Hochladen und Zusammenfuehren dieses Projekts.
 ---
 
 # Diktator Kart: Projektabschluss
 
-Schon der alleinstehende entsprechende Kurzbefehl startet diesen Ablauf. TEAM-NOTES.md ist die gemeinsame Anleitung; offene Nutzer-Notizen lesen, Herkunft bewahren und der passenden Arbeitsliste zuordnen.
+Schon der alleinstehende entsprechende Kurzbefehl startet diesen Ablauf. Projektabschluss, Projektende und Projekt Ende sind gleichwertig; das ist der ausdrueckliche Auftrag zum geprueften Veroeffentlichen. TEAM-NOTES.md ist die gemeinsame Anleitung; offene Nutzer-Notizen lesen, Herkunft bewahren und der passenden Arbeitsliste zuordnen. Beim Start offene Nachrichten an den bekannten aktuellen Nutzer kurz zeigen. Diktierte Teamnachrichten hier mit Autor/Datum/Zielperson/Status speichern; gelesen/beantwortet erst nach Nutzerbestaetigung.
 
 Vor dem Commit CURRENT-WORKLIST.md mit erledigten/geprueften und offenen Aufgaben samt naechstem Schritt aktualisieren; erreichte/geaenderte langfristige Ziele in LONG-TERM-GOALS.md abgleichen. Nur elementare Nutzerentscheidungen und sichtbare Funktionsaenderungen kurz in TEAM-CHANGES.md aufnehmen. TEAM-NOTES.md erhaelt die Nutzer-Notizen; zugeordnete/abgeschlossene Notizen mit Verweisen kennzeichnen, nicht mit Technikprotokollen fuellen. Technische Belege bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem getesteten Spielstand synchronisieren und veroeffentlichen.
 

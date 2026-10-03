@@ -2,7 +2,9 @@
 
 ## Kurzbefehle
 
-Ein alleinstehendes **Projektstart** ruft den sicheren Startablauf auf; **Projektabschluss** den geprüften Abschluss mit Veröffentlichung. Keine langen Prompts nötig. Die vier zentralen Tabs gehören zum Start. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Naechstes anzeigen. Maßgebliche Anleitung: [TEAM-NOTES.md](TEAM-NOTES.md).
+Die Kurzbefehle **Projektstart** oder **Projekt Start** rufen den sicheren Startablauf auf; **Projektabschluss**, **Projektende** oder **Projekt Ende** den geprüften Abschluss mit Veröffentlichung. Keine langen Prompts nötig. Die vier zentralen Tabs gehören zum Start. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Naechstes anzeigen. Maßgebliche Anleitung: [TEAM-NOTES.md](TEAM-NOTES.md).
+
+Diktierte Wünsche selbstständig in die passende Arbeitsdatei eintragen: „Heute möchte ich …“ in CURRENT-WORKLIST.md, „Langfristiges Ziel: …“ in LONG-TERM-GOALS.md, „Notiere: …“ und „Nachricht an Sarah/Marcel: …“ in TEAM-NOTES.md (Datum, Autor, Zielperson, Status). Nutzer müssen Dateien nicht selbst schreiben. Beim Projektstart offene Notizen und für den Nutzer bestimmte Teamnachrichten kurz anzeigen; Empfang/Antwort nicht erfinden.
 
 ## Unsere vier Arbeitsdateien
 

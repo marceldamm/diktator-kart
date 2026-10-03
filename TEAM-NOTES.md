@@ -4,6 +4,25 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+## Schnellhilfe – alles einfach der KI sagen
+
+**Ihr müsst diese Dateien nicht selbst beschreiben.** Diktiert oder schreibt eure Wünsche in Codex; die KI trägt sie passend ein und hält die Arbeitsgrundlage aktuell.
+
+| Kurzer Befehl / Beispiel | Was die KI macht |
+|---|---|
+| **Projekt Start** | GitHub synchronisieren, lokale Arbeit bewahren, vier Tabs öffnen, Aufgaben und Nachrichten zeigen. Auch **Projektstart** funktioniert. |
+| **Projekt Ende** | Arbeit sichern, dokumentieren, prüfen und den geprüften Teamstand nach GitHub main hochladen. Auch **Projektabschluss** funktioniert. |
+| **Heute möchte ich …** | Als aktuellen Auftrag in CURRENT-WORKLIST.md aufnehmen und bearbeiten. |
+| **Langfristiges Ziel: …** | In LONG-TERM-GOALS.md aufnehmen. |
+| **Notiere: …** | Beobachtung/Frage mit Herkunft hier in TEAM-NOTES.md festhalten. |
+| **Nachricht an Sarah: …** / **Nachricht an Marcel: …** | Als datierte Teamnachricht hier festhalten; beim nächsten Projektstart dem angesprochenen Teammitglied zeigen. |
+
+**Diktator-Kart-starten.cmd:** Spiel aus dem aktiven Projektordner öffnen.
+
+**Projekt-starten.cmd:** Einfachen Git-Start ausführen. **Projekt-abschliessen.cmd:** Einfachen geprüften Git-Abschluss ausführen. Bei Konflikten/ungesicherten Dateien hilft Codex; die Batches selbst sind keine KI. Der Spielstarter synchronisiert GitHub nicht.
+
+Details zu Dateien, Zusammenarbeit und Modellwahl stehen darunter.
+
 ## So arbeiten Marcel und Sarah gemeinsam
 
 Wir entwickeln gemeinsam das neue Babylon.js-Spiel. Die frühere Engine und alte Ordner sind archiviert und werden ausschließlich historisch betrachtet. Die neue Grundlage umfasst editierbare 3D-Assets, Fahrphysik, sechs Karts, Rennen, Items und drei Kameras. Grafik, Spielwelt und erkennbare historische Fahrer bauen wir weiter aus; es bleibt ein unfertiges Spiel.
@@ -13,7 +32,7 @@ Wir entwickeln gemeinsam das neue Babylon.js-Spiel. Die frühere Engine und alte
 Öffne deinen aktiven Projektordner in Codex und schreibe:
 
 ```text
-Projektstart
+Projekt Start
 ```
 
 Beim ersten Mal kannst du ergänzen: **„Ich bin Sarah“** beziehungsweise **„Ich bin Marcel“**. Danach reicht der Kurzbefehl. Du kannst deinen Auftrag direkt anhängen: „Projektstart. Danach verbessere …“
@@ -42,7 +61,7 @@ Die KI ordnet konkrete Aufträge der aktuellen Liste zu, Zukunftsideen den langf
 ### 4. Arbeitsende: ein Wort genügt
 
 ```text
-Projektabschluss
+Projekt Ende
 ```
 
 Damit beauftragen wir die KI, Änderungen und nötige Prüfungen abzuschließen, unsere vier Dateien und den technischen Fortschritt zu aktualisieren, lokal zu committen, den neuesten Teamstand zu holen und das geprüfte Ergebnis in GitHub **main** zu veröffentlichen. Gearbeitet wird auf eigenem Branch. Kein Force-Push, keine fremde Arbeit verwerfen. Bei Konflikten, fehlenden Rechten oder fehlgeschlagenen Prüfungen meldet sie konkret, was gesichert und was noch nicht veröffentlicht ist.
@@ -52,6 +71,10 @@ Damit beauftragen wir die KI, Änderungen und nötige Prüfungen abzuschließen,
 Spiel öffnen: **Diktator-Kart-starten.cmd** im aktiven Ordner. Der Spielstarter lädt allein keine GitHub-Änderungen herunter. **Projekt-starten.cmd** und **Projekt-abschliessen.cmd** erledigen den einfachen Git-Fall; bei Konflikten oder ungesicherten Dateien hilft Codex.
 
 Für zusammenhängende Spielentwicklung verwenden wir **GPT-6.1 Sol mit hoher Denkintensität**. **GPT-6 Astra** kann bei schwierigen Analysen oder festgefahrenen Problemen helfen; **GPT-6 Luna** für kleine Routineaufgaben, soweit verfügbar. Modellverfügbarkeit und Details stehen im [TEAM-HANDBOOK.md](TEAM-HANDBOOK.md). Eine Einstellung garantiert kein perfektes Ergebnis: sichtbares Ziel, echte Browserbilder und Fahrtests verlangen. Limits beobachten; keine Zusatzkosten oder Resets automatisch auslösen.
+
+## Teamnachrichten
+
+Hier hält die KI diktierte Nachrichten fest: **Datum · von · an · Nachricht · Status**. Beim Projektstart passende offene Nachrichten kurz anzeigen; „gelesen“ oder „beantwortet“ erst nach eurer Bestätigung vermerken. Aktuell keine separate Teamnachricht eingetragen.
 
 ## Unsere Notizen
 

@@ -55,3 +55,5 @@ Ein 60-FPS-F3-Standbild ersetzt keinen Kaltlauf. RTX, Headless und Touch-Emulati
 ## Fahrtest-Ergänzungen und Teamablauf – 03.10.2026
 
 Aktueller technischer Nachweis in [PROGRESS-LOG.md](../../PROGRESS-LOG.md). mouse-camera-final-check.json und drive-polish-check.json belegen Maus/Drift/Radkontakt; shepherd-browser-check.json die bestehenden Itemtreffer mit Hundendarstellung. shepherd-art-inspection-v1.png zeigt das eigene stilisierte Hundemodell in der tatsächlichen pausierten Sechskart-Welt mit QA-Platzierung/Inspektionskamera. period-boulevard-v1.png/period-eagle-v1.png sind entsprechende Artinspektionen der zusätzlichen Straßenmöbel. voice-horn-check.json belegt F-Abklingzeit/Clipdekodierung, keine Hörabnahme oder historische Mitschnitte. Keine schwache-PC-/Mobil-Abnahme.
+
+*-drive-polish.png: aktuelle normale Kameras, Menü, Fahr-/Countdown-/Neustartregression (slice-browser PASS). final-six-kart-load.json: bewegter aktueller dev-Sechskart-Lastlauf über drei kurze Kamerafenster, konstante 967 Meshes; keine Drei-Runden-/Kaltlauf-/Geräteabnahme.
