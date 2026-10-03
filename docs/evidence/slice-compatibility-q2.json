@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-03T17:28:23.223Z",
+  "date": "2026-10-03T17:52:29.166Z",
   "method": "Production Chrome on same RTX GPU: explicit WebGL1 and WebGL2 deliberately unavailable; six actual glTF karts, driving and camera switches. Not old-device approval.",
   "results": [
     {
@@ -7,7 +7,7 @@
       "speed": 7.1666666666666705,
       "webgl": 1,
       "view": "Fahrerperspektive",
-      "meshes": 634,
+      "meshes": 636,
       "karts": 6
     },
     {
@@ -15,7 +15,7 @@
       "speed": 7.1666666666666705,
       "webgl": 1,
       "view": "Fahrerperspektive",
-      "meshes": 634,
+      "meshes": 636,
       "karts": 6
     }
   ],

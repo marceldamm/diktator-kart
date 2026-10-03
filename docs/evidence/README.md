@@ -17,7 +17,7 @@ Alle Bilder aus dem laufenden Spiel (isolierter Chrome, RTX 3070 Laptop, 1600 ×
 | `slice-race-finish-q2.png` | Echter Drei-Runden-Zielstand mit sechs Zeiten. |
 | `slice-forced-webgl1-q2.png`, `slice-automatic-webgl1-q2.png`, `slice-touch-landscape-q2.png` | WebGL1-Pfad und Touch-Emulation (kein echtes Gerät). |
 
-JSON: `slice-production-race-rtx-q2.json` (Rennen, Revanche, Framefenster), `slice-item-race-q2.json`, `slice-feedback-q2.json`, `slice-compatibility-q2.json`, `slice-touch-emulation-q2.json`. Menü-, Kamera-, Feedback- und Rennbilder wurden nach dem Politurcommit `dd7a1f2` neu erzeugt; Item-, WebGL1- und Touch-Bilder stammen aus dem Lauf davor (Rasen statt Pflaster außerhalb der Parkinseln).
+JSON: `slice-production-race-rtx-q2.json` (Rennen, Revanche, Framefenster), `slice-item-race-q2.json`, `slice-feedback-q2.json`, `slice-compatibility-q2.json`, `slice-touch-emulation-q2.json`. Menü-, Kamera-, Feedback-, Renn-, Item- und WebGL1-Bilder wurden mit dem finalen Kart (Heckverkleidung, Commit nach `dd7a1f2`) neu erzeugt; nur das Touch-Bild stammt aus einem früheren Lauf derselben Sitzung.
 
 ## Vorheriger Slice – Aktuell ansehen (historisch)
 
