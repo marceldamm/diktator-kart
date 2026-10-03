@@ -1,5 +1,11 @@
 # Gemeinsamer Arbeitsablauf fuer Marcel und Sarah
 
+## Unsere drei Arbeitsdateien
+
+Beim KI-Befehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md als drei Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
+
+Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+
 Verbindlich seit 03.10.2026, ausdruecklicher Nutzerauftrag. Ziel: dieselbe neue Babylon-Hauptbasis, sichere Zusammenarbeit und KI-Hilfe bei Git-Konflikten.
 
 ## Welche Version gilt?

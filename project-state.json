@@ -8,5 +8,6 @@
   "mainBranch": "main",
   "minimumSourceCommit": "c13d47e8cbd33dc9899320d73fe718d54b4b93ba",
   "baselineTag": "babylon-team-baseline-2026-10-03",
+  "teamLists": ["CURRENT-WORKLIST.md", "LONG-TERM-GOALS.md", "TEAM-CHANGES.md"],
   "legacyPolicy": "read-only-history; never develop, start, or publish legacy as the active game"
 }

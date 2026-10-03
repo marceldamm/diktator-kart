@@ -1,5 +1,11 @@
 # Diktator Kart – gemeinsamer Einstieg
 
+## Unsere drei Arbeitsdateien
+
+Beim KI-Befehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md als drei Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
+
+Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+
 ## Jetzt verbindlich
 
 **Aktiver Stand:** neuer Babylon-Q2d-Stand auf GitHub main, Ursprung Claude c13d47e. Das bisherige Hauptspiel und alle Altarchive sind ausschließlich historische Referenzen: nicht bearbeiten, nicht starten, nicht automatisch migrieren. Technische Kennzeichnung in project-state.json.
@@ -16,7 +22,7 @@ Die Repo-Skills heißen $diktator-projektstart und $diktator-projektabschluss. A
 
 **Spiel starten:** Diktator-Kart-starten.cmd im aktiven Hauptordner. Es öffnet den ausgecheckten neuen Stand, keinen fest eingetragenen Worktree. Root-/Versionsprüfung verhindert die Wiederverwendung eines fremden/alten Servers; angezeigte URL verwenden. Abhängigkeiten werden aus dem Lockfile installiert. Fenster offen lassen.
 
-**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E oder Linksklick Item, C drei Kameras, linke Maustaste halten zum Umsehen, rechte Maustaste/X halten Rückblick, E Items, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
+**Bedienung:** Enter Rennen; W/S Gas/Bremse/Rückwärts, A/D Lenken, Space Hop/Drift/Turbo, E Item, C drei Kameras, linke Maustaste halten zum Umsehen, rechte Maustaste/X halten Rückblick, E Items, Mausrad Zoom; V Foto, B langsame Rücksetzung, P Pause, R Szenenneustart, Esc Menü, F3 Diagnose.
 
 **Claude-Stand:** 593-m-Kurs, neue Welt/Karts/sechs fiktive Fahrer, Bot-Drift, Hinterhof-Abkürzung, Stimmen/Publikum, Lenkträgheit und gefederte Karosserie, Rüttelrandsteine, Live-Videowand. Vorliegende Tests und verbleibende Qualitäts-/Gerätegrenzen: [Fortschrittslog](docs/17-progress-log.md). Kein fertiger historischer Kader und keine G–L-Abnahme. Regen/nasse Straße/echtere Fahrer sind nächste Produktionswünsche, keine bereits gebauten Features.
 

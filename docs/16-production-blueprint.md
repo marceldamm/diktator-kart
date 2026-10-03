@@ -1,5 +1,9 @@
 # Bauplan und Fahrplan für die Entwicklung
 
+## Unsere drei Arbeitsdateien
+
+Die drei gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele/Meilensteine und spätere Vorschläge), TEAM-CHANGES.md (nur wenige elementare besprochene Änderungen für Marcel/Sarah). Neue konkrete Wünsche in CURRENT-WORKLIST.md, größere Zukunftsziele in LONG-TERM-GOALS.md; wichtige Ziel-/Funktionsänderungen kurz in TEAM-CHANGES.md. Keine Werkzeuglogs/Dateilisten dort. Technische Prüfbelege, Annahmen und Probleme bleiben in docs/17-progress-log.md. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich bereits beauftragte Ziele weiter umsetzen. Nicht stillschweigend neue Produktziele beginnen. Dateien regelmäßig im selben Arbeitsbranch aktualisieren, mit der Arbeit synchronisieren und beim geprüften Abschluss nach main veröffentlichen. Altes Projekt bleibt reine historische Referenz.
+
 ## Gemeinsame Hauptbasis – 03.10.2026
 
 Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.

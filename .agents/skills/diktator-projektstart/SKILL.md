@@ -5,6 +5,8 @@ description: Synchronisiere beim Diktator-Kart-Projektstart Marcels oder Sarahs 
 
 # Diktator Kart: Projektstart
 
+Nach erfolgreicher Synchronisierung die drei Arbeitsdateien als Dateitabs in der Codex-Windows-App oeffnen, wenn open_in_codex verfuegbar ist (absolute Pfade des aktiven Checkouts; keine alten Worktreepfade). Alle drei einzeln oeffnen; keine andere Sitzung ansteuern. Ist das Werkzeug nicht verfuegbar, die Dateien verlinken und die Grenze ehrlich nennen. Danach die drei Arbeitsdateien lesen: CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md. Aktuellen Auftrag und naechsten Schritt in CURRENT-WORKLIST.md setzen; bei leerer Liste passende Pakete aus LONG-TERM-GOALS.md vorschlagen. Neue konkrete Nutzerauftraege in CURRENT-WORKLIST.md, Zukunftsideen in LONG-TERM-GOALS.md; alte Notizen nicht als erledigt oder aktuelle Vorgaben ausgeben.
+
 Lies AGENTS.md und docs/21-team-workflow.md im Repository-Hauptordner. Der Hauptordner wird mit git rev-parse --show-toplevel ermittelt; kein fest verdrahteter PC- oder Claude-Worktree-Pfad. Ursprung ist marceldamm/diktator-kart; aktive Quelle nur Babylon src/public/art-source mit project-state.json.
 
 1. Pruefe Branch, Worktrees, dirty Status, origin und laufende Merge/Rebase-Operationen. Hole origin/main. Fuehre scripts/team-workflow.ps1 -Action Status aus, sofern vorhanden. Ohne neue Skripte lies nach fetch erst origin/main:AGENTS.md und origin/main:docs/21-team-workflow.md.

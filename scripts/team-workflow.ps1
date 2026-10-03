@@ -50,6 +50,18 @@ function EnsureDependencies {
         Set-Content -LiteralPath '.tools/dependency-lock.sha256' -Value $hash -Encoding ASCII
     }
 }
+function ShowWorkLists {
+    $activeState = ReadState 'HEAD'
+    if (-not $activeState.teamLists) { return } # Older marker/isolated fixtures remain compatible.
+    $required = @('CURRENT-WORKLIST.md', 'LONG-TERM-GOALS.md', 'TEAM-CHANGES.md')
+    foreach ($file in $required) {
+        if ($activeState.teamLists -notcontains $file -or -not (Test-Path -LiteralPath $file -PathType Leaf)) {
+            throw "Gemeinsame Arbeitsdatei fehlt: $file. Codex muss die aktuelle Wissensbasis wiederherstellen; kein Abschluss."
+        }
+    }
+    Write-Host 'Gemeinsame Arbeitsdateien: CURRENT-WORKLIST.md / LONG-TERM-GOALS.md / TEAM-CHANGES.md.'
+    Write-Host 'Codex: diese drei Dateien als App-Tabs oeffnen und lesen, Status/Naechstes aktualisieren; technische Belege nur in Log 17.'
+}
 
 try {
     $top = Git @('rev-parse', '--show-toplevel')
@@ -116,7 +128,8 @@ try {
         }
         $session = [ordered]@{ owner = $Owner; branch = (Git @('branch', '--show-current')); startingHead = (Git @('rev-parse', 'HEAD')); remoteAtStart = $remote; startedUtc = [DateTime]::UtcNow.ToString('o') }
         $session | ConvertTo-Json | Set-Content -LiteralPath '.tools/team-session.json' -Encoding UTF8
-        Write-Host "Bereit: $($session.branch). Read START-HERE.md and docs/17-progress-log.md. Develop only this Babylon project."
+        ShowWorkLists
+        Write-Host "Bereit: $($session.branch). Read START-HERE.md, CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md and the latest progress entry. Develop only this Babylon project."
         exit 0
     }
     if (-not $isNew -or $branch -eq 'main' -or $branch -match '^(archive/|legacy-)') { throw 'Publication requires a new Babylon work branch. Old/main/archive work is refused.' }
@@ -127,6 +140,7 @@ try {
     }
     $logChanged = Git @('diff', '--name-only', 'origin/main..HEAD', '--', 'docs/17-progress-log.md')
     if (-not $logChanged) { throw 'Add a verified handoff entry to docs/17-progress-log.md and commit before publishing.' }
+    ShowWorkLists
     EnsureDependencies
     & npm.cmd test
     if ($LASTEXITCODE -ne 0) { throw 'Tests failed; main unchanged.' }

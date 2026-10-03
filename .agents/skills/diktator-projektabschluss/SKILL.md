@@ -5,6 +5,8 @@ description: Pruefe und dokumentiere Diktator-Kart-Aenderungen, integriere den n
 
 # Diktator Kart: Projektabschluss
 
+Vor dem Commit CURRENT-WORKLIST.md mit erledigten/geprueften und offenen Aufgaben samt naechstem Schritt aktualisieren; erreichte/geaenderte langfristige Ziele in LONG-TERM-GOALS.md abgleichen. Nur elementare Nutzerentscheidungen und sichtbare Funktionsaenderungen kurz in TEAM-CHANGES.md aufnehmen, keine Tool-/Testchronik. Technische Belege bleiben in Log 17. Alle drei Dateien zusammen mit dem getesteten Spielstand synchronisieren und veroeffentlichen.
+
 Lies AGENTS.md und docs/21-team-workflow.md. Ein ausdrueckliches Projektabschluss / veroeffentliche meinen Stand autorisiert lokalen Commit, Branch-Push und getestete Integration nach main in marceldamm/diktator-kart. Bestehende Nutzerfreigabe nicht erneut erfragen; die Invokation erweitert keine Berechtigung auf andere Repositories, Force-Push, alte Engine-Migration oder Verwerfen fremder Arbeit.
 
 1. Pruefe Repository/Branch/Abstammung mit project-state.json und git. Archive/Legacy/alte Hauptbasis niemals veroeffentlichen. Bei Arbeit versehentlich auf main erst eigenen Babylon-Arbeitsbranch anlegen.

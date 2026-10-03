@@ -48,6 +48,17 @@ function fixture() {
 const run = (cwd, action, good = true) => command(root, 'powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', workflow, '-Action', action, '-ProjectRoot', cwd], good);
 const remoteHead = f => git(f.remote, 'rev-parse', 'main');
 
+test('team: new work-list marker prevents publication when a shared work file is missing', { skip: !windows }, () => {
+  const f=fixture();
+  put(f.Bob,'project-state.json',JSON.stringify({...f.state,teamLists:['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md']}));
+  put(f.Bob,'CURRENT-WORKLIST.md','# Current\n');put(f.Bob,'LONG-TERM-GOALS.md','# Goals\n');
+  commit(f.Bob,'new work-list contract but missing team history');git(f.Bob,'push','origin','main');
+  git(f.Alice,'fetch','origin');git(f.Alice,'switch','-c','codex/team-alice-list-test','origin/main');
+  put(f.Alice,'docs/17-progress-log.md','# Progress\nVerified draft\n');commit(f.Alice,'documented work');
+  const before=remoteHead(f),result=run(f.Alice,'Finish',false);
+  assert.notEqual(result.status,0);assert.match(result.stdout,/TEAM-CHANGES.md/);assert.equal(remoteHead(f),before);
+});
+
 test('team: dirty local work is preserved and cannot be switched or published', { skip: !windows }, () => {
   const f = fixture(); const before = git(f.Alice, 'rev-parse', 'HEAD');
   put(f.Alice, 'draft.txt', 'do not lose me');

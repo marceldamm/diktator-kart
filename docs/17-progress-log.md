@@ -739,7 +739,7 @@
 
 **Grenzen:** Kurze Frame-Wandzeitstichproben weiterhin P95 47 / 42,7 ms bei möglicher gleichzeitig offener Nutzersitzung. Keine kontrollierte FPS-Abnahme, keine Behauptung völlig ruckelfreier GPU-Bildausgabe. Keine menschliche Komfort-/schwache-PC-/Handyabnahme. 60-FPS-Ziel unverändert. Fahrzeugvibrationen werden auf zusätzlichen ausdrücklichen Wunsch als nächstes reduziert.
 
-**Dateien / nächster Schritt:** render-state.ts/main.ts, tests/render-state.test.mjs/drive-pacing-browser.mjs, Browserrohwerte, docs03/04/17/23. Nutzerergänzungen vollständig in docs/23-current-work-list.md: endgültige linke Look-/rechte Rückblick-Geste mit temporärer Cursorbindung, weniger Wackeln/Acceleration-Pose, beidseitiges Driftladen und Staub, historische Atmosphären-/Satiredetails, Schäferhund-Verfolger. Danach gezielter Gesamttest/Teamabschluss.
+**Dateien / nächster Schritt:** render-state.ts/main.ts, tests/render-state.test.mjs/drive-pacing-browser.mjs, Browserrohwerte, docs03/04/17/23. Nutzerergänzungen vollständig in CURRENT-WORKLIST.md: endgültige linke Look-/rechte Rückblick-Geste mit temporärer Cursorbindung, weniger Wackeln/Acceleration-Pose, beidseitiges Driftladen und Staub, historische Atmosphären-/Satiredetails, Schäferhund-Verfolger. Danach gezielter Gesamttest/Teamabschluss.
 
 ### 2026-10-03 – Aktueller menschlicher Fahrbefund und präzisiertes Modellziel
 
@@ -761,7 +761,7 @@
 
 **Neue Nutzeraufträge:** Unverständliche Wörter/komische Aussprache der gesprochenen Texte überprüfen; weniger statisch/mechanisch, freundlichere Stadionsprecherin. F soll eine individuelle Sprachhupe je Fahrer auslösen. Echte unproblematische historische Mitschnitte erwünscht; Quelle, Identität und Nutzungsrechte vor Verwendung prüfen, keine falsche Authentizität.
 
-**Status:** In docs/23-current-work-list.md aufgenommen; nach laufender Fahrzeug-/Driftarbeit bearbeiten. Noch keine Hörprüfung oder Mitschnittfreigabe behauptet.
+**Status:** In CURRENT-WORKLIST.md aufgenommen; nach laufender Fahrzeug-/Driftarbeit bearbeiten. Noch keine Hörprüfung oder Mitschnittfreigabe behauptet.
 
 ### 2026-10-03 – Fahrzeug beruhigt, Gegenlenk-Drift und Staub
 
@@ -770,6 +770,24 @@
 **Verifiziert:** Produktionsbuild besteht. 16 gezielte Fahrmodell-/Drifttests bestehen, einschließlich beider Richtungen, Gegenlenk-Ladung, Kurvenweite, Turbo-/Bremsfreigabe, Federung und Langlaufkontakte. Near-head-on-Test berücksichtigt bewusst die kleine neue tangentiale Driftbewegung und verlangt >95% Geschwindigkeitsverlust samt Drift/Turbo-Abbruch. Browser, normale Welt/sechs Karts: Radzentren entsprechen Terrain+Radius während Haubenpose; Staub emittiert; echtes W/D/Space/A-Gegenlenken lädt, Richtung bleibt, Release gibt Turbo; Neustart setzt zurück. Rohdaten docs/evidence/drive-polish-check.json, Screenshot drive-polish-turbo-v1.png aus tatsächlicher Szene während Pause nach Turboauslösung. QA-Kart zu Beginn auf klare Gerade positioniert, danach reale Eingabe. Frühere QA-Starts fuhren während Screenshotwartezeit an die Bande; Prüffahrt korrigiert, kein falscher Turbo-Erfolg behauptet.
 
 **Grenzen / nächste Arbeit:** Noch keine menschliche Drift-/Animationsabnahme, keine schwache-PC-Abnahme. Nächster Schritt Schäferhund, Umgebungsdetails, realitätsnaher Figurenpass, Sprache/F-Hupe. Maus bereits e5152ab lokal gesichert.
+
+### 2026-10-03 – Drei verbindliche Team-Arbeitsdateien
+
+**Auftrag / Umsetzung:** Marcel will eine aktuelle Liste, große Langzeitliste und kurzen elementaren Änderungsverlauf statt technischer Überdokumentation. docs23 weitergeführt, docs24 aus Roadmap/Grundpfeilern/Katalog und Nutzerwünschen erstellt, docs25 wenige Teamänderungen. Nachricht an Sarah mit beiden KI-Befehlen/Umstieg/Modellwahl direkt in docs23. Kein Versand.
+
+**Verankert:** AGENTS/START-HERE/README/Handbuch/Framework/Roadmap/Blueprint/Teamablauf und beide Repo-Skills. project-state nennt die drei Dateien; Git-Start/Finish zeigen sie an und prüfen beim neuen Marker ihre Existenz. KI liest/aktualisiert sie inhaltlich; Batch behauptet keine autonome kreative Konfliktlösung. Log 17 bleibt technische Belegquelle, TEAM-CHANGES.md kurz.
+
+**Verifiziert / Grenzen:** Modellhinweise mit offiziellen OpenAI-Seiten abgeglichen; Sol für qualitäts-/zeitbewusste Arbeit, Astra für schwierige Aufgaben, keine Ranglistengarantie. Beide Repo-Skills mit quick_validate validiert; neue Skriptregression besteht: fehlender Teamverlauf stoppt Veröffentlichung und erhält Remote-main. Die drei Dateien anschließend ohne Nummer in den Hauptordner verschoben, alle aktiven Verweise/Marker/Tests migriert. Öffnen als App-Tabs dreimal angefordert; Tool meldete queued, Anzeige beim Zurückkehren in diese Sitzung. Sarahs tatsächlicher PC/Account noch nicht getestet.
+
+### 2026-10-03 – Editierbarer Schäferhund als Spieler-Item
+
+**Umgesetzt:** Eigener schwarz-brauner Schäferhund in Blender mit spitzer Ohr-/Schnauzensilhouette, Fellflächen, Augen, Halsband, vier Beinpivots und Schwanz. Editierbare .blend, reproduzierbarer Erzeuger, optimiertes GLB 208.808 Bytes. Spieler direct/homing laufen mit Hundedarstellung am Boden; identische unveränderte Itemsimulation, Bots bisherige postalische Formen. Eigener .68-s-Doppelbelllaut, HUD/Hinweise, begrenzte Comic-Trefferwolke. Zwei feste Hundepools, keine Meshallocation beim Fahren.
+
+**Verifiziert:** TypeScript/Produktionsbuild bestanden. Eigener Chrome 9227, normale Welt/sechs Karts, kontrollierte Slots/Positionen: echtes E startet direct/homing, Hundeknoten laufen, bestehende Trefferlogik trifft gezielt auf Pfad positionierten Gegner, Meshzahl konstant; WAV per AudioContext dekodiert, Peak <1. Browserbeleg shepherd-browser-check.json. Keine angebliche menschliche Hör-/Modellrealismusabnahme. Früher direkter Test ohne kontrolliertes Ziel verfehlte bewegten Bot; das beweist keine garantierte Trefferquote. Screenshots stammen aus Spiel, normale Kameras zeigen Hund teils verdeckt/kurz; Nahprüfung folgt.
+
+**Nutzerwunsch Sichtbarkeit:** Unsichtbaren eigenen Headless-Test-Chrome beendet, sichtbaren isolierten Chrome 9228 geöffnet. Nutzer kann nächste Tests dort verfolgen; bisheriger Nutzerspieltab unverändert.
+
+**Dateien / nächste Arbeit:** build_shepherd.py/blend/glb, Bell-Erzeuger/WAV, item-scene/audio/main, Manifest/Quellen/Browserbelege. Nächste Pakete: historische Atmosphäre/Adler, realistischer Fahrerpass, Sprache/F-Hupe.
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
