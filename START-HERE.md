@@ -53,6 +53,8 @@ verifiziert, offen und nächsten Schritt.
 
 **M2j-Kontaktkorrektur:** Eine 60-s-Sechs-Kart-Simulation deckte nach Fahrzeugstößen bis zu 5,7 cm Eindringen in den markierten Block auf. Die gemeinsame Positionskorrektur läuft nun mehrmals nach Fahrzeugkontakten. Im selben Test: kein Blockeindringen, höchstens 1,6 cm Restüberlappung zwischen Karts. Modelltests, Chrome-Browserprobe und RTX-Langprobe bestanden; M2 bleibt wegen Fahrgefühl und Zielhardware offen.
 
+**M2k-Kamerasichtprobe:** Ferne Verfolger- und Fahrerperspektive wurden bei Fahrzeugkontakt als Chrome-Standbilder festgehalten. Die Szene bleibt sichtbar; Kameraruhe und Komfort während echter Bedienung sind weiter offen.
+
 **Git-Stand:** M1–M2f sind lokal im Commit `51e22ff` auf `babylon-neustart-2026` gesichert; M2g/h liegen ebenfalls lokal auf diesem Branch. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
 
 ## Kurzer menschlicher M2-Fahrcheck

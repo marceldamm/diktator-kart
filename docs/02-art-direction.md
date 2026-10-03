@@ -25,6 +25,8 @@ Cockpit, Hände, Lenkrad und Vorderräder sind deshalb frühe Modell-/Animations
 
 **M2d-Sichtprobe, 03.10.2026:** Drei Perspektiven sind mit prozeduralen Testformen in Chrome umschaltbar. Die Fahrerperspektive zeigt einfache Armaturen, Hände, bewegtes Lenkrad und Vorderräder auch während eines geladenen Drifts. Das ist ein Funktionsbeleg für Sichtbarkeit, noch keine Abnahme von Materialqualität, Fahrkomfort, Kamera bei Wandkontakt oder Touch-Bedienung. Die entsprechende offene Aufgabe in Dokument 10 bleibt bestehen.
 
+**M2k-Kontaktbilder, 03.10.2026:** Der reproduzierbare Gegenverkehrsfall wurde zusätzlich in ferner Verfolger- und Fahrerperspektive bei angezeigtem Fahrzeugkontakt aufgenommen. In den Standbildern bleiben Test-Karts beziehungsweise Cockpitteile und Gegenkart sichtbar; die Kamera zeigt keine leere oder vollständig verdeckte Szene. Belege: `docs/evidence/m2k-fahrzeugkontakt-fern-chrome.png` und `m2k-fahrzeugkontakt-fahrer-chrome.png`. Bewegungsruhe, Komfort, echte Wandkontakte und fertige Cockpitqualität sind damit nicht beurteilt.
+
 Figuren behalten große Köpfe und überzeichnete Körper mit erkennbaren historischen Gesichtszügen. Zuerst erhält ein Fahrer samt Kart den vollständigen Stilpass; fünf weitere bleiben zunächst einfacher dargestellt. Die Abnahme erfolgt auch aus beiden Verfolgeransichten und der Fahrerperspektive, nicht allein anhand der Konzeptbilder.
 
 Die Verfolgerkamera muss das Kart hinterherführen, Kurven und Drift lesen lassen und bei Sprüngen genügend Strecke zeigen. Kamerabewegung darf spektakulär sein, aber nicht die Fahrbarkeit opfern. Eine Option für reduzierte Kamerabewegung und reduzierte Effekte ist Pflicht für Zugänglichkeit und schwächere Hardware.

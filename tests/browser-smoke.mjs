@@ -265,6 +265,32 @@ try {
   await tap('r', 'KeyR', 82);
   await delay(300);
   assert.equal((await read()).mode, 'Bereit');
+  const contactViews = [];
+  for (const [presses, label, file] of [
+    [1, 'Verfolger fern', 'm2k-fahrzeugkontakt-fern-chrome.png'],
+    [2, 'Fahrerperspektive', 'm2k-fahrzeugkontakt-fahrer-chrome.png'],
+  ]) {
+    await send('Page.navigate', { url: 'http://127.0.0.1:4173/?scenario=contact' });
+    await delay(500);
+    assert.equal((await read()).status, 'Testszene läuft');
+    for (let index = 0; index < presses; index++) {
+      await tap('c', 'KeyC', 67);
+      await delay(80);
+    }
+    assert.equal((await read()).camera, label);
+    await key('keyDown', 'w', 'KeyW', 87);
+    let viewContact;
+    for (let attempt = 0; attempt < 60; attempt++) {
+      await delay(50);
+      viewContact = await read();
+      if (viewContact.mode?.startsWith('Fahrzeugkontakt')) break;
+    }
+    assert.match(viewContact.mode, /Fahrzeugkontakt/, `Expected ${label} contact: ${JSON.stringify(viewContact)}`);
+    const viewScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+    await writeFile(`docs/evidence/${file}`, Buffer.from(viewScreenshot.data, 'base64'));
+    await key('keyUp', 'w', 'KeyW', 87);
+    contactViews.push(viewContact);
+  }
   await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&webgl=1' });
   await delay(500);
   assert.equal((await read()).status, 'Testszene läuft');
@@ -282,7 +308,7 @@ try {
   const fallbackScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   await writeFile('docs/evidence/m2i-webgl1-chrome.png', Buffer.from(fallbackScreenshot.data, 'base64'));
   await key('keyUp', 'w', 'KeyW', 87);
-  process.stdout.write(JSON.stringify({ contact, driving, hopping, charged, boosted, paused, restarted, farView, farMoving, driverView, driverDrift, oneKart, sixKarts, boundary, obstacle, vehicleContact, webgl1: webgl1.result.value, fallbackDriving }) + '\n');
+  process.stdout.write(JSON.stringify({ contact, driving, hopping, charged, boosted, paused, restarted, farView, farMoving, driverView, driverDrift, oneKart, sixKarts, boundary, obstacle, vehicleContact, contactViews, webgl1: webgl1.result.value, fallbackDriving }) + '\n');
 } finally {
   socket.close();
 }

@@ -373,6 +373,28 @@
 
 **Empfohlenes Modell:** Sol für beobachtete Fahr-/Kamerafehler; Astra bei widersprüchlicher Gesamtabnahme.
 
+### 2026-10-03 – M2k Kamerasicht bei Fahrzeugkontakt
+
+**Ziel:** Die nach M2h noch offene statische Sicht in ferner Verfolger- und Fahrerperspektive bei einem reproduzierbaren Fahrzeugkontakt prüfen.
+
+**Modell / Arbeitsmodus:** lokale Fortsetzung auf `babylon-neustart-2026`, isolierter Headless Chrome auf RTX 3070 Laptop GPU; keine Spielregeländerung, kein GitHub-Push und kein Ruhezustand.
+
+**Erledigt:** `tests/browser-smoke.mjs` fährt den Gegenverkehrsfall auch in den beiden bisher nicht beim Kontakt fotografierten Kameras. Die bestehenden Screenshots werden bei normalen Wiederholungen nicht überschrieben.
+
+**Verifiziert:** `npm run test:browser` bestand mit Fahrzeugkontakt in naher, ferner und Fahrerperspektive. Die neuen Bilder `docs/evidence/m2k-fahrzeugkontakt-fern-chrome.png` und `m2k-fahrzeugkontakt-fahrer-chrome.png` wurden visuell geprüft: Testkarts beziehungsweise Cockpit, Gegenkart und Umgebung bleiben sichtbar. Kein vollständig leerer oder verdeckter Bildausschnitt in diesen Momenten.
+
+**Nicht verifiziert:** Kameraruhe im Zeitverlauf, Komfort bei echter Bedienung, Wandkontakt außerhalb der Testfläche, fertige Cockpitqualität und Zielhardwareleistung. Der kurze Browserlauf war keine neue kontrollierte Lastmessung.
+
+**Geänderte Dateien:** `tests/browser-smoke.mjs`, zwei neue M2k-Bilder in `docs/evidence/`, `START-HERE.md`, `docs/02-art-direction.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Abnahmefolgen geprüft; Grundpfeiler bleiben unverändert.
+
+**Neue Entscheidungen:** keine; nur zusätzlicher technischer Sichtbeleg für die bereits bestätigten drei Kameras.
+
+**Offene Probleme:** Menschlicher M2-Fahr-/Kameracheck und Messung auf normalem PC bleiben erforderlich. GitHub-Upload bleibt ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** Menschliche Fahr-/Kameraprüfung und normale-PC-Messung nach Dokument 09; daraus konkrete Korrekturen oder die M2-Entscheidung ableiten.
+
+**Empfohlenes Modell:** Sol für aus der praktischen Fahrt resultierende Korrekturen; Astra bei schwieriger Gesamtbewertung.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

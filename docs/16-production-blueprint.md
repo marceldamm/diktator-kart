@@ -60,6 +60,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **Abnahmeführung:** Das getrennte M2-Prüfprotokoll in `09-roadmap.md` hält technische Belege, menschliches Fahr-/Kameraurteil und Gerätewerte auseinander. Ohne praktische Beurteilung und erste normale-PC-Messung wird M2 nicht als abgeschlossen markiert; fehlende schwächere/Mobilgeräte bleiben als offene Zielplattformprüfung sichtbar.
 
+**M2k-Sichtprobe, 03.10.2026:** Statische Browserbilder der fernen Verfolger- und Fahrerperspektive beim Fahrzeugkontakt ergänzen die technische Kameraabdeckung. Eine menschliche Fahrt mit Beobachtung von Kameraruhe, Sicht und Komfort bleibt für die M2-Abnahme nötig.
+
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 
 ### M3 – Erster Vertical Slice

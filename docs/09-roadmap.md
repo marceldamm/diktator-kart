@@ -53,6 +53,8 @@ Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und
 
 **Zwischenstand M2j, 03.10.2026:** Der Sechs-Kart-Stresstest fand bis zu 5,7 cm Blockeindringen nach Fahrzeugkontakt. Eine gemeinsame, wiederholte Positionskorrektur senkte dies im gleichen 60-s-Pfad auf null und die Kart-Restüberlappung auf höchstens 1,6 cm. 14 Modell-/Eingabetests, Build, Browserprobe und erneute RTX-Probe bestanden. M2 bleibt wegen menschlichem Fahrgefühl, normaler/schwacher Hardware und repräsentativer Streckenkollision offen.
 
+**Zwischenstand M2k, 03.10.2026:** Gegenverkehrskontakt wurde zusätzlich in ferner Verfolger- und Fahrerperspektive in Chrome festgehalten. Die Standbilder zeigen die Szene und Cockpitteile bei Kontakt; sie belegen weder Kameraruhe während der Bewegung noch menschlichen Komfort. Die entsprechenden Abnahmefelder bleiben offen.
+
 ## M3 – Erster ausgearbeiteter Spielabschnitt
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.
