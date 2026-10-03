@@ -439,6 +439,28 @@
 
 **Empfohlenes Modell:** Sol für M2-Korrekturen; Astra bei festgefahrener Meilenstein-/Stilentscheidung.
 
+### 2026-10-03 – Berlin-/Stadionroute als Vorschlag vorbereitet
+
+**Ziel:** Den zweiten unabhängigen offenen Punkt vor dem M3-Art-Piloten vorbereiten, ohne M2 zu überspringen oder historische Kulissen ungeprüft zu produzieren.
+
+**Modell / Arbeitsmodus:** Dokumentationsarbeit auf `babylon-neustart-2026`. Dokumente 01, 02, 05, 10, 11 und 13 sowie das bestätigte Bildraster G–L geprüft. Historische Anker mit offiziellen Berliner Denkmal-/Stadtquellen und der Geschichteseite des Olympiastadions gegengeprüft; keine externen Bilder oder Texte übernommen.
+
+**Erledigt:** Dokument 01 skizziert ein fiktives Zeitbild der 1930er Jahre und eine Route aus Stadionvorplatz, Kulissenboulevard, optionaler Hinterbühnenabkürzung und Rückbogen. Olympiagelände und Brandenburger Tor sind als belegte Form-/Sichtreferenzen mit Links markiert; die alte Druckerei-Idee bleibt ausdrücklich optionale Altidee. M3 wird auf einen zusammenhängenden Abschnitt begrenzt, vollständiger Rundkurs/Abkürzungsregel bleiben M4. Dokument 10 trennt den ausgearbeiteten Vorschlag von der offenen gemeinsamen Bestätigung.
+
+**Verifiziert:** Offizielle Quellen belegen Olympiastadion/Olympischen Platz als Teil der Anlage bis 1936, deren Nutzung für NS-Selbstinszenierung sowie das Brandenburger Tor als älteres Berliner Wahrzeichen. Die Projektvorgabe erlaubt eine frei zusammengestellte, nicht geografisch exakte Berlin-/Stadionwelt. Quellenlinks und Inhaltsgrenzen stehen im Dokument 01.
+
+**Nicht verifiziert:** endgültiges Zeitbild, Landmarken-/Symbolwahl, Abkürzungssicherheit, Route/Fahrdauer, Assetrechte, Stilwirkung in Babylon und historische Genauigkeit einer späteren konkreten Szene. Es wurde keine Strecke gebaut oder abgenommen.
+
+**Geänderte Dateien:** `docs/01-game-design.md`, `docs/10-open-questions.md`, `docs/13-world-and-content-boundaries.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/00-project-framework.md`, `README.md`, `START-HERE.md`, `docs/17-progress-log.md`. Dokumente 02, 05 und 11 wurden auf Abhängigkeiten geprüft. Dokument 12 braucht keinen neuen Entscheidungseintrag, da nur ein Vorschlag vorliegt.
+
+**Neue Entscheidungen:** keine. Die bestätigte Berlin-/Stadionrichtung, Inhaltsgrenzen und Reihenfolge M2 → M3 → M4 bleiben unverändert.
+
+**Offene Probleme:** M2-Fahr-/Kameraprüfung und normale-PC-Messung; danach gemeinsame Fahrer-/Strecken-/Zeichenwahl. GitHub-Upload ohne ausdrückliche Freigabe weiter ausgeschlossen.
+
+**Nächster Schritt:** M2-Fahrcheck und Gerätewerte gemäß Dokument 09 erheben. Vor M3-Assetproduktion über ersten Fahrer und Landmarken-/Zeitbildvorschlag gemeinsam entscheiden.
+
+**Empfohlenes Modell:** Sol für M2-Korrekturen; Astra für schwierige Stil-/Inhaltsabwägungen.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

@@ -24,7 +24,24 @@ Der Spieler soll innerhalb weniger Sekunden verstehen, wie beschleunigt, gelenkt
 
 ## Erste Strecke: historische Berlin-/Stadionwelt
 
-Bestätigt ist eine frei zusammengestellte historische Berlin-/Stadionstrecke mit wiedererkennbaren Gebäuden und eigenen satirischen Details. Sie muss keine geografisch exakte Rekonstruktion sein. Konkrete Landmarken und die genaue Zeitdarstellung sind noch auszuarbeiten; die Grenzen aus Dokument 13 gelten.
+Bestätigt ist eine frei zusammengestellte historische Berlin-/Stadionstrecke mit wiedererkennbaren Gebäuden und eigenen satirischen Details. Sie muss keine geografisch exakte Rekonstruktion sein. Landmarken und Zeitbild sind unten als Vorschlag ausgearbeitet, noch nicht beschlossen; die Grenzen aus Dokument 13 gelten.
+
+### Vorschlag für Landmarken und erste Route – noch kein Beschluss
+
+**Zeitbild:** Eine fiktive, verdichtete Berlin-Kulisse mit Bauformen und Selbstinszenierung der 1930er Jahre, ohne einen konkreten Tag, ein tatsächliches Rennen oder ein historisches Massenereignis nachzustellen. Die bestätigte historische Berlin-/Stadionrichtung bleibt bestehen; genaue Gebäudeformen, Symbole und Route werden erst nach gemeinsamer Prüfung beschlossen.
+
+**Belegte historische Anker:** Das Berliner Olympiagelände umfasste bis 1936 unter anderem Olympischen Platz, Olympiastadion und Maifeld. Die Berliner Stadtbeschreibung ordnet die Anlage ausdrücklich der Inszenierung nationalsozialistischer Kulturpolitik zu. Das Brandenburger Tor ist ein älteres, eigenständiges Berliner Wahrzeichen mit fünf Durchfahrten. Diese Befunde stützen erkennbare Silhouetten und den kritischen Kontext, nicht die Übernahme von Fotos oder eine geographisch exakte Strecke. Quellen: [Berlin.de: Olympiagelände](https://www.berlin.de/sehenswuerdigkeiten/3560211-3558930-olympiagelaende.html), [Olympiastadion Berlin: Geschichte](https://olympiastadion.berlin/de/geschichte/), [Berliner Denkmaldatenbank: Brandenburger Tor](https://denkmaldatenbank.berlin.de/daobj.php?obj_dok_nr=09065019).
+
+| Abschnitt | Vorgeschlagene Fahrfunktion | Landschaft und satirischer Blick |
+|---|---|---|
+| Stadionvorplatz / Start | breite, klare Startzone und erste gut lesbare Kurve | vereinfachte Stadion-Ovalfassade und Platzachse; Applausmaschinen laufen sichtbar asynchron und machen die Inszenierung als Mechanik erkennbar |
+| Kulissenboulevard | mittellange Gerade für Tempo, Überholen und Sicht auf den folgenden Abzweig | fiktive Behördenfassaden und ein entferntes Brandenburger-Tor-Motiv als Orientierungspunkt; keine reale Parade oder originalgetreuen Regimesymbole |
+| Hinterbühne / optionale Abkürzung | sichere Hauptroute plus kürzere, angekündigte Nebenroute mit klarer Rückführung | die prunkvolle Fassade zeigt dahinter Stützen, Akten und unpraktische Bürokratie; eine Druckerei-Idee aus der alten gemischten Hauptstadtstrecke bleibt hier nur eine mögliche satirische Ausstattung |
+| Rückbogen / Ziel | breite Driftkurve mit freier Sicht auf Ziellinie und beide Kameradistanzen | Stadion- und Platzsilhouette kehren wieder; Kulissen reagieren über Runden dekorativ, ohne befahrbare Kollisionen zu verändern |
+
+**Produktionsabfolge:** M3 baut zunächst nur einen zusammenhängenden Vorplatz-/Boulevard-Abschnitt als visuelle Stil- und Sechs-Fahrzeug-Lastprobe. Der vollständige Rundkurs, drei Runden, Checkpoints und die Abkürzungsregel gehören zu M4. Das langfristige 60–120-s-Rundenziel bleibt bestehen und wird erst mit Fahrtest und Botlinie bewertet. Materialien/Schilder entstehen neu; historische Fotos und Texte werden ohne geprüfte Nutzungsrechte nicht übernommen.
+
+**Offen zur gemeinsamen Prüfung:** Wiedererkennbarkeit von Stadion und Tor in den drei Spielkameras, konkrete Zeit- und Zeichenwahl, Position des entfernten Tors in der fiktiven Topologie, satirische Lesbarkeit der Kulissen sowie sichere Abkürzungsgeometrie. Orte des Holocausts oder der Vernichtung und Humor auf Kosten von Opfern/Minderheiten bleiben ausgeschlossen; Dokument 13 ist die Inhaltsgrenze.
 
 ## Alte Streckenideen: „Größenwahn Grand Prix – Hauptstadt auf Bewährung“
 

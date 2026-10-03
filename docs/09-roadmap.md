@@ -63,6 +63,8 @@ Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt 
 
 **Vorbereitung, noch kein M3-Start:** Dokument 14 enthält Mussolini/Il Duce GT als begründeten ersten Art-Piloten-Vorschlag mit überlieferten Ideen, Herkunft und klarer Liefergrenze. Die gemeinsame Auswahl und Stilfreigabe sowie die M2-Abnahme stehen aus; keine Art-Produktion wurde begonnen.
 
+Dokument 01 skizziert zusätzlich eine fiktive Stadion-/Boulevardroute mit belegten historischen Landmarken als **Vorschlag**. M3 umfasst davon nur einen zusammenhängenden Abschnitt für Stil- und Lastprobe; vollständiger Rundkurs und Rennregeln bleiben M4. Landmarken, Zeitbild und Zeichen werden vor Assetproduktion gemeinsam geprüft.
+
 **Abnahme:** Stil aus tatsächlichen Spielkameras gemeinsam geprüft; sechs sichtbare Teilnehmer und erste Messwerte. Noch keine fertige Gesamtstrecke behaupten.
 
 ## M4 – Kernrennen

@@ -25,6 +25,8 @@ Der Nutzer hat eine frei zusammengestellte historische Berlin-/Stadionwelt mit B
 
 Für den Prototyp ist eine klar erkennbare, aber fiktiv verfremdete Umgebung vorzuziehen, in der der Größenwahn und die Kulissenhaftigkeit des Regimes kritisiert werden. Orte des Holocausts oder der Vernichtung sind ausgeschlossen.
 
+Dokument 01 enthält dazu einen **unverbindlichen** Streckenvorschlag: stadionartige Fassade, fiktiver Kulissenboulevard und ein entferntes Brandenburger-Tor-Motiv. Das Tor ist ein älteres Berliner Wahrzeichen; die Stadionanlage wurde von der NS-Diktatur für Selbstinszenierung genutzt. Diese Herkunft soll in der Satire sichtbar kritisch behandelt werden. Weder historische Symbolik noch konkrete Gebäudeabbildungen sind damit freigegeben; vor Assetproduktion sind Inhalt, Referenzrechte und historische Genauigkeit gesondert zu prüfen.
+
 ## Erwachsene Gestaltung
 
 Das Spiel ist für Erwachsene gedacht. Bissiger schwarzer Humor, düstere Stimmung, brutale Itemwirkung und attraktive, sinnliche oder teilweise freizügigere Figuren sind möglich. Die Darstellung bleibt charakterbezogen, stilvoll und nicht pornografisch; sie darf nicht als sexualisierte Gewalt, rassistische Pointe oder Verherrlichung missbrauchter Macht funktionieren.

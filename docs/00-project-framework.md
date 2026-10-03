@@ -71,6 +71,7 @@ Alte Technik ist keine Autorität für die neue Architektur.
 - Itemumsetzung: konzeptionelle Produktionsmatrix in `15-item-feasibility-and-production.md`; technische Machbarkeit und Balance noch nicht praktisch verifiziert
 - Bauplan: in `16-production-blueprint.md`
 - M3-Vorbereitung: Mussolini/Il Duce GT ist in Dokument 14 als erster Art-Pilot vorgeschlagen, nicht ausgewählt; M2-Abnahme und gemeinsame Stilprüfung bleiben vorgelagert
+- Erste Strecke: Dokument 01 enthält einen quellenbasierten Vorschlag für eine fiktive Stadion-/Boulevardroute; Landmarken, Zeitbild, Zeichen und Layout sind nicht beschlossen
 - Laufende Historie: in `17-progress-log.md`
 - Nächster Arbeitsschritt innerhalb M2: Fahrgefühl, Kamerakomfort und Kontaktreaktionen durch einen Menschen sowie Leistung auf normalem/schwachem PC und Mobilgeräten prüfen; die Headless-RTX-Probe ist keine Zielhardware-Abnahme
 

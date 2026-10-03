@@ -43,7 +43,8 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 
 - [x] Ersten vollständig auszuarbeitenden Fahrer als Vorschlag vorbereiten: Mussolini/Il Duce GT in Dokument 14; keine Auswahl oder Änderung an Sarahs Ideen beschlossen.
 - [ ] Ersten Fahrer gemeinsam auswählen und die spätere Stilprobe aus allen drei Spielkameras abnehmen.
-- [ ] Landmarken, Zeitraum und Symbolgestaltung der Berlin-/Stadionstrecke konkret entwerfen und innerhalb der bestehenden Grenzen prüfen.
+- [x] Landmarken, Zeitbild und satirische Route als **Vorschlag** mit historischen Quellen und Inhaltsgrenzen in Dokument 01 ausgearbeitet; keine Strecke oder Symbole beschlossen.
+- [ ] Landmarken, Zeitbild, konkrete Zeichen und Streckenlayout gemeinsam prüfen und vor Assetproduktion bestätigen.
 - [ ] Schwachen PC mit integrierter Grafik und Android-Testgerät benennen; konkrete Auflösung, Mindestleistung und Ladezeitziele anhand Messungen bestätigen.
 - [ ] Kostenlose Asset-/Audiopipeline an einem Modell und kurzen Hörproben prüfen; Herkunft/Lizenzen erfassen.
 - [ ] First-Person-Sichtbarkeit, Kameraruhe, Eingabe und Touch-Bedienung praktisch prüfen. M2d belegt eine erste Chrome-Sichtprobe mit Cockpit und geladenem Drift; interaktiver Komfort und Touch bleiben offen.

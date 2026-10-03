@@ -70,6 +70,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **Vorlaufender Vorschlag:** Dokument 14 empfiehlt Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart und trennt Altideen von möglichen Produktionsausführungen. Das ist weder eine gemeinsame Auswahl noch eine Erlaubnis, M2-Abnahme oder Stilprüfung zu überspringen.
 
+Dokument 01 hält einen quellenbasierten, fiktiven Berlin-/Stadion-Routenvorschlag mit Inhaltsprüfung fest. Für M3 genügt der dort abgegrenzte erste Abschnitt; die Route wird erst nach gemeinsamer Auswahl und M2-Abnahme produziert. Historische Fotos/Schilder und konkrete Zeichen brauchen vor Nutzung eigene Freigabe und Lizenzprüfung.
+
 **Aufgaben:** ein Diktator/Kart vollständig ausgearbeitet, fünf weitere in einfacherer Darstellung als Bots, ein historischer Berlin-/Stadionabschnitt, Beleuchtung, Materialpass, Atmosphäre und Audio. Drei Kameras einschließlich Cockpit mit Händen, Lenkrad, Armaturen und Vorderrädern prüfen. Start-Items beginnen, vollständiges Dreierset in M4.
 
 **Ergebnis:** ein kleiner Abschnitt mit sechs Teilnehmern vermittelt die Zielrichtung. Stil gemeinsam prüfen, bevor die übrigen fünf Modelle vollständig ausgearbeitet werden.

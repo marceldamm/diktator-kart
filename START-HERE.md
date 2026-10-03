@@ -29,7 +29,7 @@ verifiziert, offen und nächsten Schritt.
 
 ## Wo stehen wir?
 
-**Heute:** M1 geprüft; M2a–j liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt. Ein vollständiges Rennen existiert noch nicht.
+**Heute:** M1 geprüft; M2a–l liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts, vorläufigen Kontakten und F3-Diagnose. Ein vollständiges Rennen existiert noch nicht.
 
 **Aktueller Meilenstein:** M2 – Fahrprototyp.
 
@@ -59,7 +59,9 @@ verifiziert, offen und nächsten Schritt.
 
 **M3-Vorbereitung ohne Produktionsstart:** [Dokument 14](docs/14-character-and-item-catalog.md) schlägt Mussolini/Il Duce GT als ersten Art-Piloten vor. Auswahl, M2-Abnahme und spätere Stilprobe bleiben offen.
 
-**Git-Stand:** M1–M2f sind lokal im Commit `51e22ff` auf `babylon-neustart-2026` gesichert; M2g/h liegen ebenfalls lokal auf diesem Branch. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
+**Streckenvorbereitung ohne Produktionsstart:** [Dokument 01](docs/01-game-design.md) skizziert eine fiktive Stadion-/Boulevardroute mit belegten historischen Ankern. Landmarken, Zeitbild, Zeichen und Layout sind Vorschläge und werden vor Assetproduktion gemeinsam geprüft.
+
+**Git-Stand:** M1 und die M2a–l-Zwischenschritte sind lokal auf `babylon-neustart-2026` gesichert; der Branch liegt vor `origin/babylon-neustart-2026`. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
 
 ## Kurzer menschlicher M2-Fahrcheck
 
