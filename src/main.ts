@@ -6,6 +6,7 @@ import { createTestScene, type TestScene } from './scene';
 import './style.css';
 import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace,type RaceProgress } from './track';
 import { KartAudio } from './audio';
+import { CAST } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
@@ -427,7 +428,7 @@ class App {
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
-            const names=['Du · Funkwagen','Reservefahrer','Archivexpress','Werkstattwagen','Paradewagen','Kurierwagen'];
+            const names=CAST.map((c,i)=>i===0?`Du · ${c.name}`:c.name);
             const ranking=rankRace(this.progress).map(i=>({p:this.progress[i],i}));
             const list=document.querySelector('#finish-results')!;list.replaceChildren();
             for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;row.append(label,time);list.append(row);}

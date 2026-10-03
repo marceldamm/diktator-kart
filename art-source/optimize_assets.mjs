@@ -7,7 +7,7 @@ import {mkdir,copyFile,access,stat,writeFile} from 'node:fs/promises';
 const io=new NodeIO().registerExtensions(ALL_EXTENSIONS);
 const root=new URL('../',import.meta.url),cache=new URL('.tools/raw-models/',root);await mkdir(cache,{recursive:true});
 const results=[];
-for(const name of ['hero-kart','stadium-world','stadium-props','park-tree','items']) {
+for(const name of (process.argv[2]?process.argv.slice(2):['hero-kart','stadium-world','park-tree','items'])) {
   const input=new URL(name+'.glb',cache),output=new URL('public/assets/models/'+name+'.glb',root);
   try{await access(input);}catch{await copyFile(output,input);}
   const document=await io.read(input.pathname.replace(/^\/([A-Za-z]:)/,'$1'));

@@ -30,10 +30,11 @@ import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineIns
 import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
+import { CAST, CAST_PARTS } from './cast';
 
 
 /** Panorama-space angle of the sun in sky-afternoon (table_mountain_2), measured in-game. */
-const SKY_SUN_OFFSET = 0;
+const SKY_SUN_OFFSET = Math.PI * .55;
 
 function glowMaterial(scene: Scene, name: string, color: string): StandardMaterial {
   const m = new StandardMaterial(name, scene); m.diffuseColor = Color3.FromHexString(color);
@@ -81,20 +82,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const stoneMaps = surfaceTextures(scene, 'Limestone', 'stone'), leafMaps = surfaceTextures(scene, 'Cypress', 'leaf'), fabricMaps = surfaceTextures(scene, 'Cloth', 'fabric');
     for (const mesh of world.meshes) if (mesh.material instanceof PBRMaterial) {
       const m = mesh.material;
-      if (/stone|limestone/.test(m.name)) { m.albedoTexture = stoneMaps.color; m.bumpTexture = stoneMaps.normal; }
+      if (/stone|limestone|render/.test(m.name)) { m.albedoTexture = stoneMaps.color; m.bumpTexture = stoneMaps.normal; }
       if (/foliage/.test(m.name)) { m.albedoTexture = leafMaps.color; m.bumpTexture = leafMaps.normal; }
-      if (/cloth/.test(m.name)) { m.albedoTexture = fabricMaps.color; m.bumpTexture = fabricMaps.normal; }
+      if (/cloth|Spectator/.test(m.name)) { m.albedoTexture = fabricMaps.color; m.bumpTexture = fabricMaps.normal; }
     }
     for (const mesh of world.meshes) { mesh.receiveShadows = true; mesh.isPickable = false; if (mesh.getTotalVertices() > 0) shadow.addShadowCaster(mesh); }
-    const props=await ImportMeshAsync('/assets/models/stadium-props.glb',scene);
-    props.meshes.filter(m=>!m.parent).forEach(m=>m.parent=worldOrientation);
-    for(const mesh of props.meshes) {
-      mesh.receiveShadows=true;mesh.isPickable=false;if(mesh.getTotalVertices()>0)shadow.addShadowCaster(mesh);
-      if(mesh.material instanceof PBRMaterial) {
-        if(mesh.material.name.includes('limestone')){mesh.material.albedoTexture=stoneMaps.color;mesh.material.bumpTexture=stoneMaps.normal;}
-        if(/cloth|Spectator/.test(mesh.material.name)){mesh.material.albedoTexture=fabricMaps.color;mesh.material.bumpTexture=fabricMaps.normal;}
-      }
-    }
     const trackWorld = addTrackWorld(scene, shadow);
     // Fountain spray with a hard particle cap.
     for (const [fx, fz] of LANDMARKS.fountains) {
@@ -129,7 +121,6 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const glow = new GlowLayer('Restrained lamp and exhaust glow', scene, { mainTextureRatio: .35 }); glow.intensity = .45;
     for(const mesh of trackWorld.glowMeshes) glow.addIncludedOnlyMesh(mesh);
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
-    const colors = ['#125965', '#862e38', '#c1ae78', '#435940', '#384b74', '#5a365a'];
     const visuals = Array.from({ length: loadKartCount + 1 }, (_, index) => {
       const instance = container.instantiateModelsToScene((name) => `kart${index}/${name}`, false, { doNotInstantiate: true });
       const paint=new Map<PBRMaterial,PBRMaterial>();
@@ -141,9 +132,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const spins = Array.from({ length: 4 }, (_, i) => nodes.find((n) => n.name === `kart${index}/wheelSpin-${i}`) as TransformNode);
       const driver = nodes.find((n) => n.name === `kart${index}/driverPose`) as TransformNode;
       const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
-      const variants=['radio','spare','luggage','fin','parade','none'];
+      const cast = CAST[index % CAST.length];
       for(const kind of ['radio','spare','luggage','fin','parade']) {
-        const node=nodes.find(n=>n.name===`kart${index}/variant-${kind}`) as TransformNode|undefined;node?.setEnabled(kind===variants[index]);
+        const node=nodes.find(n=>n.name===`kart${index}/variant-${kind}`) as TransformNode|undefined;node?.setEnabled(kind===cast.kit);
+      }
+      for (const part of CAST_PARTS) {
+        const node = nodes.find((n) => n.name === `kart${index}/cast-${part}`) as TransformNode | undefined;
+        node?.setEnabled(part === cast.hat || cast.face.includes(part));
       }
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const steering = nodes.find((n) => n.name === `kart${index}/steeringWheel`) as TransformNode;
@@ -152,9 +147,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const mesh of root.getChildMeshes()) {
         mesh.receiveShadows = true; mesh.isPickable = false;
         if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh);
-        if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Petrol enamel')) {
+        const recolour: [RegExp, string | null][] = [[/Petrol enamel/, cast.paint], [/Uniform racing suit/, cast.uniform], [/Cape cloth/, cast.cape], [/Hat cloth/, cast.hatColor]];
+        for (const [pattern, colour] of recolour) if (mesh.material instanceof PBRMaterial && pattern.test(mesh.material.name)) {
+          if (!colour) { mesh.setEnabled(false); continue; }
           const source=mesh.material;let material=paint.get(source);
-          if(!material){material=source.clone(`Kart ${index} enamel`)!;material.albedoColor=Color3.FromHexString(colors[index]);paint.set(source,material);}
+          if(!material){
+            material=source.clone(`Kart ${index} ${source.name}`)!;material.albedoColor=Color3.FromHexString(colour).toLinearSpace();
+            if (/enamel/.test(source.name)) { material.metallic = .25; material.roughness = .38; material.clearCoat.isEnabled = true; material.clearCoat.intensity = .85; material.clearCoat.roughness = .08; }
+            paint.set(source,material);
+          }
           mesh.material=material;
         }
         if (mesh.material instanceof PBRMaterial && /racing suit|leather/.test(mesh.material.name)) {
@@ -163,10 +164,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       }
       const flames = [-.72, .72].map((x) => {
         const flame = MeshBuilder.CreateSphere(`Exhaust flame ${index}`, { diameter: .18, segments: 8 }, scene);
-        flame.parent = root; flame.position.set(x, .62, -1.62); flame.scaling.z = 4;
+        flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
       });
-      const shadowMeshes=root.getChildMeshes().filter(mesh=>/Petrol enamel|Tire rubber|racing suit|Warm skin|helmet|Dark leather/.test(mesh.name));
+      const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|racing suit|Warm skin|Hair|Hat cloth|Cape cloth|Dark leather/.test(mesh.name));
       return { root, pivots, spins, driver,head, scarf, steering, flames,shadowMeshes, rotation: 0, previousSpeed: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
@@ -206,7 +207,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     };
     const presentItems=await addItems(scene,shadow,loadKartCount+1);
     const itemShadowMeshes=(shadow.getShadowMap()?.renderList??[]).filter(mesh=>!staticShadowMeshes.includes(mesh));
-    for(const mesh of [...world.meshes,...props.meshes]){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
+    for(const mesh of world.meshes){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     return {
       scene,
       presentItems,
@@ -255,7 +256,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           v.driver.rotation.z = s.drifting ? s.driftDirection * .08 : Math.sin(time * 5) * Math.abs(s.speed) * .0008;
           v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;
           v.head.rotation.x=s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
-          if (v.scarf) v.scarf.rotation.z = Math.sin(time * 12) * Math.abs(s.speed) * .008;
+          if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
         });
