@@ -14,27 +14,26 @@ babylon-neustart-2026. Lies AGENTS.md, README.md, docs/00-project-framework.md,
 docs/16-production-blueprint.md, docs/17-progress-log.md und die für M2
 benötigten Detaildokumente.
 
-Ziel des nächsten Arbeitspakets M2f-Fahrprüfung: Die neue Randreaktion,
-Hop, Drift, Mini-Turbo, Federung und alle drei Kameras bei einer
-längeren Fahrt auf verfügbarer echter Hardware prüfen. Dokumentiere
-Gerät, Browser, Grafikpfad, Bildrate/Frame-Pacing und Beobachtungen
-getrennt vom bisherigen Headless-Vergleich. Prüfe Pause und Neustart
-erneut. Wenn menschliches Fahrgefühl nicht selbst beurteilt werden kann,
-halte dies offen und bereite einen kurzen reproduzierbaren Fahrtest für
-den Nutzer vor. Die fünf automatisch bewegten Lastkarts sind noch
-keine Rennbots; allgemeine Streckenkollision und Zielhardware-Abnahme
-bleiben weitere M2-Themen. Übernimm keinen PlayCanvas-/Ammo-Code.
-Halte START-HERE.md und docs/17-progress-log.md aktuell und berichte
-verifiziert, nicht verifiziert, offen und nächsten Schritt.
+Ziel des nächsten Arbeitspakets M2-Abnahme: Fahre den unten beschriebenen
+menschlichen Fahrcheck für Rand-, Hindernis- und Fahrzeugkontakt, Hop,
+Drift, Mini-Turbo, Federung und alle drei Kameras, sobald ein Mensch am
+Gerät steuern kann; erfinde kein Fahrgefühlurteil. Miss auf einem
+normalen oder schwächeren PC beziehungsweise Mobilgerät, wenn eines
+zugänglich ist. Bewerte danach die vorläufigen Kollisionsformen und
+Kamerabewegungen; dokumentiere nötige Korrekturen als klar abgegrenzte
+M2-Pakete. Die fünf automatisch bewegten Lastkarts sind noch keine
+Rennbots. Übernimm keinen PlayCanvas-/Ammo-Code. Halte START-HERE.md und
+docs/17-progress-log.md aktuell und berichte verifiziert, nicht
+verifiziert, offen und nächsten Schritt.
 ```
 
 ## Wo stehen wir?
 
-**Heute:** M1 geprüft; M2a–e und der M2f-Randstoß liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras und fünf bewegten Lastkarts. Ein vollständiges Rennen existiert noch nicht.
+**Heute:** M1 geprüft; M2a–h liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt. Ein vollständiges Rennen existiert noch nicht.
 
 **Aktueller Meilenstein:** M2 – Fahrprototyp.
 
-**Direktes Ziel:** M2f-Fahrprüfung auf echter Hardware; bisherige Chrome-Messung war Headless.
+**Direktes Ziel:** M2-Abnahmelücken: menschliches Fahrgefühl, Kamerakomfort, Kontaktreaktionen und normale/schwächere Hardware.
 
 **M1-Abnahme:** Build erfolgreich; Testszene in Chrome sichtbar; WebGL2, Pause, Eingabeaktionen, Neustart, Fehler und Wiederherstellung geprüft. Ein-Klick-Starter startet Vite und öffnet Chrome.
 
@@ -46,6 +45,14 @@ verifiziert, nicht verifiziert, offen und nächsten Schritt.
 
 **M2f-Teilstand:** Der Rand gibt nun einen kurzen Rückstoß, stoppt Drift/Turbo und lässt danach die Steuerung wieder frei. Zehn Modell-/Eingabetests, Build und Chrome-Randprobe bestanden. Fahrgefühl und echte Hardwareleistung sind offen.
 
+**M2f-Messung:** Ein längerer automatisierter Headless-Chrome-Lauf auf der RTX 3070 Laptop GPU prüfte ein und sechs Karts in allen drei Kameras. Je 300 Frames: 16,7 ms Median, 16,8 ms P95, 16,9 ms P99; keine Browserausnahme und stabile Meshzahl nach Neustarts. Das ist ein Befund für das starke Entwicklungsgerät, kein Urteil zum Fahrgefühl oder zur Leistung auf normalem/schwachem PC und Mobilgeräten. Rohdaten: `docs/evidence/m2f-rtx-endurance.json`.
+
+**M2g/h-Teilstand:** Ein markierter Block rechts der Geraden und Fahrzeug-zu-Fahrzeug-Kontakt verwenden vorläufige, reine Fahrmodellregeln. 14 Modell-/Eingabetests einschließlich einer 60-s-Sechs-Kart-Simulation, Build und Chrome-Probe mit getrennten Hindernis- und Gegenverkehrsfällen bestanden. Die erneute RTX-Lastprobe mit 44/89 Meshes für ein/sechs Karts ergab in allen sechs Fenstern 16,8 ms P95; ein Sechs-Kart-Fenster endete nach Kontakt bei 0 km/h. Das sind Technikbelege, keine Abnahme von Fahrgefühl, normaler/schwacher Hardware oder fertiger Kollisionsphysik. Rohdaten: `docs/evidence/m2g-rtx-endurance.json` und `docs/evidence/m2h-rtx-endurance.json`.
+
+**M2i-Kompatibilitätsprobe:** `?fleet=1&webgl=1` startet die Testszene absichtlich mit WebGL1. Chrome zeigte auf derselben RTX 3070 GPU eine sichtbare Szene, 44 Meshes und eine fahrende Runde im kurzen Browsercheck. Das belegt den Engine-Pfad, nicht die Leistung oder Kompatibilität eines älteren Zielgeräts. Beleg: `docs/evidence/m2i-webgl1-chrome.png`.
+
+**Git-Stand:** M1–M2f sind lokal im Commit `51e22ff` auf `babylon-neustart-2026` gesichert; M2g/h liegen ebenfalls lokal auf diesem Branch. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
+
 ## Kurzer menschlicher M2-Fahrcheck
 
 Diese Beobachtungen ergänzen die automatischen Tests; ein angenehmes Fahrgefühl kann nur ein Mensch beurteilen:
@@ -54,7 +61,8 @@ Diese Beobachtungen ergänzen die automatischen Tests; ein angenehmes Fahrgefüh
 2. Von der Mitte mit **W** geradeaus über die türkise und orange Bodenwelle fahren. Auf Rad- und Karosseriebewegung sowie störendes Springen achten.
 3. Mit **W + A/D + Space** nach dem Hop driften, Space bei geladener Anzeige loslassen und Bremsen ausprobieren. Rückmeldung zu Lenkbarkeit, Tempo und Turbo geben.
 4. Mit **C** durch nahe, ferne und Fahrerperspektive wechseln; während Kurve, Hop und Drift auf Sichtbarkeit und Kameraruhe achten.
-5. Gerade gegen den gelben Rand fahren, Rückstoß und erneute Steuerbarkeit prüfen. Danach **P** für Pause und **R** für Neustart verwenden.
+5. Gerade gegen den gelben Rand fahren, Rückstoß und erneute Steuerbarkeit prüfen. Den rot-gelben Block rechts der Geraden gezielt anfahren und Kontaktreaktion bewerten. Für einen reproduzierbaren Gegenverkehrsfall `http://127.0.0.1:4173/?scenario=contact` öffnen und geradeaus fahren; das zweite Kart ist ein Testfahrzeug.
+6. **P** für Pause und **R** für Neustart verwenden. Komfort, Sicht und unfaire Blockaden konkret notieren.
 
 Bitte nur tatsächlich beobachtete Punkte als bestanden markieren. Komfort, Zielhardware und Cockpitqualität sind noch nicht abgenommen.
 

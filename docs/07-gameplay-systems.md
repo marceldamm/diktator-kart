@@ -14,6 +14,10 @@ Vorgesehene Zustände: Menü, Laden, Einführung, Countdown, Rennen, Pause, Ziel
 
 **M2f-Teilstand:** Am Testflächenrand stoppt das Kart mit einem kurzen, begrenzten Rückstoß und einer kleinen Karosserieneigung; Drift und Turbo werden beendet. Die Eingabe setzt nach 0,22 s wieder ein. Das ist eine vorläufige Randreaktion und kein allgemeines Kollision-/Schadenssystem.
 
+**M2g-Teilstand:** Ein klar markierter Streckenblock rechts der Geraden verwendet im reinen Fahrkern eine Kreis-/Rechteck-Kontaktprüfung mit Rückstoß und eigenem HUD-Zustand. Ein direkter Fahrtest mit W, dann D trifft ihn; geradeaus ist er umfahrbar. Der hohe Block ist bewusst nicht per Hop überfahrbar. Fahrzeug-zu-Fahrzeug-Kollision, Streckenwände jenseits der Testfläche und Schäden sind noch nicht umgesetzt.
+
+**M2h-Teilstand:** Spieler und fünf Lastkarts erhalten dieselbe einfache Kreis-Kontaktregel. Überlappende Fahrzeugpositionen werden gleichmäßig getrennt; ein Stoß stoppt beide kurz, beendet Drift/Turbo und meldet Fahrzeugkontakt im HUD. Der gezielte Gegenverkehrsfall `?scenario=contact` ist ein Testaufbau. Renn-KI, vollständige Mehrfach- und Streckenkollision, Schaden und menschlich bewertetes Fahrgefühl fehlen weiter.
+
 Das Fahrmodell soll Arcade-Charakter behalten, aber Gewicht, Grip, Federung, Drift, Sprung und Kontakt zum Boden glaubwürdig spürbar machen. Ziel ist ungefähr 6/10 Realismus. Kleine Steine, Bordsteinkanten und unterschiedliche Untergründe dürfen Räder und Kartkörper sichtbar reagieren lassen. Spieler und Bots verwenden dieselben grundlegenden Fahrregeln. Bot-Persönlichkeit beeinflusst Entscheidungen, nicht heimliche Beschleunigungs- oder Gripvorteile.
 
 Fahrprofile dürfen sich leicht unterscheiden. Drift, Hop/Sprung und Mini-Turbo sind verbindlich; Federung, Bodenhaftung und Untergründe liefern den glaubwürdigen Eindruck. Optische Schäden können bis Rennende bleiben; betroffene Reifen oder bestimmte Kollisionen können die Lenkung kurzzeitig beeinträchtigen. Spielwirksame Nachteile enden zuverlässig, auch wenn das beschädigte Bauteil sichtbar bleibt.

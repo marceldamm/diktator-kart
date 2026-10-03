@@ -64,10 +64,10 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 ## Aktueller Status
 
 - Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
-- Babylon.js-Neuentwicklung: **M1 geprüft; M2a–e sowie die M2f-Randreaktion mit Fahrkern, Federung, drei Kameras und Sechs-Fahrzeug-Technikprobe lokal umgesetzt und geprüft**
+- Babylon.js-Neuentwicklung: **M1 geprüft; M2a–h mit Fahrkern, Federung, drei Kameras, Sechs-Fahrzeug-Technikprobe sowie Rand-, Hindernis- und Fahrzeugkontakt lokal umgesetzt und geprüft**
 - Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - Alte technische Implementierung: **nicht übernommen**
-- Nächster Schritt: M2f mit Fahrgefühl- und Hardwareprüfung abschließen; Auftrag in [START-HERE.md](START-HERE.md).
+- Nächster Schritt: M2-Abnahmelücken mit menschlichem Fahrcheck, normalem/schwächerem PC und Mobilgeräten prüfen; die vorläufigen Kollisionsformen und Kameras dabei bewerten. Auftrag in [START-HERE.md](START-HERE.md).
 - Arbeitsmodus für längere Sitzungen: [16-production-blueprint.md](docs/16-production-blueprint.md) lesen und [17-progress-log.md](docs/17-progress-log.md) fortschreiben.
 - Zielplattformen: Google Chrome unter Windows zuerst; mobile Browser werden von Anfang an berücksichtigt.
 - Startbarkeit: Jeder spielbare Stand braucht einen einfachen Startbutton, Launcher oder eine eindeutige Verknüpfung ohne Entwicklerkonsole.

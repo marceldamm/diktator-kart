@@ -8,7 +8,7 @@ import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { Scene } from '@babylonjs/core/scene';
-import { TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, WHEEL_POSITIONS, type KartState } from './kart-model';
+import { TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, WHEEL_POSITIONS, type KartState } from './kart-model';
 
 export interface TestScene {
   scene: Scene;
@@ -60,6 +60,21 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
     bumpMaterial.emissiveColor = index === 0
       ? new Color3(0.1, 0.35, 0.36) : new Color3(0.45, 0.23, 0.04);
     surface.material = bumpMaterial;
+  });
+  const obstacleMaterial = material(scene, 'obstacle-mat', new Color3(0.78, 0.14, 0.17));
+  obstacleMaterial.emissiveColor = new Color3(0.22, 0.03, 0.04);
+  const obstacleTopMaterial = material(scene, 'obstacle-top-mat', new Color3(0.98, 0.78, 0.22));
+  TEST_OBSTACLES.forEach((obstacle, index) => {
+    const block = MeshBuilder.CreateBox(`test-obstacle-${index}`, {
+      width: obstacle.halfWidth * 2, height: obstacle.height, depth: obstacle.halfDepth * 2,
+    }, scene);
+    block.position.set(obstacle.x, obstacle.height / 2, obstacle.z);
+    block.material = obstacleMaterial;
+    const marker = MeshBuilder.CreateBox(`test-obstacle-marker-${index}`, {
+      width: obstacle.halfWidth * 2 + 0.06, height: 0.05, depth: obstacle.halfDepth * 2 + 0.06,
+    }, scene);
+    marker.position.set(obstacle.x, obstacle.height + 0.025, obstacle.z);
+    marker.material = obstacleTopMaterial;
   });
 
   const borderMaterial = material(scene, 'border-mat', new Color3(0.93, 0.65, 0.16));

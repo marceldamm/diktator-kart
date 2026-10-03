@@ -19,6 +19,7 @@ export interface KartState {
   impactRemaining: number;
   impactVelocityX: number;
   impactVelocityZ: number;
+  impactKind: 'boundary' | 'obstacle' | 'kart' | null;
 }
 
 export interface DriveInput {
@@ -34,6 +35,9 @@ export const TEST_AREA_HALF_SIZE = 22.5;
 export const TERRAIN_BUMPS = [
   { z: 6, halfWidth: 3.5, halfLength: 0.55, height: 0.12 },
   { z: 13.5, halfWidth: 3.5, halfLength: 0.7, height: 0.18 },
+] as const;
+export const TEST_OBSTACLES = [
+  { x: 4.3, z: 10.2, halfWidth: 0.65, halfDepth: 0.65, height: 1.2 },
 ] as const;
 // Order: front-left, front-right, rear-left, rear-right.
 export const WHEEL_POSITIONS = [
@@ -67,6 +71,7 @@ export const KART_TUNING = {
   impactDuration: 0.22,
   impactReboundCap: 2.5,
   impactVelocityDecay: 10,
+  collisionRadius: 1.25,
 } as const;
 
 export function terrainHeightAt(x: number, z: number): number {
@@ -98,6 +103,7 @@ export function initialKartState(): KartState {
     suspensionOffset: 0, suspensionVelocity: 0, bodyPitch: 0, bodyRoll: 0,
     wheelGroundHeights: [0, 0, 0, 0], grounded: true,
     impactRemaining: 0, impactVelocityX: 0, impactVelocityZ: 0,
+    impactKind: null,
   };
 }
 
@@ -172,18 +178,49 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
   const travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
   const rawX = state.x + Math.sin(travelHeading) * speed * dt + state.impactVelocityX * dt;
   const rawZ = state.z + Math.cos(travelHeading) * speed * dt + state.impactVelocityZ * dt;
-  const x = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawX));
-  const z = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawZ));
+  let x = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawX));
+  let z = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawZ));
+  let collisionNormalX = x !== rawX ? -Math.sign(rawX) : 0;
+  let collisionNormalZ = z !== rawZ ? -Math.sign(rawZ) : 0;
+  let impactKind: KartState['impactKind'] = collisionNormalX || collisionNormalZ ? 'boundary' : state.impactKind;
+  for (const obstacle of TEST_OBSTACLES) {
+    const nearestX = Math.max(obstacle.x - obstacle.halfWidth, Math.min(obstacle.x + obstacle.halfWidth, x));
+    const nearestZ = Math.max(obstacle.z - obstacle.halfDepth, Math.min(obstacle.z + obstacle.halfDepth, z));
+    const differenceX = x - nearestX;
+    const differenceZ = z - nearestZ;
+    const distance = Math.hypot(differenceX, differenceZ);
+    if (distance >= KART_TUNING.collisionRadius) continue;
+    if (distance > 0.000001) {
+      collisionNormalX = differenceX / distance;
+      collisionNormalZ = differenceZ / distance;
+      x += collisionNormalX * (KART_TUNING.collisionRadius - distance);
+      z += collisionNormalZ * (KART_TUNING.collisionRadius - distance);
+    } else {
+      const toLeft = x - (obstacle.x - obstacle.halfWidth);
+      const toRight = obstacle.x + obstacle.halfWidth - x;
+      const toNear = z - (obstacle.z - obstacle.halfDepth);
+      const toFar = obstacle.z + obstacle.halfDepth - z;
+      const smallest = Math.min(toLeft, toRight, toNear, toFar);
+      collisionNormalX = smallest === toLeft ? -1 : smallest === toRight ? 1 : 0;
+      collisionNormalZ = smallest === toNear ? -1 : smallest === toFar ? 1 : 0;
+      x += collisionNormalX * (KART_TUNING.collisionRadius + smallest);
+      z += collisionNormalZ * (KART_TUNING.collisionRadius + smallest);
+    }
+    impactKind = 'obstacle';
+    break;
+  }
+  const collided = collisionNormalX !== 0 || collisionNormalZ !== 0;
   let impactRemaining = Math.max(0, state.impactRemaining - dt);
   const impactDecay = Math.exp(-KART_TUNING.impactVelocityDecay * dt);
   let impactVelocityX = state.impactVelocityX * impactDecay;
   let impactVelocityZ = state.impactVelocityZ * impactDecay;
 
-  if (x !== rawX || z !== rawZ) {
+  if (collided) {
     if (Math.abs(speed) > 1 && impactRemaining === 0) {
       const rebound = Math.min(KART_TUNING.impactReboundCap, Math.abs(speed) * 0.15 + 0.3);
-      impactVelocityX = x !== rawX ? -Math.sign(rawX) * rebound : 0;
-      impactVelocityZ = z !== rawZ ? -Math.sign(rawZ) * rebound : 0;
+      const normalLength = Math.hypot(collisionNormalX, collisionNormalZ);
+      impactVelocityX = collisionNormalX / normalLength * rebound;
+      impactVelocityZ = collisionNormalZ / normalLength * rebound;
       impactRemaining = KART_TUNING.impactDuration;
     }
     speed = 0;
@@ -192,6 +229,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
     driftCharge = 0;
     driftDirection = 0;
   }
+  if (impactRemaining === 0) impactKind = null;
   const grounded = hopRemaining === 0;
   const wheelGroundHeights = sampleWheelGround(x, z, heading);
   const averageGround = wheelGroundHeights.reduce((sum, contact) => sum + contact, 0) / 4;
@@ -210,5 +248,43 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
   const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
   return { x, z, heading, travelHeading, speed, height, hopRemaining, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
-    impactRemaining, impactVelocityX, impactVelocityZ };
+    impactRemaining, impactVelocityX, impactVelocityZ, impactKind };
+}
+
+// Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.
+export function resolveKartContacts(states: KartState[]): KartState[] {
+  const resolved = states.map((state) => ({ ...state }));
+  const diameter = KART_TUNING.collisionRadius * 2;
+  for (let first = 0; first < resolved.length; first++) {
+    for (let second = first + 1; second < resolved.length; second++) {
+      const left = resolved[first];
+      const right = resolved[second];
+      const differenceX = left.x - right.x;
+      const differenceZ = left.z - right.z;
+      const distance = Math.hypot(differenceX, differenceZ);
+      if (distance >= diameter) continue;
+      const normalX = distance > 0.000001 ? differenceX / distance : 1;
+      const normalZ = distance > 0.000001 ? differenceZ / distance : 0;
+      const separation = (diameter - distance) / 2;
+      left.x += normalX * separation;
+      left.z += normalZ * separation;
+      right.x -= normalX * separation;
+      right.z -= normalZ * separation;
+      const incomingSpeed = Math.max(Math.abs(left.speed), Math.abs(right.speed));
+      if (incomingSpeed <= 1) continue;
+      const rebound = Math.min(KART_TUNING.impactReboundCap, incomingSpeed * 0.15 + 0.3);
+      for (const [kart, sign] of [[left, 1], [right, -1]] as const) {
+        kart.speed = 0;
+        kart.turboRemaining = 0;
+        kart.drifting = false;
+        kart.driftCharge = 0;
+        kart.driftDirection = 0;
+        kart.impactRemaining = KART_TUNING.impactDuration;
+        kart.impactVelocityX = normalX * rebound * sign;
+        kart.impactVelocityZ = normalZ * rebound * sign;
+        kart.impactKind = 'kart';
+      }
+    }
+  }
+  return resolved;
 }

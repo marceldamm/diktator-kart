@@ -67,11 +67,11 @@ Alte Technik ist keine Autorität für die neue Architektur.
 
 - Wissensbasis: angelegt und quergeprüft
 - Altideen: Fahrer, Karts, Items, Bots, Drift, Audio, Streckenideen sowie Kostümvarianten, Team-Boni und individuelle Details aus den bekannten Altquellen extrahiert; Altarchiv bleibt für spätere Rückfragen erhalten
-- Babylon.js: M1-Technikgrundstand und M2a–e-Test-Kart mit Beschleunigung, Bremse, Rückwärtsfahrt, Lenkung, Hop, Drift, Mini-Turbo, Federung, drei Test-Kameramodi und fünf bewegten Lastfahrzeugen im Projektroot implementiert; Rennbots, vollständige Kollision und Rennregeln folgen
+- Babylon.js: M1-Technikgrundstand und M2a–h-Test-Kart mit Beschleunigung, Bremse, Rückwärtsfahrt, Lenkung, Hop, Drift, Mini-Turbo, Federung, drei Test-Kameramodi, fünf bewegten Lastfahrzeugen und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt im Projektroot implementiert; Rennbots, vollständige Streckenkollision und Rennregeln folgen
 - Itemumsetzung: konzeptionelle Produktionsmatrix in `15-item-feasibility-and-production.md`; technische Machbarkeit und Balance noch nicht praktisch verifiziert
 - Bauplan: in `16-production-blueprint.md`
 - Laufende Historie: in `17-progress-log.md`
-- Nächster Arbeitsschritt innerhalb M2: die nun implementierte Randreaktion und das Fahrgefühl auf echter Hardware prüfen; die Headless-Sechs-Fahrzeug-Probe ist keine Zielhardware-Abnahme
+- Nächster Arbeitsschritt innerhalb M2: Fahrgefühl, Kamerakomfort und Kontaktreaktionen durch einen Menschen sowie Leistung auf normalem/schwachem PC und Mobilgeräten prüfen; die Headless-RTX-Probe ist keine Zielhardware-Abnahme
 
 ## Definition eines „fertigen“ Arbeitsstands
 

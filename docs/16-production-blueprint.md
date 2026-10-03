@@ -48,6 +48,14 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **M2f-Teilstand, 03.10.2026:** Eine begrenzte Randstoßreaktion ist implementiert und im Modell/Browser geprüft. Der echte Fahr-/Hardwaretest und allgemeine Streckenkollision stehen aus; daher keine M2-Gesamtabnahme.
 
+**M2f-Messstand, 03.10.2026:** Eine längere Headless-Probe auf der RTX 3070 Laptop GPU verglich alle drei Kameras mit einem und sechs Karts; Frame-Pacing und Meshzahlen blieben in diesem prozeduralen Test stabil. Menschlicher Fahrkomfort, normaler/schwacher PC, Mobile und allgemeine Streckenkollision bleiben offene M2-Abnahmen.
+
+**M2g-Teilstand, 03.10.2026:** Ein einzelner Seitenblock belegt allgemeine statische Hinderniskollision im Fahrkern und Browser. Fahrzeug-zu-Fahrzeug-Kontakt, repräsentativere Streckenwände und menschliche/hardwareseitige Abnahme bleiben vor M2-Abschluss zu prüfen. Die fünf Lastkarts sind noch keine Rennbots.
+
+**M2h-Teilstand, 03.10.2026:** Ein vorläufiger Kreis-zu-Kreis-Kontakt stoppt und trennt Spieler/Lastkart nach derselben Regel; Gegenverkehr, Build und Browser sind geprüft. Dies ersetzt keine vollständige Streckenkollision oder Mehrfachkontaktphysik. Menschlicher Fahrtest, Kamerakomfort und Messung auf normalem/schwachem PC sowie Mobile bleiben M2-Abnahmelücken. Die fünf Lastkarts sind weiterhin keine Rennbots.
+
+**M2i-Kompatibilitätsprobe, 03.10.2026:** WebGL1 wurde im Chrome-Test auf dem starken Entwicklungsgerät absichtlich erzwungen und zeigte eine fahrende Szene. Ein echter älterer PC, normaler/schwacher Ziel-PC und Mobilgeräte bleiben ungeprüft; M2 wird dadurch nicht abgenommen.
+
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 
 ### M3 – Erster Vertical Slice

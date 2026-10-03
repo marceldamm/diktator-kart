@@ -1,7 +1,7 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
 import { attachKeyboard, InputHub } from './input';
-import { advanceKart, initialKartState, KART_TUNING, type KartState } from './kart-model';
+import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
 
@@ -23,8 +23,12 @@ const fleetDisplay = document.querySelector<HTMLElement>('#fleet-count')!;
 
 const FIXED_STEP = 1 / 60;
 const LOAD_KART_COUNT = new URLSearchParams(location.search).get('fleet') === '1' ? 0 : 5;
+const CONTACT_SCENARIO = new URLSearchParams(location.search).get('scenario') === 'contact';
+const FORCE_WEBGL1 = new URLSearchParams(location.search).get('webgl') === '1';
 
 function initialLoadKarts(): KartState[] {
+  if (CONTACT_SCENARIO) return [{ ...initialKartState(), z: 10, heading: Math.PI,
+    travelHeading: Math.PI, speed: 8 }];
   return Array.from({ length: LOAD_KART_COUNT }, (_, index) => {
     const angle = index * 2 * Math.PI / LOAD_KART_COUNT;
     const heading = angle + Math.PI / 2;
@@ -80,6 +84,7 @@ class App {
   }
 
   private createEngine(): Engine {
+    if (FORCE_WEBGL1) return new Engine(canvas, true, { disableWebGL2Support: true });
     try {
       return new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
     } catch (firstError) {
@@ -152,7 +157,10 @@ class App {
       while (this.accumulator >= FIXED_STEP) {
         this.kart = advanceKart(this.kart, { ...frame, hopPressed: this.queuedHopPress }, FIXED_STEP);
         this.loadKarts = this.loadKarts.map((other) => advanceKart(other,
-          { throttle: 1, steering: 0.75 }, FIXED_STEP));
+          { throttle: 1, steering: CONTACT_SCENARIO ? 0 : 0.75 }, FIXED_STEP));
+        const resolved = resolveKartContacts([this.kart, ...this.loadKarts]);
+        this.kart = resolved[0];
+        this.loadKarts = resolved.slice(1);
         this.queuedHopPress = false;
         this.accumulator -= FIXED_STEP;
       }
@@ -160,7 +168,8 @@ class App {
       this.camera?.update(this.kart, delta, false, frame.steering);
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.kart.impactRemaining > 0
-        ? 'Randkontakt – Kart fängt sich'
+        ? this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'
+          : this.kart.impactKind === 'obstacle' ? 'Hinderniskontakt – Kart fängt sich' : 'Randkontakt – Kart fängt sich'
         : this.kart.turboRemaining > 0
         ? `Mini-Turbo ${this.kart.turboRemaining.toFixed(1)} s`
         : this.kart.drifting

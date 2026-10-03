@@ -1,7 +1,18 @@
 // Run against a local Vite server and Chrome with CDP on 127.0.0.1:9223.
 // Example: npm run dev; chrome --headless=new --remote-debugging-port=9223 http://127.0.0.1:4173/
 import assert from 'node:assert/strict';
-import { writeFile } from 'node:fs/promises';
+import { access, writeFile as saveFile } from 'node:fs/promises';
+
+// Preserve historical evidence on routine reruns; UPDATE_EVIDENCE=1 refreshes it deliberately.
+async function writeFile(path, data) {
+  try {
+    await access(path);
+    if (process.env.UPDATE_EVIDENCE !== '1') return;
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+  await saveFile(path, data);
+}
 
 const targets = await (await fetch('http://127.0.0.1:9223/json')).json();
 const page = targets.find((item) => item.type === 'page' && item.url?.startsWith('http://127.0.0.1:4173/'));
@@ -79,7 +90,7 @@ async function loadSample(fleet) {
 }
 
 try {
-  await send('Page.navigate', { url: 'http://127.0.0.1:4173/' });
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1' });
   await delay(500);
   for (let attempt = 0; attempt < 30 && (await read()).status !== 'Testszene läuft'; attempt++) await delay(200);
   assert.equal((await read()).status, 'Testszene läuft', JSON.stringify(await read()));
@@ -189,6 +200,18 @@ try {
   assert.ok(sixKarts.meshes >= oneKart.meshes + 35, `Expected five cloned karts: ${JSON.stringify({ oneKart, sixKarts })}`);
   const fleetScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   await writeFile('docs/evidence/m2e-sechs-fahrzeuge-chrome.png', Buffer.from(fleetScreenshot.data, 'base64'));
+  await tap('r', 'KeyR', 82);
+  await delay(300);
+  await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = false` });
+  await delay(300);
+  const restartMetrics = await send('Runtime.evaluate', {
+    expression: `Number(document.querySelector('#debug').textContent.match(/Meshes: (\\d+)/)?.[1])`,
+    returnByValue: true,
+  });
+  assert.equal(restartMetrics.result.value, sixKarts.meshes, 'Restart should not grow scene meshes');
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1' });
+  await delay(500);
+  assert.equal((await read()).status, 'Testszene läuft');
   await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = true` });
   await key('keyDown', 'w', 'KeyW', 87);
   let boundary;
@@ -204,14 +227,62 @@ try {
   await tap('r', 'KeyR', 82);
   await delay(300);
   assert.equal((await read()).speed, '0 km/h');
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1' });
+  await delay(500);
+  assert.equal((await read()).status, 'Testszene läuft');
+  await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = true` });
+  await key('keyDown', 'w', 'KeyW', 87);
+  await delay(800);
+  await key('keyDown', 'd', 'KeyD', 68);
+  let obstacle;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    await delay(50);
+    obstacle = await read();
+    if (obstacle.mode?.startsWith('Hinderniskontakt')) break;
+  }
+  assert.match(obstacle.mode, /Hinderniskontakt/, `Expected obstacle contact: ${JSON.stringify(obstacle)}`);
+  const obstacleScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m2g-hindernis-chrome.png', Buffer.from(obstacleScreenshot.data, 'base64'));
+  await key('keyUp', 'd', 'KeyD', 68);
+  await key('keyUp', 'w', 'KeyW', 87);
+  await tap('r', 'KeyR', 82);
+  await delay(300);
+  assert.equal((await read()).speed, '0 km/h');
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?scenario=contact' });
+  await delay(500);
+  assert.equal((await read()).status, 'Testszene läuft');
+  await key('keyDown', 'w', 'KeyW', 87);
+  let vehicleContact;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    await delay(50);
+    vehicleContact = await read();
+    if (vehicleContact.mode?.startsWith('Fahrzeugkontakt')) break;
+  }
+  assert.match(vehicleContact.mode, /Fahrzeugkontakt/, `Expected vehicle contact: ${JSON.stringify(vehicleContact)}`);
+  const vehicleScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m2h-fahrzeugkontakt-chrome.png', Buffer.from(vehicleScreenshot.data, 'base64'));
+  await key('keyUp', 'w', 'KeyW', 87);
+  await tap('r', 'KeyR', 82);
+  await delay(300);
+  assert.equal((await read()).mode, 'Bereit');
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&webgl=1' });
+  await delay(500);
+  assert.equal((await read()).status, 'Testszene läuft');
   await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = false` });
   await delay(300);
-  const restartMetrics = await send('Runtime.evaluate', {
-    expression: `Number(document.querySelector('#debug').textContent.match(/Meshes: (\\d+)/)?.[1])`,
+  const webgl1 = await send('Runtime.evaluate', {
+    expression: `document.querySelector('#debug').textContent.match(/WebGL: (\\d+)/)?.[1]`,
     returnByValue: true,
   });
-  assert.equal(restartMetrics.result.value, sixKarts.meshes, 'Restart should not grow scene meshes');
-  process.stdout.write(JSON.stringify({ contact, driving, hopping, charged, boosted, paused, restarted, farView, farMoving, driverView, driverDrift, oneKart, sixKarts, boundary }) + '\n');
+  assert.equal(webgl1.result.value, '1', 'Forced WebGL1 path should start the scene');
+  await key('keyDown', 'w', 'KeyW', 87);
+  await delay(500);
+  const fallbackDriving = await read();
+  assert.ok(Number.parseInt(fallbackDriving.speed, 10) > 0);
+  const fallbackScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m2i-webgl1-chrome.png', Buffer.from(fallbackScreenshot.data, 'base64'));
+  await key('keyUp', 'w', 'KeyW', 87);
+  process.stdout.write(JSON.stringify({ contact, driving, hopping, charged, boosted, paused, restarted, farView, farMoving, driverView, driverDrift, oneKart, sixKarts, boundary, obstacle, vehicleContact, webgl1: webgl1.result.value, fallbackDriving }) + '\n');
 } finally {
   socket.close();
 }

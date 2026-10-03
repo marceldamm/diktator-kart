@@ -261,6 +261,74 @@
 
 **Empfohlenes Modell:** Sol für weitere Fahrkernarbeit; Astra bei Abnahme-/Performancekonflikten.
 
+**Git-Checkpoint und Upload:** M1–M2f sind lokal auf `babylon-neustart-2026` im Commit `51e22ff` gesichert. Ein anschließender Push zu `origin/babylon-neustart-2026` wurde von der automatischen Freigabeprüfung abgelehnt: Eigentum und Vertraulichkeit des externen GitHub-Ziels seien für die Übertragung des vollständigen Projektstands nicht eindeutig belegt. Der Push wurde nicht umgangen; GitHub bleibt einen Commit zurück. Für den Upload ist eine ausdrückliche Nutzerfreigabe erforderlich. `main` und die Altarchive sind unverändert.
+
+### 2026-10-03 – M2f längere GPU-Fahrprobe
+
+**Ziel:** Nach der kurzen Chrome-Probe Frame-Pacing, Kameramodi und Neustartstabilität bei längerer Fahrt mit einem und sechs Karts auf verfügbarer Hardware prüfen. Der Nutzer nahm den früheren Wunsch nach Ruhezustand zurück und bat um Fortsetzung des Projekts.
+
+**Modell / Arbeitsmodus:** lokale Fortsetzung auf `babylon-neustart-2026`; kein GitHub-Push nach der dokumentierten automatischen Ablehnung. Bestehender Vite-Server, isolierte Headless-Chrome-Instanz und die RTX 3070 Laptop GPU des Entwicklungsgeräts. Kein neuer Spielinhalt und keine Änderung an Sarahs Ideen.
+
+**Erledigt:** Wiederholbares Skript `tests/browser-endurance.mjs` und `npm run test:endurance` ergänzt. Es misst sechs Fenster zu je 300 `requestAnimationFrame`-Intervallen bei 1280 × 800: ein/sechs Karts in naher, ferner und Fahrerperspektive. Während der Messung sind Gas und Lenkung gehalten. Zwischen den Ansichten startet die Szene neu; Status, Kamera, WebGL-Version und Meshzahl werden geprüft. Rohdaten liegen als `docs/evidence/m2f-rtx-endurance.json` vor.
+
+**Verifiziert:** Alle sechs Messfenster meldeten WebGL2 über ANGLE/D3D11 auf der NVIDIA GeForce RTX 3070 Laptop GPU. 42 Meshes mit einem Kart, 87 mit sechs; nach den Neustarts kein Meshwachstum. In jedem Fenster: 300 Frames, 16,7 ms Median, 16,8 ms P95, 16,9 ms P99, kein Frame über 25 ms. Drei Kamerabezeichnungen korrekt, Bewegung mit rund 51–52 km/h am Messende, null Browserausnahmen. Das sind etwa 30 Sekunden gemessene Fahrt über alle Varianten. Der zuvor geprüfte kurze Browser-Smoke-Test deckt Hop, Drift, Mini-Turbo, Rand, Pause und Neustart ab.
+
+**Nicht verifiziert:** menschliches Fahrgefühl, interaktive Kameraruhe, normale/schwächere PCs, Android/iPhone, GPU-Zeit, Drawcalls, Ladezeit und Speicher sowie fertige Fahrzeug-/Streckenlast. Das 60-Hz-Limit verhindert eine Aussage zu Leistungsreserven. Der Headless-Test prüft einen echten NVIDIA-Grafikpfad, aber keine menschliche Bedienung.
+
+**Geänderte Dateien:** `tests/browser-endurance.mjs`, `package.json`, `docs/evidence/m2f-rtx-endurance.json`, `README.md`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+
+**Neue Entscheidungen:** 300 aufeinanderfolgende Frames pro 1-/6-Kart- und Kamera-Kombination als wiederholbare M2-Messmethode; Dokument 12 enthält die Begründung. Keine Veränderung der Ziel-FPS oder des Umfangs.
+
+**Offene Probleme:** M2-Gesamtabnahme bleibt offen, vor allem wegen menschlichem Fahrcheck, schwächerer Zielhardware und allgemeiner Strecken-/Fahrzeugkollision. Die Lastkarts sind weiterhin keine Rennbots. GitHub-Upload bleibt ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** M2g aus `START-HERE.md`: menschlichen Fahrcheck und normal/schwache Hardware organisieren, Kollisionslücke für M2 präzise abgrenzen. Bis Nutzer/Hardware verfügbar sind, können lokal technische Kollisionsregeln unabhängig weiterentwickelt werden.
+
+**Empfohlenes Modell:** Sol für weitere Fahrkern-/Kollisionsarbeit; Astra bei M2-Abnahmeentscheidung mit widersprüchlichen Leistungsbefunden.
+
+### 2026-10-03 – M2g/h Hindernis- und Fahrzeugkontakt
+
+**Ziel:** Nach der M2f-Randprobe die technische Kollisionslücke für ein markiertes Streckenhindernis und zwei Karts schließen, ohne M2 als Ganzes vorzeitig abzunehmen. Der Nutzer wünschte ausdrücklich weitere Projektarbeit und nahm den Ruhezustand zurück.
+
+**Modell / Arbeitsmodus:** lokale Fortsetzung auf `babylon-neustart-2026`; keine neue Bibliothek, kein Altcode, kein GitHub-Push nach der früheren automatischen Ablehnung. Bestehender lokaler Vite-Server und isolierte Headless-Chrome-Instanz für Browser-/RTX-Proben.
+
+**Erledigt:** Ein rot-gelber Seitenblock nutzt im reinen Fahrmodell Kreis-/Rechteck-Trennung mit 1,25 m vorläufigem Kart-Umkreis und M2f-Rückstoß. Spieler und Lastkarts verwenden anschließend denselben horizontalen Kreis-zu-Kreis-Kontakt: gleichmäßige Trennung, kurzes Stoppen, Drift-/Turbo-Abbruch und HUD-Rückmeldung. `?scenario=contact` stellt einen reproduzierbaren Gegenverkehrsfall bereit. Die Browsertests für isolierte Hop-/Driftregeln fahren mit `?fleet=1`; Sechs-Kart-Last, Rand, Hindernis und Gegenverkehr werden gesondert geprüft. `tests/browser-endurance.mjs` schreibt Messdaten wahlweise in benannte Dateien.
+
+**Verifiziert:** `npm test` mit 14 bestandenen Tests, `npm run build` und `npm run test:browser` erfolgreich. Eine 60-s-Sechs-Kart-Simulation blieb endlich und innerhalb der Testfläche; die größte Restüberlappung nach einem Schritt betrug 2,62 cm. Der Browser zeigte Rand-, Hindernis- und Fahrzeugkontakt sowie Hop, Drift, Mini-Turbo, Federung, drei Kameras, Pause und Neustart. Kontaktbild: `docs/evidence/m2h-fahrzeugkontakt-chrome.png`; Hindernisbild: `docs/evidence/m2g-hindernis-chrome.png`. M2g-RTX-Probe: 44/89 Meshes, P95 16,8 ms in allen sechs 300-Frame-Fenstern, ein einzelner 33,5-ms-Ausreißer in 1.800 Intervallen. M2h-RTX-Probe: dieselbe Meshzahl, P95 16,8 ms, kein Intervall über 25 ms, keine Browserausnahme; in einem Sechs-Kart-Fenster stoppte ein Kontakt das Spieler-Kart. Rohdaten in `docs/evidence/m2g-rtx-endurance.json` und `m2h-rtx-endurance.json`. Die Headless-Proben nutzten WebGL2 über ANGLE/D3D11 auf der RTX 3070 Laptop GPU.
+
+**Nicht verifiziert:** menschliches Fahrgefühl und Kamerakomfort, Leistung auf normalem/schwachem PC und Android/iPhone, GPU-Zeit/Drawcalls/Speicher/Ladezeit, fertige Kart-/Streckenlast, komplexe Mehrfach- und Streckenwandkollision, vertikale Überfahrten, Schaden und Renn-KI. Die RTX-Messungen reichen für keine M2-Gesamtabnahme. Die Vite-Warnung für den rund 1,024-MB-Haupteinstieg bleibt bestehen.
+
+**Geänderte Dateien:** `src/kart-model.ts`, `src/scene.ts`, `src/main.ts`, `index.html`, `tests/kart-model.test.mjs`, `tests/browser-smoke.mjs`, neues `tests/browser-endurance.mjs`, `package.json`, neue M2g/h-Browserbilder und neue `m2f-rtx-endurance.json`, `m2g-rtx-endurance.json`, `m2h-rtx-endurance.json` in `docs/evidence/`, `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. Ältere Screenshots wurden auf ihrem Commit-Stand belassen; erneutes Schreiben verlangt `UPDATE_EVIDENCE=1`. Dokument 10 wurde auf Abhängigkeiten geprüft; die dort offenen Geräte- und Komfortfragen bleiben korrekt offen.
+
+**Neue Entscheidungen:** vorläufige Kreis-/Rechteck- und Kreis-/Kreis-Kontakte mit gleichem Rückstoß für Spieler und Lastkarts; Begründungen in Dokument 03 und 12. Keine Änderung an Sarahs Ideen, bestätigten 15 Grundsatzentscheidungen oder Performancezielen.
+
+**Offene Probleme:** M2 bleibt offen. Die geometrische Näherung kann bei Mehrfachkontakten oder Streckenwänden unplausibel wirken. Die Lastkarts sind keine Rennbots. GitHub-Upload bleibt ohne ausdrückliche Freigabe ausgeschlossen; `main` und Altarchive bleiben unverändert.
+
+**Nächster Schritt:** Menschlichen M2-Fahrcheck aus `START-HERE.md` durchführen und auf normalem/schwachem PC sowie Mobilgeräten messen, sobald verfügbar. Befunde als konkrete Korrekturpakete dokumentieren; erst danach über M2-Gesamtabnahme und M3 entscheiden.
+
+**Empfohlenes Modell:** Sol für Fahr-/Kamerakorrekturen; Astra bei widersprüchlicher M2-Abnahme oder festgefahrener Performanceanalyse.
+
+### 2026-10-03 – M2i WebGL1-Kompatibilitätsprobe
+
+**Ziel:** Den in M1 vorgesehenen WebGL1-Engine-Pfad nach den M2-Kollisionsänderungen sichtbar prüfen, ohne einen schwachen Ziel-PC zu simulieren.
+
+**Modell / Arbeitsmodus:** lokale Branch-Arbeit; der bestehende isolierte Chrome-Test nutzte weiterhin die RTX 3070 Laptop GPU. Kein GitHub-Push und kein Ruhezustand.
+
+**Erledigt:** `?webgl=1` wählt gezielt Babylons WebGL1-Option; die Browserprobe prüft Start, Diagnoseversion und Fahrt mit einem Kart. Bestehende Screenshots bleiben bei normalen Testläufen unverändert; `UPDATE_EVIDENCE=1` erlaubt bewusste Aktualisierung.
+
+**Verifiziert:** `npm run test:browser` erfolgreich. Diagnose zeigte WebGL 1, 44 Meshes und nach 0,5 s Gas eine Bewegung von rund 19 km/h; Szene und Kart waren im Screenshot `docs/evidence/m2i-webgl1-chrome.png` sichtbar. Abschließendes `npm test` mit 14 bestandenen Tests und `npm run build` einschließlich der WebGL1-Option erfolgreich; `git diff --check` meldete keine Inhaltsfehler. Die Vite-Warnung für den rund 1,024-MB-Haupteinstieg bleibt bestehen.
+
+**Nicht verifiziert:** automatische Umschaltung bei echtem WebGL2-Startfehler, Shader-/Leistungskompatibilität auf älteren oder schwachen GPUs, Mobile, menschliches Fahrgefühl.
+
+**Geänderte Dateien:** `src/main.ts`, `tests/browser-smoke.mjs`, `docs/evidence/m2i-webgl1-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`.
+
+**Neue Entscheidungen:** Nur der Testparameter `?webgl=1`; der WebGL2-Vorrang und M1-Fallback bleiben unverändert.
+
+**Offene Probleme:** M2-Abnahme hängt weiter an menschlichem Fahr-/Kameracheck, normalem/schwachem PC und Mobilgeräten. Der aktuelle Beleg stammt wieder vom starken Entwicklungsgerät.
+
+**Nächster Schritt:** Abschlusscheck, lokaler Git-Checkpoint; danach praktische M2-Abnahme gemäß `START-HERE.md`, sobald ein Mensch und passende Geräte verfügbar sind.
+
+**Empfohlenes Modell:** Sol für Fahr-/Kompatibilitätskorrekturen; Astra bei einer schwierigen M2-Gesamtentscheidung.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

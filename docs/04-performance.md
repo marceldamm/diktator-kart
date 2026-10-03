@@ -39,6 +39,14 @@ Der persönliche Entwicklungs-PC ist eine RTX-3070-Laptop-Referenz, nicht die Mi
 
 Ein isolierter Headless-Chrome-Lauf bei 1280 × 800 verglich dieselbe einfache Testszene mit einem und sechs bewegten Karts. `WEBGL_debug_renderer_info` meldete ANGLE/D3D11 auf der NVIDIA GeForce RTX 3070 Laptop GPU des Entwicklungsgeräts. Die Diagnose zeigte 42 beziehungsweise 87 Meshes und jeweils 60 FPS; 120 `requestAnimationFrame`-Intervalle ergaben in beiden Fällen 16,7 ms Median und 16,8 ms P95. Die fünf zusätzlichen Karts benutzen das gleiche einfache Fahrmodell, aber weder Renn-KI noch ausgearbeitete Figuren/Materialien. Dieser Lauf ist ein wiederholbarer Frühvergleich auf starker Hardware, kein Nachweis der Zielwerte auf normalem/schwachem PC, Android oder iPhone. GPU-Zeit, Drawcalls, Speicher und Ladezeit wurden dabei nicht gemessen. Das rund 1,022 MB große minifizierte Hauptskript bleibt über der Vite-Warngrenze und braucht später eine gezielte Ladezeitprüfung.
 
+Eine längere M2f-Probe ergänzte sechs Messfenster mit jeweils 300 Frames: ein und sechs Karts in jeder der drei Kameras, 1280 × 800, W+A gehalten. Auf derselben RTX-3070-GPU lagen Median/P95/P99 in allen Fenstern bei 16,7/16,8/16,9 ms; kein Frame überschritt 25 ms. Die Meshzahl blieb nach den Neustarts stabil bei 42 beziehungsweise 87. Die Rohdaten stehen in `docs/evidence/m2f-rtx-endurance.json`. Das 60-Hz-Limit deckelt die Aussage: Die Probe misst weder Leistungsreserven noch die Kosten fertiger Fahrer, Strecke, Licht- und Wettereffekte.
+
+Nach Ergänzung des M2g-Hindernisses ergab die gleiche Probe 44/89 Meshes. Median/P95/P99 blieben in allen sechs Fenstern bei 16,7/16,8/16,9 ms; ein einziges der 1.800 Intervalle dauerte 33,5 ms (erstes Fenster mit einem Kart), alle anderen blieben unter 25 ms. Rohdaten: `docs/evidence/m2g-rtx-endurance.json`. Der einzelne Ausreißer wird nicht als dauerhafte Verschlechterung oder als bestandene Zielhardware-Abnahme gedeutet.
+
+Mit M2h-Fahrzeugkontakt blieb die Szene bei 44/89 Meshes. In sechs Fenstern zu je 300 Frames auf derselben RTX 3070 Laptop GPU lagen Median/P95/P99 zwischen 16,7/16,8/16,8 und 16,7/16,8/16,9 ms; kein Intervall überschritt 25 ms und es gab keine Browserausnahme. In der fernen Sechs-Kart-Ansicht endete die Fahrt bei 0 km/h nach einem Kontakt, sodass dieses Fenster nicht dieselbe freie Trajektorie wie die übrigen misst. Rohdaten: `docs/evidence/m2h-rtx-endurance.json`. Die Werte erlauben keine Aussage zu normalen/schwachen Zielgeräten oder fertiger Spielgrafik.
+
+Der mit `?webgl=1` erzwungene WebGL1-Start gelang im kurzen M2i-Browsercheck auf derselben RTX 3070 GPU mit 44 Meshes und sichtbarer Fahrt. Das ist eine Kompatibilitätsprobe des Renderpfads, kein Lastvergleich für ältere Grafikhardware.
+
 ## Performance-Sicherheitsregeln
 
 - Keine unbounded Listen oder Timer in Rennen, Pause, Neustart und Menürückkehr.

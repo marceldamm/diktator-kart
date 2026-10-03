@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { advanceKart, initialKartState, KART_TUNING, TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, terrainHeightAt } from '../src/kart-model.ts';
+import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, terrainHeightAt } from '../src/kart-model.ts';
 
 const step = 1 / 60;
 function run(state, input, seconds) {
@@ -53,6 +53,75 @@ test('boundary impact briefly rebounds, cancels drift/turbo and recovers', () =>
   assert.equal(initialKartState().impactRemaining, 0);
 });
 
+test('marked side obstacle stops a directed kart without blocking the straight lane', () => {
+  const straight = run(initialKartState(), { throttle: 1, steering: 0 }, 2);
+  assert.equal(straight.impactKind, null);
+  let state = run(initialKartState(), { throttle: 1, steering: 0 }, 0.8);
+  for (let index = 0; index < 70 && state.impactKind !== 'obstacle'; index++) {
+    state = advanceKart(state, { throttle: 1, steering: 1 }, step);
+  }
+  assert.equal(state.impactKind, 'obstacle');
+  assert.equal(state.speed, 0);
+  assert.ok(state.impactVelocityX < 0);
+  const obstacle = TEST_OBSTACLES[0];
+  assert.ok(state.x < obstacle.x - obstacle.halfWidth);
+  const retreat = advanceKart(state, { throttle: 0, steering: 0 }, step);
+  assert.ok(retreat.x < state.x);
+  const reset = initialKartState();
+  assert.equal(reset.impactKind, null);
+});
+
+test('two approaching karts share one contact rule and separate after impact', () => {
+  const left = { ...initialKartState(), z: 4, speed: 9, drifting: true,
+    driftDirection: 1, driftCharge: KART_TUNING.driftChargeTime, turboRemaining: 0.8 };
+  const right = { ...initialKartState(), z: 6, heading: Math.PI,
+    travelHeading: Math.PI, speed: 8 };
+  const [hitLeft, hitRight] = resolveKartContacts([left, right]);
+  assert.ok(Math.hypot(hitLeft.x - hitRight.x, hitLeft.z - hitRight.z) >= 2 * KART_TUNING.collisionRadius - 1e-9);
+  for (const kart of [hitLeft, hitRight]) {
+    assert.equal(kart.speed, 0);
+    assert.equal(kart.impactKind, 'kart');
+    assert.ok(kart.impactRemaining > 0);
+    assert.equal(kart.turboRemaining, 0);
+    assert.equal(kart.drifting, false);
+  }
+  assert.ok(hitLeft.impactVelocityZ < 0 && hitRight.impactVelocityZ > 0);
+  assert.equal(left.speed, 9, 'input state should not be changed');
+  const recovering = advanceKart(hitLeft, { throttle: 0, steering: 0 }, step);
+  assert.ok(recovering.z < hitLeft.z);
+});
+
+test('kart contact leaves distant karts unchanged and handles coincident centres', () => {
+  const a = initialKartState();
+  const b = { ...initialKartState(), x: 8 };
+  assert.deepEqual(resolveKartContacts([a, b]), [a, b]);
+  const [left, right] = resolveKartContacts([{ ...a, speed: 4 }, { ...a, speed: 4 }]);
+  assert.ok(Math.hypot(left.x - right.x, left.z - right.z) >= 2 * KART_TUNING.collisionRadius - 1e-9);
+  assert.ok(Number.isFinite(left.impactVelocityX) && Number.isFinite(right.impactVelocityX));
+});
+
+test('six moving karts stay finite and within the test area during a long simulation', () => {
+  let karts = [initialKartState(), ...Array.from({ length: 5 }, (_, index) => {
+    const angle = index * 2 * Math.PI / 5;
+    const heading = angle + Math.PI / 2;
+    return { ...initialKartState(), x: 10.5 * Math.sin(angle), z: 10.5 * Math.cos(angle),
+      heading, travelHeading: heading, speed: 8 };
+  })];
+  for (let tick = 0; tick < 3600; tick++) {
+    karts = resolveKartContacts(karts.map((kart, index) => advanceKart(kart,
+      { throttle: 1, steering: index ? 0.75 : 0.4 }, step)));
+    for (let first = 0; first < karts.length; first++) {
+      const kart = karts[first];
+      assert.ok(Number.isFinite(kart.x) && Number.isFinite(kart.z) && Number.isFinite(kart.speed));
+      assert.ok(Math.abs(kart.x) <= TEST_AREA_HALF_SIZE && Math.abs(kart.z) <= TEST_AREA_HALF_SIZE);
+      for (let second = first + 1; second < karts.length; second++) {
+        assert.ok(Math.hypot(kart.x - karts[second].x, kart.z - karts[second].z)
+          >= 2 * KART_TUNING.collisionRadius - 0.03, `overlap at tick ${tick}`);
+      }
+    }
+  }
+});
+
 test('Space starts one visible hop and holding it does not repeat the hop', () => {
   let state = advanceKart(initialKartState(), { throttle: 0, steering: 0, hopDrift: true, hopPressed: true }, step);
   const heights = [state.height];
@@ -78,7 +147,7 @@ test('a short drift releases without turbo', () => {
 });
 
 test('a sustained directed drift charges mini-turbo; brake cancels it', () => {
-  let state = { ...initialKartState(), speed: 8 };
+  let state = { ...initialKartState(), x: -8, speed: 8 };
   state = advanceKart(state, { throttle: 1, steering: 1, hopDrift: true, hopPressed: true }, step);
   state = run(state, { throttle: 1, steering: 1, hopDrift: true }, 1.3);
   assert.equal(state.drifting, true);

@@ -30,6 +30,14 @@ Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verf
 
 **Zwischenstand M2f, 03.10.2026:** Kurzer begrenzter Rückstoß am Testflächenrand und Abbruch von Drift/Turbo modelliert; zehn Modell-/Eingabetests und Chrome-Randkontaktprobe bestanden. Die allgemeine Kollisionslogik, subjektive Fahrprüfung und Zielhardware-Leistung bleiben für die M2-Gesamtabnahme offen.
 
+**M2f-GPU-Prüfung, 03.10.2026:** Je 300 Frames in drei Kameras mit einem und sechs Karts auf der RTX 3070 Laptop GPU: 16,7 ms Median, 16,8 ms P95 und 16,9 ms P99 in allen sechs Messfenstern, ohne Frame über 25 ms; Meshzahl nach Neustart stabil. Dieses starke Entwicklungsgerät ersetzt keine Messung auf normalem/schwachem PC und keine menschliche Fahrgefühlabnahme. M2 bleibt offen.
+
+**Zwischenstand M2g, 03.10.2026:** Ein markierter Seitenblock nutzt eine eigene, unabhängig testbare Kreis-/Rechteck-Kollision und den begrenzten Rückstoß. Elf Modell-/Eingabetests und Chrome-Kontaktprobe bestanden; die gerade Linie bleibt frei. Eine neue 1-/6-Kart-Messung mit je drei Kameras ergab 44/89 Meshes, P95 16,8 ms und einen einzelnen 33,5-ms-Ausreißer in 1.800 Frames auf der RTX 3070. Fahrzeugkontakt, schwache Zielhardware und menschlicher Fahrcheck fehlen weiterhin für die M2-Gesamtabnahme.
+
+**Zwischenstand M2h, 03.10.2026:** Gleicher vorläufiger Kreis-Kontakt für Spieler und Lastkarts; gezielter Gegenverkehrsfall in Chrome geprüft. 14 Modell-/Eingabetests einschließlich einer 60-s-Sechs-Kart-Simulation, Build und Browserprobe bestanden. Die erneute 1-/6-Kart-Probe zeigte 44/89 Meshes und P95 16,8 ms in allen sechs RTX-Fenstern; ein Sechs-Kart-Fenster endete durch Kontakt bei 0 km/h. Menschliches Fahrgefühl, normale/schwache PCs, Mobile sowie repräsentative Strecken- und Mehrfachkollision bleiben offen. M2 ist nicht insgesamt abgenommen.
+
+**Zwischenstand M2i, 03.10.2026:** Der WebGL1-Pfad startete erzwungen in Chrome auf der RTX 3070 GPU mit sichtbarer Fahrt und 44 Meshes. Echtes Fallback-Verhalten nach WebGL2-Fehler und Leistung auf älterem PC bleiben ungeprüft; M2-Gesamtabnahme unverändert offen.
+
 ## M3 – Erster ausgearbeiteter Spielabschnitt
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.
