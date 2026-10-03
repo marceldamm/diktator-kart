@@ -33,7 +33,9 @@ import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineIns
 import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
-import { CAST, CAST_PARTS } from './cast';
+import { CAST, CAST_PARTS, type CastMember } from './cast';
+import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
+import { CreateScreenshotUsingRenderTargetAsync } from '@babylonjs/core/Misc/screenshotTools';
 import type { LoadingReporter } from './loading-progress';
 
 
@@ -139,14 +141,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const spins = Array.from({ length: 4 }, (_, i) => nodes.find((n) => n.name === `kart${index}/wheelSpin-${i}`) as TransformNode);
       const driver = nodes.find((n) => n.name === `kart${index}/driverPose`) as TransformNode;
       const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
-      const cast = CAST[index % CAST.length];
-      for(const kind of ['radio','spare','luggage','fin','parade']) {
-        const node=nodes.find(n=>n.name===`kart${index}/variant-${kind}`) as TransformNode|undefined;node?.setEnabled(kind===cast.kit);
-      }
-      for (const part of CAST_PARTS) {
-        const node = nodes.find((n) => n.name === `kart${index}/cast-${part}`) as TransformNode | undefined;
-        node?.setEnabled(part === cast.hat || cast.face.includes(part));
-      }
+      const kits = ['radio','spare','luggage','fin','parade'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/variant-${kind}`)] as const);
+      const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
+      const recolourable: {mesh:Mesh;kind:'paint'|'uniform'|'cape'|'hatColor'|'hair';material:PBRMaterial}[] = [];
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const steering = nodes.find((n) => n.name === `kart${index}/steeringWheel`) as TransformNode;
       const arms = ['L', 'R'].map((side) => nodes.find((n) => n.name === `kart${index}/armPose-${side}`) as TransformNode | undefined);
@@ -160,18 +157,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const mesh of root.getChildMeshes()) {
         mesh.receiveShadows = true; mesh.isPickable = false;
         if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh);
-        const recolour: [RegExp, string | null][] = [[/Petrol enamel/, cast.paint], [/Uniform racing suit/, cast.uniform], [/Cape cloth/, cast.cape], [/Hat cloth/, cast.hatColor], [/Hair and leather helmet/, cast.hair]];
-        for (const [pattern, colour] of recolour) if (mesh.material instanceof PBRMaterial && pattern.test(mesh.material.name)) {
-          if (!colour) { mesh.setEnabled(false); continue; }
+        const recolour: [RegExp, 'paint'|'uniform'|'cape'|'hatColor'|'hair'][] = [[/Petrol enamel/, 'paint'], [/Uniform racing suit/, 'uniform'], [/Cape cloth/, 'cape'], [/Hat cloth/, 'hatColor'], [/Hair and leather helmet/, 'hair']];
+        for (const [pattern, kind] of recolour) if (mesh instanceof Mesh && mesh.material instanceof PBRMaterial && pattern.test(mesh.material.name)) {
           const source=mesh.material;let material=paint.get(source);
           if(!material){
-            material=source.clone(`Kart ${index} ${source.name}`)!;material.albedoColor=Color3.FromHexString(colour).toLinearSpace();
+            material=source.clone(`Kart ${index} ${source.name}`)!;
             if (/enamel/.test(source.name)) { material.metallic = .25; material.roughness = .38; material.clearCoat.isEnabled = true; material.clearCoat.intensity = .85; material.clearCoat.roughness = .08; }
             // Pomaded hair catches a soft highlight so it never reads as a felt cap.
             if (/Hair and leather/.test(source.name)) { material.metallic = 0; material.roughness = .36; material.clearCoat.isEnabled = true; material.clearCoat.intensity = .35; material.clearCoat.roughness = .3; }
             paint.set(source,material);
           }
-          mesh.material=material;
+          mesh.material=material;recolourable.push({mesh,kind,material});
         }
         if (mesh.material instanceof PBRMaterial && /racing suit|leather/.test(mesh.material.name)) {
           mesh.material.albedoTexture = fabricMaps.color; mesh.material.bumpTexture = fabricMaps.normal;
@@ -182,11 +178,19 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
       });
-      // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
-      const bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
-      // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
-      const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|driverPose \/ Uniform racing suit|Cape cloth|Hat cloth/.test(mesh.name));
-      return { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0 };
+      const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
+        /** Dresses this kart as one roster member: kit, caricature parts and colours. */
+        dress(cast: CastMember) {
+          for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
+          for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
+          for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }
+          // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
+          v.bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
+          // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
+          v.shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|driverPose \/ Uniform racing suit|Cape cloth|Hat cloth/.test(mesh.name));
+        } };
+      v.dress(CAST[index % CAST.length]);
+      return v;
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
     const contactCanvas = contactTexture.getContext();
@@ -238,7 +242,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       if (ip.colorCurves) { ip.colorCurves.globalSaturation = 18; ip.colorCurves.highlightsHue = 40; ip.colorCurves.highlightsDensity = 18; ip.colorCurves.highlightsSaturation = 20; ip.colorCurves.shadowsHue = 210; ip.colorCurves.shadowsDensity = 12; ip.colorCurves.shadowsSaturation = 15; }
       pipeline.sharpenEnabled = full; pipeline.sharpen.edgeAmount = .18;
     };
-    const presentItems=await addItems(scene,shadow,loadKartCount+1);
+    let roster=CAST.map((_,i)=>i);
+    const presentItems=await addItems(scene,shadow,loadKartCount+1,owner=>CAST[roster[owner]??owner].projectile);
     // 'Größenbefehl' parade tank for the player's driver (art-source/build_tank.py).
     const tankContainer = await LoadAssetContainerAsync('/assets/models/parade-tank.glb', scene);
     scene.onDisposeObservable.add(() => tankContainer.dispose());
@@ -255,11 +260,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     { const c = trackTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#16181a'; c.fillRect(0, 0, 128, 64);
       for (let i = 0; i < 4; i++) { c.fillStyle = '#3b3f43'; c.fillRect(i * 32 + 2, 4, 22, 56); c.fillStyle = '#5c6066'; c.fillRect(i * 32 + 4, 8, 6, 48); c.fillStyle = '#0c0d0e'; c.fillRect(i * 32 + 26, 0, 4, 64); }
       trackTexture.wrapU = Texture.WRAP_ADDRESSMODE; trackTexture.update(); }
-    const tankMeshes = tankRoot.getChildMeshes();
+    const tankMeshes = tankRoot.getChildMeshes(); const tankPaint: PBRMaterial[] = [];
     for (const mesh of tankMeshes) {
       mesh.isPickable = false; mesh.receiveShadows = true;
       if (mesh.material instanceof PBRMaterial && /Tank parade enamel/.test(mesh.material.name)) {
-        const m = mesh.material.clone('Tank parade enamel player')!; m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
+        const m = mesh.material.clone('Tank parade enamel player')!; m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace(); tankPaint.push(m);
         m.clearCoat.isEnabled = true; m.clearCoat.intensity = .6; mesh.material = m;
       }
       if (mesh.material instanceof PBRMaterial && /Tank track links/.test(mesh.material.name)) { mesh.material.albedoTexture = trackTexture; mesh.material.albedoColor = Color3.White(); }
@@ -337,6 +342,28 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0;
       },
       puddles() { return raining ? trackWorld.puddles : []; },
+      setRoster(order) {
+        roster = order.slice(); visuals.forEach((v, i) => v.dress(CAST[order[i] ?? i]));
+        for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[order[0]].paint).toLinearSpace();
+      },
+      async portraits(order) {
+        // Head-and-shoulders shots straight from the race models, one per roster member.
+        const camera = new FreeCamera('Portrait camera', Vector3.Zero(), scene); camera.fov = .5; camera.minZ = .05;
+        // Studio light for the selection cards: soft frontal fill, no hard sun shadows across the faces.
+        const fill = new HemisphericLight('Portrait fill', Vector3.Up(), scene); fill.intensity = 1.35; fill.diffuse = new Color3(1, .95, .88); fill.groundColor = new Color3(.55, .5, .46);
+        const sunWasShadowing = sun.shadowEnabled; sun.shadowEnabled = false; const sunLevel = sun.intensity; sun.intensity = sunLevel * .55;
+        const shots: string[] = [];
+        try {
+          for (let castIndex = 0; castIndex < CAST.length; castIndex++) {
+            const v = visuals[Math.max(0, order.indexOf(castIndex))];
+            const head = v.head.getAbsolutePosition(), h = v.root.rotation.y;
+            camera.position.set(head.x + Math.sin(h) * 2.35 + Math.cos(h) * .45, head.y + .12, head.z + Math.cos(h) * 2.35 - Math.sin(h) * .45);
+            camera.setTarget(new Vector3(head.x, head.y - .22, head.z));
+            shots.push(await CreateScreenshotUsingRenderTargetAsync(engine, camera, { width: 320, height: 360 }, 'image/jpeg', 4));
+          }
+        } finally { camera.dispose(); fill.dispose(); sun.shadowEnabled = sunWasShadowing; sun.intensity = sunLevel; }
+        return shots;
+      },
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);

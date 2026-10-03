@@ -39,7 +39,7 @@ export class KartAudio {
   get voiceCount(): number { return this.voices.size; }
   private loading = false;
   private lastHorn = -Infinity;
-  private readonly music = new Audio('/assets/audio/fig-leaf-rag.mp3');
+  private readonly music = new Audio('/assets/audio/march.wav');
   private musicVolume=.14;
   enabled = true;
   constructor() { this.music.loop = true; this.music.volume = .14; }

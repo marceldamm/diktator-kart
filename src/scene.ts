@@ -33,6 +33,10 @@ export interface TestScene {
   setRain?(rain: boolean): void;
   /** Puddle discs for splash/drag rules in rain (empty in sunshine). */
   puddles?(): { x: number; z: number; r: number }[];
+  /** Dresses the six karts; order[kart] is the CAST index (kart 0 = player). */
+  setRoster?(order: number[]): void;
+  /** Portrait images (data URLs) of every CAST member, rendered from the race models. */
+  portraits?(order: number[]): Promise<string[]>;
   /** Called on a lightning flash so the audio can thunder. */
   onLightning?: () => void;
 }

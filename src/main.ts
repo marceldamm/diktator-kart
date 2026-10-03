@@ -6,7 +6,7 @@ import { createTestScene, type TestScene } from './scene';
 import './style.css';
 import { TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
-import { CAST } from './cast';
+import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, createAbilities, stepAbilities, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
@@ -105,12 +105,27 @@ class App {
   private lastRank=6;
   private voiceCooldown=0;
   private leadCooldown=0;
+  private chosen=0;
+  private order=rosterOrder(0);
+  private selecting=false;
+  private portraits: string[] | undefined;
+  /** Roster member driving kart slot i (slot 0 = player). */
+  private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
+    try{const saved=Number(localStorage.getItem('dk-driver'));if(Number.isInteger(saved)&&saved>=0&&saved<CAST.length)this.chosen=saved;}catch{}
+    this.order=rosterOrder(this.chosen);
+    document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
+    document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
+    window.addEventListener('keydown',(event)=>{
+      if(!this.selecting)return;
+      if(event.code==='ArrowLeft'||event.code==='ArrowRight'){event.preventDefault();event.stopImmediatePropagation();this.pick((this.chosen+(event.code==='ArrowLeft'?CAST.length-1:1))%CAST.length);}
+      if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();this.closeSelection();}
+    },true);
     document.querySelector('#sound-toggle')!.textContent=this.audio.enabled?'Ton an':'Ton aus';
     const musicVolume=document.querySelector<HTMLInputElement>('#music-volume')!;
     try{const saved=Number(localStorage.getItem('dk-music-volume')??'14');musicVolume.value=String(Math.max(0,Math.min(100,saved)));}catch{}
@@ -125,7 +140,7 @@ class App {
     document.querySelector('#menu-race')?.addEventListener('click',()=>void this.startRace());
     document.querySelector('#menu-practice')?.addEventListener('click',()=>{this.closeMenu();void this.audio.unlock().then(()=>setTimeout(()=>this.welcome(),400));});
     document.querySelector('#menu-button')?.addEventListener('click',()=>this.openMenu());
-    document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.startRace());
+    document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.beginRace());
     document.querySelector('#finish-menu')?.addEventListener('click',()=>this.openMenu());
     document.querySelector('#item-use')?.addEventListener('click',()=>{this.input.setAction('item-button','item',true);this.input.setAction('item-button','item',false);});
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
@@ -216,6 +231,7 @@ class App {
     this.queuedHopPress = false;
     document.body.classList.remove('photo-mode');
     document.body.classList.remove('menu-open');
+    document.body.classList.remove('select-open');this.selecting=false;this.portraits=undefined;
     this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.lapTimes=[];this.lapNoticeUntil=0;
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
@@ -242,6 +258,7 @@ class App {
       const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD,this.quality,report);
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
+      this.testScene.setRoster?.(this.order);
       this.applyQuality();
       if (this.testScene) this.testScene.onLightning = () => this.audio.thunder();
       this.applyWeather();
@@ -298,7 +315,54 @@ class App {
     if(this.racePhase==='finished')document.querySelector('#finish-card')?.removeAttribute('hidden');
   }
 
+  /** Every new Grand Prix starts with the driver selection; Revanche keeps the current driver. */
   private async startRace(): Promise<void> {
+    if (LAB_WORLD || this.state === 'loading') return;
+    if (this.selecting) { this.confirmSelection(); return; }
+    this.openSelection();
+  }
+  private openSelection(): void {
+    if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
+    if (!this.camera?.introMode) this.openMenu();
+    this.selecting = true; document.body.classList.add('select-open');
+    this.renderSelection();
+    if (!this.portraits && this.testScene.portraits) {
+      const generation = this.generation;
+      void this.testScene.portraits(this.order).then((shots) => { if (generation === this.generation) { this.portraits = shots; this.renderSelection(); } }).catch(() => undefined);
+    }
+  }
+  private closeSelection(): void { this.selecting = false; document.body.classList.remove('select-open'); }
+  private confirmSelection(): void {
+    this.closeSelection();
+    try { localStorage.setItem('dk-driver', String(this.chosen)); } catch { /* storage optional */ }
+    void this.beginRace();
+  }
+  private pick(index: number): void {
+    this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order);
+    this.renderSelection(); this.audio.voice(`${CAST[index].voice}-horn`, { channel: 'driver', rate: CAST[index].voiceRate, volume: .8 });
+  }
+  private renderSelection(): void {
+    const grid = document.querySelector('#driver-grid')!; grid.replaceChildren();
+    CAST.forEach((member, index) => {
+      const card = document.createElement('button'); card.type = 'button'; card.className = 'driver-card'; card.setAttribute('role', 'option');
+      card.classList.toggle('selected', index === this.chosen); card.setAttribute('aria-selected', String(index === this.chosen));
+      const shot = this.portraits?.[index];
+      const picture = shot ? Object.assign(document.createElement('img'), { src: shot, alt: `Karikatur ${member.name}` }) : Object.assign(document.createElement('span'), { className: 'portrait-wait', textContent: 'Porträt wird gerendert …' });
+      const dot = document.createElement('i'); dot.style.background = member.paint;
+      const name = document.createElement('strong'); name.textContent = member.name;
+      const kart = document.createElement('small'); kart.textContent = member.kartName;
+      card.append(picture, dot, name, kart);
+      card.addEventListener('click', () => { if (index === this.chosen) this.confirmSelection(); else this.pick(index); });
+      grid.append(card);
+    });
+    const m = CAST[this.chosen], detail = document.querySelector('#driver-detail')!; detail.replaceChildren();
+    const title = document.createElement('b'); title.textContent = `${m.name} · ${m.kartName}`;
+    const line = document.createElement('div'); line.textContent = `„${m.title}“ – ${m.flavour}`;
+    const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit:</em> '; ability.append(m.abilityIdea + (this.chosen === 0 ? ' · Q' : ' · bis dahin leiht Q den Größenbefehl'));
+    detail.append(title, line, ability);
+  }
+
+  private async beginRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
     const generation=this.generation;
     await this.audio.unlock();
@@ -341,8 +405,9 @@ class App {
     document.querySelector<HTMLElement>('#drift-fill')!.style.width=`${100*(this.kart.turboRemaining>0?this.kart.turboRemaining/KART_TUNING.turboDuration:this.kart.driftCharge/KART_TUNING.driftChargeTime)}%`;
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
-    document.querySelector('#item-name')!.textContent=item?(item==='trap'?ITEM_NAMES[item]:item==='homing'?'Schäferhund · verfolgt':'Schäferhund · voraus'):'Sendung abholen';
-    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?'🐕':item==='trap'?'§':'✉';
+    const own=this.castOf(0);
+    document.querySelector('#item-name')!.textContent=item?(item==='trap'?ITEM_NAMES[item]:`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`):'Sendung abholen';
+    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':'✉';
     const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;itemButton.disabled=!item||this.racePhase!=='race';
     document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?'E · einsetzen':this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
@@ -391,7 +456,7 @@ class App {
   private welcome(): void { if (this.welcomed || LAB_WORLD) return; this.welcomed = this.audio.voice('announcer-welcome'); }
   /** A caricature's own line; the player's driver speaks louder than the field. */
   private say(kart: number, kind: 'hit' | 'pass' | 'win' | 'boost', volume = 1): void {
-    const cast = CAST[kart % CAST.length];
+    const cast = this.castOf(kart);
     const id = kind === 'boost' && cast.voice !== 'general' ? `${cast.voice}-pass` : `${cast.voice}-${kind}`;
     this.audio.voice(id, { channel: 'driver', rate: cast.voiceRate, volume });
   }
@@ -429,8 +494,8 @@ class App {
     this.lastFrameAt = now;
     const frame = this.input.read();
     this.camera?.setLookBack(this.state === 'running' && !this.camera.introMode && this.input.isDown('lookBack'));
-    if(frame.pressed.has('menu')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}
-    if(this.camera?.introMode&&(['accelerate','brake','steerLeft','steerRight','camera','photo'] as Action[]).some(a=>frame.pressed.has(a)))this.closeMenu();
+    if(frame.pressed.has('menu')&&!this.selecting&&!document.body.classList.contains('select-open')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}
+    if(this.camera?.introMode&&!this.selecting&&(['accelerate','brake','steerLeft','steerRight','camera','photo'] as Action[]).some(a=>frame.pressed.has(a)))this.closeMenu();
     if (frame.pressed.has('restart')) void this.restart();
     if (frame.pressed.has('pause')) this.togglePause();
     if (frame.pressed.has('debug')) debug.hidden = !debug.hidden;
@@ -451,7 +516,7 @@ class App {
     }
     if (this.state === 'running' && this.testScene) {
       if(frame.pressed.has('horn')&&!this.camera?.introMode&&!this.camera?.photoMode){
-        if(this.audio.honk(CAST[0].voice,CAST[0].voiceRate))this.lastAction='Sprachhupe';
+        if(this.audio.honk(this.castOf(0).voice,this.castOf(0).voiceRate))this.lastAction='Sprachhupe';
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') { this.queuedSpecial = true; this.lastAction = 'Größenbefehl (Q)'; }
@@ -519,9 +584,10 @@ class App {
           const use=all.map((_,i)=>i===0?frame.pressed.has('item')||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           for(const event of this.items.events) if(event.kart===0) {
-            this.itemMessage=event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:'Schäferhund'} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':'Schäferhund unterwegs'):'Treffer · kurzzeitig geschützt';
+            const projectile=this.castOf(0).projectileName;
+            this.itemMessage=event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+1.8;
-            if(event.kind==='launch'&&event.item!=='trap')this.audio.dogBark();else this.audio.itemEvent(event.kind);
+            if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);
             if(event.kind==='hit')this.say(0,'hit');
           }
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
@@ -544,7 +610,7 @@ class App {
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
-            const names=CAST.map((c,i)=>i===0?`Du · ${c.name}`:c.name);
+            const names=this.order.map((_,i)=>i===0?`Du · ${this.castOf(0).name}`:this.castOf(i).name);
             const ranking=rankRace(this.progress).map(i=>({p:this.progress[i],i}));
             const list=document.querySelector('#finish-results')!;list.replaceChildren();
             for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;row.append(label,time);list.append(row);}
@@ -566,7 +632,7 @@ class App {
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       this.commentary();
-      if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? 'STAATSFERNSEHEN · Freies Training' : `FÜHRUNG: ${CAST[leader].name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
+      if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? 'STAATSFERNSEHEN · Freies Training' : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
         : this.kart.impactRemaining > 0
