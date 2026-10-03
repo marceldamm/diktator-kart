@@ -145,6 +145,12 @@
 - Alte Zahlenwerte sind keine Babylon-Balanceentscheidung; Kostüme und Teams gehören nicht automatisch zu Version 1. Die persönliche Urheberschaft einzelner bearbeiteter Alteinträge bleibt unbelegt.
 - Die entsprechenden offenen Aufgaben in Dokument 10 und im Gesamtgerüst aktualisiert. Das vollständige Altarchiv bleibt für späteren Quellenabgleich erhalten.
 
+### 2026-10-03 – Täglichen Einstieg vereinfacht
+
+- `START-HERE.md` auf eine kurze Handlungsseite reduziert: Projekt öffnen, Branch prüfen, GPT-6.1 Sol mit hoher Denkintensität wählen und den fertigen M1-Auftrag kopieren.
+- Aktueller Stand, direktes Ziel und Gesamtprojekt M0–M8 stehen gemeinsam auf dieser Seite.
+- Astra bleibt für schwierige Gesamtprüfungen und festgefahrene Kernprobleme vorgesehen; Luna für Routine. Der nächste konkrete Arbeitslauf ist M1 mit Sol.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

@@ -1,84 +1,85 @@
-# Diktator Kart – START HERE
+# Diktator Kart – Hier starten
 
-Diese Datei ist die tägliche Übersichtsseite. Wenn du nur wissen möchtest, wo das Projekt steht und was als Nächstes passieren soll, öffne zuerst diese Datei.
+## Was du jetzt tun musst
 
-Für die vollständige Anleitung für dich und Sarah: [TEAM-HANDBOOK.md](TEAM-HANDBOOK.md).
+1. Öffne das lokale Projekt `D:\Diktator-Kart` in **Codex**.
+2. Prüfe, dass der Branch **`babylon-neustart-2026`** ausgewählt ist.
+3. Wähle **GPT-6.1 Sol** mit **hoher Denkintensität**.
+4. Kopiere den Auftrag aus dem nächsten Abschnitt in den Chat.
+5. Lass Codex selbstständig arbeiten. Antworte nur, wenn Codex eine echte Entscheidung oder Windows-Freigabe benötigt.
 
-## Aktueller Stand
+## Auftrag für den nächsten Arbeitslauf
 
-**Datum:** 03.10.2026
+```text
+Arbeite im lokalen Projekt D:\Diktator-Kart auf dem Branch
+babylon-neustart-2026.
 
-**Arbeitsordner:** `D:\Diktator-Kart` – neue Wissensbasis direkt im Hauptverzeichnis; altes Spiel unter `Diktator-Kart-Legacy/`.
+Lies AGENTS.md, START-HERE.md, README.md und nur die für die Aufgabe
+benötigten Detaildokumente.
 
-**Projektphase:** M0 – Grundgerüst und Vorbereitung
+Ziel: Baue M1, einen startbaren Babylon.js-Grundstand direkt im
+Hauptverzeichnis, und triff dabei die nötigen technischen Startentscheidungen.
 
-**Spielcode:** Babylon.js-Neuentwicklung noch nicht begonnen
+Der Stand braucht:
+- lokale Babylon.js-/TypeScript-Projektbasis
+- sichtbare Testszene in Google Chrome
+- Lade- und Fehleranzeige
+- gemeinsame Eingabegrundlage für Tastatur und spätere Touch-Steuerung
+- getrennte Aktionen für Kamerawechsel, Item und Spezialfähigkeit
+- Debuganzeige
+- sauberen Neustart
+- einfachen Ein-Klick-Start für den Nutzer
 
-**Altprojekt:** nur noch Referenzmaterial; technische Umsetzung wird nicht übernommen
+Übernimm keinen PlayCanvas-/Ammo-Code aus Diktator-Kart-Legacy.
+Multiplayer, fertige Fahrer, vollständige Strecke und Grafikpolitur
+gehören noch nicht in diesen Arbeitslauf.
 
-**Visuelles Ziel:** Stilraum G–L aus `references/visuals/style-comparison-02-c-a-refined.png`
+Triff technische Detailentscheidungen selbstständig, verwende nur
+vorhandene oder kostenlose Werkzeuge, teste Build und echten Browserstart
+und halte START-HERE.md sowie docs/17-progress-log.md aktuell.
 
-**Zielplattform:** Google Chrome unter Windows zuerst; danach Android und iPhone im Querformat, gleiche Regeln und skalierbare Grafik.
+Arbeite bis M1 überprüfbar fertig ist oder ein echter Blocker vorliegt.
+Berichte am Ende kurz: erledigt, geprüft, offen und nächster Schritt.
+```
 
-**Gemeinsame Arbeitsbasis:** GitHub-Branch `babylon-neustart-2026` ist erstellt und veröffentlicht; `main` bleibt unverändert.
+## Wo stehen wir?
 
-## Der nächste konkrete Schritt
+**Heute:** Planung abgeschlossen genug für den technischen Start. Babylon.js-Spielcode existiert noch nicht.
 
-**M0 abschließen und M1 beginnen:**
+**Aktueller Meilenstein:** M1 – startbarer Babylon-Grundstand.
 
-1. Die 15 bestätigten Antworten in `docs/10-open-questions.md` gelten; keine erneute Grundsatzbefragung.
-2. Gesicherte Altideen in `docs/14-character-and-item-catalog.md` bei Bedarf nachschlagen; kostenlosen Asset-/Audioweg und Messgeräte planen.
-3. Technischen M1-Auftrag nach `docs/20-first-evening-runbook.md` konkretisieren.
-4. Die Gesamtprüfung ist erfolgt; ihre offenen Befunde bearbeiten, statt sie routinemäßig zu wiederholen.
-5. Danach die technische Umsetzung als eigene Aufgabe starten; am Ende Fortschrittslog aktualisieren.
+**Direktes Ziel:** Eine Babylon-Testszene, die per einfachem Startweg in Chrome läuft.
 
-**Festgelegt:** sechs bisherige Fahrer, erst einer vollständig ausgearbeitet; Berlin-/Stadionstrecke; nahe/ferne Verfolgerkamera und Fahrerperspektive; drei gemeinsame Start-Itemregeln; Spezialfähigkeit mit eigener Eingabe und fester Abklingzeit. Zunächst privat, später öffentlich kostenlos, derzeit kein Zusatzbudget. Sarahs ursprüngliche Ideen werden nur gemeinsam geändert.
+**Danach:** M2 Fahrprototyp mit Kart, Federung, Sprung, Drift, Mini-Turbo und den drei Kameraansätzen.
 
-## Meilensteine
+**Modell jetzt:** GPT-6.1 Sol, hohe Denkintensität.
+
+**Astra wieder verwenden:** bei einer schwierigen Gesamtentscheidung, einem festgefahrenen Kernproblem oder vor einer großen Meilensteinabnahme.
+
+**Luna verwenden:** für kleine Korrekturen, Listen, Dokumentationspflege und klar begrenzte Routinearbeiten.
+
+## Gesamtprojekt
 
 | Status | Meilenstein | Ergebnis |
 |---|---|---|
-| ✅ | M0a Wissensbasis | Grundpfeiler, Altideen, Grenzen und Stilrichtung dokumentiert |
-| 🔄 | M0b Startvorbereitung | Hardware, Werkzeuge, UI-/Startanforderungen und Runbook vorbereitet |
-| ⬜ | M1 Babylon-Grundstand | startbare Babylon.js-Szene, Diagnose, Eingabegrundlage, Launcher |
-| ⬜ | M2 Fahrprototyp | Kart, drei Kameraansätze, Federung, Sprung, Drift, Mini-Turbo, einfache Strecke |
-| ⬜ | M3 Vertical Slice | ein ausgearbeiteter Fahrer/Kart plus fünf einfachere Bots, Berlin-/Stadionabschnitt, Cockpit, Licht, Atmosphäre, Audio |
-| ⬜ | M4 Kernrennen | drei Runden, fünf Bots, drei Start-Items, faire Rücksetzung, Checkpoints, Ziel, Ergebnis, Revanche |
-| ⬜ | M5 Systeme | Items, Spezialfähigkeiten, Schaden, Wetter, Sprecherin, Weltreaktionen |
-| ⬜ | M6 Singleplayer-Version 1 | vollständige Strecke, UI, Audio, Siegerehrung, Rennbericht |
-| ⬜ | M7 Abnahme | Performance, normale PCs, Android/iPhone, drei Kameras, Regressionen, Auslieferung |
-| ⬜ | M8 Online | private Lobbys per Einladung, Crossplay; weitere Inhalte separat priorisieren |
+| ✅ | M0 Planung | Ziele, Stil, Altideen, Grenzen und Arbeitsweise dokumentiert |
+| ▶️ | M1 Grundstand | Babylon.js startet in Chrome, Diagnose und Ein-Klick-Start |
+| ⬜ | M2 Fahren | Kart, Federung, Sprung, Drift, Mini-Turbo, drei Kameras |
+| ⬜ | M3 Stilprobe | ein fertiger Fahrer/Kart, fünf einfache Bots, erster Streckenabschnitt |
+| ⬜ | M4 Kernrennen | drei Runden, fünf Bots, drei Start-Items, Ergebnis und Revanche |
+| ⬜ | M5 Spielsysteme | Fähigkeiten, Schäden, Wetter, Stimmen, Musik und Weltreaktionen |
+| ⬜ | M6 Singleplayer | vollständige Strecke, sechs ausgearbeitete Fahrer, UI und Audio |
+| ⬜ | M7 Abnahme | normale PCs, Android, iPhone, Performance und Fehlerprüfung |
+| ⬜ | M8 Online | private Lobbys per Einladung und Crossplay |
 
-## So lässt du Codex arbeiten
+## Die drei Dateien für den Alltag
 
-Öffne diese Datei und sende anschließend eine klare Aufgabe nach diesem Muster:
+- **Diese Datei:** aktueller Stand und der nächste kopierfertige Auftrag.
+- **[README.md](README.md):** Grundidee und verbindliche Spielziele.
+- **[docs/17-progress-log.md](docs/17-progress-log.md):** vollständige Historie und Übergabe zwischen Arbeitssitzungen.
 
-```text
-Arbeite im Projekt Diktator Kart – Babylon-Neustart 2026.
-Lies zuerst START-HERE.md, AGENTS.md und die dort verlinkten Dateien.
+Weitere Detaildateien öffnet Codex selbst, wenn sie für die aktuelle Aufgabe gebraucht werden.
 
-Arbeite am nächsten offenen Meilenstein: [M0/M1/M2 ...]
-Konkretes Ziel: [eine klar abgegrenzte Aufgabe]
-Nicht-Ziel: [was heute nicht angefasst werden soll]
+## Noch wichtig
 
-Arbeite selbstständig, teste deine Änderungen, halte alle Dokumente synchron
-und aktualisiere am Ende docs/17-progress-log.md.
-Berichte: erledigt, verifiziert, offen, blockiert, geänderte Dateien und nächster Schritt.
-```
-
-Für den ersten langen Abend steht der fertige Auftrag in `docs/20-first-evening-runbook.md`.
-
-## Welche Datei wofür?
-
-- **START-HERE.md:** täglicher Status, nächster Schritt und Meilensteine
-- **docs/17-progress-log.md:** vollständige Projekthistorie und Übergabe zwischen Sitzungen
-- **docs/16-production-blueprint.md:** ausführlicher Bauplan, Zeitfenster und Modellstrategie
-- **docs/00-project-framework.md:** Grundpfeiler und Abhängigkeiten
-- **docs/10-open-questions.md:** Entscheidungen, die noch von dir gebraucht werden
-- **docs/20-first-evening-runbook.md:** konkreter Ablauf für den ersten großen Arbeitsabend
-- **docs/15-item-feasibility-and-production.md:** machbare Umsetzung der Itemideen
-- **references/visuals/:** Bilder und Art-Direction-Referenzen
-
-## Wichtige Wahrheit
-
-Aktuell gibt es noch keinen Babylon.js-Spielstart. Der Ein-Klick-Launcher wird in M1 gebaut. Diese Wissensbasis enthält bestätigte Entscheidungen und sichtbar offene Vorbereitungsaufgaben. Der alte Starter im Legacy-Ordner startet ausschließlich das Altspiel; nach dem Umzug wurde seine Funktion noch nicht erneut geprüft.
+Das neue Projekt liegt direkt in `D:\Diktator-Kart`. Das alte Spiel liegt im Ordner `Diktator-Kart-Legacy` und dient nur als Ideenquelle. Der stabile GitHub-Stand bleibt auf dem Branch `babylon-neustart-2026`, bis ihr später gemeinsam über die Übernahme nach `main` entscheidet.

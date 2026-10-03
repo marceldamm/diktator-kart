@@ -61,11 +61,11 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 
 ## Aktueller Status
 
-- Planung und Wissensbasis: **angelegt**
+- Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
 - Babylon.js-Neuentwicklung: **noch nicht begonnen**
-- Grundsatzentscheidungen: **Babylon.js gesetzt; weitere Fragen priorisiert offen**
+- Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - Alte technische Implementierung: **nicht übernommen**
-- Nächster sinnvoller Schritt: die verbleibenden Produktions- und Messfragen in [10-open-questions.md](docs/10-open-questions.md) schließen und M1 vorbereiten.
+- Nächster Schritt: mit GPT-6.1 Sol und dem kopierfertigen Auftrag aus [START-HERE.md](START-HERE.md) den startbaren M1-Babylon-Grundstand bauen.
 - Arbeitsmodus für längere Sitzungen: [16-production-blueprint.md](docs/16-production-blueprint.md) lesen und [17-progress-log.md](docs/17-progress-log.md) fortschreiben.
 - Zielplattformen: Google Chrome unter Windows zuerst; mobile Browser werden von Anfang an berücksichtigt.
 - Startbarkeit: Jeder spielbare Stand braucht einen einfachen Startbutton, Launcher oder eine eindeutige Verknüpfung ohne Entwicklerkonsole.
