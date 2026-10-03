@@ -70,8 +70,12 @@ def rod(name, a, b, r, m, parent=None):
     bpy.ops.object.convert(target='MESH'); o.select_set(False); return o
 
 def apply_all():
+    import bmesh
     for o in list(bpy.context.scene.objects):
-        if o.type != 'MESH' or not o.modifiers: continue
+        if o.type != 'MESH': continue
+        # Generated lofts and lathes have arbitrary winding; make every shell face outward.
+        bm = bmesh.new(); bm.from_mesh(o.data); bmesh.ops.recalc_face_normals(bm, faces=bm.faces); bm.to_mesh(o.data); bm.free()
+        if not o.modifiers: continue
         bpy.ops.object.select_all(action='DESELECT'); o.select_set(True); bpy.context.view_layer.objects.active = o
         for m in list(o.modifiers): bpy.ops.object.modifier_apply(modifier=m.name)
 
@@ -125,7 +129,7 @@ for sd in [-1, 1]:
         tube('Fender brass edge', [(sd * (.9 + width / 2 + .005), wy + (wr + .15) * math.cos(a0 + (a1 - a0) * k / 8), wr + (wr + .15) * math.sin(a0 + (a1 - a0) * k / 8)) for k in range(9)], .018, trim, kart)
     cyl('Headlamp cup', (sd * .42, 1.12, .66), .12, .16, trim, kart, 'Y')
     ellipsoid('Headlamp glass', (sd * .42, 1.205, .66), (.1, .03, .1), glow, kart)
-    ellipsoid('Rear stop light', (sd * .36, -1.33, .6), (.09, .03, .06), red, kart)
+    ellipsoid('Rear stop light', (sd * .3, -1.46, .55), (.065, .03, .065), red, kart)
     tube('Exhaust pipe', [(sd * .38, -1.0, .52), (sd * .48, -1.3, .54), (sd * .52, -1.58, .6)], .07, chrome, kart)
     cyl('Exhaust black mouth', (sd * .52, -1.6, .6), .055, .02, leather, kart, 'Y')
     tube('Front suspension arm', [(sd * .2, .78, .38), (sd * .55, .8, .36), (sd * .78, .8, .38)], .03, chrome, kart)
@@ -153,10 +157,23 @@ emb.location = (cx, cy + .02, cz - .1); emb.rotation_euler = (math.pi / 2, 0, ma
 bpy.ops.object.select_all(action='DESELECT'); emb.select_set(True); bpy.context.view_layer.objects.active = emb; bpy.ops.object.convert(target='MESH')
 for k, x in enumerate([-.12, 0, .12]): ellipsoid('Emblem crown point', (x, cy + .02, cz + .27 + (.05 if k == 1 else 0)), (.035, .03, .05), trim, kart, 8)
 box('Emblem crown band', (0, cy + .02, cz + .23), (.3, .04, .06), trim, .01, kart)
-# Rear engine bay and bumper.
-box('Engine block', (0, -1.12, .62), (.62, .42, .32), leather, .05, kart)
+# Rear: lacquered cowl with the brass emblem facing the chase camera, exposed twin engine below.
+cowl = [(-1.0, .44, .2, .74), (-1.18, .42, .2, .72), (-1.34, .36, .17, .68), (-1.44, .26, .12, .64)]
+loft('Rear cowl', [ring(w, hh, zc, y, 18, 2.4) for y, w, hh, zc in cowl], paint, kart, 1)
+torus('Rear emblem laurel ring', (0, -1.47, .68), .13, .022, trim, kart, 'Y')
+for k in range(10):
+    a = math.pi * (.18 + .64 * k / 9)
+    for sd in [-1, 1]: ellipsoid('Rear laurel leaf', (sd * .155 * math.cos(a), -1.475, .68 + .155 * math.sin(a) - .04), (.026, .012, .045), trim, kart, 6)
+rear_text = bpy.data.curves.new('Rear paragraph', 'FONT'); rear_text.body = '§'; rear_text.align_x = 'CENTER'; rear_text.size = .2; rear_text.extrude = .02; rear_text.resolution_u = 3
+rp = bpy.data.objects.new('Rear paragraph', rear_text); bpy.context.collection.objects.link(rp)
+rp.location = (0, -1.49, .615); rp.rotation_euler = (math.pi / 2, 0, 0); rp.data.materials.append(trim); rp.parent = kart
+bpy.ops.object.select_all(action='DESELECT'); rp.select_set(True); bpy.context.view_layer.objects.active = rp; bpy.ops.object.convert(target='MESH')
+tube('Cowl brass seam', [(-.42, -1.02, .82), (0, -1.0, .95), (.42, -1.02, .82)], .016, trim, kart)
 for sd in [-1, 1]:
-    for j in range(3): cyl('Engine cooling fin', (sd * .18, -1.0 - j * .1, .82), .1, .03, chrome, kart, 'Y')
+    cyl('Engine cylinder', (sd * .2, -1.05, .5), .1, .26, chrome, kart, 'X')
+    for j in range(4): cyl('Engine cooling fin', (sd * (.1 + j * .065), -1.05, .5), .13, .018, chrome, kart, 'X')
+    cyl('Tail lamp bezel', (sd * .3, -1.43, .55), .075, .05, chrome, kart, 'Y')
+cyl('Brass air intake', (0, -.98, .46), .07, .2, trim, kart, 'Y', r2=.11)
 tube('Rear bumper', [(-.7, -1.5, .34), (-.4, -1.58, .32), (.4, -1.58, .32), (.7, -1.5, .34)], .04, chrome, kart)
 box('Number plate', (0, -1.45, .42), (.36, .03, .16), ivory, .01, kart)
 # Seat and dashboard.
@@ -266,7 +283,7 @@ tube('Smirk', [(-.08, .27, -.08), (0, .285, -.095), (.09, .27, -.07)], .011, hai
 box('Uniform collar', (0, -.03, -.2), (.34, .3, .1), uniform, .04, head)
 tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, head)
 for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .25, -.06, .16), (.07, .17, .13), hair, head)
-ellipsoid('Hair back', (0, -.15, .15), (.26, .14, .16), hair, head)
+ellipsoid('Hair back', (0, -.13, .1), (.24, .13, .13), hair, head)
 
 def cast(name):
     return empty('cast-' + name, (0, 0, 0), head)
