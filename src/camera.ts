@@ -8,9 +8,9 @@ import type { Scene } from '@babylonjs/core/scene';
 import type { KartState } from './kart-model';
 
 const VIEWS = [
-  { name: 'Verfolger nah', distance: 6.8, height: 3.15, fov: 0.85, follow: 8 },
-  { name: 'Verfolger fern', distance: 12.5, height: 5.7, fov: 0.9, follow: 5 },
-  { name: 'Fahrerperspektive', distance: 0, height: 0, fov: 1.05, follow: 14 },
+  { name: 'Verfolger nah', distance: 5.5, height: 2.1, fov: 0.9, follow: 9, look: 3.4, lookHeight: 1.05 },
+  { name: 'Verfolger fern', distance: 9.2, height: 3.5, fov: 0.88, follow: 6, look: 4.5, lookHeight: 1.0 },
+  { name: 'Fahrerperspektive', distance: 0, height: 0, fov: 1.05, follow: 14, look: 0, lookHeight: 0 },
 ] as const;
 
 function cockpitMaterial(scene: Scene, name: string, color: Color3): StandardMaterial {
@@ -31,6 +31,9 @@ export class KartCamera {
   private reducedMotion=false;
   private intro=false;
   private introAngle=.68;
+  /** Chase yaw lags the kart so corners and drifts show its flank. */
+  private chaseHeading=0;
+  private fovKick=0;
 
   constructor(scene: Scene, state: KartState, realCockpit = false) {
     this.realCockpit = realCockpit;
@@ -91,6 +94,7 @@ export class KartCamera {
   }
 
   get viewName(): string { return VIEWS[this.view].name; }
+  get babylonCamera(): FreeCamera { return this.camera; }
   get photoMode(): boolean { return this.photo; }
   get introMode():boolean {return this.intro;}
   setIntroMode(intro:boolean):void {this.intro=intro;this.cockpit.setEnabled(!intro&&this.view===2&&!this.realCockpit);}
@@ -102,26 +106,36 @@ export class KartCamera {
       if(this.photo)this.photoAngle+=dt*.18;else this.introAngle=.68+Math.sin(performance.now()/14000)*.12;
       const a=state.heading+(this.photo?this.photoAngle:this.introAngle),distance=this.intro?5.7:4.5;
       this.camera.position.set(state.x+Math.sin(a)*distance,(this.intro?2.2:1.8)+state.height,state.z+Math.cos(a)*distance);
-      this.camera.fov=this.intro?.73:.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height,state.z));return;
+      this.camera.fov=this.intro?.73:.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height,state.z));this.chaseHeading=state.heading;return;
     }
     const view = VIEWS[this.view];
     const forwardX = Math.sin(state.heading);
     const forwardZ = Math.cos(state.heading);
     const firstPerson = this.view === 2;
+    // Lagging chase yaw: between body heading and travel direction while drifting.
+    const aim = state.drifting ? state.heading + Math.atan2(Math.sin(state.travelHeading - state.heading), Math.cos(state.travelHeading - state.heading)) * .55 : state.heading;
+    const yawRate = this.reducedMotion ? 14 : 4.2;
+    if (immediate) this.chaseHeading = aim;
+    else this.chaseHeading += Math.atan2(Math.sin(aim - this.chaseHeading), Math.cos(aim - this.chaseHeading)) * (1 - Math.exp(-yawRate * dt));
+    const chaseX = Math.sin(this.chaseHeading), chaseZ = Math.cos(this.chaseHeading);
+    const speed = Math.abs(state.speed);
     const desired = firstPerson
       ? new Vector3(state.x - forwardX * (this.realCockpit ? .42 : .05),
         (this.realCockpit ? 1.89 : 1.55) + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
         state.z - forwardZ * (this.realCockpit ? .42 : .05))
-      : new Vector3(state.x - forwardX * view.distance,
-        view.height + state.height * (this.reducedMotion?.05:.35),
-        state.z - forwardZ * view.distance);
+      : new Vector3(state.x - chaseX * (view.distance + speed * .035),
+        view.height + state.height * (this.reducedMotion?.05:.4) + state.suspensionOffset * (this.reducedMotion?0:.25),
+        state.z - chaseZ * (view.distance + speed * .035));
     const blend = immediate ? 1 : 1 - Math.exp(-(this.reducedMotion?14:view.follow) * dt);
     this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
-    this.camera.fov = (firstPerson && this.realCockpit ? 1.45 : view.fov) + (!this.reducedMotion&&state.turboRemaining > 0 ? .075 : 0);
+    // Speed widens the view slightly; mini-turbo adds a brief kick. Calm camera keeps a fixed angle.
+    const kickTarget = this.reducedMotion ? 0 : Math.min(.1, speed / 20 * .1) + (state.turboRemaining > 0 ? .085 : 0);
+    this.fovKick += (kickTarget - this.fovKick) * (immediate ? 1 : 1 - Math.exp(-6 * dt));
+    this.camera.fov = (firstPerson && this.realCockpit ? 1.45 : view.fov) + this.fovKick;
     this.camera.setTarget(firstPerson
       ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - (this.realCockpit ? 1.7 : .14),
         this.camera.position.z + forwardZ * 8)
-      : new Vector3(state.x + forwardX * 2, 0.85 + state.height * 0.5, state.z + forwardZ * 2));
+      : new Vector3(state.x + chaseX * view.look, view.lookHeight + state.height * 0.5, state.z + chaseZ * view.look));
     this.wheel.rotation.z = -steering * 0.45;
   }
 }

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
+import { BUMP_PROGRESS } from '../src/track-layout.ts';
 import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace } from '../src/track.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
@@ -38,7 +39,7 @@ test('finish order uses crossing time even if a later kart overshoots farther',(
   assert.deepEqual(rankRace([p(2,false,null),p(2,false,null)]),[0,1]);
 });
 test('circuit ground profile lifts individual wheels and settles the chassis',()=>{
-  const p=trackPoint(59);let s={...gridKart(0),...p,travelHeading:p.heading,speed:8};let highest=0,tilt=0;
+  const p=trackPoint(BUMP_PROGRESS-6);let s={...gridKart(0),...p,travelHeading:p.heading,speed:8};let highest=0,tilt=0;
   for(let i=0;i<180;i++){s=advanceKart(s,{throttle:1,steering:0},1/60,projectTrack,trackHeightAt);highest=Math.max(highest,...s.wheelGroundHeights);tilt=Math.max(tilt,Math.abs(s.bodyPitch));}
   assert.ok(highest>.2);assert.ok(tilt>.025);assert.ok(Math.abs(s.suspensionOffset)<.01);
 });

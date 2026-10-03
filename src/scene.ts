@@ -1,3 +1,4 @@
+import type { Camera } from '@babylonjs/core/Cameras/camera';
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
@@ -19,6 +20,10 @@ export interface TestScene {
   setPlayerVisible(visible: boolean): void;
   setQuality?(level: number, reducedEffects: boolean): void;
   presentItems?(world:ItemWorld,karts:KartState[]):void;
+  /** Builds the post-processing chain for the active gameplay camera. */
+  attachCamera?(camera: Camera): void;
+  celebrate?(kind: 'start' | 'finish'): void;
+  resetEffects?(): void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {

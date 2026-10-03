@@ -1,12 +1,10 @@
 {
   "schemaVersion": 1,
-  "name": "Stadion-Vertical-Slice mit Blender-Assets",
+  "name": "Stadion-Vertical-Slice, Qualitätsstufe 2",
   "files": [
     "models/hero-kart.glb",
     "models/stadium-world.glb",
     "models/park-tree.glb",
-    "textures/sky-4k.jpg",
-    "textures/sky-2k.jpg",
     "textures/studio.env",
     "textures/cobble-color.jpg",
     "textures/cobble-normal.jpg",
@@ -26,6 +24,11 @@
     "audio/lap.wav",
     "audio/finish.wav",
     "audio/hop.wav",
-    "audio/land.wav"
+    "audio/land.wav",
+    "textures/sky-afternoon-4k.jpg",
+    "textures/sky-afternoon-2k.jpg",
+    "textures/herringbone-diff.jpg",
+    "textures/herringbone-nor_gl.jpg",
+    "textures/herringbone-arm.jpg"
   ]
 }

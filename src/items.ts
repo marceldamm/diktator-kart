@@ -1,20 +1,22 @@
-import { TRACK, trackPoint, trackProgress, wrap } from './track.ts';
+import { TRACK, trackLocate, trackPoint, trackProgress, wrap } from './track.ts';
 import type { KartState } from './kart-model.ts';
 
 export type ItemKind = 'direct' | 'homing' | 'trap';
 export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Suchauftrag',trap:'Stempelfalle'};
 export interface ItemBox { id:number; x:number; z:number; readyIn:number }
-export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null }
+export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; bounces?:number }
 export interface ItemEvent { kind:'pickup'|'launch'|'hit'; kart:number; item:ItemKind }
 export interface ItemWorld {
   slots:(ItemKind|null)[];heldFor:number[];immune:number[];objects:ItemObject[];boxes:ItemBox[];
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
-export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.48,hitRadius:1.35,homingTurnRate:2.4};
+export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.48,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3};
+/** Dispatch box rows: end of the grandstand straight, the boulevard and the archive leg. */
+export const ITEM_BOX_PROGRESS=[72,330,520];
 export function createItems(count:number,seed=921):ItemWorld {
   return {slots:Array(count).fill(null),heldFor:Array(count).fill(0),immune:Array(count).fill(0),objects:[],
-    boxes:[88,280,385].flatMap((s,row)=>[-3.5,0,3.5].map((lane,col)=>({id:row*3+col,...trackPoint(s,lane),readyIn:0}))),events:[],random:seed,nextId:1,time:0,
+    boxes:ITEM_BOX_PROGRESS.flatMap((s,row)=>[-3,0,3].map((lane,col)=>({id:row*3+col,...trackPoint(s,lane),readyIn:0}))),events:[],random:seed,nextId:1,time:0,
     stats:{direct:{collected:0,launched:0,hits:0},homing:{collected:0,launched:0,hits:0},trap:{collected:0,launched:0,hits:0}}};
 }
 function roll(world:ItemWorld,rank:number,count:number):ItemKind {
@@ -57,14 +59,21 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
     if(o.kind!=='trap') {
       if(o.target!==null) {
         const target=karts[o.target];
-        const desired=Math.atan2(target.x-o.x,target.z-o.z);
+        // Follow the course until close, then close in directly: no shortcuts through the park.
+        const here=trackLocate(o.x,o.z),there=trackLocate(target.x,target.z);
+        const aim=wrap(there.s-here.s)>11?trackPoint(here.s+7,Math.max(-3.5,Math.min(3.5,there.lane))):target;
+        const desired=Math.atan2(aim.x-o.x,aim.z-o.z);
         const turn=Math.atan2(Math.sin(desired-o.heading),Math.cos(desired-o.heading));
         o.heading+=clampTurn(turn,ITEM_RULES.homingTurnRate*dt);
       }
       o.x+=Math.sin(o.heading)*ITEM_RULES.speed*dt;o.z+=Math.cos(o.heading)*ITEM_RULES.speed*dt;
-      // An item cannot cross the closed park to re-enter another track section.
-      const centre=trackPoint(trackProgress(o.x,o.z));
-      if(Math.hypot(centre.x-o.x,centre.z-o.z)>TRACK.halfWidth+1)o.remaining=0;
+      // Barriers reflect the pneumatic capsule a few times; nothing crosses the closed park.
+      const at=trackLocate(o.x,o.z),limit=TRACK.halfWidth-.45;
+      if(Math.abs(at.lane)>limit) {
+        o.bounces=(o.bounces??0)+1;
+        if(o.bounces>ITEM_RULES.maxBounces||Math.abs(at.lane)>TRACK.halfWidth+2)o.remaining=0;
+        const wall=trackPoint(at.s,Math.sign(at.lane)*limit);o.x=wall.x;o.z=wall.z;o.heading=2*wall.heading-o.heading;
+      }
     }
     if(o.remaining<=0)continue;
     for(let i=0;i<karts.length;i++) {
@@ -84,7 +93,7 @@ export function botUsesItem(world:ItemWorld,index:number,karts:KartState[]):bool
   if(kind==='direct')return karts.some((other,i)=>{
     if(i===index||Math.hypot(other.x-k.x,other.z-k.z)>38)return false;
     const desired=Math.atan2(other.x-k.x,other.z-k.z),angle=Math.atan2(Math.sin(desired-k.heading),Math.cos(desired-k.heading));
-    return Math.abs(angle)<.11&&wrap(trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<40;
+    return Math.abs(angle)<.2&&wrap(trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<34;
   });
   return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<45&&wrap(trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<50)||world.heldFor[index]>6;
 }

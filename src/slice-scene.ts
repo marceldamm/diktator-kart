@@ -6,7 +6,6 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
-import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
@@ -19,7 +18,11 @@ import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator'
 import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent';
 import { GlowLayer } from '@babylonjs/core/Layers/glowLayer';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
-import { TRACK, trackPoint, trackHeightAt } from './track';
+import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline';
+import { TRACK, trackPoint } from './track';
+import { LANDMARKS } from './track-layout';
+import { addTrackWorld } from './track-world';
+import { SkidMarks, createConfetti, softParticleTexture } from './effects';
 import type { TestScene } from './scene';
 import { surfaceTextures } from './surface-textures';
 import { SceneInstrumentation } from '@babylonjs/core/Instrumentation/sceneInstrumentation';
@@ -28,147 +31,47 @@ import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
 
-function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
-  const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
-  m.metallic = metal; m.roughness = roughness; return m;
-}
 
-function ribbon(scene: Scene, name: string, inner: number, outer: number, y: number, material: PBRMaterial): Mesh {
-  const positions: number[] = [], indices: number[] = [], uvs: number[] = [];
-  for (let i = 0; i <= 256; i++) {
-    const s = i / 256 * TRACK.length;
-    for (const lane of [inner, outer]) {
-      const p = trackPoint(s, lane); positions.push(p.x, y + trackHeightAt(p.x,p.z), p.z); uvs.push(s / 6, (lane - inner) / 6);
-    }
-    if (i < 256) { const k = i * 2; indices.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
-  }
-  const normals: number[] = []; VertexData.ComputeNormals(positions, indices, normals);
-  const mesh = new Mesh(name, scene), data = new VertexData();
-  data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs;
-  data.applyToMesh(mesh); mesh.material = material; mesh.receiveShadows = true; return mesh;
-}
+/** Panorama-space angle of the sun in sky-afternoon (table_mountain_2), measured in-game. */
+const SKY_SUN_OFFSET = 0;
 
 function glowMaterial(scene: Scene, name: string, color: string): StandardMaterial {
   const m = new StandardMaterial(name, scene); m.diffuseColor = Color3.FromHexString(color);
   m.emissiveColor = m.diffuseColor; m.disableLighting = true; return m;
 }
 
-function addTrackWorld(scene: Scene, shadow: ShadowGenerator): void {
-  const road = pbr(scene, 'Cobblestone boulevard', '#cfccbd', 0, 1);
-  road.albedoTexture = new Texture('/assets/textures/cobble-color.jpg',scene);
-  road.bumpTexture = new Texture('/assets/textures/cobble-normal.jpg',scene);
-  road.metallicTexture = new Texture('/assets/textures/cobble-arm.jpg',scene);
-  road.useRoughnessFromMetallicTextureAlpha = false; road.useRoughnessFromMetallicTextureGreen = true;
-  road.useMetallnessFromMetallicTextureBlue = true; road.useAmbientOcclusionFromMetallicTextureRed = true;
-  road.invertNormalMapX = true; road.bumpTexture.level = .65;
-  for (const t of [road.albedoTexture,road.bumpTexture,road.metallicTexture]) {
-    t.wrapU=Texture.WRAP_ADDRESSMODE;t.wrapV=Texture.WRAP_ADDRESSMODE;t.anisotropicFilteringLevel=8;
-  }
-  ribbon(scene, '441 metre racing circuit', -7.5, 7.5, .018, road);
-  const pavement = pbr(scene, 'Pale sidewalk', '#ac9a78', 0, .82);
-  const grass = pbr(scene, 'Park lawn', '#42513a', 0, .93);
-  const grassMaps = surfaceTextures(scene, 'Lawn', 'grass'); grass.albedoTexture = grassMaps.color; grass.bumpTexture = grassMaps.normal;
-  grassMaps.color.uScale = grassMaps.color.vScale = 180; grassMaps.normal.uScale = grassMaps.normal.vScale = 180;
-  const ground = MeshBuilder.CreateGround('Park and city terrain', { width: 600, height: 600 }, scene);
-  ground.material = grass; ground.receiveShadows = true;
-  for (const side of [-1, 1]) ribbon(scene, `Track sidewalk ${side}`, side < 0 ? -13 : 7.5, side < 0 ? -7.5 : 13, .026, pavement);
-  const red = pbr(scene, 'Racing barrier burgundy', '#832d2d', .08, .65);
-  const ivory = pbr(scene, 'Racing barrier ivory', '#d7c9a8', .04, .65);
-  const metal = pbr(scene, 'Street iron', '#263637', .7, .4);
-  const gold = pbr(scene, 'Street brass', '#b48b48', .68, .32);
-  const lamp = glowMaterial(scene, 'Street lantern glow', '#ffca7e');
-  const groups = new Map<string, Mesh[]>();
-  const group = (mesh: Mesh, material: PBRMaterial | StandardMaterial) => {
-    mesh.material = material; const a = groups.get(material.name) ?? []; a.push(mesh); groups.set(material.name, a);
-  };
-  for (let s = 0; s < TRACK.length; s += 2.3) for (const side of [-1, 1]) {
-    const p = trackPoint(s, side * 7.65);
-    const curb = MeshBuilder.CreateBox('Alternating safety barrier', { width: .38, height: .62, depth: 2.22 }, scene);
-    curb.position.set(p.x, .32, p.z); curb.rotation.y = p.heading;
-    group(curb, Math.floor(s / 2.3) % 2 ? ivory : red);
-  }
-  for (let s = 0; s < TRACK.length; s += 22) for (const side of [-1, 1]) {
-    const p = trackPoint(s, side * 11);
-    const post = MeshBuilder.CreateCylinder('Lantern post', { diameterBottom: .22, diameterTop: .09, height: 4.5, tessellation: 8 }, scene);
-    post.position.set(p.x, 2.3, p.z); group(post, metal);
-    const foot = MeshBuilder.CreateCylinder('Lantern base', { diameter: .45, height: .42, tessellation: 8 }, scene);
-    foot.position.set(p.x, .22, p.z); group(foot, metal);
-    const light = MeshBuilder.CreateBox('Lantern glass', { width: .33, height: .55, depth: .33 }, scene);
-    light.position.set(p.x, 4.72, p.z); group(light, lamp);
-    const cap = MeshBuilder.CreateCylinder('Lantern crown', { diameterBottom: .6, diameterTop: .05, height: .3, tessellation: 4 }, scene);
-    cap.position.set(p.x, 5.13, p.z); group(cap, gold);
-  }
-  // Tangible track signage. Satire is fictional; no historic insignia are used.
-  const signTexture = new DynamicTexture('Civic poster', { width: 512, height: 512 }, scene, true);
-  signTexture.vScale=-1;signTexture.vOffset=1;
-  const c = signTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#731e29'; c.fillRect(0, 0, 512, 512);
-  c.strokeStyle = '#d7b573'; c.lineWidth = 12; c.strokeRect(22, 22, 468, 468);
-  c.fillStyle = '#efdfb6'; c.textAlign = 'center'; c.font = 'bold 48px Georgia';
-  c.fillText('FREIE FAHRT', 256, 132); c.font = '30px Georgia'; c.fillText('NACH ANTRAG', 256, 190);
-  c.font = 'bold 125px Georgia'; c.fillText('§', 256, 345); c.font = '22px Georgia'; c.fillText('FORMULAR 08 / 15', 256, 438);
-  signTexture.update(); const sign = pbr(scene, 'Satirical racing poster', '#ffffff'); sign.albedoTexture = signTexture;
-  for (const s of [47, 190, 295, 400]) {
-    const p = trackPoint(s, 10);
-    const poster = MeshBuilder.CreateBox('Race poster', { width: 2.6, height: 3, depth: .08 }, scene);
-    poster.position.set(p.x, 2.1, p.z); poster.rotation.y = p.heading - Math.PI / 2; poster.material = sign;
-  }
-  const start = trackPoint(22);
-  for (let row = 0; row < 2; row++) for (let i = 0; i < 20; i++) {
-    const tile = MeshBuilder.CreateBox('Checkered start finish', { width: .72, height: .013, depth: .6 }, scene);
-    tile.position.set(start.x - 7.1 + i * .74, .032, start.z + row * .62); group(tile, (row + i) % 2 ? ivory : metal);
-  }
-  for (const [name, meshes] of groups) {
-    const merged = Mesh.MergeMeshes(meshes, true, true)!; merged.name = name + ' / batch';
-    merged.receiveShadows = true; merged.isPickable = false;
-    if (!name.includes('glow')) shadow.addShadowCaster(merged);
-  }
-  // Fountain surfaces and restrained spray; capped particle count.
-  const water = pbr(scene, 'Fountain water', '#287e88', .28, .16);
-  for (const z of [-40, 40]) {
-    const disc = MeshBuilder.CreateDisc('Fountain pool', { radius: 4.97, tessellation: 48 }, scene);
-    disc.rotation.x = Math.PI / 2; disc.position.set(0, .57, z); disc.material = water;
-    const spray = new ParticleSystem('Fountain spray', 120, scene); spray.particleTexture = particleTexture(scene);
-    spray.emitter = new Vector3(0, 2.8, z); spray.minEmitBox = new Vector3(-.1, 0, -.1); spray.maxEmitBox = new Vector3(.1, .1, .1);
-    spray.direction1 = new Vector3(-.4, 1, -.4); spray.direction2 = new Vector3(.4, 1, .4);
-    spray.minEmitPower = 2; spray.maxEmitPower = 3; spray.gravity = new Vector3(0, -5, 0);
-    spray.minLifeTime = .8; spray.maxLifeTime = 1.4; spray.minSize = .04; spray.maxSize = .12; spray.emitRate = 65;
-    spray.color1 = new Color4(.7, .86, .87, .6); spray.color2 = new Color4(.9, .92, .84, .5); spray.colorDead = new Color4(.7, .85, .9, 0); spray.start();
-  }
-}
-
-function particleTexture(scene: Scene): DynamicTexture {
-  const t = new DynamicTexture('Soft particle', 64, scene, false); const c = t.getContext();
-  const gradient = c.createRadialGradient(32, 32, 1, 32, 32, 31);
-  gradient.addColorStop(0, '#ffffffff'); gradient.addColorStop(.3, '#ffffffbb'); gradient.addColorStop(1, '#ffffff00');
-  c.fillStyle = gradient; c.fillRect(0, 0, 64, 64); t.hasAlpha = true; t.update(); return t;
-}
+function particleTexture(scene: Scene): DynamicTexture { return softParticleTexture(scene); }
 
 export async function createSliceScene(engine: Engine, loadKartCount: number, quality=1): Promise<TestScene> {
   const scene = new Scene(engine);
   scene.skipPointerMovePicking=true;
   try {
-    scene.clearColor = new Color4(.58, .69, .76, 1);
-    scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0028; scene.fogColor = new Color3(.71, .73, .7);
+    // Warm late-afternoon look (G/J): low sun from the south-west, cool sky fill, light aerial haze.
+    scene.clearColor = new Color4(.62, .72, .84, 1);
+    scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0032; scene.fogColor = new Color3(.80, .78, .74);
     scene.environmentTexture = CubeTexture.CreateFromPrefilteredData('/assets/textures/studio.env', scene);
-    scene.environmentIntensity = .45;
+    scene.environmentIntensity = .55;
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
     scene.imageProcessingConfiguration.toneMappingType = 1;
-    scene.imageProcessingConfiguration.exposure = 1.08;
-    scene.imageProcessingConfiguration.contrast = 1.16;
+    scene.imageProcessingConfiguration.exposure = 1.12;
+    scene.imageProcessingConfiguration.contrast = 1.22;
     const hemisphere = new HemisphericLight('Blue sky fill', new Vector3(0, 1, 0), scene);
-    hemisphere.diffuse = new Color3(.71, .81, 1); hemisphere.groundColor = new Color3(.32, .25, .18); hemisphere.intensity = .32;
-    const sun = new DirectionalLight('Late afternoon sun', new Vector3(-.65, -1, .45), scene);
-    sun.position.set(45, 70, -35); sun.diffuse = new Color3(1, .82, .58); sun.intensity = 3.1;
-    sun.orthoLeft = -48; sun.orthoRight = 48; sun.orthoTop = 60; sun.orthoBottom = -60;
-    sun.shadowMinZ = 1; sun.shadowMaxZ = 200; sun.autoUpdateExtends = false; sun.shadowOrthoScale = 0;
-    const shadow = new ShadowGenerator(engine.webGLVersion > 1 ? 1536 : 1024, sun);
-    shadow.usePercentageCloserFiltering = engine.webGLVersion > 1; shadow.bias = .0006; shadow.normalBias = .04;
+    hemisphere.diffuse = new Color3(.66, .76, 1); hemisphere.groundColor = new Color3(.42, .32, .22); hemisphere.intensity = .42;
+    const sunDirection = new Vector3(.42, -.52, .74).normalize();
+    const sun = new DirectionalLight('Late afternoon sun', sunDirection, scene);
+    sun.diffuse = new Color3(1, .8, .58); sun.intensity = 3.6;
+    sun.orthoLeft = -46; sun.orthoRight = 46; sun.orthoTop = 56; sun.orthoBottom = -56;
+    sun.shadowMinZ = 1; sun.shadowMaxZ = 220; sun.autoUpdateExtends = false; sun.shadowOrthoScale = 0;
+    const shadow = new ShadowGenerator(engine.webGLVersion > 1 ? 2048 : 1024, sun);
+    shadow.usePercentageCloserFiltering = engine.webGLVersion > 1; shadow.bias = .0007; shadow.normalBias = .035;
     shadow.filteringQuality=ShadowGenerator.QUALITY_MEDIUM;
-    shadow.darkness = .05;
+    shadow.darkness = .12;
     const sky = MeshBuilder.CreateSphere('Panoramic sky', { diameter: 900, segments: 32, sideOrientation: Mesh.BACKSIDE }, scene);
+    // Turn the panorama so its low sun glows where the light actually comes from.
+    sky.rotation.y = Math.atan2(-sunDirection.x, -sunDirection.z) + SKY_SUN_OFFSET;
     const skyMaterial = new StandardMaterial('Cloud sky', scene); skyMaterial.disableLighting = true;
     let skyQuality=quality;
-    let skyTexture = new Texture(`/assets/textures/sky-${quality?'4k':'2k'}.jpg`, scene, false, false);
+    let skyTexture = new Texture(`/assets/textures/sky-afternoon-${quality?'4k':'2k'}.jpg`, scene, false, false);
     skyTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
     skyMaterial.emissiveTexture = skyTexture;
     skyMaterial.emissiveColor = Color3.Black(); skyMaterial.backFaceCulling = false; skyMaterial.fogEnabled = false; sky.material = skyMaterial; sky.infiniteDistance = true;
@@ -192,7 +95,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if(/cloth|Spectator/.test(mesh.material.name)){mesh.material.albedoTexture=fabricMaps.color;mesh.material.bumpTexture=fabricMaps.normal;}
       }
     }
-    addTrackWorld(scene, shadow);
+    const trackWorld = addTrackWorld(scene, shadow);
+    // Fountain spray with a hard particle cap.
+    for (const [fx, fz] of LANDMARKS.fountains) {
+      const spray = new ParticleSystem('Fountain spray', 120, scene); spray.particleTexture = particleTexture(scene);
+      spray.emitter = new Vector3(fx, 2.8, fz); spray.minEmitBox = new Vector3(-.1, 0, -.1); spray.maxEmitBox = new Vector3(.1, .1, .1);
+      spray.direction1 = new Vector3(-.4, 1, -.4); spray.direction2 = new Vector3(.4, 1, .4);
+      spray.minEmitPower = 2; spray.maxEmitPower = 3; spray.gravity = new Vector3(0, -5, 0);
+      spray.minLifeTime = .8; spray.maxLifeTime = 1.4; spray.minSize = .04; spray.maxSize = .12; spray.emitRate = 65;
+      spray.color1 = new Color4(.7, .86, .87, .6); spray.color2 = new Color4(.9, .92, .84, .5); spray.colorDead = new Color4(.7, .85, .9, 0); spray.start();
+    }
     const staticShadowMeshes=[...(shadow.getShadowMap()?.renderList??[])];
     const treeShadows: {root:TransformNode;meshes:Mesh[]}[]=[];
     const treeContainer = await LoadAssetContainerAsync('/assets/models/park-tree.glb', scene);
@@ -200,11 +112,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       material.transparencyMode=PBRMaterial.PBRMATERIAL_OPAQUE;
       material.backFaceCulling=false;
     }
-    for (const x of [-48, 48]) for (const z of [-50, 0, 50]) {
+    for (const [x, z] of LANDMARKS.trees) {
       const instance = treeContainer.instantiateModelsToScene((name) => `park ${x} ${z}/${name}`, false);
       const root = new TransformNode(`Park tree ${x} ${z}`, scene); instance.rootNodes.forEach((n) => n.parent = root);
       const bounds = root.getHierarchyBoundingVectors(); const height = bounds.max.y - bounds.min.y;
-      root.scaling.setAll(9 / Math.max(1, height)); root.position.set(x, -bounds.min.y * root.scaling.y, z); root.rotation.y = z * .19;
+      root.scaling.setAll((9 + (x * 7 + z) % 3) / Math.max(1, height)); root.position.set(x, -bounds.min.y * root.scaling.y, z); root.rotation.y = z * .19;
       const meshes=root.getChildMeshes().filter((m):m is Mesh=>m instanceof Mesh);
       for (const mesh of meshes) { mesh.receiveShadows = true; mesh.isPickable = false; }
       treeShadows.push({root,meshes});
@@ -214,8 +126,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const gpuTimings=new EngineInstrumentation(engine);gpuTimings.captureGPUFrameTime=true;
     scene.metadata={timings,gpuTimings};
     scene.onDisposeObservable.add(()=>{timings.dispose();gpuTimings.dispose();});
-    const glow = new GlowLayer('Restrained lamp and exhaust glow', scene, { mainTextureRatio: .35 }); glow.intensity = .35;
-    for(const mesh of scene.meshes) if(mesh instanceof Mesh && mesh.name.includes('lantern glow')) glow.addIncludedOnlyMesh(mesh);
+    const glow = new GlowLayer('Restrained lamp and exhaust glow', scene, { mainTextureRatio: .35 }); glow.intensity = .45;
+    for(const mesh of trackWorld.glowMeshes) glow.addIncludedOnlyMesh(mesh);
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
     const colors = ['#125965', '#862e38', '#c1ae78', '#435940', '#384b74', '#5a365a'];
     const visuals = Array.from({ length: loadKartCount + 1 }, (_, index) => {
@@ -275,20 +187,49 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     sparks.direction1 = new Vector3(-1.5, .3, -1.5); sparks.direction2 = new Vector3(1.5, 1.5, 1.5);
     sparks.gravity = new Vector3(0, -4, 0); sparks.colorDead = new Color4(1, .4, .05, 0); sparks.start();
     let reducedEffects = false;
+    const skids = new SkidMarks(scene, loadKartCount + 1);
+    const confetti = createConfetti(scene);
+    let pipeline: DefaultRenderingPipeline | undefined, pipelineLevel = quality;
+    const configurePipeline = () => {
+      if (!pipeline) return;
+      const full = pipelineLevel > 0;
+      pipeline.samples = full && engine.webGLVersion > 1 ? 4 : 1;
+      pipeline.fxaaEnabled = true;
+      pipeline.bloomEnabled = full && !reducedEffects; pipeline.bloomThreshold = .82; pipeline.bloomWeight = .32; pipeline.bloomKernel = 48; pipeline.bloomScale = .5;
+      pipeline.imageProcessingEnabled = true;
+      const ip = pipeline.imageProcessing;
+      ip.toneMappingEnabled = true; ip.toneMappingType = 1; ip.exposure = 1.12; ip.contrast = 1.22;
+      ip.vignetteEnabled = full; ip.vignetteWeight = 1.6; ip.vignetteStretch = .35; ip.vignetteCameraFov = .9; ip.vignetteColor = new Color4(.12, .07, .04, 0);
+      ip.colorCurvesEnabled = full;
+      if (ip.colorCurves) { ip.colorCurves.globalSaturation = 18; ip.colorCurves.highlightsHue = 40; ip.colorCurves.highlightsDensity = 18; ip.colorCurves.highlightsSaturation = 20; ip.colorCurves.shadowsHue = 210; ip.colorCurves.shadowsDensity = 12; ip.colorCurves.shadowsSaturation = 15; }
+      pipeline.sharpenEnabled = full; pipeline.sharpen.edgeAmount = .18;
+    };
     const presentItems=await addItems(scene,shadow,loadKartCount+1);
     const itemShadowMeshes=(shadow.getShadowMap()?.renderList??[]).filter(mesh=>!staticShadowMeshes.includes(mesh));
     for(const mesh of [...world.meshes,...props.meshes]){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     return {
       scene,
       presentItems,
+      attachCamera(camera) {
+        pipeline?.dispose();
+        pipeline = new DefaultRenderingPipeline('Presentation', engine.getCaps().textureHalfFloatRender, scene, [camera]);
+        configurePipeline();
+      },
+      celebrate(kind) {
+        const p = trackPoint(TRACK.start, 0);
+        confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
+      },
+      resetEffects() { skids.clear(); },
       setQuality(level, reduced) {
+        pipelineLevel = level;
         if(level!==skyQuality) {
-          const old=skyTexture;skyTexture=new Texture(`/assets/textures/sky-${level?'4k':'2k'}.jpg`,scene,false,false);skyTexture.wrapV=Texture.CLAMP_ADDRESSMODE;
+          const old=skyTexture;skyTexture=new Texture(`/assets/textures/sky-afternoon-${level?'4k':'2k'}.jpg`,scene,false,false);skyTexture.wrapV=Texture.CLAMP_ADDRESSMODE;
           skyMaterial.emissiveTexture=skyTexture;old.dispose();skyQuality=level;
         }
         reducedEffects = reduced; sun.shadowEnabled = level > 0; glow.isEnabled = level > 0 && !reduced;
         engine.setHardwareScalingLevel(level === 0 ? Math.max(1, window.devicePixelRatio * 1.35) : 1);
         for (const system of scene.particleSystems) if (system.name === 'Fountain spray') system.emitRate = reduced ? 15 : level === 0 ? 30 : 65;
+        configurePipeline();
       },
       setPlayerVisible(visible) {
         // First person uses the real model; hide only the head/body, keep cockpit and wheels.
@@ -296,7 +237,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       },
       present(state, others) {
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
-        sun.position.set(state.x + 45, 70, state.z - 35);
+        sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
+        trackWorld.animate(time);
+        skids.update([state, ...others]);
         [state, ...others].forEach((s, index) => {
           const v = visuals[index]; if (!v) return;
           contactShadows[index].position.x=s.x;contactShadows[index].position.z=s.z;contactShadows[index].rotation.y=s.heading;
@@ -324,8 +267,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         const back = new Vector3(state.x - Math.sin(state.heading), .2 + state.height, state.z - Math.cos(state.heading));
         dust.emitter = back; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 20 : 90 : reducedEffects ? 0 : 8 : 0;
         sparks.emitter = back.add(new Vector3(Math.cos(state.heading) * .85, 0, -Math.sin(state.heading) * .85));
-        sparks.emitRate = state.drifting || state.impactRemaining > 0 ? reducedEffects ? 20 : 70 : 0;
-        sparks.color1 = state.driftCharge >= .7 ? new Color4(1, .6, .12, 1) : new Color4(.15, .8, 1, 1); sparks.color2 = sparks.color1;
+        const scraping = state.scrapeRemaining > 0 || state.impactRemaining > 0;
+        sparks.emitRate = state.drifting || scraping ? reducedEffects ? 20 : scraping ? 120 : 70 : 0;
+        sparks.color1 = scraping ? new Color4(1, .78, .35, 1) : state.driftCharge >= .7 ? new Color4(1, .6, .12, 1) : new Color4(.15, .8, 1, 1); sparks.color2 = sparks.color1;
       },
     };
   } catch (error) { scene.dispose(); throw error; }

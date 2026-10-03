@@ -20,6 +20,8 @@ export interface KartState {
   impactVelocityX: number;
   impactVelocityZ: number;
   impactKind: 'boundary' | 'obstacle' | 'kart' | 'item' | null;
+  /** Seconds of visible scrape/bump feedback after a glancing wall or kart contact. */
+  scrapeRemaining: number;
 }
 
 export interface DriveInput {
@@ -72,6 +74,8 @@ export const KART_TUNING = {
   impactReboundCap: 2.5,
   impactVelocityDecay: 10,
   collisionRadius: 1.25,
+  /** Closing speed (m/s) above which kart contact is a stopping crash instead of a racing bump. */
+  crashClosingSpeed: 7,
 } as const;
 
 export function terrainHeightAt(x: number, z: number): number {
@@ -103,7 +107,7 @@ export function initialKartState(): KartState {
     suspensionOffset: 0, suspensionVelocity: 0, bodyPitch: 0, bodyRoll: 0,
     wheelGroundHeights: [0, 0, 0, 0], grounded: true,
     impactRemaining: 0, impactVelocityX: 0, impactVelocityZ: 0,
-    impactKind: null,
+    impactKind: null, scrapeRemaining: 0,
   };
 }
 
@@ -211,10 +215,10 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
 
   const yawRate = Math.max(-KART_TUNING.maxYawRate,
     Math.min(KART_TUNING.maxYawRate, speed * steering * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
-  const heading = state.heading + yawRate * dt;
+  let heading = state.heading + yawRate * dt;
   const angleDifference = Math.atan2(Math.sin(heading - state.travelHeading), Math.cos(heading - state.travelHeading));
   const follow = (drifting ? KART_TUNING.driftHeadingFollow : KART_TUNING.normalHeadingFollow) * dt;
-  const travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
+  let travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
   const rawX = state.x + Math.sin(travelHeading) * speed * dt + state.impactVelocityX * dt;
   const rawZ = state.z + Math.cos(travelHeading) * speed * dt + state.impactVelocityZ * dt;
   const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = project(rawX, rawZ);
@@ -225,12 +229,26 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   let impactVelocityX = state.impactVelocityX * impactDecay;
   let impactVelocityZ = state.impactVelocityZ * impactDecay;
 
-  if (collided) {
+  let scrapeRemaining = Math.max(0, (state.scrapeRemaining ?? 0) - dt);
+  const normalLength = Math.hypot(collisionNormalX, collisionNormalZ) || 1;
+  const wallX = collisionNormalX / normalLength, wallZ = collisionNormalZ / normalLength;
+  const closing = -(Math.sin(travelHeading) * wallX + Math.cos(travelHeading) * wallZ) * speed;
+  const glance = speed > 0 ? Math.max(0, closing) / speed : 1;
+  if (collided && kind === 'boundary' && speed > 2 && glance < .5) {
+    // Shallow wall scrape: keep the tangential motion, lose speed with the impact angle.
+    const tangentX = Math.sin(travelHeading) * speed + closing * wallX, tangentZ = Math.cos(travelHeading) * speed + closing * wallZ;
+    const slide = Math.atan2(tangentX, tangentZ);
+    travelHeading = slide;
+    heading += Math.atan2(Math.sin(slide - heading), Math.cos(slide - heading)) * .3;
+    speed *= Math.max(.2, .9 - glance * 1.25);
+    impactVelocityX += wallX * Math.min(1.2, closing * .4); impactVelocityZ += wallZ * Math.min(1.2, closing * .4);
+    if (glance > .28) { drifting = false; driftCharge = 0; driftDirection = 0; turboRemaining = 0; }
+    scrapeRemaining = .2;
+  } else if (collided) {
     if (Math.abs(speed) > 1 && impactRemaining === 0) {
       const rebound = Math.min(KART_TUNING.impactReboundCap, Math.abs(speed) * 0.15 + 0.3);
-      const normalLength = Math.hypot(collisionNormalX, collisionNormalZ);
-      impactVelocityX = collisionNormalX / normalLength * rebound;
-      impactVelocityZ = collisionNormalZ / normalLength * rebound;
+      impactVelocityX = wallX * rebound;
+      impactVelocityZ = wallZ * rebound;
       impactRemaining = KART_TUNING.impactDuration;
     }
     speed = 0;
@@ -258,7 +276,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
   return { x, z, heading, travelHeading, speed, height, hopRemaining, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
-    impactRemaining, impactVelocityX, impactVelocityZ, impactKind };
+    impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining };
 }
 
 // Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.
@@ -285,6 +303,25 @@ export function resolveKartContacts(states: KartState[], project: WorldProjectio
         right.z -= normalZ * separation;
         const incomingSpeed = Math.max(Math.abs(left.speed), Math.abs(right.speed));
         if (incomingSpeed <= 1) continue;
+        const velocity = (k: KartState) => [Math.sin(k.travelHeading) * k.speed, Math.cos(k.travelHeading) * k.speed];
+        const [lvx, lvz] = velocity(left), [rvx, rvz] = velocity(right);
+        const leftNormal = lvx * normalX + lvz * normalZ, rightNormal = rvx * normalX + rvz * normalZ;
+        const closing = rightNormal - leftNormal;
+        if (closing < KART_TUNING.crashClosingSpeed) {
+          // Racing bump: equal karts share the normal velocity, keep their tangential speed and get a sideways shove.
+          if (closing <= .05) continue;
+          const shared = (leftNormal + rightNormal) / 2, shove = Math.min(2.2, closing * .55 + .5);
+          for (const [kart, vx, vz, own, sign] of [[left, lvx, lvz, leftNormal, 1], [right, rvx, rvz, rightNormal, -1]] as const) {
+            const nx = vx + (shared - own) * normalX, nz = vz + (shared - own) * normalZ;
+            const forward = nx * Math.sin(kart.travelHeading) + nz * Math.cos(kart.travelHeading);
+            kart.speed = Math.sign(forward || 1) * Math.hypot(nx, nz) * .96;
+            if (Math.abs(kart.speed) > .5) kart.travelHeading = Math.atan2(nx * Math.sign(kart.speed), nz * Math.sign(kart.speed));
+            kart.impactVelocityX += normalX * shove * sign; kart.impactVelocityZ += normalZ * shove * sign;
+            kart.scrapeRemaining = .25;
+            if (closing > 3.5) { kart.drifting = false; kart.driftCharge = 0; kart.driftDirection = 0; }
+          }
+          continue;
+        }
         const rebound = Math.min(KART_TUNING.impactReboundCap, incomingSpeed * 0.15 + 0.3);
         for (const [kart, sign] of [[left, 1], [right, -1]] as const) {
           kart.speed = 0;

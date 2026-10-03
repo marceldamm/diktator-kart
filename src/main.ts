@@ -209,6 +209,8 @@ class App {
       this.testScene = created;
       this.applyQuality();
       this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
+      this.testScene.attachCamera?.(this.camera.babylonCamera);
+      this.drawMinimapTrack();
       this.applyMotion();
       this.testScene.present(this.kart, this.loadKarts);
       this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
@@ -262,7 +264,7 @@ class App {
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
-    this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0;
+    this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
@@ -275,6 +277,7 @@ class App {
     if (LAB_WORLD) return;
     const place=rankRace(this.progress).indexOf(0)+1;
     document.body.classList.toggle('race-finished',this.racePhase==='finished');
+    document.body.classList.toggle('racing',this.racePhase==='countdown'||this.racePhase==='race');
     document.querySelector('#place')!.textContent = `${place}`;
     document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
@@ -294,9 +297,30 @@ class App {
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
     document.querySelector('#race-start')!.textContent = this.racePhase === 'practice' ? 'Rennen starten ↵' : 'Neues Rennen ↵';
     const map = document.querySelector<HTMLCanvasElement>('#minimap')!, c = map.getContext('2d')!;
-    c.clearRect(0, 0, 150, 230); c.strokeStyle = '#d3bd8b66'; c.lineWidth = 9; c.beginPath();
-    for (let i = 0; i <= 100; i++) { const p = trackPoint(i / 100 * TRACK.length); const x = 75 + p.x * .75, y = 115 - p.z * .95; if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); } c.stroke();
-    [this.kart, ...this.loadKarts].forEach((s, i) => { c.fillStyle = i === 0 ? '#ffe1a0' : '#95b8b8'; c.beginPath(); c.arc(75 + s.x * .75, 115 - s.z * .95, i ? 2.5 : 4.5, 0, Math.PI * 2); c.fill(); });
+    c.clearRect(0, 0, map.width, map.height);
+    if (this.minimapTrack) c.drawImage(this.minimapTrack, 0, 0);
+    [...this.loadKarts, this.kart].forEach((s, i, all) => { const player = i === all.length - 1, [x, y] = this.minimapPoint(s.x, s.z); c.fillStyle = player ? '#ffe1a0' : '#95b8b8'; c.strokeStyle = '#0b1a1e'; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, player ? 5 : 3, 0, Math.PI * 2); c.fill(); c.stroke(); });
+  }
+
+  private minimapTrack: HTMLCanvasElement | undefined;
+  private minimapPoint(x: number, z: number): [number, number] {
+    const xs = TRACK.samples.map((p) => p.x), zs = TRACK.samples.map((p) => p.z);
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs);
+    const scale = Math.min(130 / (maxX - minX), 210 / (maxZ - minZ));
+    return [75 + (x - (minX + maxX) / 2) * scale, 115 - (z - (minZ + maxZ) / 2) * scale];
+  }
+  private drawMinimapTrack(): void {
+    const canvas = document.createElement('canvas'); canvas.width = 150; canvas.height = 230; const c = canvas.getContext('2d')!;
+    c.lineJoin = 'round';
+    for (const [width, color] of [[11, '#0b1a1e99'], [7, '#d3bd8b88']] as const) {
+      c.strokeStyle = color; c.lineWidth = width; c.beginPath();
+      for (let i = 0; i <= 160; i++) { const p = trackPoint(i / 160 * TRACK.length), [x, y] = this.minimapPoint(p.x, p.z); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); }
+      c.closePath(); c.stroke();
+    }
+    const a = trackPoint(TRACK.start, -6), b = trackPoint(TRACK.start, 6), [ax, ay] = this.minimapPoint(a.x, a.z), [bx, by] = this.minimapPoint(b.x, b.z);
+    c.strokeStyle = '#f3eee0'; c.lineWidth = 3; c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke();
+    this.minimapTrack = canvas;
+    document.querySelector('.map-card span')!.textContent = `${Math.round(TRACK.length)} m · STADIONRING`;
   }
 
   private togglePause(): void {
@@ -349,7 +373,7 @@ class App {
         const countdown = !LAB_WORLD && this.racePhase === 'countdown';
         if (countdown) {
           const before=Math.ceil(this.countdown-.4);this.countdown -= FIXED_STEP;
-          if(this.countdown<=0){this.racePhase='race';this.audio.cue('start');}
+          if(this.countdown<=0){this.racePhase='race';this.audio.cue('start');this.testScene?.celebrate?.('start');}
           else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before)this.audio.cue('countdown');
         }
         if (!countdown && this.racePhase !== 'finished') {
@@ -399,7 +423,7 @@ class App {
           }
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
-            this.audio.cue('finish');
+            this.audio.cue('finish');this.testScene?.celebrate?.('finish');
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;

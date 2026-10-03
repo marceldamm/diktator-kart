@@ -1,53 +1,101 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
+import { BUMP_PROGRESS, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
-export const TRACK = { radius: 32, straight: 120, halfWidth: 7.5, length: 240 + 64 * Math.PI };
+const built = sampleTrack();
+const SAMPLES = built.samples;
+export const TRACK = { halfWidth: TRACK_HALF_WIDTH, length: built.length, start: START_PROGRESS, samples: SAMPLES };
 export const wrap = (s: number) => ((s % TRACK.length) + TRACK.length) % TRACK.length;
+const signedGap = (s: number) => { const d = wrap(s); return d > TRACK.length / 2 ? d - TRACK.length : d; };
 
-/** Clockwise in progress space: north on the eastern straight, west at the stadium. */
-export function trackPoint(progress: number, lane = 0): { x: number; z: number; heading: number } {
-  const s = wrap(progress), r = TRACK.radius + lane, half = TRACK.straight / 2;
-  if (s < 120) return { x: r, z: -half + s, heading: 0 };
-  if (s < 120 + Math.PI * 32) {
-    const a = (s - 120) / 32;
-    return { x: r * Math.cos(a), z: half + r * Math.sin(a), heading: -a };
-  }
-  if (s < 240 + Math.PI * 32) return { x: -r, z: half - (s - 120 - Math.PI * 32), heading: -Math.PI };
-  const a = (s - 240 - Math.PI * 32) / 32;
-  return { x: -r * Math.cos(a), z: -half - r * Math.sin(a), heading: -Math.PI - a };
+// Uniform hash grid over centreline samples for nearest-segment lookup.
+const CELL = 6;
+const grid = new Map<string, number[]>();
+SAMPLES.forEach((p, i) => {
+  const key = `${Math.floor(p.x / CELL)},${Math.floor(p.z / CELL)}`;
+  const list = grid.get(key) ?? []; list.push(i); grid.set(key, list);
+});
+
+function sampleIndexAt(s: number): number {
+  const target = wrap(s);
+  let lo = 0, hi = SAMPLES.length - 1;
+  while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (SAMPLES[mid].s <= target) lo = mid; else hi = mid - 1; }
+  return lo;
 }
 
-export function trackProgress(x: number, z: number): number {
-  if (z > 60) return 120 + Math.atan2(z - 60, x) * 32;
-  if (z < -60) return wrap(240 + Math.PI * 32 + Math.atan2(-z - 60, -x) * 32);
-  return x >= 0 ? z + 60 : 120 + Math.PI * 32 + 60 - z;
+/** Centre point, heading and lane offset (positive = driver's right) at a progress distance. */
+export function trackPoint(progress: number, lane = 0): { x: number; z: number; heading: number } {
+  const s = wrap(progress), i = sampleIndexAt(s), a = SAMPLES[i], b = SAMPLES[(i + 1) % SAMPLES.length];
+  const span = (i + 1 < SAMPLES.length ? b.s : TRACK.length) - a.s, f = span > 0 ? (s - a.s) / span : 0;
+  const turn = Math.atan2(Math.sin(b.heading - a.heading), Math.cos(b.heading - a.heading));
+  const heading = a.heading + turn * f;
+  const x = a.x + (b.x - a.x) * f, z = a.z + (b.z - a.z) * f;
+  return { x: x + Math.cos(heading) * lane, z: z - Math.sin(heading) * lane, heading };
+}
+
+/** Nearest centreline progress and signed lateral offset for any world position. */
+export function trackLocate(x: number, z: number): { s: number; lane: number } {
+  const cx = Math.floor(x / CELL), cz = Math.floor(z / CELL);
+  let best = -1, bestDistance = Infinity;
+  for (let ring = 1; ring <= 6 && best < 0; ring += 2) {
+    for (let dx = -ring; dx <= ring; dx++) for (let dz = -ring; dz <= ring; dz++) {
+      for (const i of grid.get(`${cx + dx},${cz + dz}`) ?? []) {
+        const d = (SAMPLES[i].x - x) ** 2 + (SAMPLES[i].z - z) ** 2;
+        if (d < bestDistance) { bestDistance = d; best = i; }
+      }
+    }
+  }
+  if (best < 0) SAMPLES.forEach((p, i) => { const d = (p.x - x) ** 2 + (p.z - z) ** 2; if (d < bestDistance) { bestDistance = d; best = i; } });
+  let result = { s: SAMPLES[best].s, lane: 0 }; let closest = Infinity;
+  for (const i of [(best - 1 + SAMPLES.length) % SAMPLES.length, best]) {
+    const a = SAMPLES[i], b = SAMPLES[(i + 1) % SAMPLES.length];
+    const ex = b.x - a.x, ez = b.z - a.z, len2 = ex * ex + ez * ez || 1;
+    const t = Math.max(0, Math.min(1, ((x - a.x) * ex + (z - a.z) * ez) / len2));
+    const px = a.x + ex * t, pz = a.z + ez * t, d = Math.hypot(x - px, z - pz);
+    if (d < closest - 1e-12) {
+      closest = d;
+      const span = (i + 1 < SAMPLES.length ? b.s : TRACK.length) - a.s;
+      const len = Math.sqrt(len2), side = ((x - px) * ez - (z - pz) * ex) / len;
+      result = { s: wrap(a.s + span * t), lane: side };
+    }
+  }
+  return result;
+}
+
+export function trackProgress(x: number, z: number): number { return trackLocate(x, z).s; }
+
+/** Largest absolute centreline curvature in [from, from + distance]. */
+export function curvatureAhead(from: number, distance: number): { curvature: number; sign: number } {
+  let best = 0, sign = 0;
+  for (let d = 0; d <= distance; d += 1.5) {
+    const k = SAMPLES[sampleIndexAt(from + d)].curvature;
+    if (Math.abs(k) > best) { best = Math.abs(k); sign = Math.sign(k); }
+  }
+  return { curvature: best, sign };
 }
 
 export function trackHeightAt(x: number, z: number): number {
-  const s = trackProgress(x, z), delta = Math.abs(s - 65);
-  return delta < 4 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0;
+  const { s, lane } = trackLocate(x, z), delta = Math.abs(signedGap(s - BUMP_PROGRESS));
+  return delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0;
 }
 
 export const projectTrack: WorldProjection = (x, z) => {
-  const cy = Math.max(-60, Math.min(60, z));
-  const dx = x, dz = z - cy;
-  const distance = Math.hypot(dx, dz);
+  const { s, lane } = trackLocate(x, z);
   const safe = TRACK.halfWidth - KART_TUNING.collisionRadius;
-  const target = Math.max(TRACK.radius - safe, Math.min(TRACK.radius + safe, distance));
-  if (Math.abs(distance - target) < .00001) return { x, z, normalX: 0, normalZ: 0, kind: null };
-  const nx = distance > .001 ? dx / distance : 1, nz = distance > .001 ? dz / distance : 0;
-  const sign = target > distance ? 1 : -1;
-  return { x: nx * target, z: cy + nz * target, normalX: nx * sign, normalZ: nz * sign, kind: 'boundary' };
+  if (Math.abs(lane) <= safe + 1e-7) return { x, z, normalX: 0, normalZ: 0, kind: null };
+  const sign = Math.sign(lane), p = trackPoint(s, sign * safe);
+  // Normal points back toward the centreline.
+  return { x: p.x, z: p.z, normalX: -sign * Math.cos(p.heading), normalZ: sign * Math.sin(p.heading), kind: 'boundary' };
 };
 
 export function gridKart(index: number): KartState {
-  const p = trackPoint(22 - Math.floor(index / 2) * 4.3, index % 2 ? 1.65 : -1.65);
+  const p = trackPoint(START_PROGRESS - 3.5 - Math.floor(index / 2) * 4.6, index % 2 ? 1.9 : -1.9);
   return { ...initialKartState(), ...p, travelHeading: p.heading };
 }
 
 // Everyone recovers at their current track progress; no free metres or laps.
 export function recoverKart(state: KartState, others: KartState[]): KartState {
   const s = trackProgress(state.x,state.z);
-  const lanes = [-3.5,0,3.5].map(lane=>({lane,p:trackPoint(s,lane)}));
+  const lanes = [-3,0,3].map(lane=>({lane,p:trackPoint(s,lane)}));
   lanes.sort((a,b)=> {
     const clearance=(p:{x:number;z:number})=>Math.min(20,...others.filter(o=>o!==state).map(o=>Math.hypot(p.x-o.x,p.z-o.z)));
     return clearance(b.p)-clearance(a.p);
@@ -56,25 +104,53 @@ export function recoverKart(state: KartState, others: KartState[]): KartState {
   return {...initialKartState(),...p,travelHeading:p.heading};
 }
 
+/** Shared bot driver: racing lane choice, corner braking, traffic and drift-boost through tight bends. */
 export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {
-  const s = trackProgress(state.x, state.z);
-  const currentLane = Math.hypot(state.x, state.z - Math.max(-60, Math.min(60, state.z))) - 32;
-  const lanes = [-3.5, 0, 3.5];
-  const traffic = others.filter((other) => other !== state).map((other) => ({
-    ahead: wrap(trackProgress(other.x, other.z) - s),
-    lane: Math.hypot(other.x, other.z - Math.max(-60, Math.min(60, other.z))) - 32,
-    speed: other.speed,
-  })).filter((other) => other.ahead > .05 && other.ahead < 14);
-  const score = (lane: number) => Math.abs(lane - currentLane) * .35 + Math.abs(lane - lanes[index % 3]) * .12 +
+  const { s, lane: currentLane } = trackLocate(state.x, state.z);
+  const speed = Math.abs(state.speed);
+  const corner = curvatureAhead(s + 2, 10 + speed * 1.1);
+  const radius = 1 / Math.max(corner.curvature, 1e-3);
+  const lanes = [-2.8, 0, 2.8];
+  const traffic = others.filter((other) => other !== state).map((other) => {
+    const p = trackLocate(other.x, other.z);
+    return { ahead: wrap(p.s - s), lane: p.lane, speed: other.speed };
+  }).filter((other) => other.ahead > .05 && other.ahead < 14);
+  // Inside lane through bends (positive curvature turns right), personal lane on straights.
+  const preferred = radius < 30 ? corner.sign * 2.8 : lanes[index % 3];
+  const score = (lane: number) => Math.abs(lane - currentLane) * .35 + Math.abs(lane - preferred) * .14 +
     traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.7 ? (14 - t.ahead) * 2 : 0), 0);
   const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
-  const target = trackPoint(s + 8 + Math.abs(state.speed) * .4, lane);
+  const target = trackPoint(s + 6.5 + speed * .38, lane);
   const desired = Math.atan2(target.x - state.x, target.z - state.z);
   const error = Math.atan2(Math.sin(desired - state.heading), Math.cos(desired - state.heading));
-  const steering = Math.max(-1, Math.min(1, error * 2.1));
-  let desiredSpeed = 13.2 + (index % 3) * .55 - Math.abs(error) * 3;
+  const steering = Math.max(-1, Math.min(1, error * 2.3));
+  const pace = 13.4 + (index % 3) * .5;
+  const cornerSpeed = radius >= 11 ? pace : Math.max(8.5, radius * 1.05 + 2.5);
+  let desiredSpeed = Math.min(pace, cornerSpeed) - Math.abs(error) * 2.5;
   for (const t of traffic) if (t.ahead < 5 && Math.abs(t.lane - currentLane) < 2.5) desiredSpeed = Math.min(desiredSpeed, Math.max(1, t.speed - 1));
-  return { throttle: state.speed > desiredSpeed + .5 ? -.12 : .9, steering };
+  const throttle = speed > desiredSpeed + .5 ? -.12 : .9;
+  // Facing a barrier at walking pace: back out with reversed steering instead of pushing into it.
+  const centre = trackPoint(s), towardWall = Math.sin(state.heading - centre.heading) * Math.sign(currentLane);
+  if (towardWall > .4 && speed < 4 && Math.abs(currentLane) > 3.2 && !state.drifting)
+    return { throttle: -.8, steering: Math.sign(currentLane) };
+  // Drift-boost: hop into a committed tight bend, hold while charging, release once the bend opens.
+  const tight = radius < 17 && speed > 9 && Math.abs(currentLane) < 4.2;
+  if (state.drifting) {
+    const near = curvatureAhead(s + 1, 7), outward = -currentLane * state.driftDirection;
+    const opening = near.curvature < 1 / 24 || near.sign !== state.driftDirection;
+    const against = error * state.driftDirection < -.3;
+    const release = against || outward > 3.4 || state.driftCharge >= KART_TUNING.driftChargeTime && (opening || outward > 2.6);
+    const driftSteer = Math.max(-1, Math.min(1, state.driftDirection * (.45 + Math.max(0, outward - .8) * .35) + error * 1.6));
+    return { throttle: .9, steering: release ? steering : driftSteer, hopDrift: !release };
+  }
+  if (state.hopRemaining > 0) {
+    const committed = tight && Math.sign(steering) === corner.sign;
+    return { throttle: .9, steering: committed ? corner.sign * Math.max(.5, Math.abs(steering)) : steering, hopDrift: committed };
+  }
+  // Two of three bots are drifters; the third keeps grip, so the field races with different lines.
+  if (tight && index % 3 !== 1 && Math.abs(steering) > .35 && Math.sign(steering) === corner.sign)
+    return { throttle: .9, steering, hopDrift: true, hopPressed: true };
+  return { throttle, steering };
 }
 
 export interface RaceProgress { last: number; distance: number; finished: boolean; finishTime: number | null }
@@ -89,15 +165,13 @@ export function rankRace(progress:RaceProgress[]):number[] {
 }
 export function createRaceProgress(state: KartState): RaceProgress {
   const last = trackProgress(state.x, state.z);
-  return { last, distance: last - 22, finished: false, finishTime: null };
+  return { last, distance: signedGap(last - START_PROGRESS), finished: false, finishTime: null };
 }
 export function advanceRace(race: RaceProgress, state: KartState, time: number): void {
   if (race.finished) return;
   const next = trackProgress(state.x, state.z);
-  let delta = next - race.last;
-  if (delta < -TRACK.length / 2) delta += TRACK.length;
-  if (delta > TRACK.length / 2) delta -= TRACK.length;
-  // Never award teleport progress or a jump between the two straights.
+  const delta = signedGap(next - race.last);
+  // Never award teleport progress or a jump between neighbouring track sections.
   if (Math.abs(delta) < 3) race.distance = Math.max(-TRACK.length, race.distance + delta);
   race.last = next;
   if (race.distance >= TRACK.length * 3) { race.finished = true; race.finishTime = time; }

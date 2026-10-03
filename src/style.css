@@ -135,3 +135,13 @@ button:disabled { opacity: .5; cursor: default; }
 .photo-mode #touch-controls { display:none !important; }
 .showcase.start-error #status,.showcase.start-error #message { display:block; }
 @media(max-width:900px) { .showcase .brand { top:18px; left:18px; } .brand div { display:none; } .showcase .race-hud { top:16px; padding:9px 14px; } .race-stats { gap:16px; } .race-stats b { font-size:20px; } .showcase .map-card { width:90px; right:14px; top:16px; } #minimap { width:75px; height:115px; } .showcase .panel { right:14px; bottom:14px; width:200px; } .showcase #debug { left:14px; width:min(365px,90vw); } }
+/* Race HUD: only what matters while driving. Buttons and help return in practice, pause and menu. */
+.racing .showcase-controls, .racing .panel .actions, .racing #camera-mode, .racing #options-anchor, .racing .credits { display: none !important; }
+.showcase.racing .panel { width: 190px; padding: 12px 16px 10px; background: linear-gradient(135deg,#142a30d9,#101d21cc); }
+.showcase.racing #speed { font: italic 600 38px/1 Georgia, serif; letter-spacing: -.02em; }
+.showcase.racing .brand { opacity: .78; }
+.showcase.racing .brand div span { display: none; }
+#countdown { animation: count-pop .9s ease-out infinite; }
+@keyframes count-pop { 0% { transform: translate(-50%,-50%) scale(1.35); opacity: 0; } 18% { opacity: 1; } 100% { transform: translate(-50%,-50%) scale(1); opacity: .92; } }
+@media(prefers-reduced-motion:reduce) { #countdown { animation: none; } }
+.showcase.racing #speed { white-space: nowrap; }
