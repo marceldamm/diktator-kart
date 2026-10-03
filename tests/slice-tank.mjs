@@ -6,7 +6,8 @@ const dk = (expr) => evaluate(`(()=>{const d=window.__DK;return ${expr};})()`);
 const result = {};
 try {
   await send('Runtime.enable'); await send('Emulation.setDeviceMetricsOverride', { width: 1600, height: 1000, deviceScaleFactor: 1, mobile: false });
-  await load(); await evaluate(`document.querySelector('#menu-race').click()`); await delay(4300);
+  await load(); await evaluate(`document.querySelector('#menu-race').click()`);
+  for (let i = 0; i < 80 && await dk('d.phase') !== 'race'; i++) await delay(150);
   assert.equal(await dk('d.bots.length + 1'), 6);
   await tap('q', 'KeyQ', 81); await delay(500);
   result.active = await dk('d.kart.tankRemaining'); assert.ok(result.active > 7, 'tank did not start');
