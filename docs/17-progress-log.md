@@ -351,6 +351,28 @@
 
 **Empfohlenes Modell:** Sol für Fahrkernkorrekturen; Astra bei schwerer M2-Abnahmeentscheidung.
 
+### 2026-10-03 – M2-Abnahmefelder präzisiert
+
+**Ziel:** Die noch offene M2-Gesamtabnahme so fassen, dass technische Tests nicht mit menschlichem Fahrgefühl oder Zielhardwareleistung verwechselt werden.
+
+**Modell / Arbeitsmodus:** reine Dokumentationsfortsetzung auf `babylon-neustart-2026` nach M2j; keine neue Spielregel und keine Änderung an Performancezielen oder Sarahs Ideen.
+
+**Erledigt:** Dokument 09 enthält ein M2-Prüfprotokoll für Start/Regeln, Sechs-Kart-Stabilität, Fahrgefühl/Kontakte, drei Kameras, normalen/schwächeren PC und eine mobile Frühprobe. `START-HERE.md` verweist auf die nötigen Geräte- und Beobachtungsdaten; Dokument 16 und 12 halten die Abnahmegrenze fest.
+
+**Verifiziert:** Die eingetragenen technischen Befunde entsprechen den lokalen Modell-, Browser- und RTX-Proben aus M2f–j. Dokument 04 wurde gegen die unveränderten vorläufigen Ziele 60 FPS Standard und stabile 30 FPS auf schwächerer Hardware geprüft. Dokument 10 wurde auf offene Geräte-/Touchfragen geprüft; die bestätigten 15 Grundsatzentscheidungen bleiben unverändert.
+
+**Nicht verifiziert:** menschliche Bewertung von Fahrgefühl und Kamerakomfort, normale/schwächere PC-Leistung und mobile Start-/Eingabeprüfung. Kein M2-Abnahmehaken wurde für diese Punkte gesetzt.
+
+**Geänderte Dateien:** `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/09-roadmap.md`, `docs/16-production-blueprint.md`, `docs/12-decision-log.md`, `docs/17-progress-log.md`.
+
+**Neue Entscheidungen:** getrennte, belegpflichtige M2-Abnahmefelder; Begründung in Dokument 12. Keine Senkung der FPS-Ziele und keine Vorverlegung der vollständigen Mobilabnahme aus M7.
+
+**Offene Probleme:** Für die nächsten Abnahmeschritte werden ein menschlicher Fahrer und ein normaler PC benötigt; schwächere/Mobilgeräte sind noch nicht als Testplätze benannt. GitHub-Upload bleibt ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** Den menschlichen Fahrcheck und eine normale-PC-Messung gemäß Dokument 09 durchführen; daraus konkrete M2-Korrekturen oder die M2-Entscheidung ableiten.
+
+**Empfohlenes Modell:** Sol für beobachtete Fahr-/Kamerafehler; Astra bei widersprüchlicher Gesamtabnahme.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

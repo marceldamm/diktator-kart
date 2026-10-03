@@ -58,6 +58,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **M2j-Korrektur, 03.10.2026:** Der Sechs-Kart-Stresstest fand und beseitigte im geprüften Pfad das Eindringen in den markierten Block nach Fahrzeugstößen. Wiederholte Positionskorrektur ist weiter nur eine Arcade-Näherung; menschlicher Fahrcheck, echte Zielgeräte und repräsentative Strecke bleiben vor M2-Abschluss offen.
 
+**Abnahmeführung:** Das getrennte M2-Prüfprotokoll in `09-roadmap.md` hält technische Belege, menschliches Fahr-/Kameraurteil und Gerätewerte auseinander. Ohne praktische Beurteilung und erste normale-PC-Messung wird M2 nicht als abgeschlossen markiert; fehlende schwächere/Mobilgeräte bleiben als offene Zielplattformprüfung sichtbar.
+
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 
 ### M3 – Erster Vertical Slice

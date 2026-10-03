@@ -22,6 +22,19 @@ Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verf
 
 **Abnahme:** Fahr- und Kameraverhalten geprüft, erste Lastmessungen mit sechs Fahrzeugen.
 
+**M2-Abnahmeprotokoll:** Die folgenden Punkte werden getrennt bewertet. Ein bestandener Modell- oder Headless-Test ersetzt kein menschliches Fahrgefühlurteil und keine Messung auf normaler Zielhardware.
+
+| Prüffeld | Konkreter Nachweis | Stand |
+|---|---|---|
+| Start und Grundregeln | Ein-Klick-Start, Build, Eingaben, Pause/Neustart; Modell- und Browserchecks für Fahren, Hop, Drift, Turbo, Federung und Kontakte | technisch geprüft |
+| Stabilität mit sechs Karts | mindestens 60 s Simulationslauf ohne ungültigen Zustand; Browser-Neustart ohne Meshwachstum; Kamerawechsel und Kontaktfälle sichtbar | auf RTX-Entwicklungsgerät geprüft |
+| Fahrgefühl und Kontakt | Mensch fährt geradeaus, Kurven, Hop/Drift/Turbo sowie Rand-, Block- und Fahrzeugkontakt; beurteilt Lenkbarkeit, Rückmeldung und Wiederanfahrt in eigenen Worten | offen |
+| Alle drei Kameras | Mensch prüft nahe/ferne Verfolger- und Fahrerperspektive bei Kurve, Hop, Drift und Kontakt auf Sicht, Ruhe und störende Verdeckung | offen |
+| Normale/schwächere PC-Hardware | Gerät/GPU, Chrome-Version, Auflösung, Grafikmodus, 1/6 Karts und drei Kameras protokollieren; vorläufiges Ziel aus Dokument 04: 60 FPS Standard, stabil 30 FPS auf schwächerer Hardware | offen; RTX-Headless ersetzt dies nicht |
+| Mobile Frühprobe | Android/iPhone im Querformat mit Start, Sichtbarkeit und Eingabe prüfen, sobald Testgeräte/Touchsteuerung vorhanden sind; vollständige mobile Abnahme bleibt M7 | offen |
+
+Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und eine erste Messung auf einem normalen PC tatsächlich beurteilt sein. Fehlende schwächere/Mobilgeräte bleiben ausdrücklich offen; ihre Leistungsziele werden dadurch nicht abgesenkt. Gerät, Datum, Beobachtung und Beleg gehören in `17-progress-log.md`; daraus folgende Änderungen werden als einzelne M2-Korrekturen geplant.
+
 **Zwischenstand M2a, 03.10.2026:** Steuerbares Test-Kart, begrenzte Fläche, getrennte Fahrzustands-/Darstellungs-/Kamerabausteine, Browserprüfung und gezielte Modelltests vorhanden. Hop, Drift und Mini-Turbo waren zu diesem Zeitpunkt noch offen und wurden in M2b ergänzt. Federung, drei echte Kameras, sechs Fahrzeuge und Lastmessung fehlen weiterhin.
 
 **Zwischenstand M2b, 03.10.2026:** Hop, aufladbarer Drift und befristeter Mini-Turbo sind im Fahrmodell und Browser-Test sichtbar. Sieben Modell-/Eingabetests sowie ein Chrome-Test mit gehaltenen Tasten prüfen die Übergänge, Pause und Neustart. Federung, Untergründe, drei echte Kameras, sechs Fahrzeuge und Lastmessung fehlen für die M2-Gesamtabnahme.

@@ -29,7 +29,7 @@ verifiziert, offen und nächsten Schritt.
 
 ## Wo stehen wir?
 
-**Heute:** M1 geprüft; M2a–h liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt. Ein vollständiges Rennen existiert noch nicht.
+**Heute:** M1 geprüft; M2a–j liefern ein steuerbares Test-Kart mit Hop, Drift, Mini-Turbo, Federung, drei Kameras, fünf bewegten Lastkarts und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt. Ein vollständiges Rennen existiert noch nicht.
 
 **Aktueller Meilenstein:** M2 – Fahrprototyp.
 
@@ -67,6 +67,8 @@ Diese Beobachtungen ergänzen die automatischen Tests; ein angenehmes Fahrgefüh
 6. **P** für Pause und **R** für Neustart verwenden. Komfort, Sicht und unfaire Blockaden konkret notieren.
 
 Bitte nur tatsächlich beobachtete Punkte als bestanden markieren. Komfort, Zielhardware und Cockpitqualität sind noch nicht abgenommen.
+
+Die getrennten technischen und menschlichen M2-Abnahmepunkte stehen in [docs/09-roadmap.md](docs/09-roadmap.md). Für Rückmeldungen bitte Gerät/GPU, Chrome-Version, Auflösung und die konkrete Beobachtung nennen; fehlende Geräte bleiben offen.
 
 **Modell jetzt:** Sol, hohe Denkintensität.
 

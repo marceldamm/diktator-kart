@@ -67,7 +67,7 @@ Alte Technik ist keine Autorität für die neue Architektur.
 
 - Wissensbasis: angelegt und quergeprüft
 - Altideen: Fahrer, Karts, Items, Bots, Drift, Audio, Streckenideen sowie Kostümvarianten, Team-Boni und individuelle Details aus den bekannten Altquellen extrahiert; Altarchiv bleibt für spätere Rückfragen erhalten
-- Babylon.js: M1-Technikgrundstand und M2a–h-Test-Kart mit Beschleunigung, Bremse, Rückwärtsfahrt, Lenkung, Hop, Drift, Mini-Turbo, Federung, drei Test-Kameramodi, fünf bewegten Lastfahrzeugen und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt im Projektroot implementiert; Rennbots, vollständige Streckenkollision und Rennregeln folgen
+- Babylon.js: M1-Technikgrundstand und M2a–j-Test-Kart mit Beschleunigung, Bremse, Rückwärtsfahrt, Lenkung, Hop, Drift, Mini-Turbo, Federung, drei Test-Kameramodi, fünf bewegten Lastfahrzeugen und vorläufigem Rand-, Hindernis- und Fahrzeugkontakt im Projektroot implementiert; Rennbots, vollständige Streckenkollision und Rennregeln folgen
 - Itemumsetzung: konzeptionelle Produktionsmatrix in `15-item-feasibility-and-production.md`; technische Machbarkeit und Balance noch nicht praktisch verifiziert
 - Bauplan: in `16-production-blueprint.md`
 - Laufende Historie: in `17-progress-log.md`

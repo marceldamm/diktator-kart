@@ -64,7 +64,7 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 ## Aktueller Status
 
 - Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
-- Babylon.js-Neuentwicklung: **M1 geprüft; M2a–h mit Fahrkern, Federung, drei Kameras, Sechs-Fahrzeug-Technikprobe sowie Rand-, Hindernis- und Fahrzeugkontakt lokal umgesetzt und geprüft**
+- Babylon.js-Neuentwicklung: **M1 geprüft; M2a–j mit Fahrkern, Federung, drei Kameras, Sechs-Fahrzeug-Technikprobe sowie vorläufigem Rand-, Hindernis- und Fahrzeugkontakt lokal umgesetzt und geprüft**
 - Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - Alte technische Implementierung: **nicht übernommen**
 - Nächster Schritt: M2-Abnahmelücken mit menschlichem Fahrcheck, normalem/schwächerem PC und Mobilgeräten prüfen; die vorläufigen Kollisionsformen und Kameras dabei bewerten. Auftrag in [START-HERE.md](START-HERE.md).

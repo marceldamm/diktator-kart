@@ -40,6 +40,7 @@
 | 2026-10-03 | M2h: gleichmäßige Trennung zweier Kart-Umkreise und identischer kurzer Kontaktzustand für Spieler und Lastkart; `?scenario=contact` als Gegenverkehrsprobe. | Die noch offene Fahrzeugkontaktlücke wird im reinen Fahrmodell reproduzierbar geprüft. Es ist eine vorläufige technische Näherung ohne Renn-KI oder fertige Kollisionsphysik. | README, 00, 03, 04, 07, 09, 16, 17, START-HERE |
 | 2026-10-03 | M2i: `?webgl=1` erzwingt nur für eine Kompatibilitätsprobe den bereits vorgesehenen WebGL1-Engine-Pfad. | Der Fallback-Renderpfad soll sichtbar und automatisch prüfbar sein; daraus wird kein neues Mindestgerät und keine Zielhardware-Abnahme abgeleitet. | 03, 04, 09, 16, 17, START-HERE |
 | 2026-10-03 | M2j: dieselbe Testflächenprojektion wird nach Fahrzeugkontakten bis zu viermal mit der paarweisen Trennung wiederholt. | Ein 60-s-Stresstest wies Blockeindringen nach M2h nach; die Korrektur entfernt es im geprüften Pfad ohne neue Physikbibliothek oder geändertes Performanceziel. | 03, 04, 07, 09, 16, 17, START-HERE |
+| 2026-10-03 | M2-Abnahme wird in technische Stabilität, menschliches Fahr-/Kameraurteil und normale-PC-Messung getrennt protokolliert; mobile Vollabnahme bleibt M7. | Headless-RTX-Befunde dürfen die verbindliche Fahr- und Zielhardwareprüfung nicht stillschweigend ersetzen. Die 60-/30-FPS-Planungsziele aus Dokument 04 bleiben bestehen. | 04, 09, 16, 17, START-HERE |
 
 ## Pflegehinweis
 
