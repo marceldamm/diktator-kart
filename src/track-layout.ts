@@ -88,6 +88,8 @@ export const LANDMARKS = {
   trees: [[24, 40], [-14, 60], [28, 2], [-6, 40], [-20, 20], [30, -16]] as const,
   /** Progress of the boulevard gate the circuit drives through. */
   gateProgress: 318,
+  /** Lawn islands [x0, z0, x1, z1] inside the circuit; the rest of the city floor is paved. */
+  lawns: [[-14, -6, 34, 62], [-42, -76, -28, -50]] as const,
   /** Width of the promenade strip behind each barrier, in metres. */
   promenade: 5,
 };

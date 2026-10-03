@@ -191,6 +191,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     sparks.direction1 = new Vector3(-1.5, .3, -1.5); sparks.direction2 = new Vector3(1.5, 1.5, 1.5);
     sparks.gravity = new Vector3(0, -4, 0); sparks.colorDead = new Color4(1, .4, .05, 0); sparks.start();
     let reducedEffects = false;
+    const boostFire = new ParticleSystem('Turbo exhaust fire', 160, scene); boostFire.particleTexture = particleTexture(scene);
+    boostFire.blendMode = ParticleSystem.BLENDMODE_ADD; boostFire.minSize = .12; boostFire.maxSize = .32; boostFire.minLifeTime = .08; boostFire.maxLifeTime = .2;
+    boostFire.color1 = new Color4(1, .72, .28, 1); boostFire.color2 = new Color4(.45, .8, 1, 1); boostFire.colorDead = new Color4(1, .3, .05, 0);
+    boostFire.minEmitPower = 1.5; boostFire.maxEmitPower = 3; boostFire.emitRate = 0; boostFire.start();
     const skids = new SkidMarks(scene, loadKartCount + 1);
     const confetti = createConfetti(scene);
     let pipeline: DefaultRenderingPipeline | undefined, pipelineLevel = quality;
@@ -251,7 +255,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           contactShadows[index].visibility=Math.max(.15,1-s.height*.9);
           v.root.position.set(s.x, s.height + s.suspensionOffset, s.z); v.root.rotation.y = s.heading;
           v.root.rotation.x = -s.bodyPitch + s.impactVelocityZ * .035;
-          v.root.rotation.z = s.bodyRoll + (s.drifting ? -s.driftDirection * .055 : 0);
+          const slip = Math.sin(s.heading - s.travelHeading);
+          v.root.rotation.z = s.bodyRoll + (s.drifting ? -s.driftDirection * .055 : 0) + (s.grounded ? Math.max(-.07, Math.min(.07, slip * Math.abs(s.speed) * .012)) : 0);
+          // Visible weight: compress on landing and suspension dips, stretch slightly at the hop apex.
+          const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
+          v.root.scaling.set(1 - squash * .5, 1 + squash, 1 - squash * .5);
           v.rotation += s.speed * dt / .33;
           v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? Math.sin(s.heading - s.travelHeading) * .6 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
@@ -270,7 +278,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           ...visuals.filter(v=>Math.hypot(v.root.position.x-state.x,v.root.position.z-state.z)<45).flatMap(v=>v.shadowMeshes),
           ...itemShadowMeshes.filter(mesh=>mesh.isEnabled())];
         const back = new Vector3(state.x - Math.sin(state.heading), .2 + state.height, state.z - Math.cos(state.heading));
-        dust.emitter = back; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 20 : 90 : reducedEffects ? 0 : 8 : 0;
+        dust.emitter = back;
+        boostFire.emitter = new Vector3(state.x - Math.sin(state.heading) * 1.75, .62 + state.height, state.z - Math.cos(state.heading) * 1.75);
+        boostFire.direction1 = new Vector3(-Math.sin(state.heading) * 2 - .3, .2, -Math.cos(state.heading) * 2 - .3);
+        boostFire.direction2 = new Vector3(-Math.sin(state.heading) * 3 + .3, .5, -Math.cos(state.heading) * 3 + .3);
+        boostFire.emitRate = state.turboRemaining > 0 ? reducedEffects ? 40 : 150 : 0; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 20 : 90 : reducedEffects ? 0 : 8 : 0;
         sparks.emitter = back.add(new Vector3(Math.cos(state.heading) * .85, 0, -Math.sin(state.heading) * .85));
         const scraping = state.scrapeRemaining > 0 || state.impactRemaining > 0;
         sparks.emitRate = state.drifting || scraping ? reducedEffects ? 20 : scraping ? 120 : 70 : 0;

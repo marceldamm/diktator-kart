@@ -101,12 +101,20 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     return [tone, tone * .985, tone * .96];
   } });
 
-  // City ground: lawn between the promenades; Blender plazas and podiums sit on top.
+  // City ground: a paved square everywhere; lawn only on the bounded park islands.
+  const square = pbr(scene, 'City square paving', '#b9ab8f', 0, 1);
+  square.albedoTexture = new Texture('/assets/textures/herringbone-diff.jpg', scene);
+  square.bumpTexture = new Texture('/assets/textures/herringbone-nor_gl.jpg', scene);
+  for (const t of [square.albedoTexture, square.bumpTexture] as Texture[]) { t.uScale = t.vScale = 130; t.anisotropicFilteringLevel = 8; }
+  const ground = MeshBuilder.CreateGround('Park and city terrain', { width: 520, height: 520 }, scene);
+  ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
   const lawn = pbr(scene, 'Park lawn', '#4d5f3a', 0, .95);
   const lawnMaps = surfaceTextures(scene, 'Lawn', 'grass'); lawn.albedoTexture = lawnMaps.color; lawn.bumpTexture = lawnMaps.normal;
-  lawnMaps.color.uScale = lawnMaps.color.vScale = 160; lawnMaps.normal.uScale = lawnMaps.normal.vScale = 160;
-  const ground = MeshBuilder.CreateGround('Park and city terrain', { width: 520, height: 520 }, scene);
-  ground.material = lawn; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
+  lawnMaps.color.uScale = lawnMaps.color.vScale = 18; lawnMaps.normal.uScale = lawnMaps.normal.vScale = 18;
+  for (const [x0, z0, x1, z1] of LANDMARKS.lawns) {
+    const island = MeshBuilder.CreateGround('Park lawn island', { width: x1 - x0, height: z1 - z0 }, scene);
+    island.position.set((x0 + x1) / 2, .05, (z0 + z1) / 2); island.material = lawn; island.receiveShadows = true; island.isPickable = false; island.freezeWorldMatrix();
+  }
 
   // Painted kerbs and the start line.
   const kerbTexture = canvasTexture(scene, 'Kerb stripes', 256, 32, (c) => {
