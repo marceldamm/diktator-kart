@@ -6,6 +6,14 @@ Vorgesehene Zustände: Menü, Laden, Einführung, Countdown, Rennen, Pause, Ziel
 
 ## Fahrmodell
 
+**M2a-Implementierungsstand:** Ein prozedurales Test-Kart beschleunigt, bremst bis zur Rückwärtsfahrt, lenkt geschwindigkeitsabhängig, rollt aus und stoppt an der Testflächengrenze. Der Fahrzustand ist von Babylon-Darstellung und Kamera getrennt. Hop, Drift und Mini-Turbo waren zu diesem Zeitpunkt noch offen und wurden in M2b ergänzt; die vorläufigen Zahlen stehen in Dokument 03.
+
+**M2b-Implementierungsstand:** Space startet einen kurzen Hop. Nach der Landung leitet gehaltenes Space mit Lenkung bei ausreichender Vorwärtsfahrt einen Drift ein; gleichgerichtetes Lenken lädt ihn auf. Loslassen nach ausreichender Ladezeit aktiviert den befristeten Mini-Turbo, Bremsen bricht ihn ab. Die Fahrtrichtung folgt im Drift der Kartausrichtung verzögert, sodass sich die Trajektorie tatsächlich verändert. HUD-Text und zwei Leuchten am Test-Kart zeigen Hop, Driftladung und Turbo. Alle Werte sind vorläufig. Federung, Reifen-/Untergrundreaktionen und faire Botnutzung bleiben Folgearbeiten.
+
+**M2c–e-Implementierungsstand:** Zwei markierte Bodenwellen heben einzelne Räder anhand vier unabhängiger Kontaktpunkte. Ein gedämpftes Federungsmodell bewegt und neigt die Karosserie; Hop entkoppelt die Räder kurz vom Boden, die Landung gibt einen kleinen Federungsimpuls. Nahe/ferne Verfolgeransicht und eine einfache Fahrerperspektive lesen denselben Fahrzustand. Fünf automatisch gelenkte Lastfahrzeuge verwenden `advanceKart` mit denselben Fahrregeln, haben aber noch keine Renn-KI, Wegfindung oder Kollision untereinander. Die Bodenwellen verändern derzeit die Federung, nicht den Reifengrip oder das Tempo; solche Wirkungen brauchen einen eigenen Fahrtest.
+
+**M2f-Teilstand:** Am Testflächenrand stoppt das Kart mit einem kurzen, begrenzten Rückstoß und einer kleinen Karosserieneigung; Drift und Turbo werden beendet. Die Eingabe setzt nach 0,22 s wieder ein. Das ist eine vorläufige Randreaktion und kein allgemeines Kollision-/Schadenssystem.
+
 Das Fahrmodell soll Arcade-Charakter behalten, aber Gewicht, Grip, Federung, Drift, Sprung und Kontakt zum Boden glaubwürdig spürbar machen. Ziel ist ungefähr 6/10 Realismus. Kleine Steine, Bordsteinkanten und unterschiedliche Untergründe dürfen Räder und Kartkörper sichtbar reagieren lassen. Spieler und Bots verwenden dieselben grundlegenden Fahrregeln. Bot-Persönlichkeit beeinflusst Entscheidungen, nicht heimliche Beschleunigungs- oder Gripvorteile.
 
 Fahrprofile dürfen sich leicht unterscheiden. Drift, Hop/Sprung und Mini-Turbo sind verbindlich; Federung, Bodenhaftung und Untergründe liefern den glaubwürdigen Eindruck. Optische Schäden können bis Rennende bleiben; betroffene Reifen oder bestimmte Kollisionen können die Lenkung kurzzeitig beeinträchtigen. Spielwirksame Nachteile enden zuverlässig, auch wenn das beschädigte Bauteil sichtbar bleibt.

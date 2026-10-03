@@ -30,6 +30,8 @@ Jeder spielbare Zwischenstand braucht einen einfachen Startweg ohne Entwicklerko
 
 Für die Entwicklung ist eine Ein-Klick-Verknüpfung oder ein Launcher vorgesehen. Der genaue Mechanismus wird im ersten Babylon.js-Prototyp festgelegt. Eine Kommandozeile darf intern existieren, aber nicht der einzige Weg für den Nutzer sein.
 
+**M1-Umsetzung:** `Diktator-Kart-starten.cmd` im Projektroot doppelklicken. Der Starter prüft Chrome und Port 4173, installiert bei fehlenden lokalen Abhängigkeiten mit `npm ci`, startet Vite auf `127.0.0.1:4173` und öffnet Chrome automatisch. Das Konsolenfenster bleibt für den Serverstatus offen. Der finale Startweg wurde am 03.10.2026 lokal ausgeführt; Vite antwortete mit HTTP 200 und ein Chrome-Fenster mit dem Titel der M1-Testszene war sichtbar. Beim Schließen des Browsers endet der Server nicht automatisch; Strg+C im Starterfenster und die Windows-Rückfrage mit J beenden ihn.
+
 ## Lokale Arbeitsregel
 
 Aktiver Projektpfad: `D:\Diktator-Kart`. Das neue Projekt liegt direkt im Hauptverzeichnis. Das alte Spiel einschließlich seiner bisherigen lokalen Änderungen ist unter `Diktator-Kart-Legacy/` archiviert. Die schon vorhandene Legacy-Kopie bleibt dort zusätzlich in `Sicherung-vor-Umzug-2026-10-03/`. Die aktive `.git`-Verwaltung bleibt im Hauptverzeichnis. Der Umzug allein erzeugt keinen neuen Commit und keine GitHub-Veröffentlichung.

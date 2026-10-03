@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Diktator Kart · M2 Fahrtest</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="render-canvas" aria-label="Babylon.js-Testszene"></canvas>
+      <section class="panel" aria-live="polite">
+        <div class="eyebrow">DIKTATOR KART / M2 TEST</div>
+        <h1>M2 Fahrtest</h1>
+        <p id="status">Lade Projekt …</p>
+        <p id="message">Die Testszene wird vorbereitet.</p>
+        <p id="speed">0 km/h</p>
+        <p id="drive-mode">Bereit</p>
+        <p id="surface">Ebener Boden</p>
+        <p id="camera-mode">Verfolger nah</p>
+        <p id="fleet-count">6 Fahrzeuge im Techniktest</p>
+        <div class="actions">
+          <button id="pause" type="button" disabled>Pause</button>
+          <button id="restart" type="button" disabled>Neustart</button>
+          <button id="debug-toggle" type="button" disabled>Diagnose</button>
+        </div>
+        <p class="hint">W/↑ Gas · S/↓ Bremse/Rückwärts · A/D oder ←/→ Lenken<br>Space Hop; halten + lenken: Drift; geladen loslassen: Mini-Turbo<br>Türkise und orange Bodenwellen testen die Federung<br>C Kamera nah/fern/Fahrer · E Item · Q Fähigkeit · P Pause · R Neustart · F3 Diagnose</p>
+        <pre id="debug" hidden></pre>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

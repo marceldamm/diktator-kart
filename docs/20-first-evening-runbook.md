@@ -1,5 +1,7 @@
 # Runbook für den ersten richtigen Babylon.js-Abend
 
+**Historischer Vorbereitungsplan:** M1 wurde am 03.10.2026 umgesetzt und geprüft. Für den aktuellen Einstieg und den nächsten M2-Auftrag gilt `START-HERE.md`; die folgenden Zeitblöcke dokumentieren die damalige Planung.
+
 ## Ziel des Abends
 
 Am Ende des ersten Abends soll noch kein fertiges Spiel entstehen. Das Ziel ist ein überprüfter, startbarer Babylon.js-Grundstand mit sauberem Übergabepunkt für eine lange autonome Arbeit: Browserstart, Projektstruktur, Renderfläche, Eingabegrundlage, Diagnose, Dokumentationsstatus und klarer nächster Meilenstein.

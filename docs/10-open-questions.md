@@ -34,10 +34,10 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 
 ## Vor M1: konkrete Vorbereitungsaufgaben
 
-- [ ] Technischen Vorschlag für Babylon-Version, Build, Physikversuch und Launcher begründet festlegen. Aufgabe der KI, keine Frage nach Bibliotheksnamen an den Nutzer.
-- [ ] Git-Arbeitsbasis einschließlich abweichender alter Historie und offener lokaler Änderungen dokumentieren; main erst nach gesonderter Freigabe verändern.
+- [x] Technischen Vorschlag für Babylon-Version, Build, Physikversuch und Launcher begründet festlegen. Ergebnis in Dokument 03 und 12; Physik bleibt M2-Versuch.
+- [x] Git-Arbeitsbasis dokumentieren: Branch `babylon-neustart-2026` war vor M1 sauber und lag fünf Commits vor lokalem `main` (Vergleich `main...babylon-neustart-2026`: 0/5). Der Branch enthält gegenüber `main` absichtlich die neue Root-Struktur statt der alten Engine-Dateien; das Altprojekt bleibt lokal archiviert. M1 ist zunächst eine lokale Branch-Änderung ohne Übernahme nach `main`.
 - [x] Bei der Gesamtprüfung entdeckte Altideen (Kostümvarianten, Team-Boni, Farben, individuelle Details) mit Quellen in Dokument 14 gesichert; persönliche Herkunft einzelner bearbeiteter Ideen bleibt unbelegt.
-- [ ] Arbeitsauftrag M1 mit Ergebnis, Tests, Wiederaufnahmepunkt und nächstem Schritt formulieren. Diese Dokumentationsentscheidung startet noch keine Spielentwicklung.
+- [x] Arbeitsauftrag M1 in `START-HERE.md` formuliert und ausgeführt; Build, Chrome-Start, Fehlerpfad, Eingaben, Neustart und Launcher geprüft. Nächster Auftrag dort: M2-Arbeitspaket.
 
 ## Vor Art-Pilot / Performance-Abnahme
 
@@ -45,7 +45,7 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 - [ ] Landmarken, Zeitraum und Symbolgestaltung der Berlin-/Stadionstrecke konkret entwerfen und innerhalb der bestehenden Grenzen prüfen.
 - [ ] Schwachen PC mit integrierter Grafik und Android-Testgerät benennen; konkrete Auflösung, Mindestleistung und Ladezeitziele anhand Messungen bestätigen.
 - [ ] Kostenlose Asset-/Audiopipeline an einem Modell und kurzen Hörproben prüfen; Herkunft/Lizenzen erfassen.
-- [ ] First-Person-Sichtbarkeit, Kameraruhe, Eingabe und Touch-Bedienung praktisch prüfen.
+- [ ] First-Person-Sichtbarkeit, Kameraruhe, Eingabe und Touch-Bedienung praktisch prüfen. M2d belegt eine erste Chrome-Sichtprobe mit Cockpit und geladenem Drift; interaktiver Komfort und Touch bleiben offen.
 
 ## Vor Kernrennen-/Version-1-Abnahme
 

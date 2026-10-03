@@ -35,6 +35,10 @@ Der alte Projektindex nennt für einen Headless-/SwiftShader-Lauf ungefähr 4 FP
 
 Der persönliche Entwicklungs-PC ist eine RTX-3070-Laptop-Referenz, nicht die Mindestanforderung. Die Mindestanforderung wird separat mit integrierter oder vergleichbarer schwächerer Grafik bestimmt.
 
+## Frühe M2e-Technikprobe, 03.10.2026
+
+Ein isolierter Headless-Chrome-Lauf bei 1280 × 800 verglich dieselbe einfache Testszene mit einem und sechs bewegten Karts. `WEBGL_debug_renderer_info` meldete ANGLE/D3D11 auf der NVIDIA GeForce RTX 3070 Laptop GPU des Entwicklungsgeräts. Die Diagnose zeigte 42 beziehungsweise 87 Meshes und jeweils 60 FPS; 120 `requestAnimationFrame`-Intervalle ergaben in beiden Fällen 16,7 ms Median und 16,8 ms P95. Die fünf zusätzlichen Karts benutzen das gleiche einfache Fahrmodell, aber weder Renn-KI noch ausgearbeitete Figuren/Materialien. Dieser Lauf ist ein wiederholbarer Frühvergleich auf starker Hardware, kein Nachweis der Zielwerte auf normalem/schwachem PC, Android oder iPhone. GPU-Zeit, Drawcalls, Speicher und Ladezeit wurden dabei nicht gemessen. Das rund 1,022 MB große minifizierte Hauptskript bleibt über der Vite-Warngrenze und braucht später eine gezielte Ladezeitprüfung.
+
 ## Performance-Sicherheitsregeln
 
 - Keine unbounded Listen oder Timer in Rennen, Pause, Neustart und Menürückkehr.

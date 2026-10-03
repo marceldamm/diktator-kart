@@ -23,6 +23,8 @@ Beschlossen sind drei umschaltbare Ansichten: nahe Verfolgerkamera, weiter entfe
 
 Cockpit, Hände, Lenkrad und Vorderräder sind deshalb frühe Modell-/Animationsanforderungen. Kameranachführung und visuelle Federung dürfen die Fahrerperspektive nicht unkontrolliert erschüttern. Kameramodi werden bei Drift, Sprung, Landung, Wandkontakt und Rücksetzung geprüft.
 
+**M2d-Sichtprobe, 03.10.2026:** Drei Perspektiven sind mit prozeduralen Testformen in Chrome umschaltbar. Die Fahrerperspektive zeigt einfache Armaturen, Hände, bewegtes Lenkrad und Vorderräder auch während eines geladenen Drifts. Das ist ein Funktionsbeleg für Sichtbarkeit, noch keine Abnahme von Materialqualität, Fahrkomfort, Kamera bei Wandkontakt oder Touch-Bedienung. Die entsprechende offene Aufgabe in Dokument 10 bleibt bestehen.
+
 Figuren behalten große Köpfe und überzeichnete Körper mit erkennbaren historischen Gesichtszügen. Zuerst erhält ein Fahrer samt Kart den vollständigen Stilpass; fünf weitere bleiben zunächst einfacher dargestellt. Die Abnahme erfolgt auch aus beiden Verfolgeransichten und der Fahrerperspektive, nicht allein anhand der Konzeptbilder.
 
 Die Verfolgerkamera muss das Kart hinterherführen, Kurven und Drift lesen lassen und bei Sprüngen genügend Strecke zeigen. Kamerabewegung darf spektakulär sein, aber nicht die Fahrbarkeit opfern. Eine Option für reduzierte Kamerabewegung und reduzierte Effekte ist Pflicht für Zugänglichkeit und schwächere Hardware.

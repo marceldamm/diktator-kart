@@ -1,0 +1,101 @@
+import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
+import { Color3 } from '@babylonjs/core/Maths/math.color';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
+import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
+import type { Scene } from '@babylonjs/core/scene';
+import type { KartState } from './kart-model';
+
+const VIEWS = [
+  { name: 'Verfolger nah', distance: 6.8, height: 3.15, fov: 0.85, follow: 8 },
+  { name: 'Verfolger fern', distance: 12.5, height: 5.7, fov: 0.9, follow: 5 },
+  { name: 'Fahrerperspektive', distance: 0, height: 0, fov: 1.05, follow: 14 },
+] as const;
+
+function cockpitMaterial(scene: Scene, name: string, color: Color3): StandardMaterial {
+  const result = new StandardMaterial(name, scene);
+  result.diffuseColor = color;
+  result.emissiveColor = color.scale(0.25);
+  return result;
+}
+
+export class KartCamera {
+  private readonly camera: FreeCamera;
+  private readonly cockpit: TransformNode;
+  private readonly wheel: TransformNode;
+  private view = 0;
+
+  constructor(scene: Scene, state: KartState) {
+    this.camera = new FreeCamera('kart-camera', Vector3.Zero(), scene);
+    this.camera.minZ = 0.05;
+    scene.activeCamera = this.camera;
+
+    const shell = cockpitMaterial(scene, 'cockpit-shell-mat', new Color3(0.07, 0.12, 0.14));
+    const rim = cockpitMaterial(scene, 'cockpit-rim-mat', new Color3(0.9, 0.61, 0.16));
+    const hand = cockpitMaterial(scene, 'cockpit-hand-mat', new Color3(0.82, 0.59, 0.41));
+    const tire = cockpitMaterial(scene, 'cockpit-tire-mat', new Color3(0.035, 0.045, 0.05));
+    this.cockpit = new TransformNode('cockpit-view', scene);
+    this.cockpit.parent = this.camera;
+    const dashboard = MeshBuilder.CreateBox('cockpit-dashboard', { width: 1.3, height: 0.12, depth: 0.24 }, scene);
+    dashboard.position.set(0, -0.48, 0.85);
+    dashboard.material = shell;
+    dashboard.parent = this.cockpit;
+    for (const x of [-0.35, 0.35]) {
+      const gauge = MeshBuilder.CreateSphere(`cockpit-gauge-${x}`, { diameter: 0.15, segments: 10 }, scene);
+      gauge.position.set(x, -0.39, 0.79);
+      gauge.material = rim;
+      gauge.parent = this.cockpit;
+      const frontTire = MeshBuilder.CreateCylinder(`cockpit-front-tire-${x}`, { diameter: 0.36, height: 0.16, tessellation: 14 }, scene);
+      frontTire.rotation.z = Math.PI / 2;
+      frontTire.position.set(x < 0 ? -0.77 : 0.77, -0.57, 1.75);
+      frontTire.material = tire;
+      frontTire.parent = this.cockpit;
+    }
+    this.wheel = new TransformNode('cockpit-steering', scene);
+    this.wheel.position.set(0, -0.42, 0.95);
+    this.wheel.parent = this.cockpit;
+    const steeringRim = MeshBuilder.CreateTorus('cockpit-steering-rim', { diameter: 0.37, thickness: 0.04, tessellation: 20 }, scene);
+    steeringRim.rotation.x = Math.PI / 2.8;
+    steeringRim.material = rim;
+    steeringRim.parent = this.wheel;
+    for (const x of [-0.2, 0.2]) {
+      const palm = MeshBuilder.CreateSphere(`cockpit-hand-${x}`, { diameter: 0.12, segments: 8 }, scene);
+      palm.position.set(x, 0, 0.02);
+      palm.material = hand;
+      palm.parent = this.wheel;
+    }
+    this.cockpit.setEnabled(false);
+    this.update(state, 0, true);
+  }
+
+  cycleView(): string {
+    this.view = (this.view + 1) % VIEWS.length;
+    this.cockpit.setEnabled(this.view === 2);
+    return VIEWS[this.view].name;
+  }
+
+  get viewName(): string { return VIEWS[this.view].name; }
+
+  update(state: KartState, dt: number, immediate = false, steering = 0): void {
+    const view = VIEWS[this.view];
+    const forwardX = Math.sin(state.heading);
+    const forwardZ = Math.cos(state.heading);
+    const firstPerson = this.view === 2;
+    const desired = firstPerson
+      ? new Vector3(state.x - forwardX * 0.05,
+        1.55 + state.height * 0.75 + state.suspensionOffset * 0.3,
+        state.z - forwardZ * 0.05)
+      : new Vector3(state.x - forwardX * view.distance,
+        view.height + state.height * 0.35,
+        state.z - forwardZ * view.distance);
+    const blend = immediate ? 1 : 1 - Math.exp(-view.follow * dt);
+    this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
+    this.camera.fov = view.fov;
+    this.camera.setTarget(firstPerson
+      ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - 0.14,
+        this.camera.position.z + forwardZ * 8)
+      : new Vector3(state.x + forwardX * 2, 0.85 + state.height * 0.5, state.z + forwardZ * 2));
+    this.wheel.rotation.z = -steering * 0.45;
+  }
+}

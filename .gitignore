@@ -9,5 +9,6 @@
 # Reproducible dependencies and generated development output.
 node_modules/
 dist/
+.npm-cache/
 .env
 .env.local

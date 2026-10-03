@@ -14,11 +14,21 @@ Browserprojekt, Lade-/Fehlerzustände, Eingabeschnittstelle, Diagnose, kontrolli
 
 **Abnahme:** neuer Stand startet über den vorgesehenen einfachen Einstieg; keine alte Engine übernommen.
 
+**Stand 03.10.2026:** lokal erfüllt: TypeScript/Vite/Babylon-Grundstand, sichtbare Szene in Chrome, Status/Fehler, Eingabeaktionen, Debug, Pause/Neustart und Ein-Klick-Starter. WebGL2 im Entwicklungsbrowser belegt; weitere Geräte und das Fahrmodell gehören zu M2/M7.
+
 ## M2 – Fahrbarer Technikprototyp
 
 Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verfolgerkamera und erste Cockpit-Sichtprobe. Isolierte Ein-Kart-Tests sind Entwicklungsschritte, nicht der abgenommene Sechs-Fahrer-Prototyp.
 
 **Abnahme:** Fahr- und Kameraverhalten geprüft, erste Lastmessungen mit sechs Fahrzeugen.
+
+**Zwischenstand M2a, 03.10.2026:** Steuerbares Test-Kart, begrenzte Fläche, getrennte Fahrzustands-/Darstellungs-/Kamerabausteine, Browserprüfung und gezielte Modelltests vorhanden. Hop, Drift und Mini-Turbo waren zu diesem Zeitpunkt noch offen und wurden in M2b ergänzt. Federung, drei echte Kameras, sechs Fahrzeuge und Lastmessung fehlen weiterhin.
+
+**Zwischenstand M2b, 03.10.2026:** Hop, aufladbarer Drift und befristeter Mini-Turbo sind im Fahrmodell und Browser-Test sichtbar. Sieben Modell-/Eingabetests sowie ein Chrome-Test mit gehaltenen Tasten prüfen die Übergänge, Pause und Neustart. Federung, Untergründe, drei echte Kameras, sechs Fahrzeuge und Lastmessung fehlen für die M2-Gesamtabnahme.
+
+**Zwischenstand M2c–e, 03.10.2026:** Vier Radkontakte und gedämpfte Karosseriereaktion über zwei markierte Bodenwellen, drei umschaltbare Kameras mit einfacher Fahrerperspektive sowie fünf bewegte Lastfahrzeuge ergänzt. Neun Modell-/Eingabetests, Build und Chrome-Browsertest bestanden. Die vergleichende Headless-Probe zeigte 42 Meshes für ein und 87 für sechs Fahrzeuge; beide Proben 60 FPS bei 1280 × 800. Fahrgefühl, Rand-/Kollisionsreaktion, Cockpitqualität und Leistung auf echter Zielhardware sind noch nicht abgenommen. Die fünf Lastfahrzeuge sind keine Rennbots.
+
+**Zwischenstand M2f, 03.10.2026:** Kurzer begrenzter Rückstoß am Testflächenrand und Abbruch von Drift/Turbo modelliert; zehn Modell-/Eingabetests und Chrome-Randkontaktprobe bestanden. Die allgemeine Kollisionslogik, subjektive Fahrprüfung und Zielhardware-Leistung bleiben für die M2-Gesamtabnahme offen.
 
 ## M3 – Erster ausgearbeiteter Spielabschnitt
 

@@ -8,6 +8,8 @@ Das Spiel muss vom Start bis zum Rennen ohne Entwicklerkonsole verständlich bed
 
 Start/Launcher → Hauptmenü → Spielmodus → Fahrer/Kart → Strecke → Ladephase → Countdown → Rennen → Ergebnis/Siegerehrung → Revanche oder Menü.
 
+M1 enthält davon nur den lokalen Launcher, die Lade-/Fehleranzeige, Pause, Neustart und Diagnose der Technikszene. Menü, Einstellungen, Speicherung und Renn-HUD sind noch nicht implementiert; die Pflichtliste bleibt bestehen.
+
 Während des Rennens: Pause, Neustart, Audio-/Grafikzugriff, Steuerungshinweis und verständliche Rückkehrwege.
 
 ## Einstellungsbereiche

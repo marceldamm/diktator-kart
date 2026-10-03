@@ -30,6 +30,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **Ergebnis:** leere Babylon-Szene mit kontrolliertem Start, Pause, Neustart und Diagnose.
 
+**M1-Stand 03.10.2026:** Die prozedurale Testszene und der lokale Startweg sind umgesetzt und geprüft. Das ist ein technischer Grundstand ohne Fahrphysik oder Renninhalt. Nach M1 beginnt M2 gemäß eigener Abnahme, einschließlich erster Lastmessung mit sechs Fahrzeugen.
+
 **Grobe Dauer:** 2–5 Arbeitssitzungen.
 
 ### M2 – Fahrbarer Technikprototyp
@@ -37,6 +39,14 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 **Aufgaben:** Kart, nahe/ferne Verfolgerkamera und First-Person-Sichtprobe, Beschleunigung, Bremse, Rückwärtsfahrt, Federung, Räder, Kollision, Hop, Drift, Mini-Turbo, einfache Strecke. Erste Lastmessung mit sechs Fahrzeugen; isolierte Ein-Kart-Tests bleiben interne Zwischenschritte.
 
 **Ergebnis:** eine Runde fühlt sich stabil und angenehm an; keine alten PlayCanvas-/Ammo-Klassen wurden übernommen.
+
+**Zwischenstand M2a, 03.10.2026:** Beschleunigung, Bremsen, Rückwärtsfahrt und Lenkung als erster Fahrkern umgesetzt. Die M2-Gesamtabnahme bleibt an die weiteren Fahrfunktionen, echte Kameras und sechs Fahrzeuge mit Lastmessung gebunden.
+
+**Zwischenstand M2b, 03.10.2026:** Hop, Driftladung und Mini-Turbo mit Browserfeedback und Zustandsprüfungen ergänzt. Nächster Bauabschnitt: Federung/Bodenkontakt und kleine Untergrundereignisse. Echte Kameras und sechs Fahrzeuge bleiben danach weiterhin Teil der M2-Abnahme.
+
+**Zwischenstand M2c–e, 03.10.2026:** Markierte Bodenwellen, vier Radkontakte, Federung, drei Kameramodi und fünf bewegte Lastfahrzeuge ergänzt. Browserprobe mit sechs einfachen Fahrzeugen liegt vor; die Werte sind nicht auf Zielhardware übertragbar. M2 benötigt noch gezielte Rand-/Kollisionsreaktion, längere Fahrgefühlprüfung und belastbare Kamera-/Leistungsmessung; die fünf Zusatzfahrzeuge werden erst in M3 zu Rennbots mit eigener Linie und Recovery.
+
+**M2f-Teilstand, 03.10.2026:** Eine begrenzte Randstoßreaktion ist implementiert und im Modell/Browser geprüft. Der echte Fahr-/Hardwaretest und allgemeine Streckenkollision stehen aus; daher keine M2-Gesamtabnahme.
 
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 

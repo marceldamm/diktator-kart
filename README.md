@@ -1,6 +1,6 @@
 # Diktator Kart – Babylon-Neustart 2026
 
-Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Das Altspiel liegt unter `Diktator-Kart-Legacy/`, zusammen mit Kopien der bisherigen Sicherungen. Die ältere Sicherung `Legacy/` bleibt wegen einer Windows-Verschiebesperre zusätzlich im Hauptverzeichnis erhalten und wird nicht bearbeitet. Die aktive Git-Verwaltung bleibt im Hauptverzeichnis. Dieser Stand ist zunächst Dokumentation, noch kein startbares Babylon-Spiel.
+Aktives Hauptverzeichnis: `D:\Diktator-Kart`. Das Altspiel liegt unter `Diktator-Kart-Legacy/`, zusammen mit Kopien der bisherigen Sicherungen. Die ältere Sicherung `Legacy/` bleibt wegen einer Windows-Verschiebesperre zusätzlich im Hauptverzeichnis erhalten und wird nicht bearbeitet. Die aktive Git-Verwaltung bleibt im Hauptverzeichnis. Seit M2e gibt es hier einen steuerbaren Kart-Techniktest mit Hop, Drift, Mini-Turbo, Federung, drei Kameras und fünf bewegten Lastfahrzeugen, noch kein Rennen.
 
 Für den täglichen Überblick zuerst [START-HERE.md](START-HERE.md) öffnen. Die gemeinsame Bedienungsanleitung für dich und Sarah steht in [TEAM-HANDBOOK.md](TEAM-HANDBOOK.md).
 
@@ -8,7 +8,9 @@ Für den täglichen Überblick zuerst [START-HERE.md](START-HERE.md) öffnen. Di
 
 Diktator Kart wird als eigenständiger satirischer 3D-Arcade-Kart-Racer für den Browser neu konzipiert. Die neue technische Basis ist **Babylon.js**. Das Spiel soll vom Gefühl klassischer Kart-Racer wie Mario Kart 64 und vom Politur-Niveau modernerer Mario-Kart-Spiele auf der Switch inspiriert sein, aber eine eigene Welt, eigene Figuren und eine eigene Satire besitzen: etwas realistischer, schöner und effektvoller, ohne auf High-End-PCs angewiesen zu sein.
 
-Dieser Ordner ist zunächst eine Planungs- und Wissensbasis. Er übernimmt aus dem Altprojekt Ideen und belegte Designentscheidungen, aber keine alte Engine-Implementierung.
+Dieser Ordner enthält die Planungs- und Wissensbasis sowie seit M1 einen startbaren Babylon.js-Technikgrundstand. Er übernimmt aus dem Altprojekt Ideen und belegte Designentscheidungen, aber keine alte Engine-Implementierung.
+
+**Techniktest starten:** Unter Windows [`Diktator-Kart-starten.cmd`](Diktator-Kart-starten.cmd) doppelklicken. Das Fenster offen lassen; Chrome öffnet `http://127.0.0.1:4173/`. Beim ersten Start installiert der Launcher die im Lockfile festgelegten kostenlosen npm-Pakete. Technischer Weg: `npm ci`, dann `npm run dev`. W/S beziehungsweise Pfeil hoch/runter fahren, A/D beziehungsweise Pfeil links/rechts lenken. Space löst einen Hop aus; Space nach der Landung mit Lenkung halten und bei geladenem Drift loslassen, um Mini-Turbo zu aktivieren. Zwei markierte Bodenwellen zeigen die Federung. C wechselt zwischen naher/ferner Verfolger- und Fahrerperspektive, P pausiert und R startet neu. `?fleet=1` reduziert die Lastprobe auf ein Fahrzeug.
 
 ## Grundpfeiler
 
@@ -62,10 +64,10 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 ## Aktueller Status
 
 - Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
-- Babylon.js-Neuentwicklung: **noch nicht begonnen**
+- Babylon.js-Neuentwicklung: **M1 geprüft; M2a–e sowie die M2f-Randreaktion mit Fahrkern, Federung, drei Kameras und Sechs-Fahrzeug-Technikprobe lokal umgesetzt und geprüft**
 - Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - Alte technische Implementierung: **nicht übernommen**
-- Nächster Schritt: mit GPT-6.1 Sol und dem kopierfertigen Auftrag aus [START-HERE.md](START-HERE.md) den startbaren M1-Babylon-Grundstand bauen.
+- Nächster Schritt: M2f mit Fahrgefühl- und Hardwareprüfung abschließen; Auftrag in [START-HERE.md](START-HERE.md).
 - Arbeitsmodus für längere Sitzungen: [16-production-blueprint.md](docs/16-production-blueprint.md) lesen und [17-progress-log.md](docs/17-progress-log.md) fortschreiben.
 - Zielplattformen: Google Chrome unter Windows zuerst; mobile Browser werden von Anfang an berücksichtigt.
 - Startbarkeit: Jeder spielbare Stand braucht einen einfachen Startbutton, Launcher oder eine eindeutige Verknüpfung ohne Entwicklerkonsole.

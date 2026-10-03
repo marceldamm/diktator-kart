@@ -1,0 +1,22 @@
+:root { font-family: system-ui, sans-serif; color: #f7f0da; background: #08151d; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+#app { position: relative; width: 100vw; height: 100dvh; min-height: 480px; overflow: hidden; }
+#render-canvas { display: block; width: 100%; height: 100%; outline: none; }
+.panel { position: absolute; top: max(20px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); width: min(400px, calc(100vw - 40px)); padding: 20px 22px; background: rgba(6, 22, 30, .88); border: 1px solid rgba(126, 214, 217, .4); border-radius: 12px; box-shadow: 0 12px 40px #0008; backdrop-filter: blur(8px); }
+.eyebrow { font-size: .72rem; letter-spacing: .2em; color: #6ed6dc; font-weight: 700; }
+h1 { font-size: 1.4rem; margin: .5rem 0 1rem; }
+#status { color: #f4bf5f; font-weight: 700; margin: 0 0 .35rem; }
+#message { min-height: 2.5em; margin: 0 0 .8rem; line-height: 1.35; overflow-wrap: anywhere; }
+#speed { font-size: 1.4rem; font-weight: 800; margin: 0 0 .1rem; color: #9de6ca; }
+#drive-mode { font-size: .88rem; font-weight: 700; color: #f4bf5f; min-height: 1.25rem; margin: 0 0 .2rem; }
+#surface { font-size: .82rem; color: #76d1d6; min-height: 1.2rem; margin: 0 0 .2rem; }
+#camera-mode { font-size: .82rem; color: #d7e7e3; min-height: 1.2rem; margin: 0 0 .2rem; }
+#fleet-count { font-size: .82rem; color: #d7e7e3; min-height: 1.2rem; margin: 0 0 1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+button { border: 0; border-radius: 6px; padding: .58rem .8rem; font: inherit; font-weight: 700; color: #10212a; background: #76d1d6; cursor: pointer; }
+button:hover:enabled { background: #a1e9ec; }
+button:disabled { opacity: .5; cursor: default; }
+.hint { font-size: .82rem; line-height: 1.4; color: #c2d1d1; margin: 1rem 0 0; }
+#debug { margin: 1rem 0 0; padding: .75rem; border-radius: 6px; background: #020b11; color: #9de6ca; font-size: .8rem; line-height: 1.4; overflow: auto; }
+@media (max-height: 580px) { .panel { max-height: calc(100dvh - 25px); overflow: auto; } }
