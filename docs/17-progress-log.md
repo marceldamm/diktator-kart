@@ -507,6 +507,22 @@
 
 **Sitzungsstatus:** Auf ausdrücklichen Nutzerwunsch an diesem überprüften Zwischenstand pausiert. Kein Ruhezustand und kein GitHub-Upload ausgelöst.
 
+### 2026-10-03 – Großer Vertical Slice: erster geprüfter Zwischenstand
+
+**Auftrag:** Nutzer startet ausdrücklich die autonome breite Umsetzung anhand G–L. Neutrales Hero-Kart und fiktiver Stadionring sind für diese Sitzung freigegeben; keine historische Fahrerwahl und keine Stilabnahme. Branch `codex/stadium-vertical-slice`, Ausgangscommit `8bf0dc1`.
+
+**Umgesetzt:** Editierbare Blender-Pipeline mit `.blend` und GLB für geformtes Retro-Kart und Stadion-/Boulevardarchitektur; PBR, Himmeltextur, Originaltexturatlanten, Lampen, Brunnen, begrenzter Rauch/Funken/Boost. 441-m-Rundkurs mit Barrieren; drei Runden, Countdown, Rang, Zeit, Ziel und Revanche. Fünf Bots nutzen denselben Fahrcontroller; erster Spur-/Verkehrsalgorithmus. Originale WAV-Effekte und Audiofreischaltung nach Eingabe. Laborpfad bleibt separat.
+
+**Verifiziert:** Produktionsbuild bestanden (Bundlewarnung weiter vorhanden), 17 Modelltests einschließlich durchgehender Streckenprojektion, drei Bot-Runden und Schutz gegen Rückwärts-/Teleportfortschritt. Browserprobe bestätigte Start, Fahrt, drei Kameras, Pause, Countdown und Neustart. Erste sechs-Kart-F3-Probe bei 1600 × 1000 auf RTX 3070 Laptop GPU: 60 FPS, P95 17,6 ms, P99 19,7 ms, ein Intervall >25 ms; noch kein kontrollierter Dauerlauf der finalen Grafik. Spielbilder unter `docs/evidence/slice-*.png`; Zwischenbilder werden im laufenden Art-Pass ersetzt.
+
+**Offen:** G–L wird sichtbar noch nicht erreicht; Material-/Schatten-/Vegetationspass und Kamera-Finish laufen. Vollständiges Rennen im Browser, hörbare Audioqualität, schwacher PC/Mobile, neue Spurwahl und Endurance noch zu prüfen. Historische Fahrer-/Landmarkenauswahl und M2-Gesamtabnahme bleiben offen. Keine GitHub-Übertragung.
+
+**Budget:** Offizielle Codex-Werte sind abrufbar; zuletzt 16 % verbraucht im Fünf-Stunden- und 2 % im Wochenfenster. Abschluss-Puffer bei etwa 15 % Rest bleibt verbindlich.
+
+**Quellen:** Assetherkunft in `public/assets/CREDITS.md`; neutrale Geometrie und Audio original, Himmel Imagegen, lokale Beleuchtungsumgebung aus Babylon Assets unter CC-BY-4.0.
+
+**Nächster Schritt:** Sichtbare Qualität und Botverkehr verbessern, tatsächliches Dreirundenrennen/Neustart/Lastfenster prüfen und den nächsten funktionierenden Stand sichern. Diese Sitzung läuft weiter.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

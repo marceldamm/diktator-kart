@@ -1,5 +1,5 @@
 {
   "schemaVersion": 1,
-  "name": "M2-Fahrtest-Prozeduralszene",
-  "files": []
+  "name": "Stadion-Vertical-Slice mit Blender-Assets",
+  "files": ["models/hero-kart.glb", "models/stadium-world.glb", "textures/golden-sky.png", "textures/studio.env", "audio/motor.wav", "audio/tire.wav", "audio/impact.wav", "audio/boost.wav", "CREDITS.md"]
 }

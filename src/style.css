@@ -32,3 +32,38 @@ button:disabled { opacity: .5; cursor: default; }
 .showcase-controls { display: none; }
 .showcase .showcase-controls { display: block; position: absolute; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); width: min(340px, calc(100vw - 36px)); margin: 0; padding: .65rem .85rem; border-radius: 8px; background: rgba(9, 20, 25, .72); color: #f5e7c4; font-size: .75rem; line-height: 1.45; }
 @media (max-width: 700px) { .showcase .showcase-controls { display: none; } }
+
+.slice-only { display: none; }
+.showcase .slice-only:not([hidden]) { display: block; }
+[hidden] { display: none !important; }
+.showcase .brand { position: absolute; top: 26px; left: 30px; display: flex; gap: 14px; align-items: center; color: #f5e6be; text-shadow: 0 2px 10px #000b; }
+.brand-mark { border: 1px solid #ddc18b; padding: 9px 12px; font: italic 800 25px Georgia,serif; background: #17292dbb; }
+.brand strong { display: block; font-size: 15px; letter-spacing: .2em; }
+.brand div span { display: block; margin-top: 6px; font-size: 10px; letter-spacing: .15em; color: #eadab6; }
+.showcase .brand.slice-only { display: flex; }
+.showcase .race-hud { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); padding: 12px 22px; text-align: center; background: linear-gradient(100deg,#142a30e8,#102023c9); border-top: 2px solid #ddbd7a; border-bottom: 1px solid #d6b87855; box-shadow: 0 8px 24px #0004; }
+#race-label { color: #dec58e; letter-spacing: .2em; font-size: 10px; font-weight: 700; }
+.race-stats { display: flex; gap: 28px; margin-top: 8px; }
+.race-stats b { display: block; font-size: 25px; font-variant-numeric: tabular-nums; font-weight: 600; }
+.race-stats small { font-size: 9px; letter-spacing: .13em; color: #b2bfbb; }
+.showcase .map-card { position: absolute; top: 24px; right: 26px; width: 126px; background: #1123299c; border: 1px solid #e3c78d44; border-radius: 4px; text-align: center; }
+#minimap { width: 110px; height: 169px; display: block; margin: auto; }
+.map-card span { display: block; font-size: 8px; letter-spacing: .1em; margin: 4px 0 11px; color: #e4d2ae; }
+.showcase .panel { top: auto; left: auto; bottom: 25px; right: 26px; width: 235px; border-radius: 4px; border-top: 2px solid #d4b579; background: linear-gradient(135deg,#142a30e8,#101d21ed); padding: 17px; overflow: visible; }
+.showcase #status { display: none; }
+.showcase #speed { font-size: 32px; font-weight: 600; font-variant-numeric: tabular-nums; color: #f5e5bc; }
+.showcase #drive-mode { color: #d5bd87; font-size: 11px; }
+.showcase #camera-mode { color: #9cb6b7; font-size: 10px; margin-top: 5px; }
+.showcase .actions { gap: 6px; }
+.showcase button { background: #263d40; color: #e3d4b4; border: 1px solid #d9bb7633; border-radius: 3px; font-size: 10px; padding: 6px 8px; font-weight: 500; }
+.showcase button:hover:enabled { background: #476063; }
+.showcase #race-start { width: 100%; background: #d5b77b; color: #16272c; font-weight: 700; padding: 9px; font-size: 12px; }
+.showcase .showcase-controls { right: auto; left: 30px; bottom: 26px; width: auto; padding: 12px 16px; border-left: 2px solid #c7ac76; border-radius: 3px; background: #13262cbf; font-size: 10px; line-height: 1.9; color: #becbc6; }
+.showcase-controls b { color: #f1ddb0; font-size: 10px; }
+.showcase #debug { position: fixed; top: 105px; left: 30px; width: 365px; max-height: calc(100dvh - 135px); margin: 0; background: #071c22f2; border: 1px solid #d5b87855; font-size: 11px; }
+#countdown { position: absolute; top: 40%; left: 50%; transform: translate(-50%,-50%); font: italic bold 130px Georgia,serif; color: #ffe4a8; text-shadow: 0 6px 30px #000c; }
+#finish-card { position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); width: min(560px,90vw); padding: 32px; text-align: center; background: #10262eee; border: 1px solid #d3b477; box-shadow: 0 24px 80px #0008; }
+#finish-card span { color: #d7bc86; letter-spacing: .2em; font-size: 10px; }
+#finish-card h2 { font: 32px Georgia,serif; color: #f0dfb7; }
+#finish-card p { color: #bacbc7; font-size: 13px; }
+@media(max-width:900px) { .showcase .brand { top:18px; left:18px; } .brand div { display:none; } .showcase .race-hud { top:16px; padding:9px 14px; } .race-stats { gap:16px; } .race-stats b { font-size:20px; } .showcase .map-card { width:90px; right:14px; top:16px; } #minimap { width:75px; height:115px; } .showcase .panel { right:14px; bottom:14px; width:200px; } .showcase #debug { left:14px; width:min(365px,90vw); } }

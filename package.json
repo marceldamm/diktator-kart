@@ -13,7 +13,8 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort"
   },
   "dependencies": {
-    "@babylonjs/core": "9.28.0"
+    "@babylonjs/core": "9.28.0",
+    "@babylonjs/loaders": "9.28.0"
   },
   "devDependencies": {
     "typescript": "7.0.2",

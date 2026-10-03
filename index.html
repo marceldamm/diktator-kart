@@ -3,11 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Diktator Kart · M2 Fahrtest</title>
+    <title>Diktator Kart · Stadion der Eitelkeit</title>
   </head>
   <body>
     <main id="app">
       <canvas id="render-canvas" aria-label="Babylon.js-Testszene"></canvas>
+      <div class="brand slice-only"><span class="brand-mark">DK</span><div><strong>DIKTATOR KART</strong><span>STADION DER EITELKEIT</span></div></div>
+      <div class="race-hud slice-only"><span id="race-label">FREIE FAHRT</span><div class="race-stats"><div><b id="place">1</b><small>PLATZ / 6</small></div><div><b id="lap">1 / 3</b><small>RUNDE</small></div><div><b id="race-time">0:00.00</b><small>ZEIT</small></div></div></div>
+      <div class="map-card slice-only"><canvas id="minimap" width="150" height="230" aria-label="Streckenkarte"></canvas><span>441 m · STADIONRING</span></div>
+      <div id="countdown" class="slice-only" hidden>3</div>
+      <div id="finish-card" hidden><span>STADION GRAND PRIX</span><h2 id="finish-title">Ziel erreicht</h2><p id="finish-detail"></p></div>
       <section class="panel" aria-live="polite">
         <div class="eyebrow">DIKTATOR KART / M2 TEST</div>
         <h1>M2 Fahrtest</h1>
@@ -19,14 +24,16 @@
         <p id="camera-mode">Verfolger nah</p>
         <p id="fleet-count">6 Fahrzeuge im Techniktest</p>
         <div class="actions">
+          <button id="race-start" class="slice-only" type="button">Rennen starten ↵</button>
           <button id="pause" type="button" disabled>Pause</button>
           <button id="restart" type="button" disabled>Neustart</button>
+          <button id="sound-toggle" class="slice-only" type="button">Ton an</button>
           <button id="debug-toggle" type="button" disabled>Diagnose</button>
         </div>
         <p class="hint">W/↑ Gas · S/↓ Bremse/Rückwärts · A/D oder ←/→ Lenken<br>Space Hop; halten + lenken: Drift; geladen loslassen: Mini-Turbo<br>Bodenwellen voraus; roter Kollisionsblock rechts der Linie<br>C Kamera nah/fern/Fahrer · E Item · Q Fähigkeit · P Pause · R Neustart · F3 Diagnose</p>
         <pre id="debug" hidden></pre>
       </section>
-      <p class="showcase-controls">W/S Fahren · A/D Lenken · Space Hop/Drift · C Kamera · F3 Diagnose</p>
+      <p class="showcase-controls"><b>W / S</b> Fahren &nbsp; <b>A / D</b> Lenken<br><b>SPACE</b> Hop · halten: Drift · loslassen: Turbo<br><b>C</b> Kamera &nbsp; <b>P</b> Pause &nbsp; <b>R</b> Neustart &nbsp; <b>F3</b> Diagnose</p>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

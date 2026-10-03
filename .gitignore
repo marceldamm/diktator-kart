@@ -12,3 +12,8 @@ dist/
 .npm-cache/
 .env
 .env.local
+
+# Portable authoring tools and isolated browser profiles.
+.tools/
+.browser-profile/
+*.blend1

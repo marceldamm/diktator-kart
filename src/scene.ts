@@ -10,6 +10,7 @@ import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { Scene } from '@babylonjs/core/scene';
 import { TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, WHEEL_POSITIONS, type KartState } from './kart-model';
 import { addShowcaseWorld } from './showcase-world';
+import { createSliceScene } from './slice-scene';
 
 export interface TestScene {
   scene: Scene;
@@ -23,7 +24,8 @@ function material(scene: Scene, name: string, color: Color3): StandardMaterial {
   return result;
 }
 
-export function createTestScene(engine: Engine, loadKartCount = 0, showcase = true): TestScene {
+export async function createTestScene(engine: Engine, loadKartCount = 0, showcase = true): Promise<TestScene> {
+  if (showcase) return createSliceScene(engine, loadKartCount);
   const scene = new Scene(engine);
   scene.clearColor = new Color4(0.53, 0.68, 0.78, 1);
   const sky = new HemisphericLight('sky-light', new Vector3(0.2, 1, 0.4), scene);

@@ -4,6 +4,8 @@ import { attachKeyboard, InputHub } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
+import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, trackPoint, trackProgress, type RaceProgress } from './track';
+import { KartAudio } from './audio';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -26,11 +28,13 @@ const LOAD_KART_COUNT = new URLSearchParams(location.search).get('fleet') === '1
 const CONTACT_SCENARIO = new URLSearchParams(location.search).get('scenario') === 'contact';
 const FORCE_WEBGL1 = new URLSearchParams(location.search).get('webgl') === '1';
 const LAB_WORLD = new URLSearchParams(location.search).get('world') === 'lab';
+const DEMO = new URLSearchParams(location.search).get('demo') === '1';
 document.body.classList.toggle('showcase', !LAB_WORLD);
 
 function initialLoadKarts(): KartState[] {
   if (CONTACT_SCENARIO) return [{ ...initialKartState(), z: 10, heading: Math.PI,
     travelHeading: Math.PI, speed: 8 }];
+  if (!LAB_WORLD) return Array.from({ length: LOAD_KART_COUNT }, (_, i) => gridKart(i));
   return Array.from({ length: LOAD_KART_COUNT }, (_, index) => {
     const angle = index * 2 * Math.PI / LOAD_KART_COUNT;
     const heading = angle + Math.PI / 2;
@@ -57,8 +61,24 @@ class App {
   private frameTimes: number[] = [];
   private rendererName = 'nicht verfügbar';
   private generation = 0;
+  private racePhase: 'practice' | 'countdown' | 'race' | 'finished' = 'practice';
+  private countdown = 3;
+  private raceTime = 0;
+  private progress: RaceProgress[] = [];
+  private readonly audio = new KartAudio();
+  private botStuck: number[] = [];
 
   constructor() {
+    Object.defineProperty(window, '__DK', { get: () => ({ scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress }) });
+    document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
+    document.querySelector('#sound-toggle')?.addEventListener('click', () => {
+      this.audio.setEnabled(!this.audio.enabled); void this.audio.unlock();
+      document.querySelector('#sound-toggle')!.textContent = this.audio.enabled ? 'Ton an' : 'Ton aus';
+    });
+    window.addEventListener('keydown', (event) => {
+      if (!LAB_WORLD) void this.audio.unlock();
+      if (event.code === 'Enter' && this.racePhase !== 'countdown') void this.startRace();
+    });
     pauseButton.addEventListener('click', () => this.togglePause());
     restartButton.addEventListener('click', () => void this.restart());
     debugButton.addEventListener('click', () => { debug.hidden = !debug.hidden; });
@@ -121,12 +141,16 @@ class App {
     this.testScene?.scene.dispose();
     this.testScene = undefined;
     this.camera = undefined;
-    this.kart = initialKartState();
+    this.kart = LAB_WORLD ? initialKartState() : gridKart(LOAD_KART_COUNT);
     this.loadKarts = initialLoadKarts();
     this.accumulator = 0;
     this.frameTimes = [];
     this.lastFrameAt = 0;
     this.queuedHopPress = false;
+    this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = this.loadKarts.map(() => 0);
+    if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
+    this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
+    document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
     surfaceDisplay.textContent = 'Ebener Boden';
@@ -142,13 +166,45 @@ class App {
         this.rendererName = this.readRendererName();
         this.engine.runRenderLoop(() => this.frame());
       }
-      this.testScene = createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD);
-      this.camera = new KartCamera(this.testScene.scene, this.kart);
+      const created = await createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD);
+      if (generation !== this.generation) { created.scene.dispose(); return; }
+      this.testScene = created;
+      this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
       this.testScene.present(this.kart, this.loadKarts);
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
     } catch (error) {
       if (generation === this.generation) this.show('error', error instanceof Error ? error.message : String(error));
     }
+  }
+
+  private async startRace(): Promise<void> {
+    if (LAB_WORLD || this.state === 'loading') return;
+    await this.audio.unlock();
+    // Reuse assets; reset the simulation without reloading the entire scene.
+    this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
+    this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
+    this.botStuck = this.loadKarts.map(() => 0);
+    this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0;
+    document.querySelector('#finish-card')?.setAttribute('hidden', '');
+    this.camera?.update(this.kart, 0, true);
+    this.accumulator = 0; this.queuedHopPress = false;
+    if (this.state === 'paused') this.togglePause();
+  }
+
+  private updateRaceHud(): void {
+    if (LAB_WORLD) return;
+    const place = 1 + this.progress.slice(1).filter((p) => p.distance >= this.progress[0].distance).length;
+    document.querySelector('#place')!.textContent = `${place}`;
+    document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
+    document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
+    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : 'STADION GRAND PRIX';
+    const countdown = document.querySelector<HTMLElement>('#countdown')!;
+    countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
+    document.querySelector('#race-start')!.textContent = this.racePhase === 'practice' ? 'Rennen starten ↵' : 'Neues Rennen ↵';
+    const map = document.querySelector<HTMLCanvasElement>('#minimap')!, c = map.getContext('2d')!;
+    c.clearRect(0, 0, 150, 230); c.strokeStyle = '#d3bd8b66'; c.lineWidth = 9; c.beginPath();
+    for (let i = 0; i <= 100; i++) { const p = trackPoint(i / 100 * TRACK.length); const x = 75 + p.x * .75, y = 115 - p.z * .95; if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); } c.stroke();
+    [this.kart, ...this.loadKarts].forEach((s, i) => { c.fillStyle = i === 0 ? '#ffe1a0' : '#95b8b8'; c.beginPath(); c.arc(75 + s.x * .75, 115 - s.z * .95, i ? 2.5 : 4.5, 0, Math.PI * 2); c.fill(); });
   }
 
   private togglePause(): void {
@@ -186,18 +242,47 @@ class App {
       const delta = Math.min(this.engine!.getDeltaTime() / 1000, 0.1);
       this.accumulator += delta;
       while (this.accumulator >= FIXED_STEP) {
-        this.kart = advanceKart(this.kart, { ...frame, hopPressed: this.queuedHopPress }, FIXED_STEP);
-        this.loadKarts = this.loadKarts.map((other) => advanceKart(other,
-          { throttle: 1, steering: CONTACT_SCENARIO ? 0 : 0.75 }, FIXED_STEP));
-        const resolved = resolveKartContacts([this.kart, ...this.loadKarts]);
+        const countdown = !LAB_WORLD && this.racePhase === 'countdown';
+        if (countdown) { this.countdown -= FIXED_STEP; if (this.countdown <= 0) this.racePhase = 'race'; }
+        if (!countdown && this.racePhase !== 'finished') {
+        const project = LAB_WORLD ? undefined : projectTrack;
+        const traffic = [this.kart, ...this.loadKarts];
+        this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : { ...frame, hopPressed: this.queuedHopPress }, FIXED_STEP, project);
+        this.loadKarts = this.loadKarts.map((other, index) => {
+          if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
+          let next = advanceKart(other, LAB_WORLD ? { throttle: 1, steering: CONTACT_SCENARIO ? 0 : .75 } : botInput(other, index + 1, traffic), FIXED_STEP, project);
+          if (!LAB_WORLD) {
+            this.botStuck[index] = Math.abs(next.speed) < 1 ? this.botStuck[index] + FIXED_STEP : 0;
+            if (this.botStuck[index] > 4) {
+              const p = trackPoint(trackProgress(next.x, next.z), (index % 2 ? 1 : -1) * 1.8);
+              next = { ...initialKartState(), ...p, travelHeading: p.heading }; this.botStuck[index] = 0;
+              this.progress[index + 1].last = trackProgress(p.x, p.z);
+            }
+          }
+          return next;
+        });
+        const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
+        if (!LAB_WORLD && this.racePhase === 'race') {
+          this.raceTime += FIXED_STEP;
+          [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          if (this.progress[0].finished) {
+            this.racePhase = 'finished';
+            const place = 1 + this.progress.slice(1).filter((p) => p.finished).length;
+            document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
+            document.querySelector('#finish-detail')!.textContent = `Drei Runden in ${this.raceTime.toFixed(2)} Sekunden. Enter startet die Revanche.`;
+            document.querySelector('#finish-card')!.removeAttribute('hidden');
+          }
+        }
+        }
         this.queuedHopPress = false;
         this.accumulator -= FIXED_STEP;
       }
       this.testScene.present(this.kart, this.loadKarts);
       this.camera?.update(this.kart, delta, false, frame.steering);
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
+      this.updateRaceHud();
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.kart.impactRemaining > 0
         ? this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'
@@ -215,6 +300,7 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
+    if (!LAB_WORLD) this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished');
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();

@@ -25,8 +25,10 @@ export class KartCamera {
   private readonly cockpit: TransformNode;
   private readonly wheel: TransformNode;
   private view = 0;
+  private readonly realCockpit: boolean;
 
-  constructor(scene: Scene, state: KartState) {
+  constructor(scene: Scene, state: KartState, realCockpit = false) {
+    this.realCockpit = realCockpit;
     this.camera = new FreeCamera('kart-camera', Vector3.Zero(), scene);
     this.camera.minZ = 0.05;
     scene.activeCamera = this.camera;
@@ -79,7 +81,7 @@ export class KartCamera {
 
   cycleView(): string {
     this.view = (this.view + 1) % VIEWS.length;
-    this.cockpit.setEnabled(this.view === 2);
+    this.cockpit.setEnabled(this.view === 2 && !this.realCockpit);
     return VIEWS[this.view].name;
   }
 
@@ -91,17 +93,17 @@ export class KartCamera {
     const forwardZ = Math.cos(state.heading);
     const firstPerson = this.view === 2;
     const desired = firstPerson
-      ? new Vector3(state.x - forwardX * 0.05,
-        1.55 + state.height * 0.75 + state.suspensionOffset * 0.3,
-        state.z - forwardZ * 0.05)
+      ? new Vector3(state.x - forwardX * (this.realCockpit ? .42 : .05),
+        (this.realCockpit ? 1.89 : 1.55) + state.height * .9 + state.suspensionOffset * .3,
+        state.z - forwardZ * (this.realCockpit ? .42 : .05))
       : new Vector3(state.x - forwardX * view.distance,
         view.height + state.height * 0.35,
         state.z - forwardZ * view.distance);
     const blend = immediate ? 1 : 1 - Math.exp(-view.follow * dt);
     this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
-    this.camera.fov = view.fov;
+    this.camera.fov = (firstPerson && this.realCockpit ? 1.45 : view.fov) + (state.turboRemaining > 0 ? .075 : 0);
     this.camera.setTarget(firstPerson
-      ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - 0.14,
+      ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - (this.realCockpit ? 1.7 : .14),
         this.camera.position.z + forwardZ * 8)
       : new Vector3(state.x + forwardX * 2, 0.85 + state.height * 0.5, state.z + forwardZ * 2));
     this.wheel.rotation.z = -steering * 0.45;

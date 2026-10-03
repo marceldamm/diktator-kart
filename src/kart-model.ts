@@ -112,9 +112,11 @@ function approachZero(value: number, amount: number): number {
   return Math.min(0, value + amount);
 }
 
-function projectIntoTestArea(rawX: number, rawZ: number): {
+export type WorldProjection = (rawX: number, rawZ: number) => {
   x: number; z: number; normalX: number; normalZ: number; kind: 'boundary' | 'obstacle' | null;
-} {
+};
+
+function projectIntoTestArea(rawX: number, rawZ: number): ReturnType<WorldProjection> {
   let x = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawX));
   let z = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawZ));
   let normalX = x !== rawX ? -Math.sign(rawX) : 0;
@@ -149,7 +151,7 @@ function projectIntoTestArea(rawX: number, rawZ: number): {
   return { x, z, normalX, normalZ, kind };
 }
 
-export function advanceKart(state: KartState, input: DriveInput, dt: number): KartState {
+export function advanceKart(state: KartState, input: DriveInput, dt: number, project: WorldProjection = projectIntoTestArea): KartState {
   const commandedDrive = Math.max(-1, Math.min(1, input.throttle));
   const drive = state.impactRemaining > 0 ? Math.min(0, commandedDrive) : commandedDrive;
   const steering = Math.max(-1, Math.min(1, input.steering));
@@ -215,7 +217,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
   const travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
   const rawX = state.x + Math.sin(travelHeading) * speed * dt + state.impactVelocityX * dt;
   const rawZ = state.z + Math.cos(travelHeading) * speed * dt + state.impactVelocityZ * dt;
-  const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = projectIntoTestArea(rawX, rawZ);
+  const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = project(rawX, rawZ);
   let impactKind: KartState['impactKind'] = kind ?? state.impactKind;
   const collided = collisionNormalX !== 0 || collisionNormalZ !== 0;
   let impactRemaining = Math.max(0, state.impactRemaining - dt);
@@ -260,7 +262,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
 }
 
 // Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.
-export function resolveKartContacts(states: KartState[]): KartState[] {
+export function resolveKartContacts(states: KartState[], project: WorldProjection = projectIntoTestArea): KartState[] {
   const resolved = states.map((state) => ({ ...state }));
   const diameter = KART_TUNING.collisionRadius * 2;
   for (let pass = 0; pass < 4; pass++) {
@@ -298,7 +300,7 @@ export function resolveKartContacts(states: KartState[]): KartState[] {
       }
     }
     for (const kart of resolved) {
-      const projected = projectIntoTestArea(kart.x, kart.z);
+      const projected = project(kart.x, kart.z);
       if (projected.x !== kart.x || projected.z !== kart.z) corrected = true;
       kart.x = projected.x;
       kart.z = projected.z;

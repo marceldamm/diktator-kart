@@ -1,0 +1,16 @@
+// Original deterministic motor, tire, impact and boost sound effects. No music or voices.
+import { writeFile } from 'node:fs/promises';
+let seed=701;
+const noise=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/2147483648-1;};
+async function wav(name,duration,sample){
+  const rate=22050,count=Math.round(rate*duration),data=Buffer.alloc(44+count*2);
+  data.write('RIFF');data.writeUInt32LE(36+count*2,4);data.write('WAVEfmt ',8);data.writeUInt32LE(16,16);data.writeUInt16LE(1,20);data.writeUInt16LE(1,22);data.writeUInt32LE(rate,24);data.writeUInt32LE(rate*2,28);data.writeUInt16LE(2,32);data.writeUInt16LE(16,34);data.write('data',36);data.writeUInt32LE(count*2,40);
+  for(let i=0;i<count;i++)data.writeInt16LE(Math.round(Math.max(-1,Math.min(1,sample(i/rate,duration)))*27000),44+i*2);
+  await writeFile(new URL(`../public/assets/audio/${name}.wav`,import.meta.url),data);
+}
+let filter=0;
+await wav('motor',2,t=>{filter=filter*.83+noise()*.17;return .4*Math.sin(2*Math.PI*55*t)+.16*Math.sin(2*Math.PI*110*t)+.1*Math.sin(2*Math.PI*220*t)+filter*.5;});
+await wav('tire',2,t=>{filter=filter*.3+noise()*.7;return filter*.4+.12*Math.sin(2*Math.PI*(620*t+4*Math.sin(t*31)));});
+await wav('impact',.38,t=>noise()*.7*Math.exp(-t*19)+Math.sin(2*Math.PI*90*t)*.5*Math.exp(-t*24));
+await wav('boost',1.2,(t,d)=>{filter=filter*.55+noise()*.45;return (filter*.6+Math.sin(2*Math.PI*(85*t+30*t*t))*.1)*Math.sin(Math.PI*t/d);});
+console.log('Four original WAV effects written.');
