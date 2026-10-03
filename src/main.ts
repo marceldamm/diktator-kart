@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { TRACK, advanceRace, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace,type RaceProgress } from './track';
+import { TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -322,6 +322,9 @@ class App {
       for (let i = 0; i <= 160; i++) { const p = trackPoint(i / 160 * TRACK.length), [x, y] = this.minimapPoint(p.x, p.z); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); }
       c.closePath(); c.stroke();
     }
+    c.setLineDash([4, 3]); c.strokeStyle = '#d3bd8bbb'; c.lineWidth = 3; c.beginPath();
+    for (let i = 0; i <= 20; i++) { const p = shortcutPoint(i / 20 * SHORTCUT_LENGTH), [x, y] = this.minimapPoint(p.x, p.z); if (i === 0) c.moveTo(x, y); else c.lineTo(x, y); }
+    c.stroke(); c.setLineDash([]);
     const a = trackPoint(TRACK.start, -6), b = trackPoint(TRACK.start, 6), [ax, ay] = this.minimapPoint(a.x, a.z), [bx, by] = this.minimapPoint(b.x, b.z);
     c.strokeStyle = '#f3eee0'; c.lineWidth = 3; c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke();
     this.minimapTrack = canvas;
@@ -425,6 +428,7 @@ class App {
           });
           this.kart=recovered[0];this.loadKarts=recovered.slice(1);
         }
+        if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);

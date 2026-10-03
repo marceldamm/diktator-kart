@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BUMP_PROGRESS, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BUMP_PROGRESS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -61,7 +61,63 @@ export function trackLocate(x: number, z: number): { s: number; lane: number } {
   return result;
 }
 
-export function trackProgress(x: number, z: number): number { return trackLocate(x, z).s; }
+// Shortcut centreline: Catmull-Rom through the inside lanes of both legs and the backyard points.
+const SHORTCUT_PATH = (() => {
+  const raw = [trackPoint(SHORTCUT.from, -3), ...SHORTCUT.points.map(([x, z]) => ({ x, z })), trackPoint(SHORTCUT.to, -3)];
+  const pts: { x: number; z: number }[] = [];
+  for (let i = 0; i < raw.length - 1; i++) {
+    const p0 = raw[Math.max(0, i - 1)], p1 = raw[i], p2 = raw[i + 1], p3 = raw[Math.min(raw.length - 1, i + 2)];
+    for (let k = 0; k < 16; k++) {
+      const t = k / 16, t2 = t * t, t3 = t2 * t;
+      const f = (a: number, b: number, c: number, d: number) => .5 * (2 * b + (c - a) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (3 * b - a - 3 * c + d) * t3);
+      pts.push({ x: f(p0.x, p1.x, p2.x, p3.x), z: f(p0.z, p1.z, p2.z, p3.z) });
+    }
+  }
+  pts.push(raw[raw.length - 1]);
+  const u = [0]; for (let i = 1; i < pts.length; i++) u.push(u[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
+  return { pts, u, length: u[u.length - 1] };
+})();
+export const SHORTCUT_LENGTH = SHORTCUT_PATH.length;
+
+/** Point and heading on the shortcut at distance u (0..length) with a lateral offset (positive = right). */
+export function shortcutPoint(u: number, lane = 0): { x: number; z: number; heading: number } {
+  const { pts, u: cum } = SHORTCUT_PATH; const d = Math.max(0, Math.min(SHORTCUT_PATH.length, u));
+  let i = 0; while (i < pts.length - 2 && cum[i + 1] < d) i++;
+  const a = pts[i], b = pts[i + 1], f = (d - cum[i]) / (cum[i + 1] - cum[i] || 1), heading = Math.atan2(b.x - a.x, b.z - a.z);
+  const x = a.x + (b.x - a.x) * f, z = a.z + (b.z - a.z) * f;
+  return { x: x + Math.cos(heading) * lane, z: z - Math.sin(heading) * lane, heading };
+}
+
+/** Nearest shortcut position: distance along it, signed lateral offset and mapped race progress. */
+export function shortcutLocate(x: number, z: number): { u: number; lane: number; s: number } {
+  const { pts, u: cum } = SHORTCUT_PATH; let best = { u: 0, lane: Infinity, d: Infinity };
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1], ex = b.x - a.x, ez = b.z - a.z, len2 = ex * ex + ez * ez || 1;
+    const t = Math.max(0, Math.min(1, ((x - a.x) * ex + (z - a.z) * ez) / len2));
+    const px = a.x + ex * t, pz = a.z + ez * t, d = Math.hypot(x - px, z - pz);
+    if (d < best.d) best = { u: cum[i] + Math.sqrt(len2) * t, lane: ((x - px) * ez - (z - pz) * ex) / Math.sqrt(len2), d };
+  }
+  return { u: best.u, lane: best.lane, s: wrap(SHORTCUT.from + (SHORTCUT.to - SHORTCUT.from) * best.u / SHORTCUT_PATH.length) };
+}
+
+/** True while a kart is in the backyard alley rather than on the circuit itself. */
+export function inShortcut(x: number, z: number): boolean {
+  if (Math.abs(trackLocate(x, z).lane) <= TRACK.halfWidth + .3) return false;
+  return Math.abs(shortcutLocate(x, z).lane) <= SHORTCUT.halfWidth + .3;
+}
+
+export function trackProgress(x: number, z: number): number {
+  const main = trackLocate(x, z);
+  if (Math.abs(main.lane) <= TRACK.halfWidth + .3) return main.s;
+  const alley = shortcutLocate(x, z);
+  return Math.abs(alley.lane) <= SHORTCUT.halfWidth + .3 ? alley.s : main.s;
+}
+
+/** Rough alley cobbles: speed above the cap bleeds away unless a mini-turbo is running. */
+export function applySurfaceDrag(state: KartState, dt: number): KartState {
+  if (state.turboRemaining > 0 || state.speed <= SHORTCUT.speedCap || !inShortcut(state.x, state.z)) return state;
+  return { ...state, speed: Math.max(SHORTCUT.speedCap, state.speed - 14 * dt) };
+}
 
 /** Largest absolute centreline curvature in [from, from + distance]. */
 export function curvatureAhead(from: number, distance: number): { curvature: number; sign: number } {
@@ -82,6 +138,14 @@ export const projectTrack: WorldProjection = (x, z) => {
   const { s, lane } = trackLocate(x, z);
   const safe = TRACK.halfWidth - KART_TUNING.collisionRadius;
   if (Math.abs(lane) <= safe + 1e-7) return { x, z, normalX: 0, normalZ: 0, kind: null };
+  // The alley corridor is open ground too; outside both corridors, push back to the nearer wall.
+  const alley = shortcutLocate(x, z), alleySafe = SHORTCUT.halfWidth - KART_TUNING.collisionRadius * .8;
+  if (Math.abs(alley.lane) <= alleySafe + 1e-6) return { x, z, normalX: 0, normalZ: 0, kind: null };
+  const alleyExcess = Math.abs(alley.lane) - alleySafe, mainExcess = Math.abs(lane) - safe;
+  if (alleyExcess < mainExcess && alley.u > .5 && alley.u < SHORTCUT_PATH.length - .5) {
+    const sign = Math.sign(alley.lane), p = shortcutPoint(alley.u, sign * alleySafe);
+    return { x: p.x, z: p.z, normalX: -sign * Math.cos(p.heading), normalZ: sign * Math.sin(p.heading), kind: 'boundary' };
+  }
   const sign = Math.sign(lane), p = trackPoint(s, sign * safe);
   // Normal points back toward the centreline.
   return { x: p.x, z: p.z, normalX: -sign * Math.cos(p.heading), normalZ: sign * Math.sin(p.heading), kind: 'boundary' };

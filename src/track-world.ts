@@ -10,8 +10,8 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackHeightAt } from './track';
-import { LANDMARKS } from './track-layout';
+import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
+import { LANDMARKS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
@@ -38,7 +38,7 @@ function canvasTexture(scene: Scene, name: string, width: number, height: number
  * u runs along the track in metres / uScale, v along the profile in metres / vScale.
  */
 function sweep(scene: Scene, name: string, profile: [number, number][], material: PBRMaterial | StandardMaterial,
-  options: { uScale: number; vScale?: number; step?: number; from?: number; to?: number; follow?: boolean; color?: (s: number, lane: number) => [number, number, number] }): Mesh {
+  options: { uScale: number; vScale?: number; step?: number; from?: number; to?: number; follow?: boolean; color?: (s: number, lane: number) => [number, number, number]; at?: (s: number, lane: number) => { x: number; z: number } }): Mesh {
   const { uScale, vScale = 1, step = 1, from = 0, to = TRACK.length, follow = false } = options;
   const positions: number[] = [], uvs: number[] = [], indices: number[] = [], colors: number[] = [];
   const along: number[] = [0];
@@ -47,7 +47,7 @@ function sweep(scene: Scene, name: string, profile: [number, number][], material
   for (let r = 0; r <= rings; r++) {
     const s = from + (to - from) * r / rings;
     profile.forEach(([lane, height], j) => {
-      const p = trackPoint(s, lane);
+      const p = (options.at ?? trackPoint)(s, lane);
       positions.push(p.x, height + (follow ? trackHeightAt(p.x, p.z) : 0), p.z);
       uvs.push(s / uScale, along[j] / vScale);
       if (options.color) { const [cr, cg, cb] = options.color(s, lane); colors.push(cr, cg, cb, 1); }
@@ -84,7 +84,24 @@ export function paintEmblem(c: CanvasRenderingContext2D, cx: number, cy: number,
   c.restore();
 }
 
+/** Progress ranges on the inner (left) side where the backyard alley opens the circuit edge. */
+function alleyGaps(lane: number): [number, number][] {
+  const gaps: [number, number][] = []; let open: number | null = null;
+  for (let s = SHORTCUT.from - 20; s <= SHORTCUT.to + 20; s += .5) {
+    const p = trackPoint(s, lane), inside = Math.abs(shortcutLocate(p.x, p.z).lane) <= SHORTCUT.halfWidth + .9;
+    if (inside && open === null) open = s; if (!inside && open !== null) { gaps.push([open - .5, s + .5]); open = null; }
+  }
+  return gaps;
+}
+/** Splits [from, to] around gap ranges. */
+function without(from: number, to: number, gaps: [number, number][]): [number, number][] {
+  let parts: [number, number][] = [[from, to]];
+  for (const [a, b] of gaps) parts = parts.flatMap(([x, y]) => b <= x || a >= y ? [[x, y] as [number, number]] : [[x, a], [b, y]].filter(([p, q]) => q - p > .3) as [number, number][]);
+  return parts;
+}
+
 export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld {
+  const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
   const road = pbr(scene, 'Cobblestone boulevard', '#d8d2c2', 0, 1);
   road.albedoTexture = new Texture('/assets/textures/cobble-color.jpg', scene);
@@ -122,7 +139,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#0003'; c.fillRect(0, 28, 256, 4);
   });
   const kerb = pbr(scene, 'Painted kerb', '#ffffff', 0, .55); kerb.albedoTexture = kerbTexture;
-  for (const side of [-1, 1]) sweep(scene, `Kerb ${side}`, side < 0 ? [[-W - .95, .08], [-W - .1, .05], [-W, .025]] : [[W, .025], [W + .1, .05], [W + .95, .08]], kerb, { uScale: 2.4, step: .6 });
+  for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(0, TRACK.length, edgeGaps) : [[0, TRACK.length]]) sweep(scene, `Kerb ${side}`, side < 0 ? [[-W - .95, .08], [-W - .1, .05], [-W, .025]] : [[W, .025], [W + .1, .05], [W + .95, .08]], kerb, { uScale: 2.4, step: .6, from, to });
   const checker = canvasTexture(scene, 'Start checker', 256, 64, (c) => {
     for (let x = 0; x < 16; x++) for (let y = 0; y < 4; y++) { c.fillStyle = (x + y) % 2 ? '#111618' : '#f3eee0'; c.fillRect(x * 16, y * 16, 16, 16); }
   });
@@ -161,10 +178,10 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   let cursor = 0;
   for (const [a, b] of BOARD_RANGES) { ranges.push({ from: cursor, to: a, boards: false }, { from: a, to: b, boards: true }); cursor = b; }
   ranges.push({ from: cursor, to: TRACK.length, boards: false });
-  for (const range of ranges) for (const side of [-1, 1]) {
+  for (const range of ranges) for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(range.from, range.to, wallGaps) : [[range.from, range.to]]) {
     const profile = side < 0 ? wall(-1).reverse() : wall(1);
     // Only the face toward the road (first two profile points) carries the stripes; v is normalised.
-    const mesh = sweep(scene, `Barrier ${side}`, profile, range.boards ? board : barrier, { uScale: range.boards ? 32 : 4.8, vScale: 2.4, step: .8, from: range.from, to: range.to });
+    const mesh = sweep(scene, `Barrier ${side}`, profile, range.boards ? board : barrier, { uScale: range.boards ? 32 : 4.8, vScale: 2.4, step: .8, from, to });
     if (side < 0) { const uv = mesh.getVerticesData('uv')!; for (let i = 0; i < uv.length; i += 2) uv[i + 1] = 2.38 / 2.4 - uv[i + 1]; mesh.setVerticesData('uv', uv); }
     walls.push(mesh);
   }
@@ -182,9 +199,35 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   for (const side of [-1, 1]) {
     const outer = W + 1.45 + LANDMARKS.promenade;
     const lanes: [number, number][] = side < 0 ? [[-outer, .14], [-W - 1.45, .14]] : [[W + 1.45, .14], [outer, .14]];
-    sweep(scene, `Promenade ${side}`, lanes, paving, { uScale: 3, vScale: 3, step: 1.2 });
+    for (const [from, to] of side < 0 ? without(0, TRACK.length, promenadeGaps) : [[0, TRACK.length]]) sweep(scene, `Promenade ${side}`, lanes, paving, { uScale: 3, vScale: 3, step: 1.2, from, to });
     sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2 });
   }
+  // Backyard alley: darker, rougher cobbles between clipped hedges, opening onto both legs.
+  const alleyAt = (u: number, lane: number) => shortcutPoint(u, lane);
+  sweep(scene, 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], road, { uScale: 2, vScale: 2, step: .5, to: SHORTCUT_LENGTH, at: alleyAt,
+    color: (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
+  const hedgeMaterial = pbr(scene, 'Clipped alley hedge', '#ffffff', 0, .95);
+  const hedgeMaps = surfaceTextures(scene, 'Hedge', 'leaf'); hedgeMaps.color.hasAlpha = false; hedgeMaterial.albedoTexture = hedgeMaps.color; hedgeMaterial.bumpTexture = hedgeMaps.normal; hedgeMaterial.albedoColor = Color3.FromHexString('#5e8a4c');
+  for (const side of [-1, 1]) {
+    const a = SHORTCUT.halfWidth + .45, b = a + .7;
+    const hedge = sweep(scene, `Alley hedge ${side}`, side < 0 ? [[-b, 0], [-b, 1.05], [-a, 1.05], [-a, 0]] : [[a, 0], [a, 1.05], [b, 1.05], [b, 0]], hedgeMaterial,
+      { uScale: 1.5, vScale: 1.5, step: .8, from: 9, to: SHORTCUT_LENGTH - 9, at: alleyAt });
+    shadow.addShadowCaster(hedge);
+  }
+  const signTexture = canvasTexture(scene, 'Shortcut sign', 512, 256, (c) => {
+    c.fillStyle = '#efe4c8'; c.fillRect(0, 0, 512, 256); c.strokeStyle = '#6d1b23'; c.lineWidth = 14; c.strokeRect(10, 10, 492, 236);
+    c.fillStyle = '#6d1b23'; c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ABKÜRZUNG', 256, 96);
+    c.font = '30px Georgia'; c.fillText('nur mit Sondergenehmigung', 256, 150); c.font = 'italic 24px Georgia'; c.fillText('Formular 08/15-B · Kopfsteinpflaster', 256, 200);
+  });
+  const signMaterial = pbr(scene, 'Shortcut sign board', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
+  for (const [u, side] of [[5, 1], [SHORTCUT_LENGTH - 5, -1]] as const) {
+    const p = shortcutPoint(u, side * (SHORTCUT.halfWidth + 1.2));
+    const board = MeshBuilder.CreatePlane('Shortcut sign', { width: 2.2, height: 1.1, sideOrientation: Mesh.DOUBLESIDE }, scene);
+    board.position.set(p.x, 2.2, p.z); board.rotation.y = p.heading + (u > 10 ? Math.PI : 0); board.material = signMaterial; board.isPickable = false;
+    const pole = MeshBuilder.CreateCylinder('Shortcut sign pole', { diameter: .1, height: 2.2, tessellation: 6 }, scene);
+    pole.position.set(p.x, 1.1, p.z); pole.material = kerbStone; pole.isPickable = false;
+  }
+
   const verge = pbr(scene, 'Gravel verge', '#6f6550', 0, .95);
   for (const side of [-1, 1]) sweep(scene, `Verge ${side}`, side < 0 ? [[-W - 1, .022], [-W - .95, .08]] : [[W + .95, .08], [W + 1, .022]], verge, { uScale: 2, step: 2 });
 

@@ -80,6 +80,12 @@ export function sampleTrack(points = TRACK_CONTROL_POINTS, spacing = .5): { samp
   return { samples, length: smoothLength };
 }
 
+/**
+ * Backyard shortcut through the fountain hairpin: leaves the boulevard on the inside at `from`,
+ * rejoins the return leg at `to`. Narrow, rough cobbles cap the speed unless a mini-turbo is active.
+ */
+export const SHORTCUT = { from: 343, to: 452, halfWidth: 3, speedCap: 10.5, points: [[-46, -44], [-34, -44.5], [-22, -47.5]] as const };
+
 /** World anchors shared with the Blender builders (game x / z). */
 export const LANDMARKS = {
   palace: [0, 132] as const,

@@ -29,8 +29,13 @@ def tp(s, lane=0.0):
     x, y = a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f
     return x + math.cos(h) * lane, y - math.sin(h) * lane, h
 
+ALLEY = T.get('shortcut', {}).get('points', [])
+
 def clearance(x, y):
-    return min(math.hypot(p[0] - x, p[1] - y) for p in S)
+    # Distance to the circuit centreline; the backyard alley counts as circuit with its own (narrower) corridor.
+    d = min(math.hypot(p[0] - x, p[1] - y) for p in S)
+    if ALLEY: d = min(d, min(math.hypot(p[0] - x, p[1] - y) for p in ALLEY) + (W - T['shortcut']['halfWidth']))
+    return d
 
 def frame(s, lane, turn=0.0, name='frame'):
     x, y, h = tp(s, lane)
