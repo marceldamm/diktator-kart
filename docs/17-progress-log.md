@@ -651,6 +651,8 @@
 
 **Budget beim Abschluss:** Fünf-Stunden-Fenster 83 % vor der Abschlussprüfung, Woche 11 %; Arbeit bewusst vor 95 % beendet.
 
+**Versuch verworfen:** Ein Bot (Diva) mit einfacher Zielpunktsteuerung durch die Gasse prallte in der Simulation 19-mal an die Einmündungen und war 20 s langsamer; Änderung nicht übernommen. Bots brauchen für die Gasse eine eigene Ideallinie mit Bremspunkt.
+
 **Nächster Schritt:** Testfahrt mit Bande, Rempeln, Gasse und Stimmen; danach Bots auf die Abkürzung, Schadensstufen, Drawcalls senken, Grafiksprung jenseits des Mario-Kart-Looks (Materialtiefe, Atmosphäre/Wetter, dichtere Architektur und Publikum).
 
 **Nicht verifiziert:** Menschliches Gefühl der neuen Bandenregel und der Gasse; Balancing der Abkürzung; Bots auf der Abkürzung.
