@@ -16,7 +16,7 @@ import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
-export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[] }
+export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
 const W = TRACK.halfWidth;
 /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
@@ -230,6 +230,17 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     pole.position.set(p.x, 1.1, p.z); pole.material = kerbStone; pole.isPickable = false;
   }
 
+  // Rain puddles on the racing line: glossy dark water discs (enabled only in rain).
+  const puddleMaterial = pbr(scene, 'Rain puddle water', '#1c2226', 0, .04); puddleMaterial.alpha = .88;
+  const puddles: { x: number; z: number; r: number }[] = [];
+  const puddleMeshes: Mesh[] = [];
+  for (const [s, lane, r] of [[40, -2.2, 1.6], [96, 1.8, 1.3], [150, -.6, 1.8], [205, 2.4, 1.2], [300, -1.5, 2], [326, 2, 1.4], [372, .5, 1.5], [470, -2, 1.4], [512, 1.2, 1.9], [560, -.8, 1.3]] as const) {
+    const p = trackPoint(s, lane);
+    const disc = MeshBuilder.CreateDisc('Rain puddle', { radius: r, tessellation: 28 }, scene);
+    disc.rotation.x = Math.PI / 2; disc.scaling.y = 1.6; disc.rotation.y = p.heading; disc.position.set(p.x, .05, p.z);
+    disc.material = puddleMaterial; disc.isPickable = false; disc.setEnabled(false); puddleMeshes.push(disc); puddles.push({ x: p.x, z: p.z, r: r * 1.2 });
+  }
+
   const verge = pbr(scene, 'Gravel verge', '#6f6550', 0, .95);
   for (const side of [-1, 1]) sweep(scene, `Verge ${side}`, side < 0 ? [[-W - 1, .022], [-W - .95, .08]] : [[W + .95, .08], [W + 1, .022]], verge, { uScale: 2, step: 2 });
 
@@ -351,6 +362,13 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   return {
     glowMeshes: [globe],
+    puddles,
+    setWet(wet) {
+      // Wet cobbles: darker, much smoother (rain film) and more reflective; puddles appear.
+      road.albedoColor = Color3.FromHexString(wet ? '#8d897f' : '#d8d2c2'); road.roughness = wet ? .32 : 1;
+      paving.albedoColor = Color3.FromHexString(wet ? '#8c8270' : '#cbbda0'); paving.roughness = wet ? .4 : 1;
+      for (const m of puddleMeshes) m.setEnabled(wet);
+    },
     animate(time) { updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04; },
   };
 }

@@ -56,3 +56,12 @@ await wav('land',.22,t=>noise()*.2*Math.exp(-t*30)+Math.sin(2*Math.PI*65*t)*.4*M
     return firing+rum*1.6+links;});
   console.log('Tank sounds written.');
 }
+
+// Weather: seamless rain bed and a rolling thunder clap.
+{
+  let a=0,c=0;
+  await wav('rain',4,t=>{const n=noise();a=a*.55+n*.45;c=c*.97+n*.03;const drops=Math.random()<.004?noise()*.8:0;return (a-c)*.55+drops*.4;});
+  let r1=0,r2=0;
+  await wav('thunder',3.2,t=>{const n=noise();r1=r1*.985+n*.015;r2=r2*.9+n*.1;const env=Math.min(1,t*6)*Math.exp(-t*1.1)*(1+.6*Math.sin(t*9)*Math.exp(-t));return (r1*7+r2*.8)*env*.9;});
+  console.log('Weather sounds written.');
+}

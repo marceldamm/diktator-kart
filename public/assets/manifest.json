@@ -38,6 +38,8 @@
     "models/parade-tank.glb",
     "audio/tank-transform.wav",
     "audio/tank-crush.wav",
-    "audio/tank-engine.wav"
+    "audio/tank-engine.wav",
+    "audio/rain.wav",
+    "audio/thunder.wav"
   ]
 }

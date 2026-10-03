@@ -90,6 +90,7 @@ class App {
   private items:ItemWorld=createItems(LOAD_KART_COUNT+1);
   private abilities:AbilityWorld=createAbilities(LOAD_KART_COUNT+1);
   private queuedSpecial=false;
+  private rain=false;
   private abilityStats={transform:0,revert:0,crush:0};
   private itemMessage='';
   private itemMessageUntil=0;
@@ -117,6 +118,8 @@ class App {
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
     document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = 1 - this.quality; this.applyQuality(); });
+    try { this.rain = new URLSearchParams(location.search).get('weather') === 'rain' || localStorage.getItem('dk-weather') === 'rain'; } catch { /* storage optional */ }
+    document.querySelector('#weather-toggle')?.addEventListener('click', () => { this.rain = !this.rain; this.applyWeather(); });
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
     document.querySelector('#menu-race')?.addEventListener('click',()=>void this.startRace());
@@ -240,6 +243,8 @@ class App {
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
       this.applyQuality();
+      if (this.testScene) this.testScene.onLightning = () => this.audio.thunder();
+      this.applyWeather();
       this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
       this.testScene.attachCamera?.(this.camera.babylonCamera);
       this.drawMinimapTrack();
@@ -257,6 +262,12 @@ class App {
     }
   }
 
+  private applyWeather(): void {
+    if (LAB_WORLD) return;
+    this.testScene?.setRain?.(this.rain); this.audio.setRain(this.rain);
+    document.querySelector('#weather-toggle')!.textContent = this.rain ? 'Wetter Regen' : 'Wetter Sonne';
+    try { localStorage.setItem('dk-weather', this.rain ? 'rain' : 'sun'); } catch { /* storage optional */ }
+  }
   private applyQuality(): void {
     if (LAB_WORLD) return;
     this.testScene?.setQuality?.(this.quality, this.reducedEffects);
@@ -480,6 +491,12 @@ class App {
             return s;
           });
           this.kart=recovered[0];this.loadKarts=recovered.slice(1);
+        }
+        if (!LAB_WORLD && this.rain) {
+          // Rain puddles: water drag and a little lost grip while crossing.
+          const puddles = this.testScene?.puddles?.() ?? [];
+          const wade = (k: typeof this.kart) => puddles.some((p) => Math.hypot(p.x - k.x, p.z - k.z) < p.r) ? { ...k, speed: k.speed * (1 - 1.1 * FIXED_STEP), yawRate: k.yawRate * (1 - 2 * FIXED_STEP) } : k;
+          this.kart = wade(this.kart); this.loadKarts = this.loadKarts.map(wade);
         }
         if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);

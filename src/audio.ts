@@ -24,6 +24,8 @@ export class KartAudio {
   private lastAirborne=false;
   private lastBump=false;
   private tankGain?: GainNode;
+  private rainGain?: GainNode;
+  private raining=false;
   private readonly tankCues=new Map<string,AudioBuffer>();
   private lastGear = 0;
   private shiftDip = 0;
@@ -64,10 +66,12 @@ export class KartAudio {
         else if (kind === 'scrape') this.scrapeGain = gain; else this.crowdGain = gain;
       }
       // Parade tank sounds are optional extras: the race works without them.
-      void Promise.all(['tank-transform','tank-crush','tank-engine'].map(async (n) => { try { this.tankCues.set(n, await load(n)); } catch { /* optional */ } })).then(() => {
+      void Promise.all(['tank-transform','tank-crush','tank-engine','thunder','rain'].map(async (n) => { try { this.tankCues.set(n, await load(n)); } catch { /* optional */ } })).then(() => {
         const engine = this.tankCues.get('tank-engine'); if (!engine || !this.master) return;
         const source = context.createBufferSource(), gain = context.createGain(); source.buffer = engine; source.loop = true; gain.gain.value = 0;
         source.connect(gain); gain.connect(this.master); source.start(); this.tankGain = gain;
+        const rainBuffer = this.tankCues.get('rain'); if (!rainBuffer) return;
+        const rs = context.createBufferSource(), rg = context.createGain(); rs.buffer = rainBuffer; rs.loop = true; rg.gain.value = 0; rs.connect(rg); rg.connect(this.master); rs.start(); this.rainGain = rg;
       });
       // Voice lines stream in after the effects; a missing line is simply skipped.
       void fetch('/assets/audio/voice/lines.json').then((r) => r.json()).then(async (lines: Record<string, unknown>) => {
@@ -133,6 +137,9 @@ export class KartAudio {
     return played;
   }
   cue(kind:'countdown'|'start'|'lap'|'finish'):void { this.play(this.cues.get(kind),.65); }
+  setRain(on:boolean):void { this.raining=on; }
+  /** Lightning: thunder rolls in a moment after the flash. */
+  thunder():void { const b=this.tankCues.get('thunder'); window.setTimeout(()=>this.play(b,.8,.85+Math.random()*.3),500+Math.random()*1200); }
   /** Parade tank: transform clank and hiss, revert, heavy run-over thud. */
   ability(kind:'transform'|'revert'|'crush'):void { this.play(this.tankCues.get(kind==='crush'?'tank-crush':'tank-transform'),kind==='crush'?.75:.7,kind==='revert'?1.25:1); }
   dispose():void {this.music.pause();this.music.src='';void this.context?.close();this.context=undefined;}
@@ -159,6 +166,7 @@ export class KartAudio {
     if (running && bump && !this.lastBump) this.play(this.impact, .3, 1.35);
     this.lastBump = bump;
     this.crowdGain?.gain.setTargetAtTime(running ? (.035 + crowdNearness * .16 + this.crowdSwell * .22) * (this.duck > 0 ? .7 : 1) : .02, t, .3);
+    this.rainGain?.gain.setTargetAtTime(this.raining ? (running ? .32 : .2) : 0, t, .4);
     this.tankGain?.gain.setTargetAtTime(running && (state.tankRemaining ?? 0) > 0 ? .3 + Math.min(.2, speed * .012) : 0, t, .15);
     const impact = state.impactRemaining > 0, boost = state.turboRemaining > 0;
     if (running && impact && !this.lastImpact) this.play(this.impact, .65);

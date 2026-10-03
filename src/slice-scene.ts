@@ -275,6 +275,18 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     trackDust.direction1 = new Vector3(-1, .3, -1); trackDust.direction2 = new Vector3(1, 1.2, 1);
     trackDust.color1 = new Color4(.6, .55, .46, .35); trackDust.color2 = new Color4(.7, .66, .58, .28); trackDust.colorDead = new Color4(.65, .6, .5, 0); trackDust.start();
     let lastStates: KartState[] = [];
+    // Rain: streak particles around the camera, puddle splashes, lightning flashes.
+    let raining = false, lightningTimer = 9, flash = 0;
+    const rain = new ParticleSystem('Rain streaks', 2600, scene); rain.particleTexture = particleTexture(scene);
+    rain.billboardMode = ParticleSystem.BILLBOARDMODE_STRETCHED; rain.minSize = .015; rain.maxSize = .03; rain.minScaleY = 14; rain.maxScaleY = 22;
+    rain.minLifeTime = .5; rain.maxLifeTime = .8; rain.emitRate = 0; rain.minEmitBox = new Vector3(-22, 12, -22); rain.maxEmitBox = new Vector3(22, 14, 22);
+    rain.direction1 = new Vector3(-1.5, -24, -.5); rain.direction2 = new Vector3(-.5, -28, .5); rain.minEmitPower = 1; rain.maxEmitPower = 1;
+    rain.color1 = new Color4(.75, .8, .88, .45); rain.color2 = new Color4(.65, .72, .82, .35); rain.colorDead = new Color4(.6, .7, .8, 0); rain.start();
+    const splash = new ParticleSystem('Puddle splash', 260, scene); splash.particleTexture = particleTexture(scene);
+    splash.minSize = .08; splash.maxSize = .22; splash.minLifeTime = .3; splash.maxLifeTime = .6; splash.emitRate = 0;
+    splash.direction1 = new Vector3(-2.5, 3, -2.5); splash.direction2 = new Vector3(2.5, 5, 2.5); splash.gravity = new Vector3(0, -9, 0);
+    splash.color1 = new Color4(.75, .82, .9, .7); splash.color2 = new Color4(.9, .93, .96, .6); splash.colorDead = new Color4(.8, .85, .9, 0); splash.start();
+    const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
     report?.('items');
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
     const tvCamera = new FreeCamera('Staatsfernsehen camera', new Vector3(0, 5, 0), scene); tvCamera.fov = .5; tvCamera.minZ = .1;
@@ -300,7 +312,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     paintCaption('STAATSFERNSEHEN · Übertragung genehmigt');
     const itemShadowMeshes=(shadow.getShadowMap()?.renderList??[]).filter(mesh=>!staticShadowMeshes.includes(mesh));
     for(const mesh of world.meshes){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
-    return {
+    const api: TestScene = {
       scene,
       presentItems,
       attachCamera(camera) {
@@ -314,6 +326,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (kind === 'crush') { burst(puff, at, reducedEffects ? 10 : 40); burst(paper, at, reducedEffects ? 8 : 25); return; }
         smoke.emitter = new Vector3(at.x, .4, at.z); smoke.manualEmitCount = reducedEffects ? 40 : 160;
       },
+      setRain(on) {
+        raining = on; trackWorld.setWet(on);
+        sun.intensity = on ? baseLight.sun * .28 : baseLight.sun; hemisphere.intensity = on ? .62 : baseLight.hemi;
+        hemisphere.diffuse = on ? new Color3(.62, .68, .78) : new Color3(.66, .76, 1);
+        scene.fogDensity = on ? .0105 : baseLight.fog; scene.fogColor = on ? new Color3(.46, .5, .55) : baseLight.fogColor;
+        scene.environmentIntensity = on ? .85 : baseLight.env; skyMaterial.emissiveColor = Color3.Black();
+        skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0;
+      },
+      puddles() { return raining ? trackWorld.puddles : []; },
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
@@ -346,6 +367,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height, k.z)); }
         skids.update([state, ...others]);
         lastStates = [state, ...others];
+        if (raining) {
+          rain.emitter = new Vector3(state.x + Math.sin(state.heading) * 8, 0, state.z + Math.cos(state.heading) * 8);
+          for (const k of lastStates) if (Math.abs(k.speed) > 4 && trackWorld.puddles.some((p) => Math.hypot(p.x - k.x, p.z - k.z) < p.r)) { splash.emitter = new Vector3(k.x, .1, k.z); splash.manualEmitCount = reducedEffects ? 6 : 24; }
+          lightningTimer -= dt;
+          if (lightningTimer <= 0) { lightningTimer = 9 + Math.random() * 14; flash = 1; api.onLightning?.(); }
+        }
+        if (flash > 0) { flash = Math.max(0, flash - dt * 3.2); const f = flash > .7 || (flash > .3 && flash < .45) ? 1 : 0; hemisphere.intensity = .62 + f * 2.4; skyMaterial.emissiveTexture!.level = .42 + f * .9; }
         // Parade tank: springy pop-in, kart hidden, driver rises into the hatch, tracks and road wheels roll.
         { const want = state.tankRemaining > 0 ? 1 : 0; tankBlend += (want - tankBlend) * Math.min(1, dt * 7);
           const shown = tankBlend > .02; tankRoot.setEnabled(shown);
@@ -422,5 +450,6 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         sparks.color1 = scraping ? new Color4(1, .78, .35, 1) : state.driftCharge >= .7 ? new Color4(1, .6, .12, 1) : new Color4(.15, .8, 1, 1); sparks.color2 = sparks.color1;
       },
     };
+    return api;
   } catch (error) { scene.dispose(); throw error; }
 }

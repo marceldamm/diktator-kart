@@ -29,6 +29,12 @@ export interface TestScene {
   broadcast?(kart: number, caption: string): void;
   /** Ability feedback: transformation burst, revert burst, run-over dust. */
   abilityEvent?(kind: 'transform' | 'revert' | 'crush', kart: number, target?: number): void;
+  /** Weather: false = late-afternoon sun, true = rain with wet road, puddles and lightning. */
+  setRain?(rain: boolean): void;
+  /** Puddle discs for splash/drag rules in rain (empty in sunshine). */
+  puddles?(): { x: number; z: number; r: number }[];
+  /** Called on a lightning flash so the audio can thunder. */
+  onLightning?: () => void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {

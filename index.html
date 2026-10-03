@@ -65,6 +65,7 @@
       <div class="map-card slice-only"><canvas id="minimap" width="150" height="230" aria-label="Streckenkarte"></canvas><span>441 m · STADIONRING</span></div>
       <div id="countdown" class="slice-only" hidden>3</div>
       <div id="lap-notice" class="slice-only" hidden></div>
+      <div class="ability-card slice-only" id="ability-card"><span id="ability-icon">⚡</span><div><strong id="ability-name">Größenbefehl</strong><small id="ability-info">Q · Panzer bereit</small><div class="ability-meter"><div id="ability-fill"></div></div></div><span class="ability-key">Q</span></div>
       <div class="item-card slice-only"><span id="item-icon">✉</span><div><strong id="item-name">Sendung abholen</strong><small id="item-info">Leuchtende Postkisten auf der Strecke</small></div><button id="item-use" type="button" disabled aria-label="Item einsetzen">E</button></div>
       <div id="item-warning" class="slice-only" hidden></div>
       <div id="finish-card" hidden><span>STADION GRAND PRIX</span><h2 id="finish-title">Ziel erreicht</h2><p id="finish-detail"></p><ol id="finish-results" aria-label="Stand bei deiner Zielankunft"></ol><p id="finish-best"></p><button id="finish-retry" type="button">Revanche ↵</button><button id="finish-menu" type="button">Zum Menü</button></div>
@@ -87,7 +88,7 @@
           <button id="restart" type="button" disabled>Neustart</button>
           <button id="debug-toggle" type="button" disabled>Diagnose</button>
         </div>
-        <div id="options-anchor"><details id="options" class="slice-only"><summary>Optionen</summary><div class="actions"><button id="sound-toggle" type="button">Ton an</button><button id="quality-toggle" type="button">Grafik Standard</button><button id="effects-toggle" type="button">Effekte voll</button><button id="motion-toggle" type="button">Kamera dynamisch</button></div><label>Musik <input id="music-volume" type="range" min="0" max="100" value="14" aria-label="Musiklautstärke"></label></details></div>
+        <div id="options-anchor"><details id="options" class="slice-only"><summary>Optionen</summary><div class="actions"><button id="sound-toggle" type="button">Ton an</button><button id="weather-toggle" type="button">Wetter Sonne</button><button id="quality-toggle" type="button">Grafik Standard</button><button id="effects-toggle" type="button">Effekte voll</button><button id="motion-toggle" type="button">Kamera dynamisch</button></div><label>Musik <input id="music-volume" type="range" min="0" max="100" value="14" aria-label="Musiklautstärke"></label></details></div>
         <p class="hint">W/↑ Gas · S/↓ Bremse/Rückwärts · A/D oder ←/→ Lenken<br>Space Hop; halten + lenken: Drift; geladen loslassen: Mini-Turbo<br>Bodenwellen voraus; roter Kollisionsblock rechts der Linie<br>C Kamera nah/fern/Fahrer · E Item · Q Fähigkeit · P Pause · R Neustart · F3 Diagnose</p>
         <pre id="debug" hidden></pre>
       </section>
