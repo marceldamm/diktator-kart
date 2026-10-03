@@ -27,3 +27,7 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Sprachhupe:** F spielt einen individuellen vorläufigen Parodieclip mit Abklingzeit. Sprechertexte freundlicher/kürzer, Hall und Verzerrung reduziert; echte historische Mitschnitte und Hörabnahme bleiben offen.
 
 - **Diktieren genügt:** Wünsche, Langfristziele und Nachrichten füreinander trägt die KI ein. Schnellhilfe oben in TEAM-NOTES.md; auch „Projekt Start“ und „Projekt Ende“ sind gültige Kurzbefehle.
+
+## 04.10.2026
+
+- **Gemeinsam gesichert:** Geprüfter neuer Spielstand und vier Arbeitsdateien auf GitHub main veröffentlicht. Der nächste Abend beginnt mit „Projekt Start“. Historische Fahrer und weitere Grafikarbeit bleiben nächste Aufgaben.

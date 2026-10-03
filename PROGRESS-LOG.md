@@ -4,7 +4,13 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
-## Aktueller globaler Stand – 03.10.2026
+## Neueste Übergabe – 04.10.2026
+
+Die geprüfte Spielversion **2c6e92d** wurde über den sicheren Team-Finish auf Arbeitsbranch und GitHub main veröffentlicht und durch erneutes Fetch bestätigt. 41 Tests / 41 bestanden, TypeScript und Produktionsbuild bestanden. Abschließender Dokumentationsnachweis ändert anschließend keine Spiel-/Asset-/Skriptdateien. Die vier zentralen Rootdateien und Kurzbefehle sind die tägliche Arbeitsgrundlage; die frühere Gesamtübersicht darunter ist historisch.
+
+Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, gegenlenkbarer Drift, Staub, eigener stilisierter Hund, Straßenmöbel und F-Sprachhupe mit eigener Parodie. Offen: echte historische Fahrer, weitere Grafikqualität, menschliche Hör-/Driftabnahme, frei nutzbare authentische Sprachclips und echte schwache-PC-/Mobil-Abnahme. Details/Belege in den datierten letzten Einträgen und CURRENT-WORKLIST.md. Kein Zurückgehen zur Altengine.
+
+## Historische Gesamtübersicht – 03.10.2026
 
 ### Verifiziert
 
@@ -828,6 +834,16 @@
 **Artprüfung:** Eigenen sichtbaren Chrome wiederhergestellt; erste Nahprüfung bei verdecktem Fenster zeigte nur die alte Szene, nicht den injizierten Hund. Nach bestätigter laufender Rennphase/Fokusverwaltung neu aufgenommen: shepherd-art-inspection-v1.png zeigt tatsächlich den stilisierten Schäferhund. Nicht als realitätsnahes Tiermodell bezeichnet. Straßenmöbelbilder und normaler Fahrerblick nochmals angesehen; reale historische Fahrer und G–L-Qualität bleiben unerreicht.
 
 **Abschluss:** Funktionierender Checkpoint 9d849cb; aktuelle Schnellhilfe/Belege werden zusätzlich lokal gesichert. Team-Finish holt vor Veröffentlichung aktuellen main und führt die volle Test-/Build-Prüfung aus. Ergebnis erst nach tatsächlichem Remotevergleich als veröffentlicht melden. Nächste Aufgabe: erkennbare historische Fahrer, höherwertige Welt/Materialien; Stimme menschlich anhören, Quellen für echte Sprachhupen klären.
+
+### 2026-10-04 – Geprüfter Teamabschluss veröffentlicht
+
+**Tatsächlich gesichert:** scripts/team-workflow.ps1 -Action Finish -Owner Marcel beendet mit Exit 0. 41 Tests bestanden, 0 Fehler; tsc/Vite-Produktionsbuild bestanden. Aktueller Remote-main vor dem Abschluss war 3c3ec5f, keine parallele Änderung erkannt. Arbeitsbranch und main regulär (kein Force-Push) auf **2c6e92d0e9afa25b8ff979bc5c7b5ac724fb0ead** veröffentlicht; erneutes Fetch bestätigt HEAD = origin/main. Reproduzierbarer Konsolenbeleg lokal .tools/team-finish-20261004.log (nicht ins Repository hochgeladen).
+
+**Erhalten:** Sarahs angeforderter Alt-Hauptstand e292070, lokaler Alt-main 2d95e8a und Claude-Qualitätsstand c13d47e bleiben auf ihren unveränderten GitHub-Archivbranches. Das beweist keine Sicherung von Sarahs nur lokal/unveröffentlichten Dateien. Legacy-Verzeichnisse unverändert. Arbeitsbranch bleibt erhalten; lokales main wird nur per Fast-Forward aktualisiert, sofern nicht anderswo aktiv.
+
+**Rest / Grenze:** Benutzer-/Geräte-/Hörabnahmen bleiben offen; G–L und realitätsnahe historische Fahrer sind noch nicht erreicht. Build meldet weiterhin großen ~2,2-MB-Hauptchunk, keine stillschweigende Performance-Abnahme. Vier App-Tabs angefordert, Toolstatus queued; Öffnung beim Zurückkehren zur betreffenden Codex-Sitzung, keine sofortige Anzeige behauptet. Offizieller Limitstand zuletzt 82% Fünf-Stunden / 27% Woche verbraucht, Abschluss-Puffer genutzt; keine Resets/Zusatzkontingente.
+
+**Nächster Schritt:** Projekt Start. Danach erste erkennbare historische Fahrerproduktion und nächster Grafikpass; Sprecherin/F-Parodie im Fahrtest anhören, konkrete Aussprachefehler notieren. Abschließende Arbeitslisten-/Veröffentlichungsnotiz als dokumentationsreiner Folgcommit, Spiel-/Asset-/Skriptstand bleibt der oben geprüfte.
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 

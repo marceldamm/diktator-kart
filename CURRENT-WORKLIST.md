@@ -6,16 +6,16 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
-**Aktuell:** Vier-Dateien-Teamablauf prüfen und die heutigen Spieländerungen sichern.
+**Aktuell:** Heutiger Teamstand geprüft und auf GitHub main gesichert.
 **Danach:** Erkennbare historische Fahrer und der nächste Grafikpass.
-**Arbeitsbranch:** codex/team-marcel-20261003-202647-623. GitHub-Abschluss noch ausstehend.
+**Arbeitsbranch:** codex/team-marcel-20261003-202647-623. Geprüfte Spielversion 2c6e92d nach main veröffentlicht; Arbeitsbranch bleibt erhalten.
 
 ## Offen und als Nächstes
 
 - [ ] Historische Fahrer: erkennbare, realitätsnahe Abbilder, insbesondere Hitler; vorhandene neutralen Figuren ersetzen. Satirische Inszenierung, keine Regimezeichen. Kein fertiges 1:1-Modell behaupten.
 - [ ] Sprachausgabe menschlich anhören: Verständlichkeit jedes Textes, freundlichere lebendige Sprecherin. Kürzere Texte und klarere Mischung umgesetzt; Hörabnahme steht aus.
 - [ ] Historische Sprachhupen: echte unproblematische Mitschnitte mit belegter Person/Quelle und geklärten kostenlosen Nutzungsrechten. Aktuelle sechs Clips sind eigene synthetische Parodien.
-- [ ] Abschließender Teamabschluss: Tests/Build, echte Spielbelege, vier Arbeitsdateien/PROGRESS-LOG.md aktualisieren, neuesten Teamstand integrieren, geprüft nach main veröffentlichen.
+- [x] Abschließender Teamabschluss (41 Tests und Build bestanden, GitHub main 2c6e92d verifiziert): Tests/Build, echte Spielbelege, vier Arbeitsdateien/PROGRESS-LOG.md aktualisieren, neuesten Teamstand integrieren, geprüft nach main veröffentlichen.
 
 ## Heute umgesetzt und geprüft
 
