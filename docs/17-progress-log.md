@@ -673,6 +673,8 @@
 
 **Nachtrag 2d (Nutzerfahrt):** Umsehen mit Totzone gegen Handzittern und ruhigem Zurückschwenken nach 2 s; Rechtsklick ist ein starrer Rückblick entlang der Kartachse ohne Mausversatz. Die Fahrgrenze lag bei 4,75 m (vor dem Randstein), jetzt bis an die Wand (7 m minus halbe Kartbreite 1,15 m); Randsteine sind echte 3,5–5,5-cm-Rüttelwellen für die Radkontakte. Items prallen erst an der Wand ab. 25 Modelltests (Bodenwellentest endet jetzt vor der Haarnadel), Botsimulation 119–127 s ohne Festfahren.
 
+**Nachtrag 2d – Videowand „Staatsfernsehen LIVE“:** Vergoldete Großbildwand neben der Tribünengeraden; eine zweite Kamera rendert per RenderTargetTexture (768 × 432, jedes zweite Bild) den aktuellen Rennführer aus drei wechselnden Einstellungen (seitlich, Hubschrauber, Streckenrand), darunter eine Bauchbinde „● LIVE · FÜHRUNG: <Figur> · RUNDE x/3“. Im laufenden Spiel aufgenommen und funktionsfähig; kostet eine zusätzliche Szenendarstellung (Drawcalls im Rennen ≈ 700–760 auf der RTX, Perzentile weiter 16,8 ms P95) – bewusst nach Nutzervorgabe „Performance ignorieren“.
+
 **Nächster Schritt (nach Limit-Reset):** Regen mit nasser Fahrbahn, Pfützen mit Spritzern, Blitz/Donner und Wolkenschatten; Videowand „Staatsfernsehen LIVE“; deutlich echtere Fahrermodelle (MPFB/MakeHuman CC0 prüfen).
 
 ### [JJJJ-MM-TT] – [Sitzungstitel]

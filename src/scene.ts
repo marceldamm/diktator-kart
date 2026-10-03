@@ -24,6 +24,8 @@ export interface TestScene {
   attachCamera?(camera: Camera): void;
   celebrate?(kind: 'start' | 'finish'): void;
   resetEffects?(): void;
+  /** State TV wall: which kart the live camera follows and the caption under the picture. */
+  broadcast?(kart: number, caption: string): void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {

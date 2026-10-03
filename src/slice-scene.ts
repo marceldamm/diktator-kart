@@ -18,6 +18,8 @@ import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator'
 import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent';
 import { GlowLayer } from '@babylonjs/core/Layers/glowLayer';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
+import { RenderTargetTexture } from '@babylonjs/core/Materials/Textures/renderTargetTexture';
+import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline';
 import { TRACK, trackPoint } from './track';
 import { LANDMARKS } from './track-layout';
@@ -226,6 +228,28 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       pipeline.sharpenEnabled = full; pipeline.sharpen.edgeAmount = .18;
     };
     const presentItems=await addItems(scene,shadow,loadKartCount+1);
+    // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
+    const tvCamera = new FreeCamera('Staatsfernsehen camera', new Vector3(0, 5, 0), scene); tvCamera.fov = .5; tvCamera.minZ = .1;
+    const feed = new RenderTargetTexture('Staatsfernsehen feed', { width: 768, height: 432 }, scene, false);
+    feed.activeCamera = tvCamera; feed.renderList = null; feed.refreshRate = 2; scene.customRenderTargets.push(feed);
+    const wallAt = trackPoint(66, -(TRACK.halfWidth + 11));
+    const tv = new TransformNode('Staatsfernsehen wall', scene); tv.position.set(wallAt.x, 0, wallAt.z); tv.rotation.y = wallAt.heading - .45;
+    const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = feed; screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.Black();
+    const screen = MeshBuilder.CreatePlane('Staatsfernsehen picture', { width: 9.6, height: 5.4 }, scene); screen.parent = tv; screen.position.y = 9.2; screen.material = screenMaterial;
+    const frameMaterial = new PBRMaterial('Staatsfernsehen gilded frame', scene); frameMaterial.albedoColor = Color3.FromHexString('#b98a3e'); frameMaterial.metallic = .9; frameMaterial.roughness = .3;
+    const frame = MeshBuilder.CreateBox('Staatsfernsehen frame', { width: 10.6, height: 7.6, depth: .5 }, scene); frame.parent = tv; frame.position.set(0, 8.6, .3); frame.material = frameMaterial;
+    for (const x of [-3.6, 3.6]) { const leg = MeshBuilder.CreateBox('Staatsfernsehen pylon', { width: .7, height: 5, depth: .7 }, scene); leg.parent = tv; leg.position.set(x, 2.5, .3); leg.material = frameMaterial; shadow.addShadowCaster(leg); }
+    const captionTexture = new DynamicTexture('Staatsfernsehen caption', { width: 1024, height: 128 }, scene, true);
+    const captionMaterial = new StandardMaterial('Staatsfernsehen caption', scene); captionMaterial.emissiveTexture = captionTexture; captionMaterial.disableLighting = true;
+    const caption = MeshBuilder.CreatePlane('Staatsfernsehen caption', { width: 9.6, height: 1.2 }, scene); caption.parent = tv; caption.position.set(0, 5.75, -.01); caption.material = captionMaterial;
+    let following = 0, captionText = '', shotTimer = 0, shot = 0;
+    const paintCaption = (text: string) => {
+      const c = captionTexture.getContext() as CanvasRenderingContext2D;
+      c.fillStyle = '#7a1820'; c.fillRect(0, 0, 1024, 128); c.fillStyle = '#d7b46a'; c.fillRect(0, 0, 210, 128);
+      c.fillStyle = '#7a1820'; c.font = 'bold 44px Georgia'; c.textAlign = 'center'; c.fillText('● LIVE', 105, 80);
+      c.fillStyle = '#f3e3b8'; c.font = 'bold 40px Georgia'; c.textAlign = 'left'; c.fillText(text, 240, 80); captionTexture.update();
+    };
+    paintCaption('STAATSFERNSEHEN · Übertragung genehmigt');
     const itemShadowMeshes=(shadow.getShadowMap()?.renderList??[]).filter(mesh=>!staticShadowMeshes.includes(mesh));
     for(const mesh of world.meshes){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     return {
@@ -236,6 +260,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         pipeline = new DefaultRenderingPipeline('Presentation', engine.getCaps().textureHalfFloatRender, scene, [camera]);
         configurePipeline();
       },
+      broadcast(kart, text) { following = kart; if (text !== captionText) { captionText = text; paintCaption(text); } },
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
@@ -261,6 +286,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         trackWorld.animate(time);
+        // TV director: cut between three angles on the followed kart every few seconds.
+        { const k = [state, ...others][following] ?? state; shotTimer += dt; if (shotTimer > 5.5) { shotTimer = 0; shot = (shot + 1) % 3; }
+          const side = shot === 0 ? 1 : -1, ahead = shot === 2 ? 2 : 9, up = shot === 1 ? 7 : 1.6, out = shot === 1 ? 3 : 5.5;
+          const want = new Vector3(k.x + Math.sin(k.heading) * ahead + Math.cos(k.heading) * out * side, up, k.z + Math.cos(k.heading) * ahead - Math.sin(k.heading) * out * side);
+          tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height, k.z)); }
         skids.update([state, ...others]);
         [state, ...others].forEach((s, index) => {
           const v = visuals[index]; if (!v) return;
