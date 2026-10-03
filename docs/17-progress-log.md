@@ -717,6 +717,18 @@
 
 **Budget:** Letzte offizielle Abfrage 22 % Fünf-Stunden- und 18 % Wochenverbrauch; mindestens 78 % Rest im maßgeblichen Limit. Kein Reset oder Zusatzkontingent.
 
+### 2026-10-03 – Maussteuerung bewusst per Ziehen
+
+**Auftrag:** Nutzer beanstandet dauernde Kamerabewegung bei freier Maus; erlaubt passendere Belegung statt Linkstaste. Anschließend zusätzlich Fahrt-/Kameraruckeln untersuchen (separates folgendes Arbeitspaket).
+
+**Umgesetzt:** Projektstart auf aktuellem main 3c3ec5f, eigener Branch codex/team-marcel-20261003-202647-623. Rechte Taste halten + ziehen dreht die Kamera, freie Mausbewegung wirkt nicht mehr. Linksklick/E weiterhin Item; X halten Rückblick; Wheel Zoom. Sichtbarer freier Cursor, kein Pointer Lock, Grabbing-Cursor nur während der Geste. Pointer Capture und vollständiges Loslassen bei Release/Blur/Hidden/Menu/Pause/Restart/Viewwechsel. Kamera hält die Richtung während des Haltens, zentriert danach weich statt erst nach zwei Sekunden. Kamera-/Rennneustart löscht alte Look-Offsets.
+
+**Verifiziert:** Produktionsbuild/TypeScript bestanden. Eigener Chrome 9227, 1280 × 800, normale Spielwelt mit einem Kart: alle drei Ansichten ohne Hover-Bewegung, gezielter Drag, mehr als zwei Sekunden stabiles Halten, weiches Zentrieren, X-Rückblick samt Release; Menü und simuliertes Blur lösen Capture; Linksklick erzeugt ausschließlich Item-Eingabe, Maus bleibt ohne Pointer Lock. Keine Runtimeausnahme. Rohdaten docs/evidence/mouse-camera-check.json, Tests tests/mouse-camera-browser.mjs. Kein menschlicher Komforttest oder Hardware-Performancebeleg.
+
+**Geändert:** src/mouse-camera.ts, main.ts/camera.ts/input.ts/style.css, index.html, Browsertest/Beleg, README/START-HERE/docs19/22/17/12. Keine Fahrphysikänderung in diesem Paket.
+
+**Nächster Schritt:** Das vom Nutzer beschriebene kurzzeitige Zurückbleiben/Aufholen bei gerader Fahrt anhand Simulationsschritten, Renderposition und Kamerazeit messen und beheben. Mausarbeit lokal sichern; gemeinsamer Abschluss nach beiden Paketen.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

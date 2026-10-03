@@ -96,3 +96,7 @@ Technische Produktionsentscheidung im freigegebenen Slice: Original-Blenderkarts
 **Freigabe:** Projektabschluss ist der ausdrückliche Auftrag zum geprüften Upload/integrativen main-Update. Kein wiederholtes Freigabeproblem für denselben Ablauf; keine Autorisierung für Force-Push, fremde Ziele oder Verwerfen fremder Arbeit. Sarahs private lokale Änderungen bleiben durch ihren ersten Projektstart zu sichern.
 
 **Betroffen:** AGENTS/CLAUDE/README/START-HERE/TEAM-HANDBOOK; docs/00/08/09/10/11/12/16/17/18/21; project-state.json, Skripte, Batches, Repo-Skills, Vite-Identität. Inhalts-/Stil-/Geräteziele bleiben unverändert.
+
+## 03.10.2026 – Kameramaus nur als bewusste Geste
+
+Nutzer erlaubt alternative Mausbelegung nach Beanstandung dauernder Kamerabewegung. Technische Entscheidung: rechte Taste halten + ziehen für Look, linke Taste weiterhin Item, X halten Rückblick. Sichtbarer freier Cursor; kein permanenter Pointer Lock; weiche Rückzentrierung beim Release. Damit bleiben Fahren, Kamera und Itemabsicht getrennt. Vorbild für die Drag-Geste: offizielle BeamNG-Photomode-Kamerabedienung. Betrifft README, START-HERE, docs19/22, main/input/camera/mouse-camera und Spielhinweise. Keine Änderung an Sarahs Figuren-/Itemideen.

@@ -40,6 +40,7 @@ export class KartCamera {
   private lookPitch=0;
   private lookIdle=0;
   private lookBack=false;
+  private looking=false;
   private zoom=1;
   private lastImpact=0;
 
@@ -96,6 +97,7 @@ export class KartCamera {
   }
 
   cycleView(): string {
+    this.resetLook();
     this.view = (this.view + 1) % VIEWS.length;
     this.cockpit.setEnabled(this.view === 2 && !this.realCockpit);
     return VIEWS[this.view].name;
@@ -105,10 +107,12 @@ export class KartCamera {
   get babylonCamera(): FreeCamera { return this.camera; }
   get photoMode(): boolean { return this.photo; }
   get introMode():boolean {return this.intro;}
-  setIntroMode(intro:boolean):void {this.intro=intro;this.cockpit.setEnabled(!intro&&this.view===2&&!this.realCockpit);}
+  setIntroMode(intro:boolean):void {this.resetLook();this.intro=intro;this.cockpit.setEnabled(!intro&&this.view===2&&!this.realCockpit);}
   setReducedMotion(reduced:boolean):void { this.reducedMotion=reduced; }
   look(dx:number,dy:number):void { if(Math.abs(dx)+Math.abs(dy)<3)return; this.lookYaw=Math.max(-2.6,Math.min(2.6,this.lookYaw+dx*.006)); this.lookPitch=Math.max(-.35,Math.min(.6,this.lookPitch+dy*.004)); this.lookIdle=0; }
   setLookBack(back:boolean):void { this.lookBack=back; }
+  setLooking(active:boolean):void { this.looking=active; this.lookIdle=0; }
+  resetLook():void { this.lookYaw=0; this.lookPitch=0; this.lookIdle=0; this.looking=false; this.lookBack=false; }
   zoomBy(delta:number):void { this.zoom=Math.max(.6,Math.min(1.9,this.zoom*(delta>0?1.08:1/1.08))); }
   togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
 
@@ -128,7 +132,7 @@ export class KartCamera {
     const yawRate = this.reducedMotion ? 14 : 4.2;
     if (immediate) this.chaseHeading = aim;
     else this.chaseHeading += Math.atan2(Math.sin(aim - this.chaseHeading), Math.cos(aim - this.chaseHeading)) * (1 - Math.exp(-yawRate * dt));
-    this.lookIdle += dt; if (this.lookIdle > 2 || this.lookBack) { const back = 1 - Math.exp(-(this.lookBack ? 30 : 2.5) * dt); this.lookYaw -= this.lookYaw * back; this.lookPitch -= this.lookPitch * back; }
+    this.lookIdle += dt; if ((!this.looking && this.lookIdle > .08) || this.lookBack) { const back = 1 - Math.exp(-(this.lookBack ? 30 : 5.5) * dt); this.lookYaw -= this.lookYaw * back; this.lookPitch -= this.lookPitch * back; }
     const orbit = this.lookBack ? state.heading + Math.PI : this.chaseHeading + this.lookYaw;
     const chaseX = Math.sin(orbit), chaseZ = Math.cos(orbit);
     const speed = Math.abs(state.speed);

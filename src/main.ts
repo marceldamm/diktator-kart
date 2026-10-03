@@ -9,6 +9,7 @@ import { KartAudio } from './audio';
 import { CAST } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
+import { attachMouseCamera } from './mouse-camera';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -57,6 +58,13 @@ class App {
   private readonly input = new InputHub();
   private readonly detachKeyboard = attachKeyboard(this.input);
   private readonly detachTouch=attachTouch(this.input,document.querySelector<HTMLElement>('#touch-controls')!);
+  private readonly mouse = attachMouseCamera(canvas, {
+    enabled: () => this.state === 'running' && !!this.camera && !this.camera.introMode && !this.camera.photoMode,
+    look: (dx,dy) => this.camera?.look(dx,dy),
+    dragging: active => this.camera?.setLooking(active),
+    item: () => { this.input.setAction('mouse-item','item',true); this.input.setAction('mouse-item','item',false); },
+    zoom: delta => this.camera?.zoomBy(delta),
+  });
   private state: AppState = 'loading';
   private lastAction = 'Keine';
   private manifestName = '–';
@@ -121,22 +129,13 @@ class App {
     restartButton.addEventListener('click', () => void this.restart());
     debugButton.addEventListener('click', () => { debug.hidden = !debug.hidden; });
     window.addEventListener('resize', () => this.engine?.resize());
-    // Mouse: move = look around the driver, right button = rear view, left button = item, wheel = zoom.
-    canvas.addEventListener('contextmenu', (event) => event.preventDefault());
-    canvas.addEventListener('pointermove', (event) => { if (event.pointerType === 'mouse' && !this.camera?.introMode) this.camera?.look(event.movementX, event.movementY); });
-    canvas.addEventListener('pointerdown', (event) => {
-      if (event.pointerType !== 'mouse' || this.camera?.introMode) return;
-      if (event.button === 2) this.camera?.setLookBack(true);
-      if (event.button === 0) { this.input.setAction('mouse-item', 'item', true); this.input.setAction('mouse-item', 'item', false); }
-    });
-    window.addEventListener('pointerup', (event) => { if (event.button === 2) this.camera?.setLookBack(false); });
-    canvas.addEventListener('wheel', (event) => { event.preventDefault(); this.camera?.zoomBy(event.deltaY); }, { passive: false });
     window.addEventListener('pagehide', () => this.dispose());
     void this.restart();
   }
 
   private show(state: AppState, detail: string): void {
     this.state = state;
+    if (state !== 'running') this.mouse.release();
     document.body.classList.toggle('is-loading',state==='loading'||state==='error');
     document.body.classList.toggle('start-error',state==='error');
     if (state === 'error') window.dispatchEvent(new CustomEvent('dk:load-error', { detail }));
@@ -187,6 +186,7 @@ class App {
 
   private async restart(): Promise<void> {
     const generation = ++this.generation;
+    this.mouse.release();
     const loading = new LoadingProgress(!LAB_WORLD);
     const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail }));
     const report = (phase: LoadingPhase) => { if (generation === this.generation) notify(loading.complete(phase)); };
@@ -260,6 +260,7 @@ class App {
     try{localStorage.setItem('dk-reduced-motion',this.reducedMotion?'1':'0');}catch{}
   }
   private openMenu():void {
+    this.mouse.release();
     if(LAB_WORLD||this.state==='loading'||!this.camera)return;
     if(this.camera.introMode)return;
     if(this.camera.photoMode)this.camera.togglePhoto();document.body.classList.remove('photo-mode');
@@ -282,6 +283,7 @@ class App {
     await this.audio.unlock();
     if(generation!==this.generation||!this.testScene)return;
     this.closeMenu();
+    this.mouse.release(); this.camera?.resetLook();
     if (this.camera?.photoMode) this.camera.togglePhoto(); document.body.classList.remove('photo-mode');
     // Reuse assets; reset the simulation without reloading the entire scene.
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
@@ -391,6 +393,7 @@ class App {
     } else if (this.state !== 'running' || document.hidden) this.frameTimes = [];
     this.lastFrameAt = now;
     const frame = this.input.read();
+    this.camera?.setLookBack(this.state === 'running' && !this.camera.introMode && this.input.isDown('lookBack'));
     if(frame.pressed.has('menu')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}
     if(this.camera?.introMode&&(['accelerate','brake','steerLeft','steerRight','camera','photo'] as Action[]).some(a=>frame.pressed.has(a)))this.closeMenu();
     if (frame.pressed.has('restart')) void this.restart();
@@ -404,6 +407,7 @@ class App {
     }
     if ((this.state === 'running'||this.state==='paused')&&this.testScene) {
       if (frame.pressed.has('camera')) {
+        this.mouse.release();
         this.lastAction = `Kamera: ${this.camera?.cycleView() ?? 'Verfolger nah'}`;
         cameraDisplay.textContent = this.camera?.viewName ?? 'Verfolger nah';
         this.camera?.update(this.kart,0,true,frame.steering);
@@ -532,6 +536,7 @@ class App {
   }
 
   private dispose(): void {
+    this.mouse.dispose();
     ++this.generation;
     this.detachKeyboard();
     this.detachTouch();

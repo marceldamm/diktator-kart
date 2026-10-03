@@ -1,0 +1,31 @@
+{
+  "controls": "RMB drag camera; release centres; X hold rear; LMB item",
+  "viewport": "1280x800",
+  "fleet": 1,
+  "evidence": [
+    {
+      "view": "Verfolger nah",
+      "hover": 0,
+      "held": 0.9599999992723467,
+      "centred": 0.0010797409139669393,
+      "rear": 3.1415926535667187
+    },
+    {
+      "view": "Verfolger fern",
+      "hover": 0,
+      "held": 0.9599999067905148,
+      "centred": 0.0025331642482185057,
+      "rear": 3.1415926498205535
+    },
+    {
+      "view": "Fahrerperspektive",
+      "hover": 0,
+      "held": 0.7680000115221988,
+      "centred": 0,
+      "rear": 3.1415926484244587
+    }
+  ],
+  "menuAndFocusRelease": true,
+  "itemSeparate": true,
+  "runtimeErrors": []
+}

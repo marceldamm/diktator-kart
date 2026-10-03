@@ -1,5 +1,9 @@
 # Benutzeroberfläche, Einstellungen und lokale Speicherung
 
+## Bewusste Mausgeste – 03.10.2026
+
+Umsehen im Rennen/freier Fahrt nur mit rechter Maustaste halten + ziehen (an der freien Kamera von BeamNG orientiertes Bedienmuster, https://www.beamng.com/game/support/portal/gameplay/photomode/). Linksklick/E bleiben Items; X halten Rückblick; Mausrad Zoom. Der Cursor bleibt sichtbar, ohne Pointer Lock. Pointer Capture hält eine gestartete Geste über dem Canvasrand zusammen; Loslassen/Fokusverlust/Menü/Pause/Neustart/Kamerawechsel beenden sie. Während des Haltens bleibt die gewählte Blickrichtung; danach weiche Rückzentrierung. Menüs/Fotoautomatik erhalten keine Drag-Eingabe. Spielhinweise, README/START-HERE/aktueller Hand-off synchronisiert.
+
 ## Früher Start ohne weißen HTML-Blitz – 03.10.2026
 
 Die Ladeoberfläche und deren Grundlayout stehen direkt in index.html, vor dem Babylon-Modul und dessen CSS. Andere Spiel-HTML wird bis zur Szenenbereitschaft verborgen. Konzeptmotiv mit dunklem Verlauf und editierbarer HTML-Typografie, responsiv und mit reduzierter Bewegung. Balken zählt sechs tatsächlich abgeschlossene Abschnitte (Engine/Manifest, Welt, Bäume, Karts, Items, Szenenbereitschaft/erstes Bild), keine geschätzten Downloadprozente. Techniklabor besitzt nur zwei Abschnitte. Bei Modul-/Assetstartfehlern bleiben Fehlermeldung, optionale Fehlerdetails und Erneut laden verfügbar; bei längerem Start nach 45 s Hinweis/Wiederholen, ohne künstlichen Abbruch oder gefälschten Fortschritt. Browserprobe des Produktionsbuilds einschließlich Neustart und Rückkehr zum echten 3D-Menü in docs/evidence/loading-browser-check.json.

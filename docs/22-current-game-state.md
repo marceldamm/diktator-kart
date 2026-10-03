@@ -9,7 +9,7 @@ Vollstaendiger Quellbaum von `c13d47e`, Branch `claude/diktator-kart-quality-lev
 - 593-m-Spline-Rundkurs mit Palastbogen, S-Kurven, Boulevard und Haarnadeln; gemeinsame Mittellinie fuer Fahren, Bots, Welt und Minikarte. Hinterhof-Abkuerzung (Bots dort noch ohne Ideallinie).
 - Neues Kart, sechs fiktive Karikaturfiguren mit ganzen Beinen/Uniformdetails, sichtbare Vorderrad-/Lenkrad-/Armanimation, Faustgeste bei Turbo.
 - Gleitende Bandenkontakte mit einmaligem Anprallverlust und laufender Reibung; weichere Rempler; Lenkträgheit, gefederte Karosserie, Kopfsteinpflaster-/Randsteinreaktion, sichtbarer Dreher bei Itemtreffer.
-- Drei Kameras, Umsehen per Maus mit Totzone, starrer Rechtsklick-Rueckblick, Mausradzoom, Linksklick-Item.
+- Drei Kameras, Umsehen nur mit gehaltener rechter Maustaste und Ziehen; Loslassen zentriert weich. X halten fuer Rueckblick, Mausradzoom, Linksklick-Item. Freier sichtbarer Cursor, keine permanente Mausbindung.
 - Bot-Drift/Turbo, drei gleiche Itemregeln, kompletter Rennablauf mit Countdown/drei Runden/Ziel/Revanche und freier Fahrt.
 - Warmes Nachmittagslicht, Bloom/Farbkurven, Begrenzung fuer Basisgrafik, Reifenspuren, Turbo-Feuer, Papier-/Staub-/Konfettieffekte. Architektur entlang der Strecke, Publikum, Banner und fiktive Statuen.
 - Originale Motor-/Publikums-/Kontaktklaenge, Sprecherin und Figurenrufe (offline synthetisierte eigene Texte; keine menschliche Hoerabnahme).

@@ -1,6 +1,6 @@
 export type Action =
   | 'accelerate' | 'brake' | 'steerLeft' | 'steerRight' | 'hopDrift'
-  | 'camera' | 'item' | 'special' | 'pause' | 'restart' | 'debug' | 'photo' | 'recover' | 'menu';
+  | 'camera' | 'item' | 'special' | 'pause' | 'restart' | 'debug' | 'photo' | 'recover' | 'menu' | 'lookBack';
 
 export interface InputFrame {
   throttle: number;
@@ -16,6 +16,7 @@ const bindings: Record<string, Action> = {
   ArrowRight: 'steerRight', KeyD: 'steerRight',
   Space: 'hopDrift', KeyC: 'camera', KeyE: 'item', KeyQ: 'special',
   KeyP: 'pause', KeyR: 'restart', F3: 'debug', KeyV: 'photo', KeyB: 'recover',Escape:'menu',
+  KeyX: 'lookBack',
 };
 
 // All devices write through this interface. A later touch adapter can use its own source ID.
