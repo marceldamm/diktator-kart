@@ -104,6 +104,7 @@ eye_white = mat('Eye white', (.92, .9, .86), 0, .35)
 lips = mat('Lip rouge', (.55, .08, .1), 0, .45)
 lens = mat('Sunglass lens', (.02, .025, .03), .6, .08)
 medal_red = mat('Medal ribbon', (.6, .05, .08), 0, .6)
+iris = mat('Eye iris', (.12, .22, .3), .1, .3)
 
 kart = empty('hero-kart')
 
@@ -226,8 +227,17 @@ loft('Uniform torso', torso_rings, uniform, driver, 1)
 box('Uniform belt', (0, -.24, 1.0), (.56, .08, .1), leather, .02, driver)
 box('Belt buckle', (0, -.19, 1.0), (.1, .03, .09), trim, .01, driver)
 tube('Parade sash', [(-.34, -.3, 1.44), (-.1, -.21, 1.25), (.18, -.22, 1.06), (.36, -.32, .95)], .05, cape_cloth, driver)
-for k, z in enumerate([1.12, 1.24, 1.36]):
-    ellipsoid('Uniform button', (0, -.2, z), (.025, .015, .025), trim, driver, 10)
+ellipsoid('Uniform belly', (0, -.3, 1.08), (.36, .26, .27), uniform, driver, 18)
+for z in [1.04, 1.16, 1.28, 1.4]:
+    for x in [-.1, .1]: ellipsoid('Uniform button', (x, -.07 - abs(1.08 - z) * .25, z), (.025, .015, .025), trim, driver, 8)
+for row in range(3):
+    for col in range(3):
+        box('Medal ribbon bar', (.13 + col * .065, -.18, 1.42 - row * .045), (.06, .02, .04), [medal_red, trim, uniform][(row + col) % 3], .004, driver)
+for k, x in enumerate([.14, .21, .28]):
+    tube('Medal hanger', [(x, -.18, 1.29), (x, -.175, 1.22)], .012, medal_red, driver)
+    cyl('Hanging medal', (x, -.17, 1.19), .032, .012, trim, driver, 'Y', verts=12)
+tube('Aiguillette cord', [(-.38, -.35, 1.5), (-.3, -.2, 1.36), (-.16, -.16, 1.3), (-.1, -.17, 1.4)], .014, trim, driver)
+tube('Aiguillette loop', [(-.38, -.36, 1.48), (-.32, -.24, 1.28), (-.2, -.19, 1.24), (-.1, -.17, 1.38)], .012, trim, driver)
 for k, (x, z) in enumerate([(.16, 1.32), (.24, 1.3), (.2, 1.22)]):
     box('Medal ribbon', (x, -.19, z + .05), (.06, .02, .07), medal_red, .005, driver)
     cyl('Medal disc', (x, -.185, z - .02), .035, .012, trim, driver, 'Y')
@@ -242,8 +252,12 @@ for sd in [-1, 1]:
     tube('Uniform arm', [(0, 0, -.02), (sd * .04, .33, -.26), (-sd * .22, .6, -.24)], .1, uniform, arm)
     tube('Gold cuff', [(-sd * .16, .53, -.24), (-sd * .2, .57, -.24)], .105, trim, arm)
     ellipsoid('Glove', (-sd * .23, .64, -.23), (.09, .1, .08), white_glove, arm)
-    ellipsoid('Uniform knee', (sd * .17, .05, .92), (.13, .3, .13), uniform, driver)
-    tube('Trouser stripe', [(sd * .3, -.2, .95), (sd * .29, .25, .94)], .015, trim, driver)
+    # Full seated legs: thigh up to a raised knee, shin down into the nose, boots on the pedals.
+    tube('Uniform thigh', [(sd * .17, -.38, .9), (sd * .19, -.05, .98), (sd * .21, .2, 1.06)], .115, uniform, driver)
+    ellipsoid('Uniform knee', (sd * .21, .22, 1.06), (.12, .12, .12), uniform, driver)
+    tube('Uniform shin', [(sd * .21, .24, 1.04), (sd * .2, .45, .82), (sd * .19, .62, .6)], .09, uniform, driver)
+    ellipsoid('Riding boot', (sd * .19, .7, .55), (.085, .16, .1), leather, driver)
+    tube('Trouser stripe', [(sd * (.17 + .11), -.36, .92), (sd * (.19 + .11), -.05, 1.0), (sd * (.21 + .1), .2, 1.08), (sd * (.2 + .08), .45, .84)], .014, trim, driver)
 # Cape: animated flap at the shoulders (runtime node name 'scarfFlap').
 cape = empty('scarfFlap', (0, -.66, 1.56), driver)
 cvs = []; cfs = []
@@ -274,15 +288,21 @@ for j in range(len(rows) - 1):
 hf.append(tuple(reversed(range(N)))); hf.append(tuple((len(rows) - 1) * N + k for k in range(N)))
 smooth(mesh('Driver caricature head', hv, hf, skin, head), 2)
 ellipsoid('Neck', (0, -.02, -.22), (.12, .12, .14), skin, head)
-ellipsoid('Nose', (0, .3, .06), (.07, .09, .075), skin, head)
+ellipsoid('Nose', (0, .31, .05), (.08, .1, .085), skin, head)
+ellipsoid('Nose tip', (0, .37, .02), (.055, .05, .05), skin, head)
 for sd in [-1, 1]:
     ellipsoid('Ear', (sd * .29, 0, .06), (.04, .08, .1), skin, head)
     ellipsoid('Cheek', (sd * .14, .22, -.02), (.09, .07, .07), skin, head)
-    ellipsoid('Eye white', (sd * .1, .245, .14), (.06, .025, .045), eye_white, head)
-    ellipsoid('Eye pupil', (sd * .1, .265, .135), (.026, .012, .03), leather, head)
+    ellipsoid('Eye white', (sd * .1, .245, .14), (.065, .03, .05), eye_white, head)
+    ellipsoid('Eye iris', (sd * .1, .268, .132), (.032, .012, .034), iris, head, 10)
+    ellipsoid('Eye pupil', (sd * .1, .276, .132), (.016, .008, .018), leather, head, 8)
+    lid = ellipsoid('Heavy eyelid', (sd * .1, .25, .165), (.072, .036, .03), skin, head)
     tube('Bushy brow', [(sd * .05, .26, .2), (sd * .11, .265, .225), (sd * .17, .24, .2)], .022, hair, head)
-tube('Smirk', [(-.08, .27, -.08), (0, .285, -.095), (.09, .27, -.07)], .011, hair, head)
+tube('Smirk', [(-.09, .27, -.075), (0, .288, -.1), (.1, .272, -.06)], .013, lips, head)
+ellipsoid('Smug teeth', (.02, .282, -.088), (.06, .012, .016), eye_white, head, 10)
 box('Uniform collar', (0, -.03, -.2), (.34, .3, .1), uniform, .04, head)
+for sd in [-1, 1]: box('Collar oak tab', (sd * .1, .13, -.19), (.07, .02, .06), trim, .006, head)
+ellipsoid('Double chin', (0, .18, -.17), (.15, .1, .07), skin, head)
 tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, head)
 for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .26, -.03, .14), (.06, .16, .12), hair, head)
 ellipsoid('Hair back', (0, -.1, .12), (.285, .2, .2), hair, head)
@@ -292,12 +312,13 @@ def cast(name):
     return empty('cast-' + name, (0, 0, 0), head)
 
 c = cast('peaked')                               # military peaked cap, laurel badge
-cyl('Cap crown', (0, -.02, .38), .3, .16, hat_cloth, c, r2=.34, verts=28)
+cyl('Cap crown', (0, .0, .42), .29, .24, hat_cloth, c, r2=.38, verts=28)
+ellipsoid('Cap crown top', (0, .03, .54), (.38, .4, .05), hat_cloth, c, 20)
 cyl('Cap band', (0, -.02, .31), .29, .07, leather, c, verts=28)
 ellipsoid('Cap visor', (0, .22, .3), (.25, .14, .025), leather, c)
 tube('Cap gold cord', [(-.27, .19, .33), (0, .27, .34), (.27, .19, .33)], .014, trim, c)
-torus('Cap badge laurel', (0, .27, .4), .055, .012, trim, c, 'Y')
-ellipsoid('Cap badge', (0, .275, .41), (.035, .012, .04), trim, c, 8)
+torus('Cap badge laurel', (0, .3, .44), .075, .014, trim, c, 'Y')
+ellipsoid('Cap badge', (0, .31, .45), (.05, .014, .055), trim, c, 10)
 c = cast('naval')                                # white naval cap with gold leaves
 cyl('Naval cap crown', (0, -.02, .4), .32, .14, ivory, c, r2=.37, verts=28)
 cyl('Naval cap band', (0, -.02, .32), .29, .08, leather, c, verts=28)
