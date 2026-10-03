@@ -33,6 +33,7 @@ export class KartCamera {
 
     const shell = cockpitMaterial(scene, 'cockpit-shell-mat', new Color3(0.07, 0.12, 0.14));
     const rim = cockpitMaterial(scene, 'cockpit-rim-mat', new Color3(0.9, 0.61, 0.16));
+    const hoodPaint = cockpitMaterial(scene, 'cockpit-hood-mat', new Color3(0.47, 0.06, 0.07));
     const hand = cockpitMaterial(scene, 'cockpit-hand-mat', new Color3(0.82, 0.59, 0.41));
     const tire = cockpitMaterial(scene, 'cockpit-tire-mat', new Color3(0.035, 0.045, 0.05));
     this.cockpit = new TransformNode('cockpit-view', scene);
@@ -41,14 +42,21 @@ export class KartCamera {
     dashboard.position.set(0, -0.48, 0.85);
     dashboard.material = shell;
     dashboard.parent = this.cockpit;
+    const hood = MeshBuilder.CreateBox('cockpit-hood', { width: 1.55, height: 0.1, depth: 1.5 }, scene);
+    hood.position.set(0, -0.73, 1.77);
+    hood.material = hoodPaint;
+    hood.parent = this.cockpit;
     for (const x of [-0.35, 0.35]) {
-      const gauge = MeshBuilder.CreateSphere(`cockpit-gauge-${x}`, { diameter: 0.15, segments: 10 }, scene);
-      gauge.position.set(x, -0.39, 0.79);
+      const gauge = MeshBuilder.CreateCylinder(`cockpit-gauge-${x}`,
+        { diameter: 0.12, height: 0.025, tessellation: 16 }, scene);
+      gauge.rotation.x = Math.PI / 2;
+      gauge.position.set(x * 0.72, -0.4, 0.93);
       gauge.material = rim;
       gauge.parent = this.cockpit;
-      const frontTire = MeshBuilder.CreateCylinder(`cockpit-front-tire-${x}`, { diameter: 0.36, height: 0.16, tessellation: 14 }, scene);
+      const frontTire = MeshBuilder.CreateCylinder(`cockpit-front-tire-${x}`,
+        { diameter: 0.28, height: 0.13, tessellation: 14 }, scene);
       frontTire.rotation.z = Math.PI / 2;
-      frontTire.position.set(x < 0 ? -0.77 : 0.77, -0.57, 1.75);
+      frontTire.position.set(x < 0 ? -1.1 : 1.1, -0.7, 2.35);
       frontTire.material = tire;
       frontTire.parent = this.cockpit;
     }
@@ -57,7 +65,7 @@ export class KartCamera {
     this.wheel.parent = this.cockpit;
     const steeringRim = MeshBuilder.CreateTorus('cockpit-steering-rim', { diameter: 0.37, thickness: 0.04, tessellation: 20 }, scene);
     steeringRim.rotation.x = Math.PI / 2.8;
-    steeringRim.material = rim;
+    steeringRim.material = shell;
     steeringRim.parent = this.wheel;
     for (const x of [-0.2, 0.2]) {
       const palm = MeshBuilder.CreateSphere(`cockpit-hand-${x}`, { diameter: 0.12, segments: 8 }, scene);

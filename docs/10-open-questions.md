@@ -47,7 +47,7 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 - [ ] Landmarken, Zeitbild, konkrete Zeichen und Streckenlayout gemeinsam prüfen und vor Assetproduktion bestätigen.
 - [ ] Schwachen PC mit integrierter Grafik und Android-Testgerät benennen; konkrete Auflösung, Mindestleistung und Ladezeitziele anhand Messungen bestätigen.
 - [ ] Kostenlose Asset-/Audiopipeline an einem Modell und kurzen Hörproben prüfen; Herkunft/Lizenzen erfassen.
-- [ ] First-Person-Sichtbarkeit, Kameraruhe, Eingabe und Touch-Bedienung praktisch prüfen. M2d belegt eine erste Chrome-Sichtprobe mit Cockpit und geladenem Drift; interaktiver Komfort und Touch bleiben offen.
+- [ ] First-Person-Sichtbarkeit, Kameraruhe, Eingabe und Touch-Bedienung praktisch prüfen. M2d belegt eine erste Chrome-Sichtprobe; der Nutzer meldete die Fahrerperspektive als sichtbar unfertig. Die spätere Stilskizze entfernt das doppelt sichtbare Außenkart und ordnet Instrumente/Räder neu. Interaktiver Komfort und Touch bleiben offen.
 
 ## Vor Kernrennen-/Version-1-Abnahme
 

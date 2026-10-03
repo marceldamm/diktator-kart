@@ -461,6 +461,52 @@
 
 **Empfohlenes Modell:** Sol für M2-Korrekturen; Astra für schwierige Stil-/Inhaltsabwägungen.
 
+### 2026-10-03 – Erster menschlicher M2-Fahrbericht und F3-Bild
+
+**Ziel:** Die erste tatsächliche Nutzerfahrt von automatischen M2-Tests trennen und nur beobachtete Teilpunkte eintragen.
+
+**Modell / Arbeitsmodus:** Fortsetzung auf `babylon-neustart-2026`; Nutzer fuhr den sichtbaren Browserprototypen selbst. Der laufende Vite-Server und sein Browser blieben ungestört. Das zugesandte Bild wurde als `docs/evidence/m2-human-f3-rtx-2026-10-03.png` gesichert.
+
+**Erledigt:** Nutzerbericht und F3-Zahlen in Dokument 09, 04 und `START-HERE.md` eingeordnet. Rückwärtsgeschwindigkeit als späteren Balancewunsch erfasst, ohne Tuning zu ändern. Ein isolierter Browserfall für simulierten WebGL2-Ausfall wurde in `tests/browser-smoke.mjs` vorbereitet; sein GPU-Lauf wartet, bis der Nutzer seinen Fahrcheck beendet hat.
+
+**Verifiziert:** Der Nutzer meldete flüssige Fahrt, im Vergleich zum Altspiel deutlich besseres Gefühl, sichtbare und positive Rad-/Karosseriereaktion auf Bodenwellen, funktionierende Bremse und Rückwärtsfahrt sowie sichtbare Animation bei Kontakten. Er sagte, die Kamera funktioniere grundsätzlich; die Fahrerperspektive sehe noch unfertig aus. Das Bild zeigt WebGL2/ANGLE/D3D11 auf der RTX 3070 Laptop GPU, 1849 × 1263 Canvas-Pixel bei DPR 1, sechs Karts und 89 Meshes. F3 zeigte 60 FPS, P50/P95/P99 16,7/16,9/17,2 ms und null Frames über 25/33 ms im 300er Fenster. Im Moment des Bildes stand das Kart nach Fahrzeugkontakt bei 0 km/h. `node --check tests/browser-smoke.mjs` bestand; `git diff --check` ohne Fehler.
+
+**Nicht verifiziert:** Fahrgefühl von Hop, geladenem Drift und Turbo; Komfort in jedem der drei Kameramodi unter Kurve/Hop/Kontakt; getrennte Bewertung von Rand-, Block- und Fahrzeugstoß; kontrollierte F3-Fahrtmessung; Leistung auf normalem/schwachem PC und Mobilgeräten. Der vorbereitete WebGL2-Ausfalltest wurde noch nicht ausgeführt. Chrome-Version und genaue Testdauer wurden nicht gemeldet.
+
+**Geänderte Dateien:** `tests/browser-smoke.mjs`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/17-progress-log.md`, `README.md`, `START-HERE.md` und neues Bild `docs/evidence/m2-human-f3-rtx-2026-10-03.png`. Dokument 10 und 16 wurden gegen die unveränderten Abnahmegrenzen geprüft.
+
+**Neue Entscheidungen:** keine Grundsatz- oder Balanceänderung; Rückwärtsgeschwindigkeit bleibt vorläufig.
+
+**Offene Probleme:** Die Fahrerperspektive ist gestalterisch/visuell noch unfertig; konkrete Komfortmängel stehen nicht fest. M2-Gesamtabnahme bleibt bis zu vollständigem menschlichem Fahr-/Kamerabefund und normaler-PC-Messung offen. GitHub-Upload ohne ausdrückliche Freigabe weiter ausgeschlossen.
+
+**Nächster Schritt:** Nutzerfeedback zu Hop/Drift/Turbo und Kameras ergänzen; dann den simulierten WebGL2-Ausfalltest isoliert ausführen und etwaige Fehler beheben. Normale/schwächere GPU später separat messen.
+
+**Empfohlenes Modell:** Sol für M2-Korrekturen und technische Abnahme.
+
+### 2026-10-03 – Sichtbare Vorplatz-Stilskizze und M2-Fallback-Nachprobe
+
+**Ziel:** Auf das Nutzerfeedback zur großen Lücke zwischen dem Technikprototyp und den festgelegten G–L-Zielbildern mit einer tatsächlich laufenden Babylon-Szene reagieren, ohne den M2-Fahrkern oder unbestätigte Figuren-/Zeichenentscheidungen zu verändern.
+
+**Modell / Arbeitsmodus:** Lokale Branch-Arbeit auf `babylon-neustart-2026`; Stilregeln in Dokument 02, Quellen-/Inhaltsgrenzen in 01/13 und die Bilder G–L gelesen. Isolierter Headless Chrome für Browserbilder; der Nutzerbrowser blieb unangetastet. Keine kostenpflichtigen Assets, keine historischen Fotos oder Symbole übernommen.
+
+**Erledigt:** Der Nutzer ergänzte, Hop, Drift und Turbo funktionierten für das frühe Stadium, ihre Animationen hätten aber Luft nach oben; er erwartet größere, sichtbare Meilensteinschritte. `src/showcase-world.ts` baut nun einen fiktiven Vorplatz/Boulevard mit Fassaden, Lampen, Fahrbahn, Materialkontrast und einfacher Straßenkörnung. Die normale Ansicht zeigt ihn; `?world=lab` hält den bisherigen Fahrtest reproduzierbar. Das Testkart erhielt neutrale Fahrer-, Karosserie- und Raddetails. Ein kompakteres HUD lässt mehr Straße sichtbar. Statische Kulissenteile wurden je Material zusammengefügt. In der Fahrerperspektive wird das äußere Spieler-Kart verborgen; Haube, Instrumente und Vorderräder wurden neu angeordnet. Der Browsercheck blockiert WebGL2 künstlich und prüft WebGL1-Start mit Fahrt.
+
+**Verifiziert:** 14 Modelltests, Typecheck und Produktionsbuild bestanden; der Haupteinstieg liegt bei rund 1,191 MB minifiziert und die Vite-Größenwarnung bleibt. Der Browsercheck prüfte Grundfahrt, Hop/Drift/Turbo, Kontakte, alle Kameras, erzwungenes WebGL1 und den synthetischen WebGL2-Ausfall: ein WebGL2-Aufruf wurde abgefangen, WebGL1 startete, Gas bewegte das Kart. Die Standardansicht startete in WebGL2 mit sechs Karts und 174–175 Meshes nach Kulissen-Zusammenfassung. Nah-, Fern- und Fahrerbilder wurden visuell betrachtet: `docs/evidence/m3d-stadium-style-chrome.png`, `m3d-stadium-far-chrome.png`, `m3f-stadium-driver-chrome.png`. Die doppelt sichtbare Spielerkarosse ist im letzten Fahrerbild beseitigt. Kurze RTX-F3-Fenster der zusammengefassten Szene lagen bei P95 18,3–39,0 ms und P99 20,2–47,4 ms. Ein 1-/6-Kart-Langlauf durch drei Kameras in Labor- und Stilansicht bestand ohne Browserausnahmen oder Meshwachstum: Stilansicht 50/175 Meshes, P95 16,8–16,9 ms, null Intervalle über 25 ms; Laboransicht 61/186 Meshes, fünf Fenster P95 16,8 ms und ein Fenster P95 20,4 ms mit 107,4-ms-Ausreißer. Rohdaten `docs/evidence/m3a-showcase-rtx-endurance.json` und `m3a-lab-rtx-endurance.json`.
+
+**Nicht verifiziert:** G–L-Material-/Modellqualität, menschliche Stil- und Kamerakomfortprüfung der neuen Ansicht, vollständiger Kurs, echte Rennbots, Assetrechte, normale/schwache PC- und Mobil-Leistung, belastbarer Performancegewinn durch Mesh-Zusammenfassung. Die synthetische WebGL2-Sperre ist kein echter Treiberfehler; ein RTX-Langlauf erklärt die Streuung kurzer F3-Fenster nicht.
+
+**Geänderte Dateien:** `src/showcase-world.ts` neu; `src/scene.ts`, `src/camera.ts`, `src/main.ts`, `src/style.css`, `index.html`, `tests/browser-smoke.mjs`, `tests/browser-endurance.mjs`; drei neue Stilbilder und zwei RTX-Rohdatendateien in `docs/evidence/` sowie `README.md`, `START-HERE.md`, `docs/00-project-framework.md`, `docs/02-art-direction.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/10-open-questions.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md` und dieses Log. Das zugesandte F3-Bild bleibt als eigener M2-Beleg erhalten.
+
+**Neue Entscheidungen:** Neutrale sichtbare Stilskizze als Standardansicht, reproduzierbare Laboransicht unter `?world=lab` und Materialgruppen-Merging als vorläufige technische Darstellungswahl. Begründung in Dokument 12. Keine Auswahl eines historischen Fahrers, kein beschlossenes Landmarkenlayout und keine Änderung an M2-/FPS-Zielen.
+
+**Offene Probleme:** Die Skizze besteht noch überwiegend aus Grundformen und liegt weit unter G–L. Das Fahrer-Cockpit bleibt prozedural und visuell roh. Framezeiten der neuen Szene schwanken; gezielte Lastprüfung auf normalen PCs und mit echten M3-Assets ist nötig. M2-Gesamtabnahme bleibt wegen Kamerakomfort und Zielhardware offen. GitHub-Upload weiterhin ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** Die Stilskizze mit Nutzer/Sarah gegen G–L und Dokument 14/01 bewerten. Den ersten vollständigen Fahrer/Kart und den M3-Abschnitt nach gemeinsamer Auswahl ausarbeiten; M2-Kamerakomfort und normale-PC-Messung parallel schließen. Die Vite-Größenwarnung und schwankende kurze Framefenster bei der nächsten echten Assetlast gezielt prüfen.
+
+**Empfohlenes Modell:** Sol für Szenen-/Fahrkernintegration, Astra für die schwierige Stil-/Inhaltsabnahme.
+
+**Sitzungsstatus:** Auf ausdrücklichen Nutzerwunsch an diesem überprüften Zwischenstand pausiert. Kein Ruhezustand und kein GitHub-Upload ausgelöst.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

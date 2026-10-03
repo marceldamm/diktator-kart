@@ -64,11 +64,13 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **M2l-Messhilfe, 03.10.2026:** Die scrollbare F3-Diagnose liefert ein gleitendes 300-Frame-Fenster sowie Auflösung und verfügbaren GPU-Pfad. Sie bereitet die normale-PC-Prüfung aus Dokument 09 vor, ersetzt sie aber nicht.
 
+**Nutzerfahrt und vorgezogene Stilskizze, 03.10.2026:** Das erste menschliche Urteil bestätigt die technische Fahrgrundlage einschließlich Hop/Drift/Turbo als funktionierend, benennt aber unfertige Animationen, Fahrerperspektive und einen großen Abstand zu G–L. Deshalb zeigt die normale Babylon-Ansicht jetzt einen neutralen Stadionvorplatz-Blockout; `?world=lab` hält die reine M2-Testfläche für wiederholbare Prüfungen bereit. M2-Gesamtabnahme und die gemeinsame M3-Auswahl bleiben offen. Der Blockout ist kein fertiger M3-Abschnitt.
+
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 
 ### M3 – Erster Vertical Slice
 
-**Vorlaufender Vorschlag:** Dokument 14 empfiehlt Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart und trennt Altideen von möglichen Produktionsausführungen. Das ist weder eine gemeinsame Auswahl noch eine Erlaubnis, M2-Abnahme oder Stilprüfung zu überspringen.
+**Vorlaufender Vorschlag:** Dokument 14 empfiehlt Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart und trennt Altideen von möglichen Produktionsausführungen. Die neutrale Stilskizze legt diese Auswahl nicht fest; M2-Abnahme und gemeinsame Stilprüfung bleiben nötig.
 
 Dokument 01 hält einen quellenbasierten, fiktiven Berlin-/Stadion-Routenvorschlag mit Inhaltsprüfung fest. Für M3 genügt der dort abgegrenzte erste Abschnitt; die Route wird erst nach gemeinsamer Auswahl und M2-Abnahme produziert. Historische Fotos/Schilder und konkrete Zeichen brauchen vor Nutzung eigene Freigabe und Lizenzprüfung.
 

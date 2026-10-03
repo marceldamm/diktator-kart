@@ -28,8 +28,8 @@ Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verf
 |---|---|---|
 | Start und Grundregeln | Ein-Klick-Start, Build, Eingaben, Pause/Neustart; Modell- und Browserchecks für Fahren, Hop, Drift, Turbo, Federung und Kontakte | technisch geprüft |
 | Stabilität mit sechs Karts | mindestens 60 s Simulationslauf ohne ungültigen Zustand; Browser-Neustart ohne Meshwachstum; Kamerawechsel und Kontaktfälle sichtbar | auf RTX-Entwicklungsgerät geprüft |
-| Fahrgefühl und Kontakt | Mensch fährt geradeaus, Kurven, Hop/Drift/Turbo sowie Rand-, Block- und Fahrzeugkontakt; beurteilt Lenkbarkeit, Rückmeldung und Wiederanfahrt in eigenen Worten | offen |
-| Alle drei Kameras | Mensch prüft nahe/ferne Verfolger- und Fahrerperspektive bei Kurve, Hop, Drift und Kontakt auf Sicht, Ruhe und störende Verdeckung | offen |
+| Fahrgefühl und Kontakt | Mensch fährt geradeaus, Kurven, Hop/Drift/Turbo sowie Rand-, Block- und Fahrzeugkontakt; beurteilt Lenkbarkeit, Rückmeldung und Wiederanfahrt in eigenen Worten | teilweise: flüssige Fahrt, gute Bodenwellen-/Radreaktion, Kontaktanimation, Bremse/Rückwärtsgang gemeldet; Hop/Drift/Turbo funktionieren nach erstem Nutzerurteil, ihre Animationen brauchen Arbeit; einzelne Kontaktarten offen |
+| Alle drei Kameras | Mensch prüft nahe/ferne Verfolger- und Fahrerperspektive bei Kurve, Hop, Drift und Kontakt auf Sicht, Ruhe und störende Verdeckung | teilweise: Kamera grundsätzlich funktionsfähig; Fahrerperspektive wirkt noch unfertig, Komfort in allen drei Modi offen |
 | Normale/schwächere PC-Hardware | Gerät/GPU, Chrome-Version, Auflösung, Grafikmodus, 1/6 Karts und drei Kameras protokollieren; F3-Framefenster nach mindestens fünf Sekunden sichtbarer Fahrt ablesen; vorläufiges Ziel aus Dokument 04: 60 FPS Standard, stabil 30 FPS auf schwächerer Hardware | offen; RTX-Headless ersetzt dies nicht |
 | Mobile Frühprobe | Android/iPhone im Querformat mit Start, Sichtbarkeit und Eingabe prüfen, sobald Testgeräte/Touchsteuerung vorhanden sind; vollständige mobile Abnahme bleibt M7 | offen |
 
@@ -57,11 +57,13 @@ Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und
 
 **Zwischenstand M2l, 03.10.2026:** F3 zeigt ein rollendes 300-Frame-Fenster, Perzentile/Langframes, Auflösung und verfügbaren Grafikpfad. Ein-/Sechs-Kart-Browserprobe, Bildkontrolle, Build und 14 Modell-/Eingabetests bestanden. Die Anzeige erleichtert die noch offene normale-PC-Messung; sie selbst ist keine Zielhardware-Abnahme.
 
+**Erster menschlicher Fahrbericht, 03.10.2026:** Der Nutzer beschreibt das Fahren als flüssig und gegenüber dem alten Prototyp deutlich verbessert, besonders die sichtbare Radbewegung auf Bodenwellen. Bremsen, Rückwärtsfahren und Kontaktreaktionen wurden beobachtet. Hop, Drift und Turbo funktionieren nach erstem Eindruck, die Animationen sind noch nicht ausgereift. Die Fahrerperspektive wirkte unfertig; der visuelle Gesamtstand liegt nach Nutzerurteil weit unter G–L. Ein Screenshot der laufenden Sechs-Kart-Szene zeigt auf der RTX 3070 Laptop GPU bei 1849 × 1263 Pixel 60 FPS, P95 16,9 ms und P99 17,2 ms im 300-Frame-Fenster, ohne Frame über 25 ms. Der Screenshot entstand bei 0 km/h nach Fahrzeugkontakt; er ist keine kontrollierte Fahrtmessung und ersetzt keine normale-PC-Probe. Jede Kamera unter Bewegung und die einzelnen Kontaktarten sind noch nicht vollständig durch Menschen beurteilt. Rückwärtsgeschwindigkeit als späteren Balancewunsch vormerken, vorerst nicht ändern.
+
 ## M3 – Erster ausgearbeiteter Spielabschnitt
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.
 
-**Vorbereitung, noch kein M3-Start:** Dokument 14 enthält Mussolini/Il Duce GT als begründeten ersten Art-Piloten-Vorschlag mit überlieferten Ideen, Herkunft und klarer Liefergrenze. Die gemeinsame Auswahl und Stilfreigabe sowie die M2-Abnahme stehen aus; keine Art-Produktion wurde begonnen.
+**Vorbereitung, noch keine M3-Abnahme:** Dokument 14 enthält Mussolini/Il Duce GT als begründeten ersten Art-Piloten-Vorschlag mit überlieferten Ideen, Herkunft und klarer Liefergrenze. Die gemeinsame Auswahl und Stilfreigabe sowie die M2-Abnahme stehen aus. Eine neutrale, vorgezogene Babylon-Stilskizze für Kulisse und Testkart dient bereits zur Sicht- und Lastprüfung; sie ist kein ausgearbeiteter Fahrer, kein bestätigtes Streckenlayout und kein fertiger M3-Abschnitt.
 
 Dokument 01 skizziert zusätzlich eine fiktive Stadion-/Boulevardroute mit belegten historischen Landmarken als **Vorschlag**. M3 umfasst davon nur einen zusammenhängenden Abschnitt für Stil- und Lastprobe; vollständiger Rundkurs und Rennregeln bleiben M4. Landmarken, Zeitbild und Zeichen werden vor Assetproduktion gemeinsam geprüft.
 

@@ -65,11 +65,12 @@ Visuelle Referenzen werden künftig in [`references/visuals/`](references/visual
 
 - Planung und Wissensbasis: **für den technischen Start ausreichend geklärt**
 - Babylon.js-Neuentwicklung: **M1 geprüft; M2a–l mit Fahrkern, Federung, drei Kameras, Sechs-Fahrzeug-Technikprobe, vorläufigen Kontakten und F3-Diagnose lokal umgesetzt und geprüft**
+- Sichtbare Babylon-Stilskizze: **fiktiver Stadionvorplatz/Boulevard und neutrales Testkart in der Standardansicht; `?world=lab` hält den reproduzierbaren Techniktest bereit. G–L bleibt das deutlich höhere Ziel, keine Stilfreigabe.**
 - Grundsatzentscheidungen: **Babylon.js und erster Spielumfang gesetzt; spätere Inhalts- und Messfragen sichtbar offen**
 - M3-Vorbereitung: **Vorschlag für den ersten Art-Piloten in [Dokument 14](docs/14-character-and-item-catalog.md); Auswahl und Stilprobe bleiben gemeinsam zu bestätigen**
 - Erste Strecke: **historische Berlin-/Stadionwelt bleibt gesetzt; ein quellenbasierter Routenvorschlag in [Dokument 01](docs/01-game-design.md) ist noch gemeinsam zu prüfen**
 - Alte technische Implementierung: **nicht übernommen**
-- Nächster Schritt: M2-Abnahmelücken mit menschlichem Fahrcheck, normalem/schwächerem PC und Mobilgeräten prüfen; die vorläufigen Kollisionsformen und Kameras dabei bewerten. Auftrag in [START-HERE.md](START-HERE.md).
+- Nächster Schritt: Die Stilskizze mit dem Zielbild G–L aus den echten Spielkameras vergleichen und den ersten vollständigen Fahrer/Kart gemeinsam auswählen; M2-Fahr-/Kameraabnahme und normale/schwächere Hardwaremessung bleiben offen. Auftrag in [START-HERE.md](START-HERE.md).
 - Arbeitsmodus für längere Sitzungen: [16-production-blueprint.md](docs/16-production-blueprint.md) lesen und [17-progress-log.md](docs/17-progress-log.md) fortschreiben.
 - Zielplattformen: Google Chrome unter Windows zuerst; mobile Browser werden von Anfang an berücksichtigt.
 - Startbarkeit: Jeder spielbare Stand braucht einen einfachen Startbutton, Launcher oder eine eindeutige Verknüpfung ohne Entwicklerkonsole.

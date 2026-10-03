@@ -9,10 +9,12 @@ import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { Scene } from '@babylonjs/core/scene';
 import { TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, WHEEL_POSITIONS, type KartState } from './kart-model';
+import { addShowcaseWorld } from './showcase-world';
 
 export interface TestScene {
   scene: Scene;
   present(state: KartState, loadKarts: KartState[]): void;
+  setPlayerVisible(visible: boolean): void;
 }
 
 function material(scene: Scene, name: string, color: Color3): StandardMaterial {
@@ -21,21 +23,27 @@ function material(scene: Scene, name: string, color: Color3): StandardMaterial {
   return result;
 }
 
-export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
+export function createTestScene(engine: Engine, loadKartCount = 0, showcase = true): TestScene {
   const scene = new Scene(engine);
-  scene.clearColor = new Color4(0.035, 0.075, 0.12, 1);
-  new HemisphericLight('sky-light', new Vector3(0.2, 1, 0.4), scene);
-
-  const ground = MeshBuilder.CreateGround('test-ground', { width: 48, height: 48 }, scene);
-  ground.material = material(scene, 'ground-mat', new Color3(0.12, 0.2, 0.21));
-  const gridMaterial = material(scene, 'grid-mat', new Color3(0.2, 0.31, 0.32));
-  for (let coordinate = -20; coordinate <= 20; coordinate += 5) {
-    const horizontal = MeshBuilder.CreateBox(`grid-x-${coordinate}`, { width: 46, height: 0.012, depth: 0.025 }, scene);
-    horizontal.position.set(0, 0.012, coordinate);
-    horizontal.material = gridMaterial;
-    const vertical = MeshBuilder.CreateBox(`grid-z-${coordinate}`, { width: 0.025, height: 0.012, depth: 46 }, scene);
-    vertical.position.set(coordinate, 0.012, 0);
-    vertical.material = gridMaterial;
+  scene.clearColor = new Color4(0.53, 0.68, 0.78, 1);
+  const sky = new HemisphericLight('sky-light', new Vector3(0.2, 1, 0.4), scene);
+  sky.intensity = 0.78;
+  if (showcase) addShowcaseWorld(scene);
+  else {
+    scene.clearColor = new Color4(0.035, 0.075, 0.12, 1);
+    const ground = MeshBuilder.CreateGround('test-ground', { width: 48, height: 48 }, scene);
+    ground.material = material(scene, 'ground-mat', new Color3(0.12, 0.2, 0.21));
+    const gridMaterial = material(scene, 'grid-mat', new Color3(0.2, 0.31, 0.32));
+    for (let coordinate = -20; coordinate <= 20; coordinate += 5) {
+      const horizontal = MeshBuilder.CreateBox(`grid-x-${coordinate}`,
+        { width: 46, height: 0.012, depth: 0.025 }, scene);
+      horizontal.position.set(0, 0.012, coordinate);
+      horizontal.material = gridMaterial;
+      const vertical = MeshBuilder.CreateBox(`grid-z-${coordinate}`,
+        { width: 0.025, height: 0.012, depth: 46 }, scene);
+      vertical.position.set(coordinate, 0.012, 0);
+      vertical.material = gridMaterial;
+    }
   }
 
   TERRAIN_BUMPS.forEach((bump, index) => {
@@ -77,7 +85,8 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
     marker.material = obstacleTopMaterial;
   });
 
-  const borderMaterial = material(scene, 'border-mat', new Color3(0.93, 0.65, 0.16));
+  const borderMaterial = material(scene, 'border-mat', showcase
+    ? new Color3(0.71, 0.63, 0.49) : new Color3(0.93, 0.65, 0.16));
   for (const side of [-1, 1]) {
     const alongX = MeshBuilder.CreateBox(`boundary-x-${side}`, { width: 48, height: 0.35, depth: 0.18 }, scene);
     alongX.position.set(0, 0.18, side * 23.9);
@@ -88,8 +97,10 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
   }
 
   const root = new TransformNode('test-kart-root', scene);
-  const bodyMaterial = material(scene, 'kart-body-mat', new Color3(0.92, 0.29, 0.12));
-  const noseMaterial = material(scene, 'kart-nose-mat', new Color3(0.98, 0.79, 0.2));
+  const bodyMaterial = material(scene, 'kart-body-mat', new Color3(0.56, 0.055, 0.065));
+  bodyMaterial.specularColor = new Color3(0.58, 0.36, 0.25);
+  const noseMaterial = material(scene, 'kart-nose-mat', new Color3(0.88, 0.66, 0.23));
+  noseMaterial.specularColor = new Color3(0.65, 0.52, 0.28);
   const wheelMaterial = material(scene, 'kart-wheel-mat', new Color3(0.04, 0.06, 0.07));
   const body = MeshBuilder.CreateBox('kart-body', { width: 1.4, height: 0.45, depth: 2.1 }, scene);
   body.position.y = 0.65;
@@ -103,6 +114,50 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
   seat.position.set(0, 1.05, -0.45);
   seat.material = wheelMaterial;
   seat.parent = root;
+  const grille = MeshBuilder.CreateBox('kart-grille', { width: 0.82, height: 0.29, depth: 0.08 }, scene);
+  grille.position.set(0, 0.57, 1.08);
+  grille.material = wheelMaterial;
+  grille.parent = root;
+  for (const side of [-1, 1]) {
+    const skirt = MeshBuilder.CreateBox(`kart-skirt-${side}`, { width: 0.16, height: 0.23, depth: 1.55 }, scene);
+    skirt.position.set(side * 0.75, 0.46, 0);
+    skirt.material = noseMaterial;
+    skirt.parent = root;
+    const headlamp = MeshBuilder.CreateSphere(`kart-headlamp-${side}`, { diameter: 0.22, segments: 10 }, scene);
+    headlamp.position.set(side * 0.49, 0.82, 1.02);
+    headlamp.material = noseMaterial;
+    headlamp.parent = root;
+    const exhaust = MeshBuilder.CreateCylinder(`kart-exhaust-${side}`,
+      { diameter: 0.13, height: 0.56, tessellation: 12 }, scene);
+    exhaust.rotation.x = Math.PI / 2;
+    exhaust.position.set(side * 0.52, 0.57, -1.18);
+    exhaust.material = noseMaterial;
+    exhaust.parent = root;
+  }
+  // Neutral test driver; character identity and historical details require joint selection.
+  const coatMaterial = material(scene, 'test-driver-coat', new Color3(0.1, 0.14, 0.2));
+  const skinMaterial = material(scene, 'test-driver-face', new Color3(0.7, 0.48, 0.34));
+  const capMaterial = material(scene, 'test-driver-cap', new Color3(0.1, 0.12, 0.15));
+  const torso = MeshBuilder.CreateSphere('test-driver-torso', { diameter: 0.76, segments: 12 }, scene);
+  torso.scaling.set(1, 0.9, 0.7);
+  torso.position.set(0, 1.27, -0.42);
+  torso.material = coatMaterial;
+  torso.parent = root;
+  const head = MeshBuilder.CreateSphere('test-driver-head', { diameter: 0.48, segments: 12 }, scene);
+  head.position.set(0, 1.81, -0.42);
+  head.material = skinMaterial;
+  head.parent = root;
+  const cap = MeshBuilder.CreateSphere('test-driver-helmet', { diameter: 0.52, segments: 12 }, scene);
+  cap.scaling.y = 0.46;
+  cap.position.set(0, 2.03, -0.43);
+  cap.material = capMaterial;
+  cap.parent = root;
+  const cockpitRim = MeshBuilder.CreateTorus('kart-steering-wheel',
+    { diameter: 0.41, thickness: 0.045, tessellation: 18 }, scene);
+  cockpitRim.rotation.x = Math.PI / 2.8;
+  cockpitRim.position.set(0, 1.17, 0.12);
+  cockpitRim.material = wheelMaterial;
+  cockpitRim.parent = root;
   const feedbackMaterial = material(scene, 'drive-feedback-mat', new Color3(0.02, 0.2, 0.25));
   const driftGlow = new Color3(0.06, 0.7, 1);
   const turboGlow = new Color3(1, 0.4, 0.02);
@@ -123,6 +178,11 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
     wheel.position.set(x, 0.34, z);
     wheel.material = wheelMaterial;
     wheel.parent = root;
+    const hub = MeshBuilder.CreateCylinder(`wheel-hub-${index}`,
+      { diameter: 0.23, height: 0.26, tessellation: 14 }, scene);
+    hub.position.set(0, 0, 0);
+    hub.material = noseMaterial;
+    hub.parent = wheel;
     return wheel;
   });
   const loadVisuals = Array.from({ length: loadKartCount }, (_, index) => {
@@ -134,13 +194,28 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
     if (clonedWheels.some((wheel) => !wheel)) throw new Error('Radkopien für die Lastprobe fehlen.');
     return { root: clone, wheels: clonedWheels };
   });
+  const shadowMaterial = material(scene, 'kart-contact-shadow', new Color3(0.015, 0.02, 0.025));
+  shadowMaterial.alpha = 0.36;
+  shadowMaterial.disableLighting = true;
+  shadowMaterial.backFaceCulling = false;
+  const contactShadows = Array.from({ length: loadKartCount + 1 }, (_, index) => {
+    const shadow = MeshBuilder.CreateDisc(`kart-contact-shadow-${index}`, { radius: 1, tessellation: 24 }, scene);
+    shadow.rotation.x = Math.PI / 2;
+    shadow.scaling.y = 1.42;
+    shadow.position.y = 0.04;
+    shadow.material = shadowMaterial;
+    return shadow;
+  });
 
   // The state boundary lies inside the visual rail, so the kart never disappears.
   if (TEST_AREA_HALF_SIZE >= 23.9) throw new Error('Testbereich muss innerhalb des sichtbaren Randes liegen.');
 
   return {
     scene,
+    setPlayerVisible(visible: boolean) { root.setEnabled(visible); },
     present(state: KartState, loadKarts: KartState[]) {
+      contactShadows[0].position.x = state.x;
+      contactShadows[0].position.z = state.z;
       root.position.set(state.x, state.height + state.suspensionOffset, state.z);
       root.rotation.y = state.heading;
       root.rotation.x = -state.bodyPitch + state.impactVelocityZ * 0.05;
@@ -151,6 +226,8 @@ export function createTestScene(engine: Engine, loadKartCount = 0): TestScene {
       loadVisuals.forEach((visual, index) => {
         const other = loadKarts[index];
         if (!other) return;
+        contactShadows[index + 1].position.x = other.x;
+        contactShadows[index + 1].position.z = other.z;
         visual.root.position.set(other.x, other.height + other.suspensionOffset, other.z);
         visual.root.rotation.set(-other.bodyPitch + other.impactVelocityZ * 0.05, other.heading,
           other.bodyRoll + other.impactVelocityX * 0.06 + (other.drifting ? -other.driftDirection * 0.12 : 0));

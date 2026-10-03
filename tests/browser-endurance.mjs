@@ -94,9 +94,10 @@ async function frameSample() {
 try {
   await send('Runtime.enable');
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 800, deviceScaleFactor: 1, mobile: false });
+  const world = process.argv[3] === 'showcase' ? 'showcase' : 'lab';
   const samples = [];
   for (const fleet of [1, 6]) {
-    await send('Page.navigate', { url: `http://127.0.0.1:4173/?fleet=${fleet}` });
+    await send('Page.navigate', { url: `http://127.0.0.1:4173/?fleet=${fleet}${world === 'lab' ? '&world=lab' : ''}` });
     await delay(500);
     await waitRunning();
     await evaluate(`document.querySelector('#debug').hidden = false`);
@@ -129,7 +130,7 @@ try {
   assert.equal(samples.length, 6);
   assert.ok(samples.every((sample) => sample.frames === 300));
   assert.equal(exceptions.length, 0, `Browser exceptions: ${exceptions.join('; ')}`);
-  const result = { date: new Date().toISOString(), viewport: '1280x800', method: 'Headless Chrome CDP, 300 requestAnimationFrame intervals per view; W+A held', samples, exceptions };
+  const result = { date: new Date().toISOString(), world, viewport: '1280x800', method: 'Headless Chrome CDP, 300 requestAnimationFrame intervals per view; W+A held', samples, exceptions };
   await writeFile(process.argv[2] ?? 'docs/evidence/m2f-rtx-endurance.json', `${JSON.stringify(result, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(result)}\n`);
 } finally {

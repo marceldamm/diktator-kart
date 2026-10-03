@@ -57,7 +57,13 @@ verifiziert, offen und nächsten Schritt.
 
 **M2l-Diagnose:** F3 zeigt jetzt ein rollendes Fenster aus bis zu 300 sichtbaren Frames mit P50/P95/P99, langen Frames, Canvas-Auflösung und erkanntem Grafikpfad (falls vom Browser freigegeben). Der Browsercheck prüfte die Anzeige mit einem und sechs Karts. Das scrollbare Panel wurde im Bild `docs/evidence/m2l-f3-diagnose-chrome.png` geprüft; die angezeigten RTX-Werte sind keine Zielhardwaremessung.
 
-**M3-Vorbereitung ohne Produktionsstart:** [Dokument 14](docs/14-character-and-item-catalog.md) schlägt Mussolini/Il Duce GT als ersten Art-Piloten vor. Auswahl, M2-Abnahme und spätere Stilprobe bleiben offen.
+**Erster menschlicher Fahrbericht:** Flüssiges Fahren, gute sichtbare Rad-/Bodenwellenreaktion sowie funktionierende Bremse, Rückwärtsfahrt und Kontaktanimationen gemeldet. Fahrerperspektive wirkt noch unfertig; Rückwärtsgeschwindigkeit ist als späterer Balancewunsch notiert. Das zugesandte F3-Bild zeigt sechs Karts auf der RTX 3070 Laptop GPU bei 1849 × 1263 Pixel und P95/P99 16,9/17,2 ms ohne lange Frames im 300er Fenster. Detaillierter Kamerakomfort und ein normaler/schwächerer PC fehlen für die M2-Abnahme.
+
+**Ergänzung des Fahrberichts und sichtbare Stilskizze:** Hop, Drift und Turbo funktionieren nach erstem Nutzerurteil, ihre Animationen sind noch roh. Der Nutzer hält die Fahrgrundlage für brauchbar, die Gesamtoptik aber für deutlich zu weit vom bestätigten Bildziel G–L entfernt. Die normale Browseransicht zeigt deshalb jetzt einen fiktiven Vorplatz/Boulevard und ein neutrales Kart mit Fahrerplatzhalter; `?world=lab` öffnet die ursprüngliche Testumgebung für reproduzierbare Checks. Die Fahrerperspektive blendet das äußere Spielerkart aus und zeigt eine neu angeordnete prozedurale Haube. Bilder in `docs/evidence/m3d-stadium-style-chrome.png`, `m3d-stadium-far-chrome.png` und `m3f-stadium-driver-chrome.png`. Das ist ein Blockout, kein fertiges M3-Asset oder eine Stilabnahme.
+
+**Neue RTX-Vergleichsprobe:** Je 300 Frames für ein/sechs Karts in drei Kameras wurden in `?world=lab` und der Stilskizze aufgenommen. In der zusammengefassten Stilskizze: 50/175 Meshes, P95 16,8–16,9 ms und kein Frame über 25 ms auf der RTX 3070 Laptop GPU; Rohdaten `docs/evidence/m3a-showcase-rtx-endurance.json`. Das ist keine Messung auf normaler Zielhardware oder mit fertigen G–L-Assets.
+
+**M3-Vorbereitung:** [Dokument 14](docs/14-character-and-item-catalog.md) schlägt Mussolini/Il Duce GT als ersten Art-Piloten vor. Die neutrale Stilskizze entscheidet keinen Fahrer. Auswahl, M2-Abnahme und spätere Stilprobe mit ausgearbeiteten Assets bleiben offen.
 
 **Streckenvorbereitung ohne Produktionsstart:** [Dokument 01](docs/01-game-design.md) skizziert eine fiktive Stadion-/Boulevardroute mit belegten historischen Ankern. Landmarken, Zeitbild, Zeichen und Layout sind Vorschläge und werden vor Assetproduktion gemeinsam geprüft.
 
@@ -67,7 +73,7 @@ verifiziert, offen und nächsten Schritt.
 
 Diese Beobachtungen ergänzen die automatischen Tests; ein angenehmes Fahrgefühl kann nur ein Mensch beurteilen:
 
-1. Starter öffnen, **F3** für die Diagnose drücken und Gerät/GPU, Chrome-Version, Auflösung, FPS, Frame-P95/P99 und Zahl der Frames über 25/33 ms nach mindestens fünf Sekunden Fahrt notieren. Das Panel kann gescrollt werden. Die bisherige Headless-Probe lief auf der RTX 3070 Laptop GPU; ein normaler oder schwächerer PC ist als Vergleich besonders hilfreich.
+1. Starter öffnen, **F3** für die Diagnose drücken und nach mindestens fünf Sekunden sichtbarer Fahrt einen Screenshot des Panels senden; die Zahlen können daraus abgelesen werden. Gerät und Chrome-Version dazuschreiben, falls bekannt. Das Panel kann gescrollt werden. Die bisherige Headless-Probe lief auf der RTX 3070 Laptop GPU; ein normaler oder schwächerer PC ist als Vergleich besonders hilfreich.
 2. Von der Mitte mit **W** geradeaus über die türkise und orange Bodenwelle fahren. Auf Rad- und Karosseriebewegung sowie störendes Springen achten.
 3. Mit **W + A/D + Space** nach dem Hop driften, Space bei geladener Anzeige loslassen und Bremsen ausprobieren. Rückmeldung zu Lenkbarkeit, Tempo und Turbo geben.
 4. Mit **C** durch nahe, ferne und Fahrerperspektive wechseln; während Kurve, Hop und Drift auf Sichtbarkeit und Kameraruhe achten.

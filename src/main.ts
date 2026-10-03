@@ -25,6 +25,8 @@ const FIXED_STEP = 1 / 60;
 const LOAD_KART_COUNT = new URLSearchParams(location.search).get('fleet') === '1' ? 0 : 5;
 const CONTACT_SCENARIO = new URLSearchParams(location.search).get('scenario') === 'contact';
 const FORCE_WEBGL1 = new URLSearchParams(location.search).get('webgl') === '1';
+const LAB_WORLD = new URLSearchParams(location.search).get('world') === 'lab';
+document.body.classList.toggle('showcase', !LAB_WORLD);
 
 function initialLoadKarts(): KartState[] {
   if (CONTACT_SCENARIO) return [{ ...initialKartState(), z: 10, heading: Math.PI,
@@ -140,7 +142,7 @@ class App {
         this.rendererName = this.readRendererName();
         this.engine.runRenderLoop(() => this.frame());
       }
-      this.testScene = createTestScene(this.engine, this.loadKarts.length);
+      this.testScene = createTestScene(this.engine, this.loadKarts.length, !LAB_WORLD);
       this.camera = new KartCamera(this.testScene.scene, this.kart);
       this.testScene.present(this.kart, this.loadKarts);
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
@@ -195,6 +197,7 @@ class App {
       }
       this.testScene.present(this.kart, this.loadKarts);
       this.camera?.update(this.kart, delta, false, frame.steering);
+      this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.kart.impactRemaining > 0
         ? this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'

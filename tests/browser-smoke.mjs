@@ -57,7 +57,7 @@ async function tap(keyName, code, virtualKeyCode) {
   await key('keyUp', keyName, code, virtualKeyCode);
 }
 async function loadSample(fleet) {
-  await send('Page.navigate', { url: `http://127.0.0.1:4173/?fleet=${fleet}` });
+  await send('Page.navigate', { url: `http://127.0.0.1:4173/?fleet=${fleet}&world=lab` });
   await delay(500);
   for (let attempt = 0; attempt < 30 && (await read()).status !== 'Testszene läuft'; attempt++) await delay(200);
   assert.equal((await read()).status, 'Testszene läuft', JSON.stringify(await read()));
@@ -95,7 +95,7 @@ async function loadSample(fleet) {
 }
 
 try {
-  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1' });
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&world=lab' });
   await delay(500);
   for (let attempt = 0; attempt < 30 && (await read()).status !== 'Testszene läuft'; attempt++) await delay(200);
   assert.equal((await read()).status, 'Testszene läuft', JSON.stringify(await read()));
@@ -118,7 +118,7 @@ try {
   assert.equal((await read()).surface, 'Ebener Boden');
 
   await key('keyDown', 'w', 'KeyW', 87);
-  await delay(900);
+  await delay(500);
   const driving = await read();
   assert.ok(Number.parseInt(driving.speed, 10) > 0, `Expected movement: ${JSON.stringify(driving)}`);
 
@@ -127,20 +127,26 @@ try {
   await delay(200);
   const hopping = await read();
   assert.equal(hopping.mode, 'Hop');
-  const hopScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
-  await writeFile('docs/evidence/m2b-hop-chrome.png', Buffer.from(hopScreenshot.data, 'base64'));
+  if (process.env.UPDATE_EVIDENCE === '1') {
+    const hopScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+    await writeFile('docs/evidence/m2b-hop-chrome.png', Buffer.from(hopScreenshot.data, 'base64'));
+  }
   await delay(1200);
   const charged = await read();
   assert.match(charged.mode, /Drift geladen/);
-  const driftScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
-  await writeFile('docs/evidence/m2b-drift-chrome.png', Buffer.from(driftScreenshot.data, 'base64'));
+  if (process.env.UPDATE_EVIDENCE === '1') {
+    const driftScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+    await writeFile('docs/evidence/m2b-drift-chrome.png', Buffer.from(driftScreenshot.data, 'base64'));
+  }
 
   await key('keyUp', ' ', 'Space', 32);
   await delay(120);
   const boosted = await read();
   assert.match(boosted.mode, /Mini-Turbo/);
-  const screenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
-  await writeFile('docs/evidence/m2b-turbo-chrome.png', Buffer.from(screenshot.data, 'base64'));
+  if (process.env.UPDATE_EVIDENCE === '1') {
+    const screenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+    await writeFile('docs/evidence/m2b-turbo-chrome.png', Buffer.from(screenshot.data, 'base64'));
+  }
 
   await key('keyUp', 'a', 'KeyA', 65);
   await key('keyUp', 'w', 'KeyW', 87);
@@ -220,7 +226,7 @@ try {
     returnByValue: true,
   });
   assert.equal(restartMetrics.result.value, sixKarts.meshes, 'Restart should not grow scene meshes');
-  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1' });
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&world=lab' });
   await delay(500);
   assert.equal((await read()).status, 'Testszene läuft');
   await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = true` });
@@ -238,7 +244,7 @@ try {
   await tap('r', 'KeyR', 82);
   await delay(300);
   assert.equal((await read()).speed, '0 km/h');
-  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1' });
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&world=lab' });
   await delay(500);
   assert.equal((await read()).status, 'Testszene läuft');
   await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = true` });
@@ -259,7 +265,7 @@ try {
   await tap('r', 'KeyR', 82);
   await delay(300);
   assert.equal((await read()).speed, '0 km/h');
-  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?scenario=contact' });
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?scenario=contact&world=lab' });
   await delay(500);
   assert.equal((await read()).status, 'Testszene läuft');
   await key('keyDown', 'w', 'KeyW', 87);
@@ -281,7 +287,7 @@ try {
     [1, 'Verfolger fern', 'm2k-fahrzeugkontakt-fern-chrome.png'],
     [2, 'Fahrerperspektive', 'm2k-fahrzeugkontakt-fahrer-chrome.png'],
   ]) {
-    await send('Page.navigate', { url: 'http://127.0.0.1:4173/?scenario=contact' });
+    await send('Page.navigate', { url: 'http://127.0.0.1:4173/?scenario=contact&world=lab' });
     await delay(500);
     assert.equal((await read()).status, 'Testszene läuft');
     for (let index = 0; index < presses; index++) {
@@ -302,7 +308,7 @@ try {
     await key('keyUp', 'w', 'KeyW', 87);
     contactViews.push(viewContact);
   }
-  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&webgl=1' });
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&webgl=1&world=lab' });
   await delay(500);
   assert.equal((await read()).status, 'Testszene läuft');
   await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = false` });
@@ -319,7 +325,80 @@ try {
   const fallbackScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   await writeFile('docs/evidence/m2i-webgl1-chrome.png', Buffer.from(fallbackScreenshot.data, 'base64'));
   await key('keyUp', 'w', 'KeyW', 87);
-  process.stdout.write(JSON.stringify({ contact, driving, hopping, charged, boosted, paused, restarted, farView, farMoving, driverView, driverDrift, oneKart, sixKarts, boundary, obstacle, vehicleContact, contactViews, webgl1: webgl1.result.value, fallbackDriving }) + '\n');
+  await send('Page.enable');
+  const blockedWebgl2 = await send('Page.addScriptToEvaluateOnNewDocument', {
+    source: `(() => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      window.__blockedWebgl2Calls = 0;
+      HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
+        if (kind === 'webgl2') {
+          window.__blockedWebgl2Calls++;
+          return null;
+        }
+        return original.call(this, kind, ...args);
+      };
+    })();`,
+  });
+  let automaticFallback;
+  try {
+    await send('Page.navigate', { url: 'http://127.0.0.1:4173/?fleet=1&world=lab' });
+    await delay(500);
+    for (let attempt = 0; attempt < 30 && (await read()).status !== 'Testszene läuft'; attempt++) await delay(200);
+    assert.equal((await read()).status, 'Testszene läuft', JSON.stringify(await read()));
+    await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = false` });
+    await delay(300);
+    const probe = await send('Runtime.evaluate', {
+      expression: `({ blockedCalls: window.__blockedWebgl2Calls, webgl: document.querySelector('#debug').textContent.match(/WebGL: (\\d+)/)?.[1] })`,
+      returnByValue: true,
+    });
+    automaticFallback = probe.result.value;
+    assert.ok(automaticFallback.blockedCalls > 0,
+      `WebGL2 failure was not simulated: ${JSON.stringify(automaticFallback)}`);
+    assert.equal(automaticFallback.webgl, '1', 'WebGL1 should start when WebGL2 is unavailable');
+    await key('keyDown', 'w', 'KeyW', 87);
+    await delay(500);
+    assert.ok(Number.parseInt((await read()).speed, 10) > 0);
+    await key('keyUp', 'w', 'KeyW', 87);
+  } finally {
+    await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: blockedWebgl2.identifier });
+  }
+  await send('Page.navigate', { url: 'http://127.0.0.1:4173/' });
+  await delay(500);
+  for (let attempt = 0; attempt < 30 && (await read()).status !== 'Testszene läuft'; attempt++) await delay(200);
+  assert.equal((await read()).status, 'Testszene läuft', JSON.stringify(await read()));
+  await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = false` });
+  await delay(250);
+  const showcase = await send('Runtime.evaluate', {
+    expression: `({ meshes: Number(document.querySelector('#debug').textContent.match(/Meshes: (\\d+)/)?.[1]), webgl: document.querySelector('#debug').textContent.match(/WebGL: (\\d+)/)?.[1], world: document.body.classList.contains('showcase') })`,
+    returnByValue: true,
+  });
+  assert.equal(showcase.result.value.world, true, 'Default world should select the visual segment');
+  assert.ok(showcase.result.value.meshes > 50, 'Default world should contain rendered geometry');
+  await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = true` });
+  await key('keyDown', 'w', 'KeyW', 87);
+  await delay(450);
+  await key('keyUp', 'w', 'KeyW', 87);
+  const showcaseScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m3d-stadium-style-chrome.png', Buffer.from(showcaseScreenshot.data, 'base64'));
+  await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = false` });
+  await delay(5200);
+  const showcasePacing = await send('Runtime.evaluate', {
+    expression: `({ p95Ms: Number(document.querySelector('#debug').textContent.match(/P95 ([\\d.]+) ms/)?.[1]), p99Ms: Number(document.querySelector('#debug').textContent.match(/P99 ([\\d.]+) ms/)?.[1]), over25: Number(document.querySelector('#debug').textContent.match(/>25 ms: (\\d+)/)?.[1]) })`,
+    returnByValue: true,
+  });
+  assert.ok(Number.isFinite(showcasePacing.result.value.p95Ms));
+  await send('Runtime.evaluate', { expression: `document.querySelector('#debug').hidden = true` });
+  await tap('c', 'KeyC', 67);
+  await delay(250);
+  assert.equal((await read()).camera, 'Verfolger fern');
+  const showcaseFar = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m3d-stadium-far-chrome.png', Buffer.from(showcaseFar.data, 'base64'));
+  await tap('c', 'KeyC', 67);
+  await delay(250);
+  assert.equal((await read()).camera, 'Fahrerperspektive');
+  const showcaseDriver = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m3f-stadium-driver-chrome.png', Buffer.from(showcaseDriver.data, 'base64'));
+  process.stdout.write(JSON.stringify({ contact, driving, hopping, charged, boosted, paused, restarted, farView, farMoving, driverView, driverDrift, oneKart, sixKarts, boundary, obstacle, vehicleContact, contactViews, webgl1: webgl1.result.value, fallbackDriving, automaticFallback, showcase: showcase.result.value, showcasePacing: showcasePacing.result.value }) + '\n');
 } finally {
   socket.close();
 }

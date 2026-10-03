@@ -87,6 +87,10 @@ Die Space-Flanke wird bis zum nächsten festen Simulationsschritt vorgemerkt, da
 
 **M2l, lokale Messanzeige:** Die M1-Diagnose wurde um ein auf 300 sichtbare Render-Loop-Intervalle begrenztes Framefenster, Perzentile, Langframezähler, Canvas-Auflösung und verfügbaren WebGL-Renderer erweitert. Pause, Neustart und Tab-Ausblendung setzen das Fenster zurück. Das hilft beim späteren normalen-PC-Fahrcheck ohne Entwicklerkonsole; GPU-Zeit, Drawcalls und Speicher bleiben separate Messaufgaben.
 
+**M2-Fallback-Nachprobe:** Der Browsertest blockierte vor dem Seitenstart `canvas.getContext('webgl2')` künstlich. Ein WebGL2-Aufruf wurde abgefangen; die Szene startete in WebGL1 und reagierte auf Gas. Das prüft die automatische Codeverzweigung zusätzlich zu `?webgl=1`, ersetzt aber keinen echten älteren Grafiktreiber oder einen realen GPU-Fehler.
+
+**Vorgezogene Stilskizze:** Standardmäßig ergänzt `src/showcase-world.ts` die bestehende Fahr-/Kollisionsszene um rein dekorative, fiktive Vorplatzarchitektur. `?world=lab` erhält den bisherigen reproduzierbaren Testaufbau für Browserproben; beide Modi nutzen denselben Fahrkern. Statische Kulissenmeshes werden je Material zusammengefügt. Das äußere Spieler-Kart wird in der Fahrerperspektive verborgen, während das kameragebundene Testcockpit sichtbar bleibt. Weder Streckenkollision noch Botlinie oder fertige M3-Assets sind damit behauptet.
+
 ## Nicht übernehmen
 
 Nicht automatisch übernehmen: PlayCanvas-Szenenaufbau, Ammo-Ladepfade, alte Controllerklassen, alte Renderbudgets, alte Assetnamen, bestehende Buildannahmen oder angeblich stabile Workarounds. Sie dürfen als historische Hinweise gelesen und im neuen Prototyp unabhängig bewertet werden.

@@ -19,3 +19,16 @@ button:hover:enabled { background: #a1e9ec; }
 button:disabled { opacity: .5; cursor: default; }
 .hint { font-size: .82rem; line-height: 1.4; color: #c2d1d1; margin: 1rem 0 0; }
 #debug { margin: 1rem 0 0; padding: .75rem; border-radius: 6px; background: #020b11; color: #9de6ca; font-size: .8rem; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
+.showcase .panel { width: min(282px, calc(100vw - 32px)); padding: 14px 16px; background: rgba(9, 20, 25, .77); border-color: rgba(222, 184, 111, .5); }
+.showcase .eyebrow, .showcase h1, .showcase #message, .showcase #surface, .showcase #fleet-count { display: none; }
+.showcase #status { font-size: .8rem; margin-bottom: .25rem; }
+.showcase #speed { font-size: 2rem; color: #f2d49c; }
+.showcase #drive-mode, .showcase #camera-mode { margin-bottom: .35rem; }
+.showcase .actions { margin-top: .5rem; }
+.showcase button { background: #d9b96f; padding: .4rem .6rem; font-size: .78rem; }
+.showcase button:hover:enabled { background: #f0d494; }
+.showcase .hint { display: none; }
+.showcase #debug { max-height: 45dvh; overflow: auto; }
+.showcase-controls { display: none; }
+.showcase .showcase-controls { display: block; position: absolute; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); width: min(340px, calc(100vw - 36px)); margin: 0; padding: .65rem .85rem; border-radius: 8px; background: rgba(9, 20, 25, .72); color: #f5e7c4; font-size: .75rem; line-height: 1.45; }
+@media (max-width: 700px) { .showcase .showcase-controls { display: none; } }
