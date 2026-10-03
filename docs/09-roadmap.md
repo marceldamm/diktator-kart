@@ -38,6 +38,8 @@ Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verf
 
 **Zwischenstand M2i, 03.10.2026:** Der WebGL1-Pfad startete erzwungen in Chrome auf der RTX 3070 GPU mit sichtbarer Fahrt und 44 Meshes. Echtes Fallback-Verhalten nach WebGL2-Fehler und Leistung auf älterem PC bleiben ungeprüft; M2-Gesamtabnahme unverändert offen.
 
+**Zwischenstand M2j, 03.10.2026:** Der Sechs-Kart-Stresstest fand bis zu 5,7 cm Blockeindringen nach Fahrzeugkontakt. Eine gemeinsame, wiederholte Positionskorrektur senkte dies im gleichen 60-s-Pfad auf null und die Kart-Restüberlappung auf höchstens 1,6 cm. 14 Modell-/Eingabetests, Build, Browserprobe und erneute RTX-Probe bestanden. M2 bleibt wegen menschlichem Fahrgefühl, normaler/schwacher Hardware und repräsentativer Streckenkollision offen.
+
 ## M3 – Erster ausgearbeiteter Spielabschnitt
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.

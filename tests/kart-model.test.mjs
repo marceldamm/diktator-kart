@@ -114,9 +114,15 @@ test('six moving karts stay finite and within the test area during a long simula
       const kart = karts[first];
       assert.ok(Number.isFinite(kart.x) && Number.isFinite(kart.z) && Number.isFinite(kart.speed));
       assert.ok(Math.abs(kart.x) <= TEST_AREA_HALF_SIZE && Math.abs(kart.z) <= TEST_AREA_HALF_SIZE);
+      for (const obstacle of TEST_OBSTACLES) {
+        const nearestX = Math.max(obstacle.x - obstacle.halfWidth, Math.min(obstacle.x + obstacle.halfWidth, kart.x));
+        const nearestZ = Math.max(obstacle.z - obstacle.halfDepth, Math.min(obstacle.z + obstacle.halfDepth, kart.z));
+        assert.ok(Math.hypot(kart.x - nearestX, kart.z - nearestZ) >= KART_TUNING.collisionRadius - 1e-6,
+          `obstacle penetration at tick ${tick}`);
+      }
       for (let second = first + 1; second < karts.length; second++) {
         assert.ok(Math.hypot(kart.x - karts[second].x, kart.z - karts[second].z)
-          >= 2 * KART_TUNING.collisionRadius - 0.03, `overlap at tick ${tick}`);
+          >= 2 * KART_TUNING.collisionRadius - 0.02, `overlap at tick ${tick}`);
       }
     }
   }

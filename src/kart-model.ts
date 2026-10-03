@@ -112,6 +112,43 @@ function approachZero(value: number, amount: number): number {
   return Math.min(0, value + amount);
 }
 
+function projectIntoTestArea(rawX: number, rawZ: number): {
+  x: number; z: number; normalX: number; normalZ: number; kind: 'boundary' | 'obstacle' | null;
+} {
+  let x = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawX));
+  let z = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawZ));
+  let normalX = x !== rawX ? -Math.sign(rawX) : 0;
+  let normalZ = z !== rawZ ? -Math.sign(rawZ) : 0;
+  let kind: 'boundary' | 'obstacle' | null = normalX || normalZ ? 'boundary' : null;
+  for (const obstacle of TEST_OBSTACLES) {
+    const nearestX = Math.max(obstacle.x - obstacle.halfWidth, Math.min(obstacle.x + obstacle.halfWidth, x));
+    const nearestZ = Math.max(obstacle.z - obstacle.halfDepth, Math.min(obstacle.z + obstacle.halfDepth, z));
+    const differenceX = x - nearestX;
+    const differenceZ = z - nearestZ;
+    const distance = Math.hypot(differenceX, differenceZ);
+    if (distance >= KART_TUNING.collisionRadius) continue;
+    if (distance > 0.000001) {
+      normalX = differenceX / distance;
+      normalZ = differenceZ / distance;
+      x += normalX * (KART_TUNING.collisionRadius - distance);
+      z += normalZ * (KART_TUNING.collisionRadius - distance);
+    } else {
+      const toLeft = x - (obstacle.x - obstacle.halfWidth);
+      const toRight = obstacle.x + obstacle.halfWidth - x;
+      const toNear = z - (obstacle.z - obstacle.halfDepth);
+      const toFar = obstacle.z + obstacle.halfDepth - z;
+      const smallest = Math.min(toLeft, toRight, toNear, toFar);
+      normalX = smallest === toLeft ? -1 : smallest === toRight ? 1 : 0;
+      normalZ = smallest === toNear ? -1 : smallest === toFar ? 1 : 0;
+      x += normalX * (KART_TUNING.collisionRadius + smallest);
+      z += normalZ * (KART_TUNING.collisionRadius + smallest);
+    }
+    kind = 'obstacle';
+    break;
+  }
+  return { x, z, normalX, normalZ, kind };
+}
+
 export function advanceKart(state: KartState, input: DriveInput, dt: number): KartState {
   const commandedDrive = Math.max(-1, Math.min(1, input.throttle));
   const drive = state.impactRemaining > 0 ? Math.min(0, commandedDrive) : commandedDrive;
@@ -178,37 +215,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
   const travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
   const rawX = state.x + Math.sin(travelHeading) * speed * dt + state.impactVelocityX * dt;
   const rawZ = state.z + Math.cos(travelHeading) * speed * dt + state.impactVelocityZ * dt;
-  let x = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawX));
-  let z = Math.max(-TEST_AREA_HALF_SIZE, Math.min(TEST_AREA_HALF_SIZE, rawZ));
-  let collisionNormalX = x !== rawX ? -Math.sign(rawX) : 0;
-  let collisionNormalZ = z !== rawZ ? -Math.sign(rawZ) : 0;
-  let impactKind: KartState['impactKind'] = collisionNormalX || collisionNormalZ ? 'boundary' : state.impactKind;
-  for (const obstacle of TEST_OBSTACLES) {
-    const nearestX = Math.max(obstacle.x - obstacle.halfWidth, Math.min(obstacle.x + obstacle.halfWidth, x));
-    const nearestZ = Math.max(obstacle.z - obstacle.halfDepth, Math.min(obstacle.z + obstacle.halfDepth, z));
-    const differenceX = x - nearestX;
-    const differenceZ = z - nearestZ;
-    const distance = Math.hypot(differenceX, differenceZ);
-    if (distance >= KART_TUNING.collisionRadius) continue;
-    if (distance > 0.000001) {
-      collisionNormalX = differenceX / distance;
-      collisionNormalZ = differenceZ / distance;
-      x += collisionNormalX * (KART_TUNING.collisionRadius - distance);
-      z += collisionNormalZ * (KART_TUNING.collisionRadius - distance);
-    } else {
-      const toLeft = x - (obstacle.x - obstacle.halfWidth);
-      const toRight = obstacle.x + obstacle.halfWidth - x;
-      const toNear = z - (obstacle.z - obstacle.halfDepth);
-      const toFar = obstacle.z + obstacle.halfDepth - z;
-      const smallest = Math.min(toLeft, toRight, toNear, toFar);
-      collisionNormalX = smallest === toLeft ? -1 : smallest === toRight ? 1 : 0;
-      collisionNormalZ = smallest === toNear ? -1 : smallest === toFar ? 1 : 0;
-      x += collisionNormalX * (KART_TUNING.collisionRadius + smallest);
-      z += collisionNormalZ * (KART_TUNING.collisionRadius + smallest);
-    }
-    impactKind = 'obstacle';
-    break;
-  }
+  const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = projectIntoTestArea(rawX, rawZ);
+  let impactKind: KartState['impactKind'] = kind ?? state.impactKind;
   const collided = collisionNormalX !== 0 || collisionNormalZ !== 0;
   let impactRemaining = Math.max(0, state.impactRemaining - dt);
   const impactDecay = Math.exp(-KART_TUNING.impactVelocityDecay * dt);
@@ -255,36 +263,47 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number): Ka
 export function resolveKartContacts(states: KartState[]): KartState[] {
   const resolved = states.map((state) => ({ ...state }));
   const diameter = KART_TUNING.collisionRadius * 2;
-  for (let first = 0; first < resolved.length; first++) {
-    for (let second = first + 1; second < resolved.length; second++) {
-      const left = resolved[first];
-      const right = resolved[second];
-      const differenceX = left.x - right.x;
-      const differenceZ = left.z - right.z;
-      const distance = Math.hypot(differenceX, differenceZ);
-      if (distance >= diameter) continue;
-      const normalX = distance > 0.000001 ? differenceX / distance : 1;
-      const normalZ = distance > 0.000001 ? differenceZ / distance : 0;
-      const separation = (diameter - distance) / 2;
-      left.x += normalX * separation;
-      left.z += normalZ * separation;
-      right.x -= normalX * separation;
-      right.z -= normalZ * separation;
-      const incomingSpeed = Math.max(Math.abs(left.speed), Math.abs(right.speed));
-      if (incomingSpeed <= 1) continue;
-      const rebound = Math.min(KART_TUNING.impactReboundCap, incomingSpeed * 0.15 + 0.3);
-      for (const [kart, sign] of [[left, 1], [right, -1]] as const) {
-        kart.speed = 0;
-        kart.turboRemaining = 0;
-        kart.drifting = false;
-        kart.driftCharge = 0;
-        kart.driftDirection = 0;
-        kart.impactRemaining = KART_TUNING.impactDuration;
-        kart.impactVelocityX = normalX * rebound * sign;
-        kart.impactVelocityZ = normalZ * rebound * sign;
-        kart.impactKind = 'kart';
+  for (let pass = 0; pass < 4; pass++) {
+    let corrected = false;
+    for (let first = 0; first < resolved.length; first++) {
+      for (let second = first + 1; second < resolved.length; second++) {
+        const left = resolved[first];
+        const right = resolved[second];
+        const differenceX = left.x - right.x;
+        const differenceZ = left.z - right.z;
+        const distance = Math.hypot(differenceX, differenceZ);
+        if (distance >= diameter) continue;
+        corrected = true;
+        const normalX = distance > 0.000001 ? differenceX / distance : 1;
+        const normalZ = distance > 0.000001 ? differenceZ / distance : 0;
+        const separation = (diameter - distance) / 2;
+        left.x += normalX * separation;
+        left.z += normalZ * separation;
+        right.x -= normalX * separation;
+        right.z -= normalZ * separation;
+        const incomingSpeed = Math.max(Math.abs(left.speed), Math.abs(right.speed));
+        if (incomingSpeed <= 1) continue;
+        const rebound = Math.min(KART_TUNING.impactReboundCap, incomingSpeed * 0.15 + 0.3);
+        for (const [kart, sign] of [[left, 1], [right, -1]] as const) {
+          kart.speed = 0;
+          kart.turboRemaining = 0;
+          kart.drifting = false;
+          kart.driftCharge = 0;
+          kart.driftDirection = 0;
+          kart.impactRemaining = KART_TUNING.impactDuration;
+          kart.impactVelocityX = normalX * rebound * sign;
+          kart.impactVelocityZ = normalZ * rebound * sign;
+          kart.impactKind = 'kart';
+        }
       }
     }
+    for (const kart of resolved) {
+      const projected = projectIntoTestArea(kart.x, kart.z);
+      if (projected.x !== kart.x || projected.z !== kart.z) corrected = true;
+      kart.x = projected.x;
+      kart.z = projected.z;
+    }
+    if (!corrected) break;
   }
   return resolved;
 }

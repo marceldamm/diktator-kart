@@ -51,6 +51,8 @@ verifiziert, offen und nächsten Schritt.
 
 **M2i-Kompatibilitätsprobe:** `?fleet=1&webgl=1` startet die Testszene absichtlich mit WebGL1. Chrome zeigte auf derselben RTX 3070 GPU eine sichtbare Szene, 44 Meshes und eine fahrende Runde im kurzen Browsercheck. Das belegt den Engine-Pfad, nicht die Leistung oder Kompatibilität eines älteren Zielgeräts. Beleg: `docs/evidence/m2i-webgl1-chrome.png`.
 
+**M2j-Kontaktkorrektur:** Eine 60-s-Sechs-Kart-Simulation deckte nach Fahrzeugstößen bis zu 5,7 cm Eindringen in den markierten Block auf. Die gemeinsame Positionskorrektur läuft nun mehrmals nach Fahrzeugkontakten. Im selben Test: kein Blockeindringen, höchstens 1,6 cm Restüberlappung zwischen Karts. Modelltests, Chrome-Browserprobe und RTX-Langprobe bestanden; M2 bleibt wegen Fahrgefühl und Zielhardware offen.
+
 **Git-Stand:** M1–M2f sind lokal im Commit `51e22ff` auf `babylon-neustart-2026` gesichert; M2g/h liegen ebenfalls lokal auf diesem Branch. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
 
 ## Kurzer menschlicher M2-Fahrcheck

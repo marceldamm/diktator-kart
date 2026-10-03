@@ -56,6 +56,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **M2i-Kompatibilitätsprobe, 03.10.2026:** WebGL1 wurde im Chrome-Test auf dem starken Entwicklungsgerät absichtlich erzwungen und zeigte eine fahrende Szene. Ein echter älterer PC, normaler/schwacher Ziel-PC und Mobilgeräte bleiben ungeprüft; M2 wird dadurch nicht abgenommen.
 
+**M2j-Korrektur, 03.10.2026:** Der Sechs-Kart-Stresstest fand und beseitigte im geprüften Pfad das Eindringen in den markierten Block nach Fahrzeugstößen. Wiederholte Positionskorrektur ist weiter nur eine Arcade-Näherung; menschlicher Fahrcheck, echte Zielgeräte und repräsentative Strecke bleiben vor M2-Abschluss offen.
+
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 
 ### M3 – Erster Vertical Slice

@@ -329,6 +329,28 @@
 
 **Empfohlenes Modell:** Sol für Fahr-/Kompatibilitätskorrekturen; Astra bei einer schwierigen M2-Gesamtentscheidung.
 
+### 2026-10-03 – M2j Kontaktprojektion nach Fahrzeugstößen
+
+**Ziel:** Prüfen, ob Fahrzeugkontakt die zuvor geprüfte statische Hinderniskollision verletzt, und einen belegten Fehler innerhalb M2 korrigieren.
+
+**Modell / Arbeitsmodus:** lokale Fortsetzung auf `babylon-neustart-2026` nach dem Checkpoint `88321d3`; keine neue Bibliothek, kein Altcode und kein GitHub-Push. Isolierter Headless Chrome für Browser- und RTX-Proben.
+
+**Erledigt:** Der bisherige 60-s-Sechs-Kart-Pfad wurde zusätzlich auf Kreis-/Rechteck-Eindringen untersucht. Die Weltprojektion für Rand und Block ist nun eine gemeinsame Funktion; nach Fahrzeugpaaren folgen bis zu vier Trenn- und Projektionsdurchläufe. Der Stresstest verlangt Hindernisfreiheit und höchstens 2 cm Kart-Restüberlappung nach jedem Schritt.
+
+**Verifiziert:** Vor der Korrektur maximal 5,7 cm Blockeindringen in 856 Kart-Schritten; danach kein messbares Eindringen und maximal 1,6 cm Kart-Restüberlappung im gleichen 60-s-Pfad. `npm test`: 14 bestanden. `npm run build` und `npm run test:browser` bestanden; Chrome zeigte weiter Hop, Drift, Turbo, alle drei Kontakte, drei Kameras und den erzwungenen WebGL1-Pfad. Eine erneute RTX-Probe mit 44/89 Meshes zeigte 16,8 ms P95 in allen sechs Fenstern und kein Intervall über 25 ms; Rohdaten `docs/evidence/m2j-rtx-endurance.json`. Ein Sechs-Kart-Fenster stoppte durch Fahrzeugkontakt.
+
+**Nicht verifiziert:** extreme, überbestimmte Mehrfachkontakte außerhalb des geprüften Pfads, vollständige Streckenwände, echte Zielhardware, menschliche Fahr-/Kamerabewertung und fertige Spielgrafik.
+
+**Geänderte Dateien:** `src/kart-model.ts`, `tests/kart-model.test.mjs`, `docs/evidence/m2j-rtx-endurance.json`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/07-gameplay-systems.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Grundpfeiler-/Abnahmefolgen geprüft; ihre Aussagen bleiben passend.
+
+**Neue Entscheidungen:** bis zu vier gemeinsame Positionsdurchläufe als vorläufige M2-Korrektur; Begründung in Dokument 03 und 12. Keine Änderung an Sarahs Ideen oder den bestätigten Grundsatzentscheidungen.
+
+**Offene Probleme:** M2 nicht insgesamt abgenommen. Komplexe Kontaktketten und spätere echte Streckenformen können eine andere Lösung verlangen. GitHub-Upload bleibt ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** menschlichen M2-Fahrcheck und Messungen auf normalem/schwachem PC sowie Mobile durchführen, sobald verfügbar; beobachtete Probleme als kleine Korrekturpakete priorisieren.
+
+**Empfohlenes Modell:** Sol für Fahrkernkorrekturen; Astra bei schwerer M2-Abnahmeentscheidung.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

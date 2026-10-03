@@ -47,6 +47,8 @@ Mit M2h-Fahrzeugkontakt blieb die Szene bei 44/89 Meshes. In sechs Fenstern zu j
 
 Der mit `?webgl=1` erzwungene WebGL1-Start gelang im kurzen M2i-Browsercheck auf derselben RTX 3070 GPU mit 44 Meshes und sichtbarer Fahrt. Das ist eine Kompatibilitätsprobe des Renderpfads, kein Lastvergleich für ältere Grafikhardware.
 
+Nach der M2j-Kontaktkorrektur blieben 44/89 Meshes. Die erneute RTX-Probe mit sechs 300-Frame-Fenstern zeigte 16,8 ms P95 in jedem Fenster, kein Intervall über 25 ms und keine Browserausnahme. Ein Sechs-Kart-Fenster endete nach Kontakt bei 0 km/h. Rohdaten: `docs/evidence/m2j-rtx-endurance.json`. Die zusätzliche Positionskorrektur ist damit in dieser kleinen Szene nicht als Frame-Pacing-Verschlechterung sichtbar; Zielhardware bleibt ungemessen.
+
 ## Performance-Sicherheitsregeln
 
 - Keine unbounded Listen oder Timer in Rennen, Pause, Neustart und Menürückkehr.

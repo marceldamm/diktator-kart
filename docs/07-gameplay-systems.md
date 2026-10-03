@@ -18,6 +18,8 @@ Vorgesehene Zustände: Menü, Laden, Einführung, Countdown, Rennen, Pause, Ziel
 
 **M2h-Teilstand:** Spieler und fünf Lastkarts erhalten dieselbe einfache Kreis-Kontaktregel. Überlappende Fahrzeugpositionen werden gleichmäßig getrennt; ein Stoß stoppt beide kurz, beendet Drift/Turbo und meldet Fahrzeugkontakt im HUD. Der gezielte Gegenverkehrsfall `?scenario=contact` ist ein Testaufbau. Renn-KI, vollständige Mehrfach- und Streckenkollision, Schaden und menschlich bewertetes Fahrgefühl fehlen weiter.
 
+**M2j-Korrektur:** Nach Fahrzeugtrennung werden Testflächenrand und markierter Block gemeinsam erneut geprüft. Bis zu vier Positionsdurchläufe verhindern im 60-s-Sechs-Kart-Stresstest das zuvor beobachtete Eindringen in den Block. Mehrfachkontakte bleiben eine technische Näherung.
+
 Das Fahrmodell soll Arcade-Charakter behalten, aber Gewicht, Grip, Federung, Drift, Sprung und Kontakt zum Boden glaubwürdig spürbar machen. Ziel ist ungefähr 6/10 Realismus. Kleine Steine, Bordsteinkanten und unterschiedliche Untergründe dürfen Räder und Kartkörper sichtbar reagieren lassen. Spieler und Bots verwenden dieselben grundlegenden Fahrregeln. Bot-Persönlichkeit beeinflusst Entscheidungen, nicht heimliche Beschleunigungs- oder Gripvorteile.
 
 Fahrprofile dürfen sich leicht unterscheiden. Drift, Hop/Sprung und Mini-Turbo sind verbindlich; Federung, Bodenhaftung und Untergründe liefern den glaubwürdigen Eindruck. Optische Schäden können bis Rennende bleiben; betroffene Reifen oder bestimmte Kollisionen können die Lenkung kurzzeitig beeinträchtigen. Spielwirksame Nachteile enden zuverlässig, auch wenn das beschädigte Bauteil sichtbar bleibt.

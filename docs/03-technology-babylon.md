@@ -83,6 +83,8 @@ Die Space-Flanke wird bis zum nächsten festen Simulationsschritt vorgemerkt, da
 
 **M2i, WebGL1-Probe:** Der M1-Fallback-Pfad lässt sich mit `?webgl=1` absichtlich aufrufen. In Headless Chrome auf der RTX 3070 Laptop GPU startete die Szene sichtbar als WebGL1, meldete 44 Meshes mit einem Kart und reagierte auf Gas. Der automatische Browsercheck schreibt `docs/evidence/m2i-webgl1-chrome.png`. Das beweist weder einen echten Fallback nach einem WebGL2-Startfehler noch Kompatibilität/Leistung auf älterer Zielhardware; beides bleibt Geräteprüfung.
 
+**M2j, Kontaktprojektion:** Die 60-s-Sechs-Kart-Simulation zeigte nach M2h bei Fahrzeugstößen bis zu 5,7 cm Eindringen in den markierten Block. `projectIntoTestArea` wird jetzt vom Einzelfahrzeugschritt und bis zu viermal nach paarweisen Fahrzeugtrennungen verwendet. Der gleiche Simulationspfad zeigte danach kein messbares Hinderniseindringen und höchstens 1,6 cm Kart-Restüberlappung. Das ist eine begrenzte Positionskorrektur, keine allgemeine Starrkörperphysik; überbestimmte Kontaktketten bleiben nur angenähert.
+
 ## Nicht übernehmen
 
 Nicht automatisch übernehmen: PlayCanvas-Szenenaufbau, Ammo-Ladepfade, alte Controllerklassen, alte Renderbudgets, alte Assetnamen, bestehende Buildannahmen oder angeblich stabile Workarounds. Sie dürfen als historische Hinweise gelesen und im neuen Prototyp unabhängig bewertet werden.
