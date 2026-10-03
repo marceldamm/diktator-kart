@@ -41,7 +41,7 @@ test('boundary impact briefly rebounds, cancels drift/turbo and recovers', () =>
     turboRemaining: 0.8, drifting: true, driftCharge: 0.7, driftDirection: 1 };
   const hit = advanceKart(approaching, { throttle: 1, steering: 0, hopDrift: true }, step);
   assert.equal(hit.z, TEST_AREA_HALF_SIZE);
-  assert.equal(hit.speed, 0);
+  assert.ok(hit.speed < approaching.speed * .05, 'Near-head-on drift hit removes over 95% of speed; a small tangential component survives');
   assert.ok(hit.impactRemaining > 0 && hit.impactVelocityZ < 0);
   assert.equal(hit.drifting, false);
   assert.equal(hit.turboRemaining, 0);

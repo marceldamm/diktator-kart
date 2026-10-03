@@ -1,5 +1,9 @@
 # Art Direction
 
+## Ruhigere Karosserie und sichtbarer Staub – 03.10.2026
+
+Exponentielle statt schwingender visueller Karosserierückkehr, Rollneigung/Vibration stark reduziert. Haube hebt sich dezent mit Beschleunigung/Tempo; Hinterteil senkt sich. Radbaugruppen besitzen getrennten ungefederten Elternknoten und bleiben auf den vier berechneten Bodenkontakten. Hop und tatsächliche Federung bleiben sichtbar. Bestehender Reifenstaub als größere weichere Wolke lesbarer, maximal 150 Partikel, reduzierte Effektstufe sparsamer.
+
 ## Präzisiertes Ziel für Figuren und Welt – 03.10.2026
 
 Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar.

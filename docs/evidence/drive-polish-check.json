@@ -1,0 +1,475 @@
+{
+  "fleet": 6,
+  "qa": "Kart positioned on a clear normal-world straight, real input and fixed update thereafter",
+  "straight": {
+    "state": "running",
+    "menu": false,
+    "kart": {
+      "x": 52.01548729503074,
+      "z": 3.0714233848931953,
+      "heading": -0.4330183141644929,
+      "travelHeading": -0.4330183141644929,
+      "speed": 16,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": false,
+      "driftDirection": 0,
+      "driftCharge": 0,
+      "turboRemaining": 0,
+      "suspensionOffset": 0,
+      "suspensionVelocity": 0,
+      "bodyPitch": 0,
+      "bodyRoll": 0,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": 0,
+      "yawRate": 0
+    },
+    "render": {
+      "x": 52.07076424077026,
+      "z": 2.95184859540847,
+      "heading": -0.4330183141644929,
+      "travelHeading": -0.4330183141644929,
+      "speed": 16,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": false,
+      "driftDirection": 0,
+      "driftCharge": 0,
+      "turboRemaining": 0,
+      "suspensionOffset": 0,
+      "suspensionVelocity": 0,
+      "bodyPitch": 0,
+      "bodyRoll": 0,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": 0,
+      "yawRate": 0
+    },
+    "wheels": [
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      }
+    ],
+    "body": [
+      0.019229542072400657,
+      3.141592653589793,
+      0.0009090737520118818
+    ],
+    "dust": 24
+  },
+  "inside": {
+    "state": "running",
+    "menu": false,
+    "kart": {
+      "x": 49.53295454146299,
+      "z": 12.27531663789325,
+      "heading": 0.15604421360247425,
+      "travelHeading": -0.10125237845213306,
+      "speed": 16,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": true,
+      "driftDirection": 1,
+      "driftCharge": 0.15,
+      "turboRemaining": 0,
+      "suspensionOffset": -0.044537141253202454,
+      "suspensionVelocity": 0.1882973138368709,
+      "bodyPitch": -0.010752534780833727,
+      "bodyRoll": -0.008809630953325522,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0.054286470938629386,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": 0.9774716004550608,
+      "yawRate": 1.4475079478211537
+    },
+    "render": {
+      "x": 49.545623167091954,
+      "z": 12.150625217301783,
+      "heading": 0.1447054013445419,
+      "travelHeading": -0.11245001273958379,
+      "speed": 16,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": true,
+      "driftDirection": 1,
+      "driftCharge": 0.15,
+      "turboRemaining": 0,
+      "suspensionOffset": -0.04601213687825794,
+      "suspensionVelocity": 0.17307724665908902,
+      "bodyPitch": -0.009887445522078776,
+      "bodyRoll": -0.008100846637309915,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0.050043838582926145,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": 0.9762951173677139,
+      "yawRate": 1.4452651055916939
+    },
+    "wheels": [
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.39004385471343994
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      }
+    ],
+    "body": [
+      0.021052619484358583,
+      3.141592653589793,
+      0.0613946983802341
+    ],
+    "dust": 65
+  },
+  "counter": {
+    "state": "running",
+    "menu": false,
+    "kart": {
+      "x": 53.03613070340248,
+      "z": 21.500647046637507,
+      "heading": 0.8041077210248617,
+      "travelHeading": 0.6641077210248617,
+      "speed": 16,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": true,
+      "driftDirection": 1,
+      "driftCharge": 0.7,
+      "turboRemaining": 0,
+      "suspensionOffset": -0.0001437563035391788,
+      "suspensionVelocity": 0.0011564541060750644,
+      "bodyPitch": -0.00011850752359607733,
+      "bodyRoll": -0.00009709379937604057,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": -0.9598599791358151,
+      "yawRate": 0.5843811796085553
+    },
+    "render": {
+      "x": 52.962496618920746,
+      "z": 21.406570982387937,
+      "heading": 0.7997443415783166,
+      "travelHeading": 0.6597443415783166,
+      "speed": 16,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": true,
+      "driftDirection": 1,
+      "driftCharge": 0.7,
+      "turboRemaining": 0,
+      "suspensionOffset": -0.00015239116080939522,
+      "suspensionVelocity": 0.0012338896491514571,
+      "bodyPitch": -0.00012912579764247527,
+      "bodyRoll": -0.00010579340374457625,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": -0.9578618981100026,
+      "yawRate": 0.5900857160968124
+    },
+    "wheels": [
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      }
+    ],
+    "body": [
+      0.009696828228095526,
+      3.141592653589793,
+      0.05789484388859389
+    ],
+    "dust": 65
+  },
+  "turbo": {
+    "state": "running",
+    "menu": false,
+    "kart": {
+      "x": 54.70129061074671,
+      "z": 23.134612073975678,
+      "heading": 0.7842679806267628,
+      "travelHeading": 0.7842679806267628,
+      "speed": 20,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": false,
+      "driftDirection": 0,
+      "driftCharge": 0,
+      "turboRemaining": 1.1000000000000003,
+      "suspensionOffset": -0.00006171452066689167,
+      "suspensionVelocity": 0.00046275836730155393,
+      "bodyPitch": -0.000033073274894774316,
+      "bodyRoll": -0.000027097097466039276,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": -0.459098052454725,
+      "yawRate": -0.5377324110908509
+    },
+    "render": {
+      "x": 54.59487366483194,
+      "z": 23.027954314597583,
+      "heading": 0.7883188980851856,
+      "travelHeading": 0.7883188980851856,
+      "speed": 20,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": false,
+      "driftDirection": 0,
+      "driftCharge": 0,
+      "turboRemaining": 1.1000000000000003,
+      "suspensionOffset": -0.0000652006336674643,
+      "suspensionVelocity": 0.0004907177755526532,
+      "bodyPitch": -0.000036063098916874884,
+      "bodyRoll": -0.00002954667505371159,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": -0.48215497664798057,
+      "yawRate": -0.5040565317421213
+    },
+    "wheels": [
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      }
+    ],
+    "body": [
+      0.01621701008743044,
+      3.141592653589793,
+      0.010478070045147411
+    ],
+    "dust": 24
+  },
+  "reset": {
+    "state": "running",
+    "menu": true,
+    "kart": {
+      "x": 60.06581246142805,
+      "z": -46.57051606632818,
+      "heading": -0.08161870102448444,
+      "travelHeading": -0.08161870102448444,
+      "speed": 0,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": false,
+      "driftDirection": 0,
+      "driftCharge": 0,
+      "turboRemaining": 0,
+      "suspensionOffset": 0,
+      "suspensionVelocity": 0,
+      "bodyPitch": 0,
+      "bodyRoll": 0,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": 0,
+      "yawRate": 0
+    },
+    "render": {
+      "x": 60.06581246142805,
+      "z": -46.57051606632818,
+      "heading": -0.08161870102448444,
+      "travelHeading": -0.08161870102448444,
+      "speed": 0,
+      "height": 0,
+      "hopRemaining": 0,
+      "drifting": false,
+      "driftDirection": 0,
+      "driftCharge": 0,
+      "turboRemaining": 0,
+      "suspensionOffset": 0,
+      "suspensionVelocity": 0,
+      "bodyPitch": 0,
+      "bodyRoll": 0,
+      "wheelGroundHeights": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "grounded": true,
+      "impactRemaining": 0,
+      "impactVelocityX": 0,
+      "impactVelocityZ": 0,
+      "impactKind": null,
+      "scrapeRemaining": 0,
+      "spinRemaining": 0,
+      "scrapeKind": null,
+      "steer": 0,
+      "yawRate": 0
+    },
+    "wheels": [
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      },
+      {
+        "parent": "wheelFrame-0",
+        "y": 0.3400000035762787
+      }
+    ],
+    "body": [
+      0,
+      3.141592653589793,
+      0
+    ],
+    "dust": 0
+  },
+  "runtimeErrors": []
+}

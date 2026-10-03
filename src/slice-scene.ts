@@ -153,6 +153,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const arm of arms) if (arm) arm.rotationQuaternion = null;
       if (pivots.some((n) => !n) || spins.some((n) => !n) || !driver || !head || !steering) throw new Error('Kart articulation nodes are missing');
       for (const node of [...pivots, ...spins, driver, head, scarf, steering]) if (node) node.rotationQuaternion = null;
+      // Wheel assemblies have an unsprung parent; body squat/roll must never lift grounded tyres.
+      const wheelFrame = new TransformNode(`wheelFrame-${index}`, scene);
+      wheelFrame.rotation.y = Math.PI; wheelFrame.parent = root;
+      for (const pivot of pivots) pivot.setParent(wheelFrame);
       for (const mesh of root.getChildMeshes()) {
         mesh.receiveShadows = true; mesh.isPickable = false;
         if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh);
@@ -180,7 +184,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
       // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
       const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|driverPose \/ Uniform racing suit|Cape cloth|Hat cloth/.test(mesh.name));
-      return { root, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, rollVel: 0, pitch: 0, pitchVel: 0 };
+      return { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
     const contactCanvas = contactTexture.getContext();
@@ -192,9 +196,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     scene.onDisposeObservable.add(() => container.dispose());
     const dust = new ParticleSystem('Tire smoke and dust', 150, scene); dust.particleTexture = particleTexture(scene);
     dust.blendMode=ParticleSystem.BLENDMODE_STANDARD;
-    dust.minSize = .1; dust.maxSize = .4; dust.minLifeTime = .25; dust.maxLifeTime = .6;
-    dust.direction1 = new Vector3(-.3, .15, -.3); dust.direction2 = new Vector3(.3, .6, .3);
-    dust.color1 = new Color4(.6, .56, .48, .28); dust.color2 = new Color4(.72, .71, .63, .22); dust.colorDead = new Color4(.6, .6, .5, 0); dust.start();
+    dust.minSize = .22; dust.maxSize = .72; dust.minLifeTime = .35; dust.maxLifeTime = .85;
+    dust.minEmitBox = new Vector3(-.7, 0, -.08); dust.maxEmitBox = new Vector3(.7, .05, .08);
+    dust.direction1 = new Vector3(-.3, .2, -.3); dust.direction2 = new Vector3(.3, .65, .3);
+    dust.color1 = new Color4(.65, .58, .47, .38); dust.color2 = new Color4(.77, .71, .60, .3); dust.colorDead = new Color4(.7, .64, .53, 0); dust.start();
     const sparks = new ParticleSystem('Drift sparks', 140, scene); sparks.particleTexture = particleTexture(scene);
     sparks.billboardMode = ParticleSystem.BILLBOARDMODE_STRETCHED; sparks.minEmitPower = 2.5; sparks.maxEmitPower = 5;
     sparks.minSize = .025; sparks.maxSize = .055; sparks.minScaleY = 2.5; sparks.maxScaleY = 4; sparks.minLifeTime = .08; sparks.maxLifeTime = .24;
@@ -305,19 +310,22 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // Item hit: one eased full turn of the body while the kart coasts on its path.
           const spin = s.spinRemaining > 0 ? 1 - (s.spinRemaining / .95) : 0;
           v.root.rotation.y = s.heading + (s.spinRemaining > 0 ? (1 - (1 - spin) ** 2) * Math.PI * 2 : 0);
-          // Sprung body: rolls out of the turn, squats and dives, wobbles back; cobbles add a fine rumble.
+          // Calm sprung body. Exponential response stays stable across uneven render frames.
           const lateral = s.speed * (s.yawRate ?? 0), longitudinal = (s.speed - v.previousSpeed) / Math.max(dt, 1e-3);
-          const rollTarget = Math.max(-.11, Math.min(.11, -lateral * .011)), pitchTarget = Math.max(-.07, Math.min(.07, longitudinal * .006));
-          v.rollVel += ((rollTarget - v.roll) * 95 - v.rollVel * 7.5) * dt; v.roll += v.rollVel * dt;
-          v.pitchVel += ((pitchTarget - v.pitch) * 110 - v.pitchVel * 8.5) * dt; v.pitch += v.pitchVel * dt;
+          const rollTarget = Math.max(-.045, Math.min(.045, -lateral * .004));
+          const pitchTarget = Math.max(-.035, Math.min(.048, longitudinal * .0025 + Math.max(0, s.speed / 20) ** 2 * .016));
+          const response = 1 - Math.exp(-7 * dt);
+          v.roll += (rollTarget - v.roll) * response; v.pitch += (pitchTarget - v.pitch) * response;
           const rumble = s.grounded ? Math.min(1, Math.abs(s.speed) / 16) : 0;
-          v.root.rotation.x = -s.bodyPitch + s.impactVelocityZ * .035 + v.pitch + Math.sin(time * 47 + index) * .004 * rumble;
-          v.root.position.y += Math.sin(time * 61 + index * 2) * .008 * rumble;
+          v.root.rotation.x = 0; v.root.rotation.z = 0;
+          // The imported body's forward axis is -Z: positive local pitch lifts the bonnet.
+          v.orientation.rotation.x = -s.bodyPitch + s.impactVelocityZ * .018 + v.pitch + Math.sin(time * 47 + index) * .001 * rumble;
+          v.orientation.position.y = Math.sin(time * 61 + index * 2) * .0015 * rumble;
           const slip = Math.sin(s.heading - s.travelHeading);
-          v.root.rotation.z = s.bodyRoll + (s.drifting ? -s.driftDirection * .055 : 0) + (s.grounded ? Math.max(-.07, Math.min(.07, slip * Math.abs(s.speed) * .012)) : 0) + v.roll + Math.sin(time * 53 + index) * .005 * rumble;
+          v.orientation.rotation.z = -s.bodyRoll + (s.drifting ? s.driftDirection * .025 : 0) + (s.grounded ? Math.max(-.025, Math.min(.025, -slip * Math.abs(s.speed) * .004)) : 0) - v.roll + Math.sin(time * 53 + index) * .001 * rumble;
           // Visible weight: compress on landing and suspension dips, stretch slightly at the hop apex.
           const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
-          v.root.scaling.set(1 - squash * .5, 1 + squash, 1 - squash * .5);
+          v.orientation.scaling.set(1 - squash * .25, 1 + squash * .5, 1 - squash * .25);
           v.rotation += s.speed * dt / .33;
           v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? -(s.steer ?? 0) * .42 + Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
@@ -345,12 +353,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           ...treeShadows.filter(t=>Math.hypot(t.root.position.x-state.x,t.root.position.z-state.z)<44).flatMap(t=>t.meshes),
           ...visuals.filter(v=>Math.hypot(v.root.position.x-state.x,v.root.position.z-state.z)<45).flatMap(v=>v.shadowMeshes),
           ...itemShadowMeshes.filter(mesh=>mesh.isEnabled())];
-        const back = new Vector3(state.x - Math.sin(state.heading), .2 + state.height, state.z - Math.cos(state.heading));
+        const back = new Vector3(state.x - Math.sin(state.heading) * 1.15, .12 + state.height, state.z - Math.cos(state.heading) * 1.15);
         dust.emitter = back;
         boostFire.emitter = new Vector3(state.x - Math.sin(state.heading) * 1.75, .62 + state.height, state.z - Math.cos(state.heading) * 1.75);
         boostFire.direction1 = new Vector3(-Math.sin(state.heading) * 2 - .3, .2, -Math.cos(state.heading) * 2 - .3);
         boostFire.direction2 = new Vector3(-Math.sin(state.heading) * 3 + .3, .5, -Math.cos(state.heading) * 3 + .3);
-        boostFire.emitRate = state.turboRemaining > 0 ? reducedEffects ? 40 : 150 : 0; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 20 : 90 : reducedEffects ? 0 : 8 : 0;
+        boostFire.emitRate = state.turboRemaining > 0 ? reducedEffects ? 40 : 150 : 0; dust.emitRate = state.grounded && Math.abs(state.speed) > 4 ? state.drifting ? reducedEffects ? 12 : 65 : reducedEffects ? 0 : Math.min(24, Math.abs(state.speed) * 1.5) : 0;
         sparks.emitter = back.add(new Vector3(Math.cos(state.heading) * .85, 0, -Math.sin(state.heading) * .85));
         const scraping = state.scrapeRemaining > 0 && state.scrapeKind === 'wall' || state.impactRemaining > 0;
         sparks.emitRate = state.drifting || scraping ? reducedEffects ? 20 : scraping ? 120 : 70 : 0;

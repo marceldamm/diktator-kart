@@ -1,5 +1,9 @@
 # Gameplay-Systeme und Zuständigkeiten
 
+## Driftkorrektur im Fahrtest – 03.10.2026
+
+Driftrichtung bleibt ab Initiierung fest: gleichsinniges Lenken enger, Gegenlenken weiter; beide laden den Mini-Turbo, Neutralstellung langsamer. Reiseausrichtung folgt schneller, begrenzter Schlupfwinkel 0,42 rad und lesbare Driftpose. Vorläufige eigene Balance; Nintendo-Inspiration bezieht sich auf Drift/Halten/Funken/Loslassen-Mini-Turbo (offizielle Anleitung https://www.nintendo.com/jp/ichikara/aabpa/index_en.html), keine exakte Kopie der Nintendo-Physik. Noch menschlich abzustimmen.
+
 ## Qualitätsstufe 2 – 03.10.2026
 
 - **Strecke:** gemeinsame Mittellinie `src/track-layout.ts`; `track.ts` liefert Fortschritt, Seitenlage (`trackLocate`), Kurvenvorschau, Projektion, Startaufstellung und Rücksetzung generisch.

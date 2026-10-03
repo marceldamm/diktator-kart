@@ -68,7 +68,8 @@ export const KART_TUNING = {
   driftMinSpeed: 5,
   driftChargeTime: 0.7,
   driftYawMultiplier: 1.2,
-  driftHeadingFollow: 0.55,
+  driftHeadingFollow: 1.6,
+  driftMaxSlip: 0.42,
   normalHeadingFollow: 5.5,
   /** Steering wheel travel rate (1/s) and yaw response rate (1/s): less direct, more car-like. */
   steerRate: 6,
@@ -213,10 +214,10 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
       drifting = false;
       driftDirection = 0;
       driftCharge = 0;
-    } else if (steering * driftDirection >= 0.25) {
-      driftCharge = Math.min(KART_TUNING.driftChargeTime, driftCharge + dt);
     } else {
-      driftCharge = Math.max(0, driftCharge - dt * 0.5);
+      // Both tightening and countersteering charge; direction belongs to the initiated drift.
+      const charging = Math.abs(steering) >= .25 ? 1 : .6;
+      driftCharge = Math.min(KART_TUNING.driftChargeTime, driftCharge + dt * charging);
     }
   } else if (held && hopRemaining === 0 && speed >= KART_TUNING.driftMinSpeed && Math.abs(steering) >= 0.25) {
     drifting = true;
@@ -226,13 +227,19 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
 
   // The wheel needs time to turn and the body needs time to rotate: steering input -> steer -> yaw rate.
   const steer = (state.steer ?? 0) + (steering - (state.steer ?? 0)) * Math.min(1, KART_TUNING.steerRate * dt);
+  const turn = drifting ? driftDirection * (.5 + .32 * steer * driftDirection) : steer;
   const targetYaw = Math.max(-KART_TUNING.maxYawRate,
-    Math.min(KART_TUNING.maxYawRate, speed * steer * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
-  const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, KART_TUNING.yawResponse * dt);
+    Math.min(KART_TUNING.maxYawRate, speed * turn * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
+  const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, (drifting ? 5 : KART_TUNING.yawResponse) * dt);
   let heading = state.heading + yawRate * dt;
-  const angleDifference = Math.atan2(Math.sin(heading - state.travelHeading), Math.cos(heading - state.travelHeading));
+  const wantedTravel = heading - (drifting ? driftDirection * (.14 + .12 * Math.max(0, steer * driftDirection)) : 0);
+  const angleDifference = Math.atan2(Math.sin(wantedTravel - state.travelHeading), Math.cos(wantedTravel - state.travelHeading));
   const follow = (drifting ? KART_TUNING.driftHeadingFollow : KART_TUNING.normalHeadingFollow) * dt;
   let travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
+  if (drifting) {
+    const slip = Math.atan2(Math.sin(heading - travelHeading), Math.cos(heading - travelHeading));
+    travelHeading = heading - Math.max(-KART_TUNING.driftMaxSlip, Math.min(KART_TUNING.driftMaxSlip, slip));
+  }
   const rawX = state.x + Math.sin(travelHeading) * speed * dt + state.impactVelocityX * dt;
   const rawZ = state.z + Math.cos(travelHeading) * speed * dt + state.impactVelocityZ * dt;
   const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = project(rawX, rawZ);

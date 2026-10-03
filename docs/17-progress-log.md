@@ -757,6 +757,20 @@
 
 **Dateien / nächster Schritt:** mouse-camera/camera/main/style, index, Browserregression, README/START-HERE/docs19/22/23/17. Danach Karosserie/Drift/Staub.
 
+### 2026-10-03 – Ergänzung aus laufendem Fahrtest: Sprache und F-Hupe
+
+**Neue Nutzeraufträge:** Unverständliche Wörter/komische Aussprache der gesprochenen Texte überprüfen; weniger statisch/mechanisch, freundlichere Stadionsprecherin. F soll eine individuelle Sprachhupe je Fahrer auslösen. Echte unproblematische historische Mitschnitte erwünscht; Quelle, Identität und Nutzungsrechte vor Verwendung prüfen, keine falsche Authentizität.
+
+**Status:** In docs/23-current-work-list.md aufgenommen; nach laufender Fahrzeug-/Driftarbeit bearbeiten. Noch keine Hörprüfung oder Mitschnittfreigabe behauptet.
+
+### 2026-10-03 – Fahrzeug beruhigt, Gegenlenk-Drift und Staub
+
+**Umgesetzt:** Ungefederten Radrahmen von Karosseriepose getrennt. Weniger Roll/Vibration, stabile exponentielle Rückkehr statt unterdämpfter Federschwingung; dezente Beschleunigungs-/Tempo-Haubenhebung, Räder unabhängig auf Terrain. Drift bleibt in Initiierungsrichtung, Gegenlenken öffnet Radius und lädt ebenfalls; Neutral lädt langsamer, Reiseausrichtung/Schlupf begrenzt. Größerer begrenzter Reifenstaub, 150er Pool/reduzierte Effekte.
+
+**Verifiziert:** Produktionsbuild besteht. 16 gezielte Fahrmodell-/Drifttests bestehen, einschließlich beider Richtungen, Gegenlenk-Ladung, Kurvenweite, Turbo-/Bremsfreigabe, Federung und Langlaufkontakte. Near-head-on-Test berücksichtigt bewusst die kleine neue tangentiale Driftbewegung und verlangt >95% Geschwindigkeitsverlust samt Drift/Turbo-Abbruch. Browser, normale Welt/sechs Karts: Radzentren entsprechen Terrain+Radius während Haubenpose; Staub emittiert; echtes W/D/Space/A-Gegenlenken lädt, Richtung bleibt, Release gibt Turbo; Neustart setzt zurück. Rohdaten docs/evidence/drive-polish-check.json, Screenshot drive-polish-turbo-v1.png aus tatsächlicher Szene während Pause nach Turboauslösung. QA-Kart zu Beginn auf klare Gerade positioniert, danach reale Eingabe. Frühere QA-Starts fuhren während Screenshotwartezeit an die Bande; Prüffahrt korrigiert, kein falscher Turbo-Erfolg behauptet.
+
+**Grenzen / nächste Arbeit:** Noch keine menschliche Drift-/Animationsabnahme, keine schwache-PC-Abnahme. Nächster Schritt Schäferhund, Umgebungsdetails, realitätsnaher Figurenpass, Sprache/F-Hupe. Maus bereits e5152ab lokal gesichert.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**
