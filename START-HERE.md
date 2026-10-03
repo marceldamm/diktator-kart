@@ -55,13 +55,15 @@ verifiziert, offen und nächsten Schritt.
 
 **M2k-Kamerasichtprobe:** Ferne Verfolger- und Fahrerperspektive wurden bei Fahrzeugkontakt als Chrome-Standbilder festgehalten. Die Szene bleibt sichtbar; Kameraruhe und Komfort während echter Bedienung sind weiter offen.
 
+**M2l-Diagnose:** F3 zeigt jetzt ein rollendes Fenster aus bis zu 300 sichtbaren Frames mit P50/P95/P99, langen Frames, Canvas-Auflösung und erkanntem Grafikpfad (falls vom Browser freigegeben). Der Browsercheck prüfte die Anzeige mit einem und sechs Karts. Das scrollbare Panel wurde im Bild `docs/evidence/m2l-f3-diagnose-chrome.png` geprüft; die angezeigten RTX-Werte sind keine Zielhardwaremessung.
+
 **Git-Stand:** M1–M2f sind lokal im Commit `51e22ff` auf `babylon-neustart-2026` gesichert; M2g/h liegen ebenfalls lokal auf diesem Branch. Der Upload zu GitHub wurde von der automatischen Freigabeprüfung wegen ungeklärter Freigabe des externen Ziels abgelehnt; ohne ausdrückliche Freigabe kein erneuter Push. `main` ist unverändert.
 
 ## Kurzer menschlicher M2-Fahrcheck
 
 Diese Beobachtungen ergänzen die automatischen Tests; ein angenehmes Fahrgefühl kann nur ein Mensch beurteilen:
 
-1. Starter öffnen, **F3** für die Diagnose drücken und Browser/Gerät sowie ungefähr stabile FPS notieren. Die bisherige Headless-Probe lief auf der RTX 3070 Laptop GPU; ein normaler oder schwächerer PC ist als Vergleich besonders hilfreich.
+1. Starter öffnen, **F3** für die Diagnose drücken und Gerät/GPU, Chrome-Version, Auflösung, FPS, Frame-P95/P99 und Zahl der Frames über 25/33 ms nach mindestens fünf Sekunden Fahrt notieren. Das Panel kann gescrollt werden. Die bisherige Headless-Probe lief auf der RTX 3070 Laptop GPU; ein normaler oder schwächerer PC ist als Vergleich besonders hilfreich.
 2. Von der Mitte mit **W** geradeaus über die türkise und orange Bodenwelle fahren. Auf Rad- und Karosseriebewegung sowie störendes Springen achten.
 3. Mit **W + A/D + Space** nach dem Hop driften, Space bei geladener Anzeige loslassen und Bremsen ausprobieren. Rückmeldung zu Lenkbarkeit, Tempo und Turbo geben.
 4. Mit **C** durch nahe, ferne und Fahrerperspektive wechseln; während Kurve, Hop und Drift auf Sichtbarkeit und Kameraruhe achten.

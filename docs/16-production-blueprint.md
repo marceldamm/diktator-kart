@@ -62,6 +62,8 @@ Der konkrete Ablauf für den ersten Abend steht in [20-first-evening-runbook.md]
 
 **M2k-Sichtprobe, 03.10.2026:** Statische Browserbilder der fernen Verfolger- und Fahrerperspektive beim Fahrzeugkontakt ergänzen die technische Kameraabdeckung. Eine menschliche Fahrt mit Beobachtung von Kameraruhe, Sicht und Komfort bleibt für die M2-Abnahme nötig.
 
+**M2l-Messhilfe, 03.10.2026:** Die scrollbare F3-Diagnose liefert ein gleitendes 300-Frame-Fenster sowie Auflösung und verfügbaren GPU-Pfad. Sie bereitet die normale-PC-Prüfung aus Dokument 09 vor, ersetzt sie aber nicht.
+
 **Grobe Dauer:** 4–10 Arbeitssitzungen.
 
 ### M3 – Erster Vertical Slice

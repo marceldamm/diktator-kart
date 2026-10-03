@@ -51,6 +51,9 @@ class App {
   private lastAction = 'Keine';
   private manifestName = '–';
   private lastDebugUpdate = 0;
+  private lastFrameAt = 0;
+  private frameTimes: number[] = [];
+  private rendererName = 'nicht verfügbar';
   private generation = 0;
 
   constructor() {
@@ -96,6 +99,19 @@ class App {
     }
   }
 
+  private readRendererName(): string {
+    const gl = this.engine?.webGLVersion === 2 ? canvas.getContext('webgl2') : canvas.getContext('webgl');
+    const info = gl?.getExtension('WEBGL_debug_renderer_info');
+    return gl && info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : 'nicht verfügbar';
+  }
+
+  private frameSummary(): string {
+    if (this.frameTimes.length < 60) return `Framefenster: ${this.frameTimes.length}/300 · sammelt Daten`;
+    const values = [...this.frameTimes].sort((a, b) => a - b);
+    const at = (fraction: number) => values[Math.ceil(values.length * fraction) - 1].toFixed(1);
+    return `Framefenster: ${values.length}/300 · P50 ${at(0.5)} ms · P95 ${at(0.95)} ms · P99 ${at(0.99)} ms\n>25 ms: ${values.filter((value) => value > 25).length} · >33 ms: ${values.filter((value) => value > 33).length}`;
+  }
+
   private async restart(): Promise<void> {
     const generation = ++this.generation;
     this.show('loading', 'Asset-Manifest und Szene werden geladen.');
@@ -106,6 +122,8 @@ class App {
     this.kart = initialKartState();
     this.loadKarts = initialLoadKarts();
     this.accumulator = 0;
+    this.frameTimes = [];
+    this.lastFrameAt = 0;
     this.queuedHopPress = false;
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -119,6 +137,7 @@ class App {
       this.manifestName = manifest.name;
       if (!this.engine) {
         this.engine = this.createEngine();
+        this.rendererName = this.readRendererName();
         this.engine.runRenderLoop(() => this.frame());
       }
       this.testScene = createTestScene(this.engine, this.loadKarts.length);
@@ -134,12 +153,22 @@ class App {
     if (this.state === 'running') {
       this.queuedHopPress = false;
       this.accumulator = 0;
+      this.frameTimes = [];
       this.show('paused', 'Szene angehalten. P setzt fort.');
     }
     else if (this.state === 'paused') this.show('running', 'Szene läuft wieder.');
   }
 
   private frame(): void {
+    const now = performance.now();
+    if (this.state === 'running' && !document.hidden && this.lastFrameAt > 0) {
+      const elapsed = now - this.lastFrameAt;
+      if (elapsed > 0 && elapsed < 500) {
+        this.frameTimes.push(elapsed);
+        if (this.frameTimes.length > 300) this.frameTimes.shift();
+      } else this.frameTimes = [];
+    } else if (this.state !== 'running' || document.hidden) this.frameTimes = [];
+    this.lastFrameAt = now;
     const frame = this.input.read();
     if (frame.pressed.has('restart')) void this.restart();
     if (frame.pressed.has('pause')) this.togglePause();
@@ -186,7 +215,7 @@ class App {
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();
-      debug.textContent = `Status: ${this.state}\nEngine: Babylon ${Engine.Version}\nWebGL: ${this.engine?.webGLVersion ?? '–'}\nFPS: ${this.engine?.getFps().toFixed(0) ?? '–'}\nMeshes: ${this.testScene?.scene.meshes.length ?? 0}\nFahrzeuge: ${this.loadKarts.length + 1}\nAssetgruppe: ${this.manifestName}\nTempo: ${this.kart.speed.toFixed(2)} m/s\nPosition: ${this.kart.x.toFixed(2)}, ${this.kart.z.toFixed(2)} m\nRichtung: ${this.kart.heading.toFixed(2)} rad\nHop: ${this.kart.height.toFixed(2)} m\nFederung: ${this.kart.suspensionOffset.toFixed(3)} m / ${this.kart.suspensionVelocity.toFixed(2)} m/s\nRadkontakte: ${this.kart.wheelGroundHeights.map((value) => value.toFixed(2)).join(', ')} m\nKarosserieneigung: ${this.kart.bodyPitch.toFixed(3)} / ${this.kart.bodyRoll.toFixed(3)} rad\nRandstoß: ${this.kart.impactRemaining.toFixed(2)} s\nDrift: ${this.kart.drifting ? `${this.kart.driftCharge.toFixed(2)} s` : 'aus'}\nTurbo: ${this.kart.turboRemaining.toFixed(2)} s\nGas/Bremse: ${frame.throttle}\nLenkung: ${frame.steering}\nHop/Drift-Taste: ${frame.hopDrift}\nLetzte Aktion: ${this.lastAction}`;
+      debug.textContent = `Status: ${this.state}\nEngine: Babylon ${Engine.Version}\nWebGL: ${this.engine?.webGLVersion ?? '–'}\nGrafik: ${this.rendererName}\nAuflösung: ${canvas.width} × ${canvas.height} Pixel · DPR ${window.devicePixelRatio.toFixed(2)}\nFPS: ${this.engine?.getFps().toFixed(0) ?? '–'}\n${this.frameSummary()}\nMeshes: ${this.testScene?.scene.meshes.length ?? 0}\nFahrzeuge: ${this.loadKarts.length + 1}\nAssetgruppe: ${this.manifestName}\nTempo: ${this.kart.speed.toFixed(2)} m/s\nPosition: ${this.kart.x.toFixed(2)}, ${this.kart.z.toFixed(2)} m\nRichtung: ${this.kart.heading.toFixed(2)} rad\nHop: ${this.kart.height.toFixed(2)} m\nFederung: ${this.kart.suspensionOffset.toFixed(3)} m / ${this.kart.suspensionVelocity.toFixed(2)} m/s\nRadkontakte: ${this.kart.wheelGroundHeights.map((value) => value.toFixed(2)).join(', ')} m\nKarosserieneigung: ${this.kart.bodyPitch.toFixed(3)} / ${this.kart.bodyRoll.toFixed(3)} rad\nRandstoß: ${this.kart.impactRemaining.toFixed(2)} s\nDrift: ${this.kart.drifting ? `${this.kart.driftCharge.toFixed(2)} s` : 'aus'}\nTurbo: ${this.kart.turboRemaining.toFixed(2)} s\nGas/Bremse: ${frame.throttle}\nLenkung: ${frame.steering}\nHop/Drift-Taste: ${frame.hopDrift}\nLetzte Aktion: ${this.lastAction}`;
     }
   }
 

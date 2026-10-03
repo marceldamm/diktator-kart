@@ -30,7 +30,7 @@ Fahrmodell, Federung, Sprung, Drift, Mini-Turbo und Teststrecke; nahe/ferne Verf
 | Stabilität mit sechs Karts | mindestens 60 s Simulationslauf ohne ungültigen Zustand; Browser-Neustart ohne Meshwachstum; Kamerawechsel und Kontaktfälle sichtbar | auf RTX-Entwicklungsgerät geprüft |
 | Fahrgefühl und Kontakt | Mensch fährt geradeaus, Kurven, Hop/Drift/Turbo sowie Rand-, Block- und Fahrzeugkontakt; beurteilt Lenkbarkeit, Rückmeldung und Wiederanfahrt in eigenen Worten | offen |
 | Alle drei Kameras | Mensch prüft nahe/ferne Verfolger- und Fahrerperspektive bei Kurve, Hop, Drift und Kontakt auf Sicht, Ruhe und störende Verdeckung | offen |
-| Normale/schwächere PC-Hardware | Gerät/GPU, Chrome-Version, Auflösung, Grafikmodus, 1/6 Karts und drei Kameras protokollieren; vorläufiges Ziel aus Dokument 04: 60 FPS Standard, stabil 30 FPS auf schwächerer Hardware | offen; RTX-Headless ersetzt dies nicht |
+| Normale/schwächere PC-Hardware | Gerät/GPU, Chrome-Version, Auflösung, Grafikmodus, 1/6 Karts und drei Kameras protokollieren; F3-Framefenster nach mindestens fünf Sekunden sichtbarer Fahrt ablesen; vorläufiges Ziel aus Dokument 04: 60 FPS Standard, stabil 30 FPS auf schwächerer Hardware | offen; RTX-Headless ersetzt dies nicht |
 | Mobile Frühprobe | Android/iPhone im Querformat mit Start, Sichtbarkeit und Eingabe prüfen, sobald Testgeräte/Touchsteuerung vorhanden sind; vollständige mobile Abnahme bleibt M7 | offen |
 
 Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und eine erste Messung auf einem normalen PC tatsächlich beurteilt sein. Fehlende schwächere/Mobilgeräte bleiben ausdrücklich offen; ihre Leistungsziele werden dadurch nicht abgesenkt. Gerät, Datum, Beobachtung und Beleg gehören in `17-progress-log.md`; daraus folgende Änderungen werden als einzelne M2-Korrekturen geplant.
@@ -54,6 +54,8 @@ Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und
 **Zwischenstand M2j, 03.10.2026:** Der Sechs-Kart-Stresstest fand bis zu 5,7 cm Blockeindringen nach Fahrzeugkontakt. Eine gemeinsame, wiederholte Positionskorrektur senkte dies im gleichen 60-s-Pfad auf null und die Kart-Restüberlappung auf höchstens 1,6 cm. 14 Modell-/Eingabetests, Build, Browserprobe und erneute RTX-Probe bestanden. M2 bleibt wegen menschlichem Fahrgefühl, normaler/schwacher Hardware und repräsentativer Streckenkollision offen.
 
 **Zwischenstand M2k, 03.10.2026:** Gegenverkehrskontakt wurde zusätzlich in ferner Verfolger- und Fahrerperspektive in Chrome festgehalten. Die Standbilder zeigen die Szene und Cockpitteile bei Kontakt; sie belegen weder Kameraruhe während der Bewegung noch menschlichen Komfort. Die entsprechenden Abnahmefelder bleiben offen.
+
+**Zwischenstand M2l, 03.10.2026:** F3 zeigt ein rollendes 300-Frame-Fenster, Perzentile/Langframes, Auflösung und verfügbaren Grafikpfad. Ein-/Sechs-Kart-Browserprobe, Bildkontrolle, Build und 14 Modell-/Eingabetests bestanden. Die Anzeige erleichtert die noch offene normale-PC-Messung; sie selbst ist keine Zielhardware-Abnahme.
 
 ## M3 – Erster ausgearbeiteter Spielabschnitt
 

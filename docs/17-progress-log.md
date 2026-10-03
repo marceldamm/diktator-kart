@@ -395,6 +395,28 @@
 
 **Empfohlenes Modell:** Sol für aus der praktischen Fahrt resultierende Korrekturen; Astra bei schwieriger Gesamtbewertung.
 
+### 2026-10-03 – M2l F3-Messhilfe für normale PCs
+
+**Ziel:** Die noch offene M2-Messung auf einem normalen PC ohne Entwicklerkonsole praktisch vorbereiten.
+
+**Modell / Arbeitsmodus:** lokale Branch-Arbeit; keine neue Bibliothek oder Änderung an FPS-Zielen. Die Browserprobe lief weiterhin auf der RTX 3070 Laptop GPU des Entwicklungsgeräts.
+
+**Erledigt:** F3 sammelt ein rollendes Fenster aus bis zu 300 sichtbaren laufenden Render-Loop-Intervallen und zeigt P50/P95/P99, Zähler über 25/33 ms, Canvas-Pixelauflösung, DPR und verfügbaren WebGL-Renderer. Pause, Neustart und ausgeblendete Tabs leeren die Probe. Das Panel scrollt und bricht lange Rendererzeilen um. Die Browserprobe liest diese Felder mit einem und sechs Karts.
+
+**Verifiziert:** `npm test`: 14 Tests bestanden; `npm run build` erfolgreich. `npm run test:browser` bestätigte Framefenster, endliche P95-Werte, 1280 × 800 Pixel und RTX-Renderer für ein/sechs Karts. Der Screenshot `docs/evidence/m2l-f3-diagnose-chrome.png` zeigt die lesbaren Felder und das scrollbare Panel. Die abgelesenen Werte stammen aus Headless Chrome und sind keine Zielhardware-Abnahme.
+
+**Nicht verifiziert:** F3-Messung auf normalem/schwachem PC oder Mobile, GPU-Zeit/Drawcalls/Speicher und die Leistungsfähigkeit fertiger Assets. `WEBGL_debug_renderer_info` kann auf anderen Browsern fehlen; dann steht „nicht verfügbar“.
+
+**Geänderte Dateien:** `src/main.ts`, `src/style.css`, `tests/browser-smoke.mjs`, `docs/evidence/m2l-f3-diagnose-chrome.png`, `START-HERE.md`, `docs/03-technology-babylon.md`, `docs/04-performance.md`, `docs/09-roadmap.md`, `docs/12-decision-log.md`, `docs/16-production-blueprint.md`, `docs/19-ui-settings-and-save.md`, `docs/17-progress-log.md`. README, Dokument 00 und 10 wurden auf Abhängigkeiten geprüft; Grundpfeiler bleiben unverändert.
+
+**Neue Entscheidungen:** 300 sichtbare Frames als gleitendes lokales Diagnosefenster; Begründung in Dokument 12. Die bisherige CDP-Rohdatenprobe bleibt getrennt.
+
+**Offene Probleme:** Menschliche Fahrt und normale-PC-Messung bleiben erforderlich. Die Vite-Größenwarnung und der spätere Asset-/GPU-Lasttest bleiben offen. GitHub-Upload weiterhin ohne ausdrückliche Freigabe ausgeschlossen.
+
+**Nächster Schritt:** M2-Fahrcheck und Gerätewerte aus F3 dokumentieren; danach konkrete Fahr-/Kamerakorrekturen oder M2-Abnahme entscheiden.
+
+**Empfohlenes Modell:** Sol für beobachtete Korrekturen; Astra für schwierige Abnahmeentscheidungen.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

@@ -78,6 +78,10 @@ async function loadSample(fleet) {
       const rendererInfo = gl?.getExtension('WEBGL_debug_renderer_info');
       return { fleet: document.querySelector('#fleet-count').textContent,
         meshes: Number(diagnostics.match(/Meshes: (\\d+)/)?.[1]),
+        frameCount: Number(diagnostics.match(/Framefenster: (\\d+)\\/300/)?.[1]),
+        frameP95Ms: Number(diagnostics.match(/P95 ([\\d.]+) ms/)?.[1]),
+        reportedRenderer: diagnostics.match(/^Grafik: (.+)$/m)?.[1],
+        resolution: diagnostics.match(/^Auflösung: (.+)$/m)?.[1],
         medianFrameMs: Number(frames[60].toFixed(2)),
         p95FrameMs: Number(frames[114].toFixed(2)),
         debugFps: Number(diagnostics.match(/FPS: (\\d+)/)?.[1]),
@@ -86,6 +90,7 @@ async function loadSample(fleet) {
     awaitPromise: true,
     returnByValue: true,
   });
+  if (result.exceptionDetails) throw new Error(result.exceptionDetails.text);
   return result.result.value;
 }
 
@@ -197,7 +202,13 @@ try {
   const sixKarts = await loadSample(6);
   assert.equal(oneKart.fleet, '1 Fahrzeug im Techniktest');
   assert.equal(sixKarts.fleet, '6 Fahrzeuge im Techniktest');
+  assert.ok(oneKart.frameCount >= 100 && sixKarts.frameCount >= 100, 'F3 should collect a rolling frame window');
+  assert.ok(Number.isFinite(oneKart.frameP95Ms) && Number.isFinite(sixKarts.frameP95Ms));
+  assert.match(sixKarts.reportedRenderer, /NVIDIA/);
+  assert.match(sixKarts.resolution, /1280 × 800/);
   assert.ok(sixKarts.meshes >= oneKart.meshes + 35, `Expected five cloned karts: ${JSON.stringify({ oneKart, sixKarts })}`);
+  const diagnosticsScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+  await writeFile('docs/evidence/m2l-f3-diagnose-chrome.png', Buffer.from(diagnosticsScreenshot.data, 'base64'));
   const fleetScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   await writeFile('docs/evidence/m2e-sechs-fahrzeuge-chrome.png', Buffer.from(fleetScreenshot.data, 'base64'));
   await tap('r', 'KeyR', 82);

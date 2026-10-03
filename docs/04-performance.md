@@ -49,6 +49,8 @@ Der mit `?webgl=1` erzwungene WebGL1-Start gelang im kurzen M2i-Browsercheck auf
 
 Nach der M2j-Kontaktkorrektur blieben 44/89 Meshes. Die erneute RTX-Probe mit sechs 300-Frame-Fenstern zeigte 16,8 ms P95 in jedem Fenster, kein Intervall über 25 ms und keine Browserausnahme. Ein Sechs-Kart-Fenster endete nach Kontakt bei 0 km/h. Rohdaten: `docs/evidence/m2j-rtx-endurance.json`. Die zusätzliche Positionskorrektur ist damit in dieser kleinen Szene nicht als Frame-Pacing-Verschlechterung sichtbar; Zielhardware bleibt ungemessen.
 
+**M2l-Diagnose für Geräteprüfung:** F3 zeigt in der laufenden sichtbaren Testszene ein gleitendes Fenster bis 300 Frameintervalle mit P50/P95/P99 und Zählern über 25/33 ms, zusätzlich Canvas-Pixelauflösung, Geräte-Pixelverhältnis und den Grafikpfad, sofern `WEBGL_debug_renderer_info` verfügbar ist. Pause, Neustart und ausgeblendete Browser-Tabs leeren das Fenster. Diese Zahlen sind Render-Loop-Intervalle unter Browser/VSync-Einfluss, keine isolierte GPU-Zeit oder fertige Spielperformance. Der Chrome-Test prüfte die Anzeige mit einem und sechs Karts; der Screenshot `docs/evidence/m2l-f3-diagnose-chrome.png` belegt Lesbarkeit/Scrollen. Auf normalem/schwachem PC erst nach mindestens fünf Sekunden sichtbarer Fahrt notieren und Gerät, Chrome-Version, Auflösung, Kameramodus sowie Fahrzeugzahl dazuschreiben.
+
 ## Performance-Sicherheitsregeln
 
 - Keine unbounded Listen oder Timer in Rennen, Pause, Neustart und Menürückkehr.

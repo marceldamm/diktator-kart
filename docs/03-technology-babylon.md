@@ -85,6 +85,8 @@ Die Space-Flanke wird bis zum nächsten festen Simulationsschritt vorgemerkt, da
 
 **M2j, Kontaktprojektion:** Die 60-s-Sechs-Kart-Simulation zeigte nach M2h bei Fahrzeugstößen bis zu 5,7 cm Eindringen in den markierten Block. `projectIntoTestArea` wird jetzt vom Einzelfahrzeugschritt und bis zu viermal nach paarweisen Fahrzeugtrennungen verwendet. Der gleiche Simulationspfad zeigte danach kein messbares Hinderniseindringen und höchstens 1,6 cm Kart-Restüberlappung. Das ist eine begrenzte Positionskorrektur, keine allgemeine Starrkörperphysik; überbestimmte Kontaktketten bleiben nur angenähert.
 
+**M2l, lokale Messanzeige:** Die M1-Diagnose wurde um ein auf 300 sichtbare Render-Loop-Intervalle begrenztes Framefenster, Perzentile, Langframezähler, Canvas-Auflösung und verfügbaren WebGL-Renderer erweitert. Pause, Neustart und Tab-Ausblendung setzen das Fenster zurück. Das hilft beim späteren normalen-PC-Fahrcheck ohne Entwicklerkonsole; GPU-Zeit, Drawcalls und Speicher bleiben separate Messaufgaben.
+
 ## Nicht übernehmen
 
 Nicht automatisch übernehmen: PlayCanvas-Szenenaufbau, Ammo-Ladepfade, alte Controllerklassen, alte Renderbudgets, alte Assetnamen, bestehende Buildannahmen oder angeblich stabile Workarounds. Sie dürfen als historische Hinweise gelesen und im neuen Prototyp unabhängig bewertet werden.

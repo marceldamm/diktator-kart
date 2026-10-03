@@ -10,6 +10,8 @@ Start/Launcher → Hauptmenü → Spielmodus → Fahrer/Kart → Strecke → Lad
 
 M1 enthält davon nur den lokalen Launcher, die Lade-/Fehleranzeige, Pause, Neustart und Diagnose der Technikszene. Menü, Einstellungen, Speicherung und Renn-HUD sind noch nicht implementiert; die Pflichtliste bleibt bestehen.
 
+M2l ergänzt die F3-Technikdiagnose um scrollbare Frame-Perzentile/Langframes, Auflösung und verfügbaren Renderer für Geräteproben. Das ist ein Entwickler-/Fahrtestpanel, noch kein Einstellungsmenü oder fertiges Renn-HUD.
+
 Während des Rennens: Pause, Neustart, Audio-/Grafikzugriff, Steuerungshinweis und verständliche Rückkehrwege.
 
 ## Einstellungsbereiche
