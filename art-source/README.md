@@ -8,7 +8,8 @@ Stand 03.10.2026. Alle Kart-, Gebäude-, Requisiten- und Itemmodelle sind origin
 - `build_world.py` → `stadium-world.blend`/GLB: Palast, Tor, Zielbrücke, Tribünen, Häuser, Park, Bahnhof, Stadtring. Liest `track-layout.json`.
 - `export_track.mjs` → `track-layout.json`: Mittellinie aus `src/track-layout.ts`. Nach jeder Streckenänderung zuerst ausführen, dann `build_world.py`.
 - `decimate_tree.py`: leichtere Laufzeitkopie des CC0-Baums aus `park-tree.blend` (Quelle unverändert).
-- `build_items.py`, `build_audio.mjs`: unverändert. Der frühere Weltteil von `build_slice.py` und `build_props.py` sind abgelöst (Git-Historie bis `5f14a2d`).
+- `build_voices.mjs` → `public/assets/audio/voice/*.wav`: Sprecherin und Fahrerstimmen mit Piper TTS (MIT; Windows-Binary und Stimmen unter `.tools/piper/`, nicht in Git; Download: https://github.com/rhasspy/piper/releases/tag/2023.11.14-2 und https://huggingface.co/rhasspy/piper-voices). Texte im Skript.
+- `build_audio.mjs`: um Publikum und Bandenschleifen ergänzt. `build_items.py`: unverändert. Der frühere Weltteil von `build_slice.py` und `build_props.py` sind abgelöst (Git-Historie bis `5f14a2d`).
 - Streckenmöbel (Fahrbahn, Randsteine, Banden, Promenaden, Laternen, Banner, Wimpel) entstehen zur Laufzeit in `src/track-world.ts` aus derselben Mittellinie.
 
 Blender 4.5.3 LTS (kostenlos, portabel unter `.tools/`, nicht in Git).

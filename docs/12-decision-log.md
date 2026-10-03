@@ -48,6 +48,9 @@
 | 2026-10-03 | Sechs neutrale fiktive Karikaturfiguren (`src/cast.ts`) ersetzen den einheitlichen Platzhalterfahrer. | G–L-Kostümsprache (Uniform, Umhang, Mütze, Gold) ohne historische Person; die bestätigte historische Besetzung und Sarahs Ideen bleiben unverändert offen. | 02, 14, 17 |
 | 2026-10-03 | Welt- und Kartassets entstehen aus `build_world.py` und `build_kart.py`; der Weltteil von `build_slice.py` und `build_props.py` sind abgelöst. | Platzierung relativ zur Strecke, reproduzierbar und editierbar; ältere Generatoren bleiben in der Git-Historie. | art-source/README, 05 |
 | 2026-10-03 | Stadtboden gepflastert, Rasen nur auf Parkinseln; Nachmittagshimmel Table Mountain 2 (CC0). | Weniger leere Flächen, urbanere G–L-Wirkung, wärmeres Licht. | 02, CREDITS |
+| 2026-10-03 | Sprecherin und Fahrerstimmen entstehen vorläufig offline mit Piper TTS und CC0-Stimmen (Kerstin, Thorsten emotional); Texte eigene Satire. | Kostenloser, reproduzierbarer Einstieg in die beschlossene Sprachausgabe ohne Sprecherkosten; professionelle Parodiestimmen bleiben das spätere Ziel. | 02, 17, CREDITS, art-source/README |
+| 2026-10-03 | Kein Vollstopp mehr bei schrägem Bandenkontakt, harten Kart-Zusammenstößen und Itemtreffern (Dreher mit Ausrollen). | Nutzerwunsch: Karts sollen nicht abrupt stehen bleiben; frontale Physik bleibt plausibel mit Rückprall. | 07, 17 |
+| 2026-10-03 | Jubelgesten der Fahrer sind senkrechte Faust- oder Winkbewegungen, nie ein vorwärts erhobener Arm. | Inhaltsgrenze gegen Gruß-Assoziationen; Satire ohne Verherrlichung. | 13, 17 |
 
 ## Pflegehinweis
 

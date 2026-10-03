@@ -6,7 +6,7 @@ Laufzeitbilder: [Belege, Abschnitt Qualitätsstufe 2](evidence/README.md). Die W
 
 Karts: breite Spur, Ballonreifen, Messingfelgen, Kotflügel, Frontflügel, Nasenemblem, Klarlack. Figuren: große Köpfe, Uniform, Goldepauletten, Schärpe, Orden, Umhang; sechs neutrale fiktive Silhouetten über Kopfbedeckung (Schirmmütze, Pelzmütze, Lorbeerkranz, Barett, Diva-Frisur, Marinemütze) und Farben. Licht: warmer Nachmittag, CC0-Wolkenhimmel, Dunst, Bloom, Vignette und Farbkurven auf Standard; Basis verzichtet darauf.
 
-G–L bleibt nicht erreicht: Fassaden ohne Relief, einfache Gesichter, statisches Publikum, keine Armanimation, kein Wetter. Die Figuren sind Platzhalter bis zur gemeinsamen historischen Besetzung.
+Akustik: vorläufige Stadionsprecherin und Fahrerstimmen aus CC0-TTS mit Lautsprecher-Hall, Getriebemotor, Publikum und Bandenschleifen; Fahrer lenken mit den Armen und recken beim Turbo eine pumpende Faust. G–L bleibt nicht erreicht: Fassadenrelief nur grob, einfache Gesichter, statisches Publikum, nur eine Jubelgeste, kein Wetter. Die Figuren sind Platzhalter bis zur gemeinsamen historischen Besetzung.
 
 ## Geprüfter Slice-Abschluss – 03.10.2026
 

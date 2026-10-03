@@ -617,6 +617,25 @@
 
 **Budget:** Offizielle Claude-Werte waren abrufbar (Pro-Plan): beim Start 4 % des Fünf-Stunden-Fensters, vor der Dokumentation 41 %; Woche 6 %. Abschlusswerte stehen im Ergebnisbericht.
 
+### 2026-10-03 – Qualitätsstufe 2b: Stimmen, Klang, Kontaktgefühl und Fahrergesten
+
+**Ziel:** Nutzerwunsch nach dem ersten Q2-Stand: mehr Wow-Effekt, Fahrgefühl ohne abruptes Stehenbleiben, lebendigere Fahrer und Beginn von Audio mit Sprecherin und Fahrerstimmen. Schadensmodell bewusst später.
+
+**Erledigt:**
+- **Kontakte ohne Vollstopp:** Schräger Bandenaufprall behält den tangentialen Schwung (Reibungsanteil) mit stärkerem Rückprall; rein frontal endet die Vorwärtsfahrt weiterhin, aber mit Rückstoß. Harte Kart-Zusammenstöße tauschen Impuls mit Verlust statt beide einzufrieren. Itemtreffer: Tempo × 0,6, das Kart dreht sich sichtbar einmal (`spinRemaining`, nur Darstellung) und rollt weiter.
+- **Stimmen:** Piper TTS (MIT) mit CC0-Stimmen Kerstin (Stadionsprecherin) und Thorsten emotional (männliche Figuren). 32 eigene satirische Sätze (`art-source/build_voices.mjs`): Begrüßung, Countdown, Runden, Führung, Zustellung/Stempelfalle, Ziel; je Figur Treffer/Überholen/Sieg. Laufzeit: Lautsprecherkette (Hochpass, Tiefpass, Sättigung, Hall, Echo), Tonhöhe je Figur, Musik-/Publikumsabsenkung, Kommentar aus Rangwechseln, Itemzustellungen und Turbo, Kanäle ohne Überlappung.
+- **Klang:** Virtuelles Getriebe mit Drehzahlbändern und Schalteinbruch, Bandenschleifen als Schleife, Publikumsteppich mit Nähe zur Tribüne und Jubelanschwellen.
+- **Fahrer:** Arme an Schulter-Pivots folgen dem Lenkrad; beim Mini-Turbo eine senkrechte, pumpende Faust des rechten Arms (bewusst Sportgeste, kein vorwärts erhobener Arm). Haarschopf deckt den Hinterkopf ab.
+- **Effekte/Welt:** Papierexplosion bei Itemtreffern, Staubwolke bei Landungen, Kamerastoß bei Einschlägen (ruhige Kamera ohne), Fassadenrelief, vergoldete Beamtenstatuen, wehende Paradefahnen.
+
+**Verifiziert:** 23 Modelltests; Botsimulation unverändert stabil (116–125 s, keine festgefahrenen Bots). Echter Demolauf: alle 32 Sprachdateien geladen, 13 Ansagen/Rufe in einem Rennen ausgelöst (Begrüßung, 3-2-1-Los, Überholen, zweite und letzte Runde, Turbo, Ziel), keine Ausnahme; Pegel jeder Datei geprüft (RMS 0,09–0,26). Browserprüfungen `-q2` erneut bestanden: Kameras/Pause/Countdown/Neustart, Hop/Drift/Turbo/Bande, WebGL1 erzwungen und automatisch, volles Rennen mit Revanche, Item-Rennen (Rohrpost 7/11, Suchauftrag 5/10, Falle 4/6 Treffer). Armgeste und Dreher im laufenden Spiel fotografiert. RTX 3070 Laptop, 1600 × 1000: P95 16,8 ms in allen Kameras; nahe Kamera P99 33,3 ms mit fünf, Fahrerkamera mit drei Intervallen über 33 ms; 505–528 Drawcalls Standard, 285 Basis.
+
+**Nicht verifiziert:** Hörqualität und Verständlichkeit der Stimmen durch einen Menschen (ich kann nicht hören), Lautstärkebalance, Wirkung des neuen Kontaktgefühls in menschlicher Fahrt, schwache PCs/Mobile. Die TTS-Stimmen sind synthetisch; „gute Stimmen“ im Sinn professioneller Sprecher sind damit nicht erreicht.
+
+**Offene Probleme:** Drawcalls weiter gestiegen; Kartteile sollten pro Kart zusammengeführt werden. Kein Schadensmodell (geplant). Stimmen ohne Lippen-/Kopfanimation. Nur eine Jubelgeste.
+
+**Nächster Schritt:** Nutzer hört Sprecherin und Fahrerstimmen probe und entscheidet über Stil/Lautstärke; danach Drawcall-Reduktion, Schadensstufen, mehr Figurenanimation.
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

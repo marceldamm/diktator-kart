@@ -40,3 +40,7 @@ Vor Aufnahme eines realen Namens, Gebäudes, Symbols oder Ereignisses muss beant
 3. Könnten Betroffene oder Minderheiten dadurch unnötig herabgewürdigt werden?
 4. Ist die Darstellung für Spieler verständlich satirisch und nicht verherrlichend?
 5. Ist sie technisch, rechtlich und kommunikativ verantwortbar?
+
+## Gesten der Platzhalterfiguren (03.10.2026)
+
+Jubel- und Siegesgesten der Fahrer sind senkrechte, pumpende Fäuste oder Winken. Ein vorwärts schräg erhobener gestreckter Arm ist ausgeschlossen, um jede Gruß-Assoziation zu vermeiden. Gilt für alle Figuren, Zuschauer und Statuen.

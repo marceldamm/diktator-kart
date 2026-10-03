@@ -4,7 +4,7 @@
 
 RTX 3070 Laptop, 1600 × 1000, sechs Karts, echtes Drei-Runden-Rennen ([slice-production-race-rtx-q2.json](evidence/slice-production-race-rtx-q2.json)): Standard P50/P95/P99 16,7/16,8/16,9 ms in naher, ferner und Fahrerkamera; im letzten Lauf je zwei Intervalle über 33 ms in naher und ferner Kamera. 371–483 Drawcalls, 0,84–1,03 Mio. aktive Dreiecke, CPU-/GPU-Stichproben 10–15 / 7–9 ms. Basis (Fahrerkamera): 181 Drawcalls, 0,34 Mio. Dreiecke, ein Intervall über 33 ms. Ein Vorlauf vor dem Pflasterpass ergab gleiche Perzentile. Produktionsbuild: Hauptchunk 2.173 kB (543 kB gzip) statt 1.713 kB, vor allem durch die Rendering-Pipeline; Größenwarnung offen.
 
-Reduziert wurden Welt 619k → 202k, Kart 115k → 44k und Baum 135k → 45k Dreiecke. Die Drawcalls stiegen durch neue Streckenteile, Pipeline und Kartmaterialien; für schwache Geräte ist das zu hoch. Nächste Hebel: Kartteile pro Material zusammenfassen bzw. Atlas, Instancing der Kartvarianten, LOD für Publikum und Häuser. Keine Messung auf normalen/schwachen PCs oder Mobilgeräten; 60-/30-FPS-Ziele unverändert.
+Nach Stimmen-, Gesten- und Weltpass (Qualitätsstufe 2b): P95 weiter 16,8 ms, aber nahe Kamera P99 33,3 ms mit fünf und Fahrerkamera mit drei Intervallen über 33 ms; 505–528 Drawcalls (Standard), 285 (Basis), bis 1,09 Mio. aktive Dreiecke. Reduziert wurden Welt 619k → 202k, Kart 115k → 44k und Baum 135k → 45k Dreiecke. Die Drawcalls stiegen durch neue Streckenteile, Pipeline und Kartmaterialien; für schwache Geräte ist das zu hoch. Nächste Hebel: Kartteile pro Material zusammenfassen bzw. Atlas, Instancing der Kartvarianten, LOD für Publikum und Häuser. Keine Messung auf normalen/schwachen PCs oder Mobilgeräten; 60-/30-FPS-Ziele unverändert.
 
 ## Geprüfter Slice-Abschluss – 03.10.2026
 
