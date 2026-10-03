@@ -56,8 +56,8 @@ test('boundary impact briefly rebounds, cancels drift/turbo and recovers', () =>
 test('marked side obstacle stops a directed kart without blocking the straight lane', () => {
   const straight = run(initialKartState(), { throttle: 1, steering: 0 }, 2);
   assert.equal(straight.impactKind, null);
-  let state = run(initialKartState(), { throttle: 1, steering: 0 }, 0.8);
-  for (let index = 0; index < 70 && state.impactKind !== 'obstacle'; index++) {
+  let state = run(initialKartState(), { throttle: 1, steering: 0 }, 0.5); // steering has inertia since quality level 2d
+  for (let index = 0; index < 160 && state.impactKind !== 'obstacle'; index++) {
     state = advanceKart(state, { throttle: 1, steering: 1 }, step);
   }
   assert.equal(state.impactKind, 'obstacle');

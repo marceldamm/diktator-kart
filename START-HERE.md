@@ -12,6 +12,8 @@
 
 **Neu in 2c:** Gleiten an der Bande ohne Abbremsen, weichere Rempler, sichtbare Lenkung (Räder, Lenkrad, Arme), ganze Figuren mit Beinen und mehr Uniform-/Gesichtsdetails, Abkürzung „Hinterhofgasse“ durch die Brunnen-Haarnadel.
 
+**Neu in 2d:** trägere, autoähnliche Lenkung, wankende/nachfedernde Karosserie, korrekter Radeinschlag, Maus: umsehen, rechte Taste Blick zurück, linke Taste Item, Mausrad Zoom.
+
 **Offen:** Hörprobe der Stimmen durch dich, Stilabnahme gegen G–L durch Nutzer/Sarah, menschliche Testfahrt, schwache PCs/Mobile, Audio, Drawcalls der Karts, Fassadenrelief und Fahreranimation. Historische Figuren bleiben unbesetzt; die sechs Figuren sind neutrale Platzhalter.
 
 ## Vorheriger Einstieg – großer Vertical Slice

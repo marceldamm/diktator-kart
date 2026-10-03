@@ -657,6 +657,22 @@
 
 **Nicht verifiziert:** Menschliches Gefühl der neuen Bandenregel und der Gasse; Balancing der Abkürzung; Bots auf der Abkürzung.
 
+### 2026-10-03 – Qualitätsstufe 2d: Lenkträgheit, gefederte Karosserie, Radeinschlag-Korrektur, Maussteuerung
+
+**Anlass:** Nutzerfahrt: Vorderräder in der Fahrerperspektive spiegelverkehrt; Fahrzeuge sollen mehr wackeln und sich neigen; Lenkung weniger direkt, träger wie ein Auto; Maus zum Umsehen, rechte Taste Blick zurück, linke Taste Item, Mausrad Zoom. Zusätzlich gewünscht (noch offen): echtere Fahrermodelle, Regen/Wolkenschatten/Pfützen, ein „Hammer“-Feature.
+
+**Erledigt:**
+- **Radeinschlag:** Der glTF-Import spiegelt die Modellachse (Rechts-/Linkshänder-Umrechnung); Drehung um die Hochachse erscheint dadurch umgekehrt. Lenkanteil des Radeinschlags invertiert, Driftgegenlenkung beibehalten.
+- **Lenkgefühl:** Lenkeingabe → `steer` (Lenkradweg, 6/s) → Gierrate (Trägheit, 7/s) statt sofortiger Drehung; Spurfolge 8 → 5,5 rad/s. Neues Zustandsfeld `yawRate`.
+- **Karosserie:** Feder-Dämpfer-Modell je Kart für Wanken (aus der Kurve heraus) und Nicken (Anfahren/Bremsen) mit Nachschwingen; feines Kopfsteinpflaster-Rütteln abhängig vom Tempo; Fahrer neigt sich in die Kurve.
+- **Maus:** Bewegung kreist die Verfolgerkamera um den Fahrer (in der Fahrerperspektive dreht sie den Kopf) und zentriert nach 1,2 s; rechte Taste gehalten = Blick zurück; linke Taste = Item; Mausrad = Zoom 0,6–1,9. Hinweiszeile im HUD ergänzt.
+
+**Verifiziert:** 25 Modelltests (Hindernistest an trägere Lenkung angepasst: kürzere Anfahrt). Botsimulation: alle sechs beenden drei Runden in 119–127 s, kein Festfahren. Browser (CDP-Mauseingaben): Zoom 5,5 → 8,1 m, Umsehen bringt die Kamera seitlich, rechte Taste stellt sie vor das Kart, nach Loslassen wieder dahinter.
+
+**Nicht verifiziert:** Menschliches Gefühl der neuen Trägheit und des Wankens; Maus in echtem Chrome mit Zeigerverhalten; Linksklick-Item im Rennen (nutzt denselben Eingabeweg wie E).
+
+**Nächster Schritt (nach Limit-Reset):** Regen mit nasser Fahrbahn, Pfützen mit Spritzern, Blitz/Donner und Wolkenschatten; Videowand „Staatsfernsehen LIVE“; deutlich echtere Fahrermodelle (MPFB/MakeHuman CC0 prüfen).
+
 ### [JJJJ-MM-TT] – [Sitzungstitel]
 
 **Ziel:**

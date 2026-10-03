@@ -120,6 +120,16 @@ class App {
     restartButton.addEventListener('click', () => void this.restart());
     debugButton.addEventListener('click', () => { debug.hidden = !debug.hidden; });
     window.addEventListener('resize', () => this.engine?.resize());
+    // Mouse: move = look around the driver, right button = rear view, left button = item, wheel = zoom.
+    canvas.addEventListener('contextmenu', (event) => event.preventDefault());
+    canvas.addEventListener('pointermove', (event) => { if (event.pointerType === 'mouse' && !this.camera?.introMode) this.camera?.look(event.movementX, event.movementY); });
+    canvas.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse' || this.camera?.introMode) return;
+      if (event.button === 2) this.camera?.setLookBack(true);
+      if (event.button === 0) { this.input.setAction('mouse-item', 'item', true); this.input.setAction('mouse-item', 'item', false); }
+    });
+    window.addEventListener('pointerup', (event) => { if (event.button === 2) this.camera?.setLookBack(false); });
+    canvas.addEventListener('wheel', (event) => { event.preventDefault(); this.camera?.zoomBy(event.deltaY); }, { passive: false });
     window.addEventListener('pagehide', () => this.dispose());
     void this.restart();
   }

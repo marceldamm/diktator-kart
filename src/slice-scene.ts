@@ -174,7 +174,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
       // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
       const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|driverPose \/ Uniform racing suit|Cape cloth|Hat cloth/.test(mesh.name));
-      return { root, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0 };
+      return { root, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, rollVel: 0, pitch: 0, pitchVel: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
     const contactCanvas = contactTexture.getContext();
@@ -270,14 +270,21 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // Item hit: one eased full turn of the body while the kart coasts on its path.
           const spin = s.spinRemaining > 0 ? 1 - (s.spinRemaining / .95) : 0;
           v.root.rotation.y = s.heading + (s.spinRemaining > 0 ? (1 - (1 - spin) ** 2) * Math.PI * 2 : 0);
-          v.root.rotation.x = -s.bodyPitch + s.impactVelocityZ * .035;
+          // Sprung body: rolls out of the turn, squats and dives, wobbles back; cobbles add a fine rumble.
+          const lateral = s.speed * (s.yawRate ?? 0), longitudinal = (s.speed - v.previousSpeed) / Math.max(dt, 1e-3);
+          const rollTarget = Math.max(-.11, Math.min(.11, -lateral * .011)), pitchTarget = Math.max(-.07, Math.min(.07, longitudinal * .006));
+          v.rollVel += ((rollTarget - v.roll) * 95 - v.rollVel * 7.5) * dt; v.roll += v.rollVel * dt;
+          v.pitchVel += ((pitchTarget - v.pitch) * 110 - v.pitchVel * 8.5) * dt; v.pitch += v.pitchVel * dt;
+          const rumble = s.grounded ? Math.min(1, Math.abs(s.speed) / 16) : 0;
+          v.root.rotation.x = -s.bodyPitch + s.impactVelocityZ * .035 + v.pitch + Math.sin(time * 47 + index) * .004 * rumble;
+          v.root.position.y += Math.sin(time * 61 + index * 2) * .008 * rumble;
           const slip = Math.sin(s.heading - s.travelHeading);
-          v.root.rotation.z = s.bodyRoll + (s.drifting ? -s.driftDirection * .055 : 0) + (s.grounded ? Math.max(-.07, Math.min(.07, slip * Math.abs(s.speed) * .012)) : 0);
+          v.root.rotation.z = s.bodyRoll + (s.drifting ? -s.driftDirection * .055 : 0) + (s.grounded ? Math.max(-.07, Math.min(.07, slip * Math.abs(s.speed) * .012)) : 0) + v.roll + Math.sin(time * 53 + index) * .005 * rumble;
           // Visible weight: compress on landing and suspension dips, stretch slightly at the hop apex.
           const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
           v.root.scaling.set(1 - squash * .5, 1 + squash, 1 - squash * .5);
           v.rotation += s.speed * dt / .33;
-          v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? (s.steer ?? 0) * .42 + Math.sin(s.heading - s.travelHeading) * .35 : 0; });
+          v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? -(s.steer ?? 0) * .42 + Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
           v.steering.rotation.z = -(s.steer ?? 0) * 1.15 - Math.sin(s.heading - s.travelHeading) * .4;
           // Arms follow the wheel; a fresh mini-turbo earns a vertical, pumping fist (sports gesture, never a forward-raised arm).
@@ -290,7 +297,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if (s.height <= .02 && v.wasAirborne) burst(puff, s, reducedEffects ? 6 : 22);
           v.spinning = s.spinRemaining > 0; v.wasAirborne = s.height > .05;
           v.driver.rotation.x = Math.max(-.09, Math.min(.09, (v.previousSpeed - s.speed) * .025));
-          v.driver.rotation.z = s.drifting ? s.driftDirection * .08 : Math.sin(time * 5) * Math.abs(s.speed) * .0008;
+          // The driver leans into the bend against the body roll.
+          v.driver.rotation.z = (s.drifting ? s.driftDirection * .1 : 0) + Math.max(-.14, Math.min(.14, lateral * .013));
           v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;
           v.head.rotation.x=s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
           if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }

@@ -26,8 +26,10 @@ export interface KartState {
   spinRemaining: number;
   /** What the last glancing contact touched: barrier scrape or kart bump (sound and sparks). */
   scrapeKind: 'wall' | 'kart' | null;
-  /** Smoothed steering input for wheels, steering wheel and arms (presentation only). */
+  /** Smoothed steering input: drives the yaw response and the visible wheels, wheel and arms. */
   steer: number;
+  /** Current yaw rate (rad/s); follows the steering target with inertia like a road car. */
+  yawRate: number;
 }
 
 export interface DriveInput {
@@ -67,7 +69,10 @@ export const KART_TUNING = {
   driftChargeTime: 0.7,
   driftYawMultiplier: 1.2,
   driftHeadingFollow: 0.55,
-  normalHeadingFollow: 8,
+  normalHeadingFollow: 5.5,
+  /** Steering wheel travel rate (1/s) and yaw response rate (1/s): less direct, more car-like. */
+  steerRate: 6,
+  yawResponse: 7,
   turboDuration: 1.2,
   turboSpeedBonus: 4,
   turboAcceleration: 4,
@@ -113,7 +118,7 @@ export function initialKartState(): KartState {
     suspensionOffset: 0, suspensionVelocity: 0, bodyPitch: 0, bodyRoll: 0,
     wheelGroundHeights: [0, 0, 0, 0], grounded: true,
     impactRemaining: 0, impactVelocityX: 0, impactVelocityZ: 0,
-    impactKind: null, scrapeRemaining: 0, spinRemaining: 0, scrapeKind: null, steer: 0,
+    impactKind: null, scrapeRemaining: 0, spinRemaining: 0, scrapeKind: null, steer: 0, yawRate: 0,
   };
 }
 
@@ -219,8 +224,11 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     driftCharge = 0;
   }
 
-  const yawRate = Math.max(-KART_TUNING.maxYawRate,
-    Math.min(KART_TUNING.maxYawRate, speed * steering * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
+  // The wheel needs time to turn and the body needs time to rotate: steering input -> steer -> yaw rate.
+  const steer = (state.steer ?? 0) + (steering - (state.steer ?? 0)) * Math.min(1, KART_TUNING.steerRate * dt);
+  const targetYaw = Math.max(-KART_TUNING.maxYawRate,
+    Math.min(KART_TUNING.maxYawRate, speed * steer * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
+  const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, KART_TUNING.yawResponse * dt);
   let heading = state.heading + yawRate * dt;
   const angleDifference = Math.atan2(Math.sin(heading - state.travelHeading), Math.cos(heading - state.travelHeading));
   const follow = (drifting ? KART_TUNING.driftHeadingFollow : KART_TUNING.normalHeadingFollow) * dt;
@@ -295,7 +303,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
     scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,
-    steer: (state.steer ?? 0) + (steering - (state.steer ?? 0)) * Math.min(1, 12 * dt) };
+    steer, yawRate };
 }
 
 // Provisional M2 contact: horizontal circles, equal displacement and equal impact rules.
