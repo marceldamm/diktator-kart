@@ -326,8 +326,8 @@ class App {
     document.querySelector<HTMLElement>('#drift-fill')!.style.width=`${100*(this.kart.turboRemaining>0?this.kart.turboRemaining/KART_TUNING.turboDuration:this.kart.driftCharge/KART_TUNING.driftChargeTime)}%`;
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
-    document.querySelector('#item-name')!.textContent=item?ITEM_NAMES[item]:'Sendung abholen';
-    document.querySelector('#item-icon')!.textContent=item==='direct'?'➤':item==='homing'?'◎':item==='trap'?'§':'✉';
+    document.querySelector('#item-name')!.textContent=item?(item==='trap'?ITEM_NAMES[item]:item==='homing'?'Schäferhund · verfolgt':'Schäferhund · voraus'):'Sendung abholen';
+    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?'🐕':item==='trap'?'§':'✉';
     const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;itemButton.disabled=!item||this.racePhase!=='race';
     document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?'E · einsetzen':this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
@@ -476,8 +476,9 @@ class App {
           const use=all.map((_,i)=>i===0?frame.pressed.has('item')||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           for(const event of this.items.events) if(event.kart===0) {
-            this.itemMessage=event.kind==='pickup'?`${ITEM_NAMES[event.item]} erhalten`:event.kind==='launch'?'Sendung zugestellt … unterwegs':'Treffer · kurzzeitig geschützt';
-            this.itemMessageUntil=this.items.time+1.8;this.audio.itemEvent(event.kind);
+            this.itemMessage=event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:'Schäferhund'} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':'Schäferhund unterwegs'):'Treffer · kurzzeitig geschützt';
+            this.itemMessageUntil=this.items.time+1.8;
+            if(event.kind==='launch'&&event.item!=='trap')this.audio.dogBark();else this.audio.itemEvent(event.kind);
             if(event.kind==='hit')this.say(0,'hit');
           }
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {

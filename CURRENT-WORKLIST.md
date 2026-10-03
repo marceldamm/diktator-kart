@@ -34,7 +34,7 @@ Projektstart. Ich bin Sarah. Hole den neuesten gemeinsamen Babylon-Stand von Git
 
 Für Marcel gilt derselbe Text mit seinem Namen. Codex prüft lokale/GitHub-Änderungen und Überschneidungen und hilft bei der Zusammenführung. Bei echten widersprüchlichen Entscheidungen erhält es beide Versionen und fragt uns. Gemeinsamer geprüfter Stand ist main; gearbeitet wird auf eigenem Arbeitsbranch. Unveröffentlichte Dateien auf deinem PC sind nicht in Marcels Sicherung enthalten und werden beim ersten Umstieg gesondert bewahrt; Anleitung dafür in docs/21-team-workflow.md.
 
-Unsere Arbeitsgrundlage: **CURRENT-WORKLIST.md** = aktuelle Wünsche, Fehler und Aufgaben mit sichtbarem Status; **LONG-TERM-GOALS.md** = große Ziele/Meilensteine, Grafik, Fahrer, Strecke, Audio, Geräte und später Multiplayer; **TEAM-CHANGES.md** = kurzer gemeinsamer Änderungsverlauf. Neue Wünsche darfst du jederzeit diktieren und sagen: „In CURRENT-WORKLIST.md/24 aufnehmen.“ Nach Abschluss aktueller Arbeit schlägt die KI passende nächste Pakete aus LONG-TERM-GOALS.md vor. Der ausführliche technische Nachweis bleibt in 17 und muss nicht jedes Mal komplett gelesen werden.
+Unsere Arbeitsgrundlage: **CURRENT-WORKLIST.md** = aktuelle Wünsche, Fehler und Aufgaben mit sichtbarem Status; **LONG-TERM-GOALS.md** = große Ziele/Meilensteine, Grafik, Fahrer, Strecke, Audio, Geräte und später Multiplayer; **TEAM-CHANGES.md** = kurzer gemeinsamer Änderungsverlauf. Neue Wünsche darfst du jederzeit diktieren und sagen: „In CURRENT-WORKLIST.md beziehungsweise LONG-TERM-GOALS.md aufnehmen.“ Nach Abschluss aktueller Arbeit schlägt die KI passende nächste Pakete aus LONG-TERM-GOALS.md vor. Der ausführliche technische Nachweis bleibt in 17 und muss nicht jedes Mal komplett gelesen werden.
 
 Zum Arbeitsende:
 

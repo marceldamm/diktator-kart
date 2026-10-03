@@ -1,5 +1,9 @@
 # Editierbare Art-Pipeline des Stadion-Slices
 
+## Schäferhund reproduzieren
+
+Mit vorhandenem Blender: --background --python art-source/build_shepherd.py; danach node art-source/optimize_assets.mjs shepherd. .blend behält bewegliche Gelenke. node art-source/build_shepherd_audio.mjs erzeugt den eigenen Doppelbelllaut. GlTF-Optimierung mit Einzelmodellaufruf erhält jetzt vorhandene andere Modellmessungen statt sie zu überschreiben.
+
 Stand 03.10.2026. Alle Kart-, Gebäude-, Requisiten- und Itemmodelle sind originale Projektgeometrie. Der Parkbaum stammt von Poly Haven (CC0); Herkunft, Audio und Texturen stehen in `../public/assets/CREDITS.md`.
 
 ## Quellen und Laufzeit (Qualitätsstufe 2)

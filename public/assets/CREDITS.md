@@ -1,5 +1,9 @@
 # Assetherkunft – Stadion der Eitelkeit
 
+## Schäferhund – 03.10.2026
+
+models/shepherd.glb und art-source/shepherd.blend: eigene originale Geometrie mit vier getrennten Beinpivots, Schwanz/Kopf, schwarz-brauner Schäferhundsilhouette; keine fremden Meshes/Fotos kopiert. Quelle art-source/build_shepherd.py, Blender 4.5.3 LTS, optimiertes Runtime-GLB 208.808 Bytes. audio/shepherd-bark.wav: eigener deterministischer synthetischer Doppelbelllaut, art-source/build_shepherd_audio.mjs, kein historischer Mitschnitt. Klang-/Realismusabnahme noch offen.
+
 Stand: 03.10.2026. Keine gekauften Modelle, Texturen oder Sounds.
 
 | Dateien | Herkunft / Nutzungsgrundlage | Bearbeitung |

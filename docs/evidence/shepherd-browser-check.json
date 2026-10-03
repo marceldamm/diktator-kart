@@ -1,0 +1,161 @@
+{
+  "qa": "Normal six-kart world, controlled slots/positions for direct and homing; actual E and fixed item simulation; existing demo bot controller",
+  "evidence": [
+    {
+      "kind": "direct",
+      "active": {
+        "phase": "race",
+        "stats": {
+          "direct": {
+            "collected": 0,
+            "launched": 1,
+            "hits": 0
+          },
+          "homing": {
+            "collected": 0,
+            "launched": 0,
+            "hits": 0
+          },
+          "trap": {
+            "collected": 0,
+            "launched": 0,
+            "hits": 0
+          }
+        },
+        "objects": [
+          {
+            "id": 1,
+            "kind": "direct",
+            "owner": 0,
+            "x": 55.21632595886946,
+            "z": 8.031598439256966,
+            "heading": -0.008821122867934381,
+            "age": 0.3,
+            "remaining": 4.700000000000001,
+            "target": null
+          }
+        ],
+        "meshes": 962,
+        "dogs": [
+          {
+            "name": "shepherd direct 0",
+            "position": [
+              55.21632595886946,
+              0.10737040879473929,
+              8.031598439256966
+            ],
+            "legs": [
+              -0.5167833871564111
+            ]
+          }
+        ],
+        "puff": -1
+      },
+      "hit": {
+        "phase": "race",
+        "stats": {
+          "direct": {
+            "collected": 0,
+            "launched": 1,
+            "hits": 1
+          },
+          "homing": {
+            "collected": 0,
+            "launched": 0,
+            "hits": 0
+          },
+          "trap": {
+            "collected": 0,
+            "launched": 0,
+            "hits": 0
+          }
+        },
+        "objects": [],
+        "meshes": 962,
+        "dogs": [],
+        "puff": -1
+      }
+    },
+    {
+      "kind": "homing",
+      "active": {
+        "phase": "race",
+        "stats": {
+          "direct": {
+            "collected": 0,
+            "launched": 1,
+            "hits": 1
+          },
+          "homing": {
+            "collected": 0,
+            "launched": 1,
+            "hits": 0
+          },
+          "trap": {
+            "collected": 0,
+            "launched": 0,
+            "hits": 0
+          }
+        },
+        "objects": [
+          {
+            "id": 2,
+            "kind": "homing",
+            "owner": 0,
+            "x": 54.84998145333476,
+            "z": 6.719492735924141,
+            "heading": -0.016513021237910416,
+            "age": 0.26666666666666666,
+            "remaining": 4.733333333333334,
+            "target": 1
+          }
+        ],
+        "meshes": 962,
+        "dogs": [
+          {
+            "name": "shepherd homing 0",
+            "position": [
+              54.84998145333476,
+              0.11087219858400617,
+              6.719492735924141
+            ],
+            "legs": [
+              -0.5457982168389082
+            ]
+          }
+        ],
+        "puff": -1
+      },
+      "hit": {
+        "phase": "race",
+        "stats": {
+          "direct": {
+            "collected": 0,
+            "launched": 1,
+            "hits": 1
+          },
+          "homing": {
+            "collected": 0,
+            "launched": 1,
+            "hits": 1
+          },
+          "trap": {
+            "collected": 0,
+            "launched": 0,
+            "hits": 0
+          }
+        },
+        "objects": [],
+        "meshes": 962,
+        "dogs": [],
+        "puff": -1
+      }
+    }
+  ],
+  "audio": {
+    "duration": 0.68,
+    "channels": 1,
+    "peak": 0.4272667169570923
+  },
+  "runtimeErrors": []
+}

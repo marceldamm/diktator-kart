@@ -1,10 +1,10 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
-Gemeinsamer Überblick für Marcel, Sarah und jede KI-Sitzung. Die kurzfristige [Arbeitsliste 23](CURRENT-WORKLIST.md) führt die laufende Umsetzung; diese Liste hält das Gesamtziel und die nächste sinnvolle Ausbaustufe sichtbar. Verbindliche Detailentscheidungen stehen in den verlinkten Fachdateien. Historische Zwischeneinträge sind keine aktuellen Arbeitsaufträge.
+Gemeinsamer Überblick für Marcel, Sarah und jede KI-Sitzung. Die kurzfristige [Aktuelle Arbeitsliste](CURRENT-WORKLIST.md) führt die laufende Umsetzung; diese Liste hält das Gesamtziel und die nächste sinnvolle Ausbaustufe sichtbar. Verbindliche Detailentscheidungen stehen in den verlinkten Fachdateien. Historische Zwischeneinträge sind keine aktuellen Arbeitsaufträge.
 
 ## So arbeiten wir damit
 
-- Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste und den kurzen [Änderungsverlauf 25](TEAM-CHANGES.md) lesen.
+- Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste und den kurzen [Änderungsverlauf](TEAM-CHANGES.md) lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
 - Nach Abschluss der aktuellen Liste zwei oder drei passende nächste Pakete aus dieser Liste vorschlagen; ausdrücklich bereits beauftragte Ziele selbstständig fortsetzen. Neue Produktziele brauchen eine bewusste Priorisierung, keine heimliche Umfangserweiterung.
 - Ein gewähltes Paket mit sichtbarem Ergebnis und prüfbarer Abnahme nach CURRENT-WORKLIST.md übernehmen. Erst nach tatsächlicher Prüfung abhaken. Teilumsetzung, Nutzerabnahme und Geräteabnahme auseinanderhalten.
@@ -108,6 +108,6 @@ Details: [06](docs/06-multiplayer.md), [09](docs/09-roadmap.md).
 
 - [ ] Start-/Abschlussbefehle auf Sarahs realem Checkout einmal gemeinsam prüfen; ihre lokalen unveröffentlichten Dateien erhalten.
 - [ ] Aufgabenpakete zwischen Marcel und Sarah absprechen; bei denselben Dateien Überschneidungen bewusst integrieren.
-- [ ] Aktuelle CURRENT-WORKLIST.md, Ziele 24 und kurzer TEAM-CHANGES.md an jedem Start/Abschluss pflegen; keine alte Enginearbeit.
+- [ ] Aktuelle CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und kurzer TEAM-CHANGES.md an jedem Start/Abschluss pflegen; keine alte Enginearbeit.
 - [ ] Offizielle Fünf-Stunden-/Wochenlimits nach großen Paketen prüfen; bei ca. 15 % Rest geordnet abschließen, ca. 5 % für Nutzer übriglassen. Keine erfundenen Prozentwerte.
 - [ ] Funktionierende lokale Checkpoints und geprüfter Teamabschluss nach main; kein Force-Push und kein blindes Verwerfen fremder Änderungen.

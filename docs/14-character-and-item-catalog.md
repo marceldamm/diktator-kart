@@ -1,5 +1,9 @@
 # Übernommener Fahrer-, Kart- und Itemkatalog
 
+## Spieler-Schäferhund – tatsächliche Zwischenumsetzung
+
+Spielerslot direct/homing verwendet jetzt dasselbe eigene Schäferhundmodell mit diagonaler Laufanimation, leichtem Bodentakt und Schwanzbewegung; Homing-Verhalten/Trefferregeln bleiben die gemeinsamen Archetypen. Bots behalten bisherige neutrale Projektilformen. E löst eigenen synthetischen Belllaut aus, Treffer eine begrenzte comicartige Wolke. Kein Blut, keine historische Audio-/Figurenauthentizität behauptet. Runtime-Pools vorab angelegt, keine neuen Meshes während Rennen.
+
 ## Präzisiertes Ziel für Figuren und Welt – 03.10.2026
 
 Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar.

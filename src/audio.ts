@@ -18,6 +18,7 @@ export class KartAudio {
   private boost?: AudioBuffer;
   private pickup?:AudioBuffer;
   private launch?:AudioBuffer;
+  private bark?:AudioBuffer;
   private lastImpact = false;
   private lastBoost = false;
   private lastAirborne=false;
@@ -48,6 +49,7 @@ export class KartAudio {
       const load = async (name: string) => context.decodeAudioData(await (await fetch(`/assets/audio/${name}.wav`)).arrayBuffer());
       const [motor, tire, impact, boost,pickup,launch,scrape,crowd] = await Promise.all(['motor', 'tire', 'impact', 'boost','pickup','launch','scrape','crowd'].map(load));
       this.pickup=pickup;this.launch=launch;
+      this.bark=await load('shepherd-bark');
       const names=['countdown','start','lap','finish','hop','land'];
       const cues=await Promise.all(names.map(load));names.forEach((n,i)=>this.cues.set(n,cues[i]));
       this.impact = impact; this.boost = boost; this.master = context.createGain(); this.master.gain.value = this.enabled ? .35 : 0; this.master.connect(context.destination);
@@ -113,6 +115,7 @@ export class KartAudio {
   setEnabled(enabled: boolean): void { this.enabled = enabled; this.music.muted = !enabled; if (this.master) this.master.gain.value = enabled ? .35 : 0; }
   setMusicVolume(volume:number):void {this.musicVolume=Math.max(0,Math.min(1,volume));this.music.volume=this.musicVolume;}
   itemEvent(kind:'pickup'|'launch'|'hit'):void { this.play(kind==='pickup'?this.pickup:kind==='launch'?this.launch:this.impact,.65); }
+  dogBark():void { this.play(this.bark,.85); }
   cue(kind:'countdown'|'start'|'lap'|'finish'):void { this.play(this.cues.get(kind),.65); }
   dispose():void {this.music.pause();this.music.src='';void this.context?.close();this.context=undefined;}
   /** crowdNearness 0..1: how close the player is to the grandstands. */
