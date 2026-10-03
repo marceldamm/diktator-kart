@@ -22,7 +22,8 @@ import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPi
 import { TRACK, trackPoint } from './track';
 import { LANDMARKS } from './track-layout';
 import { addTrackWorld } from './track-world';
-import { SkidMarks, createConfetti, softParticleTexture } from './effects';
+import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
+import type { KartState } from './kart-model';
 import type { TestScene } from './scene';
 import { surfaceTextures } from './surface-textures';
 import { SceneInstrumentation } from '@babylonjs/core/Instrumentation/sceneInstrumentation';
@@ -142,6 +143,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       }
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const steering = nodes.find((n) => n.name === `kart${index}/steeringWheel`) as TransformNode;
+      const arms = ['L', 'R'].map((side) => nodes.find((n) => n.name === `kart${index}/armPose-${side}`) as TransformNode | undefined);
+      for (const arm of arms) if (arm) arm.rotationQuaternion = null;
       if (pivots.some((n) => !n) || spins.some((n) => !n) || !driver || !head || !steering) throw new Error('Kart articulation nodes are missing');
       for (const node of [...pivots, ...spins, driver, head, scarf, steering]) if (node) node.rotationQuaternion = null;
       for (const mesh of root.getChildMeshes()) {
@@ -170,7 +173,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
       const bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
       const shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|racing suit|Warm skin|Hair|Hat cloth|Cape cloth|Dark leather/.test(mesh.name));
-      return { root, pivots, spins, driver,head, scarf, steering, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0 };
+      return { root, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes,bodyMeshes, rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0 };
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
     const contactCanvas = contactTexture.getContext();
@@ -196,6 +199,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     boostFire.color1 = new Color4(1, .72, .28, 1); boostFire.color2 = new Color4(.45, .8, 1, 1); boostFire.colorDead = new Color4(1, .3, .05, 0);
     boostFire.minEmitPower = 1.5; boostFire.maxEmitPower = 3; boostFire.emitRate = 0; boostFire.start();
     const skids = new SkidMarks(scene, loadKartCount + 1);
+    const paper = new ParticleSystem('Item hit paperwork', 160, scene); paper.particleTexture = createPaperTexture(scene);
+    paper.minSize = .14; paper.maxSize = .3; paper.minLifeTime = .7; paper.maxLifeTime = 1.4; paper.emitRate = 0;
+    paper.direction1 = new Vector3(-3, 4, -3); paper.direction2 = new Vector3(3, 7, 3); paper.gravity = new Vector3(0, -6, 0);
+    paper.minAngularSpeed = -8; paper.maxAngularSpeed = 8; paper.color1 = new Color4(1, .98, .92, 1); paper.color2 = new Color4(.86, .2, .22, 1); paper.colorDead = new Color4(1, 1, 1, 0); paper.start();
+    const puff = new ParticleSystem('Landing dust', 90, scene); puff.particleTexture = particleTexture(scene);
+    puff.minSize = .35; puff.maxSize = .9; puff.minLifeTime = .35; puff.maxLifeTime = .7; puff.emitRate = 0; puff.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+    puff.direction1 = new Vector3(-2.2, .2, -2.2); puff.direction2 = new Vector3(2.2, .9, 2.2); puff.minEmitPower = 1; puff.maxEmitPower = 1.8;
+    puff.color1 = new Color4(.62, .57, .48, .35); puff.color2 = new Color4(.72, .69, .6, .28); puff.colorDead = new Color4(.7, .66, .58, 0); puff.start();
+    const burst = (system: ParticleSystem, s: KartState, count: number) => { system.emitter = new Vector3(s.x, .5 + s.height, s.z); system.manualEmitCount = count; };
     const confetti = createConfetti(scene);
     let pipeline: DefaultRenderingPipeline | undefined, pipelineLevel = quality;
     const configurePipeline = () => {
@@ -267,6 +279,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? Math.sin(s.heading - s.travelHeading) * .6 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
           v.steering.rotation.z = -Math.sin(s.heading - s.travelHeading) * .7;
+          // Arms follow the wheel; a fresh mini-turbo earns a vertical, pumping fist (sports gesture, never a forward-raised arm).
+          const wheelTurn = Math.sin(s.heading - s.travelHeading);
+          v.cheer += ((s.turboRemaining > .75 ? 1 : 0) - v.cheer) * Math.min(1, dt * 9);
+          if (v.arms[0]) { v.arms[0].rotation.z = wheelTurn * .3; v.arms[0].rotation.x = wheelTurn * .12; }
+          if (v.arms[1]) { v.arms[1].rotation.z = wheelTurn * .3 + v.cheer * .35; v.arms[1].rotation.x = -wheelTurn * .12 + v.cheer * (2.15 + Math.sin(time * 14) * .18); }
+          // Paper burst on an item hit, dust puff on landing.
+          if (s.spinRemaining > 0 && !v.spinning) burst(paper, s, reducedEffects ? 20 : 70);
+          if (s.height <= .02 && v.wasAirborne) burst(puff, s, reducedEffects ? 6 : 22);
+          v.spinning = s.spinRemaining > 0; v.wasAirborne = s.height > .05;
           v.driver.rotation.x = Math.max(-.09, Math.min(.09, (v.previousSpeed - s.speed) * .025));
           v.driver.rotation.z = s.drifting ? s.driftDirection * .08 : Math.sin(time * 5) * Math.abs(s.speed) * .0008;
           v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;

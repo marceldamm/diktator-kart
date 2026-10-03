@@ -34,6 +34,8 @@ export class KartCamera {
   /** Chase yaw lags the kart so corners and drifts show its flank. */
   private chaseHeading=0;
   private fovKick=0;
+  private shake=0;
+  private lastImpact=0;
 
   constructor(scene: Scene, state: KartState, realCockpit = false) {
     this.realCockpit = realCockpit;
@@ -126,6 +128,10 @@ export class KartCamera {
       : new Vector3(state.x - chaseX * (view.distance + speed * .035),
         view.height + state.height * (this.reducedMotion?.05:.4) + state.suspensionOffset * (this.reducedMotion?0:.25),
         state.z - chaseZ * (view.distance + speed * .035));
+    // Short camera jolt on hard impacts and item hits; calm camera keeps it still.
+    if (state.impactRemaining > this.lastImpact + .05 && !this.reducedMotion) this.shake = Math.min(.22, .08 + Math.abs(state.impactVelocityX) * .02 + Math.abs(state.impactVelocityZ) * .02 + (state.impactKind === 'item' ? .1 : 0));
+    this.lastImpact = state.impactRemaining; this.shake = Math.max(0, this.shake - dt * .6);
+    if (this.shake > 0) { const t = performance.now() / 1000; desired.x += Math.sin(t * 61) * this.shake; desired.y += Math.sin(t * 47 + 1) * this.shake * .7; }
     const blend = immediate ? 1 : 1 - Math.exp(-(this.reducedMotion?14:view.follow) * dt);
     if (firstPerson) {
       // The eye is fixed to the seat: no positional lag at speed, only a softened vertical bob.

@@ -237,9 +237,11 @@ for sd in [-1, 1]:
     box('Epaulette board', (sd * .44, -.45, 1.58), (.3, .34, .07), trim, .035, driver)
     for k in range(9):
         cyl('Epaulette fringe', (sd * (.6 + .012 * (k % 2)), -.61 + k * .04, 1.5), .016, .17, trim, driver, verts=6)
-    tube('Uniform arm', [(sd * .42, -.45, 1.42), (sd * .46, -.12, 1.18), (sd * .2, .15, 1.2)], .1, uniform, driver)
-    tube('Gold cuff', [(sd * .26, .08, 1.2), (sd * .22, .12, 1.2)], .105, trim, driver)
-    ellipsoid('Glove', (sd * .19, .19, 1.21), (.09, .1, .08), white_glove, driver)
+    # Each arm hangs from its own shoulder pivot so it can follow the wheel and celebrate.
+    arm = empty('armPose-' + ('L' if sd < 0 else 'R'), (sd * .42, -.45, 1.44), driver)
+    tube('Uniform arm', [(0, 0, -.02), (sd * .04, .33, -.26), (-sd * .22, .6, -.24)], .1, uniform, arm)
+    tube('Gold cuff', [(-sd * .16, .53, -.24), (-sd * .2, .57, -.24)], .105, trim, arm)
+    ellipsoid('Glove', (-sd * .23, .64, -.23), (.09, .1, .08), white_glove, arm)
     ellipsoid('Uniform knee', (sd * .17, .05, .92), (.13, .3, .13), uniform, driver)
     tube('Trouser stripe', [(sd * .3, -.2, .95), (sd * .29, .25, .94)], .015, trim, driver)
 # Cape: animated flap at the shoulders (runtime node name 'scarfFlap').
@@ -282,8 +284,9 @@ for sd in [-1, 1]:
 tube('Smirk', [(-.08, .27, -.08), (0, .285, -.095), (.09, .27, -.07)], .011, hair, head)
 box('Uniform collar', (0, -.03, -.2), (.34, .3, .1), uniform, .04, head)
 tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, head)
-for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .25, -.06, .16), (.07, .17, .13), hair, head)
-ellipsoid('Hair back', (0, -.13, .1), (.24, .13, .13), hair, head)
+for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .26, -.03, .14), (.06, .16, .12), hair, head)
+ellipsoid('Hair back', (0, -.1, .12), (.285, .2, .2), hair, head)
+ellipsoid('Hair nape', (0, -.2, -.04), (.2, .1, .1), hair, head)
 
 def cast(name):
     return empty('cast-' + name, (0, 0, 0), head)

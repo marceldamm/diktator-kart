@@ -76,6 +76,14 @@ export class SkidMarks {
   clear(): void { this.colors.fill(0); this.last.forEach((l) => l.fill(null)); this.mesh.updateVerticesData(VertexBuffer.ColorKind, this.colors); }
 }
 
+/** Small sheet of official paper with a red stamp mark, for item hits. */
+export function createPaperTexture(scene: Scene): DynamicTexture {
+  const t = new DynamicTexture('Official paper sheet', 64, scene, false); const c = t.getContext();
+  c.fillStyle = '#f4efe2'; c.fillRect(8, 4, 48, 56); c.fillStyle = '#b8b0a0'; for (let y = 14; y < 52; y += 7) c.fillRect(14, y, 34, 2);
+  c.strokeStyle = '#a3242a'; c.lineWidth = 4; c.beginPath(); c.arc(42, 44, 10, 0, Math.PI * 2); c.stroke();
+  t.hasAlpha = true; t.update(); return t;
+}
+
 /** Short celebratory confetti bursts at the start gantry and the finish. Bounded particle count. */
 export function createConfetti(scene: Scene): { burst(at: Vector3, amount?: number): void } {
   const t = new DynamicTexture('Confetti paper', 32, scene, false); const c = t.getContext();
