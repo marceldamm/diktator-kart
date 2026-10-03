@@ -160,13 +160,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const mesh of root.getChildMeshes()) {
         mesh.receiveShadows = true; mesh.isPickable = false;
         if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh);
-        const recolour: [RegExp, string | null][] = [[/Petrol enamel/, cast.paint], [/Uniform racing suit/, cast.uniform], [/Cape cloth/, cast.cape], [/Hat cloth/, cast.hatColor]];
+        const recolour: [RegExp, string | null][] = [[/Petrol enamel/, cast.paint], [/Uniform racing suit/, cast.uniform], [/Cape cloth/, cast.cape], [/Hat cloth/, cast.hatColor], [/Hair and leather helmet/, cast.hair]];
         for (const [pattern, colour] of recolour) if (mesh.material instanceof PBRMaterial && pattern.test(mesh.material.name)) {
           if (!colour) { mesh.setEnabled(false); continue; }
           const source=mesh.material;let material=paint.get(source);
           if(!material){
             material=source.clone(`Kart ${index} ${source.name}`)!;material.albedoColor=Color3.FromHexString(colour).toLinearSpace();
             if (/enamel/.test(source.name)) { material.metallic = .25; material.roughness = .38; material.clearCoat.isEnabled = true; material.clearCoat.intensity = .85; material.clearCoat.roughness = .08; }
+            // Pomaded hair catches a soft highlight so it never reads as a felt cap.
+            if (/Hair and leather/.test(source.name)) { material.metallic = 0; material.roughness = .36; material.clearCoat.isEnabled = true; material.clearCoat.intensity = .35; material.clearCoat.roughness = .3; }
             paint.set(source,material);
           }
           mesh.material=material;

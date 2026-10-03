@@ -84,15 +84,15 @@
     "text": "Bitte den Weg frei stempeln!",
     "emotion": "neutral"
   },
-  "diva-horn": {
-    "voice": "female",
-    "text": "Hallo! Der rote Teppich ist zu schmal!",
-    "emotion": null
+  "kim-horn": {
+    "voice": "male",
+    "text": "Platz da! Ich habe dieses Rennen schon gestern gewonnen!",
+    "emotion": "amused"
   },
-  "admiralin-horn": {
-    "voice": "female",
-    "text": "Aus dem Weg! Volle Kraft voraus!",
-    "emotion": null
+  "castro-horn": {
+    "voice": "male",
+    "text": "Aus dem Weg! Meine Rede dauert noch vier Stunden!",
+    "emotion": "neutral"
   },
   "general-hit": {
     "voice": "male",
@@ -159,34 +159,34 @@
     "text": "Der Sieg wurde ordnungsgemäß abgestempelt.",
     "emotion": "neutral"
   },
-  "diva-hit": {
-    "voice": "female",
-    "text": "Mein Lack! Das bezahlen Sie!",
-    "emotion": null
+  "kim-hit": {
+    "voice": "male",
+    "text": "Das wird nicht gesendet!",
+    "emotion": "angry"
   },
-  "diva-pass": {
-    "voice": "female",
-    "text": "Aus dem Weg, Darling!",
-    "emotion": null
+  "kim-pass": {
+    "voice": "male",
+    "text": "Laut Staatsfernsehen fahre ich sowieso vorne!",
+    "emotion": "amused"
   },
-  "diva-win": {
-    "voice": "female",
-    "text": "Applaus, bitte. Mehr Applaus!",
-    "emotion": null
+  "kim-win": {
+    "voice": "male",
+    "text": "Wie angekündigt: hundert Prozent Sieg.",
+    "emotion": "amused"
   },
-  "admiralin-hit": {
-    "voice": "female",
-    "text": "Schaden an Backbord!",
-    "emotion": null
+  "castro-hit": {
+    "voice": "male",
+    "text": "Eine Blockade! Schon wieder!",
+    "emotion": "angry"
   },
-  "admiralin-pass": {
-    "voice": "female",
-    "text": "Volle Kraft voraus!",
-    "emotion": null
+  "castro-pass": {
+    "voice": "male",
+    "text": "Die Revolution überholt links!",
+    "emotion": "neutral"
   },
-  "admiralin-win": {
-    "voice": "female",
-    "text": "Kurs gehalten. Wie befohlen.",
-    "emotion": null
+  "castro-win": {
+    "voice": "male",
+    "text": "Ein Sieg! Dazu spreche ich jetzt. Ausführlich.",
+    "emotion": "amused"
   }
 }

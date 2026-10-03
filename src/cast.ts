@@ -1,16 +1,21 @@
 /**
- * Six neutral, fictional caricature drivers for the slice. They borrow the G–L costume language
- * (parade uniforms, capes, caps, gold) but depict no historical person; the confirmed historical
- * line-up stays open until it is approved together.
+ * Confirmed start roster as satirical caricatures (docs/14-character-and-item-catalog.md): Hitler, Stalin,
+ * Mussolini, Mao, Kim Jong-un and Castro. Recognition comes from silhouette cues (hair, moustache, cap, pipe,
+ * cigar, uniform colour); no insignia or regime symbol is modelled. Caricature stage, not a realistic likeness.
+ * Paint colours follow the legacy driver list (Diktator-Kart-Legacy/client/src/game/drivers.ts).
  */
 export interface CastMember {
   name: string;
+  /** Kart nickname from the legacy production brief. */
+  kartName: string;
   paint: string;
   uniform: string;
   cape: string | null;
   hat: string;
-  /** Hat cloth colour for recolourable caps. */
+  /** Hat cloth colour for recolourable caps (also the shaved-side stubble tone). */
   hatColor: string;
+  /** Hair, brows and moustache colour. */
+  hair: string;
   face: string[];
   kit: 'radio' | 'spare' | 'luggage' | 'fin' | 'parade' | 'none';
   /** Voice line prefix (art-source/build_voices.mjs) and playback rate for the caricature register. */
@@ -19,12 +24,20 @@ export interface CastMember {
 }
 
 export const CAST: CastMember[] = [
-  { name: 'Der General', paint: '#8f1f27', uniform: '#ece5d3', cape: '#8f1f27', hat: 'peaked', hatColor: '#1d2326', face: ['moustache'], kit: 'fin', voice: 'general', voiceRate: .97 },
-  { name: 'Der Marschall', paint: '#17424f', uniform: '#1e2328', cape: null, hat: 'fur', hatColor: '#2b2b2b', face: ['beard', 'furcollar'], kit: 'spare', voice: 'marschall', voiceRate: .9 },
-  { name: 'Der Imperator', paint: '#e8dcc2', uniform: '#f1ece2', cape: '#a3262c', hat: 'crown', hatColor: '#000000', face: ['moustache'], kit: 'luggage', voice: 'imperator', voiceRate: 1.04 },
-  { name: 'Der Kommandant', paint: '#3d5236', uniform: '#4d5a3c', cape: '#2a3624', hat: 'beret', hatColor: '#6a1820', face: ['glasses', 'moustache'], kit: 'radio', voice: 'kommandant', voiceRate: .98 },
-  { name: 'Die Diva', paint: '#24357a', uniform: '#17191d', cape: '#4e1534', hat: 'diva', hatColor: '#000000', face: ['furcollar'], kit: 'parade', voice: 'diva', voiceRate: 1.07 },
-  { name: 'Die Admiralin', paint: '#5b2d63', uniform: '#1f2733', cape: '#1a2232', hat: 'naval', hatColor: '#000000', face: ['glasses'], kit: 'none', voice: 'admiralin', voiceRate: .97 },
+  { name: 'Hitler', kartName: 'Größenwahn-Mobil', paint: '#8e2635', uniform: '#7a6a4f', cape: null, hat: 'none', hatColor: '#1d2326', hair: '#16110d',
+    face: ['sidepart', 'shorthair', 'toothbrush', 'medals', 'collartabs'], kit: 'parade', voice: 'general', voiceRate: .97 },
+  { name: 'Stalin', kartName: 'Fünfjahresplan 3000', paint: '#6f2424', uniform: '#e2dccb', cape: null, hat: 'none', hatColor: '#2b2b2b', hair: '#6a645d',
+    face: ['swept', 'shorthair', 'walrus', 'pipe', 'epaulettes', 'medals', 'collartabs'], kit: 'spare', voice: 'marschall', voiceRate: .9 },
+  { name: 'Mussolini', kartName: 'Il Duce GT', paint: '#31557a', uniform: '#1d1e22', cape: '#31557a', hat: 'none', hatColor: '#000000', hair: '#1a1410',
+    face: ['chin', 'epaulettes', 'medals', 'collartabs'], kit: 'radio', voice: 'imperator', voiceRate: 1.04 },
+  { name: 'Mao', kartName: 'Kultur-Kart', paint: '#b72f2b', uniform: '#8a8c7e', cape: null, hat: 'none', hatColor: '#000000', hair: '#14110f',
+    face: ['maohair', 'shorthair'], kit: 'none', voice: 'kommandant', voiceRate: .98 },
+  { name: 'Kim Jong-un', kartName: 'Propaganda-Rakete', paint: '#263f70', uniform: '#1f2125', cape: null, hat: 'none', hatColor: '#6e5444', hair: '#0f0d0c',
+    face: ['undercut'], kit: 'fin', voice: 'kim', voiceRate: 1.02 },
+  { name: 'Castro', kartName: 'Revolutions-Cabrio', paint: '#315d42', uniform: '#55603e', cape: null, hat: 'patrol', hatColor: '#4c5536', hair: '#17120e',
+    face: ['beard', 'shorthair', 'cigar'], kit: 'luggage', voice: 'castro', voiceRate: .96 },
 ];
 
-export const CAST_PARTS = ['peaked', 'naval', 'fur', 'crown', 'beret', 'diva', 'moustache', 'beard', 'glasses', 'furcollar'];
+export const CAST_PARTS = ['peaked', 'naval', 'fur', 'crown', 'beret', 'diva', 'moustache', 'beard', 'glasses', 'furcollar',
+  'shorthair', 'medals', 'epaulettes', 'collartabs', 'sidepart', 'toothbrush', 'swept', 'walrus', 'pipe', 'chin', 'maohair',
+  'undercut', 'patrol', 'cigar'];

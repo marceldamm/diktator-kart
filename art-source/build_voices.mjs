@@ -1,7 +1,7 @@
-// Stadium announcer and six fictional driver voices, synthesised offline with Piper TTS.
+// Stadium announcer and six caricature driver voices (placeholder TTS; final voices must be human recordings), synthesised offline with Piper TTS.
 // Voices: Thorsten / Thorsten emotional and Kerstin (rhasspy/piper-voices, CC0 datasets, MIT models).
 // Run: node art-source/build_voices.mjs   (needs .tools/piper; see art-source/README.md)
-// Lines are satire of bureaucratic self-importance; no historical person, quote or slogan.
+// Lines are invented satire of self-importance; no real quote or slogan.
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -39,8 +39,8 @@ const LINES = {
   'marschall-horn': ['male', 'Zur Seite! Der Plan wartet nicht!', 'neutral'],
   'imperator-horn': ['male', 'Achtung! Mein Lorbeer hat Vorfahrt!', 'amused'],
   'kommandant-horn': ['male', 'Bitte den Weg frei stempeln!', 'neutral'],
-  'diva-horn': ['female', 'Hallo! Der rote Teppich ist zu schmal!'],
-  'admiralin-horn': ['female', 'Aus dem Weg! Volle Kraft voraus!'],
+  'kim-horn': ['male', 'Platz da! Ich habe dieses Rennen schon gestern gewonnen!', 'amused'],
+  'castro-horn': ['male', 'Aus dem Weg! Meine Rede dauert noch vier Stunden!', 'neutral'],
   'general-hit': ['male', 'Das ist Hochverrat!', 'angry'],
   'general-pass': ['male', 'Platz da! Ich habe Vorfahrt per Dekret!', 'angry'],
   'general-boost': ['male', 'Vorwärts, im Namen der Ordnung!', 'neutral'],
@@ -54,12 +54,12 @@ const LINES = {
   'kommandant-hit': ['male', 'Formular nicht ausgefüllt!', 'angry'],
   'kommandant-pass': ['male', 'Überholvorgang ordnungsgemäß abgeschlossen.', 'neutral'],
   'kommandant-win': ['male', 'Der Sieg wurde ordnungsgemäß abgestempelt.', 'neutral'],
-  'diva-hit': ['female', 'Mein Lack! Das bezahlen Sie!'],
-  'diva-pass': ['female', 'Aus dem Weg, Darling!'],
-  'diva-win': ['female', 'Applaus, bitte. Mehr Applaus!'],
-  'admiralin-hit': ['female', 'Schaden an Backbord!'],
-  'admiralin-pass': ['female', 'Volle Kraft voraus!'],
-  'admiralin-win': ['female', 'Kurs gehalten. Wie befohlen.'],
+  'kim-hit': ['male', 'Das wird nicht gesendet!', 'angry'],
+  'kim-pass': ['male', 'Laut Staatsfernsehen fahre ich sowieso vorne!', 'amused'],
+  'kim-win': ['male', 'Wie angekündigt: hundert Prozent Sieg.', 'amused'],
+  'castro-hit': ['male', 'Eine Blockade! Schon wieder!', 'angry'],
+  'castro-pass': ['male', 'Die Revolution überholt links!', 'neutral'],
+  'castro-win': ['male', 'Ein Sieg! Dazu spreche ich jetzt. Ausführlich.', 'amused'],
 };
 
 const selected=process.argv.slice(2);

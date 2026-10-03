@@ -1,6 +1,7 @@
 """Hero kart and neutral caricature driver for the 'Stadion der Eitelkeit' slice (quality level 2).
 Run: blender --background --python art-source/build_kart.py   -> art-source/hero-kart.blend, public/assets/models/hero-kart.glb
-Original geometry. Fictional characters only: no historical person, face or insignia is modelled.
+Original geometry. Satirical caricature parts for the confirmed start roster (Hitler, Stalin, Mussolini, Mao,
+Kim Jong-un, Castro): hair, moustaches, caps, pipe, cigar and regalia only; no insignia or regime symbol is modelled.
 Blender: X right, Y forward, Z up. Runtime contract (src/slice-scene.ts):
   wheelPivot-0..3 / wheelSpin-0..3 (FL, FR, RL, RR), steeringWheel, driverPose, headPose, scarfFlap (cape),
   kart accessories variant-radio|spare|luggage|fin|parade, character parts cast-<name>.
@@ -230,23 +231,25 @@ tube('Parade sash', [(-.34, -.3, 1.44), (-.1, -.21, 1.25), (.18, -.22, 1.06), (.
 ellipsoid('Uniform belly', (0, -.3, 1.08), (.36, .26, .27), uniform, driver, 18)
 for z in [1.04, 1.16, 1.28, 1.4]:
     for x in [-.1, .1]: ellipsoid('Uniform button', (x, -.07 - abs(1.08 - z) * .25, z), (.025, .015, .025), trim, driver, 8)
+medals = empty('cast-medals', (0, 0, 0), driver)        # ribbon bar, hanging medals and aiguillette
 for row in range(3):
     for col in range(3):
-        box('Medal ribbon bar', (.13 + col * .065, -.18, 1.42 - row * .045), (.06, .02, .04), [medal_red, trim, uniform][(row + col) % 3], .004, driver)
+        box('Medal ribbon bar', (.13 + col * .065, -.18, 1.42 - row * .045), (.06, .02, .04), [medal_red, trim, uniform][(row + col) % 3], .004, medals)
 for k, x in enumerate([.14, .21, .28]):
-    tube('Medal hanger', [(x, -.18, 1.29), (x, -.175, 1.22)], .012, medal_red, driver)
+    tube('Medal hanger', [(x, -.18, 1.29), (x, -.175, 1.22)], .012, medal_red, medals)
     cyl('Hanging medal', (x, -.17, 1.19), .032, .012, trim, driver, 'Y', verts=12)
-tube('Aiguillette cord', [(-.38, -.35, 1.5), (-.3, -.2, 1.36), (-.16, -.16, 1.3), (-.1, -.17, 1.4)], .014, trim, driver)
-tube('Aiguillette loop', [(-.38, -.36, 1.48), (-.32, -.24, 1.28), (-.2, -.19, 1.24), (-.1, -.17, 1.38)], .012, trim, driver)
+tube('Aiguillette cord', [(-.38, -.35, 1.5), (-.3, -.2, 1.36), (-.16, -.16, 1.3), (-.1, -.17, 1.4)], .014, trim, medals)
+tube('Aiguillette loop', [(-.38, -.36, 1.48), (-.32, -.24, 1.28), (-.2, -.19, 1.24), (-.1, -.17, 1.38)], .012, trim, medals)
 for k, (x, z) in enumerate([(.16, 1.32), (.24, 1.3), (.2, 1.22)]):
-    box('Medal ribbon', (x, -.19, z + .05), (.06, .02, .07), medal_red, .005, driver)
-    cyl('Medal disc', (x, -.185, z - .02), .035, .012, trim, driver, 'Y')
+    box('Medal ribbon', (x, -.19, z + .05), (.06, .02, .07), medal_red, .005, medals)
+    cyl('Medal disc', (x, -.185, z - .02), .035, .012, trim, medals, 'Y')
+epaulettes = empty('cast-epaulettes', (0, 0, 0), driver)
 for sd in [-1, 1]:
-    # Epaulettes with fringe: the strongest silhouette cue from the chase camera.
+    # Epaulettes with fringe: the strongest silhouette cue from the chase camera (marshal-style roles only).
     ellipsoid('Shoulder pad', (sd * .42, -.45, 1.5), (.17, .2, .1), uniform, driver, 16)
-    box('Epaulette board', (sd * .44, -.45, 1.58), (.3, .34, .07), trim, .035, driver)
+    box('Epaulette board', (sd * .44, -.45, 1.58), (.3, .34, .07), trim, .035, epaulettes)
     for k in range(9):
-        cyl('Epaulette fringe', (sd * (.6 + .012 * (k % 2)), -.61 + k * .04, 1.5), .016, .17, trim, driver, verts=6)
+        cyl('Epaulette fringe', (sd * (.6 + .012 * (k % 2)), -.61 + k * .04, 1.5), .016, .17, trim, epaulettes, verts=6)
     # Each arm hangs from its own shoulder pivot so it can follow the wheel and celebrate.
     arm = empty('armPose-' + ('L' if sd < 0 else 'R'), (sd * .42, -.45, 1.44), driver)
     tube('Uniform arm', [(0, 0, -.02), (sd * .04, .33, -.26), (-sd * .22, .6, -.24)], .1, uniform, arm)
@@ -301,12 +304,14 @@ for sd in [-1, 1]:
 tube('Smirk', [(-.09, .27, -.075), (0, .288, -.1), (.1, .272, -.06)], .013, lips, head)
 ellipsoid('Smug teeth', (.02, .282, -.088), (.06, .012, .016), eye_white, head, 10)
 box('Uniform collar', (0, -.03, -.2), (.34, .3, .1), uniform, .04, head)
-for sd in [-1, 1]: box('Collar oak tab', (sd * .1, .13, -.19), (.07, .02, .06), trim, .006, head)
+tabs = empty('cast-collartabs', (0, 0, 0), head)
+for sd in [-1, 1]: box('Collar oak tab', (sd * .1, .13, -.19), (.07, .02, .06), trim, .006, tabs)
 ellipsoid('Double chin', (0, .18, -.17), (.15, .1, .07), skin, head)
-tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, head)
-for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .26, -.03, .14), (.06, .16, .12), hair, head)
-ellipsoid('Hair back', (0, -.1, .12), (.285, .2, .2), hair, head)
-ellipsoid('Hair nape', (0, -.2, -.04), (.2, .1, .1), hair, head)
+tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, tabs)
+short = empty('cast-shorthair', (0, 0, 0), head)    # short back and sides, shared by most roles
+for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .26, -.03, .14), (.06, .16, .12), hair, short)
+ellipsoid('Hair back', (0, -.1, .12), (.285, .2, .2), hair, short)
+ellipsoid('Hair nape', (0, -.2, -.04), (.2, .1, .1), hair, short)
 
 def cast(name):
     return empty('cast-' + name, (0, 0, 0), head)
@@ -357,6 +362,67 @@ for sd in [-1, 1]: ellipsoid('Aviator lens', (sd * .1, .275, .14), (.085, .02, .
 box('Aviator bridge', (0, .28, .16), (.07, .02, .015), trim, .005, c)
 c = empty('cast-furcollar', (0, 0, 0), driver)
 torus('Fur collar', (0, -.42, 1.56), .3, .1, fur, c)
+
+
+# --- Historical caricature parts (confirmed start roster; recognisable silhouette cues, no insignia) ---
+briar = mat('Pipe briar', (.22, .1, .04), 0, .45)
+tobacco = mat('Cigar leaf', (.32, .17, .07), 0, .8)
+ash = mat('Cigar ash', (.55, .53, .5), 0, .95)
+mole_dark = mat('Mole', (.12, .06, .04), 0, .6)
+
+def strand(name, path, widths, thick, m, parent, centre=(0, 0, .08), n=10):
+    """Flat lock of hair/moustache along a path; the flat side hugs the head surface."""
+    rings_ = []
+    for i, p in enumerate(path):
+        a = path[max(0, i - 1)]; b = path[min(len(path) - 1, i + 1)]
+        t = [b[k] - a[k] for k in range(3)]; tl = math.sqrt(sum(v * v for v in t)) or 1; t = [v / tl for v in t]
+        nrm = [p[k] - centre[k] for k in range(3)]; nl = math.sqrt(sum(v * v for v in nrm)) or 1; nrm = [v / nl for v in nrm]
+        bi = [t[1] * nrm[2] - t[2] * nrm[1], t[2] * nrm[0] - t[0] * nrm[2], t[0] * nrm[1] - t[1] * nrm[0]]
+        w = widths[i] if isinstance(widths, (list, tuple)) else widths
+        rings_.append([tuple(p[k] + bi[k] * w * math.cos(2 * math.pi * j / n) + nrm[k] * thick * (math.sin(2 * math.pi * j / n) + .35) for k in range(3)) for j in range(n)])
+    return loft(name, rings_, m, parent, 1)
+
+c = cast('sidepart')                              # Hitler: flat dark top, left parting, forelock across the brow
+ellipsoid('Slick hair cap', (0, -.09, .29), (.285, .265, .105), hair, c, 20)
+ellipsoid('Parted hair volume', (.07, -.01, .33), (.19, .19, .055), hair, c, 16)
+strand('Forelock', [(-.1, .1, .37), (-.03, .2, .335), (.06, .255, .28), (.13, .275, .225), (.185, .262, .19)], [.04, .075, .085, .065, .03], .026, hair, c)
+strand('Parting edge', [(-.1, -.15, .35), (-.1, 0, .375), (-.09, .12, .37)], .012, .012, hair, c)
+c = cast('toothbrush')                            # Hitler: small square moustache under the nose
+box('Toothbrush moustache', (0, .322, -.04), (.085, .05, .042), hair, .012, c)
+c = cast('swept')                                 # Stalin: thick hair brushed straight back
+ellipsoid('Swept-back hair', (0, -.09, .29), (.3, .28, .13), hair, c, 20)
+ellipsoid('Swept-back front roll', (0, .09, .35), (.24, .13, .07), hair, c, 16)
+for k in range(5):
+    x = -.16 + k * .08
+    strand('Combed strand', [(x, .19, .35), (x * 1.05, .02, .41), (x * 1.08, -.18, .38)], .028, .012, hair, c)
+c = cast('walrus')                                # Stalin: heavy drooping moustache
+for sd in [-1, 1]:
+    strand('Walrus moustache', [(0, .345, -.025), (sd * .07, .34, -.04), (sd * .13, .315, -.075), (sd * .16, .29, -.11)], [.045, .05, .04, .02], .03, hair, c)
+c = cast('pipe')                                  # Stalin: briar pipe in the mouth corner
+rod('Pipe stem', (.07, .3, -.09), (.17, .45, -.13), .014, black, c)
+cyl('Pipe bowl', (.19, .47, -.09), .038, .09, briar, c, verts=14)
+ellipsoid('Pipe tobacco glow', (.19, .47, -.045), (.03, .03, .008), tobacco, c, 8)
+c = cast('chin')                                  # Mussolini: bald dome, jutting jaw and pout
+ellipsoid('Jutting chin', (0, .25, -.2), (.15, .12, .085), skin, c)
+ellipsoid('Square jaw', (0, .16, -.17), (.24, .14, .09), skin, c)
+tube('Pouting lip', [(-.07, .3, -.105), (0, .315, -.115), (.07, .3, -.105)], .02, skin, c)
+c = cast('maohair')                               # Mao: high receding hairline, hair combed back, chin mole
+ellipsoid('Receding hair', (0, -.1, .28), (.295, .26, .13), hair, c, 20)
+for sd in [-1, 1]: ellipsoid('Full side hair', (sd * .245, -.06, .2), (.075, .18, .12), hair, c, 12)
+ellipsoid('Chin mole', (-.035, .295, -.16), (.018, .012, .018), mole_dark, c, 8)
+c = cast('undercut')                              # Kim Jong-un: shaved sides, flat volume on top, round cheeks
+ellipsoid('Undercut top volume', (0, -.01, .345), (.215, .25, .085), hair, c, 20)
+strand('Undercut fringe', [(-.16, .17, .37), (-.06, .23, .345), (.06, .255, .325), (.15, .23, .31)], [.04, .055, .05, .03], .028, hair, c)
+for sd in [-1, 1]:
+    ellipsoid('Shaved side', (sd * .27, -.04, .16), (.04, .17, .1), hat_cloth, c, 12)
+    ellipsoid('Round cheek', (sd * .16, .2, -.04), (.11, .09, .09), skin, c)
+c = cast('patrol')                                # Castro: flat-topped olive patrol cap and cigar
+cyl('Patrol cap crown', (0, -.02, .42), .29, .2, hat_cloth, c, r2=.3, verts=28)
+cyl('Patrol cap flat top', (0, -.02, .525), .305, .02, hat_cloth, c, verts=28)
+ellipsoid('Patrol cap visor', (0, .23, .33), (.24, .14, .022), hat_cloth, c)
+c = cast('cigar')
+rod('Cigar', (-.05, .31, -.1), (-.18, .5, -.14), .022, tobacco, c)
+ellipsoid('Cigar ash tip', (-.185, .51, -.142), (.024, .024, .024), ash, c, 8)
 
 # --- Optional neutral kart accessories (one per participant) --------------------------------------
 radio = empty('variant-radio', parent=kart)

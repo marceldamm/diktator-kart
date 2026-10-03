@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-03T22:52:11.732Z",
+  "date": "2026-10-03T23:39:39.680Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -16,6 +16,11 @@
       "name": "parade-tank",
       "originalBytes": 511748,
       "runtimeBytes": 322012
+    },
+    {
+      "name": "hero-kart",
+      "originalBytes": 2320280,
+      "runtimeBytes": 1728952
     }
   ]
 }

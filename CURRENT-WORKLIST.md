@@ -10,6 +10,13 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 **Danach:** Erkennbare historische Fahrer (zuerst Hitler) und nächster Grafikpass (Regen/Pfützen/Wolkenschatten); Bots mit Fähigkeiten; weitere Sarah-Fähigkeiten nach gemeinsamer Bestätigung.
 **Arbeitsbranch:** codex/team-marcel-20261003-232302-374 (Projektstart 04.10., Claude, auf main f784078; 43 Tests und TypeScript bestanden). Noch kein neuer Auftrag; nächster Schritt laut „Danach“.
 
+## Ganz oben – Marcel, 04.10.2026 (Abend)
+
+- [ ] **Kamera-Maus reparieren (Priorität 1):** Linke Maustaste halten = umsehen, rechte Maustaste halten = zurückschauen. Marcel meldet: funktioniert bei ihm nicht mehr, unter ChatGPT lief es. Prüfen, ob ChatGPT und Claude dieselben Dateien/denselben Stand benutzen.
+- [ ] **Charakterauswahl vor dem Rennen:** Beim Spielstart bzw. „Neues Rennen“ ein Auswahlmenü mit den sechs Karikaturen (Porträts der neuen Gesichter), Namen, Kartname und Infos aus dem Fahrerkatalog; gewählte Figur fährt als Spieler.
+- [ ] **Historischer Startkader (Karikaturstufe):** Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro mit erkennbaren Merkmalen statt neutraler Platzhalter. Marcel: „sehr lustig und ansehnlich, noch Optimierungsbedarf“.
+- [ ] Mehr Wow-Effekte aus den Meilensteinen in LONG-TERM-GOALS.md in Paketen umsetzen (selbstständig, bis 95 % Nutzungslimit; danach Abschluss und Upload für Sarah).
+
 ## Offen und als Nächstes
 
 **Abarbeitungsfolge:** Bei „Arbeitslisten abarbeiten“ zuerst die ausführbaren offenen Aufgaben hier umsetzen, anschließend bestätigte Ziele aus [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md) selbstständig in diese Liste übernehmen und bearbeiten. Status und nächsten Schritt sichtbar halten; blockierte Aufgaben bewahren, unabhängige fortsetzen. Budget-/Entscheidungsregeln beachten.
