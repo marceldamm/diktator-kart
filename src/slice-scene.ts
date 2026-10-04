@@ -331,6 +331,40 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     snow.direction1 = new Vector3(-.8, -2.2, -.5); snow.direction2 = new Vector3(.6, -3, .6); snow.minEmitPower = 1; snow.maxEmitPower = 1.2;
     snow.minAngularSpeed = -2; snow.maxAngularSpeed = 2;
     snow.color1 = new Color4(1, 1, 1, .95); snow.color2 = new Color4(.9, .94, 1, .85); snow.colorDead = new Color4(1, 1, 1, 0); snow.start();
+
+    // Time of day (0 day → .5 dusk → 1 night): sky overlay, stars, moon, moonlight shadows, birds by day and bats by night.
+    let timeOfDay = 0, weatherBase = { sun: sun.intensity, sunColor: sun.diffuse.clone(), hemi: hemisphere.intensity, fogDensity: scene.fogDensity, fogColor: scene.fogColor.clone(), sky: 1 };
+    const snapshotWeather = () => { weatherBase = { sun: sun.intensity, sunColor: sun.diffuse.clone(), hemi: hemisphere.intensity, fogDensity: scene.fogDensity, fogColor: scene.fogColor.clone(), sky: skyMaterial.emissiveTexture!.level }; };
+    const skyTint = MeshBuilder.CreateSphere('Sky time-of-day tint', { diameter: 860, segments: 16, sideOrientation: Mesh.BACKSIDE }, scene);
+    const tintMaterial = new StandardMaterial('Sky tint', scene); tintMaterial.disableLighting = true; tintMaterial.fogEnabled = false; tintMaterial.backFaceCulling = false;
+    tintMaterial.emissiveColor = new Color3(1, .5, .2); tintMaterial.alpha = 0; skyTint.material = tintMaterial; skyTint.infiniteDistance = true; skyTint.isPickable = false; skyTint.alphaIndex = 1;
+    const starTexture = new DynamicTexture('Star field', { width: 1024, height: 512 }, scene, true);
+    { const c = starTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#000'; c.fillRect(0, 0, 1024, 512);
+      for (let i = 0; i < 900; i++) { const y = Math.random() * 300, b = Math.random(); c.fillStyle = `rgba(255,255,${220 + Math.floor(b * 35)},${.35 + b * .65})`; c.fillRect(Math.random() * 1024, y, b > .92 ? 2 : 1, b > .92 ? 2 : 1); }
+      starTexture.update(); }
+    const stars = MeshBuilder.CreateSphere('Night stars', { diameter: 840, segments: 16, sideOrientation: Mesh.BACKSIDE }, scene);
+    const starMaterial = new StandardMaterial('Stars', scene); starMaterial.disableLighting = true; starMaterial.fogEnabled = false; starMaterial.backFaceCulling = false;
+    starMaterial.emissiveTexture = starTexture; starMaterial.diffuseColor = Color3.Black(); starMaterial.alphaMode = Engine.ALPHA_ADD; starMaterial.alpha = 0;
+    stars.material = starMaterial; stars.infiniteDistance = true; stars.isPickable = false; stars.alphaIndex = 2;
+    const moonTexture = new DynamicTexture('Moon disc', 128, scene, true);
+    { const c = moonTexture.getContext() as CanvasRenderingContext2D; const g = c.createRadialGradient(64, 64, 20, 64, 64, 62); g.addColorStop(0, '#fffbe8'); g.addColorStop(.62, '#f2ecd2'); g.addColorStop(.7, 'rgba(240,235,210,.35)'); g.addColorStop(1, 'rgba(240,235,210,0)');
+      c.fillStyle = g; c.fillRect(0, 0, 128, 128); c.fillStyle = 'rgba(180,175,160,.35)'; for (const [x, y, r] of [[50, 52, 9], [76, 70, 7], [60, 82, 5]]) { c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); } moonTexture.hasAlpha = true; moonTexture.update(); }
+    const moon = MeshBuilder.CreatePlane('Moon', { size: 34 }, scene); moon.billboardMode = Mesh.BILLBOARDMODE_ALL; moon.infiniteDistance = true; moon.isPickable = false; moon.alphaIndex = 3;
+    const moonMaterial = new StandardMaterial('Moon', scene); moonMaterial.disableLighting = true; moonMaterial.fogEnabled = false; moonMaterial.emissiveTexture = moonTexture; moonMaterial.opacityTexture = moonTexture; moonMaterial.alpha = 0; moon.material = moonMaterial;
+    moon.position = new Vector3(-sunDirection.x * -300, 160, -sunDirection.z * -300);
+    const flyerMaterial = new StandardMaterial('Birds and bats', scene); flyerMaterial.disableLighting = true; flyerMaterial.emissiveColor = new Color3(.08, .07, .07); flyerMaterial.backFaceCulling = false;
+    const flyers = Array.from({ length: 14 }, (_, i) => {
+      const m = MeshBuilder.CreateDisc(`Flyer ${i}`, { radius: .55, tessellation: 3 }, scene); m.material = flyerMaterial; m.isPickable = false; m.scaling.set(1.6, .35, 1);
+      return { mesh: m, phase: i * 1.7, radius: 30 + (i % 5) * 9, height: 22 + (i % 4) * 4, speed: .18 + (i % 3) * .05 };
+    });
+    // Newspapers blowing across the road near the player.
+    const paperMaterial = new StandardMaterial('Blowing newspaper', scene); paperMaterial.diffuseTexture = createPaperTexture(scene); paperMaterial.backFaceCulling = false; paperMaterial.specularColor = Color3.Black();
+    const papers = Array.from({ length: 5 }, (_, i) => { const m = MeshBuilder.CreatePlane(`Newspaper ${i}`, { width: .6, height: .42 }, scene); m.material = paperMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vz: 0, spin: 0 }; });
+    // Loose parts after a wreck: lie on the road for a while, then shrink away.
+    const debrisMaterial = new StandardMaterial('Wreck debris', scene); debrisMaterial.diffuseColor = new Color3(.12, .11, .1); debrisMaterial.specularColor = new Color3(.2, .2, .2);
+    const debris = Array.from({ length: 12 }, (_, i) => { const m = i % 3 === 0 ? MeshBuilder.CreateCylinder(`Debris hubcap ${i}`, { diameter: .32, height: .06, tessellation: 12 }, scene) : MeshBuilder.CreateBox(`Debris plate ${i}`, { width: .4, height: .05, depth: .28 }, scene);
+      m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
+    let nextDebris = 0;
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
     report?.('items');
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
@@ -377,7 +411,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         hemisphere.diffuse = on ? new Color3(.62, .68, .78) : new Color3(.66, .76, 1);
         scene.fogDensity = on ? .0105 : baseLight.fog; scene.fogColor = on ? new Color3(.46, .5, .55) : baseLight.fogColor;
         scene.environmentIntensity = on ? .85 : baseLight.env; skyMaterial.emissiveColor = Color3.Black();
-        skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0;
+        skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0; snapshotWeather();
       },
       setWeather(kind) {
         snowing = kind === 'snow'; api.setRain?.(kind === 'rain'); trackWorld.setSnow(snowing);
@@ -385,18 +419,21 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           sun.intensity = baseLight.sun * .45; sun.diffuse = new Color3(.92, .95, 1); hemisphere.intensity = .78; hemisphere.diffuse = new Color3(.86, .9, 1);
           scene.fogDensity = .0085; scene.fogColor = new Color3(.86, .88, .92); scene.environmentIntensity = .8; skyMaterial.emissiveTexture!.level = .78;
         } else if (kind === 'sun') sun.diffuse = new Color3(1, .8, .58);
-        snow.emitRate = snowing ? (reducedEffects ? 500 : 1700) : 0;
+        snow.emitRate = snowing ? (reducedEffects ? 500 : 1700) : 0; snapshotWeather();
         // Tyres throw white powder in snow instead of brown dust.
         const powder = snowing ? [new Color4(.94, .95, .98, .5), new Color4(.86, .89, .95, .4), new Color4(.9, .92, .96, 0)] : [new Color4(.65, .58, .47, .38), new Color4(.77, .71, .60, .3), new Color4(.7, .64, .53, 0)];
         for (const system of [dust, puff]) { system.color1 = powder[0]; system.color2 = powder[1]; system.colorDead = powder[2]; }
       },
       puddles() { return raining ? trackWorld.puddles : []; },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
+      setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
       wreck(kart) {
         const at = lastStates[kart]; const v = visuals[kart]; if (!at || !v) return;
         fireball.emitter = new Vector3(at.x, .9, at.z); fireball.manualEmitCount = reducedEffects ? 60 : 200;
         wreckSmoke.emitter = new Vector3(at.x, 1, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 40 : 140;
         burst(paper, at, reducedEffects ? 15 : 50); v.wreckAge = 0;
+        for (let n = 0; n < (reducedEffects ? 2 : 4); n++) { const d = debris[nextDebris++ % debris.length], a = Math.random() * 6.28, p = 2 + Math.random() * 3;
+          d.mesh.setEnabled(true); d.mesh.position.set(at.x, 1, at.z); d.mesh.scaling.setAll(1); d.vx = Math.sin(a) * p; d.vz = Math.cos(a) * p; d.vy = 3 + Math.random() * 2; d.life = 9; }
       },
       setRoster(order) {
         roster = order.slice(); visuals.forEach((v, i) => v.dress(CAST[order[i] ?? i]));
@@ -451,6 +488,36 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         trackWorld.animate(time);
+        { // Time of day on top of the weather: dusk warms and dims, night turns to moonlight.
+          const night = Math.max(0, (timeOfDay - .45) / .55), dusk = Math.max(0, 1 - Math.abs(timeOfDay - .5) / .35);
+          if (flash <= 0) {
+            sun.intensity = weatherBase.sun * (1 - .88 * night) * (1 - .3 * dusk);
+            sun.diffuse = Color3.Lerp(Color3.Lerp(weatherBase.sunColor, new Color3(1, .55, .3), dusk * .8), new Color3(.55, .65, 1), night);
+            hemisphere.intensity = weatherBase.hemi * (1 - .72 * night); skyMaterial.emissiveTexture!.level = weatherBase.sky * (1 - .85 * night) * (1 - .2 * dusk);
+          }
+          scene.fogColor = Color3.Lerp(Color3.Lerp(weatherBase.fogColor, new Color3(.75, .5, .38), dusk * .5), new Color3(.06, .08, .14), night);
+          tintMaterial.emissiveColor = Color3.Lerp(new Color3(1, .45, .2), new Color3(.02, .04, .12), night); tintMaterial.alpha = Math.min(.82, dusk * .38 + night * .78);
+          starMaterial.alpha = night * (raining || snowing ? .25 : 1); moonMaterial.alpha = night * (raining ? .35 : 1);
+          glow.intensity = .45 + night * 1.1;
+          flyerMaterial.emissiveColor = night > .5 ? new Color3(.02, .02, .03) : new Color3(.1, .09, .08);
+          for (const f of flyers) { const a = time * f.speed * (night > .5 ? 2.2 : 1) + f.phase, wob = night > .5 ? Math.sin(time * 7 + f.phase) * 3 : 0;
+            f.mesh.position.set(state.x + Math.cos(a) * f.radius + wob, f.height + Math.sin(time * 1.3 + f.phase) * 1.5 - night * 8, state.z + Math.sin(a) * f.radius);
+            f.mesh.rotation.y = -a; f.mesh.scaling.y = .35 + Math.abs(Math.sin(time * (night > .5 ? 22 : 9) + f.phase)) * .5; f.mesh.setEnabled(!raining && dusk < .9); }
+        }
+        { // Blowing newspapers and lingering wreck parts.
+          for (const p of papers) {
+            if (p.life <= 0 && Math.random() < dt * .25) { const side = Math.random() < .5 ? -1 : 1, ahead = 12 + Math.random() * 20;
+              p.mesh.setEnabled(true); p.mesh.position.set(state.x + Math.sin(state.heading) * ahead + Math.cos(state.heading) * 8 * side, .3, state.z + Math.cos(state.heading) * ahead - Math.sin(state.heading) * 8 * side);
+              p.vx = -Math.cos(state.heading) * side * (2 + Math.random() * 2); p.vz = Math.sin(state.heading) * side * (2 + Math.random() * 2); p.spin = 3 + Math.random() * 4; p.life = 6; }
+            if (p.life > 0) { p.life -= dt; p.mesh.position.x += p.vx * dt; p.mesh.position.z += p.vz * dt; p.mesh.position.y = .25 + Math.abs(Math.sin(p.life * 2.3)) * .9;
+              p.mesh.rotation.x += p.spin * dt; p.mesh.rotation.y += p.spin * .6 * dt; if (p.life <= 0) p.mesh.setEnabled(false); }
+          }
+          for (const d of debris) if (d.life > 0) {
+            d.life -= dt; d.vy -= 12 * dt; d.mesh.position.x += d.vx * dt; d.mesh.position.z += d.vz * dt; d.mesh.position.y = Math.max(.03, d.mesh.position.y + d.vy * dt);
+            if (d.mesh.position.y <= .03) { d.vx *= .9; d.vz *= .9; d.vy = 0; } else { d.mesh.rotation.x += dt * 8; d.mesh.rotation.z += dt * 5; }
+            if (d.life < 1) d.mesh.scaling.setAll(Math.max(.01, d.life)); if (d.life <= 0) d.mesh.setEnabled(false);
+          }
+        }
         if (fireworkTime > 0) {
           fireworkTime -= dt; nextBurst -= dt;
           if (nextBurst <= 0) {

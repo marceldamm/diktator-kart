@@ -96,6 +96,8 @@ class App {
   /** Options choice; 'random' rolls sun, rain or snow every time the track loads. */
   private weatherChoice:'random'|'sun'|'rain'|'snow'='random';
   private weather:'sun'|'rain'|'snow'='sun';
+  /** Rolled per Grand Prix: half the races run from day through dusk into night over the three laps. */
+  private dayToNight=false;
   private abilityStats={transform:0,revert:0,crush:0};
   private itemMessage='';
   private itemMessageUntil=0;
@@ -395,6 +397,7 @@ class App {
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
+    this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
@@ -672,6 +675,8 @@ class App {
       const alpha = this.accumulator / FIXED_STEP;
       this.renderKart = interpolateKart(this.previousKart, this.kart, alpha);
       const renderBots = this.loadKarts.map((kart,i) => interpolateKart(this.previousLoadKarts[i] ?? kart, kart, alpha));
+      if (!LAB_WORLD) { const progress = Math.max(0, this.progress[0]?.distance ?? 0) / (3 * TRACK.length);
+        this.testScene.setTimeOfDay?.(this.racePhase === 'practice' ? (new URLSearchParams(location.search).get('night') === '1' ? 1 : 0) : this.dayToNight ? Math.max(0, Math.min(1, (progress - .2) / .65)) : 0); }
       this.testScene.present(this.renderKart, renderBots);
       this.testScene.presentItems?.(this.items,[this.renderKart,...renderBots]);
       this.camera?.update(this.renderKart, delta, false, frame.steering);

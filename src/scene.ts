@@ -43,6 +43,8 @@ export interface TestScene {
   onFirework?: () => void;
   /** Damage look per kart: health 0–100 and seconds left in the wrecked state. */
   setDamage?(health: number[], wrecked: number[]): void;
+  /** 0 = day, .5 = dusk, 1 = night (layered on top of the weather). */
+  setTimeOfDay?(t: number): void;
   /** Comic wreck explosion for one kart. */
   wreck?(kart: number): void;
   /** Called on a lightning flash so the audio can thunder. */
