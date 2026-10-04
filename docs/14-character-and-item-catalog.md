@@ -1,5 +1,8 @@
 # Übernommener Fahrer-, Kart- und Itemkatalog
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Startkader im Spiel – Karikaturstufe, 04.10.2026
 
 Alle sechs bestätigten Fahrer sind im Babylon-Spiel als Karikaturen mit erkennbaren Merkmalen umgesetzt (`src/cast.ts`, Teile in `art-source/build_kart.py`): Hitler Seitenscheitel/Stirnlocke/Zweifingerbart, Stalin graues zurückgekämmtes Haar/Walrossbart/Pfeife, Mussolini Glatze/Kinn, Mao hohe Stirn/Muttermal/grauer Anzug, Kim Jong-un Undercut, Castro Feldmütze/Bart/Zigarre. Keine Regimezeichen. Zwischenstufe, keine realitätsnahen Porträts. Fahrerwahl mit Live-Porträts vor jedem Grand Prix.
@@ -23,7 +26,7 @@ Spielerslot direct/homing verwendet jetzt dasselbe eigene Schäferhundmodell mit
 
 Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar.
 
-## Neutraler Slice-Pass – 03.10.2026
+## Historischer neutraler Slice-Pass – 03.10.2026 (Zwischenstand)
 
 Der ausdrückliche aktuelle Nutzerauftrag erlaubt einen eigenständigen neutralen Fahrerplatzhalter. Sechs Karts teilen das Original-Roadsterasset, mit sechs Farben und fünf optionalen Anbauten (Radiohörner, Ersatzrad, Gepäck, hohe Auspuffe, neutrale Wimpel). Kopf, Schal, Hände/Lenkrad und vier Räder sind getrennt animiert. Das ersetzt keine historische Charakterwahl und benennt Sarahs Katalog nicht um. Die im Spiel verwendeten Rohrpost-/Suchauftrag-/Stempelfallenformen stellen die drei bestätigten gemeinsamen Archetypen vorläufig dar.
 
@@ -37,7 +40,7 @@ Die zwölf Figuren sind historische Diktatoren als satirische Fahrerfiguren. Nam
 
 ## Fahrer und Fahrzeuge
 
-Bestätigter Startkader aus `client/src/game/drivers.ts` des Altprojekts: Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro. Zunächst ein vollständig ausgearbeiteter Fahrer/Kart und fünf einfachere Darstellungen. Große Köpfe und karikierte Körper mit historischen Gesichtszügen bleiben verbindlich.
+Bestätigter Startkader aus `client/src/game/drivers.ts` des Altprojekts: Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro. Zunächst ein vollständig ausgearbeiteter Fahrer/Kart und fünf einfachere Darstellungen. Der damalige Stilvorschlag mit großen Köpfen und karikierten Körpern wurde durch Marcels neueren Auftrag vom 03./04.10.2026 ersetzt: realitätsnähere, erkennbare historische Fahrer. Die aktuelle Karikaturstufe ist nur Zwischenstand.
 
 Die folgende Zwölferliste bewahrt Originalideen. Namen und Wirkungen sind keine pauschal freigegebene Implementierung. Änderungen an Sarahs ursprünglichen Ideen, einschließlich Umbenennungen, werden gemeinsam bestätigt.
 
@@ -126,7 +129,7 @@ Die Klassen dürfen Beschleunigung, Höchstgeschwindigkeit, Lenkung, Drift, Gewi
 
 Jedes Kart braucht eine eigene Silhouette und mindestens ein charakteristisches bewegliches Detail. Farbe allein reicht nicht. Mögliche Details sind übergroße Frontpartien, Wimpel, Orden, Lautsprecher, Auspuffe, Waffenattrappen, Spiegel, Fahnen, Thronsitze, Aktenkoffer oder Monumentelemente.
 
-Die Fahrer reagieren sichtbar auf Bremsen, Boost, Drift, Sprünge, Kollisionen und Schaden. Die Figur bleibt dabei stilisiert und nicht fotorealistisch; Wiedererkennbarkeit und Satire sind wichtiger als exakte historische Nachbildung.
+Die Fahrer reagieren sichtbar auf Bremsen, Boost, Drift, Sprünge, Kollisionen und Schaden. Die frühere Stilnotiz beschrieb den damaligen Zwischenstand. Für die fertige Zielrichtung gilt der neuere Auftrag: realitätsnähere, erkennbare historische Abbilder; Satire entsteht vor allem durch Inszenierung und Spielhandlungen. Lesbarkeit im Rennen bleibt ein Qualitätskriterium, hebt das Wiedererkennungsziel aber nicht auf.
 
 ## Itemkatalog aus dem Altprojekt
 

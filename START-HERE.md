@@ -1,5 +1,8 @@
 # Diktator Kart – gemeinsamer Einstieg
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Kurzbefehle
 
 **Arbeitslisten abarbeiten:** Erst offene kurzfristige Aufgaben aus CURRENT-WORKLIST.md umsetzen, anschließend selbstständig bestätigte Ziele aus LONG-TERM-GOALS.md in prüfbaren Paketen fortsetzen. Langzeitpaket jeweils in die aktuelle Liste übernehmen; Fortschritt, Blocker und nächsten Schritt zeigen. Budget-/Freigaberegeln bleiben gültig. Beispiel: **„Projektstart. Danach arbeite unsere Arbeitslisten ab: zuerst kurzfristig, dann langfristig.“** Projektstart allein synchronisiert und zeigt den Stand.

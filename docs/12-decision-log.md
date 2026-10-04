@@ -1,5 +1,8 @@
 # Entscheidungslog
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## 04.10.2026 – Höhere Gesamtqualität und fertige Stimmen ohne TTS
 
 Auf ausdrücklichen Auftrag von Marcel: viel bessere, realitätsnähere Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds, Stimmen und Musik anhand der gewählten Bildpräferenz G–L. Kein Text-to-Speech als fertige Stimme, einschließlich offline erzeugter Clips; menschliche Aufnahmen/geeignete echte Mitschnitte mit nachvollziehbaren kostenlosen Nutzungsrechten. Bisherige synthetische Produktion bleibt dokumentierter Zwischenstand. Keine neue Sarah-Idee oder fertige Umsetzung behauptet. Betroffen: README, vier Arbeitsdateien, Art Direction, Assetpipeline, Roadmap, bestätigte Entscheidungen, Audio-/Bauplan und PROGRESS-LOG.md. Bestehende Budget-/Performance-/Fairnessziele bleiben erhalten.

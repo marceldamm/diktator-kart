@@ -1,5 +1,8 @@
 # Gemeinsamer Änderungsverlauf
 
+> **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Chronologischer Kurzverlauf bestätigter Änderungen. Neuere ausdrückliche Nutzerentscheidungen gehen älteren Einträgen vor; ältere Einträge bleiben als Verlauf erhalten und werden bei Bedarf als überholt gekennzeichnet. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
+
+
 **Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
@@ -7,6 +10,8 @@
 Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Änderungen, jeweils wenige Zeilen. Kein Werkzeug-/Testprotokoll. Technische Belege und offene Annahmen stehen in [PROGRESS-LOG.md](PROGRESS-LOG.md), laufende Aufgaben in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md), Zukunftsziele in [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md).
 
 ## 04.10.2026
+
+- **Dokuordnung:** Die vier Hauptdateien sind jetzt die gemeinsame aktuelle Steuerung; aktive Fachdateien verweisen auf Vorrang, Statusabgleich und Erhalt historischer Ideen. Veraltete Aussagen zum neutralen Slice und zur festen Großkopf-Karikatur wurden als damaliger Stand markiert/korrigiert. Frühere Ideen, Gründe und Prüfbelege bleiben erhalten.
 
 - **Beide Listen abarbeiten:** Der Auftrag „Arbeitslisten abarbeiten“ umfasst zuerst kurzfristige Aufgaben und danach die selbstständige Umsetzung bestätigter Langzeitziele in sichtbaren Paketen. Keine erneute Freigabe für gewöhnliche Paketwahl; echte offene Entscheidungen und Budgetreserve beachten.
 

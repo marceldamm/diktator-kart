@@ -1,5 +1,8 @@
 # Gesamtgerüst und zentrale Arbeitsgrundlage
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Unsere vier Arbeitsdateien
 
 Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
@@ -9,9 +12,9 @@ Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchro
 Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q2d c13d47e. Alte Engine-/Archivstände dienen nur historischen Zwecken und werden nicht verändert oder als Spiel gestartet. Projektstart sichert lokale Arbeit, holt main und integriert aktuelle Babylon-Änderungen; Projektabschluss prüft, dokumentiert und veröffentlicht mit normalem Fast-Forward. Konkreter Ablauf: [21-team-workflow.md](21-team-workflow.md). Frühere „main unverändert/kein Push“-Sitzungsangaben unten sind historische Zwischenstände, keine aktuellen Arbeitsregeln.
 
 
-## Laufender großer Slice – 03.10.2026
+## Historischer Produktionsstand – 03.10.2026 (nicht mehr aktueller Arbeitsauftrag)
 
-Der ausdrückliche große Nutzerauftrag erlaubt einen neutralen, vorgezogenen Vertical Slice auf `codex/stadium-vertical-slice`: Blender-Kart/Fahrerplatzhalter, fiktive Architektur, kompletter 441-m-Kurs und Drei-Runden-Schleife. Diese Produktion ersetzt weder den historischen Startkader noch gemeinsame Stil-, Inhalts- oder Zielhardware-Abnahme. Lokale Commits, kein Push/Merge; `main` und Altarchive unverändert.
+Dieser Abschnitt hält den damaligen Auftrag und Arbeitsstand fest: neutraler Vertical Slice auf `codex/stadium-vertical-slice`, 441-m-Kurs und lokale Arbeit ohne Push. Er ist historische Projektgeschichte und beschreibt weder den heutigen Branch noch den aktuellen Figuren-/Qualitätsauftrag. Der aktuelle Stand und nächste Schritt stehen in CURRENT-WORKLIST.md und PROGRESS-LOG.md.
 
 Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 

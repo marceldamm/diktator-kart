@@ -1,5 +1,8 @@
 # Gameplay-Systeme und Zuständigkeiten
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Driftkorrektur im Fahrtest – 03.10.2026
 
 Driftrichtung bleibt ab Initiierung fest: gleichsinniges Lenken enger, Gegenlenken weiter; beide laden den Mini-Turbo, Neutralstellung langsamer. Reiseausrichtung folgt schneller, begrenzter Schlupfwinkel 0,42 rad und lesbare Driftpose. Vorläufige eigene Balance; Nintendo-Inspiration bezieht sich auf Drift/Halten/Funken/Loslassen-Mini-Turbo (offizielle Anleitung https://www.nintendo.com/jp/ichikara/aabpa/index_en.html), keine exakte Kopie der Nintendo-Physik. Noch menschlich abzustimmen.

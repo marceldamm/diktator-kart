@@ -1,5 +1,8 @@
 # Art Direction
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Höhere Gesamtqualität – 04.10.2026
 
 Marcels Ziel: viel bessere Modelle, erkennbare historische Charaktere, individuelle Fahrzeuge, realitätsnähere Strecke/Architektur/Umgebung sowie hochwertigeres Licht, Effekte und Animation. Maßstab bleibt die gewählte Bildpräferenz G–L (`references/visuals/style-comparison-02-c-a-refined.png`), sichtbar im laufenden Spiel aus allen Kameras. Sounds, Stimmen und Musik sollen dieselbe höhere Qualitätsstufe erreichen. Fertige Stimmen ohne Text-to-Speech; die unten beschriebenen TTS-Assets sind Zwischenumsetzung. Pakete und Abnahmen: [Langfristige Ziele](../LONG-TERM-GOALS.md).
