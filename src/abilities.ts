@@ -27,6 +27,12 @@ export function createAbilities(count: number): AbilityWorld {
   return { cooldown: Array(count).fill(0), active: Array(count).fill(false), repeat: Array.from({ length: count }, () => Array(count).fill(0)), events: [] };
 }
 
+/** Bot use: the tank's owner transforms when it is ready and a rival is close enough to be shoved. */
+export function botWantsAbility(world: AbilityWorld, kart: number, karts: KartState[]): boolean {
+  const self = karts[kart];
+  return abilityReady(world, kart, self) && karts.some((other, j) => j !== kart && Math.hypot(other.x - self.x, other.z - self.z) < 9);
+}
+
 export const abilityReady = (world: AbilityWorld, kart: number, state: KartState) => world.cooldown[kart] <= 0 && (state.tankRemaining ?? 0) <= 0;
 
 /**

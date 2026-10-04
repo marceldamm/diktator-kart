@@ -8,7 +8,7 @@ import { TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gri
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
-import { ABILITY_NAME, ABILITY_RULES, abilityReady, createAbilities, stepAbilities, type AbilityWorld } from './abilities';
+import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
@@ -358,7 +358,8 @@ class App {
     const m = CAST[this.chosen], detail = document.querySelector('#driver-detail')!; detail.replaceChildren();
     const title = document.createElement('b'); title.textContent = `${m.name} · ${m.kartName}`;
     const line = document.createElement('div'); line.textContent = `„${m.title}“ – ${m.flavour}`;
-    const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit:</em> '; ability.append(m.abilityIdea + (this.chosen === 0 ? ' · Q' : ' · bis dahin leiht Q den Größenbefehl'));
+    const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit (Q):</em> '; ability.append(m.abilityIdea + ' · ');
+    const item = document.createElement('em'); item.textContent = 'Wurfobjekt:'; ability.append(item, ` ${m.projectileIcon} ${m.projectileName}`);
     detail.append(title, line, ability);
   }
 
@@ -413,11 +414,11 @@ class App {
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
-      const tank=this.kart.tankRemaining>0,ready=abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
+      const owns=this.order[0]===0,tank=this.kart.tankRemaining>0,ready=owns&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
       const card=document.querySelector<HTMLElement>('#ability-card');
       if(card){card.classList.toggle('active',tank);card.classList.toggle('ready',ready);
-        document.querySelector('#ability-name')!.textContent=ABILITY_NAME;
-        document.querySelector('#ability-info')!.textContent=tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:ready?'Q · Panzer bereit':`Q · bereit in ${Math.ceil(cool)} s`;
+        document.querySelector('#ability-name')!.textContent=owns?ABILITY_NAME:this.castOf(0).abilityIdea.split(' –')[0];
+        document.querySelector('#ability-info')!.textContent=!owns?'Q · noch nicht gebaut':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:ready?'Q · Panzer bereit':`Q · bereit in ${Math.ceil(cool)} s`;
         document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
     }
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
@@ -519,7 +520,10 @@ class App {
         if(this.audio.honk(this.castOf(0).voice,this.castOf(0).voiceRate))this.lastAction='Sprachhupe';
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
-      if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') { this.queuedSpecial = true; this.lastAction = 'Größenbefehl (Q)'; }
+      if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') {
+        if (this.order[0] === 0) { this.queuedSpecial = true; this.lastAction = 'Größenbefehl (Q)'; }
+        else { this.itemMessage = `${this.castOf(0).name}: eigene Fähigkeit folgt`; this.itemMessageUntil = this.items.time + 1.8; }
+      }
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
       const delta = Math.min(this.engine!.getDeltaTime() / 1000, 0.1);
       this.accumulator += delta;
@@ -570,10 +574,14 @@ class App {
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
           // Q: Sarah's 'Größenbefehl' parade tank for the player's driver; shared protection from items.
           const all=[this.kart,...this.loadKarts];
-          const changed=stepAbilities(this.abilities,all,all.map((_,i)=>i===0&&this.queuedSpecial),this.items.immune,FIXED_STEP);
+          // Only Hitler owns the 'Größenbefehl'; as a bot he uses it when rivals are close.
+          const tankOwner=this.order.indexOf(0),botsActive=this.racePhase==='race';
+          const changed=stepAbilities(this.abilities,all,all.map((_,i)=>i===tankOwner&&(i===0?this.queuedSpecial:botsActive&&botWantsAbility(this.abilities,i,all))),this.items.immune,FIXED_STEP);
           this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
           for(const event of this.abilities.events){
-            this.abilityStats[event.kind]++;this.audio.ability(event.kind);this.testScene?.abilityEvent?.(event.kind,event.kart,event.target);
+            this.abilityStats[event.kind]++;this.testScene?.abilityEvent?.(event.kind,event.kart,event.target);
+            const source=all[event.kart];if(event.kart===0||event.target===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)this.audio.ability(event.kind);
+            if(event.kind==='transform'&&event.kart!==0&&Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35){this.itemMessage='Achtung · Hitler wird zum Panzer';this.itemMessageUntil=this.items.time+2;}
             if(event.kind==='transform'&&event.kart===0){this.itemMessage='Größenbefehl · Panzer für 8 s';this.itemMessageUntil=this.items.time+2.2;this.audio.cheer(.8);}
             if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}
           }

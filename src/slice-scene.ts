@@ -271,7 +271,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh as Mesh);
     }
     tankRoot.setEnabled(false);
-    const kartOnlyMeshes = visuals[0].root.getChildMeshes().filter((m) => !tankMeshes.includes(m) && !m.isDescendantOf(visuals[0].driver));
+    // The tank belongs to whichever kart Hitler drives (player or bot); setRoster moves it.
+    let tankOwner = 0;
+    const kartMeshesOf = (i: number) => visuals[i].root.getChildMeshes().filter((m) => !tankMeshes.includes(m) && !m.isDescendantOf(visuals[i].driver));
+    let kartOnlyMeshes = kartMeshesOf(0);
     let tankBlend = 0, trackScroll = 0;
     const smoke = new ParticleSystem('Tank transformation smoke', 220, scene); smoke.particleTexture = particleTexture(scene);
     smoke.minSize = .8; smoke.maxSize = 2.2; smoke.minLifeTime = .5; smoke.maxLifeTime = 1.2; smoke.emitRate = 0; smoke.blendMode = ParticleSystem.BLENDMODE_STANDARD;
@@ -344,7 +347,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       puddles() { return raining ? trackWorld.puddles : []; },
       setRoster(order) {
         roster = order.slice(); visuals.forEach((v, i) => v.dress(CAST[order[i] ?? i]));
-        for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[order[0]].paint).toLinearSpace();
+        const owner = Math.max(0, order.indexOf(0));
+        if (owner !== tankOwner) {
+          for (const mesh of kartOnlyMeshes) mesh.isVisible = true; visuals[tankOwner].driver.position.y = 0;
+          tankOwner = owner; tankRoot.parent = visuals[owner].root; kartOnlyMeshes = kartMeshesOf(owner); tankBlend = 0; tankRoot.setEnabled(false);
+        }
+        for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
       },
       async portraits(order) {
         // Head-and-shoulders shots straight from the race models, one per roster member.
@@ -404,18 +412,19 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         }
         if (flash > 0) { flash = Math.max(0, flash - dt * 3.2); const f = flash > .7 || (flash > .3 && flash < .45) ? 1 : 0; hemisphere.intensity = .62 + f * 2.4; skyMaterial.emissiveTexture!.level = .42 + f * .9; }
         // Parade tank: springy pop-in, kart hidden, driver rises into the hatch, tracks and road wheels roll.
-        { const want = state.tankRemaining > 0 ? 1 : 0; tankBlend += (want - tankBlend) * Math.min(1, dt * 7);
+        { const owner = [state, ...others][tankOwner] ?? state;
+          const want = owner.tankRemaining > 0 ? 1 : 0; tankBlend += (want - tankBlend) * Math.min(1, dt * 7);
           const shown = tankBlend > .02; tankRoot.setEnabled(shown);
           for (const mesh of kartOnlyMeshes) mesh.isVisible = tankBlend < .45;
           if (shown) {
             const pop = tankBlend < 1 ? 1 + Math.sin(tankBlend * Math.PI) * .18 : 1; tankRoot.scaling.setAll(Math.max(.05, tankBlend) * pop * 1.15);
-            trackScroll += state.speed * dt; for (const w of tankWheels) w.rotation.x = trackScroll / .3;
+            trackScroll += owner.speed * dt; for (const w of tankWheels) w.rotation.x = trackScroll / .3;
             trackTexture.uOffset = -trackScroll / .9 * 4;
-            if (tankTurret) tankTurret.rotation.y = -(state.steer ?? 0) * .3 + Math.sin(time * .7) * .05;
-            trackDust.emitter = new Vector3(state.x - Math.sin(state.heading) * 1.7, .2, state.z - Math.cos(state.heading) * 1.7);
+            if (tankTurret) tankTurret.rotation.y = -(owner.steer ?? 0) * .3 + Math.sin(time * .7) * .05;
+            trackDust.emitter = new Vector3(owner.x - Math.sin(owner.heading) * 1.7, .2, owner.z - Math.cos(owner.heading) * 1.7);
           }
-          trackDust.emitRate = shown && Math.abs(state.speed) > 2 ? reducedEffects ? 20 : 70 : 0;
-          visuals[0].driver.position.y = tankBlend * .85; }
+          trackDust.emitRate = shown && Math.abs(owner.speed) > 2 ? reducedEffects ? 20 : 70 : 0;
+          visuals[tankOwner].driver.position.y = tankBlend * .85; }
         [state, ...others].forEach((s, index) => {
           const v = visuals[index]; if (!v) return;
           contactShadows[index].position.x=s.x;contactShadows[index].position.z=s.z;contactShadows[index].rotation.y=s.heading;
