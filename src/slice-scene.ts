@@ -197,6 +197,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           }
           mesh.material=material;recolourable.push({mesh,kind,material});
         }
+        // More lifelike drivers: skin scatters light softly, eyes get a wet clear-coat highlight (shared materials, set once).
+        if (mesh.material instanceof PBRMaterial && /Warm skin/.test(mesh.material.name) && !mesh.material.subSurface.isTranslucencyEnabled) {
+          const m = mesh.material; m.roughness = .58; m.metallic = 0; m.subSurface.isTranslucencyEnabled = true; m.subSurface.translucencyIntensity = .35; m.subSurface.tintColor = new Color3(1, .45, .32);
+          m.sheen.isEnabled = true; m.sheen.intensity = .12; m.sheen.color = new Color3(1, .82, .72);
+        }
+        if (mesh.material instanceof PBRMaterial && /Eye white|Eye iris/.test(mesh.material.name) && !mesh.material.clearCoat.isEnabled) { mesh.material.clearCoat.isEnabled = true; mesh.material.clearCoat.intensity = 1; mesh.material.clearCoat.roughness = .05; }
         if (mesh.material instanceof PBRMaterial && /racing suit|leather/.test(mesh.material.name)) {
           mesh.material.albedoTexture = fabricMaps.color; mesh.material.bumpTexture = fabricMaps.normal;
         }

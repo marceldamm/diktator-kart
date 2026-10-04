@@ -32,7 +32,11 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Zeitfahren mit Geist:** Menü „Zeitfahren mit Geist“, allein ohne Items/Bots, Bestfahrt als halbtransparenter Geist (lokal gespeichert); geprüft: Speichern (304 Punkte) und Wiedergabe.
 - [x] **Grafik Hoch:** SSAO2-Umgebungsverdeckung + volumetrische Sonnenstrahlen (Optionen → Grafik Basis/Standard/Hoch); Bilder `docs/evidence/2026-10-04-high-*.jpg`.
 - [x] **Item-Gegenmaßnahme:** E halten = Item hinten als Schild (fängt ein Geschoss von hinten ab, wird verbraucht), loslassen = werfen; Bots schirmen beim Warten ab. Unit-Test.
-- [ ] Offen: echte historische Stimmen (keine TTS; Quellen-/Rechteprüfung, siehe unten), Bot-Überholen, individuelle Kart-Karosserien je Figur, weitere Strecke.
+- [x] **Eigene Karosserie je Figur:** Roadster (Hitler), Staatslimousine (Stalin), Rennwagen mit Heckflosse (Mussolini), rundliche Limousine (Mao), Rakete mit Leitwerk (Kim), Geländewagen mit Überrollbügel (Castro). Bild `docs/evidence/2026-10-04-individual-bodies.jpg`.
+- [x] **Realistischere Fahrer:** menschliche Kopfproportionen (Kopf 70 %, tiefer auf dem Kragen), Haut mit Lichtstreuung, glänzende Augen. Weiter offen: echte Modellierung/Sculpting realistischer Gesichter (z. B. freie CC0-Basisköpfe, in Blender angepasst).
+- [x] **Bots überholen gezielt:** fünf Spuren, Spuren mit langsamerem Vordermann werden gemieden, Abbremsen nur bei blockierter Überholspur; Simulation 3 Runden: 9 → 16 Platzwechsel, alle im Ziel.
+- [x] **Erste echte Stimme:** Mussolini-Sprachhupe = Originalton „Bivacco“-Rede 16.11.1922 (Redebeginn, Wikimedia Commons, gemeinfrei), Schnitt `art-source/cut_real_voices.mjs`. Hitler-Kandidat „Speech in 1935“ (gemeinfrei) **nicht eingebaut**, weil Inhalt erst menschlich angehört werden muss (Ausschluss verbotener Parolen). Stalin/Mao/Kim/Castro: Rechte ungeklärt, weiter Platzhalter.
+- [ ] Offen: individuelle Kart-Karosserien je Figur, weitere Strecke.
 
 ## Stand 04.10.2026 (Mittag, Claude) – Marcels neue Aufträge
 

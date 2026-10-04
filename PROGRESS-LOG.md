@@ -56,6 +56,10 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 ## Einträge
 
+### 2026-10-04 (später Nachmittag) – Claude: Karosserien, Proportionen, Bot-Überholen, echte Stimme
+
+`build_kart.py`: sechs `body-<name>`-Varianten (gemeinsame Räder/Kotflügel/Cockpit), Kopf `scale .7` bei z 1.75; `cast.ts` Feld `body`. Haut-PBR mit Translucency/Sheen, Augen mit Clear-Coat. `botInput`: fünf Spuren, Gewichtung langsamer Vordermänner ×3,2, Bremsen nur bei blockierter Zielspur; Vergleichssimulation alt/neu 9/16 Platzwechsel. Echte Stimme: Commons-Datei (PD) nach `.tools/voice-sources/`, Redebeginn 1,11–4,38 s, `build_voices.mjs` schützt `imperator-horn` (REAL-Eintrag). Bilder `docs/evidence/2026-10-04-{individual-bodies,grid-realistic-heads,portraits-realistic}.jpg`. Tests 46/46. Nicht nach main veröffentlicht.
+
 ### 2026-10-04 (Nachmittag) – Claude: Drift, Mechaniken, Zeitfahren, Grafik Hoch
 
 Branch `codex/team-marcel-20261004-110953-055`. Drift: `turn = dir·(.38 + .32·steer·dir)`, `driftYawMultiplier 1.05`, Stufen `driftTiers [.6, 1.1, 1.6]` (Turbo 50/75/100 %). Simulation `botInput`-Lenkung mit erzwungenem Drift (Krümmung > .035): 0 Wandkontakte bei 10/13/16 m/s. Windschatten, Trick, Auto-Gas/Lenkhilfe in `main.ts`; Zeitfahren (`mode`, Geist `dk-ghost-v2`, Bestzeit-Schlüssel v2 wegen größerer Karte); Fix: Itemringe bei < 6 Karts. Grafik Hoch: `SSAO2RenderingPipeline` (ratio .5, 16 Samples) + `VolumetricLightScatteringPostProcess` (Sonnenscheibe, nur Tag/trocken). Laufzeitbilder Rennen 6 Karts/fern/Fahrer in `docs/evidence/2026-10-04-*.jpg`; Pane-FPS ~45 (gedrosselter Testbrowser, keine Zielhardware-Messung). Tests 45/45. Nicht nach main veröffentlicht.
