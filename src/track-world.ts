@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { BOOST_PADS, HARBOUR, LANDMARKS, SHORTCUT } from './track-layout';
+import { BOOST_PADS, HAZARDS, LANDMARKS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
@@ -21,7 +21,7 @@ export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; s
 const W = TRACK.halfWidth;
 /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
 const BOARD_RANGES: [number, number][] = [[2, 92], [282, 372]];
-const HARBOUR_GAP: [number, number][] = [[HARBOUR.from, HARBOUR.to]];
+const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
   const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
@@ -207,17 +207,22 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2, from, to });
     }
   }
-  const boostPads: Mesh[] = [];
+  const boostPads: Mesh[] = [], hazardGlow: Mesh[] = [];
   { // Boost pads: glowing chevrons painted on the cobbles.
     const chevrons = canvasTexture(scene, 'Boost chevrons', 128, 256, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 128, 256); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
       for (let y = 30; y < 256; y += 64) { c.beginPath(); c.moveTo(14, y + 34); c.lineTo(64, y); c.lineTo(114, y + 34); c.stroke(); } });
     const padMaterial = new StandardMaterial('Boost pad', scene); padMaterial.diffuseTexture = chevrons; padMaterial.emissiveTexture = chevrons; padMaterial.emissiveColor = new Color3(1, .8, .4); padMaterial.specularColor = Color3.Black();
     for (const [from, centre] of BOOST_PADS) { const pad = sweep(scene, 'Boost pad', [[centre - 1.5, .05], [centre + 1.5, .05]], padMaterial, { uScale: 1, vScale: 1, step: .5, from, to: from + 6 }); boostPads.push(pad); }
   }
-  { // Harbour basin behind the open quay: dark water, stone quay walls, warning edge, signs and the salvage crane.
-    const { from, to } = HARBOUR, inner = W + 1.2, outer = W + HARBOUR.basin;
-    const water = pbr(scene, 'Harbour water', '#1d3b44', .25, .08); water.alpha = .93;
-    sweep(scene, 'Harbour water', [[inner, -.55], [outer, -.55]], water, { uScale: 2, step: 1, from, to });
+  for (const zone of HAZARDS) { // Open-edge hazard: water basin or furnace pit, quay walls, warning edge, signs and the salvage crane.
+    const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava';
+    const water = pbr(scene, lava ? 'Furnace glow' : 'Harbour water', lava ? '#ff5a12' : '#1d3b44', lava ? 0 : .25, lava ? .9 : .08); if (!lava) water.alpha = .93;
+    if (lava) { // dark crust plates with glowing cracks
+      const crust = canvasTexture(scene, 'Furnace crust', 256, 256, (c) => { c.fillStyle = '#ff7a18'; c.fillRect(0, 0, 256, 256);
+        for (let i = 0; i < 26; i++) { const x = (i * 53) % 256, y = (i * 97) % 256, r = 18 + (i * 7) % 22; c.fillStyle = i % 3 ? '#2a1208' : '#4a1d0a'; c.beginPath();
+          for (let k = 0; k < 7; k++) { const a = k / 7 * Math.PI * 2, rr = r * (.7 + ((i + k) * 37 % 10) / 30); c.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } c.fill(); } });
+      water.albedoTexture = crust; water.emissiveTexture = crust; water.emissiveColor = new Color3(1, .55, .25); }
+    const surface = sweep(scene, lava ? 'Furnace glow' : 'Harbour water', [[inner, .03], [outer, .03]], water, { uScale: 2, step: 1, from, to }); if (lava) hazardGlow.push(surface);
     sweep(scene, 'Harbour basin floor', [[inner, -1.6], [outer, -1.6]], kerbStone, { uScale: 2, step: 2, from, to });
     sweep(scene, 'Quay wall', [[inner, .14], [inner, -1.6]], kerbStone, { uScale: 1, step: 1, from, to });
     sweep(scene, 'Basin far wall', [[outer, -1.6], [outer, .5], [outer + .6, .5]], kerbStone, { uScale: 1, step: 1, from, to });
@@ -226,7 +231,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
     const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
-      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText('HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(lava ? 'STAATSOFEN' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
     const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
     for (const at of [from - 4, to + 4]) {
       const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
@@ -401,7 +406,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   pennants.isPickable = false;
 
   return {
-    glowMeshes: [globe, ...boostPads],
+    glowMeshes: [globe, ...boostPads, ...hazardGlow],
     puddles,
     setWet(wet) {
       // Wet cobbles: darker, much smoother (rain film) and more reflective; puddles appear.

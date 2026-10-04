@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { boostPadAt, inHarbour, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { boostPadAt, hazardAt, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -681,10 +681,10 @@ class App {
             if((this.salvage[i]??0)>0){
               this.salvage[i]=Math.max(0,this.salvage[i]-FIXED_STEP);this.recoveryRemaining[i]=Math.max(this.recoveryRemaining[i],FIXED_STEP*2);
               if(this.salvage[i]===0){all[i]=recoverKart(k,all);this.recoveryRemaining[i]=0;this.testScene?.salvaged?.(i);}
-            } else if(inHarbour(k.x,k.z)){
-              this.salvage[i]=3.2;this.testScene?.splash?.(i);
+            } else if(hazardAt(k.x,k.z)){
+              const kind=hazardAt(k.x,k.z)!;this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);
               if(i===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<40){this.audio.itemEvent('hit');this.audio.cheer(.7);}
-              if(i===0){this.itemMessage='Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
+              if(i===0){this.itemMessage=kind==='lava'?'In den Staatsofen! Das Staatliche Bergungsamt rückt an':'Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
             }
           });
           this.kart=all[0];this.loadKarts=all.slice(1);this.testScene?.setSalvage?.(this.salvage);

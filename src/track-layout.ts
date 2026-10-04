@@ -92,6 +92,8 @@ export const BOOST_PADS: readonly (readonly [number, number])[] = [[62, -2], [17
 
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
 export const HARBOUR = { from: 236, to: 262, side: 1, basin: 9 } as const;
+/** Open-edge hazards: harbour water (west bend) and a surreal satirical furnace pit (north-east bend). */
+export const HAZARDS = [{ ...HARBOUR, kind: 'water' }, { from: 118, to: 138, side: 1, basin: 6, kind: 'lava' }] as const;
 
 export const LANDMARKS = {
   palace: [0, 132] as const,

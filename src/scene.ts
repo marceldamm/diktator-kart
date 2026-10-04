@@ -46,7 +46,7 @@ export interface TestScene {
   /** 0 = day, .5 = dusk, 1 = night (layered on top of the weather). */
   setTimeOfDay?(t: number): void;
   /** Harbour fall and salvage: splash, per-kart salvage timers (crane lift), back on the track. */
-  splash?(kart: number): void;
+  splash?(kart: number, kind?: 'water' | 'lava'): void;
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
   /** Comic wreck explosion for one kart. */

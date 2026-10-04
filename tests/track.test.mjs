@@ -10,7 +10,7 @@ test('track progress is continuous around the complete course; inner and outer b
     const p=trackPoint(s),actual=trackProgress(p.x,p.z);
     assert.ok(Math.abs(actual-s)<.001,`s=${s} actual=${actual}`);
     for(const lane of [-10,10]){
-      const outside=trackPoint(s,lane);if(inShortcut(outside.x,outside.z)||(lane>0&&s>=230&&s<=268))continue; /* open harbour quay */ const safe=projectTrack(outside.x,outside.z);
+      const outside=trackPoint(s,lane);if(inShortcut(outside.x,outside.z)||(lane>0&&((s>=230&&s<=268)||(s>=112&&s<=144))))continue; /* open harbour quay */ const safe=projectTrack(outside.x,outside.z);
       assert.equal(safe.kind,'boundary');
       assert.equal(projectTrack(safe.x,safe.z).kind,null);
     }

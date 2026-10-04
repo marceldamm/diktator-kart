@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, HARBOUR, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, HAZARDS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -139,7 +139,7 @@ export function trackHeightAt(x: number, z: number): number {
   return Math.max(kerb, delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0);
 }
 
-const inHarbourRange = (s: number, lane: number) => s >= HARBOUR.from && s <= HARBOUR.to && Math.sign(lane) === HARBOUR.side;
+const hazardRange = (s: number, lane: number) => HAZARDS.find((h) => s >= h.from && s <= h.to && Math.sign(lane) === h.side);
 /** Index of the boost pad under a kart, or -1. */
 export function boostPadAt(x: number, z: number): number {
   const { s, lane } = trackLocate(x, z);
@@ -147,17 +147,19 @@ export function boostPadAt(x: number, z: number): number {
 }
 
 /** A kart beyond the open quay edge drops into the harbour basin. */
-export function inHarbour(x: number, z: number): boolean {
-  const { s, lane } = trackLocate(x, z);
-  return inHarbourRange(s, lane) && Math.abs(lane) > TRACK.halfWidth + 1.3;
+export function hazardAt(x: number, z: number): 'water' | 'lava' | null {
+  const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);
+  return h && Math.abs(lane) > TRACK.halfWidth + 1.3 ? h.kind : null;
 }
+export const inHarbour = (x: number, z: number) => hazardAt(x, z) !== null;
 
 export const projectTrack: WorldProjection = (x, z) => {
   const { s, lane } = trackLocate(x, z);
   const safe = TRACK.wall - KART_SIDE;
   if (Math.abs(lane) <= safe + 1e-7) return { x, z, normalX: 0, normalZ: 0, kind: null };
   // No barrier along the quay: the kart rolls on until the basin's far wall.
-  if (inHarbourRange(s, lane) && Math.abs(lane) <= TRACK.halfWidth + HARBOUR.basin - KART_SIDE) return { x, z, normalX: 0, normalZ: 0, kind: null };
+  const hazard = hazardRange(s, lane);
+  if (hazard && Math.abs(lane) <= TRACK.halfWidth + hazard.basin - KART_SIDE) return { x, z, normalX: 0, normalZ: 0, kind: null };
   // The alley corridor is open ground too; outside both corridors, push back to the nearer wall.
   const alley = shortcutLocate(x, z), alleySafe = SHORTCUT.halfWidth - KART_TUNING.collisionRadius * .8;
   if (Math.abs(alley.lane) <= alleySafe + 1e-6) return { x, z, normalX: 0, normalZ: 0, kind: null };

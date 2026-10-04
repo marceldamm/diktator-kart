@@ -451,7 +451,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       puddles() { return raining ? trackWorld.puddles : []; },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
-      splash(kart) { const at = lastStates[kart]; if (!at) return; splash.emitter = new Vector3(at.x, 0, at.z); splash.manualEmitCount = reducedEffects ? 40 : 160; },
+      splash(kart, kind) { const at = lastStates[kart]; if (!at) return;
+        if (kind === 'lava') { fireball.emitter = new Vector3(at.x, .2, at.z); fireball.manualEmitCount = reducedEffects ? 40 : 120; wreckSmoke.emitter = new Vector3(at.x, .5, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 30 : 90; return; }
+        splash.emitter = new Vector3(at.x, 0, at.z); splash.manualEmitCount = reducedEffects ? 40 : 160; },
       setSalvage(timers) { salvageNow = timers; },
       salvaged(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 8 : 24); },
       wreck(kart) {
