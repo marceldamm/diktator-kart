@@ -54,10 +54,10 @@ Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentw
 
 Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 
-1. Sie prüft vor jeder größeren Änderung die Grundpfeiler in `README.md` und die betroffenen Detaildokumente.
+1. Sie prüft vor jeder größeren Änderung zuerst die vier Hauptdateien: CURRENT-WORKLIST.md (aktuelle Arbeit), LONG-TERM-GOALS.md (Ziele), TEAM-CHANGES.md (bestätigte Änderungen), TEAM-NOTES.md (Notizen/offene Punkte). README.md ist die kurze Projektübersicht; danach prüft sie die betroffenen Detaildokumente.
 2. Sie erkennt Widersprüche, fehlende Entscheidungen, unrealistische Annahmen und fehlende Abnahmekriterien selbstständig.
 3. Sie ergänzt wichtige Fragen, wenn eine Entscheidung für Qualität, Performance, Umfang oder Machbarkeit fehlt.
-4. Sie hält die zentrale Hauptdatei und die Detaildateien synchron. Änderungen an einem Grundpfeiler lösen eine Prüfung aller abhängigen Dokumente aus.
+4. Sie hält die vier Hauptdateien und betroffene Detaildateien synchron. Änderungen an einem Grundpfeiler lösen eine Prüfung aller abhängigen Dokumente aus; der aktuelle Auftrag/Status wird in den vier Hauptdateien nachgeführt.
 5. Sie trennt verbindliche Entscheidungen, Vorschläge, offene Fragen und verifizierte Ergebnisse klar.
 6. Sie senkt Qualitäts- oder Performanceziele nicht stillschweigend ab. Ein Ziel darf nur nach bewusster Entscheidung geändert werden.
 7. Sie benennt Blocker konkret, arbeitet an unabhängigen Punkten weiter und fragt nur dann nach, wenn eine echte Nutzerentscheidung nötig ist.
@@ -71,10 +71,10 @@ Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 - Änderungen an Sarahs ursprünglichen Ideen als Vorschlag mit Originalidee und Begründung dokumentieren; erst nach gemeinsamer Bestätigung durch beide als beschlossen behandeln. Unklare Herkunft ehrlich kennzeichnen.
 - Die bestätigten 15 Designentscheidungen aus `docs/10-open-questions.md` nicht erneut als unbeantwortete Grundsatzfragen stellen. Technische Detailentscheidungen und vorläufige Balancewerte selbstständig begründet treffen.
 
-- `README.md` ist die kurze Quelle der Grundpfeiler und verweist auf Details.
+- Die vier Hauptdateien sind die maßgebliche aktuelle Steuerung für Aufträge, Ziele, bestätigte Entscheidungen und Notizen. `README.md` ist die kurze Projektübersicht und verweist auf Fachdetails.
 - `docs/` enthält die ausformulierten Fachentscheidungen.
 - `references/visuals/` enthält künftige Nutzerbilder für die Art Direction; Bilder werden nicht automatisch als technische Anforderungen interpretiert.
-- Bei jeder Änderung eines Grundpfeilers sind mindestens `docs/09-roadmap.md`, `docs/10-open-questions.md` und alle im Grundpfeiler genannten abhängigen Dokumente zu prüfen.
+- Bei jeder Änderung eines Grundpfeilers sind die vier Hauptdateien sowie `docs/09-roadmap.md`, `docs/10-open-questions.md` und alle betroffenen Fachdateien zu prüfen. Alte Ideen/Begründungen bleiben erhalten und werden nötigenfalls als historisch, offen oder überholt gekennzeichnet.
 - Neue Entscheidungen kommen in `docs/12-decision-log.md` mit Datum, Begründung und betroffenen Dokumenten.
 
 ## Reihenfolge vor der eigentlichen Entwicklung
