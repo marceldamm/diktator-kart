@@ -41,6 +41,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Beine/Füße/Pedale:** Armaturenbrett nach vorn/oben, Knie darunter, Schienbein zum Pedal, Stiefelsohle auf Gas/Bremse (bewegen sich mit Eingabe).
 - [x] **Haare als Schale am Schädel** je Frisur (keine Helmkugeln mehr), geformte Schultern/Handflächen; **Parade-Front nur am Roadster**, andere Karosserien zeigen eigene Nasen. Bilder `docs/evidence/2026-10-04-portraits-hair-shells.jpg`, `…-grid-distinct-fronts.jpg`.
 - [x] **Gegnerstärke leicht/mittel/schwer** (Optionen; nur Grundtempo, gleiche Physik; Simulation Siegerzeit 190/175/164 s) und **Zeitfahr-Medaillen** Bronze/Silber/Gold (≤ 206/184/169 s).
+- [x] **Zweite Sprungrampe** auf dem Boulevard zwischen Tor und Abkürzung (Rampen verallgemeinert `RAMP_LIPS`; Trick/Landeschub gelten dort ebenso).
 - [ ] **Nächster Grafikschritt:** freie CC0-Basisfiguren prüfen (gefunden: Quaternius „Universal Base Characters“, CC0, glTF/.blend, stilisiert, Download über itch.io) und in Blender sitzend anpassen; Schultern/Arme weiter verfeinern.
 - [ ] Offen: individuelle Kart-Karosserien je Figur, weitere Strecke.
 
