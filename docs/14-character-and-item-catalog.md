@@ -1,5 +1,20 @@
 # Übernommener Fahrer-, Kart- und Itemkatalog
 
+## Startkader im Spiel – Karikaturstufe, 04.10.2026
+
+Alle sechs bestätigten Fahrer sind im Babylon-Spiel als Karikaturen mit erkennbaren Merkmalen umgesetzt (`src/cast.ts`, Teile in `art-source/build_kart.py`): Hitler Seitenscheitel/Stirnlocke/Zweifingerbart, Stalin graues zurückgekämmtes Haar/Walrossbart/Pfeife, Mussolini Glatze/Kinn, Mao hohe Stirn/Muttermal/grauer Anzug, Kim Jong-un Undercut, Castro Feldmütze/Bart/Zigarre. Keine Regimezeichen. Zwischenstufe, keine realitätsnahen Porträts. Fahrerwahl mit Live-Porträts vor jedem Grand Prix.
+
+| Fahrer | Wurfobjekt (gleiche Item-Regeln) | Herkunft |
+|---|---|---|
+| Hitler | Schäferhund | Marcels Auftrag |
+| Stalin | Fünfjahresplan-Traktor | abgeleitet aus Kartname/Alt-Item „Fünfjahresplan“ – **Bestätigung offen** |
+| Mussolini | Balkon-Megafon | Altdetail „vibrierende Mini-Lautsprecher“ |
+| Mao | Rotes Regelheft | Altdetail „flatterndes Regelheft“ |
+| Kim Jong-un | Mini-Propaganda-Rakete | Kartname „Propaganda-Rakete“ |
+| Castro | Aufklappender Aktenkoffer | Altdetail „aufklappender Aktenkoffer“ |
+
+Nur Hitler besitzt bisher eine Fähigkeit (Größenbefehl); die Katalogfähigkeiten der anderen erscheinen in der Fahrerwahl als „noch nicht gebaut“.
+
 ## Spieler-Schäferhund – tatsächliche Zwischenumsetzung
 
 Spielerslot direct/homing verwendet jetzt dasselbe eigene Schäferhundmodell mit diagonaler Laufanimation, leichtem Bodentakt und Schwanzbewegung; Homing-Verhalten/Trefferregeln bleiben die gemeinsamen Archetypen. Bots behalten bisherige neutrale Projektilformen. E löst eigenen synthetischen Belllaut aus, Treffer eine begrenzte comicartige Wolke. Kein Blut, keine historische Audio-/Figurenauthentizität behauptet. Runtime-Pools vorab angelegt, keine neuen Meshes während Rennen.

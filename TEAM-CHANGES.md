@@ -49,3 +49,7 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Regen:** In den Optionen „Wetter Regen“ wählen: nasse, glänzende Straße, Pfützen, Blitz und Donner.
 
 - **Ein Ordner für alles:** Spiel, ChatGPT-App und Claude-App immer im Hauptordner; Claude ohne Worktree starten.
+
+- **Fahrerwahl und echter Startkader:** Vor jedem Grand Prix wählt man aus Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro (lustige Karikaturen mit Porträts). Jede Figur hat ihr eigenes Wurfobjekt aus unserem Katalog; der Schäferhund gehört nur Hitler, der Panzer auch. Stalins Traktor ist ein Vorschlag zur Bestätigung.
+- **Musik und Ziel:** Statt Klavier läuft ein eigener strammer deutscher Marsch. Im Ziel gibt es Feuerwerk und eine Siegerkarte mit Porträts.
+- **Maus-Kamera repariert:** Halten links/rechts funktioniert jetzt auch, wenn der Browser den Mauszeiger nicht einfangen darf. Der alte Claude-Worktree ist gelöscht.

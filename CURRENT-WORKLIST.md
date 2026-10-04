@@ -6,16 +6,20 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
-**Aktuell:** Panzerfähigkeit fertig; Abgleich der übrigen Archivfunktionen dokumentiert ([Abgleich](docs/sarah-feature-audit.md)); Dokumentation aufgeräumt.
-**Danach:** Erkennbare historische Fahrer (zuerst Hitler) und nächster Grafikpass (Regen/Pfützen/Wolkenschatten); Bots mit Fähigkeiten; weitere Sarah-Fähigkeiten nach gemeinsamer Bestätigung.
-**Arbeitsbranch:** codex/team-marcel-20261003-232302-374 (Projektstart 04.10., Claude, auf main f784078; 43 Tests und TypeScript bestanden). Noch kein neuer Auftrag; nächster Schritt laut „Danach“.
+**Aktuell (04.10. Abend, Claude):** Kamera-Maus repariert, historischer Startkader auf Karikaturstufe, Fahrerwahl mit Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch als Bot), eigener deutscher Marsch statt Klaviermusik, Ziel-Feuerwerk und Siegerporträts. Alles im Browser geprüft; Hör-/Spielabnahme durch Marcel und Sarah offen.
+**Danach:** Gesichter/Haare weiter verfeinern (Marcel: „noch Optimierungsbedarf“), Marsch menschlich anhören und ggf. nachschärfen, eigene Fähigkeiten für Stalin/Mussolini/Mao/Kim/Castro nach gemeinsamer Bestätigung, Wolkenschatten im Regen, Bot-Ideallinie Hinterhofgasse.
+**Arbeitsbranch:** codex/team-marcel-20261003-232302-374 (Projektstart 04.10., Claude, auf main f784078). Abschluss nach main am 04.10. nachts; Details in PROGRESS-LOG.md.
 
 ## Ganz oben – Marcel, 04.10.2026 (Abend)
 
-- [ ] **Kamera-Maus reparieren (Priorität 1):** Linke Maustaste halten = umsehen, rechte Maustaste halten = zurückschauen. Marcel meldet: funktioniert bei ihm nicht mehr, unter ChatGPT lief es. Prüfen, ob ChatGPT und Claude dieselben Dateien/denselben Stand benutzen.
-- [ ] **Charakterauswahl vor dem Rennen:** Beim Spielstart bzw. „Neues Rennen“ ein Auswahlmenü mit den sechs Karikaturen (Porträts der neuen Gesichter), Namen, Kartname und Infos aus dem Fahrerkatalog; gewählte Figur fährt als Spieler.
-- [ ] **Historischer Startkader (Karikaturstufe):** Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro mit erkennbaren Merkmalen statt neutraler Platzhalter. Marcel: „sehr lustig und ansehnlich, noch Optimierungsbedarf“.
-- [ ] Mehr Wow-Effekte aus den Meilensteinen in LONG-TERM-GOALS.md in Paketen umsetzen (selbstständig, bis 95 % Nutzungslimit; danach Abschluss und Upload für Sarah).
+- [x] **Kamera-Maus reparieren (Priorität 1):** Linke Maustaste halten = umsehen, rechte = zurückschauen. **Befund:** `src/mouse-camera.ts` war unverändert ChatGPTs Stand `e5152ab`; ChatGPT und Claude arbeiten im selben Ordner `D:\Diktator-Kart` auf demselben Stand (Server-Kennung zeigt Ordner/Branch/Commit). Ursache: Die Geste brach ab, sobald ein Browser den Pointer Lock verweigert (z. B. eingebauter App-Browser, Chrome kurz nach Esc). **Fix:** Geste läuft dann über Pointer Capture weiter. Im Browser per Ereignistest geprüft; **Marcels eigener Test in Chrome steht aus.**
+- [x] **Charakterauswahl vor dem Rennen:** „Grand Prix starten“/Enter öffnet die Fahrerwahl mit sechs live aus den Rennmodellen gerenderten Porträts (Studiolicht, ohne Sonnenschatten), Name, Kartname, Titel/Beschreibung und Fähigkeit/Wurfobjekt aus dem Fahrerkatalog. ←/→ wählen, Enter/Klick startet, Auswahl wird gespeichert; das Kart im Menü wechselt live. Revanche behält die Figur.
+- [x] **Historischer Startkader (Karikaturstufe):** Hitler (Seitenscheitel, Stirnlocke, Zweifingerbart), Stalin (zurückgekämmtes graues Haar, Walrossbart, Pfeife), Mussolini (Glatze, Kinn), Mao (hohe Stirn, Muttermal, grauer Anzug), Kim Jong-un (Undercut), Castro (Feldmütze, Bart, Zigarre). Keine Regimezeichen. **Noch Optimierungsbedarf** an Gesichtern/Haaren.
+- [x] **Schäferhund nur für Hitler, eigene Wurfobjekte aus unseren Ideen:** Mussolini Balkon-Megafon (Altdetail „Mini-Lautsprecher“), Mao rotes Regelheft („flatterndes Regelheft“), Kim Mini-Propaganda-Rakete (Kartname), Castro aufklappender Aktenkoffer (Altdetail), Stalin Fünfjahresplan-Traktor (aus Kartname/Alt-Item „Fünfjahresplan“ abgeleitet – **bitte bestätigen**). Gleiche Trefferregeln für alle.
+- [x] **Klaviermusik ersetzt:** eigener „Stadionmarsch der Eitelkeit“ (strammer deutscher Parademarsch, 118 bpm, punktierte Rhythmen, Tuba/Hörner, Trompeten, große Trommel mit Becken, Trio als Grandioso), synthetisiert mit `art-source/build_march.mjs`. Marcels erster Eindruck („lustig, aber nicht wirklich deutsch“) führte zur strammeren Fassung; **erneute Hörprobe offen.** Echte Blasmusikaufnahme wäre später besser (nur mit Freigabe/geklärter Lizenz).
+- [x] **Panzer „Größenbefehl“ nur für Hitler:** als Spieler auf Q; fährt man eine andere Figur, setzt der Hitler-Bot den Panzer ein, sobald Gegner nah sind. Andere Figuren zeigen auf Q „eigene Fähigkeit folgt“.
+- [x] **Wow-Pakete:** Ziel-Feuerwerk vor der Kamera; Siegerkarte mit Siegerporträt und Mini-Porträts.
+- [x] Alter Claude-Worktree entfernt (leerer, von der App gesperrter Ordner `.claude/worktrees/…` kann bleiben; von Git ignoriert). Regel „ein Arbeitsordner für ChatGPT und Claude“ bleibt.
 
 ## Offen und als Nächstes
 
@@ -27,7 +31,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] Abschließender Teamabschluss (41 Tests und Build bestanden, GitHub main 2c6e92d verifiziert): Tests/Build, echte Spielbelege, vier Arbeitsdateien/PROGRESS-LOG.md aktualisieren, neuesten Teamstand integrieren, geprüft nach main veröffentlichen.
 
 - [ ] Fünf weitere archivierte Fähigkeiten (Stalin, Mussolini, Mao, Kim, Castro) nach gemeinsamer Bestätigung umsetzen; heute bewusst nicht, da es keine Fahrerwahl gibt und die Wirkungen von den Katalogideen abweichen (siehe Abgleich).
-- [ ] Bots: Fähigkeiten (z. B. Panzer für eine Bot-Figur) und saubere Ideallinie durch die Hinterhofgasse.
+- [ ] Bots: saubere Ideallinie durch die Hinterhofgasse. (Panzer für den Hitler-Bot erledigt am 04.10.)
 
 - [x] 04.10., Claude: Wetter „Regen“ (Optionen → Wetter, auch `?weather=rain`): nasse glänzende Fahrbahn, Pfützen mit Spritzern und Wasserbremse, Blitz mit Donner, Regengeräusch. Im Batch-Server geprüft (Rennen, 2 365 Regenpartikel, Bild). Offen: Wolkenschatten, Hörprobe, Feinabstimmung der Spritzer.
 - [x] 04.10., Claude: Einheitlicher Arbeitsordner festgelegt (Worktree-Server zeigte wegen `.claude/`-Ignorierregel alten Stand). Hauptordner auf den neuesten Stand gezogen.

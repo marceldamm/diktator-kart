@@ -46,3 +46,5 @@ Artassets im laufenden Spiel mit C (nah/fern/Fahrer) und V (Foto) prüfen. V pau
 Die neutralen Gesichter, Zubehörvarianten und Zuschauersilhouetten sind vorläufige Artassets. Historische Charakterwahl, Sarahs Ideen, Hörqualität und G–L-Stilabnahme bleiben gesondert zu prüfen.
 
 Weitere editierbare Straßenmöbel/Adler und eigene Plakatgrafiken: src/period-details.ts; fünf nach Material zusammengefasste Laufzeitmeshes.
+
+**04.10.2026:** `node art-source/build_march.mjs` erzeugt den eigenen Stadionmarsch (`public/assets/audio/march.wav`). `build_kart.py` enthält die schaltbaren Karikaturteile des Startkaders (`cast-sidepart`, `cast-toothbrush`, `cast-swept`, `cast-walrus`, `cast-pipe`, `cast-chin`, `cast-maohair`, `cast-undercut`, `cast-patrol`, `cast-cigar`, `cast-shorthair`, `cast-medals`, `cast-epaulettes`, `cast-collartabs`); danach `node art-source/optimize_assets.mjs hero-kart`.

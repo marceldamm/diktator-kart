@@ -4,7 +4,11 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
-## Neueste Übergabe – 04.10.2026
+## Neueste Übergabe – 04.10.2026 (Abend, Claude)
+
+Projektstart auf `codex/team-marcel-20261003-232302-374` (Basis main `f784078`), danach autonome Arbeit auf Marcels Auftrag bis zur 95-%-Budgetgrenze und Teamabschluss nach main. Ergebnis: Maus-Kamera-Fix, historischer Startkader (Karikaturstufe), Fahrerwahl mit Live-Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch Bot), eigener Marsch statt Klavier, Ziel-Feuerwerk und Siegerporträts. 43/43 Unit-Tests, TypeScript und Produktionsbuild bestanden; Browserbelege im eingebauten Browser der Claude-App gegen den Batch-Server (Port 4173, gleicher Ordner/Branch/Commit laut `/__diktator/status`). Offen: Marcels Maus-Test in Chrome, Hörprobe des Marsches, Feinschliff der Gesichter, eigene Fähigkeiten der fünf anderen Figuren. Details im Eintrag unten.
+
+## Vorherige Übergabe – 04.10.2026
 
 **Listenfolge verankert (04.10., Marcel):** „Arbeitslisten abarbeiten“ autorisiert kurzfristige Aufgaben und anschließend bestätigte Langzeitziele; Pakete in CURRENT-WORKLIST.md übernehmen, selbstständig umsetzen, verifizieren und dokumentieren. Blockierte Aufgaben erhalten und unabhängig weiterarbeiten; echte Entscheidungen/unbestätigte Vorschläge nicht automatisch freigeben. AGENTS/START-HERE, beide Listen, TEAM-NOTES/TEAM-CHANGES aktualisiert. Nur Dokumentation, keine Spieländerung. Offiziell zu Beginn 6 % Fünf-Stunden-Rest / 71 % Wochenrest; Abschluss dieses kleinen Auftrags, danach keine autonome Großaufgabe. Lokaler Checkpoint, nicht gepusht.
 
@@ -50,7 +54,33 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 5. Bestätigten Stil G–L mit einem Fahrer/Kart in drei tatsächlichen Kameras prüfen; kostenlose Asset-/Audioqualität praktisch erproben.
 6. Bei neuen Altideen den Katalog ergänzen; frühere pauschale Vollständigkeitsansprüche bleiben zu vermeiden.
 
-## Einträge ab gemeinsamer Hauptbasis
+## Einträge
+
+### 2026-10-04 (Abend) – Claude: Kader, Fahrerwahl, Maus-Fix, Marsch
+
+**Auftrag (Marcel):** Projektstart; alten Claude-Worktree löschen (Regel „ein Arbeitsordner“ bleibt); offene Punkte selbstständig mit Wow-Effekten abarbeiten bis 95 % Nutzungslimit, dann dokumentieren und veröffentlichen, damit Sarah per Projektstart nahtlos weitermacht. Während der Arbeit nachgereicht: Maus-Kamera reparieren und Versionsgleichheit ChatGPT/Claude klären, Charakterauswahl mit Porträts, Klaviermusik durch strammen deutschen Marsch ersetzen, Porträts weiter herausgezoomt und ohne Schatten, Schäferhund nur bei Hitler und figurenspezifische Wurfobjekte aus unseren Ideen.
+
+**Versionsklärung:** `src/mouse-camera.ts` war seit ChatGPTs Fix `e5152ab` unverändert; `git diff d2e2e41 f784078` zeigte nur Panzeränderungen an `camera.ts`/`main.ts`. Beide Apps arbeiten im selben Ordner `D:\Diktator-Kart`; der Batch-Server meldet Ordner, Branch und Commit. Wahrscheinliche frühere Abweichung: der inzwischen gelöschte Claude-Worktree-Server (Port 4176) zeigte wegen der `.claude/`-Ignorierregel einen alten Stand.
+
+**Maus-Fix:** Die gehaltene Geste brach ab, wenn `requestPointerLock` abgelehnt wird (eingebettete App-Browser, Chrome-Sperre kurz nach Esc). Jetzt läuft sie über Pointer Capture (`pointermove`/`movementX`) weiter; Lock bleibt die bevorzugte Variante. Beleg: synthetische Pointer-Ereignisse ohne Lock drehen die Kamera (Position 60.51/-52.05 → 55.51/-43.92), Rechtsklick schaltet Rückblick, Loslassen stellt zurück. Nicht belegt: echter Test mit Maus in Marcels Chrome.
+
+**Startkader:** `art-source/build_kart.py` erhält Teile `sidepart`, `toothbrush`, `swept`, `walrus`, `pipe`, `chin`, `maohair`, `undercut`, `patrol`, `cigar`; bisherige Haare/Orden/Epauletten/Kragenspiegel als schaltbare Teile (`shorthair`, `medals`, `epaulettes`, `collartabs`). `src/cast.ts`: sechs Figuren mit Altfarben, Kartnamen, Titeln aus docs/14, Haarfarbe, Wurfobjekt. Haarmaterial mit leichtem Glanz. Keine Regimezeichen. Stimmen: Kim/Castro neue männliche Piper-Platzhalter (`kim-*`, `castro-*`), Diva/Admiralin entfernt; übrige Stimmdateien unverändert.
+
+**Fahrerwahl:** `#driver-select` in `index.html`, Logik in `main.ts` (`openSelection`/`pick`/`confirmSelection`, `localStorage dk-driver`), Kader-Umkleidung `setRoster` und Live-Porträts `portraits` (Render-Target-Screenshots mit Studiolicht, Sonnenschatten aus) in `slice-scene.ts`. Revanche behält die Figur. Einmal beobachtet: erste Auswahl startete mit falscher Figur (Kim statt Castro); in zwei Wiederholungen nicht reproduzierbar – bei erneutem Auftreten melden.
+
+**Wurfobjekte:** `item-scene.ts` baut zur Laufzeit einfache Modelle (Traktor, Megafon, Regelheft, Rakete, Aktenkoffer); Schäferhund nur für Hitlers Kart; Fallen bleiben der neutrale Stempel. Quellen: bewegliche Altdetails in docs/14 (Lautsprecher, Regelheft, Aktenkoffer), Kartnamen (Rakete, Fünfjahresplan), Marcels Hund. Stalins Traktor ist abgeleitet und bestätigungspflichtig. Beleg: Castro wirft „Aufklappender Aktenkoffer“ (HUD/Objekt), Kim „Mini-Propaganda-Rakete“.
+
+**Panzer:** Nur Hitler besitzt „Größenbefehl“. `botWantsAbility` lässt den Hitler-Bot bei Gegnern unter 9 m verwandeln; der Panzer hängt am jeweiligen Hitler-Kart. Beleg: als Castro `transform: 1`, Bot-Slot 1 `tankRemaining 7.5`, Q zeigt „eigene Fähigkeit folgt“.
+
+**Musik:** `fig-leaf-rag.mp3` entfernt (Credits/Manifest angepasst). Neu `public/assets/audio/march.wav` (4,5 MB, 103 s, 22 kHz mono) aus `art-source/build_march.mjs`: eigene Komposition, kein Sample. Marcels erster Höreindruck: „lustig, aber nicht wirklich deutsch“ → zweite Fassung strammer (118 bpm, punktierte Rhythmen, große Trommel auf jedem Schlag). Zweite Fassung nicht menschlich abgenommen.
+
+**Wow:** Ziel-Feuerwerk (Partikelpool 1200, vor der Spielerkamera, reduziert bei „Effekte reduziert“), Siegerkarte mit Siegerporträt und Mini-Porträts. Beleg: Screenshots mit sichtbaren Bursts und Porträts.
+
+**Worktree:** `.claude/worktrees/diktator-kart-quality-level-f851c0` aus Git ausgetragen, lokaler Branch gelöscht (war identisch mit main), `parade-tank.glb`-Rohdatei nach `.tools/raw-models` übernommen. Der leere Ordner ist von der Claude-App gesperrt und bleibt (ignoriert). Remote-Branch unverändert.
+
+**Prüfung:** `npm test` 43/43, `tsc --noEmit`, `npm run build` bestanden. Browserproben siehe oben (eingebauter Browser, RTX-Laptop; keine schwache-PC-/Mobilmessung).
+
+**Nächster Schritt:** Marcel/Sarah: Maus in Chrome, Marsch anhören, Fahrerwahl und Karikaturen beurteilen, Stalins Traktor bestätigen; danach Gesichter verfeinern und eigene Fähigkeiten der fünf Figuren nach gemeinsamer Entscheidung. ab gemeinsamer Hauptbasis
 
 Ältere Einträge (Planung, M1–M2, Vertical Slice, Qualitätsstufen 2–2d): [Archiv](docs/history/progress-log-2026-10-02-bis-q2d.md).
 

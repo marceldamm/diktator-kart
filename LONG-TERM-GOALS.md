@@ -55,7 +55,7 @@ Vorhanden: editierbare Retro-Karts, vollständiger Stadionring, Materialien, Arc
 
 - [ ] Zuerst einen Fahrer samt Kart als ausgearbeiteten Qualitätsanker liefern; aktuelle Priorität aus Marcels Auftrag: erkennbarer Hitler. Mussolini-Pilot war ein früherer Vorschlag, keine Pflicht vor dieser Präzisierung.
 - [ ] Gesicht, Anatomie, Haare, Augen, Kleidung und Stoff-/Hautmaterialien realitätsnah ausarbeiten; benannte reale Person erkennbar, kein bloß umbenannter Platzhalter.
-- [ ] Fünf weitere Startfahrer: Stalin, Mussolini, Mao, Kim Jong-un und Castro. Anfangs einfacher, aber individuell erkennbar; anschließend auf denselben Qualitätsmaßstab bringen.
+- [ ] Fünf weitere Startfahrer: Stalin, Mussolini, Mao, Kim Jong-un und Castro. Anfangs einfacher, aber individuell erkennbar; anschließend auf denselben Qualitätsmaßstab bringen. **04.10.: alle sechs als Karikaturen mit erkennbaren Merkmalen im Spiel (Zwischenstufe, nicht realitätsnah).**
 - [ ] Kartformen individuell gestalten, sichtbare Bauteile/Federung/Räder und differenzierte Materialien verbessern; Artmodelle bleiben editierbar.
 - [ ] Fahreranimation: Hände/Lenkrad, Kopf/Blick, Bremsen, Drift, Hop/Landung, Turbo, Kontakt und Rennenende; kleine Reaktionen statt unruhigem Dauerschütteln.
 - [ ] Fahrerperspektive mit plausibler Augenhöhe, Händen, Instrumenten, Haube und Vorderrädern ausarbeiten; keine störende doppelte Außenkarosse.
@@ -95,7 +95,7 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 
 ## M6 – Vollständiger Singleplayer
 
-- [ ] Fahrer-/Kartwahl, Menü, HUD, Optionen, Tutorial und Startablauf auf einen gemeinsamen Qualitätsstand bringen.
+- [ ] Fahrer-/Kartwahl, Menü, HUD, Optionen, Tutorial und Startablauf auf einen gemeinsamen Qualitätsstand bringen. **04.10.: Fahrerwahl mit Live-Porträts vorhanden; Siegerkarte mit Porträts und Ziel-Feuerwerk.**
 - [ ] Verständliche deutsche Bedienung und Statusmeldungen; Diagnose bleibt optional, keine technischen Interna als normaler Spielerablauf.
 - [ ] Alle sechs Fahrer und erste historische Strecke mit Material-/Animations-/Audioqualität fertigstellen.
 - [ ] Siegerehrung, Ergebnis-/Rennbericht und Revanche ausarbeiten.
