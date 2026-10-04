@@ -90,6 +90,9 @@ export const SHORTCUT = { from: 343, to: 452, halfWidth: 3, speedCap: 10.5, poin
 /** Glowing boost pads [progress start, lane centre]; 6 m long, 3 m wide, same effect for everyone. */
 export const BOOST_PADS: readonly (readonly [number, number])[] = [[62, -2], [176, 2], [292, 0]];
 
+/** Abstract 'Staatliches Übungsgelände': marked shell craters [progress, lane, radius] on the straight before the gate; avoidable. */
+export const CRATERS: readonly (readonly [number, number, number])[] = [[298, -3, 1.7], [305, 2.6, 1.9], [312, -.6, 1.6]];
+
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
 export const HARBOUR = { from: 236, to: 262, side: 1, basin: 9 } as const;
 /** Open-edge hazards: harbour water (west bend) and a surreal satirical furnace pit (north-east bend). */

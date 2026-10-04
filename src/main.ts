@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { boostPadAt, hazardAt, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { boostPadAt, craterAt, hazardAt, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -94,6 +94,7 @@ class App {
   /** Seconds left in a harbour salvage per kart (Staatliches Bergungsamt). */
   private salvage:number[]=[];
   private padCooldown:number[]=[];
+  private inCrater:boolean[]=[];
   /** Countdown value when the player first pressed throttle (start boost timing); null = not yet. */
   private startPress:number|null=null;
   private queuedSpecial=false;
@@ -677,6 +678,12 @@ class App {
           { const allKarts=[this.kart,...this.loadKarts];
             allKarts.forEach((k,i)=>{this.padCooldown[i]=Math.max(0,(this.padCooldown[i]??0)-FIXED_STEP);
               if(this.padCooldown[i]===0&&k.grounded&&boostPadAt(k.x,k.z)>=0){allKarts[i]={...k,turboRemaining:Math.max(k.turboRemaining,KART_TUNING.turboDuration),speed:Math.min(KART_TUNING.maxTurboSpeed,Math.max(k.speed,0)+KART_TUNING.turboSpeedBonus)};this.padCooldown[i]=1.2;if(i===0)this.audio.cue('start');}});
+            this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
+          // Shell craters: a jolt on entry and loose-dirt drag while crossing (same for everyone).
+          { const allKarts=[this.kart,...this.loadKarts];
+            allKarts.forEach((k,i)=>{ if(!k.grounded||craterAt(k.x,k.z)<0){this.inCrater[i]=false;return;}
+              allKarts[i]={...k,speed:k.speed*(1-1.5*FIXED_STEP),suspensionVelocity:this.inCrater[i]?k.suspensionVelocity:k.suspensionVelocity-1.4,drifting:false,driftCharge:0};
+              if(!this.inCrater[i]){this.testScene?.craterHit?.(i);if(i===0)this.audio.itemEvent('hit');} this.inCrater[i]=true; });
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Harbour: a kart past the open quay sinks, the state salvage crane lifts it back at the same progress.
           const all=[this.kart,...this.loadKarts];

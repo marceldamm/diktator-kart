@@ -470,6 +470,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       puddles() { return raining ? trackWorld.puddles : []; },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
+      craterHit(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 10 : 34); },
       trackEvent() { zeppelinTime = 0; zeppelin.setEnabled(true); },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return;
         if (kind === 'lava') { fireball.emitter = new Vector3(at.x, .2, at.z); fireball.manualEmitCount = reducedEffects ? 40 : 120; wreckSmoke.emitter = new Vector3(at.x, .5, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 30 : 90; return; }

@@ -51,6 +51,8 @@ export interface TestScene {
   salvaged?(kart: number): void;
   /** Announced decorative track event (lap 2 propaganda zeppelin flyover). */
   trackEvent?(kind: 'zeppelin'): void;
+  /** Dirt burst when a kart drops into a shell crater. */
+  craterHit?(kart: number): void;
   /** Comic wreck explosion for one kart. */
   wreck?(kart: number): void;
   /** Called on a lightning flash so the audio can thunder. */

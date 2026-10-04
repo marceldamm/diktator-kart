@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { BOOST_PADS, HAZARDS, LANDMARKS, SHORTCUT } from './track-layout';
+import { BOOST_PADS, CRATERS, HAZARDS, LANDMARKS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
@@ -208,6 +208,18 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     }
   }
   const boostPads: Mesh[] = [], hazardGlow: Mesh[] = [];
+  { // Shell craters: scorched dirt decals with a raised rim and a training-ground sign (abstract, no real place).
+    const scorch = canvasTexture(scene, 'Crater scorch', 256, 256, (c) => { const g = c.createRadialGradient(128, 128, 10, 128, 128, 126); g.addColorStop(0, '#1b140e'); g.addColorStop(.55, '#3a2a1c'); g.addColorStop(.8, '#5b4630'); g.addColorStop(1, 'rgba(91,70,48,0)'); c.fillStyle = g; c.fillRect(0, 0, 256, 256); }, true);
+    const scorchMaterial = new StandardMaterial('Crater scorch', scene); scorchMaterial.diffuseTexture = scorch; scorchMaterial.useAlphaFromDiffuseTexture = true; scorchMaterial.specularColor = Color3.Black(); scorchMaterial.zOffset = -2;
+    const dirt = pbr(scene, 'Crater dirt rim', '#5b4630', 0, .95);
+    for (const [s, lane, r] of CRATERS) { const p = trackPoint(s, lane);
+      const decal = MeshBuilder.CreateGround('Crater decal', { width: r * 2.6, height: r * 2.6 }, scene); decal.position.set(p.x, .045, p.z); decal.material = scorchMaterial; decal.isPickable = false;
+      const rim = MeshBuilder.CreateTorus('Crater rim', { diameter: r * 2, thickness: .32, tessellation: 20 }, scene); rim.position.set(p.x, .02, p.z); rim.scaling.y = .35; rim.material = dirt; rim.isPickable = false; }
+    const sign = canvasTexture(scene, 'Training ground sign', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a'; c.textAlign = 'center';
+      c.font = 'bold 44px Georgia'; c.fillText('STAATLICHES', 256, 80); c.fillText('ÜBUNGSGELÄNDE', 256, 135); c.font = '26px Georgia'; c.fillText('Trichter bitte umfahren', 256, 195); });
+    const signMaterial = pbr(scene, 'Training ground sign', '#ffffff', 0, .6); signMaterial.albedoTexture = sign;
+    const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
+    board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; }
   { // Boost pads: glowing chevrons painted on the cobbles.
     const chevrons = canvasTexture(scene, 'Boost chevrons', 128, 256, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 128, 256); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
       for (let y = 30; y < 256; y += 64) { c.beginPath(); c.moveTo(14, y + 34); c.lineTo(64, y); c.lineTo(114, y + 34); c.stroke(); } });

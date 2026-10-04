@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, HAZARDS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, CRATERS, HAZARDS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -140,6 +140,11 @@ export function trackHeightAt(x: number, z: number): number {
 }
 
 const hazardRange = (s: number, lane: number) => HAZARDS.find((h) => s >= h.from && s <= h.to && Math.sign(lane) === h.side);
+/** Index of the crater under a kart, or -1. */
+export function craterAt(x: number, z: number): number {
+  return CRATERS.findIndex(([s, lane, r]) => { const p = trackPoint(s, lane); return Math.hypot(p.x - x, p.z - z) < r; });
+}
+
 /** Index of the boost pad under a kart, or -1. */
 export function boostPadAt(x: number, z: number): number {
   const { s, lane } = trackLocate(x, z);
