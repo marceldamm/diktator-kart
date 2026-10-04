@@ -93,6 +93,8 @@ export const SHORTCUT = { from: 343 * S, to: 452 * S, halfWidth: 3, speedCap: 10
 /** World anchors shared with the Blender builders (game x / z). */
 /** Canal across the grandstand straight in front of the stands: jump it from the ramp, or fall in and get salvaged. */
 export const CANAL_FROM = 85 * S, CANAL_LENGTH = 9, RAMP_LENGTH = 9, RAMP_HEIGHT = 1;
+/** Take-off ramps: lip progress (the canal ramp plus a free jump on the boulevard after the gate). */
+export const RAMP_LIPS = [CANAL_FROM, 330 * S] as const;
 
 /** Glowing boost pads [progress start, lane centre]; 6 m long, 3 m wide, same effect for everyone. */
 export const BOOST_PADS: readonly (readonly [number, number])[] = [[62 * S, -2], [176 * S, 2], [292 * S, 0], [CANAL_FROM - 22, 0]];

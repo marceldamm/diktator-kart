@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, SHORTCUT } from './track-layout';
+import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
@@ -217,11 +217,13 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let y = 0; y < 256; y += 32) { c.fillStyle = y % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(0, y + 2, 256, 28); }
       c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let y = 40; y < 256; y += 90) { c.beginPath(); c.moveTo(40, y + 40); c.lineTo(128, y); c.lineTo(216, y + 40); c.stroke(); } });
     const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
-    const paths: Vector3[][] = [];
-    for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = CANAL_FROM - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .02 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
-    const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
-    const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(CANAL_FROM, lane); return [new Vector3(p.x, RAMP_HEIGHT + .02, p.z), new Vector3(p.x, -.2, p.z)]; });
-    const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
+    for (const end of RAMP_LIPS) {
+      const paths: Vector3[][] = [];
+      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .02 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
+      const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
+      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane); return [new Vector3(p.x, RAMP_HEIGHT + .02, p.z), new Vector3(p.x, -.2, p.z)]; });
+      const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
+    }
   }
   { // Shell craters: scorched dirt decals with a raised rim and a training-ground sign (abstract, no real place).
     const scorch = canvasTexture(scene, 'Crater scorch', 256, 256, (c) => { const g = c.createRadialGradient(128, 128, 10, 128, 128, 126); g.addColorStop(0, '#1b140e'); g.addColorStop(.55, '#3a2a1c'); g.addColorStop(.8, '#5b4630'); g.addColorStop(1, 'rgba(91,70,48,0)'); c.fillStyle = g; c.fillRect(0, 0, 256, 256); }, true);
