@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { inHarbour, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -91,6 +91,8 @@ class App {
   private items:ItemWorld=createItems(LOAD_KART_COUNT+1);
   private abilities:AbilityWorld=createAbilities(LOAD_KART_COUNT+1);
   private damage:DamageWorld=createDamage(LOAD_KART_COUNT+1);
+  /** Seconds left in a harbour salvage per kart (Staatliches Bergungsamt). */
+  private salvage:number[]=[];
   private queuedSpecial=false;
   private rain=false;
   /** Options choice; 'random' rolls sun, rain or snow every time the track loads. */
@@ -250,7 +252,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0};
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -394,7 +396,7 @@ class App {
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
@@ -655,6 +657,21 @@ class App {
             document.querySelector('#finish-card')!.removeAttribute('hidden');
           }
         }
+        }
+        if (!LAB_WORLD && this.racePhase !== 'finished') {
+          // Harbour: a kart past the open quay sinks, the state salvage crane lifts it back at the same progress.
+          const all=[this.kart,...this.loadKarts];
+          all.forEach((k,i)=>{
+            if((this.salvage[i]??0)>0){
+              this.salvage[i]=Math.max(0,this.salvage[i]-FIXED_STEP);this.recoveryRemaining[i]=Math.max(this.recoveryRemaining[i],FIXED_STEP*2);
+              if(this.salvage[i]===0){all[i]=recoverKart(k,all);this.recoveryRemaining[i]=0;this.testScene?.salvaged?.(i);}
+            } else if(inHarbour(k.x,k.z)){
+              this.salvage[i]=3.2;this.testScene?.splash?.(i);
+              if(i===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<40){this.audio.itemEvent('hit');this.audio.cheer(.7);}
+              if(i===0){this.itemMessage='Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
+            }
+          });
+          this.kart=all[0];this.loadKarts=all.slice(1);this.testScene?.setSalvage?.(this.salvage);
         }
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
           // Cumulative damage from this step's contacts, crashes and item hits; a wreck waits for the state workshop.

@@ -374,6 +374,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const debris = Array.from({ length: 12 }, (_, i) => { const m = i % 3 === 0 ? MeshBuilder.CreateCylinder(`Debris hubcap ${i}`, { diameter: .32, height: .06, tessellation: 12 }, scene) : MeshBuilder.CreateBox(`Debris plate ${i}`, { width: .4, height: .05, depth: .28 }, scene);
       m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
+    let salvageNow: number[] = [];
+    const cableMaterial = new StandardMaterial('Salvage cable', scene); cableMaterial.diffuseColor = new Color3(.1, .1, .1);
+    const cables = visuals.map((_, i) => { const c = MeshBuilder.CreateCylinder(`Salvage cable ${i}`, { diameter: .06, height: 1 }, scene); c.material = cableMaterial; c.isPickable = false; c.setEnabled(false);
+      const hook = MeshBuilder.CreateTorus(`Salvage hook ${i}`, { diameter: .5, thickness: .08, tessellation: 12 }, scene); hook.material = cableMaterial; hook.parent = c; hook.position.y = -.5; return c; });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
     report?.('items');
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
@@ -436,6 +440,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       puddles() { return raining ? trackWorld.puddles : []; },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
+      splash(kart) { const at = lastStates[kart]; if (!at) return; splash.emitter = new Vector3(at.x, 0, at.z); splash.manualEmitCount = reducedEffects ? 40 : 160; },
+      setSalvage(timers) { salvageNow = timers; },
+      salvaged(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 8 : 24); },
       wreck(kart) {
         const at = lastStates[kart]; const v = visuals[kart]; if (!at || !v) return;
         fireball.emitter = new Vector3(at.x, .9, at.z); fireball.manualEmitCount = reducedEffects ? 60 : 200;
@@ -592,7 +599,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
           v.orientation.scaling.set(1 - squash * .25, 1 + squash * .5, 1 - squash * .25);
           v.rotation += s.speed * dt / .33;
-          v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? -(s.steer ?? 0) * .42 + Math.sin(s.heading - s.travelHeading) * .35 : 0; });
+          v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? (s.steer ?? 0) * .42 - Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
           v.steering.rotation.z = -(s.steer ?? 0) * 1.15 - Math.sin(s.heading - s.travelHeading) * .4;
           // Arms follow the wheel; a fresh mini-turbo earns a vertical, pumping fist (sports gesture, never a forward-raised arm).
@@ -615,6 +622,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if (v.pedals[0]) v.pedals[0].rotation.x = -v.gas * .45; if (v.pedals[1]) v.pedals[1].rotation.x = -v.brake * .45;
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
+          // Harbour salvage: sink, then the crane hook lifts the kart out of the water.
+          { const left = salvageNow[index] ?? 0, cable = cables[index];
+            if (left > 0) { const t = 3.2 - left, y = t < 1 ? -.9 * t : -.9 + Math.min(1, (t - 1) / 1.4) * 4.1;
+              v.root.position.y = y + Math.sin(time * 3) * (t > 2.4 ? .08 : 0); v.root.rotation.z = t > 1 ? Math.sin(time * 2.4) * .12 : 0;
+              cable.setEnabled(t > .7); const top = 11, bottom = y + 1.6; cable.scaling.y = Math.max(.1, top - bottom); cable.position.set(s.x, (top + bottom) / 2, s.z);
+            } else { cable.setEnabled(false); v.root.rotation.z = 0; } }
           // Damage look: soot on the paint, engine smoke, and the comic driver ejection during a wreck.
           const health = healthNow[index] ?? 100, wrecked = (wreckedNow[index] ?? 0) > 0;
           const soot = wrecked ? .85 : health < 66 ? (66 - health) / 66 * .65 : 0;

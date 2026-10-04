@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { LANDMARKS, SHORTCUT } from './track-layout';
+import { HARBOUR, LANDMARKS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
@@ -21,6 +21,7 @@ export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; s
 const W = TRACK.halfWidth;
 /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
 const BOARD_RANGES: [number, number][] = [[2, 92], [282, 372]];
+const HARBOUR_GAP: [number, number][] = [[HARBOUR.from, HARBOUR.to]];
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
   const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
@@ -180,7 +181,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   let cursor = 0;
   for (const [a, b] of BOARD_RANGES) { ranges.push({ from: cursor, to: a, boards: false }, { from: a, to: b, boards: true }); cursor = b; }
   ranges.push({ from: cursor, to: TRACK.length, boards: false });
-  for (const range of ranges) for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(range.from, range.to, wallGaps) : [[range.from, range.to]]) {
+  for (const range of ranges) for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(range.from, range.to, wallGaps) : without(range.from, range.to, HARBOUR_GAP)) {
     const profile = side < 0 ? wall(-1).reverse() : wall(1);
     // Only the face toward the road (first two profile points) carries the stripes; v is normalised.
     const mesh = sweep(scene, `Barrier ${side}`, profile, range.boards ? board : barrier, { uScale: range.boards ? 32 : 4.8, vScale: 2.4, step: .8, from, to });
@@ -201,8 +202,40 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   for (const side of [-1, 1]) {
     const outer = W + 1.45 + LANDMARKS.promenade;
     const lanes: [number, number][] = side < 0 ? [[-outer, .14], [-W - 1.45, .14]] : [[W + 1.45, .14], [outer, .14]];
-    for (const [from, to] of side < 0 ? without(0, TRACK.length, promenadeGaps) : [[0, TRACK.length]]) sweep(scene, `Promenade ${side}`, lanes, paving, { uScale: 3, vScale: 3, step: 1.2, from, to });
-    sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2 });
+    for (const [from, to] of side < 0 ? without(0, TRACK.length, promenadeGaps) : without(0, TRACK.length, HARBOUR_GAP)) {
+      sweep(scene, `Promenade ${side}`, lanes, paving, { uScale: 3, vScale: 3, step: 1.2, from, to });
+      sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2, from, to });
+    }
+  }
+  { // Harbour basin behind the open quay: dark water, stone quay walls, warning edge, signs and the salvage crane.
+    const { from, to } = HARBOUR, inner = W + 1.2, outer = W + HARBOUR.basin;
+    const water = pbr(scene, 'Harbour water', '#1d3b44', .25, .08); water.alpha = .93;
+    sweep(scene, 'Harbour water', [[inner, -.55], [outer, -.55]], water, { uScale: 2, step: 1, from, to });
+    sweep(scene, 'Harbour basin floor', [[inner, -1.6], [outer, -1.6]], kerbStone, { uScale: 2, step: 2, from, to });
+    sweep(scene, 'Quay wall', [[inner, .14], [inner, -1.6]], kerbStone, { uScale: 1, step: 1, from, to });
+    sweep(scene, 'Basin far wall', [[outer, -1.6], [outer, .5], [outer + .6, .5]], kerbStone, { uScale: 1, step: 1, from, to });
+    for (const [a, b] of [[from - 1, from], [to, to + 1]]) sweep(scene, 'Basin end wall', [[inner, .5], [outer, .5]], kerbStone, { uScale: 1, step: .5, from: a, to: b });
+    const hazard = pbr(scene, 'Quay hazard stripes', '#ffffff', 0, .6);
+    hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
+    sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
+    const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText('HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+    const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
+    for (const at of [from - 4, to + 4]) {
+      const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
+      sign.material = signMaterial; sign.position.set(p.x, 2.3, p.z); sign.rotation.y = p.heading + Math.PI; sign.isPickable = false;
+      const post = MeshBuilder.CreateCylinder('Harbour sign post', { diameter: .12, height: 2 }, scene); post.position.set(p.x, 1, p.z); post.material = kerbStone; post.isPickable = false;
+    }
+    const craneSteel = pbr(scene, 'Salvage crane yellow', '#d9a21f', .5, .45);
+    const mid = trackPoint((from + to) / 2, outer + 2), hookAt = trackPoint((from + to) / 2, W + 4);
+    const mast = MeshBuilder.CreateBox('Salvage crane mast', { width: .7, height: 11, depth: .7 }, scene); mast.position.set(mid.x, 5.5, mid.z); mast.material = craneSteel;
+    const dx = hookAt.x - mid.x, dz = hookAt.z - mid.z, len = Math.hypot(dx, dz) + 2;
+    const boom = MeshBuilder.CreateBox('Salvage crane boom', { width: .45, height: .45, depth: len }, scene); boom.material = craneSteel;
+    boom.position.set(mid.x + dx / 2, 10.8, mid.z + dz / 2); boom.rotation.y = Math.atan2(dx, dz);
+    const plateTexture = canvasTexture(scene, 'Salvage office plate', 512, 128, (c) => { c.fillStyle = '#7a1820'; c.fillRect(0, 0, 512, 128); c.fillStyle = '#f3e3b8'; c.font = 'bold 40px Georgia'; c.textAlign = 'center'; c.fillText('STAATLICHES BERGUNGSAMT', 256, 80); });
+    const plateMaterial = pbr(scene, 'Salvage office plate', '#ffffff', 0, .6); plateMaterial.albedoTexture = plateTexture;
+    const plate = MeshBuilder.CreatePlane('Salvage office plate', { width: 4, height: 1 }, scene); plate.material = plateMaterial; plate.position.set(mid.x, 6, mid.z); plate.rotation.y = Math.atan2(dx, dz) + Math.PI; plate.isPickable = false;
+    for (const m of [mast, boom]) { m.isPickable = false; shadow.addShadowCaster(m); }
   }
   // Backyard alley: darker, rougher cobbles between clipped hedges, opening onto both legs.
   const alleyAt = (u: number, lane: number) => shortcutPoint(u, lane);
