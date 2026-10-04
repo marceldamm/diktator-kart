@@ -56,6 +56,10 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 ## Einträge
 
+### 2026-10-04 (Vormittag) – Claude: Arbeitslisten abgearbeitet
+
+Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umgesetzt: `src/damage.ts` (Haltbarkeit/Wrack, Tests `tests/damage.test.mjs`), Wandgleiten in `kart-model.ts`, Finger/Pedale/Spiegel in `build_kart.py`, feste Hände (Handschuhe am Lenkrad, Arm-Ausrichtung) und Vorderrad-Vorzeichen in `slice-scene.ts`, Tag-Nacht/Sterne/Mond/Vögel/Zeitungen/Wrackteile, Glow-Verdeckung (alle Meshes als Occluder), Gefahren `HAZARDS`/`CRATERS` mit Bergung, Boostflächen, Startschub, Zeppelin, Schnellneustart, Videowand-Renderliste (`renderList = scene.meshes`, refresh 3). Belege im eingebauten Browser (Werte/Bilder), 45 Tests + TypeScript grün. Grenzen: Werte vorläufig, kein echter Fahrtest/schwacher PC; Startschub-Timing nur teilweise geprüft (gedrosselter Testbrowser). Nicht veröffentlicht (kein Projektabschluss beauftragt).
+
 ### 2026-10-04 (Abend) – Claude: Kader, Fahrerwahl, Maus-Fix, Marsch
 
 **Auftrag (Marcel):** Projektstart; alten Claude-Worktree löschen (Regel „ein Arbeitsordner“ bleibt); offene Punkte selbstständig mit Wow-Effekten abarbeiten bis 95 % Nutzungslimit, dann dokumentieren und veröffentlichen, damit Sarah per Projektstart nahtlos weitermacht. Während der Arbeit nachgereicht: Maus-Kamera reparieren und Versionsgleichheit ChatGPT/Claude klären, Charakterauswahl mit Porträts, Klaviermusik durch strammen deutschen Marsch ersetzen, Porträts weiter herausgezoomt und ohne Schatten, Schäferhund nur bei Hitler und figurenspezifische Wurfobjekte aus unseren Ideen.

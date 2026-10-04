@@ -11,6 +11,17 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Stand 04.10.2026 (Vormittag, Claude) – Arbeitslisten abgearbeitet
+
+- [x] PC-/Handy-Abgleich geprüft: Abend-Upload `3bfe3a2` in main, Handy-Doku sichtbar, keine Konflikte.
+- [x] **Wand/Schaden (P1):** Banden gleiten statt kleben (Nase dreht zur Wand, Frontaleinschlag bleibt hart); Haltbarkeit pro Kart, Qualm/Ruß, Totalschaden mit Explosion, herausgeschleudertem Fahrer und 3-s-„Staatliche Werkstatt“; HUD „Karosserie“. Werte vorläufig, Fahrtest offen.
+- [x] **Fahrer/Cockpit (P2, Teil):** Finger am Lenkrad (Handschuhe sitzen fest am Kranz, Arme folgen), Pedale bewegen sich, Rückspiegel im Fahrerblick, Vorderrad-Einschlag korrigiert (war spiegelverkehrt), erwachsenere Gesichter. Offen: Beine/Sitz-Feinschliff, noch realistischere Gesichter.
+- [x] **Tag-Nacht (P3):** zufällig pro Rennen Tag→Dämmerung→Nacht über drei Runden, Sterne, Mond, Mondlicht, Vögel/Fledermäuse, wehende Zeitungen, liegenbleibende Wrackteile; Lichter scheinen nicht mehr durch Figuren.
+- [x] **Gefahren + Bergung:** Hafenbecken (Westkurve), Staatsofen-Lavagrube (Nordostkurve), abstraktes Übungsgelände mit Granattrichtern; Kran des „Staatlichen Bergungsamts“ setzt nach ~3 s an gleicher Position zurück, gleiche Regeln für Bots. Offen: Klippe.
+- [x] **Mechaniken:** Boostflächen (3), Startschub zum „LOS!“, Schnellneustart T, pulsierende Itemwarnung, Zeppelin-Ereignis in Runde 2.
+- [x] Live-Videowand zeigt wieder alle Fahrer (vorher nur Schatten außerhalb des Blickfelds).
+- [ ] Offen: echte historische Sprachhupen (Quellen-/Lizenzprüfung, Download nur mit Freigabe), Landeschub nach Sprüngen, weitere Oberflächen, Klippe.
+
 ## Morgen prüfen – 05.10.2026
 
 - [ ] **PC-/Cloud-Lauf und Veröffentlichung verifizieren:** Commits und Branches prüfen, den vom PC gemeldeten Arbeitsstand mit GitHub `main` vergleichen, tatsächliche Tests/Build-Belege lesen und prüfen, ob Sarah den veröffentlichten Stand abrufen kann. Kommentar „98 % fertig“ allein gilt nicht als Nachweis.
