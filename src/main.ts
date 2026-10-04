@@ -261,6 +261,7 @@ class App {
       this.testScene.setRoster?.(this.order);
       this.applyQuality();
       if (this.testScene) this.testScene.onLightning = () => this.audio.thunder();
+      if (this.testScene) this.testScene.onFirework = () => this.audio.itemEvent('launch');
       this.applyWeather();
       this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
       this.testScene.attachCamera?.(this.camera.babylonCamera);

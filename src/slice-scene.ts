@@ -227,6 +227,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     puff.color1 = new Color4(.62, .57, .48, .35); puff.color2 = new Color4(.72, .69, .6, .28); puff.colorDead = new Color4(.7, .66, .58, 0); puff.start();
     const burst = (system: ParticleSystem, s: KartState, count: number) => { system.emitter = new Vector3(s.x, .5 + s.height, s.z); system.manualEmitCount = count; };
     const confetti = createConfetti(scene);
+    // Finish fireworks over the main stand: additive bursts in gold, red, white and green (capped pool).
+    const fireworks = new ParticleSystem('Finish fireworks', 1200, scene); fireworks.particleTexture = particleTexture(scene);
+    fireworks.blendMode = ParticleSystem.BLENDMODE_ADD; fireworks.minSize = .7; fireworks.maxSize = 1.25; fireworks.minLifeTime = 1.1; fireworks.maxLifeTime = 1.9;
+    fireworks.createSphereEmitter(.4); fireworks.minEmitPower = 7; fireworks.maxEmitPower = 11; fireworks.gravity = new Vector3(0, -3.2, 0); fireworks.emitRate = 0; fireworks.start();
+    const fireworkColours = [[1, .82, .35], [1, .3, .22], [1, .97, .9], [.45, 1, .55], [.5, .75, 1]];
+    let fireworkTime = 0, nextBurst = 0;
     let pipeline: DefaultRenderingPipeline | undefined, pipelineLevel = quality;
     const configurePipeline = () => {
       if (!pipeline) return;
@@ -375,8 +381,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
+        if (kind === 'finish') { fireworkTime = reducedEffects ? 4 : 9; nextBurst = 0; }
       },
-      resetEffects() { skids.clear(); },
+      resetEffects() { skids.clear(); fireworkTime = 0; },
       setQuality(level, reduced) {
         pipelineLevel = level;
         if(level!==skyQuality) {
@@ -397,6 +404,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         trackWorld.animate(time);
+        if (fireworkTime > 0) {
+          fireworkTime -= dt; nextBurst -= dt;
+          if (nextBurst <= 0) {
+            nextBurst = .35 + Math.random() * .45;
+            // In front of the player's view so every camera sees the show.
+            const ahead = 22 + Math.random() * 18, side = (Math.random() - .5) * 30, [r, g, b] = fireworkColours[Math.floor(Math.random() * fireworkColours.length)];
+            fireworks.emitter = new Vector3(state.x + Math.sin(state.heading) * ahead + Math.cos(state.heading) * side, 8 + Math.random() * 5, state.z + Math.cos(state.heading) * ahead - Math.sin(state.heading) * side);
+            fireworks.color1 = new Color4(r, g, b, 1); fireworks.color2 = new Color4(Math.min(1, r + .2), Math.min(1, g + .2), Math.min(1, b + .2), 1); fireworks.colorDead = new Color4(r * .6, g * .3, b * .2, 0);
+            fireworks.manualEmitCount = reducedEffects ? 80 : 220; api.onFirework?.();
+          }
+        }
         // TV director: cut between three angles on the followed kart every few seconds.
         { const k = [state, ...others][following] ?? state; shotTimer += dt; if (shotTimer > 5.5) { shotTimer = 0; shot = (shot + 1) % 3; }
           const side = shot === 0 ? 1 : -1, ahead = shot === 2 ? 2 : 9, up = shot === 1 ? 7 : 1.6, out = shot === 1 ? 3 : 5.5;

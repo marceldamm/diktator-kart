@@ -37,6 +37,8 @@ export interface TestScene {
   setRoster?(order: number[]): void;
   /** Portrait images (data URLs) of every CAST member, rendered from the race models. */
   portraits?(order: number[]): Promise<string[]>;
+  /** Called for every finish firework burst (audio pop). */
+  onFirework?: () => void;
   /** Called on a lightning flash so the audio can thunder. */
   onLightning?: () => void;
 }
