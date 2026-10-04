@@ -1,5 +1,8 @@
 # Entscheidungen und verbleibende Fragen
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Qualitäts- und Stimmenpräzisierung – 04.10.2026
 
 Marcel verlangt deutlich höhere, realitätsnähere Qualität aller Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds, Stimmen und Musik anhand der gewählten G–L-Bildpräferenz. Fertige Stimmen ohne Text-to-Speech (auch offline erzeugtes TTS); aktuelle synthetische Clips sind Zwischenstand. Vorproduzierte menschliche Aufnahmen/geeignete echte Mitschnitte mit geklärten Rechten, bisherige Musikrichtung und kostenloser Rahmen bleiben Grundlage. Diese bestätigte Zielentscheidung nicht erneut als offene Grundsatzfrage stellen. Umsetzung/Abnahmen: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md).
