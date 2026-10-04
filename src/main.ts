@@ -413,7 +413,7 @@ class App {
     document.querySelector('#place')!.textContent = `${place}`;
     document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
-    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : 'STADION GRAND PRIX';
+    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `STADION GRAND PRIX · ${this.castOf(0).name.toUpperCase()}`;
     const notice=document.querySelector<HTMLElement>('#lap-notice')!;notice.hidden=this.racePhase!=='race'||this.raceTime>=this.lapNoticeUntil;notice.textContent=this.lapNotice;
     const meter=document.querySelector<HTMLElement>('#drift-meter')!;meter.hidden=!this.kart.drifting&&this.kart.turboRemaining<=0;
     meter.classList.toggle('charged',this.kart.driftCharge>=KART_TUNING.driftChargeTime||this.kart.turboRemaining>0);
@@ -630,7 +630,7 @@ class App {
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
             this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.audio.cheer(1.4);
-            {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});if(won)window.setTimeout(()=>this.say(0,'win'),3200);}
+            {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});const champion=rankRace(this.progress)[0];window.setTimeout(()=>this.say(won?0:champion,'win',won?1:.85),3200);}
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
