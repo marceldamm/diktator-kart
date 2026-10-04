@@ -366,6 +366,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           scene.fogDensity = .0085; scene.fogColor = new Color3(.86, .88, .92); scene.environmentIntensity = .8; skyMaterial.emissiveTexture!.level = .78;
         } else if (kind === 'sun') sun.diffuse = new Color3(1, .8, .58);
         snow.emitRate = snowing ? (reducedEffects ? 500 : 1700) : 0;
+        // Tyres throw white powder in snow instead of brown dust.
+        const powder = snowing ? [new Color4(.94, .95, .98, .5), new Color4(.86, .89, .95, .4), new Color4(.9, .92, .96, 0)] : [new Color4(.65, .58, .47, .38), new Color4(.77, .71, .60, .3), new Color4(.7, .64, .53, 0)];
+        for (const system of [dust, puff]) { system.color1 = powder[0]; system.color2 = powder[1]; system.colorDead = powder[2]; }
       },
       puddles() { return raining ? trackWorld.puddles : []; },
       setRoster(order) {

@@ -6,7 +6,7 @@
 
 ## Neueste Übergabe – 04.10.2026 (Abend, Claude)
 
-Projektstart auf `codex/team-marcel-20261003-232302-374` (Basis main `f784078`), danach autonome Arbeit auf Marcels Auftrag bis zur 95-%-Budgetgrenze und Teamabschluss nach main. Ergebnis: Maus-Kamera-Fix, historischer Startkader (Karikaturstufe), Fahrerwahl mit Live-Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch Bot), eigener Marsch statt Klavier, Ziel-Feuerwerk und Siegerporträts. 43/43 Unit-Tests, TypeScript und Produktionsbuild bestanden; Browserbelege im eingebauten Browser der Claude-App gegen den Batch-Server (Port 4173, gleicher Ordner/Branch/Commit laut `/__diktator/status`). Offen: Marcels Maus-Test in Chrome, Hörprobe des Marsches, Feinschliff der Gesichter, eigene Fähigkeiten der fünf anderen Figuren. Details im Eintrag unten.
+Projektstart auf `codex/team-marcel-20261003-232302-374` (Basis main `f784078`), danach autonome Arbeit auf Marcels Auftrag bis zur 95-%-Budgetgrenze und Teamabschluss nach main. Ergebnis: Maus-Kamera-Fix, historischer Startkader (Karikaturstufe), Fahrerwahl mit Live-Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch Bot), eigener Marsch statt Klavier, Ziel-Feuerwerk und Siegerporträts. 43/43 Unit-Tests, TypeScript und Produktionsbuild bestanden; Browserbelege im eingebauten Browser der Claude-App gegen den Batch-Server (Port 4173, gleicher Ordner/Branch/Commit laut `/__diktator/status`). Zweite Runde: preußischer Marsch, Zufallswetter mit Schnee, Panzerrad-Fix, Nasen/Wangen. Offen: Marcels Maus-Test in Chrome, Hörprobe des Marsches, Feinschliff der Gesichter, eigene Fähigkeiten der fünf anderen Figuren. Details im Eintrag unten.
 
 ## Vorherige Übergabe – 04.10.2026
 
@@ -81,6 +81,8 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 **Prüfung:** `npm test` 43/43, `tsc --noEmit`, `npm run build` bestanden. Browserproben siehe oben (eingebauter Browser, RTX-Laptop; keine schwache-PC-/Mobilmessung).
 
 **Nachtrag nach Veröffentlichung 253f44e:** Marcels neue Teamregel (gestaffelte Commits/Doku, Pflicht beim Projektabschluss) in AGENTS.md/CLAUDE.md Regel 3 und TEAM-CHANGES.md; keine Spieländerung.
+
+**Zweite Runde (Marcels Auftrag bis 98 % Budget):** (1) `build_march.mjs` neu: preußischer Spielmannszug-Stil, eigene Komposition (Intro Trommelmarsch, A mit Querpfeifen, A/B mit Blech in Oktaven, Trio, Grandioso), 108,6 s, 4,8 MB; Hörprobe offen. (2) Wetter: `weatherChoice` random/sun/rain/snow (`localStorage dk-weather-choice`, URL `?weather=`), Zufall beim Laden 50/25/25; neuer Schnee in `slice-scene.ts` (`setWeather`, 2200 Flocken, Licht/Nebel, `trackWorld.setSnow` mit Emissive-Aufhellung, weißer Reifen-/Landestaub); keine Grip-Änderung. Beleg: Screenshot mit Flocken und frostiger Straße, 2200 aktive Partikel, keine Konsolenfehler. (3) Panzer: `tankWheels` filterte per `/tankWheel-/` auch die gejointen Rad-Meshes und löschte deren Achsrotation → jetzt nur `/tankWheel-[LR]-\d+$/`; Beleg Seitenansicht mit runden Laufrollen. (4) Gesichter: Teile `bignose`, `straightnose`, `flatnose`, `chubby`, Undercut-Hinterkopf, breitere Stirnlocke; Beleg Fahrerwahl-Porträts. (5) Minikarte in Kartfarben. 43/43 Tests, TypeScript bestanden.
 
 **Nächster Schritt:** Marcel/Sarah: Maus in Chrome, Marsch anhören, Fahrerwahl und Karikaturen beurteilen, Stalins Traktor bestätigen; danach Gesichter verfeinern und eigene Fähigkeiten der fünf Figuren nach gemeinsamer Entscheidung. ab gemeinsamer Hauptbasis
 

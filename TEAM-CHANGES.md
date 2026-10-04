@@ -52,5 +52,6 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 
 - **Fahrerwahl und echter Startkader:** Vor jedem Grand Prix wählt man aus Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro (lustige Karikaturen mit Porträts). Jede Figur hat ihr eigenes Wurfobjekt aus unserem Katalog; der Schäferhund gehört nur Hitler, der Panzer auch. Stalins Traktor ist ein Vorschlag zur Bestätigung.
 - **Musik und Ziel:** Statt Klavier läuft ein eigener strammer deutscher Marsch. Im Ziel gibt es Feuerwerk und eine Siegerkarte mit Porträts.
+- **Strenger Marsch, Zufallswetter mit Schnee:** Neue preußische Spielmannszug-Musik; das Wetter wird beim Laden ausgewürfelt (Sonne, Regen oder neu Schnee). Panzerräder repariert, Gesichter feiner (eigene Nasen, Wangen, Frisuren).
 - **Weniger Zwischen-Commits:** Die KI committet und dokumentiert gesammelt, Pflicht ist es beim Projektabschluss; zwischendurch nur, wenn wirklich nötig.
 - **Maus-Kamera repariert:** Halten links/rechts funktioniert jetzt auch, wenn der Browser den Mauszeiger nicht einfangen darf. Der alte Claude-Worktree ist gelöscht.

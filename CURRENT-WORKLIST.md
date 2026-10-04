@@ -21,6 +21,14 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Wow-Pakete:** Ziel-Feuerwerk vor der Kamera; Siegerkarte mit Siegerporträt und Mini-Porträts.
 - [x] Alter Claude-Worktree entfernt (leerer, von der App gesperrter Ordner `.claude/worktrees/…` kann bleiben; von Git ignoriert). Regel „ein Arbeitsordner für ChatGPT und Claude“ bleibt.
 
+## Zweite Runde – Marcel, 04.10.2026 (spät)
+
+- [x] **Musik strenger und deutscher:** Marsch komplett neu im Stil eines preußischen Spielmannszugs (Trommelmarsch-Intro, Querpfeifen über Trommlerkorps, Posaunen/Trompeten in Oktaven mit Tuba, strenger Moll-Teil, Trio, Grandioso; 112 bpm, wenig Hall). **Hörprobe durch Marcel offen.**
+- [x] **Zufallswetter + neuer Effekt:** Beim Laden würfelt das Spiel Sonne (50 %), Regen oder **Schnee** (neu: Flocken, kühles Licht, heller Dunst, frostige Straße, weißer Reifenstaub). Optionen: Wetter Zufall/Sonne/Regen/Schnee; Staatsfernsehen meldet das Wetter.
+- [x] **Gesichter/Haare Feinschliff:** Nasenvarianten (Hitler schmal/gerade, Mao/Kim breit/flach, übrige groß), runde Wangen für Mao/Kim, deutlichere Stirnlocke bei Hitler, Kims Undercut mit Hinterkopf. Weitere Verfeinerung bleibt sinnvoll.
+- [x] **Panzerräder repariert:** Die Laufrollen standen hochkant und taumelten (Namensfilter erwischte die Rad-Meshes mit). Jetzt korrekt seitlich und drehen um ihre Achse.
+- [x] Minikarte zeigt die Gegner in ihren Kartfarben.
+
 ## Offen und als Nächstes
 
 **Abarbeitungsfolge:** Bei „Arbeitslisten abarbeiten“ zuerst die ausführbaren offenen Aufgaben hier umsetzen, anschließend bestätigte Ziele aus [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md) selbstständig in diese Liste übernehmen und bearbeiten. Status und nächsten Schritt sichtbar halten; blockierte Aufgaben bewahren, unabhängige fortsetzen. Budget-/Entscheidungsregeln beachten.

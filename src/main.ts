@@ -439,7 +439,7 @@ class App {
     const map = document.querySelector<HTMLCanvasElement>('#minimap')!, c = map.getContext('2d')!;
     c.clearRect(0, 0, map.width, map.height);
     if (this.minimapTrack) c.drawImage(this.minimapTrack, 0, 0);
-    [...this.loadKarts, this.kart].forEach((s, i, all) => { const player = i === all.length - 1, [x, y] = this.minimapPoint(s.x, s.z); c.fillStyle = player ? '#ffe1a0' : '#95b8b8'; c.strokeStyle = '#0b1a1e'; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, player ? 5 : 3, 0, Math.PI * 2); c.fill(); c.stroke(); });
+    [...this.loadKarts, this.kart].forEach((s, i, all) => { const player = i === all.length - 1, [x, y] = this.minimapPoint(s.x, s.z); c.fillStyle = player ? '#ffe1a0' : this.castOf(i + 1).paint; c.strokeStyle = '#0b1a1e'; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, player ? 5 : 3, 0, Math.PI * 2); c.fill(); c.stroke(); });
   }
 
   private minimapTrack: HTMLCanvasElement | undefined;
@@ -657,7 +657,7 @@ class App {
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       this.commentary();
-      if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? 'STAATSFERNSEHEN · Freies Training' : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
+      if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? `STAATSFERNSEHEN · Freies Training · ${{ sun: 'Sonnenschein genehmigt', rain: 'Regen angeordnet', snow: 'Schneefall verordnet' }[this.weather]}` : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       modeDisplay.textContent = this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
         : this.kart.impactRemaining > 0

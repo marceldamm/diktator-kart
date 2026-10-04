@@ -371,7 +371,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     },
     setSnow(snow) {
       // Light snow cover: pale, slightly glossy cobbles and paving (no grip change, rules stay identical).
-      if (snow) { road.albedoColor = Color3.FromHexString('#eef0f2'); road.roughness = .62; paving.albedoColor = Color3.FromHexString('#f2f3f5'); paving.roughness = .7; for (const m of puddleMeshes) m.setEnabled(false); }
+      const cover = snow ? new Color3(.3, .31, .34) : Color3.Black(); road.emissiveColor = cover; paving.emissiveColor = cover;
+      if (snow) { road.albedoColor = Color3.FromHexString('#f4f5f7'); road.roughness = .62; paving.albedoColor = Color3.FromHexString('#f6f7f9'); paving.roughness = .7; for (const m of puddleMeshes) m.setEnabled(false); }
       else this.setWet(false);
     },
     animate(time) { updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04; },
