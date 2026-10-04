@@ -11,6 +11,8 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 
 ## 04.10.2026
 
+- **Morgenpaket Marcel (05.10.):** Wand-/Kartkontakte und kumulative Schäden mit Fahrzeugausfall/komischem Respawn angehen; realitätsnähere Fahrer/Cockpit-Animation, Tag-Nacht-Streckenleben und echte historische Sprachhupen prüfen. Detailwünsche und offene Werte in TEAM-NOTES.md und CURRENT-WORKLIST.md; Stimmen erst nach Quellen-/Rechteprüfung verwenden.
+
 - **Dokuordnung:** Die vier Hauptdateien sind jetzt die gemeinsame aktuelle Steuerung; aktive Fachdateien verweisen auf Vorrang, Statusabgleich und Erhalt historischer Ideen. Veraltete Aussagen zum neutralen Slice und zur festen Großkopf-Karikatur wurden als damaliger Stand markiert/korrigiert. Frühere Ideen, Gründe und Prüfbelege bleiben erhalten.
 
 - **Beide Listen abarbeiten:** Der Auftrag „Arbeitslisten abarbeiten“ umfasst zuerst kurzfristige Aufgaben und danach die selbstständige Umsetzung bestätigter Langzeitziele in sichtbaren Paketen. Keine erneute Freigabe für gewöhnliche Paketwahl; echte offene Entscheidungen und Budgetreserve beachten.
