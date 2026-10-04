@@ -293,7 +293,7 @@ for k, (x, z) in enumerate([(.16, 1.32), (.24, 1.3), (.2, 1.22)]):
 epaulettes = empty('cast-epaulettes', (0, 0, 0), driver)
 for sd in [-1, 1]:
     # Epaulettes with fringe: the strongest silhouette cue from the chase camera (marshal-style roles only).
-    ellipsoid('Shoulder pad', (sd * .42, -.45, 1.5), (.17, .2, .1), uniform, driver, 16)
+    loft('Shoulder', [[(sd * (.3 + .13 * t), -.45 + p[1], p[2]) for p in ring(.1 + .03 * (1 - t), .085 - .02 * t, 1.5 - .05 * t, 0, 14, 2.4)] for t in [0, .5, 1]], uniform, driver, 1)
     box('Epaulette board', (sd * .44, -.45, 1.58), (.3, .34, .07), trim, .035, epaulettes)
     for k in range(9):
         cyl('Epaulette fringe', (sd * (.6 + .012 * (k % 2)), -.61 + k * .04, 1.5), .016, .17, trim, epaulettes, verts=6)
@@ -302,7 +302,7 @@ for sd in [-1, 1]:
     tube('Uniform arm', [(0, 0, -.02), (sd * .04, .33, -.26), (-sd * .22, .6, -.24)], .1, uniform, arm)
     tube('Gold cuff', [(-sd * .16, .53, -.24), (-sd * .2, .57, -.24)], .105, trim, arm)
     # Gloved hand gripping the rim: palm on the outside, four curled fingers and a thumb around the leather.
-    ellipsoid('Glove palm', (-sd * .26, .63, -.24), (.055, .065, .075), white_glove, arm)
+    box('Glove palm', (-sd * .26, .63, -.24), (.07, .1, .12), white_glove, .03, arm)
     rim_c = (-sd * .21, .65, -.24)
     for k, dz in enumerate([-.048, -.016, .016, .048]):
         pts = [(rim_c[0] + .047 * math.cos(a) * sd, rim_c[1] + .047 * math.sin(a), rim_c[2] + dz) for a in [-1.9, -.9, 0, .9, 1.9, 2.6]]
@@ -360,6 +360,20 @@ for v in head_mesh.data.vertices:
           - .008 * bump(x, z, 0, -.09, .07, .02))                         # mouth line
     dx = .01 * math.copysign(bump(abs(x), z, .2, -.1, .05, .06), x)      # jaw corners
     v.co = (x + dx * f, y + dy * f, z)
+def hair_shell(name, parent, keep, thickness=.022, lift=0.0):
+    # Copy of the sculpted head surface, trimmed to a hairline and pushed outward: hair hugs the skull (no helmet balls).
+    import bmesh
+    o = head_mesh.copy(); o.data = head_mesh.data.copy(); o.name = name; bpy.context.collection.objects.link(o); o.parent = parent
+    o.data.materials.clear(); o.data.materials.append(hair)
+    bm = bmesh.new(); bm.from_mesh(o.data)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not keep(v.co.x, v.co.y, v.co.z)], context='VERTS')
+    for v in bm.verts:
+        n = v.co.copy(); n.z -= .08; n.normalize(); v.co += n * (thickness + lift * max(0, v.co.z - .2))
+    bm.to_mesh(o.data); bm.free()
+    sol = o.modifiers.new('Hair thickness', 'SOLIDIFY'); sol.thickness = .018; sol.offset = -1
+    for p in o.data.polygons: p.use_smooth = True
+    return o
+
 def nose(name, length, width, depth, parent, droop=0):
     # Wedge-shaped nose with a narrow bridge and rounded tip (lofted, not a ball).
     rings_ = []
@@ -392,9 +406,7 @@ tabs = empty('cast-collartabs', (0, 0, 0), head)
 for sd in [-1, 1]: box('Collar oak tab', (sd * .1, .13, -.19), (.07, .02, .06), trim, .006, tabs)
 tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, tabs)
 short = empty('cast-shorthair', (0, 0, 0), head)    # short back and sides, shared by most roles
-for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .26, -.03, .14), (.06, .16, .12), hair, short)
-ellipsoid('Hair back', (0, -.1, .12), (.285, .2, .2), hair, short)
-ellipsoid('Hair nape', (0, -.2, -.04), (.2, .1, .1), hair, short)
+hair_shell('Short back and sides', short, lambda x, y, z: z > -.06 and (y < .02 or abs(x) > .24) and not (abs(x) > .25 and z < .08 and y > -.08), .012)
 
 def cast(name):
     return empty('cast-' + name, (0, 0, 0), head)
@@ -466,16 +478,14 @@ def strand(name, path, widths, thick, m, parent, centre=(0, 0, .08), n=10):
     return loft(name, rings_, m, parent, 1)
 
 c = cast('sidepart')                              # Hitler: flat dark top, left parting, forelock across the brow
-ellipsoid('Slick hair cap', (0, -.09, .29), (.285, .265, .105), hair, c, 20)
-ellipsoid('Parted hair volume', (.07, -.01, .33), (.19, .19, .055), hair, c, 16)
+hair_shell('Slick parted hair', c, lambda x, y, z: z > .2 and (y < .17 or z > .3), .024, .05)
 strand('Forelock', [(-.11, .08, .375), (-.04, .19, .34), (.05, .25, .285), (.12, .275, .23), (.18, .27, .19), (.205, .25, .17)], [.04, .08, .095, .08, .05, .02], .03, hair, c)
 strand('Forelock lower strand', [(-.02, .2, .33), (.07, .262, .27), (.14, .278, .215)], [.03, .045, .02], .022, hair, c)
 strand('Parting edge', [(-.1, -.15, .35), (-.1, 0, .375), (-.09, .12, .37)], .012, .012, hair, c)
 c = cast('toothbrush')                            # Hitler: small square moustache under the nose
 box('Toothbrush moustache', (0, .322, -.04), (.085, .05, .042), hair, .012, c)
 c = cast('swept')                                 # Stalin: thick hair brushed straight back
-ellipsoid('Swept-back hair', (0, -.09, .29), (.3, .28, .13), hair, c, 20)
-ellipsoid('Swept-back front roll', (0, .09, .35), (.24, .13, .07), hair, c, 16)
+hair_shell('Swept-back hair', c, lambda x, y, z: z > .16 and (y < .19 or z > .29), .032, .12)
 for k in range(5):
     x = -.16 + k * .08
     strand('Combed strand', [(x, .19, .35), (x * 1.05, .02, .41), (x * 1.08, -.18, .38)], .028, .012, hair, c)
@@ -490,13 +500,13 @@ c = cast('chin')                                  # Mussolini: bald dome, juttin
 loft('Jutting jaw', [ring(w, h, z, y, 16, 3) for y, w, h, z in [(.05, .2, .05, -.17), (.18, .17, .06, -.18), (.27, .1, .055, -.2)]], skin, c, 1)
 tube('Pouting lip', [(-.07, .3, -.105), (0, .315, -.115), (.07, .3, -.105)], .02, skin, c)
 c = cast('maohair')                               # Mao: high receding hairline, hair combed back, chin mole
-ellipsoid('Receding hair', (0, -.1, .28), (.295, .26, .13), hair, c, 20)
+hair_shell('Receding combed-back hair', c, lambda x, y, z: z > .12 and y < .1, .028, .06)
 for sd in [-1, 1]: ellipsoid('Full side hair', (sd * .245, -.06, .2), (.075, .18, .12), hair, c, 12)
 ellipsoid('Chin mole', (-.035, .295, -.16), (.018, .012, .018), mole_dark, c, 8)
 c = cast('undercut')                              # Kim Jong-un: shaved sides, flat volume on top, round cheeks
-ellipsoid('Undercut top volume', (0, -.01, .345), (.215, .25, .085), hair, c, 20)
+hair_shell('Undercut top', c, lambda x, y, z: z > .26 and abs(x) < .2, .03, .25)
 strand('Undercut fringe', [(-.16, .17, .37), (-.06, .23, .345), (.06, .255, .325), (.15, .23, .31)], [.04, .055, .05, .03], .028, hair, c)
-ellipsoid('Undercut crown', (0, -.12, .31), (.2, .16, .08), hair, c, 16)
+
 for sd in [-1, 1]: ellipsoid('Shaved side', (sd * .272, -.04, .15), (.035, .18, .12), hat_cloth, c, 12)
 c = cast('chubby')                                # round full cheeks (Kim Jong-un, Mao)
 for sd in [-1, 1]: e = ellipsoid('Full cheek', (sd * .17, .17, -.05), (.07, .07, .08), skin, c); e.scale[1] = .05
