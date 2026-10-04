@@ -1,5 +1,8 @@
 # Assets und visuelle Referenzen
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Laufender großer Slice – 03.10.2026
 
 Kostenlose lokale Pipeline: portable Blender 4.5.3 LTS unter ignoriertem `.tools/`, originale Generatoren und editierbare `.blend` unter `art-source/`, Laufzeit-GLB unter `public/assets/models/`. Poly-Haven-CC0-Baum und Pflaster sind anhand offizieller Quellen dokumentiert. Audio-WAVs original; vorläufige Pianoaufnahme mit CC-BY-4.0-Attribution. `public/assets/CREDITS.md` enthält Herkunft/Bearbeitung. G–L bleibt Bildreferenz und wird nicht als Spieltextur kopiert. Der aktuelle Himmel nutzt ein offizielles Poly-Haven-CC0-Panorama in 4K/2K; die frühere Imagegen-Textur wird nicht mehr geladen. Reproduktions- und Bearbeitungshinweise in `art-source/README.md`; lokale GLB-Optimierung mit glTF Transform SDK/Sharp, keine externe Produktionsplattform.
