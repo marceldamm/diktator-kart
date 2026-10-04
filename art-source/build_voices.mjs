@@ -37,7 +37,6 @@ const LINES = {
   'announcer-finish': ['announcer', 'Und im Ziel! Schön, dass ihr dabei wart.'],
   'general-horn': ['male', 'Platz da! Mein Antrag ist dringend!', 'amused'],
   'marschall-horn': ['male', 'Zur Seite! Der Plan wartet nicht!', 'neutral'],
-  'imperator-horn': ['male', 'Achtung! Mein Lorbeer hat Vorfahrt!', 'amused'],
   'kommandant-horn': ['male', 'Bitte den Weg frei stempeln!', 'neutral'],
   'kim-horn': ['male', 'Platz da! Ich habe dieses Rennen schon gestern gewonnen!', 'amused'],
   'castro-horn': ['male', 'Aus dem Weg! Meine Rede dauert noch vier Stunden!', 'neutral'],
@@ -74,5 +73,7 @@ for (const [id, [voice, text, emotion]] of Object.entries(LINES)) {
   for(let offset=12;offset+8<=wav.length;){const size=wav.readUInt32LE(offset+4);if(wav.toString('ascii',offset,offset+4)==='data'){let peak=1;for(let i=offset+8;i<offset+8+size;i+=2)peak=Math.max(peak,Math.abs(wav.readInt16LE(i)));const gain=.8*32767/peak;for(let i=offset+8;i<offset+8+size;i+=2)wav.writeInt16LE(Math.round(wav.readInt16LE(i)*gain),i);break;}offset+=8+size+(size%2);}
   for(let retry=0;;retry++){try{writeFileSync(path,wav);break;}catch(error){if(retry>=10)throw error;Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,100);}}
 }
-writeFileSync(join(out, 'lines.json'), JSON.stringify(Object.fromEntries(Object.entries(LINES).map(([id, [voice, text, emotion]]) => [id, { voice, text, emotion: emotion ?? null }])), null, 2) + '\n');
+// Real historical recordings (art-source/cut_real_voices.mjs) are kept and listed, never re-synthesised.
+const REAL = { 'imperator-horn': { voice: 'historical', text: 'Originalton Mussolini, Rede vom 16.11.1922 (Redebeginn), gemeinfrei', emotion: null } };
+writeFileSync(join(out, 'lines.json'), JSON.stringify(Object.assign(Object.fromEntries(Object.entries(LINES).map(([id, [voice, text, emotion]]) => [id, { voice, text, emotion: emotion ?? null }])), REAL), null, 2) + '\n');
 console.log(`${Object.keys(LINES).length} voice lines written to public/assets/audio/voice`);

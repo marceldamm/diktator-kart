@@ -75,9 +75,9 @@
     "emotion": "neutral"
   },
   "imperator-horn": {
-    "voice": "male",
-    "text": "Achtung! Mein Lorbeer hat Vorfahrt!",
-    "emotion": "amused"
+    "voice": "historical",
+    "text": "Originalton Mussolini, Rede vom 16.11.1922 (Redebeginn), gemeinfrei",
+    "emotion": null
   },
   "kommandant-horn": {
     "voice": "male",
