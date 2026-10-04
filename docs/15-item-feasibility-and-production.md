@@ -1,5 +1,8 @@
 # Sarahs Itemideen – machbare Produktionsfassung
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Integrierte gemeinsame Startregeln – 03.10.2026
 
 Im aktuellen neutralen Slice: ein Slot je Fahrer, neun regenerierende Postkisten, direkte Rohrpost, begrenzt nachführender Suchauftrag und Stempelfalle. Gemeinsame Trefferregeln für Mensch/Bots: Projektilverbrauch, kurzzeitige Verlangsamung, Drift-/Boostabbruch, 1,8 s Schutz; ausreichend hoher Hop vermeidet den Treffer. Je Typ höchstens sechs aktive Objekte, feste Meshpools, TTL und Warnanzeige. Neutrale Original-GLBs/WAVs mit editierbaren Quellen; keine fahrerspezifische historische Darstellung und keine persönliche Spezialfähigkeit. Verifiziert durch Modelltests und echte Drei-Runden-Browserläufe. Direkte Botprojektile verfehlten in den beobachteten Rennen; das wird nicht als Trefferabnahme dargestellt. Balancewerte sind vorläufig.
