@@ -39,6 +39,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Hupen wieder TTS (Marcel):** Mussolini-Originalton zurückgestellt; Quelle/Schnittskript bleiben für später (`art-source/cut_real_voices.mjs`, Ausgabe nur noch nach `.tools/`). **Merken:** echte historische Hupen später erneut angehen.
 - [x] **Charaktermodell überarbeitet (Blender):** Kopf als durchgehend modellierte Oberfläche (Brauenwulst, Augenhöhlen, Wangenknochen, Kiefer, Kinn) statt aufgesetzter Kugeln; Keilnasen; geformte Stiefel statt Kugeln; Taille statt Kugelbauch. Bild `docs/evidence/2026-10-04-sculpted-head.jpg`.
 - [x] **Beine/Füße/Pedale:** Armaturenbrett nach vorn/oben, Knie darunter, Schienbein zum Pedal, Stiefelsohle auf Gas/Bremse (bewegen sich mit Eingabe).
+- [x] **Haare als Schale am Schädel** je Frisur (keine Helmkugeln mehr), geformte Schultern/Handflächen; **Parade-Front nur am Roadster**, andere Karosserien zeigen eigene Nasen. Bilder `docs/evidence/2026-10-04-portraits-hair-shells.jpg`, `…-grid-distinct-fronts.jpg`.
 - [ ] **Nächster Grafikschritt:** freie CC0-Basisfiguren prüfen (gefunden: Quaternius „Universal Base Characters“, CC0, glTF/.blend, stilisiert, Download über itch.io) und in Blender sitzend anpassen; Schultern/Arme weiter verfeinern.
 - [ ] Offen: individuelle Kart-Karosserien je Figur, weitere Strecke.
 

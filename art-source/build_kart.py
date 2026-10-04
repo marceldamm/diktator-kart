@@ -175,26 +175,28 @@ for sd in [-1, 1]:
     cyl('Shock absorber', (sd * .52, .72, .48), .025, .34, trim, kart)
     tube('Rear axle strut', [(sd * .3, -.74, .4), (sd * .78, -.74, .4)], .04, chrome, kart)
     helix('Rear suspension coil', (sd * .45, -.92, .36), .06, .3, 6, .013, chrome, kart)
+# Parade front (wing, brass bumper, laurel emblem) belongs to the roadster only; the other bodies show their own noses.
+roadster_front = empty('roadster-front', (0, 0, 0), bpy.data.objects['body-roadster'])
 # Front wing and bumper carry the emblem forward, like a parade float.
-box('Front wing', (0, 1.5, .3), (1.7, .34, .07), paint, .03, kart)
+box('Front wing', (0, 1.5, .3), (1.7, .34, .07), paint, .03, roadster_front)
 for sd in [-1, 1]:
-    box('Wing end plate', (sd * .86, 1.48, .37), (.05, .42, .22), trim, .02, kart)
-    tube('Bumper brass', [(sd * .82, 1.64, .3), (sd * .4, 1.7, .31), (0, 1.71, .31)], .028, trim, kart)
-box('Wing ivory stripe', (0, 1.5, .34), (1.5, .3, .01), ivory, .005, kart)
-for x in [-.12, -.06, 0, .06, .12]: tube('Front grille rib', [(x, 1.38, .36), (x, 1.36, .45), (x, 1.3, .52)], .011, trim, kart)
+    box('Wing end plate', (sd * .86, 1.48, .37), (.05, .42, .22), trim, .02, roadster_front)
+    tube('Bumper brass', [(sd * .82, 1.64, .3), (sd * .4, 1.7, .31), (0, 1.71, .31)], .028, trim, roadster_front)
+box('Wing ivory stripe', (0, 1.5, .34), (1.5, .3, .01), ivory, .005, roadster_front)
+for x in [-.12, -.06, 0, .06, .12]: tube('Front grille rib', [(x, 1.38, .36), (x, 1.36, .45), (x, 1.3, .52)], .011, trim, roadster_front)
 # Nose emblem: fictional laurel, crown and paragraph sign in polished brass.
 cx, cy, cz = 0, 1.0, .84
-torus('Nose emblem laurel ring', (cx, cy, cz), .2, .03, trim, kart, 'Y')
+torus('Nose emblem laurel ring', (cx, cy, cz), .2, .03, trim, roadster_front, 'Y')
 for k in range(14):
     a = math.pi * (.15 + .7 * k / 13)
     for sd in [-1, 1]:
-        ellipsoid('Emblem laurel leaf', (cx + sd * .23 * math.cos(a), cy + .02, cz + .23 * math.sin(a) - .05), (.035, .015, .06), trim, kart, 6)
+        ellipsoid('Emblem laurel leaf', (cx + sd * .23 * math.cos(a), cy + .02, cz + .23 * math.sin(a) - .05), (.035, .015, .06), trim, roadster_front, 6)
 text_curve = bpy.data.curves.new('Emblem paragraph', 'FONT'); text_curve.body = '§'; text_curve.align_x = 'CENTER'; text_curve.size = .3; text_curve.extrude = .03; text_curve.resolution_u = 3
 emb = bpy.data.objects.new('Emblem paragraph', text_curve); bpy.context.collection.objects.link(emb)
-emb.location = (cx, cy + .02, cz - .1); emb.rotation_euler = (math.pi / 2, 0, math.pi); emb.data.materials.append(trim); emb.parent = kart
+emb.location = (cx, cy + .02, cz - .1); emb.rotation_euler = (math.pi / 2, 0, math.pi); emb.data.materials.append(trim); emb.parent = roadster_front
 bpy.ops.object.select_all(action='DESELECT'); emb.select_set(True); bpy.context.view_layer.objects.active = emb; bpy.ops.object.convert(target='MESH')
-for k, x in enumerate([-.12, 0, .12]): ellipsoid('Emblem crown point', (x, cy + .02, cz + .27 + (.05 if k == 1 else 0)), (.035, .03, .05), trim, kart, 8)
-box('Emblem crown band', (0, cy + .02, cz + .23), (.3, .04, .06), trim, .01, kart)
+for k, x in enumerate([-.12, 0, .12]): ellipsoid('Emblem crown point', (x, cy + .02, cz + .27 + (.05 if k == 1 else 0)), (.035, .03, .05), trim, roadster_front, 8)
+box('Emblem crown band', (0, cy + .02, cz + .23), (.3, .04, .06), trim, .01, roadster_front)
 # Rear: lacquered cowl with the brass emblem facing the chase camera, exposed twin engine below.
 cowl = [(-1.0, .44, .2, .74), (-1.18, .42, .2, .72), (-1.34, .36, .17, .68), (-1.44, .26, .12, .64)]
 loft('Rear cowl', [ring(w, hh, zc, y, 18, 2.4) for y, w, hh, zc in cowl], paint, kart, 1)

@@ -56,6 +56,10 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 ## Einträge
 
+### 2026-10-04 (Abend) – Claude: Charaktermodell ohne Kugeln, Beine/Pedale, TTS-Hupen
+
+`build_kart.py`: Kopf-Mesh nach Unterteilung per Vertex-Verschiebung modelliert (Brauenwulst, Augenhöhlen, Wangenknochen/-mulden, Kinn, Kieferwinkel), Lofted-Nasen (`nose()`), `hair_shell()` (Kopiefläche mit Haarlinie, Solidify), Schulter-Lofts, Stiefel-Lofts auf den Pedalen, Armaturenbrett y .5/z 1.06, Parade-Front unter `body-roadster`. Mussolini-Hupe wieder TTS (Originalton-Schnitt nur noch nach `.tools/`). Quaternius „Universal Base Characters“ (CC0) als möglicher nächster Schritt notiert. Tests 46/46; Bilder `docs/evidence/2026-10-04-{sculpted-head,portraits-hair-shells,grid-distinct-fronts}.jpg`. Nicht nach main veröffentlicht.
+
 ### 2026-10-04 (später Nachmittag) – Claude: Karosserien, Proportionen, Bot-Überholen, echte Stimme
 
 `build_kart.py`: sechs `body-<name>`-Varianten (gemeinsame Räder/Kotflügel/Cockpit), Kopf `scale .7` bei z 1.75; `cast.ts` Feld `body`. Haut-PBR mit Translucency/Sheen, Augen mit Clear-Coat. `botInput`: fünf Spuren, Gewichtung langsamer Vordermänner ×3,2, Bremsen nur bei blockierter Zielspur; Vergleichssimulation alt/neu 9/16 Platzwechsel. Echte Stimme: Commons-Datei (PD) nach `.tools/voice-sources/`, Redebeginn 1,11–4,38 s, `build_voices.mjs` schützt `imperator-horn` (REAL-Eintrag). Bilder `docs/evidence/2026-10-04-{individual-bodies,grid-realistic-heads,portraits-realistic}.jpg`. Tests 46/46. Nicht nach main veröffentlicht.
