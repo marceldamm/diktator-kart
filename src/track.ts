@@ -152,7 +152,7 @@ export function boostPadAt(x: number, z: number): number {
 }
 
 /** A kart beyond the open quay edge drops into the harbour basin. */
-export function hazardAt(x: number, z: number): 'water' | 'lava' | null {
+export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | null {
   const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);
   return h && Math.abs(lane) > TRACK.halfWidth + 1.3 ? h.kind : null;
 }

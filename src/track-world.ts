@@ -227,8 +227,12 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     for (const [from, centre] of BOOST_PADS) { const pad = sweep(scene, 'Boost pad', [[centre - 1.5, .05], [centre + 1.5, .05]], padMaterial, { uScale: 1, vScale: 1, step: .5, from, to: from + 6 }); boostPads.push(pad); }
   }
   for (const zone of HAZARDS) { // Open-edge hazard: water basin or furnace pit, quay walls, warning edge, signs and the salvage crane.
-    const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava';
+    const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava', cliff = zone.kind === 'cliff';
     const water = pbr(scene, lava ? 'Furnace glow' : 'Harbour water', lava ? '#ff5a12' : '#1d3b44', lava ? 0 : .25, lava ? .9 : .08); if (!lava) water.alpha = .93;
+    if (cliff) { // painted abyss: rock strata fading into darkness
+      const abyss = canvasTexture(scene, 'Abyss', 64, 256, (c) => { const g = c.createLinearGradient(0, 0, 0, 256); g.addColorStop(0, '#5c5246'); g.addColorStop(.12, '#3a332b'); g.addColorStop(.35, '#120f0c'); g.addColorStop(1, '#000000'); c.fillStyle = g; c.fillRect(0, 0, 64, 256);
+        c.fillStyle = 'rgba(120,105,85,.35)'; for (let y = 6; y < 70; y += 9) c.fillRect(0, y, 64, 2); });
+      water.albedoTexture = abyss; water.albedoColor = Color3.White(); water.roughness = 1; water.metallic = 0; water.alpha = 1; }
     if (lava) { // dark crust plates with glowing cracks
       const crust = canvasTexture(scene, 'Furnace crust', 256, 256, (c) => { c.fillStyle = '#ff7a18'; c.fillRect(0, 0, 256, 256);
         for (let i = 0; i < 26; i++) { const x = (i * 53) % 256, y = (i * 97) % 256, r = 18 + (i * 7) % 22; c.fillStyle = i % 3 ? '#2a1208' : '#4a1d0a'; c.beginPath();
@@ -243,7 +247,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
     const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
-      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(lava ? 'STAATSOFEN' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
     const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
     for (const at of [from - 4, to + 4]) {
       const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
@@ -339,6 +343,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const lampMatrices: Matrix[] = [], bannerBase: { s: number; side: number; m: Matrix; phase: number }[] = [];
   const spacing = 24;
   for (let s = 8; s < TRACK.length - 6; s += spacing) for (const side of [-1, 1]) {
+    if (side > 0 && HAZARDS.some((h) => s >= h.from - 1 && s <= h.to + 1)) continue; // no lamps standing in a basin or pit
     if (Math.abs(s - TRACK.start) < 6) continue;
     const at = s + (side > 0 ? spacing / 2 : 0), p = trackPoint(at, side * (W + 2.6));
     // Local -x arm reaches over the barrier toward the road.

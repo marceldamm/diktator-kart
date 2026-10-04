@@ -385,7 +385,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const debris = Array.from({ length: 12 }, (_, i) => { const m = i % 3 === 0 ? MeshBuilder.CreateCylinder(`Debris hubcap ${i}`, { diameter: .32, height: .06, tessellation: 12 }, scene) : MeshBuilder.CreateBox(`Debris plate ${i}`, { width: .4, height: .05, depth: .28 }, scene);
       m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
-    let salvageNow: number[] = [];
+    let salvageNow: number[] = []; const salvageDepth: number[] = [];
     // Propaganda zeppelin: announced lap-2 flyover with a slogan banner (purely decorative).
     const zeppelin = new TransformNode('Propaganda zeppelin', scene); zeppelin.setEnabled(false);
     { const hull = MeshBuilder.CreateSphere('Zeppelin hull', { diameter: 1, segments: 20 }, scene); hull.scaling.set(9, 9, 34); hull.parent = zeppelin;
@@ -472,7 +472,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
       craterHit(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 10 : 34); },
       trackEvent() { zeppelinTime = 0; zeppelin.setEnabled(true); },
-      splash(kart, kind) { const at = lastStates[kart]; if (!at) return;
+      splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : .9;
+        if (kind === 'cliff') { burst(puff, at, reducedEffects ? 10 : 30); return; }
         if (kind === 'lava') { fireball.emitter = new Vector3(at.x, .2, at.z); fireball.manualEmitCount = reducedEffects ? 40 : 120; wreckSmoke.emitter = new Vector3(at.x, .5, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 30 : 90; return; }
         splash.emitter = new Vector3(at.x, 0, at.z); splash.manualEmitCount = reducedEffects ? 40 : 160; },
       setSalvage(timers) { salvageNow = timers; },
@@ -670,7 +671,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           }
           // Harbour salvage: sink, then the crane hook lifts the kart out of the water.
           { const left = salvageNow[index] ?? 0, cable = cables[index];
-            if (left > 0) { const t = 3.2 - left, y = t < 1 ? -.9 * t : -.9 + Math.min(1, (t - 1) / 1.4) * 4.1;
+            if (left > 0) { const t = 3.2 - left, d = salvageDepth[index] ?? .9, y = t < 1 ? -d * t : -d + Math.min(1, (t - 1) / 1.4) * (d + 3.2);
               v.root.position.y = y + Math.sin(time * 3) * (t > 2.4 ? .08 : 0); v.root.rotation.z = t > 1 ? Math.sin(time * 2.4) * .12 : 0;
               cable.setEnabled(t > .7); const top = 11, bottom = y + 1.6; cable.scaling.y = Math.max(.1, top - bottom); cable.position.set(s.x, (top + bottom) / 2, s.z);
             } else { cable.setEnabled(false); v.root.rotation.z = 0; } }

@@ -694,7 +694,7 @@ class App {
             } else if(hazardAt(k.x,k.z)){
               const kind=hazardAt(k.x,k.z)!;this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);
               if(i===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<40){this.audio.itemEvent('hit');this.audio.cheer(.7);}
-              if(i===0){this.itemMessage=kind==='lava'?'In den Staatsofen! Das Staatliche Bergungsamt rückt an':'Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
+              if(i===0){this.itemMessage=kind==='cliff'?'Absturz! Das Staatliche Bergungsamt seilt sich ab':kind==='lava'?'In den Staatsofen! Das Staatliche Bergungsamt rückt an':'Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
             }
           });
           this.kart=all[0];this.loadKarts=all.slice(1);this.testScene?.setSalvage?.(this.salvage);
