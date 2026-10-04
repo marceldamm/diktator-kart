@@ -11,6 +11,11 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Morgen prüfen – 05.10.2026
+
+- [ ] **PC-/Cloud-Lauf und Veröffentlichung verifizieren:** Commits und Branches prüfen, den vom PC gemeldeten Arbeitsstand mit GitHub `main` vergleichen, tatsächliche Tests/Build-Belege lesen und prüfen, ob Sarah den veröffentlichten Stand abrufen kann. Kommentar „98 % fertig“ allein gilt nicht als Nachweis.
+- [ ] **Handyänderungen im PC-Stand prüfen:** Die heute per Handy/GitHub eingetragenen Dokuänderungen und Notizen auf `main` prüfen und nach dem nächsten Projektstart mit dem PC-Arbeitsstand vergleichen. Bestätigen, dass sie dort sichtbar sind und beim Abgleich nichts verloren ging oder kollidierte.
+
 **Aktuell (04.10. Abend, Claude):** Kamera-Maus repariert, historischer Startkader auf Karikaturstufe, Fahrerwahl mit Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch als Bot), eigener deutscher Marsch statt Klaviermusik, Ziel-Feuerwerk und Siegerporträts. Alles im Browser geprüft; Hör-/Spielabnahme durch Marcel und Sarah offen.
 **Danach:** Gesichter/Haare weiter verfeinern (Marcel: „noch Optimierungsbedarf“), Marsch menschlich anhören und ggf. nachschärfen, eigene Fähigkeiten für Stalin/Mussolini/Mao/Kim/Castro nach gemeinsamer Bestätigung, Wolkenschatten im Regen, Bot-Ideallinie Hinterhofgasse.
 **Arbeitsbranch:** codex/team-marcel-20261003-232302-374 (Projektstart 04.10., Claude, auf main f784078). Abschluss nach main am 04.10. nachts; Details in PROGRESS-LOG.md.
