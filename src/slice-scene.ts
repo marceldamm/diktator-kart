@@ -145,6 +145,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
       const recolourable: {mesh:Mesh;kind:'paint'|'uniform'|'cape'|'hatColor'|'hair';material:PBRMaterial}[] = [];
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
+      const pedals = ['gas', 'brake'].map((p) => nodes.find((n) => n.name === `kart${index}/pedal-${p}`) as TransformNode | undefined);
+      for (const p of pedals) if (p) p.rotationQuaternion = null;
       const steering = nodes.find((n) => n.name === `kart${index}/steeringWheel`) as TransformNode;
       const arms = ['L', 'R'].map((side) => nodes.find((n) => n.name === `kart${index}/armPose-${side}`) as TransformNode | undefined);
       for (const arm of arms) if (arm) arm.rotationQuaternion = null;
@@ -178,7 +180,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
       });
-      const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
+      const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
         paintColour: Color3.Black(), soot: -1, wreckAge: -1,
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
@@ -532,6 +534,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;
           v.head.rotation.x=s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
           if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }
+          // Pedals follow what the driver is doing: gas while gaining speed, brake while slowing hard.
+          v.gas += ((longitudinal > .4 && s.speed > 0 ? 1 : 0) - v.gas) * Math.min(1, dt * 14); v.brake += ((longitudinal < -3 ? 1 : 0) - v.brake) * Math.min(1, dt * 14);
+          if (v.pedals[0]) v.pedals[0].rotation.x = -v.gas * .45; if (v.pedals[1]) v.pedals[1].rotation.x = -v.brake * .45;
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
           // Damage look: soot on the paint, engine smoke, and the comic driver ejection during a wreck.

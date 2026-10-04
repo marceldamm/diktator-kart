@@ -178,6 +178,17 @@ for sd in [-1, 1]:
 cyl('Brass air intake', (0, -.98, .46), .07, .2, trim, kart, 'Y', r2=.11)
 tube('Rear bumper', [(-.7, -1.5, .34), (-.4, -1.58, .32), (.4, -1.58, .32), (.7, -1.5, .34)], .04, chrome, kart)
 box('Number plate', (0, -1.45, .42), (.36, .03, .16), ivory, .01, kart)
+# Pedals under the boots: runtime nodes 'pedal-gas' (right) and 'pedal-brake' (left) tilt with throttle/brake.
+for name, sd in [('pedal-gas', 1), ('pedal-brake', -1)]:
+    p = empty(name, (sd * .19, .8, .38), kart)
+    rod('Pedal arm', (0, 0, 0), (0, -.04, .2), .015, chrome, p)
+    box('Pedal pad', (0, -.05, .2), (.11, .03, .14), leather, .01, p)
+    box('Pedal grip plate', (0, -.067, .2), (.1, .008, .12), trim, .003, p)
+# Rear-view mirrors on chrome stalks, glass facing backwards.
+for sd in [-1, 1]:
+    rod('Mirror stalk', (sd * .44, .52, .8), (sd * .5, .5, 1.06), .014, chrome, kart)
+    cyl('Mirror housing', (sd * .51, .5, 1.1), .075, .04, chrome, kart, 'Y', verts=18)
+    cyl('Mirror glass', (sd * .51, .478, 1.1), .064, .006, glass, kart, 'Y', verts=18)
 # Seat and dashboard.
 box('Seat cushion', (0, -.55, .78), (.6, .62, .14), leather, .06, kart)
 seat_rings = []
@@ -254,7 +265,13 @@ for sd in [-1, 1]:
     arm = empty('armPose-' + ('L' if sd < 0 else 'R'), (sd * .42, -.45, 1.44), driver)
     tube('Uniform arm', [(0, 0, -.02), (sd * .04, .33, -.26), (-sd * .22, .6, -.24)], .1, uniform, arm)
     tube('Gold cuff', [(-sd * .16, .53, -.24), (-sd * .2, .57, -.24)], .105, trim, arm)
-    ellipsoid('Glove', (-sd * .23, .64, -.23), (.09, .1, .08), white_glove, arm)
+    # Gloved hand gripping the rim: palm on the outside, four curled fingers and a thumb around the leather.
+    ellipsoid('Glove palm', (-sd * .26, .63, -.24), (.055, .065, .075), white_glove, arm)
+    rim_c = (-sd * .21, .65, -.24)
+    for k, dz in enumerate([-.048, -.016, .016, .048]):
+        pts = [(rim_c[0] + .047 * math.cos(a) * sd, rim_c[1] + .047 * math.sin(a), rim_c[2] + dz) for a in [-1.9, -.9, 0, .9, 1.9, 2.6]]
+        tube('Glove finger', pts, .016 - abs(dz) * .05, white_glove, arm)
+    tube('Glove thumb', [(rim_c[0] + sd * .03, rim_c[1] - .03, rim_c[2] + .07), (rim_c[0] - sd * .01, rim_c[1] + .02, rim_c[2] + .08), (rim_c[0] - sd * .04, rim_c[1] + .03, rim_c[2] + .05)], .017, white_glove, arm)
     # Full seated legs: thigh up to a raised knee, shin down into the nose, boots on the pedals.
     tube('Uniform thigh', [(sd * .17, -.38, .9), (sd * .19, -.05, .98), (sd * .21, .2, 1.06)], .115, uniform, driver)
     ellipsoid('Uniform knee', (sd * .21, .22, 1.06), (.12, .12, .12), uniform, driver)
