@@ -49,6 +49,8 @@ export interface TestScene {
   splash?(kart: number, kind?: 'water' | 'lava'): void;
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
+  /** Announced decorative track event (lap 2 propaganda zeppelin flyover). */
+  trackEvent?(kind: 'zeppelin'): void;
   /** Comic wreck explosion for one kart. */
   wreck?(kart: number): void;
   /** Called on a lightning flash so the audio can thunder. */

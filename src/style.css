@@ -197,3 +197,8 @@ button:disabled { opacity: .5; cursor: default; }
 #health.wrecked { animation: wreck-flash .5s steps(2) infinite; }
 @keyframes wreck-flash { 50% { opacity:.35; } }
 #health b { font-weight:600;color:#f2e2bc;font-variant-numeric:tabular-nums; }
+
+/* Incoming projectile: pulsing red screen edge in addition to the text warning. */
+body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 90px 18px #d0281f88;animation:incoming-pulse .5s ease-in-out infinite alternate;z-index:5; }
+@keyframes incoming-pulse { from { opacity:.35; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { body.incoming-item::after { animation:none; } }

@@ -386,6 +386,19 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
     let salvageNow: number[] = [];
+    // Propaganda zeppelin: announced lap-2 flyover with a slogan banner (purely decorative).
+    const zeppelin = new TransformNode('Propaganda zeppelin', scene); zeppelin.setEnabled(false);
+    { const hull = MeshBuilder.CreateSphere('Zeppelin hull', { diameter: 1, segments: 20 }, scene); hull.scaling.set(9, 9, 34); hull.parent = zeppelin;
+      const hullMaterial = new PBRMaterial('Zeppelin silver', scene); hullMaterial.albedoColor = new Color3(.72, .72, .7); hullMaterial.metallic = .6; hullMaterial.roughness = .35; hull.material = hullMaterial;
+      const zeppelinTrim = new PBRMaterial('Zeppelin gold trim', scene); zeppelinTrim.albedoColor = Color3.FromHexString('#b98a3e'); zeppelinTrim.metallic = .9; zeppelinTrim.roughness = .3;
+      const gondola = MeshBuilder.CreateBox('Zeppelin gondola', { width: 2, height: 1.4, depth: 6 }, scene); gondola.position.y = -5; gondola.parent = zeppelin; gondola.material = zeppelinTrim;
+      for (const [x, y] of [[0, 4.5], [0, -4.5], [4.5, 0], [-4.5, 0]]) { const fin = MeshBuilder.CreateBox('Zeppelin fin', { width: x ? 5 : .3, height: y ? 5 : .3, depth: 5 }, scene); fin.position.set(x, y, -15); fin.parent = zeppelin; fin.material = zeppelinTrim; }
+      const bannerTexture = new DynamicTexture('Zeppelin banner', { width: 1024, height: 128 }, scene, true);
+      { const c = bannerTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#7a1820'; c.fillRect(0, 0, 1024, 128); c.fillStyle = '#f3e3b8'; c.font = 'bold 64px Georgia'; c.textAlign = 'center'; c.fillText('SIEG IST PFLICHT · ZUSCHAUEN AUCH', 512, 88); bannerTexture.update(); }
+      const bannerMaterial = new StandardMaterial('Zeppelin banner', scene); bannerMaterial.diffuseTexture = bannerTexture; bannerMaterial.emissiveColor = new Color3(.35, .35, .35); bannerMaterial.backFaceCulling = false;
+      for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
+      for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
+    let zeppelinTime = -1;
     const cableMaterial = new StandardMaterial('Salvage cable', scene); cableMaterial.diffuseColor = new Color3(.1, .1, .1);
     const cables = visuals.map((_, i) => { const c = MeshBuilder.CreateCylinder(`Salvage cable ${i}`, { diameter: .06, height: 1 }, scene); c.material = cableMaterial; c.isPickable = false; c.setEnabled(false);
       const hook = MeshBuilder.CreateTorus(`Salvage hook ${i}`, { diameter: .5, thickness: .08, tessellation: 12 }, scene); hook.material = cableMaterial; hook.parent = c; hook.position.y = -.5; return c; });
@@ -457,6 +470,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       puddles() { return raining ? trackWorld.puddles : []; },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
+      trackEvent() { zeppelinTime = 0; zeppelin.setEnabled(true); },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return;
         if (kind === 'lava') { fireball.emitter = new Vector3(at.x, .2, at.z); fireball.manualEmitCount = reducedEffects ? 40 : 120; wreckSmoke.emitter = new Vector3(at.x, .5, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 30 : 90; return; }
         splash.emitter = new Vector3(at.x, 0, at.z); splash.manualEmitCount = reducedEffects ? 40 : 160; },
@@ -502,7 +516,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
         if (kind === 'finish') { fireworkTime = reducedEffects ? 4 : 9; nextBurst = 0; }
       },
-      resetEffects() { skids.clear(); fireworkTime = 0; },
+      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); },
       setQuality(level, reduced) {
         pipelineLevel = level;
         if(level!==skyQuality) {
@@ -523,6 +537,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         trackWorld.animate(time);
+        if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
+          zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;
+          if (u >= 1) { zeppelinTime = -1; zeppelin.setEnabled(false); } }
         { // Time of day on top of the weather: dusk warms and dims, night turns to moonlight.
           const night = Math.max(0, (timeOfDay - .45) / .55), dusk = Math.max(0, 1 - Math.abs(timeOfDay - .5) / .35);
           if (flash <= 0) {

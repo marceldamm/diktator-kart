@@ -168,6 +168,8 @@ class App {
     });
     window.addEventListener('keydown', (event) => {
       if (!LAB_WORLD) void this.audio.unlock();
+      // T: instant race restart with the same driver (no selection, no scene reload).
+      if (event.code === 'KeyT' && !this.selecting && this.state !== 'loading' && this.racePhase !== 'practice') { void this.beginRace(); return; }
       if (event.code === 'Enter' && this.racePhase !== 'countdown') void this.startRace();
     });
     pauseButton.addEventListener('click', () => this.togglePause());
@@ -438,7 +440,7 @@ class App {
     const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;itemButton.disabled=!item||this.racePhase!=='race';
     document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?'E · einsetzen':this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
-    const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
+    const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
       const owns=this.order[0]===0,tank=this.kart.tankRemaining>0,ready=owns&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
       const card=document.querySelector<HTMLElement>('#ability-card');
@@ -647,6 +649,7 @@ class App {
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
             this.lapNoticeUntil=this.raceTime+3;
             if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);}
+            if(this.lapTimes.length===1){this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';this.itemMessageUntil=this.items.time+3;}
           }
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
