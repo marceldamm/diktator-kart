@@ -1,3 +1,4 @@
+import { HAZARDS } from '../src/track-layout.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
@@ -10,7 +11,7 @@ test('track progress is continuous around the complete course; inner and outer b
     const p=trackPoint(s),actual=trackProgress(p.x,p.z);
     assert.ok(Math.abs(actual-s)<.001,`s=${s} actual=${actual}`);
     for(const lane of [-10,10]){
-      const outside=trackPoint(s,lane);if(inShortcut(outside.x,outside.z)||(lane>0&&((s>=230&&s<=296)||(s>=112&&s<=144))))continue; /* open harbour quay */ const safe=projectTrack(outside.x,outside.z);
+      const outside=trackPoint(s,lane);if(inShortcut(outside.x,outside.z)||(lane>0&&HAZARDS.some(h=>s>=h.from-6&&s<=h.to+6)))continue; /* open harbour quay */ const safe=projectTrack(outside.x,outside.z);
       assert.equal(safe.kind,'boundary');
       assert.equal(projectTrack(safe.x,safe.z).kind,null);
     }
@@ -19,7 +20,7 @@ test('track progress is continuous around the complete course; inner and outer b
 test('five bots complete three laps using the shared kart controller without teleportation',()=>{
   let states=Array.from({length:5},(_,i)=>gridKart(i+1));
   const races=states.map(createRaceProgress);
-  for(let step=0;step<60*180;step++){
+  for(let step=0;step<60*270;step++){ // 1.5x map
     states=states.map((s,i)=>advanceKart(s,botInput(s,i+1,states),1/60,projectTrack));
     states=resolveKartContacts(states,projectTrack);
     states.forEach((s,i)=>{advanceRace(races[i],s,step/60);assert.ok(Number.isFinite(s.x+s.z+s.speed));});

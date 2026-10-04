@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { BOOST_PADS, CRATERS, HAZARDS, LANDMARKS, SHORTCUT } from './track-layout';
+import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
@@ -20,7 +20,7 @@ export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; s
 
 const W = TRACK.halfWidth;
 /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
-const BOARD_RANGES: [number, number][] = [[2, 92], [282, 372]];
+const BOARD_RANGES: [number, number][] = [[2 * MAP_SCALE, 92 * MAP_SCALE], [282 * MAP_SCALE, 372 * MAP_SCALE]];
 const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
@@ -208,6 +208,21 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     }
   }
   const boostPads: Mesh[] = [], hazardGlow: Mesh[] = [];
+  { // Canal across the road (in front of the grandstands) with a timber take-off ramp.
+    const canalWater = pbr(scene, 'Canal water', '#1d3b44', .25, .08); canalWater.alpha = .95;
+    sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
+    const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
+    edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
+    for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
+    const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let y = 0; y < 256; y += 32) { c.fillStyle = y % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(0, y + 2, 256, 28); }
+      c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let y = 40; y < 256; y += 90) { c.beginPath(); c.moveTo(40, y + 40); c.lineTo(128, y); c.lineTo(216, y + 40); c.stroke(); } });
+    const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
+    const paths: Vector3[][] = [];
+    for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = CANAL_FROM - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .02 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
+    const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
+    const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(CANAL_FROM, lane); return [new Vector3(p.x, RAMP_HEIGHT + .02, p.z), new Vector3(p.x, -.2, p.z)]; });
+    const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
+  }
   { // Shell craters: scorched dirt decals with a raised rim and a training-ground sign (abstract, no real place).
     const scorch = canvasTexture(scene, 'Crater scorch', 256, 256, (c) => { const g = c.createRadialGradient(128, 128, 10, 128, 128, 126); g.addColorStop(0, '#1b140e'); g.addColorStop(.55, '#3a2a1c'); g.addColorStop(.8, '#5b4630'); g.addColorStop(1, 'rgba(91,70,48,0)'); c.fillStyle = g; c.fillRect(0, 0, 256, 256); }, true);
     const scorchMaterial = new StandardMaterial('Crater scorch', scene); scorchMaterial.diffuseTexture = scorch; scorchMaterial.useAlphaFromDiffuseTexture = true; scorchMaterial.specularColor = Color3.Black(); scorchMaterial.zOffset = -2;
@@ -380,7 +395,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const mast = MeshBuilder.CreateCylinder('Flag mast', { diameterTop: .09, diameterBottom: .16, height: 9.5, tessellation: 8 }, scene);
   mast.material = brass; mast.isPickable = false;
   const mastMatrices: number[] = [], flagMatrices: number[] = [];
-  for (let s = 112; s <= 205; s += 13) {
+  for (let s = 112 * MAP_SCALE; s <= 205 * MAP_SCALE; s += 13) {
     const p = trackPoint(s, W + 4.2);
     mastMatrices.push(...Matrix.Translation(p.x, 4.75, p.z).asArray());
     flagMatrices.push(...Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(p.x, 8.2, p.z)).asArray());

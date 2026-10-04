@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { boostPadAt, craterAt, hazardAt, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { atRampLip, boostPadAt, craterAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -679,6 +679,13 @@ class App {
             allKarts.forEach((k,i)=>{this.padCooldown[i]=Math.max(0,(this.padCooldown[i]??0)-FIXED_STEP);
               if(this.padCooldown[i]===0&&k.grounded&&boostPadAt(k.x,k.z)>=0){allKarts[i]={...k,turboRemaining:Math.max(k.turboRemaining,KART_TUNING.turboDuration),speed:Math.min(KART_TUNING.maxTurboSpeed,Math.max(k.speed,0)+KART_TUNING.turboSpeedBonus)};this.padCooldown[i]=1.2;if(i===0)this.audio.cue('start');}});
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
+          // Ramp: launch from the lip into a flight that scales with speed; a clean landing earns a short boost.
+          { const allKarts=[this.kart,...this.loadKarts];
+            allKarts.forEach((k,i)=>{
+              if((k.jumpRemaining??0)===0&&k.hopRemaining===0&&k.speed>3&&atRampLip(k.x,k.z)){const v=k.speed;allKarts[i]={...k,jumpRemaining:.45+v*.034,jumpDuration:.45+v*.034,jumpStart:1,jumpPeak:.7+v*.05,drifting:false,driftCharge:0};if(i===0)this.audio.cue('start');}
+              if(k.landedClean){allKarts[i]={...k,landedClean:false,turboRemaining:Math.max(k.turboRemaining,.7),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+2.5)};if(i===0){this.itemMessage='Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(.6);}}
+            });
+            this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Shell craters: a jolt on entry and loose-dirt drag while crossing (same for everyone).
           { const allKarts=[this.kart,...this.loadKarts];
             allKarts.forEach((k,i)=>{ if(!k.grounded||craterAt(k.x,k.z)<0){this.inCrater[i]=false;return;}
@@ -691,8 +698,8 @@ class App {
             if((this.salvage[i]??0)>0){
               this.salvage[i]=Math.max(0,this.salvage[i]-FIXED_STEP);this.recoveryRemaining[i]=Math.max(this.recoveryRemaining[i],FIXED_STEP*2);
               if(this.salvage[i]===0){all[i]=recoverKart(k,all);this.recoveryRemaining[i]=0;this.testScene?.salvaged?.(i);}
-            } else if(hazardAt(k.x,k.z)){
-              const kind=hazardAt(k.x,k.z)!;this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);
+            } else if(hazardAt(k.x,k.z)||(overCanal(k.x,k.z)&&(k.jumpRemaining??0)===0&&k.height<.05)){
+              const kind=hazardAt(k.x,k.z)??'water';this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);
               if(i===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<40){this.audio.itemEvent('hit');this.audio.cheer(.7);}
               if(i===0){this.itemMessage=kind==='cliff'?'Absturz! Das Staatliche Bergungsamt seilt sich ab':kind==='lava'?'In den Staatsofen! Das Staatliche Bergungsamt rückt an':'Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
             }

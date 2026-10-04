@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, CRATERS, HAZARDS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, RAMP_HEIGHT, RAMP_LENGTH, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -134,12 +134,25 @@ export function curvatureAhead(from: number, distance: number): { curvature: num
 
 export function trackHeightAt(x: number, z: number): number {
   const { s, lane } = trackLocate(x, z), delta = Math.abs(signedGap(s - BUMP_PROGRESS));
+  // Take-off ramp across the whole road before the canal.
+  if (s >= CANAL_FROM - RAMP_LENGTH && s <= CANAL_FROM && Math.abs(lane) <= TRACK.halfWidth + 1) return RAMP_HEIGHT * (s - (CANAL_FROM - RAMP_LENGTH)) / RAMP_LENGTH;
   // Painted kerbs are real rumble strips: a ridged 5 cm profile between the road edge and the wall.
   const kerb = Math.abs(lane) > TRACK.halfWidth && Math.abs(lane) < TRACK.wall ? .035 + .02 * Math.abs(Math.sin(s * Math.PI / 1.2)) : 0;
   return Math.max(kerb, delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0);
 }
 
 const hazardRange = (s: number, lane: number) => HAZARDS.find((h) => s >= h.from && s <= h.to && Math.sign(lane) === h.side);
+/** On the canal water (across the whole road). */
+export function overCanal(x: number, z: number): boolean {
+  const { s, lane } = trackLocate(x, z);
+  return s > CANAL_FROM && s < CANAL_FROM + CANAL_LENGTH && Math.abs(lane) <= TRACK.halfWidth + 1.2;
+}
+/** On the last metre of the take-off ramp. */
+export function atRampLip(x: number, z: number): boolean {
+  const { s, lane } = trackLocate(x, z);
+  return s >= CANAL_FROM - 1.4 && s <= CANAL_FROM + .2 && Math.abs(lane) <= TRACK.halfWidth + 1;
+}
+
 /** Index of the crater under a kart, or -1. */
 export function craterAt(x: number, z: number): number {
   return CRATERS.findIndex(([s, lane, r]) => { const p = trackPoint(s, lane); return Math.hypot(p.x - x, p.z - z) < r; });

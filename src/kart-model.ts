@@ -5,6 +5,10 @@ export interface KartState {
   travelHeading: number;
   speed: number;
   height: number;
+  /** Ramp jump: seconds left, total flight, take-off height and extra apex height. */
+  jumpRemaining?: number; jumpDuration?: number; jumpStart?: number; jumpPeak?: number;
+  /** True for the one step in which a jump ended in a clean, straight landing (landing boost). */
+  landedClean?: boolean;
   hopRemaining: number;
   drifting: boolean;
   driftDirection: number;
@@ -64,8 +68,8 @@ export const KART_TUNING = {
   reverseAcceleration: 6,
   maxForwardSpeed: 16,
   maxReverseSpeed: 5,
-  steeringPerMetre: 0.12,
-  maxYawRate: 1.5,
+  steeringPerMetre: 0.134,
+  maxYawRate: 1.68,
   coastDeceleration: 3.2,
   hopDuration: 0.42,
   hopHeight: 0.6,
@@ -76,8 +80,10 @@ export const KART_TUNING = {
   driftMaxSlip: 0.42,
   normalHeadingFollow: 5.5,
   /** Steering wheel travel rate (1/s) and yaw response rate (1/s): less direct, more car-like. */
-  steerRate: 6,
-  yawResponse: 7,
+  steerRate: 9,
+  /** Faster self-centring when the key is released or reversed (Marcel: steering felt too soft). */
+  steerReturnRate: 18,
+  yawResponse: 11,
   turboDuration: 1.2,
   turboSpeedBonus: 4,
   turboAcceleration: 4,
@@ -203,9 +209,10 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     hopRemaining = KART_TUNING.hopDuration;
   }
   const hopProgress = 1 - hopRemaining / KART_TUNING.hopDuration;
-  const height = hopRemaining > 0
-    ? 4 * KART_TUNING.hopHeight * hopProgress * (1 - hopProgress)
-    : 0;
+  const jumpRemaining = Math.max(0, (state.jumpRemaining ?? 0) - dt), jumpDuration = state.jumpDuration ?? 1;
+  const jumpU = 1 - jumpRemaining / jumpDuration;
+  const height = Math.max(hopRemaining > 0 ? 4 * KART_TUNING.hopHeight * hopProgress * (1 - hopProgress) : 0,
+    jumpRemaining > 0 ? (state.jumpStart ?? 0) * (1 - jumpU) + (state.jumpPeak ?? 0) * Math.sin(Math.PI * jumpU) : 0);
 
   let drifting = state.drifting;
   let driftDirection = state.driftDirection;
@@ -231,7 +238,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   }
 
   // The wheel needs time to turn and the body needs time to rotate: steering input -> steer -> yaw rate.
-  const steer = (state.steer ?? 0) + (steering - (state.steer ?? 0)) * Math.min(1, KART_TUNING.steerRate * dt);
+  const previousSteer = state.steer ?? 0, returning = Math.abs(steering) < Math.abs(previousSteer) || steering * previousSteer < 0;
+  const steer = previousSteer + (steering - previousSteer) * Math.min(1, (returning ? KART_TUNING.steerReturnRate : KART_TUNING.steerRate) * dt);
   const turn = drifting ? driftDirection * (.5 + .32 * steer * driftDirection) : steer;
   const targetYaw = Math.max(-KART_TUNING.maxYawRate,
     Math.min(KART_TUNING.maxYawRate, speed * turn * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
@@ -296,7 +304,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     driftDirection = 0;
   }
   if (impactRemaining === 0) impactKind = null;
-  const grounded = hopRemaining === 0;
+  const grounded = hopRemaining === 0 && jumpRemaining === 0;
+  const landedClean = (state.jumpRemaining ?? 0) > 0 && jumpRemaining === 0 && Math.abs(Math.sin(heading - travelHeading)) < .3 && impactRemaining === 0;
   const wheelGroundHeights = sampleWheelGround(x, z, heading, terrain);
   const averageGround = wheelGroundHeights.reduce((sum, contact) => sum + contact, 0) / 4;
   const targetOffset = grounded ? averageGround : 0;
@@ -312,7 +321,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const tiltBlend = Math.min(1, KART_TUNING.bodyTiltFollow * dt);
   const bodyPitch = state.bodyPitch + ((grounded ? Math.atan2(frontGround - rearGround, 1.36) : 0) - state.bodyPitch) * tiltBlend;
   const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
-  return { x, z, heading, travelHeading, speed, height, hopRemaining, drifting, driftDirection, driftCharge, turboRemaining,
+  return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
     scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,

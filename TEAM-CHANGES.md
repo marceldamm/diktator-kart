@@ -62,3 +62,5 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Strenger Marsch, Zufallswetter mit Schnee:** Neue preußische Spielmannszug-Musik; das Wetter wird beim Laden ausgewürfelt (Sonne, Regen oder neu Schnee). Panzerräder repariert, Gesichter feiner (eigene Nasen, Wangen, Frisuren).
 - **Weniger Zwischen-Commits:** Die KI committet und dokumentiert gesammelt, Pflicht ist es beim Projektabschluss; zwischendurch nur, wenn wirklich nötig.
 - **Maus-Kamera repariert:** Halten links/rechts funktioniert jetzt auch, wenn der Browser den Mauszeiger nicht einfangen darf. Der alte Claude-Worktree ist gelöscht.
+
+- **Größere Karte mit Kanalsprung:** Die Strecke ist 1,5× so groß. Vor den Tribünen springt man jetzt über einen Kanal (Boost, Rampe, Landeschub, sonst Bergung). Lenkung direkter. Außerdem heute: Schadensmodell mit Totalschaden, Gefahrenzonen mit Bergungsamt, Tag-Nacht, feste Hände am Lenkrad, Boostflächen, Startschub.

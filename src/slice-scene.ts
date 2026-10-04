@@ -22,7 +22,7 @@ import { RenderTargetTexture } from '@babylonjs/core/Materials/Textures/renderTa
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline';
 import { TRACK, trackPoint } from './track';
-import { LANDMARKS } from './track-layout';
+import { LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
 import type { KartState } from './kart-model';
@@ -414,7 +414,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     let playerHidden = false;
     feed.onBeforeRenderObservable.add(() => { if (playerHidden) { visuals[0].head.setEnabled(true); for (const m of visuals[0].bodyMeshes) m.isVisible = true; } });
     feed.onAfterRenderObservable.add(() => { if (playerHidden) { visuals[0].head.setEnabled(false); for (const m of visuals[0].bodyMeshes) m.isVisible = false; } });
-    const wallAt = trackPoint(66, -(TRACK.halfWidth + 11));
+    const wallAt = trackPoint(66 * MAP_SCALE, -(TRACK.halfWidth + 11));
     const tv = new TransformNode('Staatsfernsehen wall', scene); tv.position.set(wallAt.x, 0, wallAt.z); tv.rotation.y = wallAt.heading - .45;
     const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = feed; screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.Black();
     const screen = MeshBuilder.CreatePlane('Staatsfernsehen picture', { width: 9.6, height: 5.4 }, scene); screen.parent = tv; screen.position.y = 9.2; screen.material = screenMaterial;

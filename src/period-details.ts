@@ -1,3 +1,4 @@
+import { MAP_SCALE } from './track-layout';
 import type {Scene} from '@babylonjs/core/scene';
 import {MeshBuilder} from '@babylonjs/core/Meshes/meshBuilder';
 import {TransformNode} from '@babylonjs/core/Meshes/transformNode';
@@ -41,7 +42,7 @@ export function addPeriodDetails(scene:Scene,shadow:ShadowGenerator):void{
   for(let i=0;i<3;i++){const back=take(MeshBuilder.CreateBox('Bench back slat',{width:2.8,height:.09,depth:.06},scene),root,slats,wood);back.position.set(0,.76+i*.13,-1.28);}
  }
  // An original architectural eagle watches over a satirical civilian administrative entrance.
- const p=trackPoint(310,TRACK.halfWidth+1.3),eagle=new TransformNode('Independent architectural eagle',scene);eagle.position.set(p.x,3.25,p.z);eagle.rotation.y=p.heading;
+ const p=trackPoint(310*MAP_SCALE,TRACK.halfWidth+1.3),eagle=new TransformNode('Independent architectural eagle',scene);eagle.position.set(p.x,3.25,p.z);eagle.rotation.y=p.heading;
  cylinder('Bird supporting stone column',0,-1.875,0,.4,2.75,eagle,bodies,stone);
  cylinder('Bird stone pedestal',0,-.3,0,.74,.6,eagle,bodies,stone);
  const body=take(MeshBuilder.CreateSphere('Eagle body',{diameter:1,segments:16},scene),eagle,trim,brass);body.scaling.set(.26,.53,.25);

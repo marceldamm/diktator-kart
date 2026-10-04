@@ -4,7 +4,10 @@
  * positive lane offsets lie on the driver's right. The same control points are
  * exported to art-source/track-layout.json for the Blender world builders.
  */
-export const TRACK_CONTROL_POINTS: readonly (readonly [number, number])[] = [
+/** Whole-map scale (Marcel, 04.10.2026: much bigger map). All positions below are base values × MAP_SCALE. */
+export const MAP_SCALE = 1.5;
+const S = MAP_SCALE;
+const BASE_CONTROL_POINTS: readonly (readonly [number, number])[] = [
   [59, -64], [56, -20], [54, 28], [51, 56],           // grandstand straight, north
   [40, 76], [20, 87], [-4, 88],                       // palace sweeper
   [-24, 82], [-37, 66], [-34, 50], [-40, 35], [-51, 21], // park esses
@@ -14,12 +17,13 @@ export const TRACK_CONTROL_POINTS: readonly (readonly [number, number])[] = [
   [22, -42], [26, -62], [33, -80], [45, -91],          // archive dip
   [57, -85],                                          // left onto the grandstand straight
 ];
+export const TRACK_CONTROL_POINTS: readonly (readonly [number, number])[] = BASE_CONTROL_POINTS.map(([x, z]) => [x * S, z * S] as const);
 
 export const TRACK_HALF_WIDTH = 6;
 /** Start / finish line in progress metres. */
-export const START_PROGRESS = 30;
+export const START_PROGRESS = 30 * S;
 /** Raised cobble hump: progress metres of its crest. */
-export const BUMP_PROGRESS = 345;
+export const BUMP_PROGRESS = 345 * S;
 
 export interface TrackSample { x: number; z: number; heading: number; s: number; curvature: number }
 
@@ -84,29 +88,32 @@ export function sampleTrack(points = TRACK_CONTROL_POINTS, spacing = .5): { samp
  * Backyard shortcut through the fountain hairpin: leaves the boulevard on the inside at `from`,
  * rejoins the return leg at `to`. Narrow, rough cobbles cap the speed unless a mini-turbo is active.
  */
-export const SHORTCUT = { from: 343, to: 452, halfWidth: 3, speedCap: 10.5, points: [[-46, -44], [-34, -44.5], [-22, -47.5]] as const };
+export const SHORTCUT = { from: 343 * S, to: 452 * S, halfWidth: 3, speedCap: 10.5, points: [[-46 * S, -44 * S], [-34 * S, -44.5 * S], [-22 * S, -47.5 * S]] as const };
 
 /** World anchors shared with the Blender builders (game x / z). */
+/** Canal across the grandstand straight in front of the stands: jump it from the ramp, or fall in and get salvaged. */
+export const CANAL_FROM = 85 * S, CANAL_LENGTH = 9, RAMP_LENGTH = 9, RAMP_HEIGHT = 1;
+
 /** Glowing boost pads [progress start, lane centre]; 6 m long, 3 m wide, same effect for everyone. */
-export const BOOST_PADS: readonly (readonly [number, number])[] = [[62, -2], [176, 2], [292, 0]];
+export const BOOST_PADS: readonly (readonly [number, number])[] = [[62 * S, -2], [176 * S, 2], [292 * S, 0], [CANAL_FROM - 22, 0]];
 
 /** Abstract 'Staatliches Übungsgelände': marked shell craters [progress, lane, radius] on the straight before the gate; avoidable. */
-export const CRATERS: readonly (readonly [number, number, number])[] = [[298, -3, 1.7], [305, 2.6, 1.9], [312, -.6, 1.6]];
+export const CRATERS: readonly (readonly [number, number, number])[] = [[298 * S, -3, 1.7], [305 * S, 2.6, 1.9], [312 * S, -.6, 1.6]];
 
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
-export const HARBOUR = { from: 236, to: 262, side: 1, basin: 9 } as const;
+export const HARBOUR = { from: 236 * S, to: 262 * S, side: 1, basin: 9 } as const;
 /** Open-edge hazards: harbour water (west bend) and a surreal satirical furnace pit (north-east bend). */
-export const HAZARDS = [{ ...HARBOUR, kind: 'water' }, { from: 118, to: 138, side: 1, basin: 6, kind: 'lava' }, { from: 272, to: 290, side: 1, basin: 7, kind: 'cliff' }] as const;
+export const HAZARDS = [{ ...HARBOUR, kind: 'water' }, { from: 118 * S, to: 138 * S, side: 1, basin: 6, kind: 'lava' }, { from: 272 * S, to: 290 * S, side: 1, basin: 7, kind: 'cliff' }] as const;
 
 export const LANDMARKS = {
-  palace: [0, 132] as const,
-  fountains: [[-33, -63], [8, 20]] as const,
+  palace: [0, 132 * S] as const,
+  fountains: [[-33 * S, -63 * S], [8 * S, 20 * S]] as const,
   /** Large park trees (Poly Haven CC0 model), kept well clear of the promenades. */
-  trees: [[24, 40], [-14, 60], [28, 2], [-6, 40], [-20, 20], [30, -16]] as const,
+  trees: ([[24, 40], [-14, 60], [28, 2], [-6, 40], [-20, 20], [30, -16]] as const).map(([x, z]) => [x * S, z * S] as const),
   /** Progress of the boulevard gate the circuit drives through. */
-  gateProgress: 318,
+  gateProgress: 318 * S,
   /** Lawn islands [x0, z0, x1, z1] inside the circuit; the rest of the city floor is paved. */
-  lawns: [[-14, -6, 34, 62], [-42, -76, -28, -50]] as const,
+  lawns: ([[-14, -6, 34, 62], [-42, -76, -28, -50]] as const).map((r) => r.map((v) => v * S) as [number, number, number, number]),
   /** Width of the promenade strip behind each barrier, in metres. */
   promenade: 5,
 };

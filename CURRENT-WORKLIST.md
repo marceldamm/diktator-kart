@@ -11,6 +11,14 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Stand 04.10.2026 (Mittag, Claude) – Marcels neue Aufträge
+
+- [x] **Lenkung direkter:** schnelleres Zurückstellen beim Loslassen (Rate 18/s statt 6/s), straffere Gierreaktion, Lenkwirkung sanft ~12 % höher. Fahrgefühl-Abnahme durch Marcel offen.
+- [x] **Karte 1,5× größer** (`MAP_SCALE` in `src/track-layout.ts`, ~890 m statt 593 m); Welt, Landmarken, Gefahren, Boostflächen, Items und Tests mitskaliert, Blender-Welt neu gebaut.
+- [x] **Kanalsprung als echter Streckenabschnitt:** Wasserkanal quer über die Start-/Tribünengerade, Boostfläche → Holzrampe → Sprung; saubere Landung gibt Schub, zu langsam = ins Wasser, Staatliches Bergungsamt holt zurück. Gleiche Regeln für Bots.
+- [ ] **Echte historische Sprachhupen (freigegeben, Download erlaubt, Claude entscheidet):** noch nicht begonnen. Plan: nur rechtlich klare Aufnahmen (Hitler/Mussolini-Reden gemeinfrei, Quelle z. B. Wikimedia Commons mit Lizenzangabe), kurze unverfängliche Anrede-Ausschnitte (keine verbotenen Parolen nach § 86a StGB), Schnitt mit portablem ffmpeg unter `.tools/`; Stalin/Mao/Kim/Castro bleiben wegen Urheberrecht vorerst Platzhalter. Quelle/Lizenz in CREDITS.md.
+- [ ] Weitere Ideen: Gefahrenzonen noch stärker in die Ideallinie ziehen (z. B. Lava-Abkürzung), weitere Rampen, Gesichter weiter verfeinern, Fahrtest aller Werte.
+
 ## Stand 04.10.2026 (Vormittag, Claude) – Arbeitslisten abgearbeitet
 
 - [x] PC-/Handy-Abgleich geprüft: Abend-Upload `3bfe3a2` in main, Handy-Doku sichtbar, keine Konflikte.

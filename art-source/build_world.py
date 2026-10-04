@@ -12,6 +12,7 @@ mt.BUILD_WORLD = True
 random.seed(1936)
 
 T = json.load(open(os.path.join(ROOT, 'art-source', 'track-layout.json'), encoding='utf8'))
+F = T.get('scale', 1)                      # whole-map scale; progress constants below are base values
 S, L, W, START = T['samples'], T['length'], T['halfWidth'], T['start']
 LM = T['landmarks']
 PROM = W + 1.45 + LM['promenade']          # outer edge of the promenade strip
@@ -341,10 +342,10 @@ for step in range(5): box('Palace stairs', (PX, PY - 12 + step * .7, .16 + step 
 # --- Track-side architecture ---------------------------------------------------------
 finish_gantry()
 gate(LM['gateProgress'])
-grandstand(4, 44, 1); grandstand(52, 92, 1); grandstand(24, 70, -1)
+grandstand(4 * F, 44 * F, 1); grandstand(52 * F, 92 * F, 1); grandstand(24 * F, 70 * F, -1)
 placed = 0
 def reserved(s, side):
-    if side > 0 and -2 <= s <= 96: return True                  # stands
+    if side > 0 and -2 * F <= s <= 96 * F: return True                  # stands
     if abs(((s - LM['gateProgress'] + L / 2) % L) - L / 2) < 13: return True
     x, y, _ = tp(s, side * (PROM + 8))
     if math.hypot(x - PX, y - PY) < 48: return True
@@ -367,13 +368,13 @@ if clearance(cx, cy) > PROM + 4:
     cyl('Bronze stamp body', (cx, cy, 3.3), 1.05, 1.1, bronze, verts=24)
     cyl('Bronze stamp pad', (cx, cy, 2.62), 1.25, .3, burgundy, verts=24)
     text('Monument plaque', 'DEM UNBEKANNTEN BEAMTEN', (cx, cy - 1.62, 1.35), .26, gold)
-for s in range(130, 236, 9):
+for s in range(int(130 * F), int(236 * F), 9):
     x, y, _ = tp(s, -(PROM + 2.2))
     if clearance(x, y) > PROM + 1.2: cypress(x, y, 6 + (s % 3))
-for s in range(386, 470, 10):
+for s in range(int(386 * F), int(470 * F), 10):
     x, y, _ = tp(s, -(PROM + 2.2))
     if clearance(x, y) > PROM + 1.2: cypress(x, y, 5.5)
-for (x, y) in [(10, 36), (20, 6), (-10, 6), (2, 64), (28, 54)]:
+for (x, y) in [(10 * F, 36 * F), (20 * F, 6 * F), (-10 * F, 6 * F), (2 * F, 64 * F), (28 * F, 54 * F)]:
     if clearance(x, y) < PROM + 4: continue
     box('Garden stone edging', (x, y, .18), (6.2, 3.2, .35), pale, .035)
     box('Garden hedge', (x, y, .46), (5.9, 2.9, .62), hedge, .2)

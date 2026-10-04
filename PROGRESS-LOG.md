@@ -56,6 +56,10 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 ## Einträge
 
+### 2026-10-04 (Mittag) – Claude: größere Karte, Kanalsprung, Lenkung
+
+`MAP_SCALE = 1.5` in `src/track-layout.ts` (Kontrollpunkte, Start, Bodenwelle, Abkürzung, Landmarken, Gefahren, Boostflächen, Krater, Itemkisten, Videowand, Tribünen/Park in `build_world.py`); Strecke 890,9 m statt 593,4 m. `stadium-world.blend/.glb` neu gebaut (Blender-Hintergrundlauf ~14 min, ein Kern). Kanalsprung: `CANAL_FROM = 85 × S` vor den Tribünen, Rampe 9 m/1 m (`trackHeightAt`), Flug `.45 + v·.034` s, Landeschub bei sauberer Landung (`landedClean`), sonst Wasser + Bergung. Beleg: Flughöhe 1,77–2,22 m, „Saubere Landung · Schub!“, Screenshot über dem Kanal. Lenkung: `steerRate 9`, `steerReturnRate 18`, `yawResponse 11`, `steeringPerMetre .134`, `maxYawRate 1.68`. Tests 45/45 (Bot-Rundenzeitlimit ×1,5). Hinweis: eingebauter Testbrowser lief stark gedrosselt; Fahrgefühl nicht menschlich abgenommen. Offen: echte Sprachhupen (Plan in CURRENT-WORKLIST.md).
+
 ### 2026-10-04 (Vormittag) – Claude: Arbeitslisten abgearbeitet
 
 Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umgesetzt: `src/damage.ts` (Haltbarkeit/Wrack, Tests `tests/damage.test.mjs`), Wandgleiten in `kart-model.ts`, Finger/Pedale/Spiegel in `build_kart.py`, feste Hände (Handschuhe am Lenkrad, Arm-Ausrichtung) und Vorderrad-Vorzeichen in `slice-scene.ts`, Tag-Nacht/Sterne/Mond/Vögel/Zeitungen/Wrackteile, Glow-Verdeckung (alle Meshes als Occluder), Gefahren `HAZARDS`/`CRATERS` mit Bergung, Boostflächen, Startschub, Zeppelin, Schnellneustart, Videowand-Renderliste (`renderList = scene.meshes`, refresh 3). Belege im eingebauten Browser (Werte/Bilder), 45 Tests + TypeScript grün. Grenzen: Werte vorläufig, kein echter Fahrtest/schwacher PC; Startschub-Timing nur teilweise geprüft (gedrosselter Testbrowser). Nicht veröffentlicht (kein Projektabschluss beauftragt).

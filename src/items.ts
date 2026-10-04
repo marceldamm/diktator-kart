@@ -1,4 +1,5 @@
 import { TRACK, trackLocate, trackPoint, trackProgress, wrap } from './track.ts';
+import { MAP_SCALE } from './track-layout.ts';
 import type { KartState } from './kart-model.ts';
 
 export type ItemKind = 'direct' | 'homing' | 'trap';
@@ -13,7 +14,7 @@ export interface ItemWorld {
 }
 export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3};
 /** Dispatch box rows: end of the grandstand straight, the boulevard and the archive leg. */
-export const ITEM_BOX_PROGRESS=[72,330,520];
+export const ITEM_BOX_PROGRESS=[72,330,520].map(s=>s*MAP_SCALE);
 export function createItems(count:number,seed=921):ItemWorld {
   return {slots:Array(count).fill(null),heldFor:Array(count).fill(0),immune:Array(count).fill(0),objects:[],
     boxes:ITEM_BOX_PROGRESS.flatMap((s,row)=>[-3,0,3].map((lane,col)=>({id:row*3+col,...trackPoint(s,lane),readyIn:0}))),events:[],random:seed,nextId:1,time:0,
