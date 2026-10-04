@@ -6,7 +6,7 @@ const step=(s,steering,held=true,throttle=1)=>advanceKart(s,{throttle,steering,h
 test('both drift directions charge while countersteering and release mini turbo',()=>{
   for(const direction of [-1,1]){
     let s={...initialKartState(),speed:12};s=step(s,direction);
-    for(let i=0;i<80;i++)s=step(s,-direction);
+    for(let i=0;i<200;i++)s=step(s,-direction);
     assert.equal(s.drifting,true);assert.equal(s.driftDirection,direction);
     assert.equal(s.driftCharge,KART_TUNING.driftChargeTime);
     assert.ok(s.yawRate*direction>0,'Countersteering must widen original arc, not reverse it');

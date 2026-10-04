@@ -636,6 +636,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // Visible weight: compress on landing and suspension dips, stretch slightly at the hop apex.
           const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
           v.orientation.scaling.set(1 - squash * .25, 1 + squash * .5, 1 - squash * .25);
+          // Air trick: one full barrel roll over the jump.
+          if (s.trick && (s.jumpRemaining ?? 0) > 0) v.orientation.rotation.z += (1 - (s.jumpRemaining ?? 0) / (s.jumpDuration ?? 1)) * Math.PI * 2;
           v.rotation += s.speed * dt / .33;
           v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? (s.steer ?? 0) * .42 - Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
@@ -702,7 +704,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         sparks.emitter = back.add(new Vector3(Math.cos(state.heading) * .85, 0, -Math.sin(state.heading) * .85));
         const scraping = state.scrapeRemaining > 0 && state.scrapeKind === 'wall' || state.impactRemaining > 0;
         sparks.emitRate = state.drifting || scraping ? reducedEffects ? 20 : scraping ? 120 : 70 : 0;
-        sparks.color1 = scraping ? new Color4(1, .78, .35, 1) : state.driftCharge >= .7 ? new Color4(1, .6, .12, 1) : new Color4(.15, .8, 1, 1); sparks.color2 = sparks.color1;
+        // Spark colour shows the mini-turbo tier: silver-blue, gold, crimson (own 'medal' palette).
+        const tier = state.driftCharge >= 1.6 ? 3 : state.driftCharge >= 1.1 ? 2 : state.driftCharge >= .6 ? 1 : 0;
+        sparks.color1 = scraping ? new Color4(1, .78, .35, 1) : [new Color4(.75, .78, .82, 1), new Color4(.3, .75, 1, 1), new Color4(1, .72, .15, 1), new Color4(1, .18, .25, 1)][tier]; sparks.color2 = sparks.color1;
+        sparks.maxSize = .055 + tier * .02;
       },
     };
     return api;

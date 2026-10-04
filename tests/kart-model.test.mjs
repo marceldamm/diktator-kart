@@ -156,7 +156,7 @@ test('a short drift releases without turbo', () => {
 test('a sustained directed drift charges mini-turbo; brake cancels it', () => {
   let state = { ...initialKartState(), x: -8, speed: 8 };
   state = advanceKart(state, { throttle: 1, steering: 1, hopDrift: true, hopPressed: true }, step);
-  state = run(state, { throttle: 1, steering: 1, hopDrift: true }, 1.3);
+  state = run(state, { throttle: 1, steering: 1, hopDrift: true }, 2.2);
   assert.equal(state.drifting, true);
   assert.equal(state.driftCharge, KART_TUNING.driftChargeTime);
   assert.ok(Math.abs(state.heading - state.travelHeading) > 0.1);

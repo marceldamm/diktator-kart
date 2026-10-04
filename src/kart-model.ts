@@ -9,6 +9,8 @@ export interface KartState {
   jumpRemaining?: number; jumpDuration?: number; jumpStart?: number; jumpPeak?: number;
   /** True for the one step in which a jump ended in a clean, straight landing (landing boost). */
   landedClean?: boolean;
+  /** A trick was performed during the current jump (spin animation, bigger landing boost). */
+  trick?: boolean;
   hopRemaining: number;
   drifting: boolean;
   driftDirection: number;
@@ -62,6 +64,9 @@ export const WHEEL_POSITIONS = [
   { x: -0.83, z: 0.68 }, { x: 0.83, z: 0.68 },
   { x: -0.83, z: -0.68 }, { x: 0.83, z: -0.68 },
 ] as const;
+/** Mini-turbo tier (0 = none) for a drift charge in seconds. */
+export const driftTier = (charge: number) => KART_TUNING.driftTiers.filter((t) => charge >= t - 1e-9).length;
+
 export const KART_TUNING = {
   acceleration: 10,
   braking: 16,
@@ -74,8 +79,11 @@ export const KART_TUNING = {
   hopDuration: 0.42,
   hopHeight: 0.6,
   driftMinSpeed: 5,
-  driftChargeTime: 0.7,
-  driftYawMultiplier: 1.2,
+  /** Full drift charge (third tier). Tiers: see driftTiers. */
+  driftChargeTime: 1.6,
+  /** Mini-turbo tiers by charge (s): 1 short, 2 medium, 3 full boost. */
+  driftTiers: [0.6, 1.1, 1.6] as const,
+  driftYawMultiplier: 1.05,
   driftHeadingFollow: 1.6,
   driftMaxSlip: 0.42,
   normalHeadingFollow: 5.5,
@@ -219,9 +227,10 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   let driftCharge = state.driftCharge;
   if (drifting) {
     if (!held || speed < KART_TUNING.driftMinSpeed) {
-      if (!held && drive >= 0 && driftCharge >= KART_TUNING.driftChargeTime && speed >= KART_TUNING.driftMinSpeed) {
-        turboRemaining = KART_TUNING.turboDuration;
-        speed = Math.min(KART_TUNING.maxTurboSpeed, speed + KART_TUNING.turboSpeedBonus);
+      const tier = driftTier(driftCharge);
+      if (!held && drive >= 0 && tier > 0 && speed >= KART_TUNING.driftMinSpeed) {
+        turboRemaining = KART_TUNING.turboDuration * [.5, .75, 1][tier - 1];
+        speed = Math.min(KART_TUNING.maxTurboSpeed, speed + KART_TUNING.turboSpeedBonus * [.6, .8, 1][tier - 1]);
       }
       drifting = false;
       driftDirection = 0;
@@ -240,7 +249,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   // The wheel needs time to turn and the body needs time to rotate: steering input -> steer -> yaw rate.
   const previousSteer = state.steer ?? 0, returning = Math.abs(steering) < Math.abs(previousSteer) || steering * previousSteer < 0;
   const steer = previousSteer + (steering - previousSteer) * Math.min(1, (returning ? KART_TUNING.steerReturnRate : KART_TUNING.steerRate) * dt);
-  const turn = drifting ? driftDirection * (.5 + .32 * steer * driftDirection) : steer;
+  // Drift arc (retuned 04.10.: the old .5 neutral pulled karts into the inner wall on the larger map).
+  const turn = drifting ? driftDirection * (.38 + .32 * steer * driftDirection) : steer;
   const targetYaw = Math.max(-KART_TUNING.maxYawRate,
     Math.min(KART_TUNING.maxYawRate, speed * turn * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
   const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, (drifting ? 5 : KART_TUNING.yawResponse) * dt);
@@ -321,7 +331,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const tiltBlend = Math.min(1, KART_TUNING.bodyTiltFollow * dt);
   const bodyPitch = state.bodyPitch + ((grounded ? Math.atan2(frontGround - rearGround, 1.36) : 0) - state.bodyPitch) * tiltBlend;
   const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
-  return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, drifting, driftDirection, driftCharge, turboRemaining,
+  return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, trick: state.trick, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
     scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,

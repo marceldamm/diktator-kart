@@ -1,7 +1,7 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
 import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
-import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
+import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
 import { atRampLip, boostPadAt, craterAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
@@ -94,6 +94,10 @@ class App {
   /** Seconds left in a harbour salvage per kart (Staatliches Bergungsamt). */
   private salvage:number[]=[];
   private padCooldown:number[]=[];
+  /** Seconds spent in a rival's slipstream per kart. */
+  private draft:number[]=[];
+  private autoGas=false;
+  private steerAssist=false;
   private inCrater:boolean[]=[];
   /** Countdown value when the player first pressed throttle (start boost timing); null = not yet. */
   private startPress:number|null=null;
@@ -132,6 +136,11 @@ class App {
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
     try{const saved=Number(localStorage.getItem('dk-driver'));if(Number.isInteger(saved)&&saved>=0&&saved<CAST.length)this.chosen=saved;}catch{}
     this.order=rosterOrder(this.chosen);
+    try{this.autoGas=localStorage.getItem('dk-auto-gas')==='1';this.steerAssist=localStorage.getItem('dk-steer-assist')==='1';}catch{}
+    const assistLabels=()=>{document.querySelector('#autogas-toggle')!.textContent=this.autoGas?'Auto-Gas an':'Auto-Gas aus';document.querySelector('#assist-toggle')!.textContent=this.steerAssist?'Lenkhilfe an':'Lenkhilfe aus';};
+    document.querySelector('#autogas-toggle')?.addEventListener('click',()=>{this.autoGas=!this.autoGas;try{localStorage.setItem('dk-auto-gas',this.autoGas?'1':'0');}catch{}assistLabels();});
+    document.querySelector('#assist-toggle')?.addEventListener('click',()=>{this.steerAssist=!this.steerAssist;try{localStorage.setItem('dk-steer-assist',this.steerAssist?'1':'0');}catch{}assistLabels();});
+    assistLabels();
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
     document.querySelector('#driver-random')?.addEventListener('click',()=>this.pick((this.chosen+1+Math.floor(Math.random()*(CAST.length-1)))%CAST.length));
@@ -431,7 +440,7 @@ class App {
     document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `STADION GRAND PRIX · ${this.castOf(0).name.toUpperCase()}`;
     const notice=document.querySelector<HTMLElement>('#lap-notice')!;notice.hidden=this.racePhase!=='race'||this.raceTime>=this.lapNoticeUntil;notice.textContent=this.lapNotice;
     const meter=document.querySelector<HTMLElement>('#drift-meter')!;meter.hidden=!this.kart.drifting&&this.kart.turboRemaining<=0;
-    meter.classList.toggle('charged',this.kart.driftCharge>=KART_TUNING.driftChargeTime||this.kart.turboRemaining>0);
+    meter.classList.toggle('charged',driftTier(this.kart.driftCharge)>0||this.kart.turboRemaining>0);meter.dataset.tier=String(driftTier(this.kart.driftCharge));
     document.querySelector<HTMLElement>('#drift-fill')!.style.width=`${100*(this.kart.turboRemaining>0?this.kart.turboRemaining/KART_TUNING.turboDuration:this.kart.driftCharge/KART_TUNING.driftChargeTime)}%`;
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
@@ -577,7 +586,11 @@ class App {
         const project = LAB_WORLD ? undefined : projectTrack;
         const traffic = [this.kart, ...this.loadKarts];
         const terrain = LAB_WORLD ? undefined : trackHeightAt;
-        this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : { ...frame, hopPressed: this.queuedHopPress }, FIXED_STEP, project, terrain);
+        // Accessibility assists (options): automatic throttle and a gentle steering help near the walls.
+        const assisted = { ...frame, hopPressed: this.queuedHopPress && !((this.kart.jumpRemaining ?? 0) > 0) };
+        if (this.autoGas && frame.throttle >= 0 && this.racePhase !== 'practice' || this.autoGas && frame.throttle > 0) assisted.throttle = frame.throttle < 0 ? frame.throttle : 1;
+        if (this.steerAssist && !LAB_WORLD) { const help = botInput(this.kart, 0, traffic).steering; assisted.steering = Math.max(-1, Math.min(1, frame.steering + help * (frame.steering === 0 ? .55 : .25))); }
+        this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : assisted, FIXED_STEP, project, terrain);
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
           let next = advanceKart(other, LAB_WORLD ? { throttle: 1, steering: CONTACT_SCENARIO ? 0 : .75 } : botInput(other, index + 1, traffic), FIXED_STEP, project, terrain);
@@ -679,11 +692,23 @@ class App {
             allKarts.forEach((k,i)=>{this.padCooldown[i]=Math.max(0,(this.padCooldown[i]??0)-FIXED_STEP);
               if(this.padCooldown[i]===0&&k.grounded&&boostPadAt(k.x,k.z)>=0){allKarts[i]={...k,turboRemaining:Math.max(k.turboRemaining,KART_TUNING.turboDuration),speed:Math.min(KART_TUNING.maxTurboSpeed,Math.max(k.speed,0)+KART_TUNING.turboSpeedBonus)};this.padCooldown[i]=1.2;if(i===0)this.audio.cue('start');}});
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
+          // Slipstream: close behind a rival for 1 s at speed earns a short pull (same rule for bots).
+          { const allKarts=[this.kart,...this.loadKarts];
+            allKarts.forEach((k,i)=>{ if(k.speed<10||!k.grounded){this.draft[i]=0;return;}
+              const fx=Math.sin(k.heading),fz=Math.cos(k.heading);
+              const behind=allKarts.some((o,j)=>{if(j===i)return false;const dx=o.x-k.x,dz=o.z-k.z,ahead=dx*fx+dz*fz,side=Math.abs(dx*fz-dz*fx);return ahead>2.5&&ahead<13&&side<1.7;});
+              this.draft[i]=behind?(this.draft[i]??0)+FIXED_STEP:0;
+              if(this.draft[i]>=1){this.draft[i]=-1.5;allKarts[i]={...k,turboRemaining:Math.max(k.turboRemaining,.55),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+2)};if(i===0){this.itemMessage='Windschatten · Schub!';this.itemMessageUntil=this.items.time+1.2;}}
+            });
+            this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Ramp: launch from the lip into a flight that scales with speed; a clean landing earns a short boost.
           { const allKarts=[this.kart,...this.loadKarts];
             allKarts.forEach((k,i)=>{
               if((k.jumpRemaining??0)===0&&k.hopRemaining===0&&k.speed>3&&atRampLip(k.x,k.z)){const v=k.speed;allKarts[i]={...k,jumpRemaining:.45+v*.034,jumpDuration:.45+v*.034,jumpStart:1,jumpPeak:.7+v*.05,drifting:false,driftCharge:0};if(i===0)this.audio.cue('start');}
-              if(k.landedClean){allKarts[i]={...k,landedClean:false,turboRemaining:Math.max(k.turboRemaining,.7),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+2.5)};if(i===0){this.itemMessage='Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(.6);}}
+              // Trick: Space in the air (player) or a confident bot spins the kart for a bigger landing boost.
+              if((k.jumpRemaining??0)>.15&&!k.trick&&((i===0&&frame.pressed.has('hopDrift'))||(i>0&&(k.jumpRemaining??0)<(k.jumpDuration??1)-.2&&i%2===1)))allKarts[i]={...allKarts[i],trick:true};
+              if(k.landedClean){const trick=!!k.trick;allKarts[i]={...k,trick:false,landedClean:false,turboRemaining:Math.max(k.turboRemaining,trick?1.1:.7),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+(trick?3.6:2.5))};if(i===0){this.itemMessage=trick?'Trick gestanden · Großer Schub!':'Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(trick?1:.6);}}
+              else if(k.trick&&(k.jumpRemaining??0)===0)allKarts[i]={...allKarts[i],trick:false};
             });
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Shell craters: a jolt on entry and loose-dirt drag while crossing (same for everyone).
@@ -746,9 +771,9 @@ class App {
         : this.kart.turboRemaining > 0
         ? `Mini-Turbo ${this.kart.turboRemaining.toFixed(1)} s`
         : this.kart.drifting
-          ? this.kart.driftCharge >= KART_TUNING.driftChargeTime
-            ? 'Drift geladen – Space loslassen'
-            : `Drift lädt ${Math.round(this.kart.driftCharge / KART_TUNING.driftChargeTime * 100)} %`
+          ? driftTier(this.kart.driftCharge) > 0
+            ? `Drift Stufe ${driftTier(this.kart.driftCharge)}${driftTier(this.kart.driftCharge) === 3 ? ' (voll)' : ''} – Space loslassen`
+            : `Drift lädt ${Math.round(this.kart.driftCharge / KART_TUNING.driftTiers[0] * 100)} %`
           : this.kart.height > 0 ? 'Hop' : 'Bereit';
       const maximumContact = Math.max(...this.kart.wheelGroundHeights);
       surfaceDisplay.textContent = this.kart.grounded && maximumContact > 0.02
