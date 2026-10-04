@@ -365,7 +365,7 @@ class App {
       const picture = shot ? Object.assign(document.createElement('img'), { src: shot, alt: `Karikatur ${member.name}` }) : Object.assign(document.createElement('span'), { className: 'portrait-wait', textContent: 'Porträt wird gerendert …' });
       const dot = document.createElement('i'); dot.style.background = member.paint;
       const name = document.createElement('strong'); name.textContent = member.name;
-      const kart = document.createElement('small'); kart.textContent = member.kartName;
+      const kart = document.createElement('small'); kart.textContent = `${member.kartName} · ${member.projectileIcon}`;
       card.append(picture, dot, name, kart);
       card.addEventListener('click', () => { if (index === this.chosen) this.confirmSelection(); else this.pick(index); });
       grid.append(card);
@@ -615,6 +615,8 @@ class App {
             if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile!=='dog'&&this.voiceCooldown===0){this.audio.voice(`${this.castOf(0).voice}-horn`,{channel:'driver',rate:this.castOf(0).voiceRate,volume:.8});this.voiceCooldown=6;}
             if(event.kind==='hit')this.say(0,'hit');
           }
+          // A nearby rival's dog barks too (Hitler as a bot).
+          for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
             this.audio.voice(event.item==='trap'?'announcer-stamp':'announcer-delivery');this.audio.cheer(.5);
             window.setTimeout(()=>this.say(event.kart,'hit',.75),900);
