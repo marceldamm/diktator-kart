@@ -127,7 +127,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     scene.metadata={timings,gpuTimings};
     scene.onDisposeObservable.add(()=>{timings.dispose();gpuTimings.dispose();});
     const glow = new GlowLayer('Restrained lamp and exhaust glow', scene, { mainTextureRatio: .35 }); glow.intensity = .45;
-    for(const mesh of trackWorld.glowMeshes) glow.addIncludedOnlyMesh(mesh);
+    // Every mesh draws into the glow map so drivers, karts and buildings hide lamps behind them; only marked
+    // lamp/flame meshes contribute colour, all others render black as occluders (no glow through bodies).
+    const glowing = new Set<object>();
+    const markGlow = (mesh: object) => { glowing.add(mesh); };
+    glow.customEmissiveColorSelector = (mesh, _subMesh, material, result) => {
+      const emissive = (material as { emissiveColor?: Color3 } | null)?.emissiveColor;
+      if (glowing.has(mesh) && emissive) result.set(emissive.r, emissive.g, emissive.b, 1); else result.set(0, 0, 0, 1);
+    };
+    glow.addExcludedMesh(sky);
+    for(const mesh of trackWorld.glowMeshes) markGlow(mesh);
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
     report?.('karts');
     const visuals = Array.from({ length: loadKartCount + 1 }, (_, index) => {
@@ -158,7 +167,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const pivot of pivots) pivot.setParent(wheelFrame);
       for (const mesh of root.getChildMeshes()) {
         mesh.receiveShadows = true; mesh.isPickable = false;
-        if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh);
+        if(mesh instanceof Mesh && mesh.name.includes('Warm headlamp')) markGlow(mesh);
         const recolour: [RegExp, 'paint'|'uniform'|'cape'|'hatColor'|'hair'][] = [[/Petrol enamel/, 'paint'], [/Uniform racing suit/, 'uniform'], [/Cape cloth/, 'cape'], [/Hat cloth/, 'hatColor'], [/Hair and leather helmet/, 'hair']];
         for (const [pattern, kind] of recolour) if (mesh instanceof Mesh && mesh.material instanceof PBRMaterial && pattern.test(mesh.material.name)) {
           const source=mesh.material;let material=paint.get(source);
@@ -178,7 +187,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const flames = [-.72, .72].map((x) => {
         const flame = MeshBuilder.CreateSphere(`Exhaust flame ${index}`, { diameter: .18, segments: 8 }, scene);
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
-        flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
+        flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); markGlow(flame); flame.setEnabled(false); return flame;
       });
       const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
         paintColour: Color3.Black(), soot: -1, wreckAge: -1,
@@ -280,7 +289,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         m.clearCoat.isEnabled = true; m.clearCoat.intensity = .6; mesh.material = m;
       }
       if (mesh.material instanceof PBRMaterial && /Tank track links/.test(mesh.material.name)) { mesh.material.albedoTexture = trackTexture; mesh.material.albedoColor = Color3.White(); }
-      if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Warm headlamp')) glow.addIncludedOnlyMesh(mesh as Mesh);
+      if (mesh.material instanceof PBRMaterial && mesh.material.name.includes('Warm headlamp')) markGlow(mesh);
     }
     tankRoot.setEnabled(false);
     // The tank belongs to whichever kart Hitler drives (player or bot); setRoster moves it.
