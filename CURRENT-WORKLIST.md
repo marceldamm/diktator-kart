@@ -17,10 +17,10 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Wand/Schaden (P1):** Banden gleiten statt kleben (Nase dreht zur Wand, Frontaleinschlag bleibt hart); Haltbarkeit pro Kart, Qualm/Ruß, Totalschaden mit Explosion, herausgeschleudertem Fahrer und 3-s-„Staatliche Werkstatt“; HUD „Karosserie“. Werte vorläufig, Fahrtest offen.
 - [x] **Fahrer/Cockpit (P2, Teil):** Finger am Lenkrad (Handschuhe sitzen fest am Kranz, Arme folgen), Pedale bewegen sich, Rückspiegel im Fahrerblick, Vorderrad-Einschlag korrigiert (war spiegelverkehrt), erwachsenere Gesichter. Offen: Beine/Sitz-Feinschliff, noch realistischere Gesichter.
 - [x] **Tag-Nacht (P3):** zufällig pro Rennen Tag→Dämmerung→Nacht über drei Runden, Sterne, Mond, Mondlicht, Vögel/Fledermäuse, wehende Zeitungen, liegenbleibende Wrackteile; Lichter scheinen nicht mehr durch Figuren.
-- [x] **Gefahren + Bergung:** Hafenbecken (Westkurve), Staatsofen-Lavagrube (Nordostkurve), abstraktes Übungsgelände mit Granattrichtern; Kran des „Staatlichen Bergungsamts“ setzt nach ~3 s an gleicher Position zurück, gleiche Regeln für Bots. Offen: Klippe.
+- [x] **Gefahren + Bergung:** Hafenbecken (Westkurve), Staatsofen-Lavagrube (Nordostkurve), abstraktes Übungsgelände mit Granattrichtern; Abgrund/Klippe (Westgerade); Kran des „Staatlichen Bergungsamts“ setzt nach ~3 s an gleicher Position zurück, gleiche Regeln für Bots.
 - [x] **Mechaniken:** Boostflächen (3), Startschub zum „LOS!“, Schnellneustart T, pulsierende Itemwarnung, Zeppelin-Ereignis in Runde 2.
 - [x] Live-Videowand zeigt wieder alle Fahrer (vorher nur Schatten außerhalb des Blickfelds).
-- [ ] Offen: echte historische Sprachhupen (Quellen-/Lizenzprüfung, Download nur mit Freigabe), Landeschub nach Sprüngen, weitere Oberflächen, Klippe.
+- [ ] Offen: echte historische Sprachhupen (Quellen-/Lizenzprüfung, Download nur mit Freigabe), Landeschub (braucht erst eine echte Rampe, sonst per Hop ausnutzbar), weitere Oberflächen.
 
 ## Morgen prüfen – 05.10.2026
 
