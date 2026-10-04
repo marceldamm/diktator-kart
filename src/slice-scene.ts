@@ -394,7 +394,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
     const tvCamera = new FreeCamera('Staatsfernsehen camera', new Vector3(0, 5, 0), scene); tvCamera.fov = .5; tvCamera.minZ = .1;
     const feed = new RenderTargetTexture('Staatsfernsehen feed', { width: 768, height: 432 }, scene, false);
-    feed.activeCamera = tvCamera; feed.renderList = null; feed.refreshRate = 2; scene.customRenderTargets.push(feed);
+    feed.activeCamera = tvCamera; feed.refreshRate = 3; scene.customRenderTargets.push(feed);
+    // A null render list would reuse the main camera's culled meshes: karts outside the player's view vanished
+    // from the wall and only their shadows remained. Render the whole scene, and show the player's own driver.
+    feed.renderList = scene.meshes;
+    let playerHidden = false;
+    feed.onBeforeRenderObservable.add(() => { if (playerHidden) { visuals[0].head.setEnabled(true); for (const m of visuals[0].bodyMeshes) m.isVisible = true; } });
+    feed.onAfterRenderObservable.add(() => { if (playerHidden) { visuals[0].head.setEnabled(false); for (const m of visuals[0].bodyMeshes) m.isVisible = false; } });
     const wallAt = trackPoint(66, -(TRACK.halfWidth + 11));
     const tv = new TransformNode('Staatsfernsehen wall', scene); tv.position.set(wallAt.x, 0, wallAt.z); tv.rotation.y = wallAt.heading - .45;
     const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = feed; screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.Black();
@@ -510,7 +516,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       },
       setPlayerVisible(visible) {
         // First person uses the real model; hide only the head/body, keep cockpit and wheels.
-        visuals[0].head.setEnabled(visible);
+        visuals[0].head.setEnabled(visible); playerHidden = !visible;
         for (const mesh of visuals[0].bodyMeshes) mesh.isVisible = visible;
       },
       present(state, others) {
