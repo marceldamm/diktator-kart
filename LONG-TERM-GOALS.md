@@ -61,6 +61,7 @@ Vorhanden: editierbare Retro-Karts, vollständiger Stadionring, Materialien, Arc
 - [ ] Fünf weitere Startfahrer: Stalin, Mussolini, Mao, Kim Jong-un und Castro. Anfangs einfacher, aber individuell erkennbar; anschließend auf denselben Qualitätsmaßstab bringen. **04.10.: alle sechs als Karikaturen mit erkennbaren Merkmalen im Spiel (Zwischenstufe, nicht realitätsnah).**
 - [ ] Kartformen individuell gestalten, sichtbare Bauteile/Federung/Räder und differenzierte Materialien verbessern; Artmodelle bleiben editierbar.
 - [ ] Fahreranimation: Hände/Lenkrad, Kopf/Blick, Bremsen, Drift, Hop/Landung, Turbo, Kontakt und Rennenende; kleine Reaktionen statt unruhigem Dauerschütteln.
+- [ ] Fahrer anatomisch korrekt ins Kart setzen: modellierter Sitz, passende Becken-/Beinposition ohne Durchstecken; Hände mit sichtbaren Fingern greifen beweglich den Lenkradkranz; Füße stehen auf beweglichen Gas-/Bremspedalen, die zur Eingabe passen. Lenkrad, Spiegel und first-person Räder prüfen; Vorderräder schlagen im Cockpit passend zur Lenkung ein.
 - [ ] Fahrerperspektive mit plausibler Augenhöhe, Händen, Instrumenten, Haube und Vorderrädern ausarbeiten; keine störende doppelte Außenkarosse.
 - [ ] Berlin-/Stadionwelt glaubwürdiger gestalten: abwechslungsreiche Fassaden, Dächer, Straßendetails, räumliche Tiefe, erkennbare Blickpunkte und historische Atmosphäre.
 - [ ] Weniger repetitive Module; gealterte Materialien, Fenster/Innenraumtiefe, Straßenmöbel und lesbare Straßenschilder.
@@ -88,10 +89,13 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 
 - [ ] Persönliche Fähigkeiten mit eigener Eingabe und festen Abklingzeiten; keine fahrleistungsabhängige Pflicht-Aufladung. Konkrete Balance noch abstimmen.
 - [ ] Sarahs gemeldete Panzerverwandlung und weitere belegte Alt-Fähigkeiten/Itemideen bewahren und in neuer Engine ausarbeiten; Panzer zuerst laut CURRENT-WORKLIST.md. Keine alten Bot-Tempoprämien übernehmen. Quellen und Abweichungen: [Altstand-Abgleich](docs/sarah-feature-audit.md).
-- [ ] Gestufte sichtbare Schäden: Spiegel, Auspuff, Abdeckungen, Ruß/Rauch/Funken; keine explizite Gore-Darstellung, Fahrbeeinträchtigungen zeitlich begrenzen.
+- [ ] Wand- und Kartkontakte weiter abstimmen: schräge Bandenkontakte gleiten mit nachvollziehbarem Tempoverlust; typische Kontakte sollen nicht abrupt zum Vollstopp führen, während harte frontale Einschläge deutlich bleiben.
+- [ ] Kumulative Haltbarkeit und gestufte sichtbare Schäden ausarbeiten: Spiegel, Auspuff, Abdeckungen, Ruß/Rauch/Funken; bei wiederholten schweren Treffern ein satirischer Fahrzeugausfall/Explosion, komische Fahrerreaktion, dann nach wenigen Sekunden ein besonderer Respawn mit Animation und Sound. Trefferketten/Fairness/Botgleichheit prüfen; keine Gore-Darstellung und keine festgelegten Zahlen, bevor Fahrtests vorliegen.
 - [ ] Lokale Weltreaktionen und thematische Wettervarianten prüfen: Regen/nasse Fahrbahn zuerst als Produktionswunsch, später Schnee/Eis/Blätter nach Priorisierung.
+- [ ] Zufällige Tageszeit pro Rennen und dynamischer Lauf über drei Runden: Tag, allmähliche Dämmerung, Nacht; mögliche Wetter-/Zeitkombinationen variieren, Übergang langsam und gut lesbar. Sonne/Vögel am Tag; Mond, Sterne, Mondschatten und Fledermäuse nachts.
+- [ ] Streckenleben mit begrenzten Blättern/Partikeln sowie herumliegenden Zeitungen, Müll und abfallenden Kartteilen ergänzen. Teile kurz sichtbar liegen lassen, dann zeitgesteuert entfernen; Performance und Sichtbarkeit während der Fahrt prüfen.
 - [ ] Aussprache aller gesprochenen Texte überprüfen, merkwürdige Wörter beheben; freundlichere lebendigere Stadionsprecherin, weniger mechanische Wirkung.
-- [ ] F als individuelle Sprachhupe; kurze Clips/Abklingzeit. Echte unproblematische historische Mitschnitte nur mit belegter Quelle/Identität/Nutzungsrecht.
+- [ ] F als individuelle Sprachhupe; kurze Clips/Abklingzeit. Marcel wünscht echte, wiedererkennbare historische Live-/Archivaufnahmen statt TTS oder neuer Einsprache. Quelle, konkrete Person/Ausschnitt, Inhalt und kostenlose Nutzungsrechte vor Download/Integration nachweisen; keine erfundenen Originalzitate.
 - [ ] Eigenständige Parodiestimmen und historische Musik mit nachvollziehbaren Quellen; keine ungekennzeichneten erfundenen „Originalzitate“.
 - [ ] Motor-/Getriebe-/Reifen-/Kontakt-/Umgebungsgeräusche und Mix hörbar abstimmen; Ansagen priorisieren, Lärm/Dopplungen begrenzen.
 - [ ] Weitere Altitems/Fähigkeiten aus dem Katalog nur nach Umfangsentscheidung übernehmen; Herkunft und Sarah-Freigaben erhalten.
