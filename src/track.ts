@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BUMP_PROGRESS, HARBOUR, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, HARBOUR, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -140,6 +140,12 @@ export function trackHeightAt(x: number, z: number): number {
 }
 
 const inHarbourRange = (s: number, lane: number) => s >= HARBOUR.from && s <= HARBOUR.to && Math.sign(lane) === HARBOUR.side;
+/** Index of the boost pad under a kart, or -1. */
+export function boostPadAt(x: number, z: number): number {
+  const { s, lane } = trackLocate(x, z);
+  return BOOST_PADS.findIndex(([from, centre]) => s >= from && s <= from + 6 && Math.abs(lane - centre) <= 1.5);
+}
+
 /** A kart beyond the open quay edge drops into the harbour basin. */
 export function inHarbour(x: number, z: number): boolean {
   const { s, lane } = trackLocate(x, z);

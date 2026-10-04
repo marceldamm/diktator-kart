@@ -87,6 +87,9 @@ export function sampleTrack(points = TRACK_CONTROL_POINTS, spacing = .5): { samp
 export const SHORTCUT = { from: 343, to: 452, halfWidth: 3, speedCap: 10.5, points: [[-46, -44], [-34, -44.5], [-22, -47.5]] as const };
 
 /** World anchors shared with the Blender builders (game x / z). */
+/** Glowing boost pads [progress start, lane centre]; 6 m long, 3 m wide, same effect for everyone. */
+export const BOOST_PADS: readonly (readonly [number, number])[] = [[62, -2], [176, 2], [292, 0]];
+
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
 export const HARBOUR = { from: 236, to: 262, side: 1, basin: 9 } as const;
 

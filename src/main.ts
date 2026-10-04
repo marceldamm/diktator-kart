@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { inHarbour, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { boostPadAt, inHarbour, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -93,6 +93,9 @@ class App {
   private damage:DamageWorld=createDamage(LOAD_KART_COUNT+1);
   /** Seconds left in a harbour salvage per kart (Staatliches Bergungsamt). */
   private salvage:number[]=[];
+  private padCooldown:number[]=[];
+  /** Countdown value when the player first pressed throttle (start boost timing); null = not yet. */
+  private startPress:number|null=null;
   private queuedSpecial=false;
   private rain=false;
   /** Options choice; 'random' rolls sun, rain or snow every time the track loads. */
@@ -122,7 +125,7 @@ class App {
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -398,6 +401,7 @@ class App {
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
+    this.startPress = null; this.padCooldown = [];
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
@@ -555,8 +559,15 @@ class App {
         this.renderSteps++;
         const countdown = !LAB_WORLD && this.racePhase === 'countdown';
         if (countdown) {
+          if(this.startPress===null&&frame.throttle>0)this.startPress=this.countdown;
           const before=Math.ceil(this.countdown-.4);this.countdown -= FIXED_STEP;
-          if(this.countdown<=0){this.racePhase='race';this.audio.cue('start');this.audio.voice('announcer-go',{force:true});this.audio.cheer(1);this.testScene?.celebrate?.('start');}
+          if(this.countdown<=0){
+            // Start boost: throttle pressed in the last ~0.5 s before 'LOS!' (shown at 0.4); earlier presses get nothing.
+            const t=this.startPress,good=t!==null&&t<=.9;
+            if(good){this.kart={...this.kart,turboRemaining:KART_TUNING.turboDuration,speed:KART_TUNING.turboSpeedBonus+2};this.itemMessage='Perfekter Start · Startschub!';this.itemMessageUntil=this.items.time+1.8;}
+            else if(t!==null){this.itemMessage='Zu früh Gas gegeben · kein Startschub';this.itemMessageUntil=this.items.time+1.8;}
+            this.loadKarts=this.loadKarts.map((k,i)=>(i*7+Math.floor(this.raceTime*13))%3===0?{...k,turboRemaining:KART_TUNING.turboDuration*.8,speed:KART_TUNING.turboSpeedBonus}:k);
+            this.racePhase='race';this.audio.cue('start');this.audio.voice('announcer-go',{force:true});this.audio.cheer(1);this.testScene?.celebrate?.('start');}
           else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before){this.audio.cue('countdown');this.audio.voice(`announcer-${Math.ceil(this.countdown-.4)}`,{force:true});}
         }
         if (!countdown && this.racePhase !== 'finished') {
@@ -659,6 +670,11 @@ class App {
         }
         }
         if (!LAB_WORLD && this.racePhase !== 'finished') {
+          // Boost pads: a short turbo for whoever drives over the glowing chevrons.
+          { const allKarts=[this.kart,...this.loadKarts];
+            allKarts.forEach((k,i)=>{this.padCooldown[i]=Math.max(0,(this.padCooldown[i]??0)-FIXED_STEP);
+              if(this.padCooldown[i]===0&&k.grounded&&boostPadAt(k.x,k.z)>=0){allKarts[i]={...k,turboRemaining:Math.max(k.turboRemaining,KART_TUNING.turboDuration),speed:Math.min(KART_TUNING.maxTurboSpeed,Math.max(k.speed,0)+KART_TUNING.turboSpeedBonus)};this.padCooldown[i]=1.2;if(i===0)this.audio.cue('start');}});
+            this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Harbour: a kart past the open quay sinks, the state salvage crane lifts it back at the same progress.
           const all=[this.kart,...this.loadKarts];
           all.forEach((k,i)=>{

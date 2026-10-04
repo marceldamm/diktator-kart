@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { HARBOUR, LANDMARKS, SHORTCUT } from './track-layout';
+import { BOOST_PADS, HARBOUR, LANDMARKS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
@@ -207,6 +207,13 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2, from, to });
     }
   }
+  const boostPads: Mesh[] = [];
+  { // Boost pads: glowing chevrons painted on the cobbles.
+    const chevrons = canvasTexture(scene, 'Boost chevrons', 128, 256, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 128, 256); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
+      for (let y = 30; y < 256; y += 64) { c.beginPath(); c.moveTo(14, y + 34); c.lineTo(64, y); c.lineTo(114, y + 34); c.stroke(); } });
+    const padMaterial = new StandardMaterial('Boost pad', scene); padMaterial.diffuseTexture = chevrons; padMaterial.emissiveTexture = chevrons; padMaterial.emissiveColor = new Color3(1, .8, .4); padMaterial.specularColor = Color3.Black();
+    for (const [from, centre] of BOOST_PADS) { const pad = sweep(scene, 'Boost pad', [[centre - 1.5, .05], [centre + 1.5, .05]], padMaterial, { uScale: 1, vScale: 1, step: .5, from, to: from + 6 }); boostPads.push(pad); }
+  }
   { // Harbour basin behind the open quay: dark water, stone quay walls, warning edge, signs and the salvage crane.
     const { from, to } = HARBOUR, inner = W + 1.2, outer = W + HARBOUR.basin;
     const water = pbr(scene, 'Harbour water', '#1d3b44', .25, .08); water.alpha = .93;
@@ -394,7 +401,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   pennants.isPickable = false;
 
   return {
-    glowMeshes: [globe],
+    glowMeshes: [globe, ...boostPads],
     puddles,
     setWet(wet) {
       // Wet cobbles: darker, much smoother (rain film) and more reflective; puddles appear.
