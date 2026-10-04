@@ -385,7 +385,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const debris = Array.from({ length: 12 }, (_, i) => { const m = i % 3 === 0 ? MeshBuilder.CreateCylinder(`Debris hubcap ${i}`, { diameter: .32, height: .06, tessellation: 12 }, scene) : MeshBuilder.CreateBox(`Debris plate ${i}`, { width: .4, height: .05, depth: .28 }, scene);
       m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
-    let salvageNow: number[] = []; const salvageDepth: number[] = [];
+    let salvageNow: number[] = []; let botsShownForGhost = false; const salvageDepth: number[] = [];
     // Propaganda zeppelin: announced lap-2 flyover with a slogan banner (purely decorative).
     const zeppelin = new TransformNode('Propaganda zeppelin', scene); zeppelin.setEnabled(false);
     { const hull = MeshBuilder.CreateSphere('Zeppelin hull', { diameter: 1, segments: 20 }, scene); hull.scaling.set(9, 9, 34); hull.parent = zeppelin;
@@ -471,6 +471,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
       craterHit(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 10 : 34); },
+      setBotsVisible(visible) { if (visible && botsShownForGhost) { botsShownForGhost = false; for (const m of visuals[1].root.getChildMeshes()) m.visibility = 1; } visuals.forEach((v, i) => { if (i > 0) { v.root.setEnabled(visible); contactShadows[i].setEnabled(visible); } }); },
+      setGhost(ghost) {
+        const g = visuals[1]; if (!g) return;
+        if (!ghost) { if (!botsShownForGhost) return; g.root.setEnabled(false); return; }
+        if (!botsShownForGhost) { botsShownForGhost = true; for (const m of g.root.getChildMeshes()) m.visibility = .35; }
+        g.root.setEnabled(true); g.root.position.set(ghost.x, ghost.height, ghost.z); g.root.rotation.y = ghost.heading;
+      },
       trackEvent() { zeppelinTime = 0; zeppelin.setEnabled(true); },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : .9;
         if (kind === 'cliff') { burst(puff, at, reducedEffects ? 10 : 30); return; }

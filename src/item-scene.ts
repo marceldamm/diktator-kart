@@ -104,7 +104,7 @@ export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,s
       p.root.scaling.setAll(o.remaining<.5?Math.max(.05,o.remaining*2):Math.min(1,.6+o.age*5));
     }
     world.boxes.forEach((box,i)=>{const root=boxes[i];root.setEnabled(box.readyIn===0);root.position.set(box.x,1.08+Math.sin(world.time*2+i)*.16,box.z);root.rotation.y=world.time*.7+i;});
-    rings.forEach((ring,i)=>{ring.setEnabled(world.immune[i]>0);ring.position.set(karts[i].x,.12+karts[i].height,karts[i].z);ring.visibility=.5+.5*Math.sin(world.time*20);});
+    rings.forEach((ring,i)=>{if(!karts[i]){ring.setEnabled(false);return;}ring.setEnabled(world.immune[i]>0);ring.position.set(karts[i].x,.12+karts[i].height,karts[i].z);ring.visibility=.5+.5*Math.sin(world.time*20);});
     for(const event of world.events)if(event.kart===0){paper.emitter=new Vector3(karts[0].x,1,karts[0].z);paper.manualEmitCount=event.kind==='hit'?35:12;}
     for(const event of world.events)if(event.kind==='hit'&&event.item!=='trap'&&(event.owner===0||event.kart===0)){
       const kart=karts[event.kart];dogPuff.emitter=new Vector3(kart.x,.5+kart.height,kart.z);dogPuff.manualEmitCount=32;

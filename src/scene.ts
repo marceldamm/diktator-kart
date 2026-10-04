@@ -53,6 +53,9 @@ export interface TestScene {
   trackEvent?(kind: 'zeppelin'): void;
   /** Dirt burst when a kart drops into a shell crater. */
   craterHit?(kart: number): void;
+  /** Time trial: hide the five bots; show the translucent ghost of the best run (null hides it). */
+  setBotsVisible?(visible: boolean): void;
+  setGhost?(ghost: { x: number; z: number; heading: number; height: number } | null): void;
   /** Comic wreck explosion for one kart. */
   wreck?(kart: number): void;
   /** Called on a lightning flash so the audio can thunder. */
