@@ -64,6 +64,8 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Welt-Paket 1a (04.10., Codex):** Zusätzlich reagiert die Kanaloberfläche jetzt bei einem schnellen, flachen Wasserkontakt mit einer hellen Heckfahne. Ein hoher, sauberer Sprung löst sie nicht aus; pro Kart stehen höchstens 28 Partikel bereit (max. 168 für sechs Karts). Regressionstest deckt Kanal-/Höhen-/Tempo-Schwelle und den reduzierten Effektmodus ab. `npm test`: 53/53 und Produktionsbuild: 1.296 Module erfolgreich. Frischer Regenstart mit neuer Welt bleibt stabil. **Offen:** den Sprühnebel gezielt beim echten Kanaldurchgang/Pfützenkontakt im Spiel sehen und die Wasseroberfläche aus nächster Entfernung beurteilen.
 
+**Wasser-Pass 1b (04.10., Codex):** Die gemeinsame Wasser-Normalkarte bleibt dezent, aber ihr Relief ist von `.16` auf `.27` und der Flussversatz auf `.035/.009` pro Sekunde erhöht. TypeScript/Vite-Build erfolgreich. Der Kanal war im letzten Spielbild noch nicht in Nahaufnahme; die sichtbare Stärke ist nicht abgenommen.
+
 - [x] Fassadengeometrie neu bauen und optimieren; Runtime-GLB von 22.076.572 auf 15.632.728 Bytes reduziert (−29,2 %). Ladenfront/Sockelkorrektur ist im Generator und frischen Blend-/GLB-Build enthalten; gegenüber dem vorherigen Runtime-Modell wächst die Weltdatei um 3.146.048 Bytes (+25,2 %).
 - [x] Wasser bekommt dezente animierte Oberflächenstruktur; Regen bekommt begrenzten, pro Fahrzeugen getrennten Reifen-Sprühnebel.
 - [x] Regen-Laufzeitansicht im In-App-Browser: nasser Straßenbelag, Regen, HUD/Item-Slot und sechs Karts sichtbar; kein Lade-/WebGL-Ausfall.

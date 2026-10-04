@@ -509,3 +509,13 @@ Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umges
 **Geänderte Dateien:** `src/environment-effects.ts`, `src/slice-scene.ts`, `tests/environment-effects.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
 
 **Budgetstand nach dem Paket:** Offiziell 3 % des aktuellen Fünf-Stunden-Fensters und 35 % des Wochenlimits verbraucht; 65 % Wochenrest ist bindend. Keine Zusatzkontingente aktiviert.
+
+### 2026-10-04 – Wasseroberfläche: Sichtbarkeit des Flusses leicht erhöht
+
+**Umgesetzt:** Die im ersten Weltpaket ergänzte gemeinsame Wasser-Normaltextur war auf `.16` gesetzt und änderte ihren UV-Offset mit `.012/.003` pro Sekunde. In `src/track-world.ts` ist die Stärke jetzt `.27`, der Flussversatz `.035/.009`. Wassergeometrie, Kanalufer, Materialtransparenz und Kontaktregeln bleiben unangetastet.
+
+**Verifiziert:** `npm run build` erfolgreich (1.296 Module); `git diff --check` erfolgreich, nur normale Windows-CRLF-Hinweise. Voller Spielstart mit der Sonnenstrecke nach dem Code-Reload funktioniert; das gerade sichtbare Kamerabild zeigt die Startgerade, nicht das Wasser.
+
+**Nicht abgenommen:** Kein Nahbild des Kanalwassers und keine kontrollierte Fahrt über der Oberfläche; stärkere Normalmap-/Flusswahrnehmung bleibt eine gezielte Sichtprüfung. Kein Framezeitvergleich für diesen Materialpass.
+
+**Geänderte Dateien:** `src/track-world.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.

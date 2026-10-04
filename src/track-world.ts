@@ -223,7 +223,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const boostPads: Mesh[] = [], hazardGlow: Mesh[] = [];
   { // Canal across the road (in front of the grandstands) with a timber take-off ramp.
     const canalWater = pbr(scene, 'Canal water', '#1d3b44', .25, .08); canalWater.alpha = .95;
-    canalWater.bumpTexture = waterRipple; waterRipple.level = .16;
+    canalWater.bumpTexture = waterRipple; waterRipple.level = .27;
     sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
     const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
     edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
@@ -261,7 +261,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   for (const zone of HAZARDS) { // Open-edge hazard: water basin or furnace pit, quay walls, warning edge, signs and the salvage crane.
     const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava', cliff = zone.kind === 'cliff';
     const water = pbr(scene, lava ? 'Furnace glow' : 'Harbour water', lava ? '#ff5a12' : '#1d3b44', lava ? 0 : .25, lava ? .9 : .08); if (!lava) water.alpha = .93;
-    if (!lava && !cliff) { water.bumpTexture = waterRipple; waterRipple.level = .16; }
+    if (!lava && !cliff) { water.bumpTexture = waterRipple; waterRipple.level = .27; }
     if (cliff) { // painted abyss: rock strata fading into darkness
       const abyss = canvasTexture(scene, 'Abyss', 64, 256, (c) => { const g = c.createLinearGradient(0, 0, 0, 256); g.addColorStop(0, '#5c5246'); g.addColorStop(.12, '#3a332b'); g.addColorStop(.35, '#120f0c'); g.addColorStop(1, '#000000'); c.fillStyle = g; c.fillRect(0, 0, 64, 256);
         c.fillStyle = 'rgba(120,105,85,.35)'; for (let y = 6; y < 70; y += 9) c.fillRect(0, y, 64, 2); });
@@ -499,7 +499,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     },
     animate(time) {
       updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04;
-      waterRipple.uOffset = (time * .012) % 1; waterRipple.vOffset = (time * .003) % 1;
+      waterRipple.uOffset = (time * .035) % 1; waterRipple.vOffset = (time * .009) % 1;
       for (const shadow of cloudShadows) {
         const progress = (shadow.phase + time * 1.6) % TRACK.length;
         if (Math.abs(progress - shadow.progress) < .4) continue;
