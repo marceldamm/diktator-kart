@@ -1,5 +1,8 @@
 # Benutzeroberfläche, Einstellungen und lokale Speicherung
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Endgültige Mausgeste – 03.10.2026
 
 Linke Maustaste halten: frei umsehen. Rechte Maustaste oder X halten: Rückblick. E: Item. Der Cursor wird nur während der Mausgeste unsichtbar und an seiner ursprünglichen Position festgehalten (temporärer nativer Pointer Lock); Loslassen zeigt ihn dort wieder. Loslassen/Fokusverlust/Menü/Pause/Neustart/Kamerawechsel beenden die Geste. Freiere Rundumsicht und vertikaler Blick; nach Loslassen weich nach vorn.
