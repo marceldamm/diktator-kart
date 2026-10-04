@@ -11,6 +11,8 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 
 ## 04.10.2026
 
+- **Dokuordnung:** Die vier Hauptdateien sind jetzt die gemeinsame aktuelle Steuerung; aktive Fachdateien verweisen auf Vorrang, Statusabgleich und Erhalt historischer Ideen. Veraltete Aussagen zum neutralen Slice und zur festen Großkopf-Karikatur wurden als damaliger Stand markiert/korrigiert. Frühere Ideen, Gründe und Prüfbelege bleiben erhalten.
+
 - **Beide Listen abarbeiten:** Der Auftrag „Arbeitslisten abarbeiten“ umfasst zuerst kurzfristige Aufgaben und danach die selbstständige Umsetzung bestätigter Langzeitziele in sichtbaren Paketen. Keine erneute Freigabe für gewöhnliche Paketwahl; echte offene Entscheidungen und Budgetreserve beachten.
 
 - **Höheres Qualitätsziel:** Marcel verlangt deutlich bessere, realitätsnähere Modelle, Fahrer, Fahrzeuge, Strecke, Umgebung, Effekte und Audio anhand der gewählten Bildpräferenz. Fertige Stimmen ohne Text-to-Speech; aktuelle synthetische Clips sind Zwischenstand. Maßnahmen in LONG-TERM-GOALS.md.
