@@ -2,7 +2,7 @@ import { Engine } from '@babylonjs/core/Engines/engine';
 import { Scene } from '@babylonjs/core/scene';
 import { LoadAssetContainerAsync, ImportMeshAsync } from '@babylonjs/core/Loading/sceneLoader';
 import '@babylonjs/loaders/glTF';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import { Vector3, Quaternion } from '@babylonjs/core/Maths/math.vector';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
@@ -160,6 +160,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const arms = ['L', 'R'].map((side) => nodes.find((n) => n.name === `kart${index}/armPose-${side}`) as TransformNode | undefined);
       for (const arm of arms) if (arm) arm.rotationQuaternion = null;
       if (pivots.some((n) => !n) || spins.some((n) => !n) || !driver || !head || !steering) throw new Error('Kart articulation nodes are missing');
+      // Gloves belong to the steering wheel (they turn exactly with the rim); each arm then aims from its shoulder at its glove.
+      for (const n of [root, ...root.getDescendants(false)]) (n as TransformNode).computeWorldMatrix?.(true);
+      const grips = arms.flatMap((arm) => {
+        if (!arm) return [];
+        const gloves = arm.getChildMeshes(true).filter((m) => /White glove/.test(m.name)); if (!gloves.length) return [];
+        const centre = gloves.map((g) => g.getBoundingInfo().boundingBox.centerWorld).reduce((a, b) => a.add(b), Vector3.Zero()).scale(1 / gloves.length);
+        for (const g of gloves) g.setParent(steering);
+        const anchor = Vector3.TransformCoordinates(centre, steering.getWorldMatrix().clone().invert());
+        const rest = Vector3.TransformCoordinates(centre, driver.getWorldMatrix().clone().invert()).subtract(arm.position).normalize();
+        return [{ arm, anchor, rest, q: new Quaternion() }];
+      });
       for (const node of [...pivots, ...spins, driver, head, scarf, steering]) if (node) node.rotationQuaternion = null;
       // Wheel assemblies have an unsprung parent; body squat/roll must never lift grounded tyres.
       const wheelFrame = new TransformNode(`wheelFrame-${index}`, scene);
@@ -189,7 +200,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); markGlow(flame); flame.setEnabled(false); return flame;
       });
-      const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
+      const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, grips, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
         paintColour: Color3.Black(), soot: -1, wreckAge: -1,
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
@@ -605,8 +616,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // Arms follow the wheel; a fresh mini-turbo earns a vertical, pumping fist (sports gesture, never a forward-raised arm).
           const wheelTurn = (s.steer ?? 0) * .9 + Math.sin(s.heading - s.travelHeading) * .3;
           v.cheer += ((s.turboRemaining > .75 ? 1 : 0) - v.cheer) * Math.min(1, dt * 9);
-          if (v.arms[0]) { v.arms[0].rotation.z = wheelTurn * .3; v.arms[0].rotation.x = wheelTurn * .12; }
-          if (v.arms[1]) { v.arms[1].rotation.z = wheelTurn * .3 + v.cheer * .35; v.arms[1].rotation.x = -wheelTurn * .12 + v.cheer * (2.15 + Math.sin(time * 14) * .18); }
+          void wheelTurn; // arms now follow the gloves on the rim (see grips below)
           // Paper burst on an item hit, dust puff on landing.
           if (s.spinRemaining > 0 && !v.spinning) burst(paper, s, reducedEffects ? 20 : 70);
           if (s.height <= .02 && v.wasAirborne) burst(puff, s, reducedEffects ? 6 : 22);
@@ -622,6 +632,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if (v.pedals[0]) v.pedals[0].rotation.x = -v.gas * .45; if (v.pedals[1]) v.pedals[1].rotation.x = -v.brake * .45;
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
+          { // Hands stay on the rim: aim each arm from the (leaning) shoulder at its glove on the turning wheel.
+            const free = v.driver.position.y > .05;
+            for (const n of [v.root, v.orientation, v.driver, v.steering]) n.computeWorldMatrix(true);
+            const inverse = v.driver.getWorldMatrix().clone().invert();
+            for (const g of v.grips) {
+              if (free) { g.arm.rotationQuaternion = Quaternion.Identity(); continue; }
+              const target = Vector3.TransformCoordinates(Vector3.TransformCoordinates(g.anchor, v.steering.getWorldMatrix()), inverse).subtract(g.arm.position).normalize();
+              g.arm.rotationQuaternion = Quaternion.FromUnitVectorsToRef(g.rest, target, g.q);
+            }
+          }
           // Harbour salvage: sink, then the crane hook lifts the kart out of the water.
           { const left = salvageNow[index] ?? 0, cable = cables[index];
             if (left > 0) { const t = 3.2 - left, y = t < 1 ? -.9 * t : -.9 + Math.min(1, (t - 1) / 1.4) * 4.1;
