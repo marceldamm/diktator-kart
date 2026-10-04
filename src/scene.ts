@@ -31,6 +31,8 @@ export interface TestScene {
   abilityEvent?(kind: 'transform' | 'revert' | 'crush', kart: number, target?: number): void;
   /** Weather: false = late-afternoon sun, true = rain with wet road, puddles and lightning. */
   setRain?(rain: boolean): void;
+  /** Weather preset: sun, rain (wet road, puddles, lightning) or snow (flakes, cold light, haze). */
+  setWeather?(kind: 'sun' | 'rain' | 'snow'): void;
   /** Puddle discs for splash/drag rules in rain (empty in sunshine). */
   puddles?(): { x: number; z: number; r: number }[];
   /** Dresses the six karts; order[kart] is the CAST index (kart 0 = player). */

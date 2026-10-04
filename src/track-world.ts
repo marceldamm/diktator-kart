@@ -16,7 +16,7 @@ import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
-export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; puddles: { x: number; z: number; r: number }[] }
+export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
 const W = TRACK.halfWidth;
 /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
@@ -368,6 +368,11 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       road.albedoColor = Color3.FromHexString(wet ? '#8d897f' : '#d8d2c2'); road.roughness = wet ? .32 : 1;
       paving.albedoColor = Color3.FromHexString(wet ? '#8c8270' : '#cbbda0'); paving.roughness = wet ? .4 : 1;
       for (const m of puddleMeshes) m.setEnabled(wet);
+    },
+    setSnow(snow) {
+      // Light snow cover: pale, slightly glossy cobbles and paving (no grip change, rules stay identical).
+      if (snow) { road.albedoColor = Color3.FromHexString('#eef0f2'); road.roughness = .62; paving.albedoColor = Color3.FromHexString('#f2f3f5'); paving.roughness = .7; for (const m of puddleMeshes) m.setEnabled(false); }
+      else this.setWet(false);
     },
     animate(time) { updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04; },
   };

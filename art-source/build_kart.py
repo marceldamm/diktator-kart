@@ -291,8 +291,15 @@ for j in range(len(rows) - 1):
 hf.append(tuple(reversed(range(N)))); hf.append(tuple((len(rows) - 1) * N + k for k in range(N)))
 smooth(mesh('Driver caricature head', hv, hf, skin, head), 2)
 ellipsoid('Neck', (0, -.02, -.22), (.12, .12, .14), skin, head)
-ellipsoid('Nose', (0, .31, .05), (.08, .1, .085), skin, head)
-ellipsoid('Nose tip', (0, .37, .02), (.055, .05, .05), skin, head)
+big_nose = empty('cast-bignose', (0, 0, 0), head)    # default bulbous caricature nose
+ellipsoid('Nose', (0, .31, .05), (.08, .1, .085), skin, big_nose)
+ellipsoid('Nose tip', (0, .37, .02), (.055, .05, .05), skin, big_nose)
+straight = empty('cast-straightnose', (0, 0, 0), head)  # narrower, straight bridge (Hitler)
+ellipsoid('Straight nose bridge', (0, .3, .08), (.045, .07, .1), skin, straight)
+ellipsoid('Straight nose tip', (0, .345, .015), (.05, .045, .045), skin, straight)
+flat = empty('cast-flatnose', (0, 0, 0), head)          # small, broad and flat (Mao, Kim)
+ellipsoid('Flat nose', (0, .3, .03), (.075, .06, .06), skin, flat)
+for sd in [-1, 1]: ellipsoid('Flat nostril wing', (sd * .045, .3, .005), (.035, .035, .03), skin, flat)
 for sd in [-1, 1]:
     ellipsoid('Ear', (sd * .29, 0, .06), (.04, .08, .1), skin, head)
     ellipsoid('Cheek', (sd * .14, .22, -.02), (.09, .07, .07), skin, head)
@@ -385,7 +392,8 @@ def strand(name, path, widths, thick, m, parent, centre=(0, 0, .08), n=10):
 c = cast('sidepart')                              # Hitler: flat dark top, left parting, forelock across the brow
 ellipsoid('Slick hair cap', (0, -.09, .29), (.285, .265, .105), hair, c, 20)
 ellipsoid('Parted hair volume', (.07, -.01, .33), (.19, .19, .055), hair, c, 16)
-strand('Forelock', [(-.1, .1, .37), (-.03, .2, .335), (.06, .255, .28), (.13, .275, .225), (.185, .262, .19)], [.04, .075, .085, .065, .03], .026, hair, c)
+strand('Forelock', [(-.11, .08, .375), (-.04, .19, .34), (.05, .25, .285), (.12, .275, .23), (.18, .27, .19), (.205, .25, .17)], [.04, .08, .095, .08, .05, .02], .03, hair, c)
+strand('Forelock lower strand', [(-.02, .2, .33), (.07, .262, .27), (.14, .278, .215)], [.03, .045, .02], .022, hair, c)
 strand('Parting edge', [(-.1, -.15, .35), (-.1, 0, .375), (-.09, .12, .37)], .012, .012, hair, c)
 c = cast('toothbrush')                            # Hitler: small square moustache under the nose
 box('Toothbrush moustache', (0, .322, -.04), (.085, .05, .042), hair, .012, c)
@@ -413,9 +421,10 @@ ellipsoid('Chin mole', (-.035, .295, -.16), (.018, .012, .018), mole_dark, c, 8)
 c = cast('undercut')                              # Kim Jong-un: shaved sides, flat volume on top, round cheeks
 ellipsoid('Undercut top volume', (0, -.01, .345), (.215, .25, .085), hair, c, 20)
 strand('Undercut fringe', [(-.16, .17, .37), (-.06, .23, .345), (.06, .255, .325), (.15, .23, .31)], [.04, .055, .05, .03], .028, hair, c)
-for sd in [-1, 1]:
-    ellipsoid('Shaved side', (sd * .27, -.04, .16), (.04, .17, .1), hat_cloth, c, 12)
-    ellipsoid('Round cheek', (sd * .16, .2, -.04), (.11, .09, .09), skin, c)
+ellipsoid('Undercut crown', (0, -.12, .31), (.2, .16, .08), hair, c, 16)
+for sd in [-1, 1]: ellipsoid('Shaved side', (sd * .272, -.04, .15), (.035, .18, .12), hat_cloth, c, 12)
+c = cast('chubby')                                # round full cheeks (Kim Jong-un, Mao)
+for sd in [-1, 1]: ellipsoid('Round cheek', (sd * .16, .2, -.04), (.11, .09, .09), skin, c)
 c = cast('patrol')                                # Castro: flat-topped olive patrol cap and cigar
 cyl('Patrol cap crown', (0, -.02, .42), .29, .2, hat_cloth, c, r2=.3, verts=28)
 cyl('Patrol cap flat top', (0, -.02, .525), .305, .02, hat_cloth, c, verts=28)

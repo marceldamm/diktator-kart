@@ -259,7 +259,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     tankInstance.rootNodes.forEach((n) => n.parent = tankOrientation);
     const tankNodes = tankRoot.getDescendants();
     const tankNode = (name: string) => tankNodes.find((n) => n.name === `tank0/${name}`) as TransformNode | undefined;
-    const tankWheels = tankNodes.filter((n) => /tankWheel-/.test(n.name)) as TransformNode[];
+    // Only the spin empties: the joined wheel meshes are named 'tankWheel-L-0 / material' and keep their axle rotation.
+    const tankWheels = tankNodes.filter((n) => /tankWheel-[LR]-\d+$/.test(n.name)) as TransformNode[];
     const tankTurret = tankNode('tankTurret');
     for (const n of [...tankWheels, tankTurret]) if (n) n.rotationQuaternion = null;
     const trackTexture = new DynamicTexture('Tank track link texture', { width: 128, height: 64 }, scene, true);
@@ -302,6 +303,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     splash.minSize = .08; splash.maxSize = .22; splash.minLifeTime = .3; splash.maxLifeTime = .6; splash.emitRate = 0;
     splash.direction1 = new Vector3(-2.5, 3, -2.5); splash.direction2 = new Vector3(2.5, 5, 2.5); splash.gravity = new Vector3(0, -9, 0);
     splash.color1 = new Color4(.75, .82, .9, .7); splash.color2 = new Color4(.9, .93, .96, .6); splash.colorDead = new Color4(.8, .85, .9, 0); splash.start();
+    // Snow: soft drifting flakes around the camera, cold light and white haze.
+    let snowing = false;
+    const snow = new ParticleSystem('Snowflakes', 2200, scene); snow.particleTexture = particleTexture(scene);
+    snow.minSize = .05; snow.maxSize = .14; snow.minLifeTime = 3; snow.maxLifeTime = 5; snow.emitRate = 0;
+    snow.minEmitBox = new Vector3(-26, 9, -26); snow.maxEmitBox = new Vector3(26, 13, 26);
+    snow.direction1 = new Vector3(-.8, -2.2, -.5); snow.direction2 = new Vector3(.6, -3, .6); snow.minEmitPower = 1; snow.maxEmitPower = 1.2;
+    snow.minAngularSpeed = -2; snow.maxAngularSpeed = 2;
+    snow.color1 = new Color4(1, 1, 1, .95); snow.color2 = new Color4(.9, .94, 1, .85); snow.colorDead = new Color4(1, 1, 1, 0); snow.start();
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
     report?.('items');
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
@@ -349,6 +358,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         scene.fogDensity = on ? .0105 : baseLight.fog; scene.fogColor = on ? new Color3(.46, .5, .55) : baseLight.fogColor;
         scene.environmentIntensity = on ? .85 : baseLight.env; skyMaterial.emissiveColor = Color3.Black();
         skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0;
+      },
+      setWeather(kind) {
+        snowing = kind === 'snow'; api.setRain?.(kind === 'rain'); trackWorld.setSnow(snowing);
+        if (snowing) {
+          sun.intensity = baseLight.sun * .45; sun.diffuse = new Color3(.92, .95, 1); hemisphere.intensity = .78; hemisphere.diffuse = new Color3(.86, .9, 1);
+          scene.fogDensity = .0085; scene.fogColor = new Color3(.86, .88, .92); scene.environmentIntensity = .8; skyMaterial.emissiveTexture!.level = .78;
+        } else if (kind === 'sun') sun.diffuse = new Color3(1, .8, .58);
+        snow.emitRate = snowing ? (reducedEffects ? 500 : 1700) : 0;
       },
       puddles() { return raining ? trackWorld.puddles : []; },
       setRoster(order) {
@@ -422,6 +439,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height, k.z)); }
         skids.update([state, ...others]);
         lastStates = [state, ...others];
+        if (snowing) snow.emitter = new Vector3(state.x + Math.sin(state.heading) * 10, 0, state.z + Math.cos(state.heading) * 10);
         if (raining) {
           rain.emitter = new Vector3(state.x + Math.sin(state.heading) * 8, 0, state.z + Math.cos(state.heading) * 8);
           for (const k of lastStates) if (Math.abs(k.speed) > 4 && trackWorld.puddles.some((p) => Math.hypot(p.x - k.x, p.z - k.z) < p.r)) { splash.emitter = new Vector3(k.x, .1, k.z); splash.manualEmitCount = reducedEffects ? 6 : 24; }

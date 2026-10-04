@@ -91,6 +91,9 @@ class App {
   private abilities:AbilityWorld=createAbilities(LOAD_KART_COUNT+1);
   private queuedSpecial=false;
   private rain=false;
+  /** Options choice; 'random' rolls sun, rain or snow every time the track loads. */
+  private weatherChoice:'random'|'sun'|'rain'|'snow'='random';
+  private weather:'sun'|'rain'|'snow'='sun';
   private abilityStats={transform:0,revert:0,crush:0};
   private itemMessage='';
   private itemMessageUntil=0;
@@ -133,8 +136,12 @@ class App {
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
     document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = 1 - this.quality; this.applyQuality(); });
-    try { this.rain = new URLSearchParams(location.search).get('weather') === 'rain' || localStorage.getItem('dk-weather') === 'rain'; } catch { /* storage optional */ }
-    document.querySelector('#weather-toggle')?.addEventListener('click', () => { this.rain = !this.rain; this.applyWeather(); });
+    try { const asked = new URLSearchParams(location.search).get('weather') ?? localStorage.getItem('dk-weather-choice'); if (asked === 'sun' || asked === 'rain' || asked === 'snow' || asked === 'random') this.weatherChoice = asked; } catch { /* storage optional */ }
+    document.querySelector('#weather-toggle')?.addEventListener('click', () => {
+      const cycle = ['random', 'sun', 'rain', 'snow'] as const; this.weatherChoice = cycle[(cycle.indexOf(this.weatherChoice) + 1) % cycle.length];
+      try { localStorage.setItem('dk-weather-choice', this.weatherChoice); } catch { /* storage optional */ }
+      this.weather = this.weatherChoice === 'random' ? this.rollWeather() : this.weatherChoice; this.applyWeather();
+    });
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
     document.querySelector('#menu-race')?.addEventListener('click',()=>void this.startRace());
@@ -262,6 +269,7 @@ class App {
       this.applyQuality();
       if (this.testScene) this.testScene.onLightning = () => this.audio.thunder();
       if (this.testScene) this.testScene.onFirework = () => this.audio.itemEvent('launch');
+      this.weather = this.weatherChoice === 'random' ? this.rollWeather() : this.weatherChoice;
       this.applyWeather();
       this.camera = new KartCamera(this.testScene.scene, this.kart, !LAB_WORLD);
       this.testScene.attachCamera?.(this.camera.babylonCamera);
@@ -280,11 +288,15 @@ class App {
     }
   }
 
+  /** Sunshine half of the time, otherwise rain or snow. */
+  private rollWeather(): 'sun'|'rain'|'snow' { const r = Math.random(); return r < .5 ? 'sun' : r < .75 ? 'rain' : 'snow'; }
   private applyWeather(): void {
     if (LAB_WORLD) return;
-    this.testScene?.setRain?.(this.rain); this.audio.setRain(this.rain);
-    document.querySelector('#weather-toggle')!.textContent = this.rain ? 'Wetter Regen' : 'Wetter Sonne';
-    try { localStorage.setItem('dk-weather', this.rain ? 'rain' : 'sun'); } catch { /* storage optional */ }
+    this.rain = this.weather === 'rain';
+    if (this.testScene?.setWeather) this.testScene.setWeather(this.weather); else this.testScene?.setRain?.(this.rain);
+    this.audio.setRain(this.rain);
+    const label = { sun: 'Sonne', rain: 'Regen', snow: 'Schnee' }[this.weather];
+    document.querySelector('#weather-toggle')!.textContent = this.weatherChoice === 'random' ? `Wetter Zufall (${label})` : `Wetter ${label}`;
   }
   private applyQuality(): void {
     if (LAB_WORLD) return;
