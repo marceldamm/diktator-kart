@@ -209,6 +209,10 @@ export function recoverKart(state: KartState, others: KartState[]): KartState {
 }
 
 /** Shared bot driver: racing lane choice, corner braking, traffic and drift-boost through tight bends. */
+/** Bot pace offset per difficulty (m/s on the base pace; never above the shared kart top speed). */
+let botSkill = 0;
+export function setBotSkill(level: 0 | 1 | 2): void { botSkill = [-1.3, 0, 1.2][level]; }
+
 export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {
   const { s, lane: currentLane } = trackLocate(state.x, state.z);
   const speed = Math.abs(state.speed);
@@ -231,8 +235,8 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const desired = Math.atan2(target.x - state.x, target.z - state.z);
   const error = Math.atan2(Math.sin(desired - state.heading), Math.cos(desired - state.heading));
   const steering = Math.max(-1, Math.min(1, error * 2.3));
-  const pace = 13.4 + (index % 3) * .5;
-  const cornerSpeed = radius >= 11 ? pace : Math.max(8.5, radius * 1.05 + 2.5);
+  const pace = 13.4 + (index % 3) * .5 + botSkill;
+  const cornerSpeed = radius >= 11 ? pace : Math.max(8.5, radius * 1.05 + 2.5 + botSkill * .5);
   let desiredSpeed = Math.min(pace, cornerSpeed) - Math.abs(error) * 2.5;
   // Only lift when the chosen passing line itself is blocked right ahead.
   for (const t of traffic) if (t.ahead < 5 && Math.abs(t.lane - currentLane) < 2 && Math.abs(t.lane - lane) < 2) desiredSpeed = Math.min(desiredSpeed, Math.max(1, t.speed - 1));

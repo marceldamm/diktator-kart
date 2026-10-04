@@ -4,7 +4,7 @@ import { attachKeyboard, attachTouch, InputHub,type Action } from './input';
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { atRampLip, boostPadAt, craterAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { setBotSkill, atRampLip, boostPadAt, craterAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -97,6 +97,7 @@ class App {
   /** Seconds spent in a rival's slipstream per kart. */
   private draft:number[]=[];
   private autoGas=false;
+  private botLevel:0|1|2=1;
   private itemHeld=false;
   /** 'gp' = Grand Prix with five bots; 'timetrial' = solo three laps against your saved ghost. */
   private mode:'gp'|'timetrial'='gp';
@@ -146,6 +147,10 @@ class App {
     document.querySelector('#autogas-toggle')?.addEventListener('click',()=>{this.autoGas=!this.autoGas;try{localStorage.setItem('dk-auto-gas',this.autoGas?'1':'0');}catch{}assistLabels();});
     document.querySelector('#assist-toggle')?.addEventListener('click',()=>{this.steerAssist=!this.steerAssist;try{localStorage.setItem('dk-steer-assist',this.steerAssist?'1':'0');}catch{}assistLabels();});
     assistLabels();
+    try{const b=Number(localStorage.getItem('dk-bot-level')??'1');if(b===0||b===1||b===2)this.botLevel=b;}catch{}
+    const botLabel=()=>{setBotSkill(this.botLevel);document.querySelector('#bots-toggle')!.textContent=`Gegner ${['leicht','mittel','schwer'][this.botLevel]}`;};
+    document.querySelector('#bots-toggle')?.addEventListener('click',()=>{this.botLevel=((this.botLevel+1)%3) as 0|1|2;try{localStorage.setItem('dk-bot-level',String(this.botLevel));}catch{}botLabel();});
+    botLabel();
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
     document.querySelector('#driver-random')?.addEventListener('click',()=>this.pick((this.chosen+1+Math.floor(Math.random()*(CAST.length-1)))%CAST.length));
@@ -700,6 +705,9 @@ class App {
             const bestKey=this.mode==='timetrial'?'dk-best-timetrial-v2':'dk-best-stadium-v2';let improved=false;
             let best:number|null=null;try{const value=Number(localStorage.getItem(bestKey));if(value>0&&Number.isFinite(value))best=value;if(!DEMO&&(best===null||this.raceTime<best)){best=this.raceTime;improved=true;localStorage.setItem(bestKey,String(best));}}catch{}
             if(this.mode==='timetrial'&&improved){try{localStorage.setItem('dk-ghost-v2',JSON.stringify({time:this.raceTime,driver:this.chosen,samples:this.ghostRecord}));}catch{}}
+            // Time-trial medals by total time on the course (average 15.8 / 14.5 / 13 m/s; hard bots win in ~164 s).
+            if(this.mode==='timetrial'){const medal=([[3*TRACK.length/15.8,'Gold'],[3*TRACK.length/14.5,'Silber'],[3*TRACK.length/13,'Bronze']] as [number,string][]).find(([t])=>this.raceTime<=t);
+              document.querySelector('#finish-detail')!.textContent+=` · ${medal?`Medaille ${medal[1]}`:`Bronze ab ${(3*TRACK.length/13).toFixed(0)} s`}`;}
             if(this.mode==='timetrial')document.querySelector('#finish-title')!.textContent=improved?'Neue Bestzeit · Geist gespeichert':`Zeitfahren · ${this.ghostRun?`Geist ${this.ghostRun.time.toFixed(2)} s`:'beendet'}`;
             document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Deine Bestzeit ${best.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
             document.querySelector('#finish-card')!.removeAttribute('hidden');
