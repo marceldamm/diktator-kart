@@ -11,7 +11,7 @@ Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle
 
 ## Verbindliches Stimmenziel – 04.10.2026
 
-Fertige Fahrer-/Sprecherstimmen laut Marcel **ohne Text-to-Speech**, auch ohne offline erzeugte TTS-Clips. Menschliche Aufnahmen oder geeignete echte Mitschnitte mit nachvollziehbaren kostenlosen Nutzungsrechten beschaffen/produzieren; Quellen und Bearbeitung erhalten. Vorhandene Piper-Clips sind Zwischenstand und erfüllen das Endziel nicht. Umfassender Qualitätspass für alle Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds und Musik anhand der gewählten Bildpräferenz: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md).
+Fertige Fahrer-/Sprecherstimmen laut Marcel **ohne Text-to-Speech**, auch ohne offline erzeugte TTS-Clips. Marcel präzisiert am 04.10.: Für die Fahrerhupen bevorzugt er echte, wiedererkennbare historische Live-/Archivaufnahmen aus belegten Internetquellen statt TTS oder neuer Einsprache. Identität, konkreter Ausschnitt, Inhalt und kostenlose Nutzungsrechte prüfen und Herkunft/Bearbeitung dokumentieren, bevor Audiodateien heruntergeladen oder integriert werden. Vorhandene Piper-Clips sind Zwischenstand und erfüllen das Endziel nicht. Umfassender Qualitätspass für alle Modelle, Charaktere, Fahrzeuge, Strecke, Umgebung, Effekte, Sounds und Musik anhand der gewählten Bildpräferenz: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md).
 
 ## Ziel
 
