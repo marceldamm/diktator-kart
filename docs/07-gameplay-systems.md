@@ -3,6 +3,13 @@
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
+
+## Neuer Auftrag: Wandkontakte und kumulativer Schaden – 04.10.2026
+
+Marcel meldet, dass das abrupte Stehenbleiben an Wänden trotz früherer Verbesserung noch den Spielfluss stört. Ältere Testentscheidungen bleiben als Historie erhalten: schräger Bandenkontakt sollte gleiten und Tempo abbauen, harter frontaler Kontakt darf Rückprall zeigen ([Entscheidungsverlauf](12-decision-log.md)). Der aktuelle Build ist neu zu fahren; das gewünschte Gefühl ist eine deutliche, glaubwürdige Kollision ohne unnötigen Komplettstopp in normalen Wandberührungen.
+
+Als Ausbau des bisherigen optischen Schadens sind Haltbarkeit und kumulative Treffer vorgesehen. Bei wiederholten schweren Einschlägen kann ein Kart komisch/übertrieben ausfallen oder explodieren; Fahrerreaktion, kurze Fahrzeugabwesenheit und Rückkehr nach wenigen Sekunden mit eigener Animation/Sound sollen spielbar und fair bleiben. Schwellenwerte, Schutzzeit, Dauer, Trefferwirkung und Botgleichheit sind offen, bis sie im echten Rennen getestet werden. Keine Gore-Darstellung. Umsetzung/Abnahme: [CURRENT-WORKLIST.md](../CURRENT-WORKLIST.md).
+
 ## Driftkorrektur im Fahrtest – 03.10.2026
 
 Driftrichtung bleibt ab Initiierung fest: gleichsinniges Lenken enger, Gegenlenken weiter; beide laden den Mini-Turbo, Neutralstellung langsamer. Reiseausrichtung folgt schneller, begrenzter Schlupfwinkel 0,42 rad und lesbare Driftpose. Vorläufige eigene Balance; Nintendo-Inspiration bezieht sich auf Drift/Halten/Funken/Loslassen-Mini-Turbo (offizielle Anleitung https://www.nintendo.com/jp/ichikara/aabpa/index_en.html), keine exakte Kopie der Nintendo-Physik. Noch menschlich abzustimmen.
