@@ -9,7 +9,7 @@ Bei `Projektstart` fuehre den dort dokumentierten Team-Startablauf aus. Bei `Pro
 
 1. Gearbeitet, gestartet, committet und gepusht wird nur im Hauptordner des Repositorys (Marcel: `D:\Diktator-Kart`). Die Batch `Diktator-Kart-starten.cmd` startet genau diesen Ordner.
 2. Vor jeder Änderung: `git status` und `git log -1` prüfen; mit `git fetch origin` und dem Projektstart-Ablauf auf den neuesten gemeinsamen Stand bringen. Nie auf älteren Dateien weiterarbeiten.
-3. Nach jeder abgeschlossenen Teilaufgabe committen, damit die nächste App denselben Stand sieht. Uncommittete fremde Änderungen nicht überschreiben, sondern zuerst sichern/committen.
+3. Commits und Dokumentation gestaffelt (Marcel, 04.10.2026): nicht nach jeder kleinen Änderung committen oder dokumentieren. Zwischen-Commits nur, wenn wirklich nötig (vor riskanten Schritten, vor einem Wechsel zur anderen KI, an der Budgetgrenze); verbindlich gesammelt beim Projektabschluss. Da alle im selben Ordner arbeiten, sieht die nächste App auch ungesicherte Änderungen. Uncommittete fremde Änderungen nie überschreiben, sondern zuerst sichern.
 4. Immer nur eine KI arbeitet gleichzeitig im Ordner. Die nächste beginnt erst, wenn die vorige committet hat.
 5. Auch Claude arbeitet direkt im Hauptordner, ohne Worktree. Der frühere Claude-Worktree wurde am 04.10.2026 entfernt.
 
