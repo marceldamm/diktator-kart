@@ -622,7 +622,11 @@ class App {
             const names=this.order.map((_,i)=>i===0?`Du · ${this.castOf(0).name}`:this.castOf(i).name);
             const ranking=rankRace(this.progress).map(i=>({p:this.progress[i],i}));
             const list=document.querySelector('#finish-results')!;list.replaceChildren();
-            for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;row.append(label,time);list.append(row);}
+            for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;
+              const shot=this.portraits?.[this.order[i]];if(shot)row.append(Object.assign(document.createElement('img'),{src:shot,alt:''}));row.append(label,time);list.append(row);}
+            // Winner's portrait on the podium card.
+            const winner=ranking[0]?.i??0,podium=document.querySelector<HTMLImageElement>('#finish-portrait');
+            if(podium){const shot=this.portraits?.[this.order[winner]];podium.hidden=!shot;if(shot){podium.src=shot;podium.alt=`Sieger ${this.castOf(winner).name}`;}}
             let best:number|null=null;try{const value=Number(localStorage.getItem('dk-best-stadium-v1'));if(value>0&&Number.isFinite(value))best=value;if(!DEMO&&(best===null||this.raceTime<best)){best=this.raceTime;localStorage.setItem('dk-best-stadium-v1',String(best));}}catch{}
             document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Deine Bestzeit ${best.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
             document.querySelector('#finish-card')!.removeAttribute('hidden');

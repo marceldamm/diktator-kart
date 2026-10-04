@@ -178,3 +178,7 @@ button:disabled { opacity: .5; cursor: default; }
 .driver-note { display:block;margin-top:12px;font-size:9px;color:#90aba9; }
 @media(max-width:820px) { #driver-grid { grid-template-columns:repeat(3,1fr); } #driver-select h2 { font-size:22px; } }
 @media(max-height:620px) { .driver-card img,.driver-card .portrait-wait { aspect-ratio:1; } #driver-select h2 { margin:6px 0 10px;font-size:22px; } }
+
+/* Podium: winner portrait and small driver portraits in the result list. */
+#finish-portrait { float:right;width:96px;height:108px;object-fit:cover;margin:0 0 8px 14px;border:2px solid #f0cf86;box-shadow:0 6px 18px #0007; }
+#finish-results li img { width:26px;height:29px;object-fit:cover;margin-right:8px;vertical-align:middle;border:1px solid #c2a66966; }
