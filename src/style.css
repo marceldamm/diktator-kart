@@ -182,3 +182,8 @@ button:disabled { opacity: .5; cursor: default; }
 /* Podium: winner portrait and small driver portraits in the result list. */
 #finish-portrait { float:right;width:96px;height:108px;object-fit:cover;margin:0 0 8px 14px;border:2px solid #f0cf86;box-shadow:0 6px 18px #0007; }
 #finish-results li img { width:26px;height:29px;object-fit:cover;margin-right:8px;vertical-align:middle;border:1px solid #c2a66966; }
+
+.driver-card.selected img { animation: portrait-breathe 2.4s ease-in-out infinite; }
+@keyframes portrait-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+.driver-card { overflow:hidden; }
+@media(prefers-reduced-motion:reduce) { .driver-card.selected img { animation:none; } }

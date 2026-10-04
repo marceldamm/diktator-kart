@@ -129,6 +129,7 @@ class App {
       if(!this.selecting)return;
       if(event.code==='ArrowLeft'||event.code==='ArrowRight'){event.preventDefault();event.stopImmediatePropagation();this.pick((this.chosen+(event.code==='ArrowLeft'?CAST.length-1:1))%CAST.length);}
       if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();this.closeSelection();}
+      const digit=/^Digit([1-6])$/.exec(event.code);if(digit){event.preventDefault();event.stopImmediatePropagation();this.pick(Number(digit[1])-1);}
     },true);
     document.querySelector('#sound-toggle')!.textContent=this.audio.enabled?'Ton an':'Ton aus';
     const musicVolume=document.querySelector<HTMLInputElement>('#music-volume')!;

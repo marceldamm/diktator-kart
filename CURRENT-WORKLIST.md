@@ -28,7 +28,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Gesichter/Haare Feinschliff:** Nasenvarianten (Hitler schmal/gerade, Mao/Kim breit/flach, übrige groß), runde Wangen für Mao/Kim, deutlichere Stirnlocke bei Hitler, Kims Undercut mit Hinterkopf. Weitere Verfeinerung bleibt sinnvoll.
 - [x] **Panzerräder repariert:** Die Laufrollen standen hochkant und taumelten (Namensfilter erwischte die Rad-Meshes mit). Jetzt korrekt seitlich und drehen um ihre Achse.
 - [x] Minikarte zeigt die Gegner in ihren Kartfarben.
-- [x] Fahrerwahl: Button „Zufällig 🎲“; Nicht-Hitler-Figuren rufen beim Werfen ihren Spruch (vorläufige TTS-Platzhalter). Siegender Bot ruft seinen Siegerspruch; Rennanzeige nennt die gewählte Figur.
+- [x] Fahrerwahl: Button „Zufällig 🎲“; Nicht-Hitler-Figuren rufen beim Werfen ihren Spruch (vorläufige TTS-Platzhalter). Siegender Bot ruft seinen Siegerspruch; Rennanzeige nennt die gewählte Figur. Fahrerwahl auch mit Tasten 1–6; gewähltes Porträt „atmet“ leicht.
 
 ## Offen und als Nächstes
 
