@@ -64,3 +64,5 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Maus-Kamera repariert:** Halten links/rechts funktioniert jetzt auch, wenn der Browser den Mauszeiger nicht einfangen darf. Der alte Claude-Worktree ist gelöscht.
 
 - **Größere Karte mit Kanalsprung:** Die Strecke ist 1,5× so groß. Vor den Tribünen springt man jetzt über einen Kanal (Boost, Rampe, Landeschub, sonst Bergung). Lenkung direkter. Außerdem heute: Schadensmodell mit Totalschaden, Gefahrenzonen mit Bergungsamt, Tag-Nacht, feste Hände am Lenkrad, Boostflächen, Startschub.
+
+- **Großer Qualitäts- und Mechanikschub (04.10. Nachmittag/Abend):** Drift kontrollierter mit 3 Turbostufen, Windschatten, Tricks, Item-Schild, Zeitfahren mit Geist und Medaillen, Gegnerstärke, Auto-Gas/Lenkhilfe, Grafik Hoch, eigene Karosserien, realistischere Köpfe/Haare, zweite Rampe. Echte Hupen-Stimmen später.
