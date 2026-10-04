@@ -28,6 +28,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Gesichter/Haare Feinschliff:** Nasenvarianten (Hitler schmal/gerade, Mao/Kim breit/flach, übrige groß), runde Wangen für Mao/Kim, deutlichere Stirnlocke bei Hitler, Kims Undercut mit Hinterkopf. Weitere Verfeinerung bleibt sinnvoll.
 - [x] **Panzerräder repariert:** Die Laufrollen standen hochkant und taumelten (Namensfilter erwischte die Rad-Meshes mit). Jetzt korrekt seitlich und drehen um ihre Achse.
 - [x] Minikarte zeigt die Gegner in ihren Kartfarben.
+- [x] Fahrerwahl: Button „Zufällig 🎲“; Nicht-Hitler-Figuren rufen beim Werfen ihren Spruch (vorläufige TTS-Platzhalter).
 
 ## Offen und als Nächstes
 

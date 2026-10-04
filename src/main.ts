@@ -124,6 +124,7 @@ class App {
     this.order=rosterOrder(this.chosen);
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
+    document.querySelector('#driver-random')?.addEventListener('click',()=>this.pick((this.chosen+1+Math.floor(Math.random()*(CAST.length-1)))%CAST.length));
     window.addEventListener('keydown',(event)=>{
       if(!this.selecting)return;
       if(event.code==='ArrowLeft'||event.code==='ArrowRight'){event.preventDefault();event.stopImmediatePropagation();this.pick((this.chosen+(event.code==='ArrowLeft'?CAST.length-1:1))%CAST.length);}
@@ -609,6 +610,8 @@ class App {
             this.itemMessage=event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+1.8;
             if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);
+            // Everyone else shouts their own line while throwing their character projectile.
+            if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile!=='dog'&&this.voiceCooldown===0){this.audio.voice(`${this.castOf(0).voice}-horn`,{channel:'driver',rate:this.castOf(0).voiceRate,volume:.8});this.voiceCooldown=6;}
             if(event.kind==='hit')this.say(0,'hit');
           }
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
