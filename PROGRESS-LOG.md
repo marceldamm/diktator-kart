@@ -4,6 +4,58 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+### 2026-10-04 – Sprungtrick, Rampenoberfläche und Roadster-Wimpel
+
+**Umgesetzt:** `airTrickRoll` liefert eine gemeinsame zeitabhängige Rollkurve für Karosserie und getrennte Radgruppe; am Ende setzt der volle Kreis auf die identische Vorwärtslage zurück. Ein Regressionstest deckt ausgeschalteten Trick, Start, Halbzeit, Abschluss und ungültige Dauer ab. Die Holzrampenfläche und Stirnseite liegen 5 cm über dem Straßenprofil, das dieselbe Rampe bereits nachzeichnet; dadurch werden die zuvor exakt koplanaren Oberflächen getrennt. `art-source/build_kart.py` ergänzt auf beiden Parade-Wimpeln ein beidseitig sichtbares eigenes Adlerrelief in Messing, ohne Regimezeichen.
+
+**Verifiziert:** Blender 4.5.3 erzeugte die editierbare `art-source/hero-kart.blend` und das GLB; `node art-source/optimize_assets.mjs hero-kart` optimierte die Laufzeitdatei von 3,538,108 auf 2,582,704 Bytes. Der aktualisierte Browserstand zeigt das Adlerrelief auf beiden roten Fahrzeugwimpeln. `npm test`: 49/49; der Strecken-/Trickteiltest: 9/9; `npm run build`: TypeScript und Vite erfolgreich (1,295 Module). Bekannte Warnung zum 2,016-kB-Hauptchunk bleibt.
+
+**Nicht verifiziert:** Die Browserbedienung hielt hier keine Fahrttaste; ein bewegter Sprungtrick und eine direkte Nahaufnahme der Rampe während der Fahrt fehlen. Die Regenszene zeigt Regen, aber die Sichtbarkeit und Deckkraft der begonnenen fünf Wolkenschatten ist noch nicht sauber gegen Sonne/Regen abgenommen. Keine Sarah-Geräteprüfung.
+
+**Geänderte Dateien:** `src/kart-visuals.ts`, `src/slice-scene.ts`, `src/track-world.ts`, `tests/track.test.mjs`, `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `art-source/README.md`, vier Arbeitsdateien und dieser Log.
+
+**Nächster Schritt:** menschliche Nah-/Fahrprobe für Rampen und Lufttrick; anschließend offene M5-Regen-Wolkenschatten mit sichtbarem Regen-/Sonnenvergleich fertig prüfen.
+
+### 2026-10-04 – Bergung nach dem Kanalsprung
+
+**Ziel:** Das Kart nach einem Fehlversuch im quer über die Fahrbahn laufenden Wasserkanal sicher aus dem Wasser bringen und unmittelbares erneutes Einsinken verhindern.
+
+**Umgesetzt:** `recoverKart` erkennt den Kanal und setzt auf die Fahrbahn hinter der Landekante. Der Abstand liegt über der Fortschritts-Toleranz von `advanceRace`; die Bergung vergibt deshalb keine Strecke/Runde. Spieler und Bots nutzen unverändert dieselbe Routine. Hafenbecken-, Lava- und Klippenbergung bleiben unverändert.
+
+**Verifiziert:** Neuer Track-Regressionstest stellt den Fehlerzustand her und belegt eine sichere Position außerhalb der Wasserfläche hinter der Landekante. `npm test`: 48/48 bestanden. `npm run build`: TypeScript und Vite erfolgreich; vorhandene Warnung zum großen Hauptchunk bleibt.
+
+**Nicht verifiziert:** Menschlicher Spielversuch mit einem absichtlich verfehlten Sprung; kein Sarah-Gerätecheck.
+
+**Geänderte Dateien:** `src/track.ts`, `tests/track.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`.
+
+**Offene Probleme:** keine bekannte technische Regression des Kanal-Respawns.
+
+**Nächster Schritt:** Bei der nächsten menschlichen Spielprobe den Sprung absichtlich verfehlen und die Bergung visuell bestätigen; anschließend an den nächsten ausführbaren bestätigten Zielen weiterarbeiten.
+
+**Empfohlenes Modell:** Sol für weitere Gameplay-/Qualitätsarbeit.
+
+## Projektstart und Arbeitslistenabgleich – 04.10.2026 (Codex, Marcel)
+
+**Git / Remote:** Vor Änderungen `git status`, `git log -1`, Branches und Worktrees geprüft. Der ursprüngliche Checkout war sauber auf `00e8173`; `git fetch origin` und `scripts/team-workflow.ps1 -Action Status` bestätigten GitHub-`main` = `00e8173`, neue Babylon-Basis, keine ungesicherten Dateien und keine Überschneidungen. `-Action Start -Owner Marcel` legte `codex/team-marcel-20261004-132611-615` auf diesem Stand an. Kein Spielcode verändert; kein Commit oder Push.
+
+**PC-/Handy-Abgleich:** Neue Spielideen/Abnahmepunkte sowie die vier Arbeitsdateien sind auf dem abgeglichenen Remote-Stand sichtbar. Tests/Build-Belege auf dem Checkout geprüft. Sarahs Abruf von ihrem eigenen Gerät/Konto ist hier nicht einsehbar und wird nicht behauptet. Codex-App meldete für die vier Dateitabs jeweils `queued`.
+
+**Prüfungen:** `npm test` nach Wiederholung außerhalb der Sandbox: **46/46 bestanden** (inkl. Kontakt-/Schadensmodelle und Team-Workflow-Regressionen). `npm run build`: TypeScript und Produktionsbuild bestanden. Vite meldet weiterhin den großen Hauptchunk (2,013.82 kB) als Warnung. Ein erster Sandboxlauf blockierte Kindprozesse (`spawn EPERM`); der gleichartige Lauf außerhalb der Sandbox bestand. Lokaler Dev-Server auf 4173 und sichtbarer Browser: `?demo=1` lädt die laufende Sechs-Kart-Szene, Fahrerperspektive/Verfolgerkameras schalten um, Karosserie startet bei 100 %. Das ist keine menschliche Fahr- oder gezielte Wandkontakt-Abnahme.
+
+**P1 Bestandsprüfung:** `src/kart-model.ts` enthält flaches Wandgleiten und Reaktionen für steilere/frontalere Kontakte; `src/damage.ts` enthält kumulativen Schaden, 35-Punkte-Maximum pro Treffer, Totalschaden, dreisekündige Reparatur und vier Sekunden Reparaturschutz. `tests/kart-model.test.mjs` und `tests/damage.test.mjs` bestehen. Werte wegen ausstehender menschlicher Fahrprobe nicht verändert.
+
+**Quaternius-Basisfigur:** Offizielle Anbieter- und itch.io-Seiten bestätigen CC0, sechs humanoide Figuren und das 122-MB-Standardpaket; das kostenlose Paket bietet glTF, vollständige `.blend`-Quellen liegen im 19,99-USD-Source-Paket. Der Browser zeigte itch.io-CDN-Probleme und lieferte trotz ausgelöstem Gratisdownload keinen abrufbaren lokalen Dateipfad; Datei wurde nicht eingebunden. Blender 4.5.3 ist lokal unter `.tools/` vorhanden. Quellen: [Quaternius](https://quaternius.com/packs/universalbasecharacters.html), [itch.io-Paket/Lizenz/Dateien](https://quaternius.itch.io/universal-base-characters).
+
+**P2-Porträts und erster Gesichtsdetailpass:** In der realen Fahrerwahl standen vor der Änderung die übrigen Karts sichtbar hinter den Head-and-Shoulders-Aufnahmen. `src/slice-scene.ts` zeigt während jeder Aufnahme nur den Fahrer-Zweig, stellt Mesh-Sichtbarkeit/Szenenfarbe/Kartwurzeln im `finally`-Block wieder her und pausiert Partikel bis zur Wiederaufnahme. Die Kamera ist näher auf Kopf und Schultern gerichtet; der Hintergrund ist eine neutrale Studiofarbe. Alle sechs Bilder wurden danach auf `http://127.0.0.1:4173/` geprüft. In `art-source/build_kart.py` wurden der Kopf zum Oberkörper verkleinert, Hautton matter/neutraler, Augen warmbraun und ein kleines Munddetail ergänzt; Blender 4.5.3 speicherte `art-source/hero-kart.blend` und exportierte `public/assets/models/hero-kart.glb`, danach optimiert (zuletzt `2,575,280` Bytes). Das Laufzeitbild wurde erneut geprüft. Es bleibt ausdrücklich Karikaturstufe; erkennbare Gesichtsformen und Cockpit bleiben offen. Späterer Gesamtstand: `npm test` 47/47 und Produktionsbuild bestanden.
+
+**Historische Hupen – erste Quellenprüfung:** Wikimedia Commons listet `Hit43.ogg` als 25-s-Aufnahme mit anonymer Quelle/Urheber und Beschreibung einer 1943er Rede zur Zurückweisung alliierter Bedingungen; Inhalt ist für einen neutralen kurzen Gruß ungeeignet. `It-Benito_Mussolini.ogg` ist nur 2,2 s lange moderne italienische Namensaussprache von Sabine Cretella, lizenziert CC BY-SA 3.0/GFDL, also keine historische Stimme. Keine Datei heruntergeladen oder übernommen. Primärseiten: [Hit43.ogg](https://commons.wikimedia.org/wiki/File:Hit43.ogg), [It-Benito_Mussolini.ogg](https://commons.wikimedia.org/wiki/File:It-Benito_Mussolini.ogg). Suche nach geeigneten historischen Kurzaufnahmen bleibt offen.
+
+**Bots durch die Hinterhofgasse:** `src/track.ts` erkennt den Abkürzungs-Einstieg für Bot-Index 3 vor dem Öffnen des Korridors, benutzt danach `shortcutLocate`/`shortcutPoint` und eine aus der Shortcut-Geometrie berechnete Kurvenvorschau. Nur dieser Bot wählt die schmale Route. Neuer Test simuliert ihn allein, bestätigt tatsächliche Korridornutzung und drei Runden mit fortlaufender Streckenwertung. Der vorhandene Fünf-Bot-Dreirundentest besteht ebenfalls. `npm test`: 47/47; `npm run build` bestanden. Echtes Mehrbot-Fahrgefühl bleibt eine Laufzeitabnahme.
+
+**P2-Sitzprüfung:** Vor jeder neuen Geometrieänderung `art-source/build_kart.py` geprüft: `Seat cushion`, `Seat back shell` und Ziernähte existieren bereits als feste Kartgeometrie. Die Oberschenkel beginnen auf Höhe .9 m bei einer Sitzoberkante von .85 m. Sechs-Kart-Rennansicht aus Verfolgerperspektive zeigt den Fahrer auf dem Sitz; tatsächliche menschliche Sitz-/Beinabnahme bleibt offen.
+
+**Aktueller Stand / nächste Schritte:** PC-/Remote-/Handy-Dokuabgleich abgeschlossen; tatsächlicher Sarah-Abruf offen. P1-Implementierung technisch bestätigt, menschliche Fahrgefühl-Abnahme offen. P2-Porträtisolierung und Studioaufnahme umgesetzt; erster Gesichts-Materialpass umgesetzt, erwachsene Modellierung/Anatomie bleiben offen. Bot 3 fährt die Gasse in der Simulation; sichtbarer Mehrbot-Fahrtest offen. Fahrer-/Cockpit-Qualitätsanker mit den eigenen editierbaren Quellen fortsetzen; freien glTF-Zugang später ergänzen. Historische Hupen: zwei unpassende Quellen ausgeschlossen; geeignete Primärquelle und menschliche Hörprobe offen.
+
 ## Neueste Übergabe – 04.10.2026 (Abend, Claude)
 
 Projektstart auf `codex/team-marcel-20261003-232302-374` (Basis main `f784078`), danach autonome Arbeit auf Marcels Auftrag bis zur 95-%-Budgetgrenze und Teamabschluss nach main. Ergebnis: Maus-Kamera-Fix, historischer Startkader (Karikaturstufe), Fahrerwahl mit Live-Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch Bot), eigener Marsch statt Klavier, Ziel-Feuerwerk und Siegerporträts. 43/43 Unit-Tests, TypeScript und Produktionsbuild bestanden; Browserbelege im eingebauten Browser der Claude-App gegen den Batch-Server (Port 4173, gleicher Ordner/Branch/Commit laut `/__diktator/status`). Zweite Runde: preußischer Marsch, Zufallswetter mit Schnee, Panzerrad-Fix, Nasen/Wangen. Offen: Marcels Maus-Test in Chrome, Hörprobe des Marsches, Feinschliff der Gesichter, eigene Fähigkeiten der fünf anderen Figuren. Details im Eintrag unten.
@@ -313,3 +365,135 @@ Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umges
 **Nächster Schritt:**
 
 **Empfohlenes Modell:**
+
+### 2026-10-04 – Fahrer-/Fahrzeug-Masterauftrag: erster Laufzeit-Formpass
+
+**Auftrag / Richtung:** Marcels neues Masterdokument zur Überarbeitung von Fahrer- und Fahrzeugmodellen hat in der Arbeitsliste Priorität. Seine anschließende Präzisierung ist verbindlich: gemeinsame Kart-Grundarchitektur mit vielen je Person gestalteten, selbst als Schwarzsilhouette lesbaren Karosserieabweichungen; keine Treckerform, Stalins Traktor bleibt das Wurfobjekt. Stalin ist der erste Qualitätsanker. Diese Auftragsänderung steht in CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md, TEAM-NOTES.md und docs/22-character-vehicle-quality-master.md. Frühere neutrale-/Großkopf- und Mussolini-als-erster-Pilot-Vorschläge sind in den Fachdateien als historische Zwischenstände markiert.
+
+**Umgesetzt:** Die beiden aktuellen Nutzerbilder dienten als Befund. In `art-source/build_kart.py` Kopfvolumen/-profil und sechs getrennte Kopf-/Kieferformen ergänzt/angepasst, Hals und weichen ovalen Uniformkragen neu geformt, Mundöffnung/Lippen sichtbar modelliert, Lenkradarme den äußeren Griffseiten zugeordnet, historische Kopfbedeckungen als schaltbare Variante vorgesehen und grobe Gold-Schulterblöcke durch eng anliegende Stoffepauletten mit feiner Paspel ersetzt. Den flatternden goldenen Nackenstab nach Ursachenprüfung beseitigt: es war ein steifer Verschluss am animierten Cape-Knoten `scarfFlap`, kein notwendiger Rigstab; der falsche Verschluss wurde entfernt. Die sechs bestehenden Kartkarosserien teilen das Rad-/Fahrwerk, behalten aber individuelle Körper-/Front-/Heckformen; Stalin fährt eine Straßen-Staatslimousine und sein Traktor bleibt ein Item. Laufzeitquelle, optimiertes GLB und Dokumentationsbelege sind aktualisiert.
+
+**Verifiziert:** `npm test`: 50/50 bestanden (einschließlich Charakterzuordnung, Trennung der sechs Kopfprofile und bestehender Spiel-/Rennregressionen). `npm run build`: TypeScript und Vite erfolgreich, 1.295 Module. Weiterhin bekannte Vite-Warnung zum 2.016,26-kB-Hauptchunk. Blender 4.5.3 erzeugte `art-source/hero-kart.blend`; glTF-Optimierung abgeschlossen (`hero-kart`: 5.913.324 Bytes Quelle → 4.507.372 Bytes Laufzeit). Die aktuelle In-App-Laufzeitansicht zeigt alle sechs Porträts, Stalin-Kappe/Bart, die neue Schulterform und die gewählte Staatslimousine. Rückansicht bestätigt, dass keine Stange aus Nacken/Rücken ragt. Browserkonsole für die aktuelle Szene: keine Warnungen oder Fehler. Prüf- und Arbeitsliste bleiben auf dem Hauptcheckout; Remoteabstammung zu Beginn war Commit `00e8173` auf Branch `codex/team-marcel-20261004-132611-615`.
+
+**Nicht abgenommen / offen:** Die Figuren sind weiterhin deutlich stilisierte Karikaturen statt realitätsnaher Abbilder; Augen-/Mundlesbarkeit, individuelle Anatomie und Gesichtsausdruck benötigen sichtbar mehr Tiefe. Front-, Seiten-, Nah- und laufende Bewegungsaufnahme des Stalin-Ankers sind nicht vollständig geprüft; die Browserbedienung ersetzt keine menschliche Fahrprobe. Silhouettenabgleich aller sechs Fahrzeuge, animierte Hände aus mehreren Blickwinkeln, Hutzuordnung im historischen Kontext und gemeinsame Qualitätsabnahme bleiben offen. Die sechs getrennten Köpfe erhöhen das Laufzeitmodell gegenüber dem vorherigen Eintrag; Leistung auf schwächerem PC/Mobile ist nicht geprüft. Die vorläufige Kopfzuordnung ist gestaltete Zwischenumsetzung und keine Quellen- oder Rechteabnahme.
+
+**Geänderte Dateien:** `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `PROGRESS-LOG.md`, `docs/02-art-direction.md`, `docs/09-roadmap.md`, `docs/10-open-questions.md`, `docs/14-character-and-item-catalog.md`, `docs/16-production-blueprint.md`, neues `docs/22-character-vehicle-quality-master.md`, `art-source/README.md`, `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `src/cast.ts`, `src/slice-scene.ts`, `tests/cast.test.mjs` sowie bereits vorher veränderte Strecken-/Gameplay-Dateien.
+
+**Nächster Schritt:** Kopf-/Hals-/Gesichtsmodell und sichtbare Handgelenke des Stalin-Karts weiter ausarbeiten; nah/vorn/seitlich/rückwärts und in Bewegung beurteilen. Dann klaren Stilanker abnehmen und mit den bestätigten Kriterien auf die anderen fünf Fahrer-/Kartpaare übertragen. Nutzerabnahme separat offen halten.
+
+**Budgetstand:** offizieller Codex-Stand nach diesem Paket: 7 % des Fünf-Stunden-Limits verbraucht, 32 % des Wochenlimits verbraucht. Keine Kontingente/Resets gekauft oder aktiviert.
+
+### 2026-10-04 – Korrektur nach Marcels Sichtprüfung: Hitler-Mund und Schnurrbart
+
+**Korrektur:** Marcel zeigte im aktuellen Auswahlbild, dass Hitlers Schnurrbart und die Münder im ersten Formpass in der tatsächlichen Kartendarstellung nicht klar sichtbar waren. Die frühere Geometrie existierte im GLB, ihre Größe/Kontrast waren in einem 320×360-Porträt aber unzureichend. Das ist eine echte Qualitätslücke und kein bloßes Missverständnis in der Dokumentation.
+
+**Umgesetzt und visuell belegt:** Mundöffnung erweitert und dunkler gesetzt, Lippen stärker geformt; Hitlers Schnurrbart merklich verbreitert, erhöht und mit weicherer Kontur gebaut. Blender 4.5.3 sowie GLB-Optimierung erfolgreich erneut ausgeführt. Das aktualisierte Fahrerwahlbild zeigt bei Hitler einen deutlich erkennbaren Mund und den kompakten dunklen Schnurrbart direkt darunter. Die übrigen Fahrer behalten ihre eigenen Gesichtsmerkmale.
+
+**Verifiziert:** Der Laufzeitbrowser hat die neue Datei geladen; die sechs Auswahlbilder wurden angezeigt. Adolf-Porträt zeigt Mundöffnung und kompakten Schnurrbart klar. Browserkonsole: keine Warnungen oder Fehler. Blender/Optimierung: `hero-kart` 5.965.128 Bytes Quelldatei → 4.531.896 Bytes Laufzeitdatei. Danach vollständige Suite 50/50 erfolgreich, TypeScript-/Vite-Produktionsbuild erfolgreich (1.295 Module; bekannte 2.016,26-kB-Hauptchunk-Warnung).
+
+**Grenze:** Es bleibt eine stilisierte Karikatur, keine realitätsnahe oder gemeinsam abgenommene Figur. Diese Iteration korrigiert gezielt die Lesbarkeit der zuvor fehlenden Gesichtszüge; Masterauftrag, Stalin-Anker und Gesamtkader bleiben offen.
+
+### 2026-10-04 – Stalin-Anker: zweiter Gesichts- und Limousinenpass
+
+**Ziel:** Marcels offenen Fahrer-/Fahrzeug-Masterauftrag in kleinen sichtbaren Paketen weiter umsetzen. Der Stalin-Anker bleibt Priorität 1; die erste Gesichtsstufe war auf der Fahrerkarte noch zu rund und zu wenig gegliedert.
+
+**Umgesetzt:** In `art-source/build_kart.py` Stalins eigenes Profil am gemeinsam animierten Schädel verbreitert und den unteren Kiefer kräftiger/squarer geformt. Zusätzliche Brauen-, Wangen-, Nasenflügel-, Nasolabial- und Unteraugenebenen werden nur mit `cast-face-stalin` aktiviert. Die Staatslimousine erhielt einen hohen gerahmten Kühler, eigene vertikale Grillstäbe, eine mittige Haubenlinie und eine gestufte Heckkante; gemeinsamer Kart-Radstand und Fahrwerk bleiben bestehen. Kein neues Regimezeichen, keine Treckerform.
+
+**Verifiziert:** Blender 4.5.3 schrieb `art-source/hero-kart.blend` und exportierte das Laufzeit-GLB; `node art-source/optimize_assets.mjs hero-kart` reduzierte 6.099.920 auf 4.669.348 Bytes. Fahrerwahlporträt und laufendes Babylon-Rennen mit Stalin wurden im Browser geladen; Kamerawechsel zeigte das Heck und danach das Cockpit. `npm test`: 50/50 bestanden. `npm run build`: TypeScript/Vite erfolgreich, 1.295 Module; bekannte 2.016,26-kB-Hauptchunk-Warnung. Der erste Test-/Buildversuch innerhalb der Sandbox konnte Windows-Unterprozesse nicht starten (`EPERM`); Wiederholung außerhalb mit erlaubtem Prozesszugriff war erfolgreich. `git diff --check` sauber (nur erwartete LF/CRLF-Hinweise).
+
+**Nicht abgenommen / offen:** Der neue Kopf ist weiterhin eine erkennbare Spielkarikatur, kein professionell fertiggestelltes historisches Porträt. Front-, Seiten- und Nahansicht sowie Bewegung des Gesichts/der Hände wurden nicht vollständig geprüft; kein menschlicher Qualitätsentscheid. Die Limousinen-Silhouette braucht einen gesamten Seiten-/Frontvergleich zu den anderen fünf Karts. Es gibt keinen geprüften schwachen-Geräte-Leistungslauf.
+
+**Geänderte Dateien:** `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `art-source/README.md`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `PROGRESS-LOG.md`.
+
+**Nächster Schritt:** Anatomie und Hand-/Armgriff des Stalin-Ankers von vorn/seitlich/nah vertiefen und Fahrzeugprofil aller sechs Karts als Silhouetten vergleichen; Stilanker erst nach vollständigem Laufzeit- und Nutzercheck freigeben.
+
+### 2026-10-04 – Regen-Wolkenschatten: Abschaltung in der Wetterreihenfolge korrigiert
+
+**Befund:** Fünf Wolkenschatten-Meshes und Regenpfützen existierten in `src/track-world.ts`, waren auf dem echten Regenbild aber unsichtbar. `setWeather('rain')` rief zuerst `setRain(true)` und danach `setSnow(false)` auf. Der `setSnow(false)`-Rückfall rief seinerseits `setWet(false)` auf und schaltete Pfützen/Schatten im selben Übergang sofort wieder ab. Regentropfen blieben aktiv, was die falsche Wetterdarstellung zunächst kaschierte.
+
+**Umgesetzt:** `setWeather` setzt die Schneeoberfläche nun zuerst zurück und aktiviert Regen zuletzt. Die gemeinsame Schattenmaterial-Alpha-Nutzung ist explizit auf Alpha-Blending gestellt; die zentrale weiche Wolkenform ist auf dem strukturierten Pflaster kontrastreicher, ohne den kleinen festen Bestand zu vergrößern (5 Meshes, 1×512² Textur).
+
+**Verifiziert:** Echter Browser unter `?weather=rain` zeigt die diffuse dunkle Schattenform und die reflektierenden Pfützen im Laufzeitrennen; `?weather=sun` zeigt beides nicht. `npm test`: 50/50 bestanden. `npm run build`: erfolgreich, 1.295 Module; bekannte 2.016,30-kB-Hauptchunk-Warnung. `git diff --check` sauber, mit erwarteten Windows-LF/CRLF-Hinweisen.
+
+**Geänderte Dateien:** `src/slice-scene.ts`, `src/track-world.ts`, `docs/07-gameplay-systems.md`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `PROGRESS-LOG.md`.
+
+**Nächster Schritt:** Wetterübergänge Regen → Sonne → Schnee und zurück im nächsten visuellen Weltpass erneut mitprüfen; diese Korrektur bezieht sich auf die Browserzustände Sonne/Regen.
+
+### 2026-10-04 – Lenkradgriff: schwebende Hände an den Kranz gesetzt
+
+**Befund:** Marcels Laufzeitmeldung wurde am Stalin-Kart in Fahrer- und Verfolgerkamera nachgestellt. In `art-source/build_kart.py` lagen Handflächen/Finger bei x≈±0,68, während das Lenkrad bei x≈±0,21 sitzt. `src/slice-scene.ts` reparentet die Handschuh-Meshes bewusst an den Lenkradknoten, damit sie dessen Bewegung mitmachen; das Parenting hielt daher die falschen Ursprungskoordinaten unverändert und ließ die Hände frei neben dem Kranz schweben.
+
+**Umgesetzt:** Unterarme zeigen jetzt vom Schulterpivot nach innen. Manschetten, Handflächen und Finger liegen beidseitig direkt an den linken/rechten Kranzpunkten; der bestehende gemeinsame Lenkradanker kann sie weiterhin mit dem Einschlag mitdrehen. Zusätzlich wurde der Hals als verjüngte, weiche Nacken-/Kehlform modelliert und die Ohrmuschel durch Concha, Helix und Ohrläppchen ergänzt.
+
+**Verifiziert:** Blender 4.5.3 erzeugte die editierbare `hero-kart.blend` und GLB neu; `node art-source/optimize_assets.mjs hero-kart` erfolgreich (6.207.268 → 4.753.588 Bytes). Der erste Optimierungsversuch wurde vom offenen Windows-Browsertab blockiert; nach Schließen des eigens angelegten Prüftabs lief der Export durch. Frischer In-App-Browser lud das neue GLB; Stalin-Rennen bis in die Fahrerperspektive geprüft: beide Handschuhe berühren den unteren linken/rechten Lenkradkranz. `npm run build` erfolgreich (1.295 Module); bekannte 2.016,30-kB-Hauptchunk-Warnung. Kein separater Regressionstest nach der reinen Assetänderung ausgeführt.
+
+**Offen:** Den Kontakt noch bei vollem Lenkeinschlag und in Außen-/Seitenansicht beurteilen. Der Character-/Vehicle-Masterauftrag bleibt als Ganzes offen; diese Griffkorrektur ist kein Qualitätsanker-Abschluss.
+
+**Geänderte Dateien:** `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `art-source/README.md`, `CURRENT-WORKLIST.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
+
+### 2026-10-04 – Stalin-Anker: Mund unter dem Walrossbart sichtbar gemacht
+
+**Befund:** In der tatsächlichen 320-Pixel-Fahrerkarte verdeckte Stalins tiefer Walrossbart die gemeinsame Mundöffnung. Der Kopf las sich dadurch trotz Nase/Bart als Mundlose Maske; die große Gesichtsanforderung war an dieser Stelle nicht erfüllt.
+
+**Umgesetzt:** `art-source/build_kart.py` modelliert einen separat schaltbaren Stalin-Mund mit dunkler Öffnung und getrennten Ober-/Unterlippen direkt unterhalb des Bartes. `src/cast.ts` aktiviert `stalinmouth` nur beim Stalin-Modell; die übrigen fünf Fahrer bleiben unverändert. Blender-Quelle/GLB neu erstellt und optimiert.
+
+**Verifiziert:** Im frischen In-App-Browser wurde die echte Fahrerauswahl geladen und Stalin ausgewählt; das kleine Runtime-Porträt zeigt den Mund unter dem Walrossbart. `npm test`: 50/50 bestanden (einschließlich neuer `stalinmouth`-Roster-Prüfung). `npm run build`: TypeScript/Vite erfolgreich, 1.295 Module; bekannte Hauptchunk-Warnung bei 2.016,33 kB. GLB: 6.277.884 Bytes Quelle → 4.794.824 Bytes Runtime.
+
+**Offen:** Stalin bleibt eine stilisierte Karikatur. Die Gesichts-/Körpermodellierung ist nicht als Qualitätsanker abgenommen; vollständige Nah-/Front-/Seiten-/Bewegungsansichten und menschliche Prüfung stehen aus.
+
+**Geänderte Dateien:** `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `src/cast.ts`, `tests/cast.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `art-source/README.md`, `PROGRESS-LOG.md`.
+
+**Budgetstand nach dem Paket:** Offiziell 17 % des Fünf-Stunden-Limits und 33 % des Wochenlimits verbraucht; keine Zusatzkontingente aktiviert.
+
+### 2026-10-04 – Lenkradgriff erneut korrigiert: Handschuh bleibt am Arm
+
+**Befund:** Marcel meldete, dass die Hände im aktuellen Laufzeitspiel wieder frei neben dem Lenkrad schweben. Der bisherige Laufzeitaufbau hing nur die Meshes mit „White glove“ direkt an den Lenkradknoten. Manschette und Unterarm blieben an `armPose-*`; eine sichtbare Verbindung der Hand zum Ärmel war so nicht garantiert.
+
+**Umgesetzt:** In `src/slice-scene.ts` werden die Handschuh-Meshes nicht mehr aus ihrer Arm-Hierarchie ausgeklinkt. Der gespeicherte Griffanker bleibt relativ zum Lenkrad; die IK richtet den kompletten Arm inklusive Hand, Daumen, Fingern und Manschette von der Schulter auf diesen bewegten Anker aus. Das beseitigt die Parent-Trennung, die einen sichtbaren Spalt zwischen Ärmel und Handschuh verursachte. Derselbe Laufzeitpfad gilt für alle sechs instanziierten Fahrer.
+
+**Verifiziert:** Frische Laufzeit mit aktualisiertem Babylon-Code geladen. Fahrerwahl-/Außenansicht zeigt beide Arme mit Händen am jeweiligen Lenkrad; Fahrerperspektive zeigt die Handschuhe am unteren linken/rechten Kranz. `npm test`: 50/50 bestanden. `npm run build`: TypeScript und Vite erfolgreich (1.295 Module); die bekannte Warnung zum 2.016,30-kB-Hauptchunk bleibt. `git diff --check`: bestanden; Git meldet ausschließlich erwartete LF/CRLF-Hinweise für Windows-Dateien.
+
+**Noch offen:** Sichtprüfung bei vollem Links-/Rechtslenkeinschlag und exakter Außen-/Seitenansicht; ein Mensch soll das Griffgefühl während echter Fahrt beurteilen. Die Korrektur belegt Grundpose und Hand-Arm-Verbindung, nicht den gesamten Fahrer-/Fahrzeug-Masterauftrag.
+
+**Geänderte Dateien in diesem Paket:** `src/slice-scene.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `PROGRESS-LOG.md`.
+
+### 2026-10-04 – Lenkradgriff folgt dem ganzen Lenkeinschlag
+
+**Befund:** Bei großem Lenkeinschlag wandert der vom Lenkrad abhängige Griffpunkt. Die starre Schulter-/Handreichweite konnte diesen Punkt nicht sicher erreichen. Bei der ersten Solverfassung war außerdem die Ruhe-Strecke vor der Berechnung versehentlich auf Einheitslänge normiert; damit entsprach der Streckfaktor nicht exakt der modellierten Armlänge.
+
+**Umgesetzt:** `armGripReach` nutzt jetzt den echten Schulter-zu-Hand-Abstand der Ruhepose. Im Laufzeitrig dreht und skaliert die IK den kompletten Arm bis zum jeweiligen Lenkradgriff; die Handschuh-Untergruppe wird gegenläufig skaliert, damit die Hand selbst ihre modellierte Größe behält. Die Handschuhe bleiben mit Manschette/Arm verbunden. Der gemeinsame Laufzeitpfad gilt für die sechs Fahrer.
+
+**Verifiziert:** Neues Regressionstestszenario prüft beide Lenkradseiten bei fünf Griffwinkeln (-1,15 bis +1,15 rad) und bestätigt eine Griffabweichung unter 1e-6 Einheiten; nach Babylon-Matrix-API-Korrektur besteht die Gesamtsuite mit 51/51 Tests. `npm run build` besteht (TypeScript/Vite, 1.295 Module). Frische lokale Laufzeit zeigt beide Hände in Fahrerwahl-Außenbild und Fahrerperspektive am Kranz. Die bekannte große Hauptchunk-Warnung (ca. 2.017 kB) bleibt.
+
+**Noch offen:** Der In-App-Browser kann die Lenktaste nicht gehalten fahren; dadurch ist der menschlich gesteuerte Volleinschlag aus seitlicher Außenansicht weiterhin nicht abgenommen. Der Test belegt die mathematische Griffpunktführung, nicht die animierte Gesamtpose bei echter Fahrt. Das ist in CURRENT-WORKLIST.md als nächste Sichtprüfung markiert.
+
+**Geänderte Dateien in diesem Paket:** `src/kart-visuals.ts`, `src/slice-scene.ts`, `tests/kart-visuals.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `art-source/README.md`, `PROGRESS-LOG.md`.
+
+**Budgetstand nach dem Paket:** Offiziell 20 % des Fünf-Stunden-Limits und 34 % des Wochenlimits verbraucht; keine Zusatzkontingente aktiviert.
+
+### 2026-10-04 – Stalin-Anker: eigene hochgeschlossene Tunika
+
+**Befund:** Der auswählbare Stalin trug noch dieselbe helle Paradeuniformform wie mehrere andere Figuren, mit generischem Band, Orden und Schulterstücken. Das widersprach dem Ziel eines individuell lesbaren Qualitätsankers. Als reine visuelle Formreferenz diente das Frontporträt der [Library of Congress](https://loc.gov/pictures/resource/cph.3b41212/); es wurde kein Foto, keine Fremdtextur und keine Fremdgeometrie übernommen.
+
+**Umgesetzt:** `art-source/build_kart.py` ergänzt eine separate Stalin-Variante: dunkles Olivgrau, hochgeschlossener Stoffkragen, mittige Knopfleiste mit Knöpfen, zwei Brusttaschen und dezente Nahtdetails. Für Stalin sind generisches Paradeband, Medaillen, Schulterstücke, Goldknöpfe und der allgemeine Ovalkragen deaktiviert; für die übrigen fünf Fahrer bleibt deren zuvor zugewiesene Kleidung bestehen. `src/cast.ts` schaltet diese Teile pro Fahrer und setzt Stalins Stofffarbe. `tests/cast.test.mjs` prüft die Varianten-/Ausschlussliste.
+
+**Verifiziert:** Blender 4.5.3 hat `hero-kart.blend` und das GLB neu erzeugt; die Laufzeitdatei enthält die Tunika- und Detailgruppen. glTF Transform exportiert 6.406.456 Bytes Quelldatei als 4.891.316 Bytes Laufzeitdatei. Gegenüber der vorherigen Laufzeitversion beträgt der Anstieg +96.492 Bytes (ca. 2,0 %). Die frische Fahrerwahl zeigt das neue olivgraue Outfit im echten Renderer. `npm test`: 51/51; `npm run build`: TypeScript/Vite erfolgreich, 1.295 Module. Der bestehende Hinweis auf den ca. 2.017-kB-Hauptchunk bleibt. Der Optimierer überspringt weiterhin die Quantisierung einzelner UV-Sätze außerhalb 0–1; die GLB-Ausgabe und Laufzeitporträts funktionieren dennoch.
+
+**Noch offen:** Das vollständige Gesicht bleibt sichtbar stilisiert; Front-/Seiten-/Nah-/Bewegungsprüfung im Spiel und menschliche Qualitätsabnahme des Stalin-Ankers fehlen. Die restlichen fünf Fahrer und alle Fahrzeugvarianten brauchen weiterhin den vollen Masterpass.
+
+**Geänderte Dateien in diesem Paket:** `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `src/cast.ts`, `tests/cast.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `art-source/README.md`, `PROGRESS-LOG.md`.
+
+**Budgetstand nach dem Paket:** Offiziell 21 % des Fünf-Stunden-Limits und 34 % des Wochenlimits verbraucht; keine Zusatzkontingente aktiviert.
+
+### 2026-10-04 – Laufzeit-Bildreferenz: Fassaden, Wasseroberfläche und Regenkontakt
+
+**Befund/Ziel:** Marcel verlangt, die Bildreferenz auf die echte Spielgrafik auszuweiten – hochwertige Fahrer/Fahrzeuge sowie sichtbar ausgearbeitete Umgebung, Gebäude, Boden, Wasser und Fahrpartikel. Der erste begrenzte Weltpass verbessert Fassadenlesbarkeit und Oberflächenbewegung, ohne die illustrative Laufzeitoptik als fotorealistisch oder fertig abzunehmen.
+
+**Umgesetzt:** `art-source/build_world.py` ersetzt den überbreiten, Ladenfenster verdeckenden Sockel durch zwei schmale Granitprofile, ergänzt einen hervorgehobenen Doppeltüreingang mit Portal, Paneelen, Oberlichtern, Griffen und Stufen und gliedert die oberen Fenster in Seitenrahmen/Sprossen. Der frisch neu gebaute `stadium-world.glb` wurde optimiert: 22.076.572 → 15.632.728 Bytes (−29,2 %); gegenüber dem alten Runtime-GLB (12.486.680 Bytes) wächst die Weltdatei um 3.146.048 Bytes (+25,2 %). `src/track-world.ts` erzeugt eine gemeinsame schwache Wellen-Normaltextur und versetzt sie im Spiel kontinuierlich; Kanal und übrige nicht-Lava-/Nicht-Fels-Wasserflächen verwenden sie. `src/slice-scene.ts` hält pro Kart einen eigenen Regen-Reifenspray-Pool (44 Partikel); bei sechs Karts bleibt diese Schicht bei höchstens 264 Partikeln. Sie wird nur bei Regen, über 6 m/s und innerhalb einer vorhandenen Pfütze angeregt, in reduzierten Effekten langsamer. Bei Ende des Regens stoppen alle Sprüh-Emitter.
+
+**Verifiziert:** Frischer Blender-Neubau von `stadium-world.blend` lief rund 18 Minuten und endete mit `WORLD_COMPLETE`; die neu erzeugte Weltdatei hat 24.107.367 Bytes Blender-Quelle und 15.632.728 Bytes Runtime-GLB. glTF-Transform konnte sie nach expliziter Registrierung von `KHR_mesh_quantization` wieder einlesen (26 exportierte Meshes). Der erneute `npm run build` nach diesem Assetbau bestand mit 1.295 Modulen; `dist/assets/models/stadium-world.glb` hat exakt 15.632.728 Bytes. `npm test` erfolgreich: 52/52. Nach vollständigem Reload importierte die echte Regenwelt im In-App-Browser; Regen, nasse Pflasterung, sechs Karts, Item-HUD und Spiel-HUD erschienen. Die bestehende Referenzkachel/Spielgrafik wurde nicht ersetzt. Die Volltests im Sandbox-Kontext erhielten zuerst `spawn EPERM`; die erlaubte Wiederholung außerhalb der Sandbox bestand. Die neue Weltdatei ist um 3.146.048 Bytes (+25,2 %) schwerer als der vorige Runtime-Export – dieser Preis ist sichtbar dokumentiert, ein Framezeitvergleich für die Weltänderung fehlt.
+
+**Nicht abgenommen / Grenzen:** Der Browserbeleg zeigt die Regen-Laufzeit, aber nicht den Nahblick der erneuerten Ladenfassade, die Normalbewegung des Wassers oder einen tatsächlichen Reifen-Sprühnebel beim Pfützenübertritt. Diese drei Sichtprüfungen bleiben offen. Der Kanal erhält noch keinen dynamischen Spritzbogen beim Durchfahren/Sprung. Fahrer- und Kartmodell bleiben der größere Bildreferenz-Meilenstein. Der große Produktionshauptchunk (~2.019 kB) gibt weiterhin eine bestehende Vite-Warnung aus. Browser-Capture-Skript `tests/slice-browser.mjs` konnte keine unabhängige Chrome-CDP-Sitzung auf Port 9223 finden; die echte Regenansicht wurde stattdessen direkt im Codex In-App-Browser angesehen. `git diff --check` bestanden; Git meldet nur die auf Windows erwartete CRLF-Konvertierung.
+
+**Geänderte Dateien dieses Weltpakets:** `art-source/build_world.py`, `public/assets/models/stadium-world.glb`, `docs/evidence/slice-asset-optimization.json`, `src/track-world.ts`, `src/slice-scene.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
+
+**Budgetstand nach dem Paket:** Offizielle Kontowerte nach dem Paket: aktuelles Fünf-Stunden-Fenster 0 % verbraucht (Reset während der Arbeit), Wochenfenster 35 % verbraucht; damit 65 % Wochenrest als bindender Rest. Keine Zusatzkontingente ausgelöst.

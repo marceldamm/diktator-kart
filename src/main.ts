@@ -99,6 +99,7 @@ class App {
   private autoGas=false;
   private botLevel:0|1|2=1;
   private itemHeld=false;
+  private queuedItemUse=false;
   /** 'gp' = Grand Prix with five bots; 'timetrial' = solo three laps against your saved ghost. */
   private mode:'gp'|'timetrial'='gp';
   private ghostRun:{time:number;driver:number;samples:number[][]}|null=null;
@@ -181,7 +182,7 @@ class App {
     document.querySelector('#menu-button')?.addEventListener('click',()=>this.openMenu());
     document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.beginRace());
     document.querySelector('#finish-menu')?.addEventListener('click',()=>this.openMenu());
-    document.querySelector('#item-use')?.addEventListener('click',()=>{this.input.setAction('item-button','item',true);this.input.setAction('item-button','item',false);});
+    document.querySelector('#item-use')?.addEventListener('click',()=>{this.queuedItemUse=true;});
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
       this.audio.setEnabled(!this.audio.enabled); void this.audio.unlock();
       document.querySelector('#sound-toggle')!.textContent = this.audio.enabled ? 'Ton an' : 'Ton aus';
@@ -278,7 +279,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.queuedItemUse=false;this.abilityStats={transform:0,revert:0,crush:0};
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -426,7 +427,7 @@ class App {
     this.testScene.setGhost?.(null);
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedItemUse=false;this.itemHeld=false;
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
@@ -460,10 +461,17 @@ class App {
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
     const own=this.castOf(0);
-    document.querySelector('#item-name')!.textContent=item?(item==='trap'?ITEM_NAMES[item]:`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`):'Sendung abholen';
+    const itemName=item?(item==='trap'?ITEM_NAMES[item]:`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`):'';
+    document.querySelector('#item-name')!.textContent=item?itemName:'Sendung abholen';
     document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':'✉';
-    const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;itemButton.disabled=!item||this.racePhase!=='race';
-    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E halten = Schild · loslassen = werfen'):this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
+    const itemCard=document.querySelector<HTMLElement>('#item-card')!,itemSlot=document.querySelector<HTMLElement>('#item-slot')!;
+    itemCard.dataset.state=item?'ready':'empty';itemSlot.dataset.state=item?'ready':'empty';
+    itemSlot.setAttribute('aria-label',item?`Item im Slot: ${itemName}`:'Item-Slot leer');
+    document.querySelector('#item-slot-state')!.textContent=item?'IM SLOT':'LEER';
+    const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;
+    itemButton.disabled=!item||this.racePhase!=='race';itemButton.textContent=item?'WERFEN':'E';
+    itemButton.setAttribute('aria-label',item?`${itemName} werfen`:'Kein Item verfügbar');
+    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E halten: Schild · antippen: werfen'):'Leerer Slot · leuchtende Postkisten einsammeln';
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
@@ -655,8 +663,9 @@ class App {
           const ranks=this.progress.map(p=>1+this.progress.filter(other=>other.distance>p.distance).length);
           // Hold E: the item trails behind as a shield; release E: throw it. Bots shield while they wait to use theirs.
           const down=this.input.isDown('item'),release=this.itemHeld&&!down;this.itemHeld=down;
+          const buttonUse=this.queuedItemUse;this.queuedItemUse=false;
           this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
-          const use=all.map((_,i)=>i===0?release||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
+          const use=all.map((_,i)=>i===0?release||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           for(const event of this.items.events) if(event.kart===0) {
             const projectile=this.castOf(0).projectileName;

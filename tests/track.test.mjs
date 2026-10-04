@@ -2,9 +2,10 @@ import { HAZARDS } from '../src/track-layout.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
-import { BUMP_PROGRESS } from '../src/track-layout.ts';
-import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag } from '../src/track.ts';
+import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH } from '../src/track-layout.ts';
+import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, overCanal, recoverKart } from '../src/track.ts';
 import { SHORTCUT } from '../src/track-layout.ts';
+import { airTrickRoll } from '../src/kart-visuals.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
   for(let s=0;s<TRACK.length;s+=.5){
@@ -17,6 +18,22 @@ test('track progress is continuous around the complete course; inner and outer b
     }
   }
 });
+test('canal rescue places a fallen kart beyond the water without awarding progress',()=>{
+  const fallen={...gridKart(0),...trackPoint(CANAL_FROM+CANAL_LENGTH/2)};
+  assert.equal(overCanal(fallen.x,fallen.z),true);
+  const rescued=recoverKart(fallen,[fallen]);
+  const progress=trackProgress(rescued.x,rescued.z);
+  assert.equal(overCanal(rescued.x,rescued.z),false);
+  assert.ok(progress>=CANAL_FROM+CANAL_LENGTH+2,`rescued progress ${progress} should be clear of the landing edge`);
+  assert.ok(Math.abs(progress-trackProgress(fallen.x,fallen.z))>=3,`rescue gap ${progress-trackProgress(fallen.x,fallen.z)} must not be awarded as race progress`);
+});
+test('air trick supplies one shared body and wheel roll over the jump duration',()=>{
+  assert.equal(airTrickRoll(false,.5,1),0);
+  assert.equal(airTrickRoll(true,1,1),0);
+  assert.ok(Math.abs(airTrickRoll(true,.5,1)-Math.PI)<1e-10);
+  assert.equal(airTrickRoll(true,0,1),0); // the completed full turn resets to the same forward pose.
+  assert.equal(airTrickRoll(true,.5,0),0);
+});
 test('five bots complete three laps using the shared kart controller without teleportation',()=>{
   let states=Array.from({length:5},(_,i)=>gridKart(i+1));
   const races=states.map(createRaceProgress);
@@ -26,6 +43,17 @@ test('five bots complete three laps using the shared kart controller without tel
     states.forEach((s,i)=>{advanceRace(races[i],s,step/60);assert.ok(Number.isFinite(s.x+s.z+s.speed));});
   }
   assert.ok(races.every(r=>r.finished),JSON.stringify(races));
+});
+test('designated bot takes the backyard alley and finishes without losing mapped progress',()=>{
+  let state=gridKart(3),sawAlley=false;const race=createRaceProgress(state);
+  for(let step=0;step<60*270;step++){
+    state=advanceKart(state,botInput(state,3,[state]),1/60,projectTrack);
+    sawAlley ||= inShortcut(state.x,state.z);
+    advanceRace(race,state,step/60);
+    assert.ok(Number.isFinite(state.x+state.z+state.speed));
+  }
+  assert.ok(sawAlley,'designated bot should use the backyard alley');
+  assert.ok(race.finished,'shortcut progress should still complete three laps');
 });
 test('reverse and teleporting across the park cannot grant a completed lap',()=>{
   const state=gridKart(0),race=createRaceProgress(state);

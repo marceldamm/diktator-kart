@@ -114,6 +114,19 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   road.useMetallnessFromMetallicTextureBlue = true; road.useAmbientOcclusionFromMetallicTextureRed = true;
   road.invertNormalMapX = true; road.bumpTexture.level = .8;
   for (const t of [road.albedoTexture, road.bumpTexture, road.metallicTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  const waterRipple = canvasTexture(scene, 'Soft flowing water normals', 256, 128, (c) => {
+    c.fillStyle = '#8080ff'; c.fillRect(0, 0, 256, 128);
+    for (let row = 0; row < 13; row++) {
+      c.strokeStyle = row % 2 ? 'rgba(112,128,232,.42)' : 'rgba(150,128,245,.35)'; c.lineWidth = 2;
+      c.beginPath();
+      for (let x = 0; x <= 256; x += 8) {
+        const y = row * 10 + Math.sin(x * .045 + row * .9) * 2.5;
+        if (x === 0) c.moveTo(x, y); else c.lineTo(x, y);
+      }
+      c.stroke();
+    }
+  });
+  waterRipple.uScale = 10; waterRipple.vScale = 1.8;
   const roadLanes: [number, number][] = [-W, -W * .6, -W * .25, 0, W * .25, W * .6, W].map((lane) => [lane, .02]);
   sweep(scene, 'Racing surface', roadLanes, road, { uScale: 2, vScale: 2, step: .75, follow: true, color: (s, lane) => {
     const wear = Math.exp(-((lane - Math.sin(s * .021) * 1.6) ** 2) / 5) * .16;
@@ -210,6 +223,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const boostPads: Mesh[] = [], hazardGlow: Mesh[] = [];
   { // Canal across the road (in front of the grandstands) with a timber take-off ramp.
     const canalWater = pbr(scene, 'Canal water', '#1d3b44', .25, .08); canalWater.alpha = .95;
+    canalWater.bumpTexture = waterRipple; waterRipple.level = .16;
     sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
     const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
     edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
@@ -219,9 +233,10 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
     for (const end of RAMP_LIPS) {
       const paths: Vector3[][] = [];
-      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .02 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
+      // The road follows the same ramp profile; lift the timber by a thin plank thickness to avoid coplanar flicker.
+      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
       const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
-      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane); return [new Vector3(p.x, RAMP_HEIGHT + .02, p.z), new Vector3(p.x, -.2, p.z)]; });
+      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane); return [new Vector3(p.x, RAMP_HEIGHT + .07, p.z), new Vector3(p.x, -.2, p.z)]; });
       const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
     }
   }
@@ -246,6 +261,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   for (const zone of HAZARDS) { // Open-edge hazard: water basin or furnace pit, quay walls, warning edge, signs and the salvage crane.
     const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava', cliff = zone.kind === 'cliff';
     const water = pbr(scene, lava ? 'Furnace glow' : 'Harbour water', lava ? '#ff5a12' : '#1d3b44', lava ? 0 : .25, lava ? .9 : .08); if (!lava) water.alpha = .93;
+    if (!lava && !cliff) { water.bumpTexture = waterRipple; waterRipple.level = .16; }
     if (cliff) { // painted abyss: rock strata fading into darkness
       const abyss = canvasTexture(scene, 'Abyss', 64, 256, (c) => { const g = c.createLinearGradient(0, 0, 0, 256); g.addColorStop(0, '#5c5246'); g.addColorStop(.12, '#3a332b'); g.addColorStop(.35, '#120f0c'); g.addColorStop(1, '#000000'); c.fillStyle = g; c.fillRect(0, 0, 64, 256);
         c.fillStyle = 'rgba(120,105,85,.35)'; for (let y = 6; y < 70; y += 9) c.fillRect(0, y, 64, 2); });
@@ -318,6 +334,32 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     disc.rotation.x = Math.PI / 2; disc.scaling.y = 1.6; disc.rotation.y = p.heading; disc.position.set(p.x, .05, p.z);
     disc.material = puddleMaterial; disc.isPickable = false; disc.setEnabled(false); puddleMeshes.push(disc); puddles.push({ x: p.x, z: p.z, r: r * 1.2 });
   }
+
+  // A small pool of soft ground decals suggests gaps in the rain clouds without
+  // adding particle churn or another shadow-map pass. The sky panorama supplies the clouds.
+  const cloudShadowTexture = canvasTexture(scene, 'Soft rain cloud shadow', 512, 512, (c) => {
+    const puff = (x: number, y: number, radius: number, opacity: number) => {
+      const g = c.createRadialGradient(x, y, radius * .08, x, y, radius);
+      g.addColorStop(0, `rgba(10,14,20,${opacity})`); g.addColorStop(.55, `rgba(10,14,20,${opacity * .72})`); g.addColorStop(1, 'rgba(10,14,20,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(x, y, radius, 0, Math.PI * 2); c.fill();
+    };
+    puff(250, 245, 242, .82); puff(150, 226, 154, .56); puff(356, 270, 174, .58);
+    puff(257, 138, 128, .36); puff(286, 360, 142, .38);
+  }, true);
+  cloudShadowTexture.wrapU = cloudShadowTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
+  const cloudShadowMaterial = new StandardMaterial('Rain cloud shadow decal', scene);
+  cloudShadowMaterial.diffuseTexture = cloudShadowTexture; cloudShadowMaterial.useAlphaFromDiffuseTexture = true;
+  cloudShadowMaterial.diffuseColor = Color3.White(); cloudShadowMaterial.specularColor = Color3.Black();
+  cloudShadowMaterial.disableLighting = true; cloudShadowMaterial.backFaceCulling = false;
+  cloudShadowMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND; cloudShadowMaterial.alpha = 1;
+  const cloudShadows = Array.from({ length: 5 }, (_, i) => {
+    // Keep the first soft shadow beyond the start grid in the clear road corridor; the rest stay evenly spaced around the lap.
+    const phase = (TRACK.start + 20 + TRACK.length * i / 5) % TRACK.length, p = trackPoint(phase);
+    const mesh = MeshBuilder.CreateGround('Moving rain cloud shadow', { width: TRACK.halfWidth * 2, height: 22 }, scene);
+    mesh.position.set(p.x, trackHeightAt(p.x, p.z) + .075, p.z); mesh.rotation.y = p.heading;
+    mesh.material = cloudShadowMaterial; mesh.isPickable = false; mesh.setEnabled(false);
+    return { mesh, phase, progress: phase };
+  });
 
   const verge = pbr(scene, 'Gravel verge', '#6f6550', 0, .95);
   for (const side of [-1, 1]) sweep(scene, `Verge ${side}`, side < 0 ? [[-W - 1, .022], [-W - .95, .08]] : [[W + .95, .08], [W + 1, .022]], verge, { uScale: 2, step: 2 });
@@ -447,6 +489,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       road.albedoColor = Color3.FromHexString(wet ? '#8d897f' : '#d8d2c2'); road.roughness = wet ? .32 : 1;
       paving.albedoColor = Color3.FromHexString(wet ? '#8c8270' : '#cbbda0'); paving.roughness = wet ? .4 : 1;
       for (const m of puddleMeshes) m.setEnabled(wet);
+      for (const shadow of cloudShadows) shadow.mesh.setEnabled(wet);
     },
     setSnow(snow) {
       // Light snow cover: pale, slightly glossy cobbles and paving (no grip change, rules stay identical).
@@ -454,6 +497,15 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       if (snow) { road.albedoColor = Color3.FromHexString('#f4f5f7'); road.roughness = .62; paving.albedoColor = Color3.FromHexString('#f6f7f9'); paving.roughness = .7; for (const m of puddleMeshes) m.setEnabled(false); }
       else this.setWet(false);
     },
-    animate(time) { updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04; },
+    animate(time) {
+      updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04;
+      waterRipple.uOffset = (time * .012) % 1; waterRipple.vOffset = (time * .003) % 1;
+      for (const shadow of cloudShadows) {
+        const progress = (shadow.phase + time * 1.6) % TRACK.length;
+        if (Math.abs(progress - shadow.progress) < .4) continue;
+        shadow.progress = progress;
+        const p = trackPoint(progress); shadow.mesh.position.set(p.x, trackHeightAt(p.x, p.z) + .075, p.z); shadow.mesh.rotation.y = p.heading;
+      }
+    },
   };
 }

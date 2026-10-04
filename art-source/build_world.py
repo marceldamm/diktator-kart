@@ -215,6 +215,7 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
     mesh('Pitched copper roof', vs, [(0, 1, 5, 4), (2, 4, 5, 3), (0, 4, 2), (1, 3, 5)], copper, e)
     box('House chimney', (2, 3, hgt + 2.4), (1.1, 1.1, 2.6), darkstone, .03, e)
     face = -depth / 2
+    trim_stone = pale if body is not pale else stone
     cols = [-width / 2 + 2.2 + k * 3.6 for k in range(int((width - 2.6) / 3.6) + 1)]
     for f in range(1, floors):
         z = 4.2 + (f - 1) * 3.4 + 1.6
@@ -222,14 +223,34 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
             box('Window recess', (face + .04, dy, z), (.14, 1.5, 2.0), window, .02, e)
             box('Window moulding', (face - .1, dy, z + 1.12), (.24, 1.9, .16), pale, .02, e)
             box('Window sill', (face - .12, dy, z - 1.08), (.28, 1.8, .12), pale, .02, e)
+            for jamb in [-.74, .74]: box('Window vertical casing', (face - .09, dy + jamb, z), (.22, .11, 1.98), trim_stone, .012, e)
+            box('Window sash mullion', (face - .105, dy, z), (.23, .075, 1.86), darkstone, .008, e)
+            box('Window cross rail', (face - .11, dy, z + .34), (.24, 1.38, .075), pale, .008, e)
             if (f + idx) % 2 == 0:
                 box('Balcony slab', (face - .55, dy, z - 1.2), (1.0, 2.0, .14), pale, .03, e)
                 tube_lo('Balcony rail', [(face - 1.0, dy - .95, z - .7), (face - 1.0, dy + .95, z - .7)], .035, black, e)
-    trim_stone = pale if body is not pale else stone
-    box('Rusticated base', (face - .1, 0, 2.1), (.22, width + .1, 4.2), darkstone, .02, e)
-    for k in range(5): box('Base joint', (face - .22, 0, .5 + k * .8), (.04, width + .12, .06), body, .005, e)
+    # Keep the heavy stone base as narrow horizontal courses. A solid plinth across
+    # the whole street-facing wall hid every shop window and made the blocks read flat.
+    box('Granite street plinth', (face - .1, 0, .22), (.24, width + .12, .38), darkstone, .025, e)
+    box('Granite plinth cap', (face - .14, 0, .48), (.32, width + .2, .12), trim_stone, .018, e)
     edges = [-width / 2 + .3] + [(cols[k] + cols[k + 1]) / 2 for k in range(len(cols) - 1)] + [width / 2 - .3]
     for py in edges: box('Facade pilaster', (face - .16, py, 4.2 + (hgt - 4.8) / 2), (.22, .42, hgt - 4.8), trim_stone, .01, e)
+    # Recessed double door between the shop windows, with a stone portal, inset
+    # timber panels, brass pulls and two shallow threshold steps.
+    door_y, door_w = 0, 1.55
+    box('Shop entrance shadow', (face - .055, door_y, 1.75), (.13, door_w + .54, 2.95), darkstone, .025, e)
+    for py in [-(door_w / 2 + .17), door_w / 2 + .17]:
+        box('Shop entrance jamb', (face - .2, py, 1.72), (.3, .22, 3.05), trim_stone, .025, e)
+        box('Door jamb inset', (face - .24, py, 1.74), (.06, .045, 2.55), darkstone, .008, e)
+    box('Shop entrance lintel', (face - .2, door_y, 3.25), (.34, door_w + .56, .28), trim_stone, .025, e)
+    box('Shop door pair', (face - .16, door_y, 1.62), (.11, door_w, 2.55), wood, .018, e)
+    box('Door centre stile', (face - .23, door_y, 1.62), (.06, .055, 2.5), darkstone, .006, e)
+    for py in [-.36, .36]:
+        box('Door recessed panel', (face - .23, py, 1.67), (.055, .51, 1.75), body, .012, e)
+        box('Door transom glass', (face - .225, py, 2.68), (.055, .51, .32), window, .008, e)
+        cyl('Brass entrance pull', (face - .29, py - .075, 1.55), .035, .12, gold, e, axis='Y', verts=10)
+    box('Door lower threshold', (face - .38, 0, .62), (.78, door_w + .54, .13), pale, .018, e)
+    box('Door upper threshold', (face - .26, 0, .78), (.46, door_w + .2, .1), trim_stone, .018, e)
     for f in range(1, floors):
         z = 4.2 + (f - 1) * 3.4 + 1.6
         for dy in cols:

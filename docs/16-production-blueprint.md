@@ -92,7 +92,7 @@ Der konkrete Ablauf für den ersten Abend steht in [history/20-first-evening-run
 
 ### M3 – Erster Vertical Slice
 
-**Vorlaufender Vorschlag:** Dokument 14 empfiehlt Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart und trennt Altideen von möglichen Produktionsausführungen. Die neutrale Stilskizze legt diese Auswahl nicht fest; M2-Abnahme und gemeinsame Stilprüfung bleiben nötig.
+**Historischer Vorschlag, 04.10.2026 überholt:** Dokument 14 empfahl zunächst Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart. Marcels neuer Masterauftrag und die aktuelle Arbeitsliste bestimmen nun Stalin als ersten Benchmark; das löst keine weiteren offenen Inhalts- oder Stilfragen und setzt die Abnahmekriterien des [Masterauftrags](22-character-vehicle-quality-master.md) nicht herab.
 
 Dokument 01 hält einen quellenbasierten, fiktiven Berlin-/Stadion-Routenvorschlag mit Inhaltsprüfung fest. Für M3 genügt der dort abgegrenzte erste Abschnitt; die Route wird erst nach gemeinsamer Auswahl und M2-Abnahme produziert. Historische Fotos/Schilder und konkrete Zeichen brauchen vor Nutzung eigene Freigabe und Lizenzprüfung.
 

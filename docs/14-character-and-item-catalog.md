@@ -5,12 +5,12 @@
 
 ## Startkader im Spiel – Karikaturstufe, 04.10.2026
 
-Alle sechs bestätigten Fahrer sind im Babylon-Spiel als Karikaturen mit erkennbaren Merkmalen umgesetzt (`src/cast.ts`, Teile in `art-source/build_kart.py`): Hitler Seitenscheitel/Stirnlocke/Zweifingerbart, Stalin graues zurückgekämmtes Haar/Walrossbart/Pfeife, Mussolini Glatze/Kinn, Mao hohe Stirn/Muttermal/grauer Anzug, Kim Jong-un Undercut, Castro Feldmütze/Bart/Zigarre. Keine Regimezeichen. Zwischenstufe, keine realitätsnahen Porträts. Fahrerwahl mit Live-Porträts vor jedem Grand Prix.
+Alle sechs bestätigten Fahrer sind im Babylon-Spiel als getrennt gestaltete Karikaturen mit erkennbaren Merkmalen umgesetzt (`src/cast.ts`, Teile in `art-source/build_kart.py`): Hitler Seitenscheitel/Stirnlocke/Zweifingerbart, Stalin graues zurückgekämmtes Haar/Walrossbart/Pfeife, Mussolini Glatze/Kinn, Mao hohe Stirn/Muttermal/grauer Anzug, Kim Jong-un Undercut, Castro Feldmütze/Bart/Zigarre. Die neue Laufzeitquelle enthält pro Fahrer ein eigenes Kopf-/Kieferprofil, wählbare Kopfbedeckungen und sechs unterschiedlich geformte Kartkarosserien auf derselben Rad-/Fahrwerksbasis. Stalin fährt eine tiefe Staatslimousine, keinen Trecker; sein Fünfjahresplan-Traktor ist nur das Wurfobjekt. Keine Regimezeichen. Dies ist eine sichtbar geprüfte Zwischenstufe, keine realitätsnahe oder gemeinsam abgenommene Porträt-/Kartqualität; Abnahme nach [Masterauftrag](22-character-vehicle-quality-master.md) bleibt offen.
 
 | Fahrer | Wurfobjekt (gleiche Item-Regeln) | Herkunft |
 |---|---|---|
 | Hitler | Schäferhund | Marcels Auftrag |
-| Stalin | Fünfjahresplan-Traktor | abgeleitet aus Kartname/Alt-Item „Fünfjahresplan“ – **Bestätigung offen** |
+| Stalin | Fünfjahresplan-Traktor | aus Kartname/Alt-Item „Fünfjahresplan“ abgeleitet; von Marcel am 04.10.2026 als Wurfobjekt bestätigt |
 | Mussolini | Balkon-Megafon | Altdetail „vibrierende Mini-Lautsprecher“ |
 | Mao | Rotes Regelheft | Altdetail „flatterndes Regelheft“ |
 | Kim Jong-un | Mini-Propaganda-Rakete | Kartname „Propaganda-Rakete“ |
@@ -72,7 +72,9 @@ Quelle: `Diktator-Kart-Legacy/client/src/game/drivers.ts`. Farben und Details si
 | Kim Jong-un | `#263f70` | `#e63f44` | überlanger Auspuff | Sieger vor Rennbeginn |
 | Castro | `#315d42` | `#d7c99a` | aufklappender Aktenkoffer | Dienstältester Boxengassenredner |
 
-## Vorschlag für den ersten M3-Art-Piloten – noch kein Beschluss
+## Historischer Vorschlag für den ersten M3-Art-Piloten – überholt
+
+**Historischer Produktionsvorschlag, am 04.10.2026 überholt:** Der ältere Vorschlag nannte Mussolini zuerst. Marcels neuerer Masterauftrag priorisiert Stalin als Benchmark. Die folgenden Details bleiben als überlieferte Ideen-/Quellenaufzeichnung erhalten, sind weder aktuelle Reihenfolge noch Beschluss zu Fähigkeiten.
 
 **Vorgeschlagen:** Benito Mussolini mit dem überlieferten Arbeitstitel **Il Duce GT**. Die Auswahl des ersten vollständig ausgearbeiteten Fahrers ist noch gemeinsam zu bestätigen; alle sechs bestätigten Fahrer bleiben im geplanten Kader. Die persönliche Herkunft einzelner Altideen von Sarah ist nicht belegt. Deshalb werden die folgenden Ausführungen als Produktionsvorschlag geführt und ändern weder Fahrzeugkonzept noch Fähigkeit.
 

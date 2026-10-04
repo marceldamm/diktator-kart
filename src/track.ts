@@ -132,6 +132,16 @@ export function curvatureAhead(from: number, distance: number): { curvature: num
   return { curvature: best, sign };
 }
 
+function shortcutCurvatureAhead(from: number, distance: number): { curvature: number; sign: number } {
+  let best = 0, sign = 0;
+  for (let d = 0; d <= distance; d += 1.5) {
+    const a = shortcutPoint(from + d).heading, b = shortcutPoint(from + d + 1.5).heading;
+    const turn = Math.atan2(Math.sin(b - a), Math.cos(b - a)), curvature = Math.abs(turn / 1.5);
+    if (curvature > best) { best = curvature; sign = Math.sign(turn); }
+  }
+  return { curvature: best, sign };
+}
+
 export function trackHeightAt(x: number, z: number): number {
   const { s, lane } = trackLocate(x, z), delta = Math.abs(signedGap(s - BUMP_PROGRESS));
   // Take-off ramp across the whole road before the canal.
@@ -198,7 +208,13 @@ export function gridKart(index: number): KartState {
 
 // Everyone recovers at their current track progress; no free metres or laps.
 export function recoverKart(state: KartState, others: KartState[]): KartState {
-  const s = trackProgress(state.x,state.z);
+  const fellIntoCanal = overCanal(state.x, state.z);
+  // The canal spans the whole road, so the usual same-progress respawn would
+  // place the kart back over water. Put it just beyond the landing edge. The
+  // gap is larger than advanceRace's teleport allowance, so rescue grants no lap progress.
+  const s = fellIntoCanal
+    ? CANAL_FROM + CANAL_LENGTH + KART_TUNING.collisionRadius + 1
+    : trackProgress(state.x,state.z);
   const lanes = [-3,0,3].map(lane=>({lane,p:trackPoint(s,lane)}));
   lanes.sort((a,b)=> {
     const clearance=(p:{x:number;z:number})=>Math.min(20,...others.filter(o=>o!==state).map(o=>Math.hypot(p.x-o.x,p.z-o.z)));
@@ -214,16 +230,19 @@ let botSkill = 0;
 export function setBotSkill(level: 0 | 1 | 2): void { botSkill = [-1.3, 0, 1.2][level]; }
 
 export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {
-  const { s, lane: currentLane } = trackLocate(state.x, state.z);
+  const main = trackLocate(state.x, state.z);
+  const alley = inShortcut(state.x, state.z) || (index === 3 && main.s >= SHORTCUT.from - 14 && main.s < SHORTCUT.to);
+  const shortcut = alley ? shortcutLocate(state.x, state.z) : null;
+  const { s, lane: currentLane } = shortcut ?? main;
   const speed = Math.abs(state.speed);
-  const corner = curvatureAhead(s + 2, 10 + speed * 1.1);
+  const corner = alley ? shortcutCurvatureAhead(shortcut!.u + 2, 10 + speed * 1.1) : curvatureAhead(s + 2, 10 + speed * 1.1);
   const radius = 1 / Math.max(corner.curvature, 1e-3);
   // Five racing lanes give room to pick a real passing line.
-  const lanes = [-3.6, -1.8, 0, 1.8, 3.6];
+  const lanes = alley ? [0] : [-3.6, -1.8, 0, 1.8, 3.6];
   const traffic = others.filter((other) => other !== state).map((other) => {
-    const p = trackLocate(other.x, other.z);
-    return { ahead: wrap(p.s - s), lane: p.lane, speed: other.speed };
-  }).filter((other) => other.ahead > .05 && other.ahead < 14);
+    const otherAlley = inShortcut(other.x, other.z), p = otherAlley ? shortcutLocate(other.x, other.z) : trackLocate(other.x, other.z);
+    return { ahead: wrap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
+  }).filter((other) => other.sameRoute && other.ahead > .05 && other.ahead < 14);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
   const preferred = radius < 30 ? corner.sign * 2.8 : [-2.8, 0, 2.8][index % 3];
   // Overtaking: lanes holding a slower kart ahead are strongly avoided, so a faster bot commits to a passing line.
@@ -231,7 +250,9 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const score = (lane: number) => Math.abs(lane - currentLane) * .3 + Math.abs(lane - preferred) * (slower.length ? .05 : .14) +
     traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.2 ? (14 - t.ahead) * (t.speed < speed + .5 ? 3.2 : 1.2) : 0), 0);
   const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
-  const target = trackPoint(s + 6.5 + speed * .38, lane);
+  const target = alley
+    ? shortcutPoint(shortcut!.u + 6.5 + speed * .38, 0)
+    : trackPoint(s + 6.5 + speed * .38, lane);
   const desired = Math.atan2(target.x - state.x, target.z - state.z);
   const error = Math.atan2(Math.sin(desired - state.heading), Math.cos(desired - state.heading));
   const steering = Math.max(-1, Math.min(1, error * 2.3));

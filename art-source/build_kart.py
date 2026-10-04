@@ -97,15 +97,17 @@ trim = gold
 ivory = cream
 leather = black
 uniform = mat('Uniform racing suit', (.8, .77, .68), 0, .78)
+skin = mat('Mature skin', (.5, .35, .27), 0, .84)
 cape_cloth = mat('Cape cloth', (.5, .04, .06), 0, .72)
 hat_cloth = mat('Hat cloth', (.12, .14, .16), 0, .7)
 fur = mat('Fur trim', (.42, .36, .3), 0, .98)
 white_glove = mat('White glove', (.86, .84, .78), 0, .6)
-eye_white = mat('Eye white', (.92, .9, .86), 0, .35)
-lips = mat('Lip rouge', (.55, .08, .1), 0, .45)
+eye_white = mat('Eye white', (.78, .74, .68), 0, .48)
+mouth_inner = mat('Mouth interior', (.12, .03, .025), 0, .92)
+lips = mat('Lip rouge', (.38, .13, .11), 0, .58)
 lens = mat('Sunglass lens', (.02, .025, .03), .6, .08)
 medal_red = mat('Medal ribbon', (.6, .05, .08), 0, .6)
-iris = mat('Eye iris', (.12, .22, .3), .1, .3)
+iris = mat('Eye iris', (.22, .12, .055), 0, .42)
 
 kart = empty('hero-kart')
 
@@ -119,13 +121,32 @@ loft('Sculpted enamel body', [ring(w, hh, zc, y) for y, w, hh, zc in tub], paint
 box('Parade grille shell', (0, 1.3, .62), (.42, .1, .44), chrome, .05, b)
 for x in [-.15, -.075, 0, .075, .15]: box('Parade grille bar', (x, 1.36, .62), (.022, .04, .38), trim, .006, b)
 for sd in [-1, 1]: tube('Bonnet louvre line', [(sd * .3, .5, .82), (sd * .3, .9, .78), (sd * .28, 1.2, .72)], .012, trim, b)
-b = body('limousine')                             # Stalin: heavy, high and boxy state limousine
-limo = [(-1.42, .56, .26, .58), (-1.2, .62, .34, .64), (-.75, .64, .36, .68), (-.3, .64, .34, .66), (.15, .62, .32, .64), (.6, .58, .3, .6), (1.0, .54, .27, .56), (1.34, .5, .22, .5), (1.52, .42, .14, .44)]
-loft('Limousine enamel body', [ring(w, hh, zc, y, 20, 4.2) for y, w, hh, zc in limo], paint, b, 1)
-box('Limousine grille', (0, 1.5, .55), (.62, .08, .34), chrome, .03, b)
-for z in [.44, .52, .6, .68]: box('Limousine grille bar', (0, 1.54, z), (.6, .03, .025), trim, .005, b)
-for y in [1.62, -1.5]: box('Limousine bumper bar', (0, y, .3), (1.3, .1, .09), chrome, .03, b)
-box('Limousine trunk lid', (0, -1.25, .9), (1.0, .4, .06), paint, .02, b)
+b = body('limousine')                             # Stalin: rounded, road-going diplomatic saloon; shared kart wheelbase, not a tractor
+limo = [(-1.48, .46, .19, .52), (-1.3, .53, .23, .55), (-1.05, .56, .24, .57), (-.78, .58, .23, .59), (-.48, .56, .2, .61), (-.12, .54, .18, .62), (.26, .52, .17, .62), (.62, .5, .16, .6), (.94, .46, .15, .57), (1.22, .4, .15, .54), (1.45, .28, .11, .5)]
+loft('Limousine enamel body', [ring(w, hh, zc, y, 32, 2.8) for y, w, hh, zc in limo], paint, b, 2)
+# Distinct long bonnet, soft fender shoulders, and a gently raised rear deck give the same kart chassis a saloon profile.
+hood = [(.28, .47, .11, .72), (.56, .49, .13, .72), (.9, .45, .13, .69), (1.2, .38, .11, .63), (1.39, .26, .07, .56)]
+loft('Limousine sculpted bonnet', [ring(w, hh, zc, y, 24, 2.5) for y, w, hh, zc in hood], paint, b, 2)
+# A restrained, upright radiator face with rounded shell, horizontal steel vanes and two exposed lamps.
+box('Limousine grille shell', (0, 1.45, .68), (.55, .07, .38), chrome, .08, b)
+for z in [.53, .59, .65, .71, .77, .83]: tube('Limousine grille vane', [(-.205, 1.495, z), (0, 1.505, z), (.205, 1.495, z)], .009, trim, b)
+for sd in [-1, 1]:
+    cyl('Limousine headlamp housing', (sd * .43, 1.31, .82), .12, .09, chrome, b, 'Y', verts=24)
+    ellipsoid('Limousine headlamp lens', (sd * .43, 1.365, .82), (.085, .025, .085), glow, b, 20)
+    tube('Limousine bonnet spear', [(sd * .2, .38, .84), (sd * .34, .82, .82), (sd * .34, 1.19, .73)], .012, chrome, b)
+    tube('Limousine running-board moulding', [(sd * .55, -.82, .46), (sd * .58, -.35, .47), (sd * .57, .08, .48)], .022, chrome, b)
+    ellipsoid('Limousine rear lamp', (sd * .42, -1.42, .58), (.07, .05, .075), red, b, 16)
+box('Limousine front bumper', (0, 1.48, .36), (1.22, .09, .075), chrome, .035, b)
+box('Limousine rear bumper', (0, -1.48, .34), (1.18, .08, .07), chrome, .035, b)
+box('Limousine trunk lid', (0, -1.17, .79), (.82, .36, .045), paint, .08, b)
+# A distinct formal-car face: tall framed grille, hood center spine, and a stepped rear deck.
+# All details follow the low road-car silhouette and leave the shared wheelbase untouched.
+box('Limousine grille surround', (0, 1.505, .68), (.62, .045, .49), trim, .11, b)
+box('Limousine inset grille', (0, 1.535, .68), (.49, .018, .37), black, .085, b)
+for x in [-.16, -.08, 0, .08, .16]:
+    tube('Limousine inset grille slat', [(x, 1.55, .51), (x, 1.555, .68), (x, 1.55, .85)], .009, chrome, b)
+tube('Limousine hood centre spine', [(0, .38, .86), (0, .78, .84), (0, 1.16, .76), (0, 1.34, .68)], .018, chrome, b)
+box('Limousine rear deck lip', (0, -1.43, .77), (.72, .075, .045), trim, .02, b)
 b = body('racer')                                 # Mussolini: low, narrow racer with headrest fairing and tail fin
 racer = [(-1.55, .12, .06, .52), (-1.3, .34, .16, .5), (-.9, .48, .22, .5), (-.4, .52, .23, .5), (.1, .5, .21, .48), (.6, .42, .18, .46), (1.05, .3, .14, .44), (1.45, .14, .08, .42)]
 loft('Racer enamel body', [ring(w, hh, zc, y, 20, 2.2) for y, w, hh, zc in racer], paint, b, 1)
@@ -276,10 +297,12 @@ for w, d, z in [(.3, .22, .86), (.36, .26, 1.0), (.4, .28, 1.18), (.44, .27, 1.3
 loft('Uniform torso', torso_rings, uniform, driver, 1)
 box('Uniform belt', (0, -.24, 1.0), (.56, .08, .1), leather, .02, driver)
 box('Belt buckle', (0, -.19, 1.0), (.1, .03, .09), trim, .01, driver)
-tube('Parade sash', [(-.34, -.3, 1.44), (-.1, -.21, 1.25), (.18, -.22, 1.06), (.36, -.32, .95)], .05, cape_cloth, driver)
+sash = empty('cast-sash', (0, 0, 0), driver)
+tube('Parade sash', [(-.34, -.3, 1.44), (-.1, -.21, 1.25), (.18, -.22, 1.06), (.36, -.32, .95)], .05, cape_cloth, sash)
 loft('Uniform waist', [ring(w, h, z, y, 18, 2.2) for y, w, h, z in [(-.5, .3, .16, 1.0), (-.36, .34, .18, 1.06), (-.24, .3, .16, 1.1)]], uniform, driver, 1)
+uniform_buttons = empty('cast-uniformbuttons', (0, 0, 0), driver)
 for z in [1.04, 1.16, 1.28, 1.4]:
-    for x in [-.1, .1]: ellipsoid('Uniform button', (x, -.07 - abs(1.08 - z) * .25, z), (.025, .015, .025), trim, driver, 8)
+    for x in [-.1, .1]: ellipsoid('Uniform button', (x, -.07 - abs(1.08 - z) * .25, z), (.025, .015, .025), trim, uniform_buttons, 8)
 medals = empty('cast-medals', (0, 0, 0), driver)        # ribbon bar, hanging medals and aiguillette
 for row in range(3):
     for col in range(3):
@@ -296,20 +319,40 @@ epaulettes = empty('cast-epaulettes', (0, 0, 0), driver)
 for sd in [-1, 1]:
     # Epaulettes with fringe: the strongest silhouette cue from the chase camera (marshal-style roles only).
     loft('Shoulder', [[(sd * (.3 + .13 * t), -.45 + p[1], p[2]) for p in ring(.1 + .03 * (1 - t), .085 - .02 * t, 1.5 - .05 * t, 0, 14, 2.4)] for t in [0, .5, 1]], uniform, driver, 1)
-    box('Epaulette board', (sd * .44, -.45, 1.58), (.3, .34, .07), trim, .035, epaulettes)
-    for k in range(9):
-        cyl('Epaulette fringe', (sd * (.6 + .012 * (k % 2)), -.61 + k * .04, 1.5), .016, .17, trim, epaulettes, verts=6)
+    # Soft, fitted shoulder tabs replace the oversized gold blocks/fringe. Keep the
+    # decorative edge close to the cloth so it reads as tailoring, not armour.
+    ellipsoid('Padded cloth epaulette', (sd * .44, -.45, 1.575), (.115, .19, .035), uniform, epaulettes, 16)
+    tube('Epaulette piping', [(sd * .35, -.59, 1.58), (sd * .44, -.62, 1.58), (sd * .53, -.59, 1.58)], .006, trim, epaulettes)
+    ellipsoid('Epaulette button', (sd * .44, -.60, 1.59), (.018, .018, .012), trim, epaulettes, 10)
     # Each arm hangs from its own shoulder pivot so it can follow the wheel and celebrate.
     arm = empty('armPose-' + ('L' if sd < 0 else 'R'), (sd * .42, -.45, 1.44), driver)
-    tube('Uniform arm', [(0, 0, -.02), (sd * .04, .33, -.26), (-sd * .22, .6, -.24)], .1, uniform, arm)
-    tube('Gold cuff', [(-sd * .16, .53, -.24), (-sd * .2, .57, -.24)], .105, trim, arm)
-    # Gloved hand gripping the rim: palm on the outside, four curled fingers and a thumb around the leather.
-    box('Glove palm', (-sd * .26, .63, -.24), (.07, .1, .12), white_glove, .03, arm)
-    rim_c = (-sd * .21, .65, -.24)
-    for k, dz in enumerate([-.048, -.016, .016, .048]):
-        pts = [(rim_c[0] + .047 * math.cos(a) * sd, rim_c[1] + .047 * math.sin(a), rim_c[2] + dz) for a in [-1.9, -.9, 0, .9, 1.9, 2.6]]
-        tube('Glove finger', pts, .016 - abs(dz) * .05, white_glove, arm)
-    tube('Glove thumb', [(rim_c[0] + sd * .03, rim_c[1] - .03, rim_c[2] + .07), (rim_c[0] - sd * .01, rim_c[1] + .02, rim_c[2] + .08), (rim_c[0] - sd * .04, rim_c[1] + .03, rim_c[2] + .05)], .017, white_glove, arm)
+    # Both forearms angle inward from the shoulder to the near-left / near-right
+    # sides of the wheel. The old outward-facing endpoint placed the gloves ~0.45 m
+    # beyond the rim; runtime parenting then faithfully preserved that floating pose.
+    tube('Uniform arm', [(0, 0, -.02), (-sd * .05, .3, -.16), (-sd * .22, .62, -.22)], .1, uniform, arm)
+    tube('Gold cuff', [(-sd * .16, .53, -.22), (-sd * .2, .58, -.23)], .085, trim, arm)
+    # Gloved hand grips the rim from its outside edge. Keep the back of the palm visible
+    # and separate the four tapered fingers along the wheel's tangent (Z) axis.
+    # The inward-facing thumb crosses toward the hub; it must not stick up like a fifth finger.
+    palm_c = (-sd * .18, .63, -.24)
+    rim_c = (-sd * .2, .65, -.24)
+    box('Glove palm', palm_c, (.075, .1, .12), white_glove, .03, arm)
+    finger_rows = [(-.046, .039, .013), (-.016, .047, .014), (.015, .045, .014), (.043, .036, .012)]
+    finger_angles = [-1.9, -1.15, -.35, .45, 1.25, 2.05]
+    for dz, reach, radius in finger_rows:
+        # Each digit curves around the leather cross-section, from the palm's inner/back
+        # edge over the rim to the front. Different lengths keep the glove from reading
+        # as four identical stacked rings.
+        pts = [(rim_c[0] + reach * math.cos(a) * sd, rim_c[1] + reach * math.sin(a), rim_c[2] + dz)
+               for a in finger_angles]
+        tube('Glove finger', pts, radius, white_glove, arm)
+    # The thumb starts at the palm's inner side, hooks across the rim toward the hub,
+    # and stays close to palm height instead of protruding above the hand.
+    tube('Glove thumb', [
+        (rim_c[0] + sd * .024, rim_c[1] - .035, rim_c[2] + .018),
+        (rim_c[0] - sd * .006, rim_c[1] - .006, rim_c[2] + .025),
+        (rim_c[0] - sd * .038, rim_c[1] + .025, rim_c[2] + .005),
+    ], .019, white_glove, arm)
     # Full seated legs: thigh up to a raised knee, shin down into the nose, boots on the pedals.
     # Seated legs: thigh along the cushion, knee under the dashboard, shin down to the pedal, boot sole on the pad.
     tube('Uniform thigh', [(sd * .16, -.42, .9), (sd * .18, -.1, .93), (sd * .19, .22, .98)], .11, uniform, driver)
@@ -317,7 +360,7 @@ for sd in [-1, 1]:
     loft('Riding boot', [[(p[0] + sd * .19, p[1], p[2]) for p in ring(w, h, zc, y, 12, 2.6)] for y, w, h, zc in
          [(.6, .055, .07, .68), (.66, .06, .06, .64), (.74, .055, .045, .62), (.82, .045, .035, .62), (.86, .03, .025, .62)]], leather, driver, 1)
     tube('Trouser stripe', [(sd * (.16 + .105), -.4, .92), (sd * (.18 + .105), -.1, .95), (sd * (.19 + .1), .2, 1.0), (sd * (.19 + .08), .42, .84)], .014, trim, driver)
-# Cape: animated flap at the shoulders (runtime node name 'scarfFlap').
+# Cape: animated cloth flap at the shoulders (runtime node name 'scarfFlap').
 cape = empty('scarfFlap', (0, -.66, 1.56), driver)
 cvs = []; cfs = []
 for j in range(6):
@@ -329,14 +372,13 @@ for j in range(5):
     for k in range(6): cfs.append((j * 7 + k, j * 7 + k + 1, (j + 1) * 7 + k + 1, (j + 1) * 7 + k))
 cape_mesh = smooth(mesh('Flowing cape', cvs, cfs, cape_cloth, cape), 1)
 sol = cape_mesh.modifiers.new('Cloth thickness', 'SOLIDIFY'); sol.thickness = .02
-box('Cape gold clasp', (0, .02, .02), (.5, .05, .06), trim, .02, cape)
 
 # Head: subdivided caricature with jowls, big nose and brow.
-# Realistic proportions (04.10.: no oversized caricature head): smaller head seated on the collar.
-head = empty('headPose', (0, -.42, 1.75), driver); head.scale = (.7, .7, .7)
+# Adult caricature proportions: the jaw overlaps the neck and torso collar instead of perching above them.
+head = empty('headPose', (0, -.42, 1.75), driver); head.scale = (.74, .72, .7)
 hv = []; hf = []
-rows = [(-.22, .1, .1, 0), (-.18, .2, .19, .02), (-.08, .27, .26, .05), (.04, .29, .27, .03), (.16, .28, .26, 0), (.27, .24, .23, 0), (.34, .15, .15, 0), (.375, .03, .03, 0)]
-N = 20
+rows = [(-.23, .065, .075, 0), (-.2, .15, .15, .01), (-.16, .21, .2, .025), (-.1, .245, .245, .045), (-.04, .27, .26, .06), (.035, .285, .27, .065), (.105, .285, .27, .055), (.17, .28, .26, .04), (.23, .26, .245, .02), (.29, .225, .215, 0), (.35, .16, .16, 0), (.385, .025, .03, 0)]
+N = 32
 for z, rx, ry, jut in rows:
     for k in range(N):
         a = 2 * math.pi * k / N
@@ -362,6 +404,39 @@ for v in head_mesh.data.vertices:
           - .008 * bump(x, z, 0, -.09, .07, .02))                         # mouth line
     dx = .01 * math.copysign(bump(abs(x), z, .2, -.1, .05, .06), x)      # jaw corners
     v.co = (x + dx * f, y + dy * f, z)
+
+# Six separate skull/jaw sculpts share the same rig and facial feature anchors; they are not colour-swapped clones.
+# Their subtle but broad volume changes make identity legible beneath each character's own hairstyle and hat.
+face_variants = {}
+for identity in ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro']:
+    group = empty('cast-face-' + identity, (0, 0, 0), head)
+    skull = head_mesh if identity == 'hitler' else head_mesh.copy()
+    if identity != 'hitler':
+        skull.data = head_mesh.data.copy(); bpy.context.collection.objects.link(skull)
+    skull.name = 'Driver skull - ' + identity.title(); skull.parent = group
+    face_variants[identity] = group
+    for vertex in skull.data.vertices:
+        x, y, z = vertex.co
+        if y <= 0: continue
+        lower = max(0, min(1, (-z + .12) / .3))
+        cheeks = bump(abs(x), z, .17, .015, .1, .14)
+        if identity == 'hitler':
+            x *= 1 - .1 * lower; y += .012 * bump(x, z, 0, -.13, .08, .08)
+        elif identity == 'stalin':
+            # Broad temples and a heavier, squarer lower face; keep the jaw transition continuous.
+            x *= 1 + .24 * lower + .055 * bump(x, z, .2, .13, .12, .12)
+            y += .05 * bump(x, z, 0, -.14, .19, .105) + .018 * bump(x, z, .2, .08, .08, .09)
+            z -= .025 * lower
+        elif identity == 'mussolini':
+            x *= 1 + .06 * lower; y += .045 * bump(x, z, 0, -.19, .095, .055); z -= .02 * bump(x, z, 0, -.18, .13, .07)
+        elif identity == 'mao':
+            x += math.copysign(.03 * cheeks, x); y += .035 * cheeks
+        elif identity == 'kim':
+            x *= 1 + .12 * lower; y += .04 * cheeks + .018 * bump(x, z, 0, -.15, .18, .09)
+        elif identity == 'castro':
+            x *= 1 - .035 * lower; y += .04 * bump(x, z, 0, -.19, .1, .055); z -= .035 * lower
+        vertex.co = (x, y, z)
+
 def hair_shell(name, parent, keep, thickness=.022, lift=0.0):
     # Copy of the sculpted head surface, trimmed to a hairline and pushed outward: hair hugs the skull (no helmet balls).
     import bmesh
@@ -383,44 +458,101 @@ def nose(name, length, width, depth, parent, droop=0):
         w = width * (.45 + .55 * t ** 1.5); d = depth * (.35 + .65 * t); zc = .14 - length * t - droop * t * t
         rings_.append([(w * math.cos(a) * (1 if math.sin(a) > -.2 else .9), .25 + d * max(.15, math.sin(a)), zc) for a in [2 * math.pi * i / 12 for i in range(12)]])
     return loft(name, rings_, skin, parent, 1)
-ellipsoid('Neck', (0, -.02, -.22), (.12, .12, .14), skin, head)
+# The neck is one tapered, softly subdivided form rather than a sphere joined to the jaw.
+# Its broader base disappears into the cloth collar; the narrower upper rings tuck under
+# the jaw and leave a readable throat in front and a clean nape from the chase camera.
+neck_rings = []
+for z, rx, ry, cy in [(-.39, .19, .145, -.035), (-.34, .175, .14, -.028),
+                      (-.29, .145, .13, -.018), (-.23, .12, .12, -.012),
+                      (-.17, .125, .12, -.008), (-.115, .15, .13, -.008)]:
+    neck_rings.append([(rx * math.cos(2 * math.pi * k / 20), cy + ry * math.sin(2 * math.pi * k / 20), z)
+                       for k in range(20)])
+loft('Tapered neck and nape', neck_rings, skin, head, 2)
 big_nose = empty('cast-bignose', (0, 0, 0), head)    # default bulbous caricature nose
 nose('Strong nose', .15, .045, .1, big_nose, .01)
 straight = empty('cast-straightnose', (0, 0, 0), head)  # narrower, straight bridge (Hitler)
 nose('Straight nose', .14, .036, .085, straight)
 flat = empty('cast-flatnose', (0, 0, 0), head)          # small, broad and flat (Mao, Kim)
 nose('Broad flat nose', .11, .055, .06, flat)
+ear_shadow = mat('Warm ear concha', (.43, .28, .23), 0, .9)
 for sd in [-1, 1]:
-    e = ellipsoid('Ear', (sd * .285, 0, .06), (.022, .065, .095), skin, head); e.rotation_euler[2] = sd * .25
+    e = ellipsoid('Ear', (sd * .285, 0, .06), (.03, .065, .095), skin, head, 18); e.rotation_euler[2] = sd * .25
+    # Add an inset concha and a raised helix so the ear reads as anatomy in profile,
+    # not a flat oval attached to the side of the skull.
+    ellipsoid('Ear concha', (sd * .298, .034, .065), (.009, .027, .043), ear_shadow, head, 12)
+    tube('Ear helix', [(sd * .296, .045, .13), (sd * .31, .056, .105),
+                       (sd * .315, .06, .065), (sd * .306, .052, .025),
+                       (sd * .294, .035, .015)], .009, skin, head)
+    ellipsoid('Ear lobe', (sd * .295, .02, .005), (.02, .04, .027), skin, head, 12)
     # Adult eyes: smaller, set under the brow ridge, with lids, lower lids and slight bags.
     ellipsoid('Eye white', (sd * .095, .248, .14), (.05, .026, .036), eye_white, head)
-    ellipsoid('Eye iris', (sd * .095, .268, .136), (.024, .01, .026), iris, head, 10)
-    ellipsoid('Eye pupil', (sd * .095, .274, .136), (.012, .006, .013), leather, head, 8)
+    ellipsoid('Eye iris', (sd * .095, .268, .136), (.027, .01, .027), iris, head, 12)
+    ellipsoid('Eye pupil', (sd * .095, .274, .136), (.012, .006, .014), leather, head, 10)
     lid = ellipsoid('Heavy eyelid', (sd * .095, .252, .16), (.058, .032, .024), skin, head)
     ellipsoid('Lower eyelid', (sd * .095, .25, .117), (.054, .028, .014), skin, head)
     tube('Bushy brow', [(sd * .04, .265, .2), (sd * .1, .272, .215), (sd * .16, .25, .2)], .016, hair, head)
     tube('Nasolabial fold', [(sd * .065, .3, .0), (sd * .095, .285, -.06), (sd * .1, .27, -.11)], .011, skin, head)
 # Mouth: real upper and lower lip with a slight self-satisfied corner, chin and philtrum.
-tube('Upper lip', [(-.075, .282, -.082), (-.03, .3, -.076), (0, .298, -.08), (.03, .3, -.076), (.08, .283, -.078)], .012, lips, head)
-tube('Lower lip', [(-.065, .28, -.095), (0, .294, -.102), (.065, .281, -.094)], .014, lips, head)
-box('Uniform collar', (0, -.03, -.2), (.34, .3, .1), uniform, .04, head)
-tabs = empty('cast-collartabs', (0, 0, 0), head)
-for sd in [-1, 1]: box('Collar oak tab', (sd * .1, .13, -.19), (.07, .02, .06), trim, .006, tabs)
-tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, tabs)
+ellipsoid('Mouth opening', (0, .294, -.09), (.055, .018, .014), mouth_inner, head, 24)
+tube('Upper lip', [(-.085, .277, -.082), (-.045, .295, -.076), (0, .3, -.079), (.045, .295, -.076), (.085, .277, -.082)], .017, lips, head)
+tube('Lower lip', [(-.072, .279, -.096), (0, .296, -.101), (.072, .279, -.096)], .019, lips, head)
+# A soft, oval cloth collar replaces the square neck block and metallic collar cluster.
+uniform_collar = empty('cast-uniformcollar', (0, 0, 0), head)
+ellipsoid('Uniform collar', (0, -.035, -.205), (.19, .19, .065), uniform, uniform_collar, 20)
+# Stalin-specific mature facial planes sit on the same animated head rig as the skull.
+# These layered, skin-toned forms deepen the brow and cheek transitions without painted-on lines.
+stalin_crease = mat('Warm skin crease', (.34, .22, .18), 0, .92)
+stalin_highlight = mat('Warm skin highlight', (.58, .42, .33), 0, .82)
+stalin_face = face_variants['stalin']
+# Stalin's quiet, closed-collar field tunic replaces the generic parade dressing.
+# These cloth-only construction lines and pockets keep the silhouette tailored without insignia.
+stalin_tunic = empty('cast-stalin-tunic', (0, 0, 0), driver)
+loft('Stalin stand collar', [
+    ring(.158, .116, 1.535, -.445, 28, 2.5),
+    ring(.15, .112, 1.585, -.445, 28, 2.5),
+    ring(.145, .108, 1.655, -.445, 28, 2.5),
+], uniform, stalin_tunic, 2)
+stalin_stitch = mat('Muted tunic seam', (.24, .26, .22), 0, .96)
+stalin_button = mat('Dark tunic buttons', (.16, .18, .15), .04, .8)
+# A narrow folded placket sits on the jacket front, with inset, low-contrast buttons.
+box('Stalin tunic placket', (0, -.183, 1.285), (.075, .038, .42), uniform, .024, stalin_tunic)
+for z in [.12, .2, .28, .36, .44]:
+    ellipsoid('Stalin tunic button', (0, -.208, .99 + z), (.012, .007, .012), stalin_button, stalin_tunic, 12)
+# Simple welt pockets and double topstitching give the chest an authored garment structure.
+for sd in [-1, 1]:
+    box('Stalin chest pocket welt', (sd * .17, -.196, 1.36), (.112, .024, .112), uniform, .018, stalin_tunic)
+    tube('Stalin pocket seam', [(sd * .223, -.211, 1.405), (sd * .17, -.213, 1.405), (sd * .117, -.211, 1.405)], .003, stalin_stitch, stalin_tunic)
+    tube('Stalin shoulder seam', [(sd * .13, -.56, 1.51), (sd * .25, -.57, 1.54), (sd * .37, -.55, 1.52)], .003, stalin_stitch, stalin_tunic)
+# The drooping walrus moustache covers the shared mouth anchor at portrait size.
+# Give Stalin his own lower-set, open mouth so the face still reads as a person speaking.
+stalin_mouth = empty('cast-stalinmouth', (0, 0, 0), stalin_face)
+ellipsoid('Stalin mouth opening', (0, .305, -.143), (.078, .022, .025), mouth_inner, stalin_mouth, 24)
+tube('Stalin upper lip', [(-.09, .292, -.129), (-.045, .309, -.124), (0, .313, -.127),
+                          (.045, .309, -.124), (.09, .292, -.129)], .014, lips, stalin_mouth)
+tube('Stalin lower lip', [(-.073, .294, -.157), (0, .31, -.164), (.073, .294, -.157)], .017, lips, stalin_mouth)
+for sd in [-1, 1]:
+    brow = ellipsoid('Stalin heavy brow plane', (sd * .095, .267, .205), (.083, .034, .033), skin, stalin_face, 18)
+    brow.rotation_euler[1] = sd * -.12
+    tube('Stalin brow furrow', [(sd * .024, .291, .245), (sd * .018, .294, .218), (sd * .028, .291, .194)], .006, stalin_crease, stalin_face)
+    # A soft cheek ridge and short smile crease make the broader skull read as an adult face.
+    ellipsoid('Stalin cheek plane', (sd * .166, .205, .015), (.064, .044, .072), stalin_highlight, stalin_face, 18)
+    tube('Stalin nasolabial crease', [(sd * .055, .307, -.005), (sd * .092, .294, -.055), (sd * .14, .275, -.09)], .007, stalin_crease, stalin_face)
+    ellipsoid('Stalin nostril shadow', (sd * .037, .324, .005), (.014, .009, .009), stalin_crease, stalin_face, 12)
+    tube('Stalin under-eye fold', [(sd * .055, .265, .105), (sd * .095, .273, .094), (sd * .14, .255, .105)], .006, stalin_crease, stalin_face)
 short = empty('cast-shorthair', (0, 0, 0), head)    # short back and sides, shared by most roles
 hair_shell('Short back and sides', short, lambda x, y, z: z > -.06 and (y < .02 or abs(x) > .24) and not (abs(x) > .25 and z < .08 and y > -.08), .012)
 
 def cast(name):
     return empty('cast-' + name, (0, 0, 0), head)
 
-c = cast('peaked')                               # military peaked cap, laurel badge
-cyl('Cap crown', (0, .0, .42), .29, .24, hat_cloth, c, r2=.38, verts=28)
-ellipsoid('Cap crown top', (0, .03, .54), (.38, .4, .05), hat_cloth, c, 20)
+c = cast('peaked')                               # plain service cap; no country or political insignia
+cyl('Cap crown', (0, .0, .42), .29, .24, hat_cloth, c, r2=.245, verts=28)
+ellipsoid('Cap crown top', (0, .03, .54), (.255, .31, .038), hat_cloth, c, 24)
 cyl('Cap band', (0, -.02, .31), .29, .07, leather, c, verts=28)
 ellipsoid('Cap visor', (0, .22, .3), (.25, .14, .025), leather, c)
-tube('Cap gold cord', [(-.27, .19, .33), (0, .27, .34), (.27, .19, .33)], .014, trim, c)
-torus('Cap badge laurel', (0, .3, .44), .075, .014, trim, c, 'Y')
-ellipsoid('Cap badge', (0, .31, .45), (.05, .014, .055), trim, c, 10)
+for sd in [-1, 1]:
+    tube('Peaked cap panel seam', [(sd * .025, .02, .575), (sd * .16, .02, .53), (sd * .28, 0, .44), (sd * .29, -.01, .34)], .006, leather, c)
+ellipsoid('Peaked cap top button', (0, .02, .58), (.023, .023, .012), leather, c, 12)
 c = cast('naval')                                # white naval cap with gold leaves
 cyl('Naval cap crown', (0, -.02, .4), .32, .14, ivory, c, r2=.37, verts=28)
 cyl('Naval cap band', (0, -.02, .32), .29, .08, leather, c, verts=28)
@@ -441,6 +573,15 @@ torus('Laurel band', (0, -.02, .28), .27, .02, trim, c)
 c = cast('beret')                                # slanted beret
 b = ellipsoid('Beret', (.04, -.02, .35), (.31, .3, .09), hat_cloth, c); b.rotation_euler[1] = .18
 ellipsoid('Beret badge', (-.18, .2, .36), (.04, .015, .045), trim, c, 8)
+c = cast('octagonal')                            # eight-panel field cap worn by Mao in a documented 1936 portrait
+cyl('Octagonal cap band', (0, -.02, .315), .29, .075, hat_cloth, c, verts=8)
+cyl('Octagonal cap crown', (0, -.03, .43), .29, .22, hat_cloth, c, r2=.12, verts=8)
+ellipsoid('Octagonal cap visor', (0, .18, .33), (.24, .13, .025), hat_cloth, c, 16)
+ellipsoid('Octagonal cap top button', (0, -.03, .55), (.03, .03, .014), hat_cloth, c, 12)
+for k in range(8):
+    a = 2 * math.pi * k / 8
+    x, y = .286 * math.cos(a), -.03 + .286 * math.sin(a)
+    tube('Octagonal cap panel seam', [(0, -.03, .56), (x * .72, -.03 + (y + .03) * .72, .51), (x, y, .34)], .005, uniform, c)
 c = cast('diva')                                 # voluminous hair, sunglasses, red lips
 ellipsoid('Diva hair volume', (0, -.08, .22), (.36, .33, .26), hair, c)
 for sd in [-1, 1]:
@@ -484,8 +625,8 @@ hair_shell('Slick parted hair', c, lambda x, y, z: z > .2 and (y < .17 or z > .3
 strand('Forelock', [(-.11, .08, .375), (-.04, .19, .34), (.05, .25, .285), (.12, .275, .23), (.18, .27, .19), (.205, .25, .17)], [.04, .08, .095, .08, .05, .02], .03, hair, c)
 strand('Forelock lower strand', [(-.02, .2, .33), (.07, .262, .27), (.14, .278, .215)], [.03, .045, .02], .022, hair, c)
 strand('Parting edge', [(-.1, -.15, .35), (-.1, 0, .375), (-.09, .12, .37)], .012, .012, hair, c)
-c = cast('toothbrush')                            # Hitler: small square moustache under the nose
-box('Toothbrush moustache', (0, .322, -.04), (.085, .05, .042), hair, .012, c)
+c = cast('toothbrush')                            # Hitler: characteristic compact, square moustache with softly clipped corners
+box('Toothbrush moustache', (0, .337, -.045), (.14, .055, .052), hair, .02, c)
 c = cast('swept')                                 # Stalin: thick hair brushed straight back
 hair_shell('Swept-back hair', c, lambda x, y, z: z > .16 and (y < .19 or z > .29), .032, .12)
 for k in range(5):
@@ -542,6 +683,18 @@ for sd in [-1, 1]:
     tube('Race pennant pole', [(sd * .72, -1.0, .62), (sd * .72, -1.0, 2.05)], .018, trim, parade)
     vs = [(sd * .72 + i * .09 * -sd, -1.0 + math.sin(i) * .03, 1.75 + j * .28) for j in [0, 1] for i in range(5)]
     mesh('Neutral burgundy pennant', vs, [(i, i + 1, i + 6, i + 5) for i in range(4)], red, parade)
+    # Independent heraldic eagle relief: spread wings, head/beak and tail, with no regime insignia.
+    cx = sd * .54
+    outline = [(-.16, .025), (-.13, .065), (-.10, .035), (-.065, .075), (-.035, .04),
+               (-.012, .085), (.018, .045), (.055, .076), (.09, .04), (.14, .065),
+               (.12, .012), (.075, -.008), (.03, -.02), (0, -.09), (-.025, -.02),
+               (-.075, -.008), (-.13, .012)]
+    for face_y, reverse in [(-1.045, False), (-.955, True)]:
+        eagle_verts = [(cx + x, face_y, 1.9 + z) for x, z in outline]
+        eagle_faces = [tuple(reversed(range(len(outline)))) if reverse else tuple(range(len(outline)))]
+        mesh('Independent spread-wing eagle pennant relief', eagle_verts, eagle_faces, trim, parade)
+    ellipsoid('Eagle head', (cx + .035, -1.045, 1.94), (.025, .012, .02), trim, parade, 10)
+    tube('Eagle beak', [(cx + .045, -1.052, 1.94), (cx + .065, -1.052, 1.93)], .008, trim, parade)
 
 apply_all()
 save('hero-kart')

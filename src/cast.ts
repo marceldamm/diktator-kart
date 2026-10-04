@@ -28,6 +28,8 @@ export interface CastMember {
   hatColor: string;
   /** Hair, brows and moustache colour. */
   hair: string;
+  /** Independently sculpted skull/jaw silhouette in the shared animated head rig. */
+  faceStyle: 'hitler' | 'stalin' | 'mussolini' | 'mao' | 'kim' | 'castro';
   face: string[];
   kit: 'radio' | 'spare' | 'luggage' | 'fin' | 'parade' | 'none';
   /** Individual kart body (art-source/build_kart.py body-<name>). */
@@ -38,23 +40,23 @@ export interface CastMember {
 }
 
 export const CAST: CastMember[] = [
-  { name: 'Hitler', kartName: 'Größenwahn-Mobil', title: 'Selbsternannter Streckenbesitzer', flavour: 'Schwer, pompös und überzeugt, dass ihm die Ideallinie gehört.', abilityIdea: 'Größenbefehl: acht Sekunden Paradepanzer (Sarahs Idee)', paint: '#8e2635', uniform: '#7a6a4f', cape: null, hat: 'none', hatColor: '#1d2326', hair: '#16110d',
-    face: ['sidepart', 'shorthair', 'toothbrush', 'straightnose', 'medals', 'collartabs'], projectile: 'dog', projectileName: 'Schäferhund', projectileIcon: '🐕', body: 'roadster', kit: 'parade', voice: 'general', voiceRate: .97 },
-  { name: 'Stalin', kartName: 'Fünfjahresplan 3000', title: 'Vorsitzender der Kurvenkommission', flavour: 'Massiv, industriell, plant jede Kurve fünf Jahre im Voraus.', abilityIdea: 'Große Säuberung – noch nicht gebaut', paint: '#6f2424', uniform: '#e2dccb', cape: null, hat: 'none', hatColor: '#2b2b2b', hair: '#6a645d',
-    face: ['swept', 'shorthair', 'walrus', 'bignose', 'pipe', 'epaulettes', 'medals', 'collartabs'], projectile: 'tractor', projectileName: 'Fünfjahresplan-Traktor', projectileIcon: '🚜', body: 'limousine', kit: 'none', voice: 'marschall', voiceRate: .9 },
-  { name: 'Mussolini', kartName: 'Il Duce GT', title: 'Balkonfahrer ohne Balkon', flavour: 'Sportlich, elegant und vor allem mit sich selbst zufrieden.', abilityIdea: 'Große Pose – noch nicht gebaut', paint: '#31557a', uniform: '#1d1e22', cape: '#31557a', hat: 'none', hatColor: '#000000', hair: '#1a1410',
-    face: ['chin', 'bignose', 'epaulettes', 'medals', 'collartabs'], projectile: 'megaphone', projectileName: 'Balkon-Megafon', projectileIcon: '📢', body: 'racer', kit: 'radio', voice: 'imperator', voiceRate: 1.04 },
-  { name: 'Mao', kartName: 'Kultur-Kart', title: 'Großer Lenker, mittelgroße Lenkung', flavour: 'Leicht und wendig, mit einem flatternden Regelheft für alles.', abilityIdea: 'Kulturrevolution – noch nicht gebaut', paint: '#b72f2b', uniform: '#8a8c7e', cape: null, hat: 'none', hatColor: '#000000', hair: '#14110f',
-    face: ['maohair', 'shorthair', 'flatnose', 'chubby'], projectile: 'book', projectileName: 'Rotes Regelheft', projectileIcon: '📕', body: 'rounded', kit: 'none', voice: 'kommandant', voiceRate: .98 },
-  { name: 'Kim Jong-un', kartName: 'Propaganda-Rakete', title: 'Sieger vor Rennbeginn', flavour: 'Raketen-Parade auf Rädern; das Ergebnis steht schon in der Zeitung.', abilityIdea: 'Propaganda-Sieg – noch nicht gebaut', paint: '#263f70', uniform: '#1f2125', cape: null, hat: 'none', hatColor: '#6e5444', hair: '#0f0d0c',
-    face: ['undercut', 'flatnose', 'chubby'], projectile: 'rocket', projectileName: 'Mini-Propaganda-Rakete', projectileIcon: '🚀', body: 'rocket', kit: 'none', voice: 'kim', voiceRate: 1.02 },
-  { name: 'Castro', kartName: 'Revolutions-Cabrio', title: 'Dienstältester Boxengassenredner', flavour: 'Leichtes Cabrio, lange Reden, immer eine Zigarre zur Hand.', abilityIdea: 'Blockade – noch nicht gebaut', paint: '#315d42', uniform: '#55603e', cape: null, hat: 'patrol', hatColor: '#4c5536', hair: '#17120e',
-    face: ['beard', 'shorthair', 'cigar', 'bignose'], projectile: 'briefcase', projectileName: 'Aufklappender Aktenkoffer', projectileIcon: '💼', body: 'jeep', kit: 'none', voice: 'castro', voiceRate: .96 },
+  { name: 'Hitler', kartName: 'Größenwahn-Mobil', title: 'Selbsternannter Streckenbesitzer', flavour: 'Schwer, pompös und überzeugt, dass ihm die Ideallinie gehört.', abilityIdea: 'Größenbefehl: acht Sekunden Paradepanzer (Sarahs Idee)', paint: '#8e2635', uniform: '#7a6a4f', cape: null, hat: 'peaked', hatColor: '#25292b', hair: '#16110d', faceStyle: 'hitler',
+    face: ['sidepart', 'shorthair', 'toothbrush', 'straightnose', 'medals', 'collartabs', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'dog', projectileName: 'Schäferhund', projectileIcon: '🐕', body: 'roadster', kit: 'parade', voice: 'general', voiceRate: .97 },
+  { name: 'Stalin', kartName: 'Fünfjahresplan 3000', title: 'Vorsitzender der Kurvenkommission', flavour: 'Massiv, industriell, plant jede Kurve fünf Jahre im Voraus.', abilityIdea: 'Große Säuberung – noch nicht gebaut', paint: '#6f2424', uniform: '#74796d', cape: null, hat: 'peaked', hatColor: '#383834', hair: '#6a645d', faceStyle: 'stalin',
+    face: ['swept', 'shorthair', 'walrus', 'stalinmouth', 'bignose', 'pipe', 'stalin-tunic'], projectile: 'tractor', projectileName: 'Fünfjahresplan-Traktor', projectileIcon: '🚜', body: 'limousine', kit: 'none', voice: 'marschall', voiceRate: .9 },
+  { name: 'Mussolini', kartName: 'Il Duce GT', title: 'Balkonfahrer ohne Balkon', flavour: 'Sportlich, elegant und vor allem mit sich selbst zufrieden.', abilityIdea: 'Große Pose – noch nicht gebaut', paint: '#31557a', uniform: '#1d1e22', cape: '#31557a', hat: 'peaked', hatColor: '#292724', hair: '#1a1410', faceStyle: 'mussolini',
+    face: ['chin', 'bignose', 'epaulettes', 'medals', 'collartabs', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'megaphone', projectileName: 'Balkon-Megafon', projectileIcon: '📢', body: 'racer', kit: 'radio', voice: 'imperator', voiceRate: 1.04 },
+  { name: 'Mao', kartName: 'Kultur-Kart', title: 'Großer Lenker, mittelgroße Lenkung', flavour: 'Leicht und wendig, mit einem flatternden Regelheft für alles.', abilityIdea: 'Kulturrevolution – noch nicht gebaut', paint: '#b72f2b', uniform: '#8a8c7e', cape: null, hat: 'octagonal', hatColor: '#5e665c', hair: '#14110f', faceStyle: 'mao',
+    face: ['maohair', 'shorthair', 'flatnose', 'chubby', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'book', projectileName: 'Rotes Regelheft', projectileIcon: '📕', body: 'rounded', kit: 'none', voice: 'kommandant', voiceRate: .98 },
+  { name: 'Kim Jong-un', kartName: 'Propaganda-Rakete', title: 'Sieger vor Rennbeginn', flavour: 'Raketen-Parade auf Rädern; das Ergebnis steht schon in der Zeitung.', abilityIdea: 'Propaganda-Sieg – noch nicht gebaut', paint: '#263f70', uniform: '#1f2125', cape: null, hat: 'none', hatColor: '#6e5444', hair: '#0f0d0c', faceStyle: 'kim',
+    face: ['undercut', 'flatnose', 'chubby', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'rocket', projectileName: 'Mini-Propaganda-Rakete', projectileIcon: '🚀', body: 'rocket', kit: 'none', voice: 'kim', voiceRate: 1.02 },
+  { name: 'Castro', kartName: 'Revolutions-Cabrio', title: 'Dienstältester Boxengassenredner', flavour: 'Leichtes Cabrio, lange Reden, immer eine Zigarre zur Hand.', abilityIdea: 'Blockade – noch nicht gebaut', paint: '#315d42', uniform: '#55603e', cape: null, hat: 'patrol', hatColor: '#4c5536', hair: '#17120e', faceStyle: 'castro',
+    face: ['beard', 'shorthair', 'cigar', 'bignose', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'briefcase', projectileName: 'Aufklappender Aktenkoffer', projectileIcon: '💼', body: 'jeep', kit: 'none', voice: 'castro', voiceRate: .96 },
 ];
 
-export const CAST_PARTS = ['peaked', 'naval', 'fur', 'crown', 'beret', 'diva', 'moustache', 'beard', 'glasses', 'furcollar',
+export const CAST_PARTS = ['peaked', 'naval', 'fur', 'crown', 'beret', 'octagonal', 'diva', 'moustache', 'beard', 'glasses', 'furcollar',
   'shorthair', 'medals', 'epaulettes', 'collartabs', 'sidepart', 'toothbrush', 'swept', 'walrus', 'pipe', 'chin', 'maohair',
-  'undercut', 'patrol', 'cigar', 'bignose', 'straightnose', 'flatnose', 'chubby'];
+  'undercut', 'patrol', 'cigar', 'bignose', 'straightnose', 'flatnose', 'chubby', 'stalinmouth', 'stalin-tunic', 'sash', 'uniformbuttons', 'uniformcollar'];
 
 /** Kart slots → CAST index: the chosen driver takes kart 0 (player), the others keep catalogue order. */
 export function rosterOrder(chosen: number): number[] {

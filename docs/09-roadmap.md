@@ -89,11 +89,13 @@ Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.
 
-**Vorbereitung, noch keine M3-Abnahme:** Dokument 14 enthält Mussolini/Il Duce GT als begründeten ersten Art-Piloten-Vorschlag mit überlieferten Ideen, Herkunft und klarer Liefergrenze. Die gemeinsame Auswahl und Stilfreigabe sowie die M2-Abnahme stehen aus. Eine neutrale, vorgezogene Babylon-Stilskizze für Kulisse und Testkart dient bereits zur Sicht- und Lastprüfung; sie ist kein ausgearbeiteter Fahrer, kein bestätigtes Streckenlayout und kein fertiger M3-Abschnitt.
+**Aktueller Fahrer-/Fahrzeugauftrag, 04.10.2026:** Stalin ist der erste zu bauende Qualitätsanker (siehe [Masterauftrag](22-character-vehicle-quality-master.md) und [CURRENT-WORKLIST.md](../CURRENT-WORKLIST.md)). Alle Karts teilen die lesbare, fahrbare Grundarchitektur und bleiben durch zahlreiche personenspezifische Karosserie-/Silhouettenabweichungen unterscheidbar. Die Silhouette muss ohne Farbe lesbar bleiben; kein Traktor-Look, Stalins Traktor bleibt ein Item. Das ist eine bestätigte Art-Richtung, keine neue offene Grundsatzfrage.
+
+**Historische Vorbereitung, noch keine M3-Abnahme:** Dokument 14 enthielt Mussolini/Il Duce GT als frühen Art-Piloten-Vorschlag; der neuere Auftrag bestimmt Stalin zuerst. Eine neutrale, vorgezogene Babylon-Stilskizze für Kulisse und Testkart dient zur Sicht- und Lastprüfung; sie ist kein ausgearbeiteter Fahrer, kein bestätigter Stil und kein fertiger M3-Abschnitt.
 
 Dokument 01 skizziert zusätzlich eine fiktive Stadion-/Boulevardroute mit belegten historischen Landmarken als **Vorschlag**. M3 umfasst davon nur einen zusammenhängenden Abschnitt für Stil- und Lastprobe; vollständiger Rundkurs und Rennregeln bleiben M4. Landmarken, Zeitbild und Zeichen werden vor Assetproduktion gemeinsam geprüft.
 
-**Abnahme:** Stil aus tatsächlichen Spielkameras gemeinsam geprüft; sechs sichtbare Teilnehmer und erste Messwerte. Noch keine fertige Gesamtstrecke behaupten.
+**Abnahme:** Stalin-Benchmark aus tatsächlichen Spielkameras (vorn/hinten/seitlich/nah und in Bewegung), anatomischer Sitz-/Hand-/Kopfcheck, getrennte Fahreridentität und Kart-Silhouette; anschließend sechs sichtbare Teilnehmer und erste Messwerte. Fahrzeuge bleiben als Kartfamilie erkennbar und sind als Schwarzsilhouetten klar unterscheidbar. Noch keine fertige Gesamtstrecke behaupten.
 
 ## M4 – Kernrennen
 

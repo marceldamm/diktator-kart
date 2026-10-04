@@ -2,7 +2,7 @@ import { Engine } from '@babylonjs/core/Engines/engine';
 import { Scene } from '@babylonjs/core/scene';
 import { LoadAssetContainerAsync, ImportMeshAsync } from '@babylonjs/core/Loading/sceneLoader';
 import '@babylonjs/loaders/glTF';
-import { Vector3, Quaternion } from '@babylonjs/core/Maths/math.vector';
+import { Matrix, Vector3, Quaternion } from '@babylonjs/core/Maths/math.vector';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
@@ -30,6 +30,7 @@ import { TRACK, trackPoint } from './track';
 import { LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
+import { airTrickRoll, armGripReach } from './kart-visuals';
 import type { KartState } from './kart-model';
 import type { TestScene } from './scene';
 import { surfaceTextures } from './surface-textures';
@@ -158,6 +159,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const kits = ['radio','spare','luggage','fin','parade'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/variant-${kind}`)] as const);
       const bodies = ['roadster','limousine','racer','rounded','rocket','jeep'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/body-${kind}`)] as const);
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
+      const faces = ['hitler','stalin','mussolini','mao','kim','castro'].map(style=>[style,nodes.find((n)=>n.name===`kart${index}/cast-face-${style}`)] as const);
       const recolourable: {mesh:Mesh;kind:'paint'|'uniform'|'cape'|'hatColor'|'hair';material:PBRMaterial}[] = [];
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const pedals = ['gas', 'brake'].map((p) => nodes.find((n) => n.name === `kart${index}/pedal-${p}`) as TransformNode | undefined);
@@ -166,16 +168,25 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const arms = ['L', 'R'].map((side) => nodes.find((n) => n.name === `kart${index}/armPose-${side}`) as TransformNode | undefined);
       for (const arm of arms) if (arm) arm.rotationQuaternion = null;
       if (pivots.some((n) => !n) || spins.some((n) => !n) || !driver || !head || !steering) throw new Error('Kart articulation nodes are missing');
-      // Gloves belong to the steering wheel (they turn exactly with the rim); each arm then aims from its shoulder at its glove.
+      // Keep each glove parented to its arm: detaching only the glove meshes from the cuff
+      // made the palm look like it floated beside the wheel when the arm aimed at it.
+      // The arm solver moves the complete, connected arm-and-hand assembly to the rim.
       for (const n of [root, ...root.getDescendants(false)]) (n as TransformNode).computeWorldMatrix?.(true);
       const grips = arms.flatMap((arm) => {
         if (!arm) return [];
         const gloves = arm.getChildMeshes(true).filter((m) => /White glove/.test(m.name)); if (!gloves.length) return [];
         const centre = gloves.map((g) => g.getBoundingInfo().boundingBox.centerWorld).reduce((a, b) => a.add(b), Vector3.Zero()).scale(1 / gloves.length);
-        for (const g of gloves) g.setParent(steering);
+        const armInverse = arm.getWorldMatrix().clone().invert();
+        const hand = new TransformNode(`gripHand-${index}-${arm.name}`, scene);
+        hand.parent = arm;
+        hand.position = Vector3.TransformCoordinates(centre, armInverse);
+        for (const mesh of [...gloves, ...arm.getChildMeshes(true).filter((m) => /Gold cuff/.test(m.name))]) mesh.setParent(hand);
+        hand.computeWorldMatrix(true);
         const anchor = Vector3.TransformCoordinates(centre, steering.getWorldMatrix().clone().invert());
-        const rest = Vector3.TransformCoordinates(centre, driver.getWorldMatrix().clone().invert()).subtract(arm.position).normalize();
-        return [{ arm, anchor, rest, q: new Quaternion() }];
+        const restOffset = Vector3.TransformCoordinates(centre, driver.getWorldMatrix().clone().invert()).subtract(arm.position);
+        // Preserve the authored shoulder-to-grip distance: the solver uses its length
+        // as the neutral arm reach, not only its direction.
+        return [{ arm, hand, anchor, rest: restOffset.clone(), restOffset: hand.position.clone(), q: new Quaternion(), inverse: new Quaternion(), inverseRotation: Matrix.Identity() }];
       });
       for (const node of [...pivots, ...spins, driver, head, scarf, steering]) if (node) node.rotationQuaternion = null;
       // Wheel assemblies have an unsprung parent; body squat/roll must never lift grounded tyres.
@@ -212,7 +223,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); markGlow(flame); flame.setEnabled(false); return flame;
       });
-      const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, grips, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
+      const v = { root, orientation, wheelFrame, pivots, spins, driver,head, scarf, steering, arms, grips, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
         paintColour: Color3.Black(), soot: -1, wreckAge: -1,
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
@@ -220,6 +231,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
           for (const [kind,node] of bodies) node?.setEnabled(kind===cast.body);
           for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
+          for (const [style,node] of faces) node?.setEnabled(style === cast.faceStyle);
           for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }
           v.paintColour = Color3.FromHexString(cast.paint).toLinearSpace(); v.soot = -1;
           // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
@@ -375,6 +387,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     splash.minSize = .08; splash.maxSize = .22; splash.minLifeTime = .3; splash.maxLifeTime = .6; splash.emitRate = 0;
     splash.direction1 = new Vector3(-2.5, 3, -2.5); splash.direction2 = new Vector3(2.5, 5, 2.5); splash.gravity = new Vector3(0, -9, 0);
     splash.color1 = new Color4(.75, .82, .9, .7); splash.color2 = new Color4(.9, .93, .96, .6); splash.colorDead = new Color4(.8, .85, .9, 0); splash.start();
+    // Bounded per-kart tire spray: a low plume follows the rear axle only while
+    // moving through a visible rain puddle. The six pools cap this layer at 264 particles.
+    const roadSprays = visuals.map((_, i) => {
+      const spray = new ParticleSystem(`Rain tire spray ${i}`, 44, scene); spray.particleTexture = particleTexture(scene);
+      spray.minSize = .055; spray.maxSize = .17; spray.minLifeTime = .18; spray.maxLifeTime = .38;
+      spray.emitRate = 0; spray.minEmitBox = new Vector3(-.62, 0, -.12); spray.maxEmitBox = new Vector3(.62, .04, .12);
+      spray.minEmitPower = .35; spray.maxEmitPower = 1.1; spray.gravity = new Vector3(0, -4.5, 0);
+      spray.color1 = new Color4(.7, .83, .88, .58); spray.color2 = new Color4(.88, .94, .95, .48); spray.colorDead = new Color4(.74, .84, .88, 0);
+      spray.start(); return spray;
+    });
     // Snow: soft drifting flakes around the camera, cold light and white haze.
     let snowing = false;
     const snow = new ParticleSystem('Snowflakes', 2200, scene); snow.particleTexture = particleTexture(scene);
@@ -484,6 +506,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       },
       setRain(on) {
         raining = on; trackWorld.setWet(on);
+        if (!on) for (const spray of roadSprays) spray.emitRate = 0;
         sun.intensity = on ? baseLight.sun * .28 : baseLight.sun; hemisphere.intensity = on ? .62 : baseLight.hemi;
         hemisphere.diffuse = on ? new Color3(.62, .68, .78) : new Color3(.66, .76, 1);
         scene.fogDensity = on ? .0105 : baseLight.fog; scene.fogColor = on ? new Color3(.46, .5, .55) : baseLight.fogColor;
@@ -491,7 +514,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0; snapshotWeather();
       },
       setWeather(kind) {
-        snowing = kind === 'snow'; api.setRain?.(kind === 'rain'); trackWorld.setSnow(snowing);
+        snowing = kind === 'snow';
+        // Reset snow's wet surfaces first; setSnow(false) disables wet decals, so rain must be applied last.
+        trackWorld.setSnow(snowing); api.setRain?.(kind === 'rain');
         if (snowing) {
           sun.intensity = baseLight.sun * .45; sun.diffuse = new Color3(.92, .95, 1); hemisphere.intensity = .78; hemisphere.diffuse = new Color3(.86, .9, 1);
           scene.fogDensity = .0085; scene.fogColor = new Color3(.86, .88, .92); scene.environmentIntensity = .8; skyMaterial.emissiveTexture!.level = .78;
@@ -542,16 +567,32 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         // Studio light for the selection cards: soft frontal fill, no hard sun shadows across the faces.
         const fill = new HemisphericLight('Portrait fill', Vector3.Up(), scene); fill.intensity = 1.35; fill.diffuse = new Color3(1, .95, .88); fill.groundColor = new Color3(.55, .5, .46);
         const sunWasShadowing = sun.shadowEnabled; sun.shadowEnabled = false; const sunLevel = sun.intensity; sun.intensity = sunLevel * .55;
+        const wasEnabled = visuals.map((visual) => visual.root.isEnabled());
+        const wasVisible = scene.meshes.map((mesh) => mesh.isVisible);
+        const activeParticles = scene.particleSystems.filter((system) => system.isStarted());
+        const clearColor = scene.clearColor.clone();
+        for (const system of activeParticles) { system.stop(); system.reset(); }
         const shots: string[] = [];
         try {
           for (let castIndex = 0; castIndex < CAST.length; castIndex++) {
-            const v = visuals[Math.max(0, order.indexOf(castIndex))];
+            const kartIndex = Math.max(0, order.indexOf(castIndex));
+            const v = visuals[kartIndex];
+            // Studio portraits should show only the selected driver, without the track or rival karts.
+            visuals.forEach((visual, index) => visual.root.setEnabled(index === kartIndex));
+            scene.meshes.forEach((mesh) => { mesh.isVisible = mesh.isDescendantOf(v.driver); });
+            scene.clearColor = new Color4(.17, .21, .22, 1);
             const head = v.head.getAbsolutePosition(), h = v.root.rotation.y;
-            camera.position.set(head.x + Math.sin(h) * 1.9 + Math.cos(h) * .35, head.y + .05, head.z + Math.cos(h) * 1.9 - Math.sin(h) * .35);
-            camera.setTarget(new Vector3(head.x, head.y - .22, head.z));
+            camera.position.set(head.x + Math.sin(h) * 1.6 + Math.cos(h) * .28, head.y + .02, head.z + Math.cos(h) * 1.6 - Math.sin(h) * .28);
+            camera.setTarget(new Vector3(head.x, head.y - .1, head.z));
             shots.push(await CreateScreenshotUsingRenderTargetAsync(engine, camera, { width: 320, height: 360 }, 'image/jpeg', 4));
           }
-        } finally { camera.dispose(); fill.dispose(); sun.shadowEnabled = sunWasShadowing; sun.intensity = sunLevel; }
+        } finally {
+          visuals.forEach((visual, index) => visual.root.setEnabled(wasEnabled[index]));
+          scene.meshes.forEach((mesh, index) => { mesh.isVisible = wasVisible[index]; });
+          scene.clearColor = clearColor;
+          activeParticles.forEach((system) => system.start());
+          camera.dispose(); fill.dispose(); sun.shadowEnabled = sunWasShadowing; sun.intensity = sunLevel;
+        }
         return shots;
       },
       celebrate(kind) {
@@ -635,7 +676,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (snowing) snow.emitter = new Vector3(state.x + Math.sin(state.heading) * 10, 0, state.z + Math.cos(state.heading) * 10);
         if (raining) {
           rain.emitter = new Vector3(state.x + Math.sin(state.heading) * 8, 0, state.z + Math.cos(state.heading) * 8);
-          for (const k of lastStates) if (Math.abs(k.speed) > 4 && trackWorld.puddles.some((p) => Math.hypot(p.x - k.x, p.z - k.z) < p.r)) { splash.emitter = new Vector3(k.x, .1, k.z); splash.manualEmitCount = reducedEffects ? 6 : 24; }
+          for (const [i, k] of lastStates.entries()) {
+            const wetContact = Math.abs(k.speed) > 6 && trackWorld.puddles.some((p) => Math.hypot(p.x - k.x, p.z - k.z) < p.r);
+            const spray = roadSprays[i]; if (!spray) continue;
+            if (wetContact) {
+              spray.emitter = new Vector3(k.x - Math.sin(k.heading) * .85, .08 + k.height, k.z - Math.cos(k.heading) * .85);
+              spray.direction1.set(-Math.sin(k.heading) * 4 - Math.cos(k.heading) * .8, 1.15, -Math.cos(k.heading) * 4 + Math.sin(k.heading) * .8);
+              spray.direction2.set(-Math.sin(k.heading) * 2 + Math.cos(k.heading) * .8, 2.4, -Math.cos(k.heading) * 2 - Math.sin(k.heading) * .8);
+              spray.emitRate = reducedEffects ? 8 : 24;
+            } else spray.emitRate = 0;
+          }
           lightningTimer -= dt;
           if (lightningTimer <= 0) { lightningTimer = 9 + Math.random() * 14; flash = 1; api.onLightning?.(); }
         }
@@ -678,13 +728,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // Visible weight: compress on landing and suspension dips, stretch slightly at the hop apex.
           const squash = Math.max(-.09, Math.min(.06, s.suspensionVelocity * .045 + (s.height > .05 ? .035 : 0)));
           v.orientation.scaling.set(1 - squash * .25, 1 + squash * .5, 1 - squash * .25);
-          // Air trick: one full barrel roll over the jump.
-          if (s.trick && (s.jumpRemaining ?? 0) > 0) v.orientation.rotation.z += (1 - (s.jumpRemaining ?? 0) / (s.jumpDuration ?? 1)) * Math.PI * 2;
+          // Air trick: the sprung body and the otherwise unsprung wheels roll together.
+          const trickRoll = airTrickRoll(s.trick, s.jumpRemaining, s.jumpDuration);
+          v.orientation.rotation.z += trickRoll;
+          v.wheelFrame.rotation.z = trickRoll;
           v.rotation += s.speed * dt / .33;
           v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? (s.steer ?? 0) * .42 - Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
           v.steering.rotation.z = -(s.steer ?? 0) * 1.15 - Math.sin(s.heading - s.travelHeading) * .4;
-          // Arms follow the wheel; a fresh mini-turbo earns a vertical, pumping fist (sports gesture, never a forward-raised arm).
+          // Arms follow the wheel; the gloves stay childed to the arm so wrist and cuff
+          // remain a single connected silhouette while steering.
           const wheelTurn = (s.steer ?? 0) * .9 + Math.sin(s.heading - s.travelHeading) * .3;
           v.cheer += ((s.turboRemaining > .75 ? 1 : 0) - v.cheer) * Math.min(1, dt * 9);
           void wheelTurn; // arms now follow the gloves on the rim (see grips below)
@@ -708,9 +761,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             for (const n of [v.root, v.orientation, v.driver, v.steering]) n.computeWorldMatrix(true);
             const inverse = v.driver.getWorldMatrix().clone().invert();
             for (const g of v.grips) {
-              if (free) { g.arm.rotationQuaternion = Quaternion.Identity(); continue; }
-              const target = Vector3.TransformCoordinates(Vector3.TransformCoordinates(g.anchor, v.steering.getWorldMatrix()), inverse).subtract(g.arm.position).normalize();
-              g.arm.rotationQuaternion = Quaternion.FromUnitVectorsToRef(g.rest, target, g.q);
+              if (free) {
+                g.arm.rotationQuaternion = Quaternion.Identity(); g.arm.scaling.setAll(1);
+                g.hand.position.copyFrom(g.restOffset); g.hand.scaling.setAll(1); continue;
+              }
+              const target = Vector3.TransformCoordinates(Vector3.TransformCoordinates(g.anchor, v.steering.getWorldMatrix()), inverse).subtract(g.arm.position);
+              const reach = armGripReach(g.rest, target, g.q);
+              g.arm.rotationQuaternion = g.q; g.arm.scaling.setAll(reach);
+              Quaternion.InverseToRef(g.q, g.inverse); Matrix.FromQuaternionToRef(g.inverse, g.inverseRotation);
+              Vector3.TransformCoordinatesToRef(target.scale(1 / reach), g.inverseRotation, g.hand.position);
+              g.hand.scaling.setAll(1 / reach);
             }
           }
           // Harbour salvage: sink, then the crane hook lifts the kart out of the water.

@@ -3,6 +3,13 @@
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
+## Wetter und Asphaltflächen – 04.10.2026
+
+Der Regenzustand aktiviert nasse, reflektierende Fahrbahn, Spritzer, Pfützen und fünf weiche, wandernde Wolkenschattenflächen. Die Schatten nutzen eine gemeinsame 512×512-Alpha-Textur und fünf feste Meshes statt einer zusätzlichen Schattenkarte oder unbeschränkter Partikel. Der Schneezustand nutzt denselben Flächenweg, schaltet Regenflächen jedoch aus.
+
+**Umschaltregel:** `setWeather` muss zuerst den Schneezustand zurücksetzen und danach Regen aktivieren. `setSnow(false)` setzt nasse Oberflächen zurück; wird es nach `setRain(true)` aufgerufen, verschwinden Pfützen und Wolkenschatten trotz aktiver Regentropfen. Regen-/Sonnenlaufzeitvergleich und technischer Prüfnachweis: [CURRENT-WORKLIST.md](../CURRENT-WORKLIST.md), [PROGRESS-LOG.md](../PROGRESS-LOG.md).
+
+
 
 ## Neuer Auftrag: Wandkontakte und kumulativer Schaden – 04.10.2026
 
@@ -33,13 +40,13 @@ Vorgesehene Zustände: Menü, Laden, Einführung, Countdown, Rennen, Pause, Ziel
 
 **M2b-Implementierungsstand:** Space startet einen kurzen Hop. Nach der Landung leitet gehaltenes Space mit Lenkung bei ausreichender Vorwärtsfahrt einen Drift ein; gleichgerichtetes Lenken lädt ihn auf. Loslassen nach ausreichender Ladezeit aktiviert den befristeten Mini-Turbo, Bremsen bricht ihn ab. Die Fahrtrichtung folgt im Drift der Kartausrichtung verzögert, sodass sich die Trajektorie tatsächlich verändert. HUD-Text und zwei Leuchten am Test-Kart zeigen Hop, Driftladung und Turbo. Alle Werte sind vorläufig. Federung, Reifen-/Untergrundreaktionen und faire Botnutzung bleiben Folgearbeiten.
 
-**M2c–e-Implementierungsstand:** Zwei markierte Bodenwellen heben einzelne Räder anhand vier unabhängiger Kontaktpunkte. Ein gedämpftes Federungsmodell bewegt und neigt die Karosserie; Hop entkoppelt die Räder kurz vom Boden, die Landung gibt einen kleinen Federungsimpuls. Nahe/ferne Verfolgeransicht und eine einfache Fahrerperspektive lesen denselben Fahrzustand. Fünf automatisch gelenkte Lastfahrzeuge verwenden `advanceKart` mit denselben Fahrregeln, haben aber noch keine Renn-KI, Wegfindung oder Kollision untereinander. Die Bodenwellen verändern derzeit die Federung, nicht den Reifengrip oder das Tempo; solche Wirkungen brauchen einen eigenen Fahrtest.
+**M2c–e-Implementierungsstand:** Zwei markierte Bodenwellen heben einzelne Räder anhand vier unabhängiger Kontaktpunkte. Ein gedämpftes Federungsmodell bewegt und neigt die Karosserie; Hop entkoppelt die Räder kurz vom Boden, die Landung gibt einen kleinen Federungsimpuls. Nahe/ferne Verfolgeransicht und eine einfache Fahrerperspektive lesen denselben Fahrzustand. Fünf Renn-Bots verwenden `advanceKart` und `botInput` mit Streckenführung, Kurvenbremsung und Verkehrswahl. Bot 3 nimmt die Hinterhofgasse anhand ihrer eigenen Kurvenvorschau; Simulationstests bestätigen Korridornutzung und drei gewertete Runden. Ein echter Mehrbot-Fahrtest bleibt ausstehend. Die Bodenwellen verändern derzeit die Federung, nicht den Reifengrip oder das Tempo; solche Wirkungen brauchen einen eigenen Fahrtest.
 
 **M2f-Teilstand:** Am Testflächenrand stoppt das Kart mit einem kurzen, begrenzten Rückstoß und einer kleinen Karosserieneigung; Drift und Turbo werden beendet. Die Eingabe setzt nach 0,22 s wieder ein. Das ist eine vorläufige Randreaktion und kein allgemeines Kollision-/Schadenssystem.
 
 **M2g-Teilstand:** Ein klar markierter Streckenblock rechts der Geraden verwendet im reinen Fahrkern eine Kreis-/Rechteck-Kontaktprüfung mit Rückstoß und eigenem HUD-Zustand. Ein direkter Fahrtest mit W, dann D trifft ihn; geradeaus ist er umfahrbar. Der hohe Block ist bewusst nicht per Hop überfahrbar. Fahrzeug-zu-Fahrzeug-Kollision, Streckenwände jenseits der Testfläche und Schäden sind noch nicht umgesetzt.
 
-**M2h-Teilstand:** Spieler und fünf Lastkarts erhalten dieselbe einfache Kreis-Kontaktregel. Überlappende Fahrzeugpositionen werden gleichmäßig getrennt; ein Stoß stoppt beide kurz, beendet Drift/Turbo und meldet Fahrzeugkontakt im HUD. Der gezielte Gegenverkehrsfall `?scenario=contact` ist ein Testaufbau. Renn-KI, vollständige Mehrfach- und Streckenkollision, Schaden und menschlich bewertetes Fahrgefühl fehlen weiter.
+**M2h-Teilstand:** Spieler und fünf Bots erhalten dieselbe einfache Kreis-Kontaktregel. Überlappende Fahrzeugpositionen werden gleichmäßig getrennt; ein Stoß stoppt beide kurz, beendet Drift/Turbo und meldet Fahrzeugkontakt im HUD. Kumulative Schäden, sichtbarer Totalschaden, Werkstattpause und Reparaturschutz sind ergänzt. Der gezielte Gegenverkehrsfall `?scenario=contact` ist ein Testaufbau. Vollständige Mehrfach- und Streckenkollision sowie menschlich bewertetes Fahrgefühl bleiben offen.
 
 **M2j-Korrektur:** Nach Fahrzeugtrennung werden Testflächenrand und markierter Block gemeinsam erneut geprüft. Bis zu vier Positionsdurchläufe verhindern im 60-s-Sechs-Kart-Stresstest das zuvor beobachtete Eindringen in den Block. Mehrfachkontakte bleiben eine technische Näherung.
 
