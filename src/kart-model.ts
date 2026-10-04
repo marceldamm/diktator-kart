@@ -261,7 +261,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const wallX = collisionNormalX / normalLength, wallZ = collisionNormalZ / normalLength;
   const closing = -(Math.sin(travelHeading) * wallX + Math.cos(travelHeading) * wallZ) * speed;
   const glance = speed > 0 ? Math.max(0, closing) / speed : 1;
-  if (collided && kind === 'boundary' && speed > 2 && glance < .5) {
+  if (collided && kind === 'boundary' && speed > 2 && glance < .6) {
     // Shallow wall scrape: keep the tangential motion, lose speed with the impact angle.
     const tangentX = Math.sin(travelHeading) * speed + closing * wallX, tangentZ = Math.cos(travelHeading) * speed + closing * wallZ;
     const slide = Math.atan2(tangentX, tangentZ);
@@ -275,8 +275,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     scrapeRemaining = .12;
   } else if (collided) {
     // Steep barrier hit: the normal part rebounds, the tangential part survives with friction;
-    // a straight head-on hit therefore ends at zero forward speed, oblique ones keep sliding.
-    const tangentKeep = kind === 'boundary' && speed > 0 ? Math.sqrt(Math.max(0, 1 - glance * glance)) * .6 : 0;
+    // a straight head-on hit (glance > ~0.92) still ends the forward run, oblique ones keep sliding along the wall.
+    const tangentKeep = kind === 'boundary' && speed > 0 ? (glance > .92 ? 0 : Math.max(.3, Math.sqrt(Math.max(0, 1 - glance * glance)) * .85)) : 0;
     if (Math.abs(speed) > 1 && impactRemaining === 0) {
       const rebound = Math.min(KART_TUNING.impactReboundCap * 1.6, Math.abs(speed) * (kind === 'boundary' ? .32 : .15) + 0.3);
       impactVelocityX = wallX * rebound;
@@ -286,7 +286,8 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     if (tangentKeep > 0) {
       const tangentX = Math.sin(travelHeading) * speed + closing * wallX, tangentZ = Math.cos(travelHeading) * speed + closing * wallZ;
       travelHeading = Math.atan2(tangentX, tangentZ);
-      heading += Math.atan2(Math.sin(travelHeading - heading), Math.cos(travelHeading - heading)) * .35;
+      // Turn the nose along the wall so the next frame does not hit it again (no 'sticking').
+      heading += Math.atan2(Math.sin(travelHeading - heading), Math.cos(travelHeading - heading)) * .6;
     }
     speed *= tangentKeep;
     turboRemaining = 0;

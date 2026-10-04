@@ -187,3 +187,13 @@ button:disabled { opacity: .5; cursor: default; }
 @keyframes portrait-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
 .driver-card { overflow:hidden; }
 @media(prefers-reduced-motion:reduce) { .driver-card.selected img { animation:none; } }
+
+/* Kart condition: green → amber → red; flashes while wrecked. */
+#health { display:none; }
+.showcase.racing #health,.showcase #health.shown { display:flex;align-items:center;gap:8px;margin-top:4px;font-size:9px;letter-spacing:.08em;color:#d8c9a4;text-transform:uppercase; }
+.health-meter { width:90px;height:5px;background:#3a2a26;overflow:hidden; }
+#health-fill { height:100%;width:100%;background:#7fbf6a;transition:width .2s,background .2s; }
+#health.worn #health-fill { background:#e0a64a; } #health.critical #health-fill { background:#d9473a; }
+#health.wrecked { animation: wreck-flash .5s steps(2) infinite; }
+@keyframes wreck-flash { 50% { opacity:.35; } }
+#health b { font-weight:600;color:#f2e2bc;font-variant-numeric:tabular-nums; }

@@ -10,6 +10,7 @@ import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
+import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
 
@@ -89,6 +90,7 @@ class App {
   private photoWasPaused = false;
   private items:ItemWorld=createItems(LOAD_KART_COUNT+1);
   private abilities:AbilityWorld=createAbilities(LOAD_KART_COUNT+1);
+  private damage:DamageWorld=createDamage(LOAD_KART_COUNT+1);
   private queuedSpecial=false;
   private rain=false;
   /** Options choice; 'random' rolls sun, rain or snow every time the track loads. */
@@ -116,7 +118,7 @@ class App {
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -246,7 +248,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0};
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -390,7 +392,7 @@ class App {
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = initialLoadKarts();
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.lapTimes=[];this.lapNoticeUntil=0;
@@ -651,6 +653,19 @@ class App {
           }
         }
         }
+        if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
+          // Cumulative damage from this step's contacts, crashes and item hits; a wreck waits for the state workshop.
+          stepDamage(this.damage,[this.previousKart,...this.previousLoadKarts],[this.kart,...this.loadKarts],FIXED_STEP);
+          for(const event of this.damage.events){
+            if(event.kind==='repaired'){if(event.kart===0){this.itemMessage='Repariert · Staatliche Werkstatt stempelt ab';this.itemMessageUntil=this.items.time+2;}continue;}
+            if(event.kind!=='wreck')continue;
+            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);
+            const at=[this.kart,...this.loadKarts][event.kart],near=Math.hypot(at.x-this.kart.x,at.z-this.kart.z)<40;
+            if(event.kart===0||near){this.audio.itemEvent('hit');this.audio.thunder();this.audio.cheer(.9);}
+            if(event.kart===0){this.itemMessage='Totalschaden! Die Staatliche Werkstatt rückt an';this.itemMessageUntil=this.items.time+3;}
+            else if(near){this.itemMessage=`${this.castOf(event.kart).name}: Totalschaden!`;this.itemMessageUntil=this.items.time+2;}
+          }
+        }
         this.queuedHopPress = false;
         this.accumulator -= FIXED_STEP;
       }
@@ -665,7 +680,11 @@ class App {
       this.commentary();
       if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? `STAATSFERNSEHEN · Freies Training · ${{ sun: 'Sonnenschein genehmigt', rain: 'Regen angeordnet', snow: 'Schneefall verordnet' }[this.weather]}` : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
-      modeDisplay.textContent = this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
+      { const health=Math.round(this.damage.health[0]),meter=document.querySelector<HTMLElement>('#health')!;
+        meter.classList.toggle('worn',health<66);meter.classList.toggle('critical',health<33);meter.classList.toggle('wrecked',this.damage.wrecked[0]>0);meter.classList.toggle('shown',this.racePhase==='practice');
+        document.querySelector<HTMLElement>('#health-fill')!.style.width=`${health}%`;document.querySelector('#health-value')!.textContent=`${health} %`;
+        this.testScene.setDamage?.(this.damage.health,this.damage.wrecked); }
+      modeDisplay.textContent = this.damage.wrecked[0]>0 ? `Totalschaden · Staatliche Werkstatt ${this.damage.wrecked[0].toFixed(1)} s` : this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`
         : this.kart.impactRemaining > 0
         ? this.kart.impactKind === 'item' ? 'Posttreffer – Kart fängt sich' : this.kart.impactKind === 'kart' ? 'Fahrzeugkontakt – Kart fängt sich'
           : this.kart.impactKind === 'obstacle' ? 'Hinderniskontakt – Kart fängt sich' : 'Randkontakt – Kart fängt sich'

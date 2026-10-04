@@ -179,11 +179,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); glow.addIncludedOnlyMesh(flame); flame.setEnabled(false); return flame;
       });
       const v = { root, orientation, pivots, spins, driver,head, scarf, steering, arms, flames,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
+        paintColour: Color3.Black(), soot: -1, wreckAge: -1,
+        paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
         dress(cast: CastMember) {
           for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
           for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
           for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }
+          v.paintColour = Color3.FromHexString(cast.paint).toLinearSpace(); v.soot = -1;
           // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
           v.bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
           // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
@@ -292,6 +295,21 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     trackDust.direction1 = new Vector3(-1, .3, -1); trackDust.direction2 = new Vector3(1, 1.2, 1);
     trackDust.color1 = new Color4(.6, .55, .46, .35); trackDust.color2 = new Color4(.7, .66, .58, .28); trackDust.colorDead = new Color4(.65, .6, .5, 0); trackDust.start();
     let lastStates: KartState[] = [];
+    // Damage: engine smoke per kart (grey when worn, black when critical), comic explosion on a wreck.
+    let healthNow: number[] = [], wreckedNow: number[] = [];
+    const engineSmoke = visuals.map((_, i) => {
+      const s = new ParticleSystem(`Damage smoke ${i}`, 70, scene); s.particleTexture = particleTexture(scene); s.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+      s.minSize = .3; s.maxSize = .8; s.minLifeTime = .6; s.maxLifeTime = 1.3; s.emitRate = 0; s.minEmitBox = new Vector3(-.2, 0, -.2); s.maxEmitBox = new Vector3(.2, .1, .2);
+      s.direction1 = new Vector3(-.3, 1.2, -.3); s.direction2 = new Vector3(.3, 2, .3); s.minEmitPower = .6; s.maxEmitPower = 1.2; s.start(); return s;
+    });
+    const fireball = new ParticleSystem('Wreck fireball', 260, scene); fireball.particleTexture = particleTexture(scene); fireball.blendMode = ParticleSystem.BLENDMODE_ADD;
+    fireball.minSize = .7; fireball.maxSize = 1.8; fireball.minLifeTime = .25; fireball.maxLifeTime = .6; fireball.emitRate = 0; fireball.createSphereEmitter(.6);
+    fireball.minEmitPower = 3; fireball.maxEmitPower = 7; fireball.color1 = new Color4(1, .78, .3, 1); fireball.color2 = new Color4(1, .4, .1, 1); fireball.colorDead = new Color4(.4, .1, 0, 0); fireball.start();
+    const wreckSmoke = new ParticleSystem('Wreck smoke', 200, scene); wreckSmoke.particleTexture = particleTexture(scene); wreckSmoke.blendMode = ParticleSystem.BLENDMODE_STANDARD;
+    wreckSmoke.minSize = 1; wreckSmoke.maxSize = 2.6; wreckSmoke.minLifeTime = .9; wreckSmoke.maxLifeTime = 1.8; wreckSmoke.emitRate = 0; wreckSmoke.createSphereEmitter(.8);
+    wreckSmoke.minEmitPower = 1.5; wreckSmoke.maxEmitPower = 3.5; wreckSmoke.gravity = new Vector3(0, 1.2, 0);
+    wreckSmoke.color1 = new Color4(.16, .15, .14, .7); wreckSmoke.color2 = new Color4(.3, .28, .26, .55); wreckSmoke.colorDead = new Color4(.3, .3, .3, 0); wreckSmoke.start();
+    const SOOT = new Color3(.02, .018, .016);
     // Rain: streak particles around the camera, puddle splashes, lightning flashes.
     let raining = false, lightningTimer = 9, flash = 0;
     const rain = new ParticleSystem('Rain streaks', 2600, scene); rain.particleTexture = particleTexture(scene);
@@ -371,6 +389,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         for (const system of [dust, puff]) { system.color1 = powder[0]; system.color2 = powder[1]; system.colorDead = powder[2]; }
       },
       puddles() { return raining ? trackWorld.puddles : []; },
+      setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
+      wreck(kart) {
+        const at = lastStates[kart]; const v = visuals[kart]; if (!at || !v) return;
+        fireball.emitter = new Vector3(at.x, .9, at.z); fireball.manualEmitCount = reducedEffects ? 60 : 200;
+        wreckSmoke.emitter = new Vector3(at.x, 1, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 40 : 140;
+        burst(paper, at, reducedEffects ? 15 : 50); v.wreckAge = 0;
+      },
       setRoster(order) {
         roster = order.slice(); visuals.forEach((v, i) => v.dress(CAST[order[i] ?? i]));
         const owner = Math.max(0, order.indexOf(0));
@@ -509,6 +534,18 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
+          // Damage look: soot on the paint, engine smoke, and the comic driver ejection during a wreck.
+          const health = healthNow[index] ?? 100, wrecked = (wreckedNow[index] ?? 0) > 0;
+          const soot = wrecked ? .85 : health < 66 ? (66 - health) / 66 * .65 : 0;
+          if (Math.abs(soot - v.soot) > .02) { v.soot = soot; const c = Color3.Lerp(v.paintColour, SOOT, soot); for (const m of v.paints()) m.albedoColor = c; }
+          const smoke = engineSmoke[index]; smoke.emitter = new Vector3(s.x - Math.sin(s.heading) * 1.2, .9 + s.height, s.z - Math.cos(s.heading) * 1.2);
+          smoke.emitRate = wrecked ? (reducedEffects ? 12 : 40) : health < 33 ? (reducedEffects ? 6 : 22) : health < 66 ? (reducedEffects ? 3 : 9) : 0;
+          const dark = wrecked || health < 33; smoke.color1 = dark ? new Color4(.1, .09, .08, .65) : new Color4(.55, .54, .52, .45); smoke.color2 = smoke.color1; smoke.colorDead = new Color4(.3, .3, .3, 0);
+          if (wrecked && v.wreckAge >= 0) {
+            v.wreckAge += dt; const t = v.wreckAge;
+            v.driver.position.y = Math.max(0, 7 * t - 5 * t * t); v.driver.rotation.x = t < 1.4 ? t * 9 : 0;
+            v.orientation.rotation.z += Math.sin(Math.min(1, t * 2) * Math.PI) * .35;
+          } else if (v.wreckAge >= 0 && !wrecked) { v.wreckAge = -1; v.driver.position.y = 0; burst(puff, s, reducedEffects ? 8 : 26); }
         });
         const map=shadow.getShadowMap();
         if(map)map.renderList=[...staticShadowMeshes,

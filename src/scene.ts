@@ -41,6 +41,10 @@ export interface TestScene {
   portraits?(order: number[]): Promise<string[]>;
   /** Called for every finish firework burst (audio pop). */
   onFirework?: () => void;
+  /** Damage look per kart: health 0–100 and seconds left in the wrecked state. */
+  setDamage?(health: number[], wrecked: number[]): void;
+  /** Comic wreck explosion for one kart. */
+  wreck?(kart: number): void;
   /** Called on a lightning flash so the audio can thunder. */
   onLightning?: () => void;
 }
