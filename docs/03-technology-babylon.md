@@ -1,5 +1,8 @@
 # Technik: Babylon.js-Neuentwicklung
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Renderinterpolation – 03.10.2026
 
 Physik/Items/Rennen bleiben bei festem 1/60-s-Schritt. Darstellung von Kart/Bots/Federung und Kamera nutzt dieselbe zwischen letztem und aktuellem Zustand interpolierte Pose; alpha=Restzeit/FIXED_STEP. Kein extrapoliertes Kollisions-/Rennverhalten. Große Recovery-Sprünge snapen statt durch die Strecke zu gleiten. Neustart/Rennstart setzen vorherige/angezeigte Snapshots zurück. Renderlatenz maximal ein Physikschritt (~16,7 ms), keine Physik-/Balanceänderung. Debugschnittstelle __DK.render ergänzt Pose/alpha/Schrittanzahl für prüfbare Diagnosen.
