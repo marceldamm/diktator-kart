@@ -7,6 +7,13 @@
 
 Marcels Ziel: viel bessere Modelle, erkennbare historische Charaktere, individuelle Fahrzeuge, realitätsnähere Strecke/Architektur/Umgebung sowie hochwertigeres Licht, Effekte und Animation. Maßstab bleibt die gewählte Bildpräferenz G–L (`references/visuals/style-comparison-02-c-a-refined.png`), sichtbar im laufenden Spiel aus allen Kameras. Sounds, Stimmen und Musik sollen dieselbe höhere Qualitätsstufe erreichen. Fertige Stimmen ohne Text-to-Speech; die unten beschriebenen TTS-Assets sind Zwischenumsetzung. Pakete und Abnahmen: [Langfristige Ziele](../LONG-TERM-GOALS.md).
 
+
+## Fahrer, Cockpit und Tageszeit – neue Anforderungen 04.10.2026
+
+Die historischen Fahrer sollen deutlich realitätsnäher, erwachsener und gesichtsdetailreicher aussehen; stilistische Überhöhung bleibt möglich, kindliche Niedrigpolygon-Anmutung ist nicht das Ziel. Fahrer müssen glaubwürdig auf modellierten Sitzen sitzen: Unterkörper/Beine dürfen nicht in der Karosserie stecken. Hände mit Fingern greifen den Lenkradkranz und bewegen sich passend; Füße ruhen auf modellierten Gas-/Bremspedalen, die mit der Eingabe reagieren. Lenkrad, first-person Räder und Spiegel korrekt ausrichten und aus Fahrer- wie Verfolgeransicht prüfen. Dies sind konkrete neue Ziele, noch keine umgesetzten oder abgenommenen Assets.
+
+Die Strecke soll pro Rennen eine zufällige Tagesstimmung erhalten können; ein Rennen kann über drei Runden sanft von Tag in Dämmerung und Nacht wechseln, ohne abrupt dunkel zu werden. Sichtbare Sonne/Vögel am Tag; Mond, Sterne, Mondschatten und Fledermäuse nachts. Blätter, leichte Partikel und zeitweise liegenbleibende Zeitungen/Müll/abgefallene Fahrzeugteile geben der Welt Leben. Partikel, Sicht und Performance unter Fahrt prüfen.
+
 ## Ruhigere Karosserie und sichtbarer Staub – 03.10.2026
 
 Exponentielle statt schwingender visueller Karosserierückkehr, Rollneigung/Vibration stark reduziert. Haube hebt sich dezent mit Beschleunigung/Tempo; Hinterteil senkt sich. Radbaugruppen besitzen getrennten ungefederten Elternknoten und bleiben auf den vier berechneten Bodenkontakten. Hop und tatsächliche Federung bleiben sichtbar. Bestehender Reifenstaub als größere weichere Wolke lesbarer, maximal 150 Partikel, reduzierte Effektstufe sparsamer.
