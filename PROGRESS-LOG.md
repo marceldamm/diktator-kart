@@ -519,3 +519,23 @@ Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umges
 **Nicht abgenommen:** Kein Nahbild des Kanalwassers und keine kontrollierte Fahrt über der Oberfläche; stärkere Normalmap-/Flusswahrnehmung bleibt eine gezielte Sichtprüfung. Kein Framezeitvergleich für diesen Materialpass.
 
 **Geänderte Dateien:** `src/track-world.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
+
+### 2026-10-04 – Kart-Rad-Detailpass
+
+**Umgesetzt:** In `art-source/build_kart.py` erhielten alle vier Radmodelle je Felgenseite zwei feine umlaufende Seitenwandrippen sowie acht kleine metallische Felgenmuttern. Die neuen Teile werden mit dem Reifen-/Metallmaterial in die bestehenden jeweiligen `wheelSpin-*`-Materialgruppen verbunden. Radgeometrie-/Spin-Hierarchie und Laufzeitverträge bleiben bestehen.
+
+**Verifiziert:** Blender 5.2.1 schrieb `art-source/hero-kart.blend` und den Roh-Export fehlerfrei; Blender meldete optionale Ressourcenwarnungen für globale Grease-Pencil-Brushpfade/Thumbnail-Schreibzugriff, aber `KART_COMPLETE` und einen abgeschlossenen glTF-Export. GlTF Transform erzeugte ein 4.843.924-Byte-Runtime-GLB aus 6.542.240 Bytes Rohquelle; gegenüber dem vorherigen Runtime-Export ist es 8.184 Bytes kleiner. Eine GLB-Strukturprüfung findet für alle vier Räder den jeweiligen `wheelSpin-*`-Knoten, Reifenmesh und Metallmesh; insgesamt 141 GLB-Meshes. `npm test`: 53/53; `npm run build`: erfolgreich, 1.296 Module. Build hat die bestehende Warnung zum 2.019,84-kB-Hauptchunk.
+
+**Nicht abgenommen:** Keine visuelle Nahaufnahme/Bewegung der neuen Rippen und Muttern im echten Browserrennen sowie kein Framezeitvergleich. Der erste eingeschränkte Test-/Buildlauf scheiterte an `spawn EPERM`; die freigegebene Wiederholung bestand. `git diff --check` wird beim Paketabschluss erneut geprüft.
+
+**Geänderte Dateien:** `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `art-source/README.md`, `docs/22-character-vehicle-quality-master.md`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `PROGRESS-LOG.md`.
+
+### 2026-10-04 – Fahrer-Hautmaterial in Nahansichten
+
+**Umgesetzt:** `src/surface-textures.ts` ergänzt einen deterministischen Hauttexturtyp: eine 512×512-Farb-/Normaltextur mit sehr schwachen Poren, warm/kühlen Mikrovariationen und `.08` Normalstärke. `src/slice-scene.ts` erzeugt sie einmal pro Szene und weist sie beim Initialisieren des gemeinsam genutzten `Warm skin`-Materials zu. Gesichtsgeometrie, Gesichtsprofile, Farbe des GLB-Grundmaterials und Stoffmaterialien bleiben unverändert. Die Generierung ist beschränkt auf genau ein Texturpaar statt einer Textur je Fahrer.
+
+**Verifiziert:** `npm run build` erfolgreich, 1.296 Module. `npm test`: 53/53. Der erste sandboxierte Versuch brach an `spawn EPERM` ab; die autorisierte Wiederholung bestand. `git diff --check` bestand vor diesem Pass, Warnungen waren nur LF→CRLF-Hinweise; nach dem Paket erneut prüfen.
+
+**Nicht abgenommen:** Kein menschlicher Vergleich des neuen Hautmaterials in Front-/Nahansicht, unterschiedlichen Licht-/Wetterlagen; keine Aussage, die gewählte Porenstärke sei gestalterisch fertig. Die Textur bleibt bewusst subtil und kann anhand der nächsten echten In-Game-Nahansicht angepasst werden. Abschließendes `git diff --check` erfolgreich; Git meldete nur übliche LF→CRLF-Hinweise für Windows.
+
+**Geänderte Dateien:** `src/surface-textures.ts`, `src/slice-scene.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `art-source/README.md`, `docs/22-character-vehicle-quality-master.md`, `PROGRESS-LOG.md`.

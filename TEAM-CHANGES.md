@@ -21,6 +21,10 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 
 - **Fahrpolitur:** Der Lufttrick rollt die Räder zusammen mit der Karosserie; die Holzrampen liegen leicht über dem deckungsgleichen Straßenverlauf; beide Roadster-Wimpel zeigen im Laufzeitbild ein eigenständiges Adlerrelief ohne Regimezeichen. Menschliche Sprung-/Nahprüfung bleibt offen.
 
+- **Rad-Detailpass:** Die gemeinsamen Räder haben beidseitig feine Seitenwandrippen und metallische Felgenmuttern bekommen. Das animierte Fahrwerk bleibt unverändert; der vollständige individuelle Fahrzeugpass ist weiterhin offen.
+
+- **Fahrer-Hautmaterial:** Dezente, generierte Farb- und Normalvariationen wurden dem gemeinsamen Laufzeit-Skinmaterial zugeordnet. Die Gesichtsgeometrie ist davon unberührt; Sichtprüfung in Nahansicht steht aus.
+
 - **Projektstart-Abgleich:** PC-Stand, `origin/main` und Handy-Notizen stimmen auf `00e8173` überein; aktuelle Gesamtsuite 47/47, Produktionsbuild bestanden. Sarahs tatsächlicher Abruf bleibt ihr eigener Gerätecheck. Fahrerporträts zeigen jeweils nur den gewählten Fahrer vor neutraler Studiofläche. Erste Anpassung von Kopf-/Oberkörper-Proportion, Hautton und Augen in der editierbaren Modellquelle und im Laufzeitmodell; vorhandener statischer Schalensitz im Rennbild geprüft. Bot 3 nutzt die Hinterhofgasse mit eigener Weglinie. Quaternius-Basisfigur ist CC0; kostenlose glTF-Variante von kostenpflichtigem `.blend`-Source-Paket getrennt.
 - **Hupen-Quellenprüfung:** zwei Wikimedia-Commons-Dateien geprüft; eine ist eine politische Rede und die andere eine neu aufgenommene Namensaussprache, daher keine historischen Hupen eingebaut. Details und Quellen in CURRENT-WORKLIST.md/PROGRESS-LOG.md.
 - **Wasserkanal-Bergung:** ein fehlgeschlagener Sprung setzt Fahrer und Bots jetzt sicher hinter der Wasserfläche ab. Der Rücksetzabstand gibt keinen Rundenfortschritt; das Hafenbecken bleibt unverändert.

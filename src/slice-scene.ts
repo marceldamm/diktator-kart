@@ -93,7 +93,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     report?.('world');
     const worldOrientation = new TransformNode('Blender world orientation', scene); worldOrientation.rotation.y = Math.PI;
     world.meshes.filter((m) => !m.parent).forEach((m) => m.parent = worldOrientation);
-    const stoneMaps = surfaceTextures(scene, 'Limestone', 'stone'), leafMaps = surfaceTextures(scene, 'Cypress', 'leaf'), fabricMaps = surfaceTextures(scene, 'Cloth', 'fabric');
+    const stoneMaps = surfaceTextures(scene, 'Limestone', 'stone'), leafMaps = surfaceTextures(scene, 'Cypress', 'leaf'), fabricMaps = surfaceTextures(scene, 'Cloth', 'fabric'), skinMaps = surfaceTextures(scene, 'Driver skin', 'skin');
     for (const mesh of world.meshes) if (mesh.material instanceof PBRMaterial) {
       const m = mesh.material;
       if (/stone|limestone|render/.test(m.name)) { m.albedoTexture = stoneMaps.color; m.bumpTexture = stoneMaps.normal; }
@@ -213,6 +213,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (mesh.material instanceof PBRMaterial && /Warm skin/.test(mesh.material.name) && !mesh.material.subSurface.isTranslucencyEnabled) {
           const m = mesh.material; m.roughness = .58; m.metallic = 0; m.subSurface.isTranslucencyEnabled = true; m.subSurface.translucencyIntensity = .35; m.subSurface.tintColor = new Color3(1, .45, .32);
           m.sheen.isEnabled = true; m.sheen.intensity = .12; m.sheen.color = new Color3(1, .82, .72);
+          m.albedoTexture = skinMaps.color; m.bumpTexture = skinMaps.normal; m.bumpTexture.level = .08;
         }
         if (mesh.material instanceof PBRMaterial && /Eye white|Eye iris/.test(mesh.material.name) && !mesh.material.clearCoat.isEnabled) { mesh.material.clearCoat.isEnabled = true; mesh.material.clearCoat.intensity = 1; mesh.material.clearCoat.roughness = .05; }
         if (mesh.material instanceof PBRMaterial && /racing suit|leather/.test(mesh.material.name)) {

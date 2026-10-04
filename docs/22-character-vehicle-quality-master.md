@@ -632,3 +632,11 @@ Dokumentiere am Ende knapp:
 WICHTIGSTER SATZ DER AUFGABE:
 
 Diktator Kart soll optisch nicht wie ein schnell zusammengesetztes Browser-Spiel mit Primitive-Figuren wirken. Die Fahrer und Fahrzeuge sollen eigenständige, professionell gestaltete 3D-Assets werden, die den visuellen Anspruch des gesamten Spiels deutlich anheben.
+
+## Laufender Zusatzpass – Räder, 04.10.2026
+
+Die vier gemeinsam genutzten Radmodelle erhielten in `art-source/build_kart.py` je Seite zwei feine Seitenwandrippen sowie acht kleine metallische Felgenmuttern. Die Ergänzung sitzt in den vorhandenen Rad-Spin-Knoten und verändert weder Fahrwerksmaße noch Fahrverhalten. Blender 5.2.1 erzeugte die editierbare `.blend`-Quelle und das GLB; GlTF Transform optimierte den Runtime-Export. Die Rohdatei ist 6.542.240 Bytes, das Runtime-GLB 4.843.924 Bytes – 8.184 Bytes weniger als der vorherige optimierte Export. Die vier Pivot-/Spin-Knoten und je Rad Reifen-/Metall-Meshes wurden im GLB ausgelesen. Das ist ein begrenzter Fahrzeugdetail-Pass; Silhouette, Front-/Heckvarianten und vollständige Laufzeit-Nah-/Bewegungsabnahme aller Fahrzeuge bleiben offen.
+
+## Laufzeit-Hautmaterial, 04.10.2026
+
+Das gemeinsame `Warm skin`-Material erhält jetzt eine einzige wiederverwendete 512×512-Textur mit zurückhaltender Poren-/Farbvariation und Normalmap auf Stärke `.08`. `src/surface-textures.ts` erzeugt sie deterministisch, `src/slice-scene.ts` weist sie bei der Materialinitialisierung zu; Gesichtsmesh, Kopfvarianten und Materialgrundfarbe bleiben erhalten. Build und Vollsuite bestanden, aber es gibt noch keine menschliche Nahbild-Abnahme. Falls die Haut dadurch körnig, fleckig oder zu kräftig wirkt, muss die Texturstärke anhand echter In-Game-Nahbilder angepasst werden.

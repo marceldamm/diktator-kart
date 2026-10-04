@@ -277,9 +277,16 @@ for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .43
     for sd in [-1, 1]:
         rim = lathe('Alloy rim', [(r * .58, sd * w * .44), (r * .5, sd * w * .5), (r * .2, sd * w * .42), (r * .12, sd * w * .52)], trim, spin, 24)
         cyl('Axle cap', (sd * w * .53, 0, 0), r * .13, .05, chrome, spin, 'X')
+        # Fine raised moulding catches a slim highlight on the otherwise broad rubber
+        # sidewall, giving the balloon tyre a manufactured profile rather than a blank disc.
+        for sidewall_radius in (r * .68, r * .78):
+            torus('Tire sidewall moulding', (sd * w * .47, 0, 0), sidewall_radius, .006, rubber, spin, 'X')
         for k in range(8):
             a = k * math.pi / 4
             rod('Alloy spoke', (sd * w * .47, r * .14 * math.sin(a), r * .14 * math.cos(a)), (sd * w * .45, r * .52 * math.sin(a + .25), r * .52 * math.cos(a + .25)), .016, trim, spin)
+            # Eight real fasteners sit between the hub and rim; paired with the spokes,
+            # they read as a serviceable wheel assembly at the chase-camera distance.
+            cyl('Wheel rim lug nut', (sd * w * .515, r * .39 * math.sin(a), r * .39 * math.cos(a)), .019, .025, chrome, spin, 'X', verts=8)
 
 # --- Steering ------------------------------------------------------------------------------------
 steering = empty('steeringWheel', (0, .2, 1.2), kart)
