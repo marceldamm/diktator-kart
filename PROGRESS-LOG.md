@@ -80,6 +80,8 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 **Prüfung:** `npm test` 43/43, `tsc --noEmit`, `npm run build` bestanden. Browserproben siehe oben (eingebauter Browser, RTX-Laptop; keine schwache-PC-/Mobilmessung).
 
+**Nachtrag nach Veröffentlichung 253f44e:** Marcels neue Teamregel (gestaffelte Commits/Doku, Pflicht beim Projektabschluss) in AGENTS.md/CLAUDE.md Regel 3 und TEAM-CHANGES.md; keine Spieländerung.
+
 **Nächster Schritt:** Marcel/Sarah: Maus in Chrome, Marsch anhören, Fahrerwahl und Karikaturen beurteilen, Stalins Traktor bestätigen; danach Gesichter verfeinern und eigene Fähigkeiten der fünf Figuren nach gemeinsamer Entscheidung. ab gemeinsamer Hauptbasis
 
 Ältere Einträge (Planung, M1–M2, Vertical Slice, Qualitätsstufen 2–2d): [Archiv](docs/history/progress-log-2026-10-02-bis-q2d.md).
