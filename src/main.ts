@@ -135,7 +135,7 @@ class App {
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
-    try { this.quality = localStorage.getItem('dk-quality') === '0' ? 0 : 1; this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
+    try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
     try{const saved=Number(localStorage.getItem('dk-driver'));if(Number.isInteger(saved)&&saved>=0&&saved<CAST.length)this.chosen=saved;}catch{}
@@ -160,7 +160,7 @@ class App {
     this.audio.setMusicVolume(Number(musicVolume.value)/100);
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
-    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = 1 - this.quality; this.applyQuality(); });
+    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = (this.quality + 1) % 3; this.applyQuality(); });
     try { const asked = new URLSearchParams(location.search).get('weather') ?? localStorage.getItem('dk-weather-choice'); if (asked === 'sun' || asked === 'rain' || asked === 'snow' || asked === 'random') this.weatherChoice = asked; } catch { /* storage optional */ }
     document.querySelector('#weather-toggle')?.addEventListener('click', () => {
       const cycle = ['random', 'sun', 'rain', 'snow'] as const; this.weatherChoice = cycle[(cycle.indexOf(this.weatherChoice) + 1) % cycle.length];
@@ -329,7 +329,7 @@ class App {
   private applyQuality(): void {
     if (LAB_WORLD) return;
     this.testScene?.setQuality?.(this.quality, this.reducedEffects);
-    document.querySelector('#quality-toggle')!.textContent = this.quality ? 'Grafik Standard' : 'Grafik Basis';
+    document.querySelector('#quality-toggle')!.textContent = ['Grafik Basis', 'Grafik Standard', 'Grafik Hoch'][this.quality];
     document.querySelector('#effects-toggle')!.textContent = this.reducedEffects ? 'Effekte reduziert' : 'Effekte voll';
     try { localStorage.setItem('dk-quality', String(this.quality)); localStorage.setItem('dk-reduced-effects', this.reducedEffects ? '1' : '0'); } catch { /* Session controls still work. */ }
   }

@@ -21,6 +21,11 @@ import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
 import { RenderTargetTexture } from '@babylonjs/core/Materials/Textures/renderTargetTexture';
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline';
+import { SSAO2RenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/ssao2RenderingPipeline';
+import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
+import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
+import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
+import type { Camera } from '@babylonjs/core/Cameras/camera';
 import { TRACK, trackPoint } from './track';
 import { LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
@@ -259,6 +264,25 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const fireworkColours = [[1, .82, .35], [1, .3, .22], [1, .97, .9], [.45, 1, .55], [.5, .75, 1]];
     let fireworkTime = 0, nextBurst = 0;
     let pipeline: DefaultRenderingPipeline | undefined, pipelineLevel = quality;
+    // 'Grafik Hoch': ambient occlusion and warm sun shafts on top of the standard chain.
+    let gameCamera: Camera | undefined, ssao: SSAO2RenderingPipeline | undefined, sunShafts: VolumetricLightScatteringPostProcess | undefined;
+    const sunDisc = MeshBuilder.CreateSphere('Sun disc for light shafts', { diameter: 24, segments: 12 }, scene);
+    const sunDiscMaterial = new StandardMaterial('Sun disc', scene); sunDiscMaterial.emissiveColor = new Color3(1, .86, .62); sunDiscMaterial.disableLighting = true; sunDiscMaterial.fogEnabled = false;
+    sunDisc.material = sunDiscMaterial; sunDisc.isPickable = false; sunDisc.setEnabled(false);
+    const configureHigh = () => {
+      const high = pipelineLevel >= 2 && !!gameCamera;
+      if (high && !ssao && gameCamera) {
+        ssao = new SSAO2RenderingPipeline('Ambient occlusion', scene, { ssaoRatio: .5, blurRatio: .5 }, [gameCamera], true);
+        ssao.radius = 1.4; ssao.totalStrength = 1.1; ssao.base = .12; ssao.samples = 16; ssao.maxZ = 140; ssao.expensiveBlur = true;
+      }
+      if (!high && ssao) { ssao.dispose(); ssao = undefined; }
+      if (high && !sunShafts && gameCamera) {
+        sunShafts = new VolumetricLightScatteringPostProcess('Sun shafts', 1, gameCamera, sunDisc, 70, Texture.BILINEAR_SAMPLINGMODE, engine, false);
+        sunShafts.exposure = .16; sunShafts.decay = .965; sunShafts.weight = .45; sunShafts.density = .9;
+      }
+      if (!high && sunShafts && gameCamera) { sunShafts.dispose(gameCamera); sunShafts = undefined; }
+      sunDisc.setEnabled(high);
+    };
     const configurePipeline = () => {
       if (!pipeline) return;
       const full = pipelineLevel > 0;
@@ -439,8 +463,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       presentItems,
       attachCamera(camera) {
         pipeline?.dispose();
+        ssao?.dispose(); ssao = undefined; if (sunShafts && gameCamera) { sunShafts.dispose(gameCamera); sunShafts = undefined; }
+        gameCamera = camera;
         pipeline = new DefaultRenderingPipeline('Presentation', engine.getCaps().textureHalfFloatRender, scene, [camera]);
-        configurePipeline();
+        configurePipeline(); configureHigh();
       },
       broadcast(kart, text) { following = kart; if (text !== captionText) { captionText = text; paintCaption(text); } },
       abilityEvent(kind, kart, target) {
@@ -535,7 +561,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         reducedEffects = reduced; sun.shadowEnabled = level > 0; glow.isEnabled = level > 0 && !reduced;
         engine.setHardwareScalingLevel(level === 0 ? Math.max(1, window.devicePixelRatio * 1.35) : 1);
         for (const system of scene.particleSystems) if (system.name === 'Fountain spray') system.emitRate = reduced ? 15 : level === 0 ? 30 : 65;
-        configurePipeline();
+        configurePipeline(); configureHigh();
       },
       setPlayerVisible(visible) {
         // First person uses the real model; hide only the head/body, keep cockpit and wheels.
@@ -545,6 +571,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       present(state, others) {
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
+        if (sunDisc.isEnabled() && gameCamera) { const c = gameCamera.position; sunDisc.position.set(c.x - sunDirection.x * 380, c.y - sunDirection.y * 380, c.z - sunDirection.z * 380); sunDiscMaterial.alpha = 1 - Math.min(1, timeOfDay * 1.6); sunDisc.isVisible = timeOfDay < .6 && !raining && !snowing; }
         trackWorld.animate(time);
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;

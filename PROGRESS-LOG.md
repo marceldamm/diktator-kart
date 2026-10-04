@@ -56,6 +56,10 @@ Aktuell: Fahrglättung, gehaltene Mausgesten, ruhigere Karosserie/Radkontakt, ge
 
 ## Einträge
 
+### 2026-10-04 (Nachmittag) – Claude: Drift, Mechaniken, Zeitfahren, Grafik Hoch
+
+Branch `codex/team-marcel-20261004-110953-055`. Drift: `turn = dir·(.38 + .32·steer·dir)`, `driftYawMultiplier 1.05`, Stufen `driftTiers [.6, 1.1, 1.6]` (Turbo 50/75/100 %). Simulation `botInput`-Lenkung mit erzwungenem Drift (Krümmung > .035): 0 Wandkontakte bei 10/13/16 m/s. Windschatten, Trick, Auto-Gas/Lenkhilfe in `main.ts`; Zeitfahren (`mode`, Geist `dk-ghost-v2`, Bestzeit-Schlüssel v2 wegen größerer Karte); Fix: Itemringe bei < 6 Karts. Grafik Hoch: `SSAO2RenderingPipeline` (ratio .5, 16 Samples) + `VolumetricLightScatteringPostProcess` (Sonnenscheibe, nur Tag/trocken). Laufzeitbilder Rennen 6 Karts/fern/Fahrer in `docs/evidence/2026-10-04-*.jpg`; Pane-FPS ~45 (gedrosselter Testbrowser, keine Zielhardware-Messung). Tests 45/45. Nicht nach main veröffentlicht.
+
 ### 2026-10-04 (Mittag) – Claude: größere Karte, Kanalsprung, Lenkung
 
 `MAP_SCALE = 1.5` in `src/track-layout.ts` (Kontrollpunkte, Start, Bodenwelle, Abkürzung, Landmarken, Gefahren, Boostflächen, Krater, Itemkisten, Videowand, Tribünen/Park in `build_world.py`); Strecke 890,9 m statt 593,4 m. `stadium-world.blend/.glb` neu gebaut (Blender-Hintergrundlauf ~14 min, ein Kern). Kanalsprung: `CANAL_FROM = 85 × S` vor den Tribünen, Rampe 9 m/1 m (`trackHeightAt`), Flug `.45 + v·.034` s, Landeschub bei sauberer Landung (`landedClean`), sonst Wasser + Bergung. Beleg: Flughöhe 1,77–2,22 m, „Saubere Landung · Schub!“, Screenshot über dem Kanal. Lenkung: `steerRate 9`, `steerReturnRate 18`, `yawResponse 11`, `steeringPerMetre .134`, `maxYawRate 1.68`. Tests 45/45 (Bot-Rundenzeitlimit ×1,5). Hinweis: eingebauter Testbrowser lief stark gedrosselt; Fahrgefühl nicht menschlich abgenommen. Offen: echte Sprachhupen (Plan in CURRENT-WORKLIST.md).

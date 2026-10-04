@@ -11,6 +11,28 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Qualitätssprung + Mechanik-Vergleich – 04.10.2026 (Nachmittag, Claude)
+
+**Vergleich mit Mario Kart World / 8 Deluxe (Prinzipien, keine Kopie; Referenz: nintendo.com, mariokart8.nintendo.com):**
+
+| Bereich | Vorhanden und geprüft | Verbesserungswürdig | Fehlt, sinnvoll | Derzeit nicht sinnvoll |
+|---|---|---|---|---|
+| Fahrgefühl/Drift | Drift mit Gegenlenken, **3 Mini-Turbo-Stufen (neu)**, ruhigerer Driftbogen (neu) | menschliche Feinabstimmung | – | – |
+| Sprünge/Boost | Rampe+Kanal, Landeschub, **Trick in der Luft (neu)**, Boostflächen, Startschub | weitere Rampen | Gleitflug-Abschnitt | Anti-Schwerkraft |
+| Strecke/Abkürzungen/Oberflächen | Hinterhof-Abkürzung, Krater, Hafen/Lava/Abgrund, Pfützen/Schnee | Gefahren stärker in Ideallinie | Schotter-/Gras-Oberfläche mit Grip | Open World |
+| Bots/Überholen | gleiche Physik, Drift, Panzer-Bot, **Windschatten (neu, für alle)** | Überholmanöver/Linienwahl | Schwierigkeitsstufen | – |
+| Items/Gegenmaßnahmen | 3 Archetypen, Figurenwurfobjekte, Schutzzeit, Warnung | Item hinten halten als Schild | Gegenmaßnahme gegen Verfolger | Kampfmodus/Arena |
+| Rennen/Modi | Grand Prix 3 Runden, Fahrerwahl, **Zeitfahren mit Geist (neu)**, Schnellneustart | Siegerehrung | Cup aus mehreren Rennen (erst mit 2. Strecke) | Online, Knockout |
+| Zugänglichkeit | **Auto-Gas, Lenkhilfe (neu)**, ruhige Kamera, reduzierte Effekte | Tastenbelegung ändern | – | – |
+| Rücksetzung | B, Steckenbleiben, Bergungsamt, Werkstatt | – | – | – |
+| Fortschritt/Wiederspielwert | Bestzeiten, Geist, Zufallswetter/Tag-Nacht | – | Medaillen-Zeiten pro Strecke | Freischalt-Shop |
+
+- [x] **Drift entschärft:** Grundbogen ~22 m statt ~12 m, Gegenlenken öffnet bis fast geradeaus, Einlenken bis ~10 m; Simulation auf echter Strecke (10/13/16 m/s, je 150 s): 0 Wandkontakte, Turbos aller Stufen. Menschlicher Fahrtest offen.
+- [x] **Mechanik-Paket:** 3 Driftstufen (Funken silberblau/gold/rot), Windschatten (1 s hinter Rivale → Schub, Spieler+Bots), Sprung-Trick (Space in der Luft → größerer Landeschub, Bots teils), Auto-Gas + Lenkhilfe (Optionen).
+- [x] **Zeitfahren mit Geist:** Menü „Zeitfahren mit Geist“, allein ohne Items/Bots, Bestfahrt als halbtransparenter Geist (lokal gespeichert); geprüft: Speichern (304 Punkte) und Wiedergabe.
+- [x] **Grafik Hoch:** SSAO2-Umgebungsverdeckung + volumetrische Sonnenstrahlen (Optionen → Grafik Basis/Standard/Hoch); Bilder `docs/evidence/2026-10-04-high-*.jpg`.
+- [ ] Offen: echte historische Stimmen (keine TTS; Quellen-/Rechteprüfung, siehe unten), Item-Schild/Gegenmaßnahme, Bot-Überholen, individuelle Kart-Karosserien je Figur, weitere Strecke.
+
 ## Stand 04.10.2026 (Mittag, Claude) – Marcels neue Aufträge
 
 - [x] **Lenkung direkter:** schnelleres Zurückstellen beim Loslassen (Rate 18/s statt 6/s), straffere Gierreaktion, Lenkwirkung sanft ~12 % höher. Fahrgefühl-Abnahme durch Marcel offen.
