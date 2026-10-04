@@ -3,6 +3,11 @@
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
+
+## Tageszeitverlauf und Streckenleben – Marcel, 04.10.2026
+
+Gewünscht ist eine variierende Tageszeit pro Rennen und die Möglichkeit, während der drei Runden allmählich von Tag über Dämmerung zu Nacht zu wechseln (Beispiel: Runde 1 Tag, Runde 2 dunkler, Runde 3 Nacht). Kein harter, plötzlicher Lichtwechsel; Wahrscheinlichkeiten und Übergangstempo werden im Spieltest festgelegt. Tageswelt: sichtbare Sonne und Vögel. Nachtwelt: Mond, Sterne, Mondschatten und Fledermäuse. Blätter/kleine Partikel sowie herumliegende Zeitungen, Müll oder nach Kollisionen verlorene Fahrzeugteile dürfen die Strecke beleben; liegengebliebene Objekte verschwinden nach begrenzter Zeit. Alles mit Performance- und Sichtbarkeitstests.
+
 ## Identität
 
 Diktator Kart ist ein erwachsener, satirischer Arcade-Kart-Racer über autoritäre Macht, Propaganda und politische Selbstinszenierung. Reale historische Anspielungen dürfen vorkommen, werden aber kritisch und klar satirisch behandelt. Die inhaltlichen Grenzen stehen verbindlich in [13-world-and-content-boundaries.md](13-world-and-content-boundaries.md).
