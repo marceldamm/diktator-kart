@@ -214,15 +214,18 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const speed = Math.abs(state.speed);
   const corner = curvatureAhead(s + 2, 10 + speed * 1.1);
   const radius = 1 / Math.max(corner.curvature, 1e-3);
-  const lanes = [-2.8, 0, 2.8];
+  // Five racing lanes give room to pick a real passing line.
+  const lanes = [-3.6, -1.8, 0, 1.8, 3.6];
   const traffic = others.filter((other) => other !== state).map((other) => {
     const p = trackLocate(other.x, other.z);
     return { ahead: wrap(p.s - s), lane: p.lane, speed: other.speed };
   }).filter((other) => other.ahead > .05 && other.ahead < 14);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
-  const preferred = radius < 30 ? corner.sign * 2.8 : lanes[index % 3];
-  const score = (lane: number) => Math.abs(lane - currentLane) * .35 + Math.abs(lane - preferred) * .14 +
-    traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.7 ? (14 - t.ahead) * 2 : 0), 0);
+  const preferred = radius < 30 ? corner.sign * 2.8 : [-2.8, 0, 2.8][index % 3];
+  // Overtaking: lanes holding a slower kart ahead are strongly avoided, so a faster bot commits to a passing line.
+  const slower = traffic.filter((t) => t.speed < speed + .5);
+  const score = (lane: number) => Math.abs(lane - currentLane) * .3 + Math.abs(lane - preferred) * (slower.length ? .05 : .14) +
+    traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.2 ? (14 - t.ahead) * (t.speed < speed + .5 ? 3.2 : 1.2) : 0), 0);
   const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
   const target = trackPoint(s + 6.5 + speed * .38, lane);
   const desired = Math.atan2(target.x - state.x, target.z - state.z);
@@ -231,7 +234,8 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const pace = 13.4 + (index % 3) * .5;
   const cornerSpeed = radius >= 11 ? pace : Math.max(8.5, radius * 1.05 + 2.5);
   let desiredSpeed = Math.min(pace, cornerSpeed) - Math.abs(error) * 2.5;
-  for (const t of traffic) if (t.ahead < 5 && Math.abs(t.lane - currentLane) < 2.5) desiredSpeed = Math.min(desiredSpeed, Math.max(1, t.speed - 1));
+  // Only lift when the chosen passing line itself is blocked right ahead.
+  for (const t of traffic) if (t.ahead < 5 && Math.abs(t.lane - currentLane) < 2 && Math.abs(t.lane - lane) < 2) desiredSpeed = Math.min(desiredSpeed, Math.max(1, t.speed - 1));
   const throttle = speed > desiredSpeed + .5 ? -.12 : .9;
   // Facing a barrier at walking pace: back out with reversed steering instead of pushing into it.
   const centre = trackPoint(s), towardWall = Math.sin(state.heading - centre.heading) * Math.sign(currentLane);
