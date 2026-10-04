@@ -112,7 +112,43 @@ kart = empty('hero-kart')
 # --- Chassis -------------------------------------------------------------------------------------
 tub = [(-1.3, .46, .17, .5), (-1.12, .55, .25, .56), (-.75, .6, .3, .6), (-.35, .6, .29, .57), (.05, .56, .26, .54),
        (.45, .5, .23, .51), (.85, .42, .2, .48), (1.18, .32, .15, .44), (1.4, .2, .09, .41)]
-loft('Sculpted enamel body', [ring(w, hh, zc, y) for y, w, hh, zc in tub], paint, kart, 1)
+# --- Individual body per roster member: runtime toggles 'body-<name>' (src/cast.ts 'body') -----------------
+def body(name): return empty('body-' + name, (0, 0, 0), kart)
+b = body('roadster')                              # Hitler: long parade roadster, tall chrome grille
+loft('Sculpted enamel body', [ring(w, hh, zc, y) for y, w, hh, zc in tub], paint, b, 1)
+box('Parade grille shell', (0, 1.3, .62), (.42, .1, .44), chrome, .05, b)
+for x in [-.15, -.075, 0, .075, .15]: box('Parade grille bar', (x, 1.36, .62), (.022, .04, .38), trim, .006, b)
+for sd in [-1, 1]: tube('Bonnet louvre line', [(sd * .3, .5, .82), (sd * .3, .9, .78), (sd * .28, 1.2, .72)], .012, trim, b)
+b = body('limousine')                             # Stalin: heavy, high and boxy state limousine
+limo = [(-1.42, .56, .26, .58), (-1.2, .62, .34, .64), (-.75, .64, .36, .68), (-.3, .64, .34, .66), (.15, .62, .32, .64), (.6, .58, .3, .6), (1.0, .54, .27, .56), (1.34, .5, .22, .5), (1.52, .42, .14, .44)]
+loft('Limousine enamel body', [ring(w, hh, zc, y, 20, 4.2) for y, w, hh, zc in limo], paint, b, 1)
+box('Limousine grille', (0, 1.5, .55), (.62, .08, .34), chrome, .03, b)
+for z in [.44, .52, .6, .68]: box('Limousine grille bar', (0, 1.54, z), (.6, .03, .025), trim, .005, b)
+for y in [1.62, -1.5]: box('Limousine bumper bar', (0, y, .3), (1.3, .1, .09), chrome, .03, b)
+box('Limousine trunk lid', (0, -1.25, .9), (1.0, .4, .06), paint, .02, b)
+b = body('racer')                                 # Mussolini: low, narrow racer with headrest fairing and tail fin
+racer = [(-1.55, .12, .06, .52), (-1.3, .34, .16, .5), (-.9, .48, .22, .5), (-.4, .52, .23, .5), (.1, .5, .21, .48), (.6, .42, .18, .46), (1.05, .3, .14, .44), (1.45, .14, .08, .42)]
+loft('Racer enamel body', [ring(w, hh, zc, y, 20, 2.2) for y, w, hh, zc in racer], paint, b, 1)
+loft('Headrest fairing', [ring(w, hh, zc, y, 14, 2) for y, w, hh, zc in [(-1.35, .05, .05, .9), (-1.1, .14, .16, .88), (-.85, .16, .2, .86), (-.7, .1, .12, .82)]], paint, b, 1)
+mesh('Tail fin', [(0, -1.45, .6), (0, -.85, .74), (0, -1.5, 1.25), (0, -1.6, 1.2)], [(0, 1, 2, 3)], paint, b)
+box('Racing windscreen', (0, .32, 1.12), (.6, .03, .22), glass, .01, b)
+b = body('rounded')                               # Mao: short, rounded state saloon with round lamps
+rounded = [(-1.3, .5, .24, .56), (-1.0, .6, .34, .62), (-.5, .64, .38, .66), (0, .64, .36, .64), (.5, .6, .32, .6), (.95, .52, .27, .56), (1.3, .38, .18, .5)]
+loft('Rounded enamel body', [ring(w, hh, zc, y, 22, 2.0) for y, w, hh, zc in rounded], paint, b, 2)
+for z in [.48, .56, .64]: tube('Saloon grille bar', [(-.25, 1.4, z), (0, 1.43, z), (.25, 1.4, z)], .016, chrome, b)
+b = body('rocket')                                # Kim Jong-un: propaganda rocket body with nose cone and fins
+rocket = [(-1.6, .2, .2, .62), (-1.3, .42, .38, .62), (-.6, .5, .44, .64), (.2, .5, .44, .64), (.8, .44, .38, .62), (1.25, .3, .26, .6), (1.6, .08, .08, .58)]
+loft('Rocket enamel body', [ring(w, hh, zc, y, 20, 2.0) for y, w, hh, zc in rocket], paint, b, 2)
+for k, a in enumerate([0, 2.09, 4.19]):
+    mesh('Rocket fin', [(0, -1.1, .62), (0, -1.65, .62), (.62 * math.sin(a), -1.75, .62 + .62 * math.cos(a)), (.42 * math.sin(a), -1.25, .62 + .42 * math.cos(a))], [(0, 1, 2, 3)], trim, b)
+torus('Rocket nose band', (0, 1.25, .6), .3, .03, ivory, b, 'Y')
+b = body('jeep')                                  # Castro: flat-sided field car with roll bar and spare wheel
+box('Jeep tub', (0, -.2, .6), (1.15, 2.4, .5), paint, .06, b)
+box('Jeep bonnet', (0, 1.0, .68), (1.05, .9, .1), paint, .03, b)
+box('Jeep grille', (0, 1.46, .55), (.9, .06, .36), black, .02, b)
+for x in [-.3, -.15, 0, .15, .3]: box('Jeep grille slot', (x, 1.5, .55), (.05, .03, .3), chrome, .005, b)
+tube('Jeep roll bar', [(-.55, -.85, .82), (-.5, -.85, 1.55), (.5, -.85, 1.55), (.55, -.85, .82)], .035, chrome, b)
+torus('Jeep spare wheel', (0, -1.48, .78), .26, .1, rubber, b, 'Y')
 box('Floor pan', (0, -.05, .26), (1.25, 2.75, .1), leather, .05, kart)
 for sd in [-1, 1]:
     pods = [(-.55, .1, .1, .36), (-.42, .17, .16, .42), (0, .19, .17, .43), (.4, .17, .15, .42), (.55, .08, .08, .38)]
@@ -293,7 +329,8 @@ sol = cape_mesh.modifiers.new('Cloth thickness', 'SOLIDIFY'); sol.thickness = .0
 box('Cape gold clasp', (0, .02, .02), (.5, .05, .06), trim, .02, cape)
 
 # Head: subdivided caricature with jowls, big nose and brow.
-head = empty('headPose', (0, -.42, 1.86), driver)
+# Realistic proportions (04.10.: no oversized caricature head): smaller head seated on the collar.
+head = empty('headPose', (0, -.42, 1.75), driver); head.scale = (.7, .7, .7)
 hv = []; hf = []
 rows = [(-.22, .1, .1, 0), (-.18, .2, .19, .02), (-.08, .27, .26, .05), (.04, .29, .27, .03), (.16, .28, .26, 0), (.27, .24, .23, 0), (.34, .15, .15, 0), (.375, .03, .03, 0)]
 N = 20

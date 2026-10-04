@@ -156,6 +156,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const driver = nodes.find((n) => n.name === `kart${index}/driverPose`) as TransformNode;
       const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
       const kits = ['radio','spare','luggage','fin','parade'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/variant-${kind}`)] as const);
+      const bodies = ['roadster','limousine','racer','rounded','rocket','jeep'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/body-${kind}`)] as const);
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
       const recolourable: {mesh:Mesh;kind:'paint'|'uniform'|'cape'|'hatColor'|'hair';material:PBRMaterial}[] = [];
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
@@ -211,6 +212,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
         dress(cast: CastMember) {
           for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
+          for (const [kind,node] of bodies) node?.setEnabled(kind===cast.body);
           for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
           for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }
           v.paintColour = Color3.FromHexString(cast.paint).toLinearSpace(); v.soot = -1;
@@ -539,7 +541,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (let castIndex = 0; castIndex < CAST.length; castIndex++) {
             const v = visuals[Math.max(0, order.indexOf(castIndex))];
             const head = v.head.getAbsolutePosition(), h = v.root.rotation.y;
-            camera.position.set(head.x + Math.sin(h) * 2.35 + Math.cos(h) * .45, head.y + .12, head.z + Math.cos(h) * 2.35 - Math.sin(h) * .45);
+            camera.position.set(head.x + Math.sin(h) * 1.9 + Math.cos(h) * .35, head.y + .05, head.z + Math.cos(h) * 1.9 - Math.sin(h) * .35);
             camera.setTarget(new Vector3(head.x, head.y - .22, head.z));
             shots.push(await CreateScreenshotUsingRenderTargetAsync(engine, camera, { width: 320, height: 360 }, 'image/jpeg', 4));
           }
