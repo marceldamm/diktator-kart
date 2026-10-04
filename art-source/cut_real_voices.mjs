@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CLIPS = [
   // Mussolini, 'bivacco' address to the Chamber, 16 Nov 1922; opens with "Signori deputati!". Wikimedia Commons, public domain.
-  { source: '.tools/voice-sources/mussolini-1922.wav', out: 'public/assets/audio/voice/imperator-horn.wav' },
+  { source: '.tools/voice-sources/mussolini-1922.wav', out: '.tools/voice-sources/imperator-horn-real.wav' },
 ];
 
 function readWav(path) {

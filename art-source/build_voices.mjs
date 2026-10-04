@@ -37,6 +37,7 @@ const LINES = {
   'announcer-finish': ['announcer', 'Und im Ziel! Schön, dass ihr dabei wart.'],
   'general-horn': ['male', 'Platz da! Mein Antrag ist dringend!', 'amused'],
   'marschall-horn': ['male', 'Zur Seite! Der Plan wartet nicht!', 'neutral'],
+  'imperator-horn': ['male', 'Achtung! Mein Lorbeer hat Vorfahrt!', 'amused'],
   'kommandant-horn': ['male', 'Bitte den Weg frei stempeln!', 'neutral'],
   'kim-horn': ['male', 'Platz da! Ich habe dieses Rennen schon gestern gewonnen!', 'amused'],
   'castro-horn': ['male', 'Aus dem Weg! Meine Rede dauert noch vier Stunden!', 'neutral'],
@@ -74,6 +75,6 @@ for (const [id, [voice, text, emotion]] of Object.entries(LINES)) {
   for(let retry=0;;retry++){try{writeFileSync(path,wav);break;}catch(error){if(retry>=10)throw error;Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,100);}}
 }
 // Real historical recordings (art-source/cut_real_voices.mjs) are kept and listed, never re-synthesised.
-const REAL = { 'imperator-horn': { voice: 'historical', text: 'Originalton Mussolini, Rede vom 16.11.1922 (Redebeginn), gemeinfrei', emotion: null } };
+const REAL = {}; // real recordings parked for later (see CURRENT-WORKLIST.md)
 writeFileSync(join(out, 'lines.json'), JSON.stringify(Object.assign(Object.fromEntries(Object.entries(LINES).map(([id, [voice, text, emotion]]) => [id, { voice, text, emotion: emotion ?? null }])), REAL), null, 2) + '\n');
 console.log(`${Object.keys(LINES).length} voice lines written to public/assets/audio/voice`);

@@ -232,11 +232,11 @@ for k in range(5):
     seat_rings.append([(p[0] * (1 - k * .05), -.88 + p[2], .8 + k * .1) for p in ring(.36, .07, 0, 0, 16)])
 loft('Seat back shell', seat_rings, leather, kart, 1)
 for x in [-.18, 0, .18]: tube('Seat stitching', [(x, -.97, .86), (x, -.97, 1.0), (x, -.96, 1.16)], .008, trim, kart)
-box('Dashboard', (0, .38, 1.0), (.74, .16, .2), paint, .05, kart)
+box('Dashboard', (0, .5, 1.06), (.74, .14, .18), paint, .05, kart)
 for x, r in [(-.2, .06), (0, .085), (.2, .06)]:
-    cyl('Gauge brass bezel', (x, .29, 1.05), r, .025, trim, kart, 'Y')
-    cyl('Gauge face', (x, .275, 1.05), r * .85, .008, ivory, kart, 'Y')
-    tube('Gauge needle', [(x, .264, 1.05), (x + .02, .264, 1.05 + r * .65)], .004, leather, kart)
+    cyl('Gauge brass bezel', (x, .42, 1.1), r, .025, trim, kart, 'Y')
+    cyl('Gauge face', (x, .405, 1.1), r * .85, .008, ivory, kart, 'Y')
+    tube('Gauge needle', [(x, .394, 1.1), (x + .02, .394, 1.1 + r * .65)], .004, leather, kart)
 
 # --- Wheels: fat balloon tyres, brass dish rims, chrome caps ------------------------------------
 for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .43), (.92, -.74, .43)]):
@@ -275,7 +275,7 @@ loft('Uniform torso', torso_rings, uniform, driver, 1)
 box('Uniform belt', (0, -.24, 1.0), (.56, .08, .1), leather, .02, driver)
 box('Belt buckle', (0, -.19, 1.0), (.1, .03, .09), trim, .01, driver)
 tube('Parade sash', [(-.34, -.3, 1.44), (-.1, -.21, 1.25), (.18, -.22, 1.06), (.36, -.32, .95)], .05, cape_cloth, driver)
-ellipsoid('Uniform belly', (0, -.3, 1.08), (.36, .26, .27), uniform, driver, 18)
+loft('Uniform waist', [ring(w, h, z, y, 18, 2.2) for y, w, h, z in [(-.5, .3, .16, 1.0), (-.36, .34, .18, 1.06), (-.24, .3, .16, 1.1)]], uniform, driver, 1)
 for z in [1.04, 1.16, 1.28, 1.4]:
     for x in [-.1, .1]: ellipsoid('Uniform button', (x, -.07 - abs(1.08 - z) * .25, z), (.025, .015, .025), trim, driver, 8)
 medals = empty('cast-medals', (0, 0, 0), driver)        # ribbon bar, hanging medals and aiguillette
@@ -309,11 +309,12 @@ for sd in [-1, 1]:
         tube('Glove finger', pts, .016 - abs(dz) * .05, white_glove, arm)
     tube('Glove thumb', [(rim_c[0] + sd * .03, rim_c[1] - .03, rim_c[2] + .07), (rim_c[0] - sd * .01, rim_c[1] + .02, rim_c[2] + .08), (rim_c[0] - sd * .04, rim_c[1] + .03, rim_c[2] + .05)], .017, white_glove, arm)
     # Full seated legs: thigh up to a raised knee, shin down into the nose, boots on the pedals.
-    tube('Uniform thigh', [(sd * .17, -.38, .9), (sd * .19, -.05, .98), (sd * .21, .2, 1.06)], .115, uniform, driver)
-    ellipsoid('Uniform knee', (sd * .21, .22, 1.06), (.12, .12, .12), uniform, driver)
-    tube('Uniform shin', [(sd * .21, .24, 1.04), (sd * .2, .45, .82), (sd * .19, .62, .6)], .09, uniform, driver)
-    ellipsoid('Riding boot', (sd * .19, .7, .55), (.085, .16, .1), leather, driver)
-    tube('Trouser stripe', [(sd * (.17 + .11), -.36, .92), (sd * (.19 + .11), -.05, 1.0), (sd * (.21 + .1), .2, 1.08), (sd * (.2 + .08), .45, .84)], .014, trim, driver)
+    # Seated legs: thigh along the cushion, knee under the dashboard, shin down to the pedal, boot sole on the pad.
+    tube('Uniform thigh', [(sd * .16, -.42, .9), (sd * .18, -.1, .93), (sd * .19, .22, .98)], .11, uniform, driver)
+    tube('Uniform shin', [(sd * .19, .2, .99), (sd * .19, .42, .82), (sd * .19, .62, .66)], .085, uniform, driver)
+    loft('Riding boot', [[(p[0] + sd * .19, p[1], p[2]) for p in ring(w, h, zc, y, 12, 2.6)] for y, w, h, zc in
+         [(.6, .055, .07, .68), (.66, .06, .06, .64), (.74, .055, .045, .62), (.82, .045, .035, .62), (.86, .03, .025, .62)]], leather, driver, 1)
+    tube('Trouser stripe', [(sd * (.16 + .105), -.4, .92), (sd * (.18 + .105), -.1, .95), (sd * (.19 + .1), .2, 1.0), (sd * (.19 + .08), .42, .84)], .014, trim, driver)
 # Cape: animated flap at the shoulders (runtime node name 'scarfFlap').
 cape = empty('scarfFlap', (0, -.66, 1.56), driver)
 cvs = []; cfs = []
@@ -343,41 +344,52 @@ for z, rx, ry, jut in rows:
 for j in range(len(rows) - 1):
     for k in range(N): hf.append((j * N + k, j * N + (k + 1) % N, (j + 1) * N + (k + 1) % N, (j + 1) * N + k))
 hf.append(tuple(reversed(range(N)))); hf.append(tuple((len(rows) - 1) * N + k for k in range(N)))
-smooth(mesh('Driver caricature head', hv, hf, skin, head), 2)
+head_mesh = smooth(mesh('Driver head', hv, hf, skin, head), 2)
+bpy.ops.object.select_all(action='DESELECT'); head_mesh.select_set(True); bpy.context.view_layer.objects.active = head_mesh
+for m in list(head_mesh.modifiers): bpy.ops.object.modifier_apply(modifier=m.name)
+def bump(x, z, cx, cz, rx, rz): return math.exp(-((x - cx) / rx) ** 2 - ((z - cz) / rz) ** 2)
+for v in head_mesh.data.vertices:
+    x, y, z = v.co
+    if y <= 0: continue
+    f = min(1, y / .2)                                                    # sculpt only the face side
+    dy = (.018 * bump(x, z, 0, .19, .14, .03)                              # brow ridge
+          - .03 * (bump(x, z, .095, .14, .045, .035) + bump(x, z, -.095, .14, .045, .035))  # eye sockets
+          + .016 * (bump(x, z, .14, .05, .05, .05) + bump(x, z, -.14, .05, .05, .05))       # cheekbones
+          - .012 * (bump(x, z, .12, -.05, .05, .05) + bump(x, z, -.12, -.05, .05, .05))     # cheek hollows
+          + .022 * bump(x, z, 0, -.16, .07, .04)                          # chin
+          - .008 * bump(x, z, 0, -.09, .07, .02))                         # mouth line
+    dx = .01 * math.copysign(bump(abs(x), z, .2, -.1, .05, .06), x)      # jaw corners
+    v.co = (x + dx * f, y + dy * f, z)
+def nose(name, length, width, depth, parent, droop=0):
+    # Wedge-shaped nose with a narrow bridge and rounded tip (lofted, not a ball).
+    rings_ = []
+    for k, t in enumerate([0, .3, .6, .85, 1]):
+        w = width * (.45 + .55 * t ** 1.5); d = depth * (.35 + .65 * t); zc = .14 - length * t - droop * t * t
+        rings_.append([(w * math.cos(a) * (1 if math.sin(a) > -.2 else .9), .25 + d * max(.15, math.sin(a)), zc) for a in [2 * math.pi * i / 12 for i in range(12)]])
+    return loft(name, rings_, skin, parent, 1)
 ellipsoid('Neck', (0, -.02, -.22), (.12, .12, .14), skin, head)
 big_nose = empty('cast-bignose', (0, 0, 0), head)    # default bulbous caricature nose
-ellipsoid('Nose', (0, .31, .05), (.065, .09, .08), skin, big_nose)
-ellipsoid('Nose tip', (0, .36, .018), (.048, .045, .045), skin, big_nose)
-for sd in [-1, 1]: ellipsoid('Nostril wing', (sd * .035, .335, .0), (.025, .028, .022), skin, big_nose)
+nose('Strong nose', .15, .045, .1, big_nose, .01)
 straight = empty('cast-straightnose', (0, 0, 0), head)  # narrower, straight bridge (Hitler)
-ellipsoid('Straight nose bridge', (0, .3, .08), (.045, .07, .1), skin, straight)
-ellipsoid('Straight nose tip', (0, .345, .015), (.05, .045, .045), skin, straight)
+nose('Straight nose', .14, .036, .085, straight)
 flat = empty('cast-flatnose', (0, 0, 0), head)          # small, broad and flat (Mao, Kim)
-ellipsoid('Flat nose', (0, .3, .03), (.075, .06, .06), skin, flat)
-for sd in [-1, 1]: ellipsoid('Flat nostril wing', (sd * .045, .3, .005), (.035, .035, .03), skin, flat)
+nose('Broad flat nose', .11, .055, .06, flat)
 for sd in [-1, 1]:
-    ellipsoid('Ear', (sd * .29, 0, .06), (.04, .08, .1), skin, head)
-    ellipsoid('Cheek', (sd * .14, .22, -.02), (.09, .07, .07), skin, head)
+    e = ellipsoid('Ear', (sd * .285, 0, .06), (.022, .065, .095), skin, head); e.rotation_euler[2] = sd * .25
     # Adult eyes: smaller, set under the brow ridge, with lids, lower lids and slight bags.
     ellipsoid('Eye white', (sd * .095, .248, .14), (.05, .026, .036), eye_white, head)
     ellipsoid('Eye iris', (sd * .095, .268, .136), (.024, .01, .026), iris, head, 10)
     ellipsoid('Eye pupil', (sd * .095, .274, .136), (.012, .006, .013), leather, head, 8)
     lid = ellipsoid('Heavy eyelid', (sd * .095, .252, .16), (.058, .032, .024), skin, head)
     ellipsoid('Lower eyelid', (sd * .095, .25, .117), (.054, .028, .014), skin, head)
-    ellipsoid('Eye bag', (sd * .1, .238, .098), (.056, .03, .02), skin, head)
-    ellipsoid('Brow ridge', (sd * .1, .245, .19), (.075, .045, .03), skin, head)
     tube('Bushy brow', [(sd * .04, .265, .2), (sd * .1, .272, .215), (sd * .16, .25, .2)], .016, hair, head)
     tube('Nasolabial fold', [(sd * .065, .3, .0), (sd * .095, .285, -.06), (sd * .1, .27, -.11)], .011, skin, head)
-    ellipsoid('Temple hollow', (sd * .2, .18, .14), (.05, .05, .07), skin, head)
 # Mouth: real upper and lower lip with a slight self-satisfied corner, chin and philtrum.
 tube('Upper lip', [(-.075, .282, -.082), (-.03, .3, -.076), (0, .298, -.08), (.03, .3, -.076), (.08, .283, -.078)], .012, lips, head)
 tube('Lower lip', [(-.065, .28, -.095), (0, .294, -.102), (.065, .281, -.094)], .014, lips, head)
-ellipsoid('Philtrum', (0, .305, -.05), (.018, .012, .022), skin, head, 8)
-ellipsoid('Chin', (0, .262, -.165), (.085, .06, .055), skin, head)
 box('Uniform collar', (0, -.03, -.2), (.34, .3, .1), uniform, .04, head)
 tabs = empty('cast-collartabs', (0, 0, 0), head)
 for sd in [-1, 1]: box('Collar oak tab', (sd * .1, .13, -.19), (.07, .02, .06), trim, .006, tabs)
-ellipsoid('Double chin', (0, .18, -.17), (.15, .1, .07), skin, head)
 tube('Collar gold trim', [(-.17, .12, -.15), (0, .16, -.15), (.17, .12, -.15)], .014, trim, tabs)
 short = empty('cast-shorthair', (0, 0, 0), head)    # short back and sides, shared by most roles
 for sd in [-1, 1]: ellipsoid('Short hair side', (sd * .26, -.03, .14), (.06, .16, .12), hair, short)
@@ -475,8 +487,7 @@ rod('Pipe stem', (.07, .3, -.09), (.17, .45, -.13), .014, black, c)
 cyl('Pipe bowl', (.19, .47, -.09), .038, .09, briar, c, verts=14)
 ellipsoid('Pipe tobacco glow', (.19, .47, -.045), (.03, .03, .008), tobacco, c, 8)
 c = cast('chin')                                  # Mussolini: bald dome, jutting jaw and pout
-ellipsoid('Jutting chin', (0, .25, -.2), (.15, .12, .085), skin, c)
-ellipsoid('Square jaw', (0, .16, -.17), (.24, .14, .09), skin, c)
+loft('Jutting jaw', [ring(w, h, z, y, 16, 3) for y, w, h, z in [(.05, .2, .05, -.17), (.18, .17, .06, -.18), (.27, .1, .055, -.2)]], skin, c, 1)
 tube('Pouting lip', [(-.07, .3, -.105), (0, .315, -.115), (.07, .3, -.105)], .02, skin, c)
 c = cast('maohair')                               # Mao: high receding hairline, hair combed back, chin mole
 ellipsoid('Receding hair', (0, -.1, .28), (.295, .26, .13), hair, c, 20)
@@ -488,7 +499,7 @@ strand('Undercut fringe', [(-.16, .17, .37), (-.06, .23, .345), (.06, .255, .325
 ellipsoid('Undercut crown', (0, -.12, .31), (.2, .16, .08), hair, c, 16)
 for sd in [-1, 1]: ellipsoid('Shaved side', (sd * .272, -.04, .15), (.035, .18, .12), hat_cloth, c, 12)
 c = cast('chubby')                                # round full cheeks (Kim Jong-un, Mao)
-for sd in [-1, 1]: ellipsoid('Round cheek', (sd * .16, .2, -.04), (.11, .09, .09), skin, c)
+for sd in [-1, 1]: e = ellipsoid('Full cheek', (sd * .17, .17, -.05), (.07, .07, .08), skin, c); e.scale[1] = .05
 c = cast('patrol')                                # Castro: flat-topped olive patrol cap and cigar
 cyl('Patrol cap crown', (0, -.02, .42), .29, .2, hat_cloth, c, r2=.3, verts=28)
 cyl('Patrol cap flat top', (0, -.02, .525), .305, .02, hat_cloth, c, verts=28)
