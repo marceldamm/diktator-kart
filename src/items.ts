@@ -6,8 +6,8 @@ export type ItemKind = 'direct' | 'homing' | 'trap';
 export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Suchauftrag',trap:'Stempelfalle'};
 export interface ItemBox { id:number; x:number; z:number; readyIn:number }
 export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; bounces?:number }
-export interface ItemEvent { kind:'pickup'|'launch'|'hit'; kart:number; item:ItemKind; owner?:number }
-export interface ItemWorld {
+export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'; kart:number; item:ItemKind; owner?:number }
+export interface ItemWorld { /** Karts holding their item behind them as a shield this step (set by the caller). */ shield?:boolean[];
   slots:(ItemKind|null)[];heldFor:number[];immune:number[];objects:ItemObject[];boxes:ItemBox[];
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
@@ -80,6 +80,9 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
     for(let i=0;i<karts.length;i++) {
       if((i===o.owner&&o.age<.8)||world.immune[i]>0||karts[i].height>.7)continue;
       if(sweptDistance(karts[i].x,karts[i].z,ax,az,o.x,o.z)>ITEM_RULES.hitRadius)continue;
+      // Countermeasure: an item held behind the kart blocks one projectile arriving from behind (same rule for all).
+      if(world.shield?.[i]&&world.slots[i]){const k=karts[i],fwd=(o.x-k.x)*Math.sin(k.heading)+(o.z-k.z)*Math.cos(k.heading);
+        if(fwd<.6){world.slots[i]=null;world.heldFor[i]=0;o.remaining=0;world.events.push({kind:'block',kart:i,item:o.kind,owner:o.owner});break;}}
       const k=result[i];result[i]=(k.tankRemaining??0)>0?{...k,speed:k.speed*.88,impactRemaining:.12,impactKind:'item'}:{...k,speed:k.speed*ITEM_RULES.hitSpeedFactor,drifting:false,driftCharge:0,turboRemaining:0,impactRemaining:.45,impactKind:'item',spinRemaining:.95};
       world.immune[i]=ITEM_RULES.immunity;world.events.push({kind:'hit',kart:i,item:o.kind,owner:o.owner});world.stats[o.kind].hits++;o.remaining=0;break;
     }

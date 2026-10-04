@@ -97,6 +97,7 @@ class App {
   /** Seconds spent in a rival's slipstream per kart. */
   private draft:number[]=[];
   private autoGas=false;
+  private itemHeld=false;
   /** 'gp' = Grand Prix with five bots; 'timetrial' = solo three laps against your saved ghost. */
   private mode:'gp'|'timetrial'='gp';
   private ghostRun:{time:number;driver:number;samples:number[][]}|null=null;
@@ -457,7 +458,7 @@ class App {
     document.querySelector('#item-name')!.textContent=item?(item==='trap'?ITEM_NAMES[item]:`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`):'Sendung abholen';
     document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':'✉';
     const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;itemButton.disabled=!item||this.racePhase!=='race';
-    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?'E · einsetzen':this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
+    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E halten = Schild · loslassen = werfen'):this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
@@ -647,10 +648,14 @@ class App {
         if (!LAB_WORLD && this.racePhase === 'race') {
           const all=[this.kart,...this.loadKarts];
           const ranks=this.progress.map(p=>1+this.progress.filter(other=>other.distance>p.distance).length);
-          const use=all.map((_,i)=>i===0?frame.pressed.has('item')||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
+          // Hold E: the item trails behind as a shield; release E: throw it. Bots shield while they wait to use theirs.
+          const down=this.input.isDown('item'),release=this.itemHeld&&!down;this.itemHeld=down;
+          this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
+          const use=all.map((_,i)=>i===0?release||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           for(const event of this.items.events) if(event.kart===0) {
             const projectile=this.castOf(0).projectileName;
+            if(event.kind==='block'){this.itemMessage='Abgewehrt · Item als Schild verbraucht';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('hit');continue;}
             this.itemMessage=event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+1.8;
             if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);

@@ -90,8 +90,11 @@ export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,s
   dogPuff.color1=new Color4(.81,.71,.5,.65);dogPuff.color2=new Color4(.94,.85,.65,.45);dogPuff.colorDead=new Color4(.9,.8,.6,0);dogPuff.emitRate=0;dogPuff.start();
   scene.onDisposeObservable.add(()=>{container.dispose();dogs.dispose();});
   return (world:ItemWorld,karts:KartState[])=>{
-    for(const p of pools) if(!world.objects.some(o=>o.id===p.id)){p.id=-1;p.root.setEnabled(false);}
-    for(const o of world.objects) {
+    // Shields: the held item trails 1.7 m behind its kart (pseudo objects with stable negative ids).
+    const shields=(world.shield??[]).flatMap((on,i)=>on&&world.slots[i]&&karts[i]?[{id:-100-i,kind:world.slots[i]!,owner:i,x:karts[i].x-Math.sin(karts[i].heading)*1.7,z:karts[i].z-Math.cos(karts[i].heading)*1.7,heading:karts[i].heading,age:1,remaining:1,target:null}]:[]);
+    const visible=[...world.objects,...shields];
+    for(const p of pools) if(!visible.some(o=>o.id===p.id)){p.id=-1;p.root.setEnabled(false);}
+    for(const o of visible) {
       // Each driver throws their own character projectile; traps stay the shared neutral stamp.
       const look:Look=o.kind==='trap'?'neutral':styleOf(o.owner);
       const p=pools.find(p=>p.id===o.id)??pools.find(p=>p.id===-1&&p.kind===o.kind&&p.look===look)??pools.find(p=>p.id===-1&&p.kind===o.kind&&p.look==='neutral');if(!p)continue;

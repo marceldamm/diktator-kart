@@ -30,3 +30,16 @@ test('recovery preserves track progress and supplies no forward speed',()=>{
   const k={...gridKart(0),...trackPoint(275,5),heading:2};const r=recoverKart(k,[k]);
   assert.ok(Math.abs(trackProgress(k.x,k.z)-trackProgress(r.x,r.z))<.05);assert.equal(r.speed,0);assert.equal(r.height,0);
 });
+
+test('an item held behind as a shield blocks one projectile from behind, consuming the item', async () => {
+  const { createItems: create, stepItems: step } = await import('../src/items.ts');
+  const { initialKartState: init } = await import('../src/kart-model.ts');
+  const world = create(2); world.boxes = [];
+  const p = trackPoint(100, 0), back = trackPoint(98.8, 0), far = trackPoint(80, 0);
+  const target = { ...init(), x: p.x, z: p.z, heading: p.heading }, shooter = { ...init(), x: far.x, z: far.z, heading: p.heading };
+  world.slots[0] = 'trap'; world.shield = [true, false];
+  world.objects.push({ id: 99, kind: 'direct', owner: 1, x: back.x, z: back.z, heading: back.heading, age: 1, remaining: 2, target: null });
+  const after = step(world, [target, shooter], [false, false], [1, 2], 1 / 60);
+  assert.ok(world.events.some((e) => e.kind === 'block' && e.kart === 0));
+  assert.equal(world.slots[0], null); assert.equal(after[0].spinRemaining ?? 0, 0);
+});

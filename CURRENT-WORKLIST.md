@@ -31,7 +31,8 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Mechanik-Paket:** 3 Driftstufen (Funken silberblau/gold/rot), Windschatten (1 s hinter Rivale → Schub, Spieler+Bots), Sprung-Trick (Space in der Luft → größerer Landeschub, Bots teils), Auto-Gas + Lenkhilfe (Optionen).
 - [x] **Zeitfahren mit Geist:** Menü „Zeitfahren mit Geist“, allein ohne Items/Bots, Bestfahrt als halbtransparenter Geist (lokal gespeichert); geprüft: Speichern (304 Punkte) und Wiedergabe.
 - [x] **Grafik Hoch:** SSAO2-Umgebungsverdeckung + volumetrische Sonnenstrahlen (Optionen → Grafik Basis/Standard/Hoch); Bilder `docs/evidence/2026-10-04-high-*.jpg`.
-- [ ] Offen: echte historische Stimmen (keine TTS; Quellen-/Rechteprüfung, siehe unten), Item-Schild/Gegenmaßnahme, Bot-Überholen, individuelle Kart-Karosserien je Figur, weitere Strecke.
+- [x] **Item-Gegenmaßnahme:** E halten = Item hinten als Schild (fängt ein Geschoss von hinten ab, wird verbraucht), loslassen = werfen; Bots schirmen beim Warten ab. Unit-Test.
+- [ ] Offen: echte historische Stimmen (keine TTS; Quellen-/Rechteprüfung, siehe unten), Bot-Überholen, individuelle Kart-Karosserien je Figur, weitere Strecke.
 
 ## Stand 04.10.2026 (Mittag, Claude) – Marcels neue Aufträge
 
