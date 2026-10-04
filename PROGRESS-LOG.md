@@ -497,3 +497,15 @@ Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umges
 **Geänderte Dateien dieses Weltpakets:** `art-source/build_world.py`, `public/assets/models/stadium-world.glb`, `docs/evidence/slice-asset-optimization.json`, `src/track-world.ts`, `src/slice-scene.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
 
 **Budgetstand nach dem Paket:** Offizielle Kontowerte nach dem Paket: aktuelles Fünf-Stunden-Fenster 0 % verbraucht (Reset während der Arbeit), Wochenfenster 35 % verbraucht; damit 65 % Wochenrest als bindender Rest. Keine Zusatzkontingente ausgelöst.
+
+### 2026-10-04 – Kanal-Wasserfahne bei flachem Oberflächenkontakt
+
+**Umgesetzt:** Der fehlende Oberflächenkontakt-Effekt beim Kanalsprung ergänzt. `src/environment-effects.ts` aktiviert die Effektlage nur innerhalb der Kanalprogresszone, bei mehr als 6 m/s und bis maximal 0,35 m Höhe. Sechs separate ParticleSystems begrenzen sie auf 28 aktive Partikel pro Kart / 168 insgesamt. Der Effekt hängt nicht vom Regen ab; ein hoher, sauberer Sprung bleibt frei. `src/slice-scene.ts` setzt den Heckemitter niedrig über die Wasserfläche und richtet den Sprühvektor nach dem Fahrzeug aus. Regressionstest deckt Regen-unabhängige Aktivierung, zu geringe Geschwindigkeit, zu große Höhe, Rückwärtsfahrt und reduzierte Effektstufe ab.
+
+**Verifiziert:** `npm test`: 53/53; `npm run build`: TypeScript und Vite erfolgreich mit 1.296 Modulen. Direkter Testlauf zunächst mit `spawn EPERM` durch Sandbox; die autorisierte Vollsuite außerhalb bestand. `git diff --check` bestanden. Nach Browserreload startet die Regenwelt inklusive Item-HUD und sechs Karts ohne Ladefehler.
+
+**Noch nicht visuell abgenommen:** Der In-App-Browser erlaubt hier nur kurze Tastendrucke statt gehaltener Fahrt. Ein tatsächlicher flacher Kanaldurchgang unter 0,35 m und ein Pfützenkontakt mit auslösender Reifenfahne wurden deshalb nicht live gefahren. Die Rendertrigger und Obergrenzen sind automatisiert geprüft; eine menschliche Sichtprüfung bleibt offen. Keine Aussage, der Effekt sei schon als Partikel auf der Oberfläche gesehen.
+
+**Geänderte Dateien:** `src/environment-effects.ts`, `src/slice-scene.ts`, `tests/environment-effects.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
+
+**Budgetstand nach dem Paket:** Offiziell 3 % des aktuellen Fünf-Stunden-Fensters und 35 % des Wochenlimits verbraucht; 65 % Wochenrest ist bindend. Keine Zusatzkontingente aktiviert.

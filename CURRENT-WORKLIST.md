@@ -62,10 +62,13 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Welt-Paket 1 (04.10., Codex):** Fassaden-/Wasser-/Kontaktpass ist im Laufzeitstand gebaut. Der Blender-Häuserblock hat jetzt schmale Granitsockel statt einer geschlossenen Wand vor den Ladenfronten, einen gegliederten Doppeltüreingang und geteilte Fensterrahmen. Kanal und weitere Wasserflächen teilen eine schwache, animiert versetzte Normalstruktur. Bei Regen erzeugt jedes Kart an einer Pfütze mit Fahrt über 6 m/s einen eigenen, auf 44 lebende Partikel begrenzten Heck-Sprühnebel; sechs gleichzeitig sichtbare Karts bleiben damit bei maximal 264 Sprühpartikeln. Der frische vollständige Blender-Bau und GLB-Optimierung sind abgeschlossen: 22.076.572 → 15.632.728 Bytes (−29,2 %). Build und Volltests sind grün; die Regenwelt ist live geprüft. Der Spraytrigger wurde technisch integriert, aber noch nicht im menschlich sichtbaren Pfützenübertritt abgenommen.
 
+**Welt-Paket 1a (04.10., Codex):** Zusätzlich reagiert die Kanaloberfläche jetzt bei einem schnellen, flachen Wasserkontakt mit einer hellen Heckfahne. Ein hoher, sauberer Sprung löst sie nicht aus; pro Kart stehen höchstens 28 Partikel bereit (max. 168 für sechs Karts). Regressionstest deckt Kanal-/Höhen-/Tempo-Schwelle und den reduzierten Effektmodus ab. `npm test`: 53/53 und Produktionsbuild: 1.296 Module erfolgreich. Frischer Regenstart mit neuer Welt bleibt stabil. **Offen:** den Sprühnebel gezielt beim echten Kanaldurchgang/Pfützenkontakt im Spiel sehen und die Wasseroberfläche aus nächster Entfernung beurteilen.
+
 - [x] Fassadengeometrie neu bauen und optimieren; Runtime-GLB von 22.076.572 auf 15.632.728 Bytes reduziert (−29,2 %). Ladenfront/Sockelkorrektur ist im Generator und frischen Blend-/GLB-Build enthalten; gegenüber dem vorherigen Runtime-Modell wächst die Weltdatei um 3.146.048 Bytes (+25,2 %).
 - [x] Wasser bekommt dezente animierte Oberflächenstruktur; Regen bekommt begrenzten, pro Fahrzeugen getrennten Reifen-Sprühnebel.
 - [x] Regen-Laufzeitansicht im In-App-Browser: nasser Straßenbelag, Regen, HUD/Item-Slot und sechs Karts sichtbar; kein Lade-/WebGL-Ausfall.
-- [ ] Nahansicht von Häuserfront, bewegte Wasserfläche und sichtbare Reifenfahne im gezielten Pfützenkontakt aufnehmen/prüfen; Wasserreaktion an der Kanalquerung bleibt ein eigener nächster Effektpass.
+- [x] Kanal-Heckfahne als begrenzter, flacher Oberflächenkontakt-Effekt ergänzt; hohe Sprünge und langsame Karts lösen ihn nicht aus, reduzierte Grafik halbiert die Rate grob.
+- [ ] Nahansicht von Häuserfront und bewegter Wasserfläche sowie sichtbare Reifenfahne bei gezieltem Pfützen-/Kanalkontakt im Spiel aufnehmen/prüfen.
 
 - [ ] Stalin-Kopf/Körper/Kart als ersten hochwertigen, animierbaren Laufzeitanker sichtbar weiterentwickeln; klar menschliche Gesichtsvolumen, sauberer Hals-/Kragenübergang, erkennbare Augen/Mund/Frisur und glaubwürdige Handform am Lenkrad. Front, Seite, Nahansicht und Fahrt prüfen; danach Maßstab auf übrige Fahrer übertragen.
 - [ ] Karts mit Blender-Geometrie und gemeinsamen Fahrwerks-/Steuerverträgen zu sechs klaren Silhouetten ausbauen: echte Karosserievolumen, modellierte Front/Heck/Kotflügel/Räder/Cockpit, sichtbare Materialien und personenspezifische Details. Keine Trecker-Silhouette; der Traktor bleibt Wurfobjekt.
@@ -75,7 +78,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Itemtreffer-Schaden ist in `src/damage.ts` bereits umgesetzt:** jeder frische Projektil-/Fallen-Treffer zieht Haltbarkeit ab; Mensch und Bots teilen dieselbe Logik. Wiederholte Treffer bis Totalschaden und Reparaturpfad werden zusätzlich regressionsgeprüft.
 - [ ] Bildreferenz in Paketen auf Laufzeitmodelle übertragen: echtes Spielbild, Winkel/Bewegung, Lesbarkeit und begrenzte Geometrie-/Partikelkosten abnehmen. Konzeptillustrationen ersetzen keine 3D-Laufzeitprüfung.
 
-**Nächster Schritt:** Sichtbar nahe Fassadenfront und den ausgelösten Reifenspray in einer Regenfahrt belegen; Kanaloberfläche/Ufer und Wasserübertritt als getrennten Effektpass verbessern. Danach den Fahrer-/Kartanker mit Nah-, Seiten- und Bewegungsbildern fortsetzen. Item-Slot und kumulativer Schaden sind bereits umgesetzt und regressionsgeprüft.
+**Nächster Schritt:** Sichtbar nahe Fassadenfront, Wasserstruktur und ausgelösten Regen-/Kanalspray bei einer kontrollierten Fahrt belegen. Danach den Fahrer-/Kartanker mit Nah-, Seiten- und Bewegungsbildern fortsetzen. Item-Slot und kumulativer Schaden sind bereits umgesetzt und regressionsgeprüft.
 
 ## Regen-Wolkenschatten – 04.10.2026 (Codex)
 

@@ -26,11 +26,12 @@ import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
 import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
-import { TRACK, trackPoint } from './track';
-import { LANDMARKS, MAP_SCALE } from './track-layout';
+import { TRACK, trackLocate, trackPoint } from './track';
+import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
 import { airTrickRoll, armGripReach } from './kart-visuals';
+import { canalSurfaceSprayRate } from './environment-effects';
 import type { KartState } from './kart-model';
 import type { TestScene } from './scene';
 import { surfaceTextures } from './surface-textures';
@@ -397,6 +398,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       spray.color1 = new Color4(.7, .83, .88, .58); spray.color2 = new Color4(.88, .94, .95, .48); spray.colorDead = new Color4(.74, .84, .88, 0);
       spray.start(); return spray;
     });
+    // A separate, smaller pool follows each kart only when it skims the canal's
+    // surface. High clean jumps and the deliberate salvage animation stay clear.
+    const canalSprays = visuals.map((_, i) => {
+      const spray = new ParticleSystem(`Canal surface spray ${i}`, 28, scene); spray.particleTexture = particleTexture(scene);
+      spray.minSize = .09; spray.maxSize = .24; spray.minLifeTime = .2; spray.maxLifeTime = .42;
+      spray.emitRate = 0; spray.minEmitBox = new Vector3(-.5, 0, -.1); spray.maxEmitBox = new Vector3(.5, .03, .1);
+      spray.minEmitPower = .55; spray.maxEmitPower = 1.3; spray.gravity = new Vector3(0, -6, 0);
+      spray.color1 = new Color4(.52, .78, .84, .65); spray.color2 = new Color4(.78, .91, .94, .52); spray.colorDead = new Color4(.65, .84, .88, 0);
+      spray.start(); return spray;
+    });
     // Snow: soft drifting flakes around the camera, cold light and white haze.
     let snowing = false;
     const snow = new ParticleSystem('Snowflakes', 2200, scene); snow.particleTexture = particleTexture(scene);
@@ -673,6 +684,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height, k.z)); }
         skids.update([state, ...others]);
         lastStates = [state, ...others];
+        for (const [i, k] of lastStates.entries()) {
+          const spray = canalSprays[i]; if (!spray) continue;
+          const progress = trackLocate(k.x, k.z).s;
+          const inCanal = progress >= CANAL_FROM && progress <= CANAL_FROM + CANAL_LENGTH;
+          spray.emitRate = canalSurfaceSprayRate(inCanal, k.speed, k.height, reducedEffects);
+          if (spray.emitRate > 0) {
+            spray.emitter = new Vector3(k.x - Math.sin(k.heading) * .78, .06 + k.height * .5, k.z - Math.cos(k.heading) * .78);
+            spray.direction1.set(-Math.sin(k.heading) * 3.2 - Math.cos(k.heading) * .6, .8, -Math.cos(k.heading) * 3.2 + Math.sin(k.heading) * .6);
+            spray.direction2.set(-Math.sin(k.heading) * 1.8 + Math.cos(k.heading) * .6, 1.8, -Math.cos(k.heading) * 1.8 - Math.sin(k.heading) * .6);
+          }
+        }
         if (snowing) snow.emitter = new Vector3(state.x + Math.sin(state.heading) * 10, 0, state.z + Math.cos(state.heading) * 10);
         if (raining) {
           rain.emitter = new Vector3(state.x + Math.sin(state.heading) * 8, 0, state.z + Math.cos(state.heading) * 8);
