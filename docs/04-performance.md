@@ -1,5 +1,8 @@
 # Performance-Ziele für normale PCs im Browser
 
+> **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
+
+
 ## Aktueller kurzer Sechskart-Lastlauf – 04.10.2026
 
 Aktueller dev-Checkout mit Fahrglättung, Straßenmöbeln und Hundepools: 1600x1000 auf lokalem RTX-Gerät, drei bewegte Kamerafenster mit je 300 rAF-Intervallen. Verfolger nah: P50/P95/P99 16.7/16.8/33.4 ms; Verfolger fern: P50/P95/P99 16.7/16.8/16.8 ms; Fahrerperspektive: P50/P95/P99 16.7/16.8/16.9 ms. 967 Meshes bleiben konstant; tatsächliche Fahrt >250 m, finite Sechskart-Zustände. Raw [final-six-kart-load.json](evidence/final-six-kart-load.json). Kein Produktions-/Kaltlauf-/schwache-PC-/Mobil-Nachweis und kein uneingeschränktes 60-FPS-Versprechen. Die älteren Produktionswerte unten gehören jeweils zu ihrem damaligen Stand.
