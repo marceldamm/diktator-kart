@@ -26,6 +26,12 @@ test('the six current drivers keep distinct kart and face variants with delibera
   assert.ok(toothbrushNode.translation[2] < -.35, 'the moustache projects in front of the face after glTF axis conversion');
   assert.equal(byName.Stalin.hat, 'stalin-cap');
   assert.ok(CAST_PARTS.includes('stalin-cap'), 'runtime roster can enable Stalin’s tailored cap');
+  const stalinCapCrown = glbDocument.nodes.find(({ name }) => name.startsWith('cast-stalin-cap / Hat cloth'));
+  assert.ok(stalinCapCrown?.mesh !== undefined, 'Stalin’s tailored cap crown remains in the runtime GLB');
+  const capPosition = glbDocument.accessors[glbDocument.meshes[stalinCapCrown.mesh].primitives[0].attributes.POSITION];
+  const capNormalization = capPosition.normalized ? 32767 : 1;
+  const capDepth = (capPosition.max[2] - capPosition.min[2]) * stalinCapCrown.scale[2] / capNormalization;
+  assert.ok(capDepth > .32, 'Stalin’s tailored cap retains a full front-to-back crown rather than an upright thin plate');
   assert.equal(byName.Mussolini.hat, 'peaked');
   assert.equal(byName.Mao.hat, 'octagonal');
   assert.equal(byName['Kim Jong-un'].hat, 'none');

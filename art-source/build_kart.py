@@ -627,20 +627,28 @@ for sd in [-1, 1]:
     tube('Peaked cap panel seam', [(sd * .025, .02, .575), (sd * .16, .02, .53), (sd * .28, 0, .44), (sd * .29, -.01, .34)], .006, leather, c)
 ellipsoid('Peaked cap top button', (0, .02, .58), (.023, .023, .012), leather, c, 12)
 c = cast('stalin-cap')                           # tailored field cap, deliberately without insignia
+def cap_ring(rx, ry, z, cy=0.0, n=28):
+    # Unlike ring(), these cross-sections lie horizontally in the local XY plane.
+    # The cap crown must have real front-to-back volume, not a thin upright disc.
+    return [(rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n), z)
+            for k in range(n)]
+
 loft('Stalin tailored cap crown', [
-    ring(.255, .045, .32, -.005, 28, 2.4),
-    ring(.278, .13, .39, -.025, 28, 2.4),
-    ring(.255, .14, .49, -.045, 28, 2.4),
-    ring(.225, .09, .545, -.05, 28, 2.4),
+    cap_ring(.25, .27, .305, -.005),
+    cap_ring(.278, .285, .34, -.01),
+    cap_ring(.28, .276, .385, -.018),
+    cap_ring(.264, .26, .435, -.03),
+    cap_ring(.236, .235, .48, -.04),
+    cap_ring(.19, .195, .515, -.045),
+    cap_ring(.125, .135, .538, -.045),
+    cap_ring(.055, .065, .547, -.045),
+    cap_ring(.012, .016, .549, -.045),
 ], hat_cloth, c, 2)
-loft('Stalin cap sweatband', [
-    ring(.259, .035, .305, -.005, 28, 2.4),
-    ring(.263, .035, .34, -.005, 28, 2.4),
-], leather, c, 1)
-ellipsoid('Stalin cap visor', (0, .225, .32), (.255, .155, .027), leather, c, 24)
+ellipsoid('Stalin cap sweatband', (0, -.005, .326), (.274, .28, .036), leather, c, 24)
+ellipsoid('Stalin cap visor', (0, .225, .326), (.255, .155, .027), leather, c, 24)
 for sd in [-1, 1]:
-    tube('Stalin cap crown seam', [(0, -.055, .55), (sd * .12, -.045, .52), (sd * .22, .0, .45), (sd * .26, .07, .35)], .005, fur, c)
-ellipsoid('Stalin cap crown button', (0, -.05, .552), (.018, .02, .009), leather, c, 10)
+    tube('Stalin cap crown seam', [(0, -.045, .548), (sd * .12, -.042, .521), (sd * .22, -.012, .46), (sd * .27, .07, .36)], .004, leather, c)
+ellipsoid('Stalin cap crown button', (0, -.045, .551), (.016, .018, .008), leather, c, 10)
 c = cast('naval')                                # white naval cap with gold leaves
 cyl('Naval cap crown', (0, -.02, .4), .32, .14, ivory, c, r2=.37, verts=28)
 cyl('Naval cap band', (0, -.02, .32), .29, .08, leather, c, verts=28)

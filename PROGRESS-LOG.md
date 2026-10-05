@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Stalin-Feldmütze: Runtime-Plattenprofil korrigiert
+
+**Befund:** Das echte Foto-Dreiviertelbild zeigte die Mützenkrone wie eine hochkant stehende, abgelöste Scheibe. GLB-Messung der bisherigen `cast-stalin-cap / Hat cloth`-Geometrie: ca. 4,4 cm Front-/Rücktiefe gegenüber 35,6 cm Höhe. Ursache war, dass der für vertikale Seitenschnitte bestimmte `ring()`-Helfer wiederholt Kronprofile auf XZ-Ebenen legte.
+
+**Umgesetzt:** `art-source/build_kart.py` erzeugt die Krone jetzt mit acht horizontalen XY-Querschnitten und einer weichen, rund geschlossenen Spitze. Das Band folgt dem unteren Kronrand; Visier bleibt vorne angebunden, Nähte und Knopf sitzen auf der neuen Silhouette. Editierbare `.blend`, Roh-GLB und optimiertes Runtime-GLB erneuert.
+
+**Verifiziert:** Neue GLB-Kronentiefe ca. 56 cm bei ca. 24 cm Höhe; regressionsgeprüfte Mindesttiefe >32 cm. Cast-/GLB-Test 2/2 und `npm run build` erfolgreich, 1.296 Module; bekannte Hauptchunkwarnung bei 2.026,22 kB bleibt. Frische Fahrerwahl zeigt alle sechs Portraits, und die echte Foto-Dreiviertelansicht zeigt die Krone nun als geschlossene, breite Feldmütze statt vertikaler Platte.
+
+**Grenze:** Das schließt die geometrische Regression der Mütze und ist ein Teilpass des Stalin-Ankers. Menschliche Stilabnahme sowie vollständige Front-, reine Profil-, Nah- und Bewegungsprüfung des gesamten Fahrers/Karts bleiben offen. Offizieller Stand danach: 14 % Fünf-Stunden- und 44 % Wochenverbrauch; Woche bindet, keine Resets verwendet.
+
 ### 2026-10-05 – Hitlers Schnurrbartregression im Runtime-Porträt
 
 **Befund:** Frische Babylon-Fahrerwahl zeigte Hitlers Augen und Mund, jedoch keinen lesbaren Schnurrbart. Die Cast-Konfiguration enthielt `toothbrush`; ein passender GLB-Knoten samt Mesh war bereits exportiert. Die bisherige einzelne kleine Quaderform war im Porträtmaßstab trotzdem nicht erkennbar.

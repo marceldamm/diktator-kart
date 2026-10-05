@@ -1,6 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
 - **05.10.2026 – Hitler-Schnurrbartregression:** Die im Runtime-Porträt unsichtbare kleine Quaderform in `art-source/build_kart.py` durch zwei klar lesbare Bartflügel vor der Gesichtsebene ersetzt; editierbare Blender-Datei sowie optimiertes GLB neu exportiert. Regression prüft Hitlers Castteil und reale GLB-Geometrie; 2/2 Tests, Produktionsbuild und frische sechs Live-Porträts geprüft. Gesamtmodell bleibt nicht als Qualitätsanker abgenommen.
+- **05.10.2026 – Stalin-Feldmützenkrone:** Ein echter Runtime-Dreiviertelblick zeigte die Krone wie eine aufrechte Scheibe; Ursache waren vertikale statt horizontale Kronquerschnitte im Blender-Bau. Die Feldmütze nutzt jetzt waagerechte, kuppelförmige Kronringe (Exporttiefe ca. 56 cm statt 4,4 cm). GLB-/Cast-Regression, Build, sechs Live-Porträts und neue Runtime-Dreiviertelansicht geprüft. Gesamtanker bleibt offen.
 - **05.10.2026 – Lid-/Mundlesbarkeit:** Lidellipsoide weichen oberen/unteren Lidkanten; Stalins Mund sitzt körpernah unter dem Walrossbart. Asset, gezielter Casttest, Build und sechs Live-Porträts geprüft. Gesamtanker und menschlicher Nah-/Profilpass bleiben offen; Details im [Fortschrittslog](PROGRESS-LOG.md).
 - **05.10.2026 – Übungskrater und Untergrundfeedback:** Fallzone plus sichere gleiche-Fortschritt-Bergung an den drei Übungskratern; prozeduraler Schotter in der Abkürzung und befahrbarer Grasrand mit eigener Lenk-/Tempo-/Staubreaktion. Vollsuite 62/62 und Build bestanden; gezielte Sicht-/Fahrabnahme steht noch aus.
 
