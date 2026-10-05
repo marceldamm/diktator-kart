@@ -686,3 +686,8 @@ Stalins zwei Schläfensträhnen liegen zusätzlich unter `cast-stalin-hairline`,
 **Geänderte Dateien:** `src/environment-effects.ts`, `src/slice-scene.ts`, `tests/environment-effects.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `PROGRESS-LOG.md`.
 
 **Limitstand:** Nach dem Paket offiziell geprüft: 8 % Fünf-Stunden-Fenster und 40 % Wochenfenster verbraucht (92 % bzw. 60 % Rest; Wochenfenster ist aktuell bindend). Keine Zusatzkontingente/Resets aktiviert.
+### 2026-10-05 – Interaktiver Item-HUD-Versuch
+
+**Beobachtet:** Die freie Fahrt startete im Codex-In-App-Browser; Fahrer, Item-HUD und die Itemkisten vor der Startgeraden waren sichtbar. Kurze `W`-Tastendrücke bewegten das Kart. Auf der Fahrt geriet es ins Hafenbecken; der HUD-Status meldete die Bergung und anschließend eine Rücksetzung. Der Slot blieb während des Versuchs `LEER`; es gab keine beobachtete Aufnahme. Deshalb wurden E-Halten/Loslassen, Bildschirmbutton sowie Maus-/Touch-Halten nicht bewertet.
+
+**Ergebnis/Limit:** Das ist keine Item-HUD-Abnahme und kein Hinweis auf einen HUD-Fehler: die Kisten wurden nicht nachweislich berührt. Die kurze Tastendrucksteuerung erlaubte hier keine ausreichend präzise Linienführung. Nächster Schritt ist eine kontrollierte Runde/Route, die sicher an einer aktiven Kiste vorbeiführt; erst danach Symbol, Status und Wurf visuell bewerten. Die Browseransicht wird vor Arbeitsende auf den Startbildschirm zurückgesetzt.
