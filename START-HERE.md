@@ -9,6 +9,13 @@
 
 Die Kurzbefehle **Projektstart** oder **Projekt Start** rufen den sicheren Startablauf auf; **Projektabschluss**, **Projektende** oder **Projekt Ende** den geprüften Abschluss mit Veröffentlichung. Keine langen Prompts nötig. Die vier zentralen Tabs gehören zum Start. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Naechstes anzeigen. Maßgebliche Anleitung: [TEAM-NOTES.md](TEAM-NOTES.md).
 
+**Git im Alltag:** Jede Person arbeitet getrennt auf einem persönlichen Branch; `main` bleibt der gemeinsame geprüfte Stand. Die KI übernimmt die technischen Git-Schritte und erklärt Konflikte verständlich.
+
+- **Projekt Start:** neuesten Stand holen und persönlichen Arbeitsbranch vorbereiten.
+- **Zwischenstand sichern:** Änderungen als Commit auf dem persönlichen Branch speichern und dorthin hochladen; `main` bleibt unverändert.
+- **Projektabschluss:** beide Arbeitsstände integrieren, prüfen und den geprüften gemeinsamen Stand nach `main` veröffentlichen.
+- **Wo stehen wir?:** Status und nächsten Schritt anzeigen lassen.
+
 Diktierte Wünsche selbstständig in die passende Arbeitsdatei eintragen: „Heute möchte ich …“ in CURRENT-WORKLIST.md, „Langfristiges Ziel: …“ in LONG-TERM-GOALS.md, „Notiere: …“ und „Nachricht an Sarah/Marcel: …“ in TEAM-NOTES.md (Datum, Autor, Zielperson, Status). Nutzer müssen Dateien nicht selbst schreiben. Beim Projektstart offene Notizen und für den Nutzer bestimmte Teamnachrichten kurz anzeigen; Empfang/Antwort nicht erfinden.
 
 ## Gemeinsame Budgetregel für autonome Arbeit
@@ -38,6 +45,8 @@ Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchro
 **Arbeitsende in Codex:**
 
     Projektabschluss. Prüfe, dokumentiere und veröffentliche meine Änderungen im gemeinsamen main.
+
+Für eine sichere Zwischenablage während der Arbeit reicht **„Zwischenstand sichern.“** Die KI prüft und dokumentiert den Stand; alternativ `Projekt-zwischenstand.cmd` im Projektordner starten. Dieser Zwischenstand ist eine Sicherung auf eurem Arbeitsbranch, noch keine Veröffentlichung im gemeinsamen `main`.
 
 Die Repo-Skills heißen $diktator-projektstart und $diktator-projektabschluss. Alternativ: Projekt-starten.cmd / Projekt-abschliessen.cmd. Bei Konflikten oder ungesicherten Dateien hilft die KI; die Batches überschreiben nichts blind. Regeln, GitHub-Sicherungen und Sarahs einmaliger Umstieg: [docs/21-team-workflow.md](docs/21-team-workflow.md).
 

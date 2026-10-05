@@ -7,6 +7,17 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+## Git für euch – der kurze gemeinsame Ablauf
+
+**Jede Person arbeitet auf einem eigenen Arbeitsbranch; `main` ist der gemeinsame, geprüfte Spielstand.** Die KI kümmert sich um Abgleich, Sicherung, Konfliktlösung und Veröffentlichung – ihr müsst keine Git-Befehle kennen.
+
+- **„Projekt Start“**: neuesten Stand holen, vorhandene Arbeit bewahren und einen persönlichen Arbeitsbranch vorbereiten.
+- **„Zwischenstand sichern“**: Änderungen prüfen und als wiederherstellbaren Commit auf den eigenen Branch bei GitHub sichern; `main` bleibt dabei unverändert.
+- **„Projektabschluss“**: beide Branch-Stände zusammenführen, Konflikte inhaltlich klären, Tests/Build ausführen und den geprüften Stand nach `main` veröffentlichen.
+- **„Wo stehen wir?“**: Die KI zeigt Branch, gespeicherte/ungesicherte Änderungen, Überschneidungen und den nächsten Schritt.
+
+Ein **Branch** ist eure getrennte Arbeitslinie, ein **Commit** ein gespeicherter Zwischenstand. Erst der geprüfte Abschluss macht daraus den gemeinsamen `main`-Stand. Wenn Änderungen dieselbe Stelle betreffen, stoppt Git zum Abgleich; die KI verbindet beides, wenn es fachlich zusammenpasst. Blender-Dateien lassen sich nicht zeilenweise zusammenfügen – dieselbe `.blend` daher nicht gleichzeitig bearbeiten.
+
 ## Schnellhilfe – alles einfach der KI sagen
 
 **Ihr müsst diese Dateien nicht selbst beschreiben.** Diktiert oder schreibt eure Wünsche in Codex; die KI trägt sie passend ein und hält die Arbeitsgrundlage aktuell.
@@ -14,7 +25,9 @@
 | Kurzer Befehl / Beispiel | Was die KI macht |
 |---|---|
 | **Projekt Start** | GitHub synchronisieren, lokale Arbeit bewahren, vier Tabs öffnen, Aufgaben und Nachrichten zeigen. Auch **Projektstart** funktioniert. |
+| **Zwischenstand sichern** | Diff prüfen, dokumentierten Checkpoint committen und nur den persönlichen Arbeitsbranch zu GitHub hochladen. `main` bleibt unberührt. Auch **Zwischenstand** funktioniert. |
 | **Projekt Ende** | Arbeit sichern, dokumentieren, prüfen und den geprüften Teamstand nach GitHub main hochladen. Auch **Projektabschluss** funktioniert. |
+| **Wo stehen wir?** | Branch, Änderungen, offene Überschneidungen und nächsten Schritt verständlich erklären. |
 | **Arbeite unsere Arbeitslisten ab** | Erst kurzfristige Aufgaben umsetzen, danach bestätigte langfristige Ziele selbstständig in Paketen bearbeiten; Fortschritt dokumentieren und Budgetreserve beachten. |
 | **Heute möchte ich …** | Als aktuellen Auftrag in CURRENT-WORKLIST.md aufnehmen und bearbeiten. |
 | **Langfristiges Ziel: …** | In LONG-TERM-GOALS.md aufnehmen. |
@@ -26,6 +39,8 @@
 **Chrome bei Spielprüfungen sichtbar lassen:** Jeder Browserlauf mit dem Spiel läuft in einem für Marcel/Sarah sichtbaren Google-Chrome-Fenster. Keine Headless- oder versteckte/minimierte Ausführung. Ein CDP-Test nutzt bei Bedarf ein eigenes sichtbares Fenster; Spiel pausieren und genau diese Testinstanz nach dem Lauf schließen, normale Chrome-Fenster offen lassen. So könnt ihr den geprüften Zustand mitverfolgen.
 
 **Projekt-starten.cmd:** Einfachen Git-Start ausführen. **Projekt-abschliessen.cmd:** Einfachen geprüften Git-Abschluss ausführen. Bei Konflikten/ungesicherten Dateien hilft Codex; die Batches selbst sind keine KI. Der Spielstarter synchronisiert GitHub nicht.
+
+**Projekt-zwischenstand.cmd:** Sichert einen geprüften Zwischenstand auf dem eigenen Branch und lädt nur diesen Branch hoch. Es ändert `main` nicht. Vorher Codex **„Zwischenstand sichern“** sagen; die KI prüft Diff und Geheimnisse und startet dann den Checkpoint.
 
 **Limit-Puffer für beide:** Die KI prüft eure eigenen offiziellen Fünf-Stunden-/Wochenwerte. Ab etwa **15 % Rest** beginnt sie keine große Aufgabe mehr und schließt geordnet ab; Ziel: mindestens etwa **5 % für euch übrig**. Ohne Zugriff meldet sie das und nutzt einen vorsichtigen Puffer. Keine automatischen Resets oder Zusatzkosten. Details in [AGENTS.md](AGENTS.md).
 

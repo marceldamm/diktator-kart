@@ -39,6 +39,8 @@ Am Ende:
 Projektabschluss. Pruefe, dokumentiere und veroeffentliche meine Aenderungen im gemeinsamen main.
 ```
 
+Fuer eine Sicherung mitten in der Arbeit reicht **„Zwischenstand sichern.“** Alternativ `Projekt-zwischenstand.cmd` starten. Dieser Befehl legt einen Commit an und laedt ausschliesslich den persoenlichen Arbeitsbranch hoch; er veraendert `main` nicht. Die KI prueft vorher den Diff und dokumentiert den Zwischenstand.
+
 Alternativ `$diktator-projektabschluss`. Dieser ausdrueckliche Abschlussauftrag autorisiert Branch-Push und die getestete Zusammenfuehrung nach main in diesem Repository. Die KI braucht dafuer keine wiederholte Freigabe. Force-Push, fremde Repositories, kostenpflichtige Dienste oder bewusstes Verwerfen fremder Arbeit sind nicht umfasst.
 
 ## Was beim Projektstart passiert
@@ -61,7 +63,15 @@ Die Batch `Projekt-starten.cmd` erledigt den einfachen Fall. Bei ungesicherten D
 4. `scripts/team-workflow.ps1 -Action Finish`: Sicherungsbranch, normaler Merge, Unit-Tests und Produktionsbuild. Arbeitsbranch auf GitHub sichern; dann **normaler Fast-Forward-Push** nach main. Kein Force-Push.
 5. Bei gleichzeitigem Upload wird der veraltete Push abgewiesen. Neu holen, integrieren, erneut testen; keine Umgehung. Bei Branchschutz stattdessen Pull Request erstellen und geltende Freigaben abwarten. Erfolg erst nach Ruecklesen des GitHub-main melden.
 
-Die Batch `Projekt-abschliessen.cmd` kann einen bereits dokumentierten, committeten Stand pruefen und publizieren. Sie committed keine ungesicherten Dateien blind. Bei einem Fehler beauftragt ihr Codex mit `Projektabschluss`.
+Die Batch `Projekt-abschliessen.cmd` kann einen bereits dokumentierten, committeten Stand pruefen und publizieren. Sie committed keine ungesicherten Dateien blind. Fuer eine bewusste Sicherung zwischendurch ist `Projekt-zwischenstand.cmd` da: Codex **„Zwischenstand sichern“** sagen, damit die KI Dateien/Geheimnisse prueft und erst dann den Checkpoint ausfuehrt. Der Befehl sichert nur auf dem persoenlichen Branch und pusht nie nach `main`. Bei einem Fehler beauftragt ihr Codex mit `Projektabschluss` beziehungsweise `Zwischenstand sichern`.
+
+### Git in drei einfachen Begriffen
+
+- **`main`** ist die gemeinsame, getestete Version.
+- Ein **Arbeitsbranch** ist Marcels oder Sarahs getrennte Arbeitslinie. Beide beginnen nach `Projekt Start` auf dem aktuellen Stand und bearbeiten nicht gleichzeitig denselben Branch.
+- Ein **Commit** ist ein gespeicherter Stand. **„Zwischenstand sichern“** legt ihn lokal an und sichert den Branch auf GitHub; **„Projektabschluss“** integriert beide Arbeitslinien, löst Konflikte fachlich, prüft Tests/Build und veröffentlicht nach `main`.
+
+Git kombiniert unabhängige Änderungen automatisch. Bei Änderungen derselben Code-/Dokumentstelle stoppt der automatische Merge; die KI prüft beide Fassungen und führt sie zusammen, wenn die Absicht kompatibel ist. Eine unvereinbare Kreativentscheidung bleibt zur Klärung offen. `.blend`, GLB und andere Binärdateien kann Git nicht inhaltlich zusammensetzen: dieselbe Quelldatei nur nacheinander bearbeiten oder getrennte Varianten erhalten und später vergleichen.
 
 ## Spiel starten
 

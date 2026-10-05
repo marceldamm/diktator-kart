@@ -68,6 +68,20 @@ test('team: dirty local work is preserved and cannot be switched or published', 
   assert.equal(readFileSync(join(f.Alice, 'draft.txt'), 'utf8'), 'do not lose me');
   assert.equal(remoteHead(f), before);
 });
+test('team: checkpoint commits and uploads only the named work branch', { skip: !windows }, () => {
+  const f = fixture(); run(f.Alice, 'Start');
+  const mainBefore = remoteHead(f);
+  const branch = git(f.Alice, 'branch', '--show-current');
+  put(f.Alice, 'checkpoint.txt', 'recoverable work');
+  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\ncheckpoint saved\n');
+  const result = run(f.Alice, 'Checkpoint');
+  assert.match(result.stdout, /ZWISCHENSTAND GESICHERT/);
+  assert.equal(remoteHead(f), mainBefore, 'checkpoint must not publish to main');
+  const branchHead = git(f.remote, 'rev-parse', `refs/heads/${branch}`);
+  assert.equal(branchHead, git(f.Alice, 'rev-parse', 'HEAD'));
+  assert.equal(git(f.Alice, 'status', '--porcelain'), '');
+  assert.equal(git(f.Alice, 'show', `${branchHead}:checkpoint.txt`), 'recoverable work');
+});
 test('team: disjoint parallel changes integrate, verify and publish as fast-forward', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   assert.match(git(f.Alice, 'branch', '--show-current'), /^codex\/team-alice-/);

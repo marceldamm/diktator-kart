@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('Status', 'Start', 'Finish')][string]$Action = 'Status',
+    [ValidateSet('Status', 'Start', 'Checkpoint', 'Finish')][string]$Action = 'Status',
     [string]$Owner = '',
     [string]$ProjectRoot = '',
     [switch]$AsJson
@@ -101,12 +101,32 @@ try {
         if ($overlap.Count) { Write-Host ($overlap -join "`n") }
     }
     if ($Action -eq 'Status') { exit 0 }
-    if ($dirty) { throw 'Local changes exist. Codex must preserve/review/commit them first. Nothing was overwritten. See .tools/team-status.json.' }
-    if (-not $branch) { throw 'Detached HEAD: ask Codex to create a named branch first.' }
+    if (-not $branch) { throw 'Detached HEAD: ask Codex to secure the work on a named branch first.' }
     if (-not $Owner) { $Owner = Git @('config', 'user.name') }
     $ownerSlug = ($Owner.ToLowerInvariant() -replace '[^a-z0-9]+', '-').Trim('-')
     if (-not $ownerSlug) { $ownerSlug = 'team' }
     $stamp = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss-fff')
+    if ($Action -eq 'Checkpoint') {
+        if (-not $isNew -or $branch -eq 'main' -or $branch -match '^(archive/|legacy-)') { throw 'Zwischenstände werden nur auf einem aktiven Babylon-Arbeitsbranch gesichert. main und Archive bleiben unangetastet.' }
+        if (-not $branch.StartsWith("codex/team-$ownerSlug-")) { throw "Zwischenstände werden nur im eigenen Arbeitsbranch codex/team-$ownerSlug-* gesichert; aktueller Branch: $branch" }
+        if ($dirty) {
+            $changedPaths = Git @('status', '--porcelain') -split "`n"
+            $sensitiveNames = @($changedPaths | Where-Object { $_ -match '(?i)(\.env|secret|credential|token|\.pem|\.pfx|\.p12|\.key)' })
+            if ($sensitiveNames.Count) { throw "Dateinamen sehen nach Zugangsdaten/Geheimnissen aus; bitte erst einzeln prüfen und ausschließen: $($sensitiveNames -join '; ')" }
+            $null = Git @('add', '-A')
+            $message = "Zwischenstand: $Owner $([DateTime]::UtcNow.ToString('yyyy-MM-dd HH:mm')) UTC"
+            $null = Git @('commit', '-m', $message)
+        }
+        $null = Git @('push', '-u', 'origin', "HEAD:refs/heads/$branch")
+        $null = Git @('fetch', 'origin', '--prune')
+        $savedHead = Git @('rev-parse', 'HEAD')
+        $remoteBranchHead = Git @('rev-parse', "refs/remotes/origin/$branch")
+        if ($remoteBranchHead -ne $savedHead) { throw 'Der Arbeitsbranch wurde nicht bytegenau auf GitHub bestätigt; lokaler Commit bleibt erhalten.' }
+        if (Git @('status', '--porcelain')) { throw 'Nach dem Zwischenstand sind noch ungesicherte Dateien vorhanden; der Branch bleibt erhalten.' }
+        Write-Host "ZWISCHENSTAND GESICHERT: $branch = $savedHead. GitHub main wurde nicht veraendert."
+        exit 0
+    }
+    if ($dirty) { throw 'Local changes exist. Codex must preserve/review/commit them first. Nothing was overwritten. See .tools/team-status.json.' }
     if ($Action -eq 'Start') {
         if (-not $isNew) {
             $archive = NewArchive 'HEAD' 'before-babylon'

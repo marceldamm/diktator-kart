@@ -11,6 +11,13 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Git-Ablauf verständlich gemacht – 05.10.2026 (Marcel)
+
+- [x] In TEAM-NOTES.md oben eine knappe Git-Erklärung ergänzt: persönlicher Branch, gespeicherter Zwischenstand/Commit, gemeinsames geprüftes `main` und welche Schritte die KI übernimmt.
+- [x] Projektstart und Projektabschluss für zwei Personen präzisiert; `Projekt-zwischenstand.cmd` und die KI-Kurzform **„Zwischenstand sichern“** ergänzen einen sicheren Checkpoint nur auf dem persönlichen Branch.
+- [x] Git-Kernablauf, automatische/nicht automatische Konfliktlösung und Grenzen bei Blender-Binärdateien in docs/21-team-workflow.md dokumentiert.
+- [ ] Sarah soll die drei Befehle beim nächsten eigenen Projektstart mit ihrer lokalen Installation einmal durchspielen; ihren unveröffentlichten PC-Stand hier nicht voraussetzen.
+
 ## Sarah – Steuerung und Items, 05.10.2026
 
 - [x] Rohrpost/Suchauftrag richtungswählbar: E+V nach vorn, E+H nach hinten; E allein behält Schild/Standardwurf. Fotomodus auf F verschoben, Hupe auf V. Dokumentiert in README, START-HERE und docs/19.

@@ -9,6 +9,8 @@ if errorlevel 1 (
   exit /b 1
 )
 echo.
-echo Bereit. In Codex: Projektstart. Danach deine Aufgabe nennen.
+echo Bereit. In Codex: Projekt Start. Danach deine Aufgabe nennen.
+echo Zum Speichern waehrend der Arbeit: Zwischenstand sichern.
+echo Zum geprueften gemeinsamen Abschluss: Projektabschluss.
 echo Das Spiel startest du mit Diktator-Kart-starten.cmd.
 pause
