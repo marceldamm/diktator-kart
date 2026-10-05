@@ -4,6 +4,18 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+## 2026-10-05 – Remote-Abgleich zum Morgenauftrag
+
+**GitHub geprüft:** `main` steht auf `00e8173229294399b3d353eabbbc7311e5e8a295`. Der Remote-Arbeitsbranch `codex/team-marcel-20261004-110953-055` ist mit main identisch; `codex/team-marcel-20261004-094440-433` liegt 16 Commits dahinter und hat keine exklusiven Commits. Handy-Dokumentcommits `6efbc49`, `afdd515`, `76234f0` sind Vorfahren von main (Vergleich main: 34, 33 bzw. 32 Commits voraus). Remote-Inhalte zeigen also, dass die Notizen in GitHub-main enthalten sind. Sie beweisen nicht, ob der lokale Windows-Checkout sie bereits synchronisiert hat oder Sarah sie abgerufen hat.
+
+**Bereits im Remote-Spielstand umgesetzt (aus Code, Tests und vorhandenen Arbeitsbelegen):** `src/damage.ts` und `tests/damage.test.mjs` enthalten kumulative Haltbarkeit, Werkstatt-Reparatur und Schutz vor Trefferketten; Banden- und Kartkontakt sind angepasst. `src/track-layout.ts`/`track-world.ts`/`track.ts` enthalten 1,5×-Kurs, Kanal, drei Boostflächen, Wasser-/Lava-/Klippenabstürze und Kranbergung, Rampen/Landeschub, plus Krater. `src/main.ts` enthält Startschub, Trick-/Landeschub, Zeppelin-Ereignis, Item-Schild/Warnung und Neustart. Tag-Nacht-Lauf, Partikel und erste Cockpitverbesserungen sind ebenfalls im verifizierten Stand dokumentiert.
+
+**Lücken aus dem Codeabgleich:** Übungsgelände-Granattrichter sind derzeit kleine Bodenhindernisse mit Rütteln/Tempoverlust; sie lösen keinen Fall aus. Es gibt also noch keine kriegsbezogene Absturzgrube. Schotter-/Grasfeedback ist ebenfalls nicht fertig. Gesichtsskulptur/Sitz-/Beinabnahme sowie menschliche Wand-/Schadens-Fahrabnahme bleiben offen. Der aktuelle Hupenclip wurde auf Nutzerwunsch auf TTS zurückgestellt; echte historische Hupen brauchen weiterhin belegte Quelle, Rechte und Inhalts-/Hörprüfung.
+
+**Prüfungslimit:** Diese Automation hatte keinen lokalen Checkout unter D:\\Diktator-Kart; Netzwerkkonnektivität für einen `git ls-remote`-Klon war nicht verfügbar. Daher heute keine neuen lokalen Tests, kein Typecheck/Build und kein PC-/Browser-/Sarah-Gerätetest. PROGRESS-LOG.md dokumentiert 45/45 Tests plus TypeScript für den früheren Claude-Spielstand; das ist kein frischer Lauf heute. Der Remote-Workflow-Run-Endpunkt lieferte keine PR-Workflowläufe für `00e8173`.
+
+**Nächster Schritt:** Auf Marcel-PC `Projektstart` ausführen und lokalen Branch/SHA gegen `main` vergleichen. Danach offene Fahr-/Modellabnahmen durchführen und die fehlende absturzfähige Granattrichter-/Übungsgrubenzone sowie ein zusätzliches Schotter-/Gras-Oberflächenfeedback im PC-Checkout implementieren, testen und regulär im Teamablauf veröffentlichen.
+
 ## Neueste Übergabe – 04.10.2026 (Abend, Claude)
 
 Projektstart auf `codex/team-marcel-20261003-232302-374` (Basis main `f784078`), danach autonome Arbeit auf Marcels Auftrag bis zur 95-%-Budgetgrenze und Teamabschluss nach main. Ergebnis: Maus-Kamera-Fix, historischer Startkader (Karikaturstufe), Fahrerwahl mit Live-Porträts, figurenspezifische Wurfobjekte, Panzer nur für Hitler (auch Bot), eigener Marsch statt Klavier, Ziel-Feuerwerk und Siegerporträts. 43/43 Unit-Tests, TypeScript und Produktionsbuild bestanden; Browserbelege im eingebauten Browser der Claude-App gegen den Batch-Server (Port 4173, gleicher Ordner/Branch/Commit laut `/__diktator/status`). Zweite Runde: preußischer Marsch, Zufallswetter mit Schnee, Panzerrad-Fix, Nasen/Wangen. Offen: Marcels Maus-Test in Chrome, Hörprobe des Marsches, Feinschliff der Gesichter, eigene Fähigkeiten der fünf anderen Figuren. Details im Eintrag unten.
