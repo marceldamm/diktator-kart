@@ -11,12 +11,35 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Aktive Produktbasis und Reihenfolge – 06.10.2026
+
+Marcels Antworten im [Projektfragebogen](PROJECT-QUESTIONNAIRE.md) und [aktiven Projektgrundgerüst](docs/23-project-design-baseline.md) sind die initial verbindliche Arbeitsbasis für Produktziele, Qualität und Priorität. Sarahs Beiträge bleiben unverändert erhalten; ihre Antworten ergänzen eine getrennte Perspektive und sind weder Freigabe noch Blocker. Der erste vollständige Art-Anker ist Hitler samt individuellem Kart. Frühere Stalin-Aufträge bleiben als ausgeführte Historie dokumentiert; offene Stalin-Arbeiten werden nach dem Hitler-Anker fortgesetzt.
+
 ## Git-Ablauf verständlich gemacht – 05.10.2026 (Marcel)
 
 - [x] In TEAM-NOTES.md oben eine knappe Git-Erklärung ergänzt: persönlicher Branch, gespeicherter Zwischenstand/Commit, gemeinsames geprüftes `main` und welche Schritte die KI übernimmt.
 - [x] Projektstart und Projektabschluss für zwei Personen präzisiert; `Projekt-zwischenstand.cmd` und die KI-Kurzform **„Zwischenstand sichern“** ergänzen einen sicheren Checkpoint nur auf dem persönlichen Branch.
 - [x] Git-Kernablauf, automatische/nicht automatische Konfliktlösung und Grenzen bei Blender-Binärdateien in docs/21-team-workflow.md dokumentiert.
 - [ ] Sarah soll die drei Befehle beim nächsten eigenen Projektstart mit ihrer lokalen Installation einmal durchspielen; ihren unveröffentlichten PC-Stand hier nicht voraussetzen.
+
+## Laufzeitbilder und Fokusprüfung als Workflow verankert – 05.10.2026 (Marcel)
+
+- [x] Verbindliche Abnahme für sichtbare Pakete ergänzt: aktuelle Spielbilder, passende Vorher-/Nachher-Zwischenstände an Paketgrenzen, gleiche Vergleichsbedingungen und knappe Belegmetadaten.
+- [x] Prüfung vorhandener Bilder vor der Bewertung festgelegt: Zeitstempel, Szene sowie geladener Branch/Commit verifizieren; alte Bilder als historisch einordnen und fehlenden aktuellen Runtimebeleg offen benennen.
+- [x] Regelmäßige Selbstprüfung gegen unnötige Detailarbeit und Prozessbeobachtung bei langen Läufen ergänzt; nur eigene, eindeutig zugeordnete Prüfinstanzen pausieren/beenden.
+- [x] Regeln in AGENTS.md, START-HERE.md, TEAM-NOTES.md, TEAM-HANDBOOK.md, docs/21-team-workflow.md und docs/evidence/README.md verankert. Langfristige Qualitätskontrolle in LONG-TERM-GOALS.md übernommen; Details dieses Beschlusses in TEAM-CHANGES.md.
+
+## Initiales Projektgrundgerüst nach Marcels Antworten ausrichten – 06.10.2026 (Marcel)
+
+- [x] Fragebogen in einheitliche Frage-und-Auswahl-Zeilen umgebaut: Marcel ist am Fragetitel gekennzeichnet, seine gewählte Antwort ist mit `[X]` markiert; Sarah erhält dieselben vollständigen Antworttexte und eigene Kästchen.
+- [x] Marcels zusätzliche Idee für fahrerspezifisch gestaltete, zwischen allen Karts frei wählbare Reifen separat und als aktive Auswahl in docs/23 und der Reifen-/Anpassungsanforderung festgehalten.
+- [x] Bei zuvor nur mit Marcels Auswahl dokumentierten Fragen zwei vollständige Gegenoptionen ergänzt, damit Sarah überall dieselbe Auswahlstruktur erhält; Marcels gesetzte Auswahl blieb erhalten.
+- [x] AGENTS.md, Projektstart-Skill und TEAM-NOTES.md angewiesen, Sarah beim nächsten Projektstart automatisch auf den Fragebogen hinzuweisen.
+- [x] Marcels Antworten in [docs/23-project-design-baseline.md](docs/23-project-design-baseline.md) als aktive initiale Basis festgeschrieben und Grundpfeiler daraus abgeleitet. Sarahs bestehende Ideen und Antworten nicht geändert.
+- [x] Spiel-, Art-, Technik-, Performance-, Asset-, Roadmap-, Katalog-, UI- und Produktionsdokumente anhand dieser Basis konkretisiert; frühere abweichende Prioritäten als historisch/überholt kenntlich gemacht.
+- [x] Sarahs Antworten können unabhängig nachgetragen werden; sie ergänzen die getrennte Perspektive, sind keine Freigabe und ändern die aktive Basis nicht automatisch.
+- [x] Zwei getrennte Worker-Ist-/Soll-Analysen zusammengeführt und daraus den gestaffelten Claude-Auftrag mit Abnahmen erstellt: [docs/24-claude-overnight-master-prompt.md](docs/24-claude-overnight-master-prompt.md).
+- [ ] Frische normale Runtime-Istaufnahme, Fahrer-/Fahrzeug-/Objektbilder und erstes Hitler-/Kart-Konzeptblatt noch erstellen; Konzept und Ist-Aufnahme sind kein Ergebnis der Worker-Berichte.
 
 ## Sarah – Steuerung und Items, 05.10.2026
 
@@ -30,14 +53,14 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 ## Umsetzungsauftrag: Qualitätsanker, Spielwelt und Fahrgefühl – 05.10.2026 (Marcel)
 
-**Quelle/Vorrang:** Marcels heute eingefügter Leitauftrag „Arbeite als leitender Entwickler, Technical Artist und Art Director …“ erweitert die bestehende Bild-/Masteraufgabe. Umgesetzt wird in der bestätigten Reihenfolge: (1) Stalin samt eigenständigem Kart als echter Runtime-Qualitätsanker, (2) sichtbare Stadion-/Berlinwelt und begrenzte Material-/Kontaktpartikel, (3) kontrollierbarer Drift mit Kurven-, Gegenlenk-, Geschwindigkeits-, Turbo- und Kontaktprüfung. Danach folgen die übrigen ausführbaren aktuellen Punkte und anschließend bestätigte Langzeitpakete. Die Arbeitsreihenfolge ist keine Abnahme: Tests, Spielbilder und menschliche Fahr-/Stilprüfung bleiben getrennte Belege.
+**Quelle/Vorrang:** Marcels heute eingefügter Leitauftrag „Arbeite als leitender Entwickler, Technical Artist und Art Director …“ erweitert die bestehende Bild-/Masteraufgabe. Umgesetzt wird in der bestätigten Reihenfolge: (1) Hitler samt eigenständigem Kart als erster vollständiger Runtime-Qualitätsanker, (2) sichtbare Stadion-/Berlinwelt und begrenzte Material-/Kontaktpartikel, (3) kontrollierbarer Drift mit Kurven-, Gegenlenk-, Geschwindigkeits-, Turbo- und Kontaktprüfung. Danach folgen die übrigen ausführbaren aktuellen Punkte und anschließend bestätigte Langzeitpakete. Die Arbeitsreihenfolge ist keine Abnahme: Tests, Spielbilder und menschliche Fahr-/Stilprüfung bleiben getrennte Belege.
 
 - [x] Leitauftrag gelesen und auf aktive Babylon-Quellen, bisherige Teilstände, vorhandene Fahr-/Effektpfade und verbindliche Budget-/Git-Regeln bezogen.
 - [ ] Laufzeitansichten/Steuerablauf robust prüfen: drei Kameras, echte Fahrerauswahl, Rennen, Bewegung, Pause und Neustart. Headless-Eingabe/Taktprobleme als Testgrenze oder Harness-Fehler vom Spielverhalten unterscheiden.
 - **Teilprüfung 06.10.2026:** Eine sichtbare Chrome-Sitzung mit `?world=lab` zeigte ausdrücklich die stark vereinfachte M2-Testszene, nicht das normale Rennen. Start/Rendern, einzelne W-Tastimpulse (HUD stieg kurz auf 4 km/h), ein Wechsel Nah→Fern, Pause/Fortsetzen und Neustart wurden beobachtet; Browser-Konsole ohne Fehler. Dauerhaftes Gas, dritte Kamera, Fahrerwahl, normales Rennen und Items sind damit **nicht** abgenommen. Der ungeeignete Testtab wurde pausiert/geschlossen; die separate CDP-Instanz meldete `HeadlessChrome`, wurde ohne Runtime-Test vollständig beendet. Für diese Aufgabe nur den sichtbaren normalen Spielablauf verwenden und die Testszene nicht als Produktionsbeleg zeigen.
 - [x] Erster weiterer Fahrer-/Stalin-Modellpass: Köpfe sind wieder sichtbar größer relativ zum Oberkörper skaliert; Stalin erhält eine eigens geschnittene, genähte Feldmütze ohne Insignien sowie vier Art-déco-Radkappen der Limousine. Die Radkappen folgen den drehenden Radknoten und bleiben bei allen anderen Karosserien verborgen.
 - [x] Stalin-Nase von der gemeinsamen generischen Variante gelöst: eigene loftmodellierte Brücke mit breiteren Nasenflügeln und zurückhaltend modellierten Nasenlöchern; nur im Stalin-Cast aktiv und im GLB-Knotentest nachgewiesen.
-- [ ] Stalin-Qualitätsanker und Limousinen-Silhouette in Front/Seite/Nähe/Bewegung weiterentwickeln; nach jedem Asset-Neubau in der Laufzeit prüfen. Nah-/Seiten-/Bewegungsprüfung mit eindeutig ausgewähltem Stalin fehlt noch.
+- [ ] Nach Abnahme des Hitler-/Kart-Ankers die bereits begonnene Stalin-Qualitätsarbeit und Limousinen-Silhouette in Front/Seite/Nähe/Bewegung fortsetzen; Laufzeit- und menschliche Abnahme getrennt dokumentieren.
 - [ ] Fassaden-, Wasser-, Straßen- und Partikeleffekte anhand echter Spielkontakte sichtbar abnehmen und auf klare Fahrspur/Performance achten; die neuen Schaumkanten sind technisch, aber noch nicht visuell abgenommen.
 - [x] Kanal-Wasserlinie dezent lesbarer gemacht: zwei prozedural texturierte Schaumstreifen sitzen innerhalb der Wassergrenzen, ohne Fahrbahn-/Kollisions- oder Partikeländerung; Breite und Lage regressiongeprüft.
 - [x] Technische Driftmatrix für drei Streckenbögen bei 9/12/15 m/s ergänzt: Bot-Drift bleibt mindestens 0,35 s aktiv, löst vor dem inneren Sperrband und fährt in der Regression ohne Grenzkontakt durch; Gegenlenk-Schlupf wird auf höchstens 0,081 rad begrenzt.
@@ -103,7 +126,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **M3-Kanalspray-Pass (05.10., technisch umgesetzt):** Die Heckfahne beim flachen Wasserübertritt steigt auf 30 Partikel/s (14 im Sparmodus); Sprites sind leicht größer und leben höchstens 0,48 s. Der Pool bleibt bei 28 Partikeln je Kart / maximal 168 für sechs Karts. Auslöser, Kanalgrenzen, Physik, Rettung, hohe Sprünge und separater Absturz-Splash sind unverändert. Regression 2/2 und Produktionsbuild bestanden. Fahrerwahl und Startaufstellung wurden im In-App-Browser angesehen; der Effekt konnte ohne gehaltene Fahrzeuggabe nicht beim Kanaldurchgang gesehen werden. Laufzeit-Wasserbild und visuelle Wirkung bleiben offen.
 
-**Nächster Schritt:** Karosserie und Modellanker in echter Nah-/Seiten-/Fahrtansicht beurteilen; danach Welt-/Wassereffekte bei Kontakt sowie kontrollierte Driftfahrt weiter abnehmen. Laufender Bildqualitätsauftrag bleibt insgesamt offen.
+**Nächster Schritt:** Erst Ist-Belege für den aktuellen Hitler-/Kart-Stand sichern, dann Konzeptblatt und den sichtbaren Runtime-Qualitätspass nach docs/23 und docs/24 umsetzen; danach Welt-/Wassereffekte und Drift fortsetzen. Laufender Bildqualitätsauftrag bleibt insgesamt offen.
 
 ## Wasserkanal-Bergung – 04.10.2026 (Marcel)
 

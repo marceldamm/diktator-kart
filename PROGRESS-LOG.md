@@ -1,5 +1,27 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-06 – Team-Fragebogen für den gemeinsamen Projektleitgedanken
+
+**Auftrag:** Marcel wollte die bisher interaktiv gestellten Fragen dauerhaft als beantwortbares Dokument sichern und Sarah beim nächsten Projektstart automatisch auf Marcels Antworten sowie eigene Antwortfelder hinweisen lassen. Der gemeinsame Leitgedanke soll erst nach beidseitigem Abgleich entstehen.
+
+**Erfasst:** 20 Bild-/Stil-/Audiofragen, 25 Grundsatzfragen, 25 Technikfragen und die ersten 5 visuellen Ankerfragen samt Marcels tatsächlichen Antworten. Erster Qualitätsanker nach Marcels Auswahl: Hitler mit individuellem Kart; die frühere Stalin-Priorität ist damit zu aktualisieren und nicht stillschweigend als bestätigt fortzuführen. Offene visuelle und akustische Entscheidungen stehen als Checkboxen bereit.
+
+**Workflow:** `PROJECT-QUESTIONNAIRE.md` enthält Marcels Antworten, Sarahs Bestätigungs-/Änderungsfelder und den offenen Rest. AGENTS.md, Projektstart-Skill und TEAM-NOTES.md verlangen, Sarah bei bekanntem Owner beim nächsten Projektstart darauf hinzuweisen. Ihre Antworten blockieren keine unabhängigen Aufgaben. Gemeinsamkeiten, Änderungen und offene Differenzen sind vor dem gemeinsamen Leitgedanken zu unterscheiden.
+
+**Grenze:** Sarah hat noch nicht geantwortet; der Leitgedanke ist ausdrücklich nicht als Teamkonsens dokumentiert. Ist-Bildbestandaufnahme, aktueller Hitler-Laufzeitbeleg, Soll-Konzept und Claude-Prompt bleiben nächste abhängige Schritte. Git-Änderungen sind lokal; kein Commit/Push beauftragt.
+
+## 2026-10-05 – Laufzeitbild-Abnahme und Arbeitsfokus dokumentiert
+
+**Auftrag:** Marcel verlangte aktuelle Laufzeitbilder als Abnahme, sinnvolle Vorher-/Nachher-Zwischenstände ohne Screenshot-Flut, eine Prüfung des Alters/Runtime-Stands vorhandener Bilder, laufende Selbstkontrolle gegen Detaildrift und Beobachtung der Rechnerlast während längerer Prüfungen.
+
+**Dokumentiert:** AGENTS.md, START-HERE.md, TEAM-NOTES.md, TEAM-HANDBOOK.md, docs/21-team-workflow.md und docs/evidence/README.md. Sichtbare Pakete sollen an Paketgrenzen in derselben möglichst vergleichbaren Szene geprüft werden. Bilddatum allein reicht nicht: Szene und geladener Branch/Commit werden mitgeprüft; alte Bilder werden als historisch geführt. CPU-/Speicherlast wird bei langen oder auffällig langsamen Prozessen dem eigenen Chrome-Tab/Build zugeordnet, bevor nur die eindeutig eigene ungenutzte Testinstanz pausiert/geschlossen wird. Nach größeren Paketen erfolgt ein Fokus-Check auf das sichtbare Hauptziel.
+
+**Aktualitätskorrektur:** Der bestehende Evidence-Index enthält ältere 05.10-Aufnahmen. `slice-first-inspection-quality-1005f.png` ist kein Nachweis des später geschriebenen `public/assets/models/hero-kart.glb`; der Eintrag ist jetzt ausdrücklich als historischer Vergleich markiert. Diese Dokumentationsrunde erstellte keine neue Spielaufnahme und änderte keine Runtime-Dateien.
+
+**Git/Prüfung:** Vor den Änderungen waren Working Tree und Branch sauber. `HEAD`, vorhandenes `origin/main` und der Team-Remote-Branch zeigten alle `58078de435b027d837d4a088825d1092c068bab2`. `git fetch origin` konnte wegen fehlender Schreibberechtigung für `.git/FETCH_HEAD` nicht laufen; deshalb wurde kein frisch abgerufenes Remote behauptet. `git diff --check` bestanden. Keine Spieltests oder Build ausgeführt, da ausschließlich Dokumentation geändert wurde.
+
+**Nächster Schritt:** Bei der nächsten sichtbaren Spieländerung den neuen Ablauf praktisch verwenden: passenden Vorherbeleg, frisch verifizierten sichtbaren Runtime-Lauf, gezielten Nachherbeleg und knappe Metadaten dokumentieren.
+
 ## 2026-10-06 – Projektabschluss: M7-Schattenlistenpaket
 
 **Ausgang und Branch:** Fortsetzung auf `codex/team-marcel-20261005-205839-799`, Ausgangscommit `e0e8d417c7309709be3fac0ca7f05bc3e4b7d6b8`; `project-state.json` bestätigt die aktive Babylon-Basis. `origin/main` blieb bei Abruf `751a39f2fc9bbb306e623d078d4a10efc2309cf0`; keine lokalen uncommitteten Fremdänderungen. Der Nutzer ordnete anschließend Projektstopp, Dokumentation und Veröffentlichung an.
@@ -890,3 +912,15 @@ Sarah bestätigt die Richtung aus dem Vorschlag und ergänzt den zehnsekündigen
 Betroffen: `src/abilities.ts`, `src/main.ts`, `src/slice-scene.ts`, `src/scene.ts`, Abilitytests, Fahrerkatalog und Einstiegshinweise. Nach Sarahs Rückmeldung, die zweite Textphase nicht gesehen zu haben, Ursache gefunden: Der erste Banner lief nur 0,9 s und sein Timer wurde beim Audit nicht neu gestartet. Fix: Das Audit startet nun eine eigene 2,6-s-Zweitmeldung in derselben separaten Anzeige. Browser-Gegenprobe zeigt Titel und Motorstottertext sichtbar zusammen mit dem Itemtoast; der echte Platz blieb dabei separat bei Rang 6. Abschließende Gesamtsuite 51/51 und Produktionsbuild bestanden; TypeScript-Fehlercheck leer. Branch `codex/team-sarah-20261005-181009-964`; uncommitted/nicht veröffentlicht.
 
 ## 2026-10-05 – Remote-Abgleich zum Morgenauftrag
+
+### 2026-10-06 – Aktive Produktbasis, Ist-/Soll-Analyse und Claude-Auftrag
+
+**Auftrag:** Marcels beantwortete Gestaltungs-/Technikfragen in ein konsistentes Projektgrundgerüst umsetzen, ohne Sarahs Beiträge anzutasten; Ist-/Soll-Analysen an Worker delegieren und einen wirksamen Claude-Arbeitsauftrag erstellen.
+
+**Ist-Analyse der Worker:** Der aktive Bestand enthält Babylon.js-Produktionsquellen und editierbare Blender-Pipelines für Fahrer/Karts und Stadionwelt. Ein frischer vollständiger Runtime-Beleg des normalen Rennens am aktuellen Stand war nicht nachgewiesen; die jüngste sichtbare `?world=lab`-Szene war eine vereinfachte Testszene. Ältere Bilder, Asset-Previews und historische Messungen dürfen nicht als heutiger Vorher- oder Abnahmebeleg ausgegeben werden. Der erste Fahrer-/Kartanker war zuvor auf Stalin priorisiert; Sarah-Gating stand noch in einzelnen Team-/Fachtexten.
+
+**Soll-Analyse der Worker:** Gestaffelte sichtbare Pakete mit frischem Vorher-Bild, Hitler/Kart-Konzeptblatt und echter Runtime-Überarbeitung, danach ein begrenzter Hero-Welt-/Wasserabschnitt und Audio-/Systempakete. Vollständiger Streckenumbau und sechs fertige Fahrer/Karts sind kein realistischer Ein-Nacht-Abnahmescope; nur tatsächlich integrierte und gezeigte Pakete als erledigt markieren.
+
+**Dokumentationsänderungen:** Marcels Antworten als aktive initiale Basis in `docs/23-project-design-baseline.md` festgelegt; Questionnaire, AGENTS, Startskill, CURRENT-WORKLIST, LONG-TERM-GOALS, TEAM-NOTES, README, START-HERE, Roadmap, offene Fragen, Art-/Gameplay-/Produktions- und Qualitätsmaster referenzieren nun die Priorität Hitler plus individuelles Kart. Frühere Stalin-Stände bleiben als Produktionshistorie erhalten. Sarahs Originalideen wurden nicht verändert. `docs/24-claude-overnight-master-prompt.md` enthält Sollkriterien, sichtbare Abnahme, Budget-/Prozessregeln und eine gestaffelte Umsetzungsreihenfolge.
+
+**Prüfung/Limit:** `git diff --check` bestanden (nur Git-Hinweise zu LF/CRLF); Widersprüche in den aktiven Leitdateien geprüft. `git fetch origin` war durch `FETCH_HEAD: Permission denied` blockiert. Keine Aktualität von `origin/main`, kein Commit und kein Push behauptet. Keine Codeänderung, kein Build/Test und keine neue Runtimeaufnahme in diesem Dokumentationspaket durchgeführt. Die frische normale Runtime-Istaufnahme und Konzeptbilder bleiben offen.

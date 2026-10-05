@@ -93,3 +93,7 @@ Eine kontrolliertere Nachprobe nutzte denselben Headless-Chrome-Pfad wie M2f mit
 - Fallback auf einfachere Schatten, Effekte und Auflösung bereitstellen.
 - Wettereffekte lokal begrenzen und zeitlich sauber beenden; Regen, Schnee, Eis und Laub dürfen keine unkontrolliert wachsenden Partikel- oder Kollisionsmengen erzeugen.
 - Schadensmodelle bevorzugen wenige austauschbare Zustände und Animationen gegenüber echter Geometriezerstörung.
+
+## Aktives Leistungsziel aus Marcels Initialantwort – 06.10.2026
+
+Das aktive Produktziel ist stabile 60 FPS in der normalen Rennszene, auch auf älteren Laptops und integrierter Grafik. Abnahme erfolgt auf einem festen Referenz-PC und in einer dokumentierten Messszene. Automatische Qualitätsanpassung plus manueller Regler reduzieren gezielt teure Effekte, während Fahrzeug-/Kernmodelle und Lesbarkeit erhalten bleiben. Vorhandene Messwerte belegen nur die jeweils genannte Szene, Auflösung und Hardware und gelten nicht als Nachweis des Gesamtziels. Referenz: [aktives Projektgrundgerüst](23-project-design-baseline.md).

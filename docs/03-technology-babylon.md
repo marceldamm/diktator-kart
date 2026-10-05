@@ -107,3 +107,7 @@ Die Space-Flanke wird bis zum nächsten festen Simulationsschritt vorgemerkt, da
 ## Nicht übernehmen
 
 Nicht automatisch übernehmen: PlayCanvas-Szenenaufbau, Ammo-Ladepfade, alte Controllerklassen, alte Renderbudgets, alte Assetnamen, bestehende Buildannahmen oder angeblich stabile Workarounds. Sie dürfen als historische Hinweise gelesen und im neuen Prototyp unabhängig bewertet werden.
+
+## Aktive technische Zielvorgaben aus Marcels Initialantwort – 06.10.2026
+
+Verbindliches Entwicklungsziel sind Desktop- und Laptop-Browser (Chrome/Edge zuerst, Firefox mitprüfen), Offline-Einzelspieler, Tastatur und Gamepad, freie Belegung der wichtigen Fahraktionen sowie ein bedienbares Menü in möglichst unter zehn Sekunden. Die normale Rennszene soll auf älteren Laptops mit integrierter Grafik stabil 60 FPS erreichen. Automatische Grafikabstimmung erhält einen manuellen Regler und kompatible Rückfälle; Kernmodelle und Lesbarkeit bleiben geschützt. Versionierte Blender-Quellen gehören zu optimierten Laufzeitmodellen. Vor Veröffentlichung sind Tests, Build und sichtbarer Laufzeitcheck erforderlich. Dies sind Zielwerte, keine behaupteten Messergebnisse. Details: [aktives Projektgrundgerüst](23-project-design-baseline.md), [Fragebogen](../PROJECT-QUESTIONNAIRE.md).

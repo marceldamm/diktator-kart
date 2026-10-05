@@ -1,5 +1,8 @@
 # Gemeinsamer Änderungsverlauf
 
+- **06.10.2026 – Aktives Projektgrundgerüst aus Marcels Antworten:** Der Fragebogen ist die initiale Produktbasis; Hitler samt Kart ist der erste Qualitätsanker. Sarahs Originalideen bleiben erhalten und ihre Antwort ändert die Basis nicht automatisch. Prioritätswidersprüche in Roadmap, Arbeitsliste, Frage-/Art-/Produktionsdokumenten sind zugunsten des neuesten Auftrags als historische Vorgaben markiert. Claude-Ist-/Soll-Analyse und gestaffelter Nachtauftrag: [docs/24-claude-overnight-master-prompt.md](docs/24-claude-overnight-master-prompt.md). Sarahs Inhalte wurden nicht umgeschrieben.
+
+
 - **05.10.2026 – Hitler-Schnurrbartregression:** Die im Runtime-Porträt unsichtbare kleine Quaderform in `art-source/build_kart.py` durch zwei klar lesbare Bartflügel vor der Gesichtsebene ersetzt; editierbare Blender-Datei sowie optimiertes GLB neu exportiert. Regression prüft Hitlers Castteil und reale GLB-Geometrie; 2/2 Tests, Produktionsbuild und frische sechs Live-Porträts geprüft. Gesamtmodell bleibt nicht als Qualitätsanker abgenommen.
 - **05.10.2026 – Stalin-Feldmützenkrone:** Ein echter Runtime-Dreiviertelblick zeigte die Krone wie eine aufrechte Scheibe; Ursache waren vertikale statt horizontale Kronquerschnitte im Blender-Bau. Die Feldmütze nutzt jetzt waagerechte, kuppelförmige Kronringe (Exporttiefe ca. 56 cm statt 4,4 cm). GLB-/Cast-Regression, Build, sechs Live-Porträts und neue Runtime-Dreiviertelansicht geprüft. Gesamtanker bleibt offen.
 - **05.10.2026 – Lid-/Mundlesbarkeit:** Lidellipsoide weichen oberen/unteren Lidkanten; Stalins Mund sitzt körpernah unter dem Walrossbart. Asset, gezielter Casttest, Build und sechs Live-Porträts geprüft. Gesamtanker und menschlicher Nah-/Profilpass bleiben offen; Details im [Fortschrittslog](PROGRESS-LOG.md).
@@ -32,7 +35,14 @@
 
 Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Änderungen, jeweils wenige Zeilen. Kein Werkzeug-/Testprotokoll. Technische Belege und offene Annahmen stehen in [PROGRESS-LOG.md](PROGRESS-LOG.md), laufende Aufgaben in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md), Zukunftsziele in [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md).
 
-## 05.10.2026
+## 05.10.2026 – Ergänzung
+
+- **Laufzeitbilder und Fokusprüfung als verbindlicher Workflow:** Sichtbare Pakete erhalten aktuelle Laufzeitbelege und bei sinnvollen Paketgrenzen knappe Vorher-/Nachher-Vergleiche. Bildalter, Szene und geladener Branch/Commit werden vor der Bewertung geprüft. Selbstprüfung gegen Detaildrift und Beobachtung eigener Browser-/Buildlast sind jetzt in der Anleitung verankert; Details: [Team-Workflow](docs/21-team-workflow.md).
+
+## 06.10.2026
+
+- **Historischer Eintrag, am 06.10.2026 überholt:** Die Formulierung, Marcels Basis müsse erst durch beidseitigen Abgleich aktiv werden, war falsch. Marcels Antworten sind jetzt unabhängig die aktive Grundlage. Sarahs Originalbeiträge bleiben erhalten; ihr Feedback ist optional und ändert die Basis nicht automatisch. Siehe den aktuellen Eintrag am Dateianfang und docs/23 sowie docs/24.
+- **Marcels Einzelentwurf dokumentiert:** [docs/23-project-design-baseline.md](docs/23-project-design-baseline.md) fasst seine Antworten als persönliche Zielvorstellung zusammen. Relevante Fachdateien verweisen mit gesonderten, unbestätigten Abschnitten darauf; vorhandene Sarah-Beiträge wurden nicht ersetzt oder geändert. Der Vorschlag für den ersten Hitler/Kart-Konzeptanker bleibt vom früher geführten Stalin-Produktionsanker unterscheidbar, bis Teamabgleich und Priorisierung erfolgt sind.
 
 - **Steuerung erweitert Sarah:** Rohrpost/Suchauftrag mit E+V vorwärts oder E+H rückwärts; E allein bleibt unverändert. Foto liegt auf F, Hupe auf V.
 - **Zensurbalken wieder aufgenommen Sarah:** Seltenes viertes Item, kurzes satirisches Banner und begrenzte Lenkeinschränkung für Gegner; Schutzzeiten bleiben wirksam.

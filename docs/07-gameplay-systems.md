@@ -1,5 +1,8 @@
 # Gameplay-Systeme und Zuständigkeiten
 
+**Aktive Produktpriorität, 06.10.2026:** Die Antworten in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md) und [docs/23-project-design-baseline.md](23-project-design-baseline.md) bestimmen neue Arbeit: zugängliches Arcade-Fahrgefühl mit Übungstiefe, chaotische Items, faire aktive Bots, kurze Rückschlagzeiten und starker Einzelspieler-Grand-Prix. Ältere Balancewerte bleiben vorläufig, falls nicht ausdrücklich gemessen/abgenommen.
+
+
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
@@ -99,3 +102,7 @@ Das HUD zeigt Runde, Position, Zeit, Item, Warnungen und gegebenenfalls Untertit
 ## Abnahme eines Systems
 
 Ein System gilt erst als bereit, wenn es im normalen Rennen, bei Pause, nach Neustart, nach Menü-Rückkehr und in einer reduzierten Qualitätsstufe geprüft wurde. Code allein und ein Dokumenteintrag reichen nicht.
+
+## Aktive Gameplay-Ziele aus Marcels Initialantwort – 06.10.2026
+
+Die aktive Spielrichtung priorisiert überraschende, sehr chaotische Item-Wendungen, persönlich auftretende Bots mit fairen und nachvollziehbaren Regeln sowie kurze, gut lesbare Nachteile nach Fahrfehlern. Ein Grand Prix ist eine zusammenhängende satirische Veranstaltung mit wiederkehrenden Motiven. Fahrzeugschäden eskalieren lesbar von Kratzern und Verformung über möglichen Teileverlust bis zum Ausfall; bis dahin bleibt das Kart fahrbar. Diese Ziele bestimmen die Weiterentwicklung. Bestehende Sarah-Ideen und ihre Herkunft bleiben erhalten. Details: [Projektgrundgerüst](23-project-design-baseline.md).

@@ -1,6 +1,13 @@
 # Aktueller Spielstand und Produktionsgrundlage
 
+> **Vorrangiger Zielstand, 06.10.2026:** Dieser technische Bestand ist eine dokumentierte ältere Inventur. Marcels aktueller Fragebogen und `docs/23-project-design-baseline.md` definieren das Ziel; erst eine neue normale Rennaufnahme zeigt den visuellen Ist-Stand des aktuellen Heads. Hitler samt individuellem Kart ist der nächste vollständige Anker. Sarahs Originalideen bleiben erhalten und werden nicht als Freigabeblock eingesetzt.
+
+
 Stand 03.10.2026 nach Claude Q2d und anschliessender Team-/Starterumstellung. Gemeinsame Quelle ist jetzt der **neue Babylon-main**, keine alte Engine-Version. Git-Ablauf in [21-team-workflow.md](21-team-workflow.md).
+
+## Aktive Zielbasis (06.10.2026)
+
+Dieser Bestand beschreibt frühere überprüfte Implementierungen und ist keine aktuelle visuelle Abnahme des vollständigen Rennens. Für neue Arbeit gilt Marcels aktives Grundgerüst: zuerst ein aktuelles, sichtbares Ist-Bild des normalen Rennens aufnehmen; danach Hitler samt individuellem Kart als ersten vollen Qualitätsanker verfolgen. Alte Evidence-Bilder nur als datierte Historie/vergleichbare Vorher-Aufnahme verwenden.
 
 ## Uebernommener Claude-Stand
 
@@ -50,6 +57,6 @@ Keine neue schwache-PC-/Mobil-, Hoer-, menschliche Komfort- oder G–L-Abnahme. 
 
 ## Offene Produktion
 
-Regen/nasse Strasse/Pfuetzen/Blitz/Wolkenschatten und echtere Fahrer sind Nutzerwuensche, bislang **nicht implementiert**. Bots auf die Abkuerzung, Schadensstufen, Drawcall-/Ladeoptimierung sowie normale/schwache PC-/Mobilpruefung bleiben offen. Historische Gestaltung, Sarahs Ideen und gemeinsame Stilfreigabe weiterhin gesondert behandeln.
+Regen/nasse Strasse/Pfuetzen/Blitz/Wolkenschatten und echtere Fahrer sind Nutzerwuensche, bislang **nicht implementiert**. Bots auf die Abkuerzung, Schadensstufen, Drawcall-/Ladeoptimierung sowie normale/schwache PC-/Mobilpruefung bleiben offen. Aktive Gestaltung folgt Marcels Fragebogen und der Dokumentbasis 23. Sarahs bestehende Ideen bleiben unverändert; neue Arbeit wird nicht durch ihr Fragebogenfeedback blockiert.
 
 Nach erfolgreicher Teamumstellung auf main 845c0bf umgesetzt: frueher Konzeptbild-Ladebildschirm mit kritischem Inline-CSS, originalem Imagegen-Motiv (376,5 kB WebP), echtem Fortschritt in sechs Abschnitten und Fehlerhilfe/Wiederholen. Das 3D-Menue folgt erst nach whenReadyAsync und erstem Renderbild. Quellen: art-source/loading-stadium-v1.md; Log/Browserbilder: docs/evidence/loading-*. Kein Ersatz fuer 3D-Spielgrafik oder neue G–L-Abnahme.

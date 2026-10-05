@@ -1,5 +1,10 @@
 # Entscheidungslog
 
+## Aktive Leitentscheidung – 06.10.2026
+
+Marcels vollständig beantworteter Projektfragebogen setzt das initiale Produktgrundgerüst, die langfristigen Qualitätsmaßstäbe und die aktuelle Arbeitspriorität. Hitler samt individuellem Kart wird erster vollständiger Konzept- und Runtime-Qualitätsanker. Derber schwarzer Humor zielt auf die Selbstdarstellung der Diktatoren, nicht auf reale Opfer. Sarahs vorhandene Ideen/Antworten bleiben erhalten und werden nicht umformuliert; sie ändern Marcels Basis nicht automatisch. Siehe [Fragebogen](../PROJECT-QUESTIONNAIRE.md) und [aktives Grundgerüst](23-project-design-baseline.md).
+
+
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
@@ -132,3 +137,7 @@ Technische Produktionsentscheidung im freigegebenen Slice: Original-Blenderkarts
 ## 03.10.2026 – Kameramaus nur als bewusste Geste
 
 Nutzer erlaubt alternative Mausbelegung nach Beanstandung dauernder Kamerabewegung. Technische Entscheidung: rechte Taste halten + ziehen für Look, linke Taste weiterhin Item, X halten Rückblick. Sichtbarer freier Cursor; kein permanenter Pointer Lock; weiche Rückzentrierung beim Release. Damit bleiben Fahren, Kamera und Itemabsicht getrennt. Vorbild für die Drag-Geste: offizielle BeamNG-Photomode-Kamerabedienung. Betrifft README, START-HERE, docs19/22, main/input/camera/mouse-camera und Spielhinweise. Keine Änderung an Sarahs Figuren-/Itemideen.
+
+## 06.10.2026 – Initiales Projektgrundgerüst aus Marcels Antworten
+
+Marcels Antworten zu Spielversprechen, Satiregrenze, Stil, technischer Zielsetzung, erstem Fahrer-/Kartanker und Audio setzen die aktive Ausgangsbasis. Die zusätzliche Reifenregel macht alle charakteristischen Fahrer-Reifensets von Beginn an auf jedem Kart auswählbar. Vollständige Auswahl: [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md); gültige Produktbeschreibung: [docs/23-project-design-baseline.md](23-project-design-baseline.md). Sarahs Originalideen und Antworten werden nicht geändert; ihre Rückmeldungen ändern diese Basis nicht automatisch.

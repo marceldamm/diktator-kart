@@ -55,3 +55,7 @@ Zu jedem wichtigen Bild sollte später kurz notiert werden: Was gefällt daran? 
 ## Altprojekt als Bildreferenz
 
 Die Bilder unter `game-review/` zeigen den bisherigen Prototypenstand mit vereinfachten Karts/Fahrern, HUD und Startaufstellung. Sie sind Ist-Stand und Lernmaterial. Das im alten Index erwähnte Key-Art dient als Farb- und Stimmungshinweis, nicht als Beweis, dass die neue Engine dieselbe Darstellung automatisch erreicht.
+
+## Aktive Konzeptblatt-Vorgabe von Marcel – 06.10.2026
+
+Jeder erste Assetanker erhält ein Konzeptblatt mit Hero-Ansicht, Front, Seite, Heck und Details. Fahrer und Kart erscheinen auf neutraler Bühne und zusätzlich klein in der Rennwelt. Für den Fahreranker werden Front, Dreiviertel, Profil und echte Rennfahrt verglichen. Das erste Paar ist Hitler samt individuellem Kart. Konzeptbilder sind Modellierungsziele; Abnahme erfordert zusätzlich aktuelle, verifizierte Spielbilder und passende Vorher-/Nachher-Belege. Quelle: [Fragebogen](../PROJECT-QUESTIONNAIRE.md).

@@ -3,6 +3,10 @@
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
+## Aktive Priorität ab 06.10.2026
+
+Marcels aktive Antworten stehen in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md) und [docs/23-project-design-baseline.md](23-project-design-baseline.md). Erster voller Fahrer-/Kartanker ist Hitler. Ältere Stalin- oder neutraler-Slice-Reihenfolgen sind historische Zwischenstände. Sarahs ursprüngliche Ideen bleiben unberührt; ihre Antworten sind kein Freigabeschritt. Der Claude-Arbeitsauftrag mit Ist/Soll-Befunden und gestaffelten Abnahmen steht in [docs/24-claude-overnight-master-prompt.md](24-claude-overnight-master-prompt.md).
+
 ## Qualitätsziel präzisiert – 04.10.2026
 
 M3–M6 sollen Modelle, historische Fahrer, Fahrzeuge, Strecke/Umfeld, Effekte und gesamtes Audio deutlich hochwertiger und realitätsnäher machen, gemessen an der gewählten Bildpräferenz G–L im laufenden Spiel. Fertige Stimmen ohne Text-to-Speech; synthetische Clips bleiben Zwischenstand. Menschliche Aufnahmen oder geeignete echte Mitschnitte mit geklärten Rechten. Konkrete Pakete/Abnahmen: [LONG-TERM-GOALS.md](../LONG-TERM-GOALS.md). Bestehende Geräte-/Performanceziele bleiben erhalten.
@@ -89,13 +93,13 @@ Für eine M2-Gesamtabnahme müssen mindestens Fahrgefühl, alle drei Kameras und
 
 Ein Fahrer/Kart vollständig ausgearbeitet, fünf weitere einfacher dargestellt und als Bots fahrend; ein Abschnitt der historischen Berlin-/Stadionwelt, Materialien, Licht, Atmosphäre und Audio. Alle drei Kameras prüfen, einschließlich Hände/Lenkrad/Armaturen/Vorderräder. Das Item-Dreierset kann hier begonnen werden und wird in M4 vollständig integriert.
 
-**Aktueller Fahrer-/Fahrzeugauftrag, 04.10.2026:** Stalin ist der erste zu bauende Qualitätsanker (siehe [Masterauftrag](22-character-vehicle-quality-master.md) und [CURRENT-WORKLIST.md](../CURRENT-WORKLIST.md)). Alle Karts teilen die lesbare, fahrbare Grundarchitektur und bleiben durch zahlreiche personenspezifische Karosserie-/Silhouettenabweichungen unterscheidbar. Die Silhouette muss ohne Farbe lesbar bleiben; kein Traktor-Look, Stalins Traktor bleibt ein Item. Das ist eine bestätigte Art-Richtung, keine neue offene Grundsatzfrage.
+**Historischer Fahrer-/Fahrzeugauftrag, 04.10.2026 (überholt):** Stalin war der erste vorgeschlagene Qualitätsanker (siehe [Masterauftrag](22-character-vehicle-quality-master.md) und [CURRENT-WORKLIST.md](../CURRENT-WORKLIST.md)). Alle Karts teilen die lesbare, fahrbare Grundarchitektur und bleiben durch zahlreiche personenspezifische Karosserie-/Silhouettenabweichungen unterscheidbar. Die Silhouette muss ohne Farbe lesbar bleiben; kein Traktor-Look, Stalins Traktor bleibt ein Item. Das ist eine bestätigte Art-Richtung, keine neue offene Grundsatzfrage.
 
-**Historische Vorbereitung, noch keine M3-Abnahme:** Dokument 14 enthielt Mussolini/Il Duce GT als frühen Art-Piloten-Vorschlag; der neuere Auftrag bestimmt Stalin zuerst. Eine neutrale, vorgezogene Babylon-Stilskizze für Kulisse und Testkart dient zur Sicht- und Lastprüfung; sie ist kein ausgearbeiteter Fahrer, kein bestätigter Stil und kein fertiger M3-Abschnitt.
+**Historische Vorbereitung, noch keine M3-Abnahme:** Dokument 14 enthielt Mussolini/Il Duce GT als frühen Art-Piloten-Vorschlag; Marcels Initialantwort setzt Hitler samt individuellem Kart zuerst. Eine frühere neutrale Babylon-Stilskizze bleibt ein technischer Zwischenstand und ersetzt den aktiven Hitler-/Kart-Qualitätsanker nicht.
 
-Dokument 01 skizziert zusätzlich eine fiktive Stadion-/Boulevardroute mit belegten historischen Landmarken als **Vorschlag**. M3 umfasst davon nur einen zusammenhängenden Abschnitt für Stil- und Lastprobe; vollständiger Rundkurs und Rennregeln bleiben M4. Landmarken, Zeitbild und Zeichen werden vor Assetproduktion gemeinsam geprüft.
+Dokument 01 skizziert zusätzlich eine fiktive Stadion-/Boulevardroute mit belegten historischen Landmarken als **Vorschlag**. M3 umfasst davon nur einen zusammenhängenden Abschnitt für Stil- und Lastprobe; vollständiger Rundkurs und Rennregeln bleiben M4. Konkrete historische Landmarken, Zeichen und Nutzungsrechte sind vor Assetproduktion quellenbasiert zu prüfen; Sarahs ursprüngliche Inhalte nicht verändern.
 
-**Abnahme:** Stalin-Benchmark aus tatsächlichen Spielkameras (vorn/hinten/seitlich/nah und in Bewegung), anatomischer Sitz-/Hand-/Kopfcheck, getrennte Fahreridentität und Kart-Silhouette; anschließend sechs sichtbare Teilnehmer und erste Messwerte. Fahrzeuge bleiben als Kartfamilie erkennbar und sind als Schwarzsilhouetten klar unterscheidbar. Noch keine fertige Gesamtstrecke behaupten.
+**Aktive Abnahme:** Hitler-Benchmark aus tatsächlichen Spielkameras (vorn/hinten/seitlich/nah und in Bewegung), anatomischer Sitz-/Hand-/Kopfcheck, getrennte Fahreridentität und Kart-Silhouette; anschließend sechs sichtbare Teilnehmer und erste Messwerte. Fahrzeuge bleiben als Kartfamilie erkennbar und sind als Schwarzsilhouetten klar unterscheidbar. Noch keine fertige Gesamtstrecke behaupten.
 
 ## M4 – Kernrennen
 
@@ -124,3 +128,7 @@ Frühe Messungen laufend ergänzen, dann PC/Android/iPhone, Querformat-Touch, Qu
 ## M8 – Online und weitere Inhalte
 
 Private Online-Lobbys per Einladung mit Crossplay sind das nächste große Produktziel nach stabilem Singleplayer. Kostenlos tragfähigen Betrieb prüfen. Zusätzliche Strecken, Fahrer, Geist, Orden und Fotomodus werden separat priorisiert und sind keine pauschalen Vorbedingungen für Multiplayer. Spätere öffentliche Veröffentlichung bleibt kostenlos.
+
+## Aktiver sichtbarer Meilenstein aus Marcels Initialantwort – 06.10.2026
+
+Der erste vollständige Konzept-/Qualitätsanker ist Hitler samt individuellem Kart; darauf folgt ein starkes vollständiges Rennen. Das ist die aktuelle Produktionspriorität. Zuvor werden Ist-Bestand und Zielbild mit Front, Seite, Heck und Details auf neutraler Bühne sowie einer kleinen Rennweltansicht dokumentiert. Siehe [Fragebogen](../PROJECT-QUESTIONNAIRE.md) und [Projektgrundgerüst](23-project-design-baseline.md).

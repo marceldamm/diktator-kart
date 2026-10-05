@@ -38,11 +38,11 @@ Diktator Kart wird ein eigenständiger, erwachsener Browser-3D-Kart-Racer mit Ba
 8. **Arbeitsfähigkeit:** Jede längere KI-Arbeit hinterlässt einen nachvollziehbaren Stand, ein Ergebnis, offene Probleme und den nächsten Schritt.
 9. **Gemeinsame Versionsbasis:** GitHub synchronisiert den Entwicklungsstand zwischen dir, Sarah und Codex; stabile Stände und laufende Arbeiten werden getrennt gehalten.
 10. **Veröffentlichung und Budget:** erst privat für das Team und Freunde, später öffentlich kostenlos. Produktion mit vorhandenen und kostenlosen Werkzeugen/Assets; zusätzliches Budget ist nicht freigegeben.
-11. **Gemeinsame Kreativentscheidungen:** Änderungen an Sarahs ursprünglichen Ideen werden gemeinsam bestätigt. Original, Umsetzungsvorschlag und bestätigte Entscheidung bleiben unterscheidbar.
+11. **Projektgrundlage und Sarahs Beiträge:** Marcels Initialantworten in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md) bilden das aktive Grundgerüst in [docs/23-project-design-baseline.md](23-project-design-baseline.md). Sarahs Originalideen bleiben mit Herkunft erhalten und werden nicht umgeschrieben. Ihre Antworten sind eine zusätzliche Sicht, keine Freigabe der laufenden Arbeit und keine automatische Änderung von Marcels Grundpfeilern. Diese ändert nur Marcel durch eine ausdrückliche neue Entscheidung.
 
 ## Bestätigte Konkretisierung vom 03.10.2026
 
-- Sechs bisherige Fahrer bleiben der Startkader: Hitler, Stalin, Mussolini, Mao, Kim Jong-un, Castro. Ein Fahrer/Kart erhält zuerst den vollständigen Art-Pass; die übrigen fünf fahren in einfacherer Darstellung mit.
+- Sechs bisherige Fahrer bleiben der Startkader: Hitler, Stalin, Mussolini, Mao, Kim Jong-un, Castro. Hitler samt individuellem Kart erhält zuerst den vollständigen Art-Pass; bereits geleistete Stalin-Arbeit bleibt erhalten, die übrigen fünf Fahrer folgen danach.
 - Große Köpfe, karikierte Körper und erkennbare historische Gesichtszüge; historische Berlin-/Stadionwelt als erster Kurs. Der alte gemischte Hauptstadt-Kurs bleibt Ideenquelle, kein verbindlicher erster Streckenplan.
 - Drei Kameramodi: Verfolger nah/fern und Fahrerperspektive. Cockpit, Hände, Lenkrad, Armaturen und Vorderräder werden von Anfang an im Assetplan berücksichtigt.
 - Drift, Sprung und Mini-Turbo; maßvolle Aufholhilfe über positionsabhängige Itemchancen, keine geheimen Tempovorteile.
@@ -103,3 +103,7 @@ Ein Abschnitt ist erst fertig, wenn:
 - die Umsetzung oder Nichtumsetzung klar gekennzeichnet ist,
 - eine angemessene Prüfung stattgefunden hat,
 - offene Probleme und der nächste Schritt im Fortschrittslog stehen.
+
+## Persönlicher Konzeptentwurf vom 06.10.2026 – nicht als Team-Beschluss lesen
+
+Marcels Antworten zu Spielversprechen, Stil, Technik, Figuren, Fahrzeugen, Welt und Audio sind das aktive Grundgerüst in [docs/23-project-design-baseline.md](23-project-design-baseline.md). [Der Fragebogen](../PROJECT-QUESTIONNAIRE.md) bleibt die Quelle jeder einzelnen Auswahl. Sarahs Antworten/Ideen werden nicht überschrieben; abweichende Sarah-Beiträge bleiben als ihre eigene Sicht dokumentiert und überschreiben Marcels Basis nicht automatisch.

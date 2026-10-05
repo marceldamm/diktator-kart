@@ -1,5 +1,8 @@
 # Game Design
 
+Marcels Antworten in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md) und das [aktive Projektgrundgerüst](23-project-design-baseline.md) sind die aktuelle Produktbasis. Ältere Abschnitte bleiben Historie, soweit sie Satiregrenzen, Figurenpriorität, Umfang, Laufzeitabnahme oder Audiowünsche anders setzen. Sarahs Originalbeiträge werden nicht geändert; ihre Rückmeldung ist kein Freigabeschritt.
+
+
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
@@ -108,3 +111,7 @@ Wetter ist zunächst lokal und zeitlich begrenzt, nicht als globale Dauerbedingu
 ## Publikum und Gegenspieler
 
 Themenbezogene Zuschauer und Hintergrund-NPCs lockern die reine Diktatorenperspektive auf. Sie tragen passende Kleidung, führen kleine sichtbare Tätigkeiten aus und bleiben im Hintergrund glaubwürdige Kulisse. Sie werden nicht zu einer übertriebenen zweiten Spielmechanik.
+
+## Aktive Spielrichtung aus Marcels Initialantwort – 06.10.2026
+
+Der aktive Maßstab ist ein zugängliches Arcade-Rennen mit Übungstiefe, chaotisch-komischen Grand Prix von ungefähr 10–15 Minuten, stark überraschenden Items und aktiven, aber fair geregelten Bots. Fahrfehler schaden kurzfristig, ohne Comebacks zu verhindern. Der Einzelspieler-Grand-Prix kommt vor Zeitfahren, freiem Üben und späterem Multiplayer; alle Inhalte sind von Beginn an verfügbar. Humor entsteht regelmäßig durch Slapstick, Selbstdarstellung, Kulisse und Ansagen, mit ruhigen Phasen. Historische Figuren bleiben faktennah und erkennbar; der Humor darf provokant sein, macht aber reale Opfer nicht lächerlich. Sarahs Beiträge bleiben separat bewahrt; ihre Antworten ändern diesen Maßstab nicht automatisch. Einzelantworten: [Fragebogen](../PROJECT-QUESTIONNAIRE.md); geltende Ausgangsbasis: [Projektgrundgerüst](23-project-design-baseline.md).

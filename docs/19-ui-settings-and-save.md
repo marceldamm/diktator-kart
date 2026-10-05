@@ -63,3 +63,7 @@ Speicherfehler dürfen das Rennen nicht unspielbar machen. Es gibt Standardwerte
 ## Mobile UI
 
 Android und iPhone verwenden Querformat mit einer eigenen Eingabeebene: große Touchflächen für Gas, Bremse/Rückwärtsfahrt, Lenkung, Hop/Drift, Item, Spezialfähigkeit und Kamerawechsel. UI-Elemente berücksichtigen Notch und kleine Displays. Die endgültige Touch-Anordnung wird nach dem Tastaturprototyp getestet; Rennregeln bleiben identisch, Grafik wird reduziert beziehungsweise skaliert. Das benannte iPhone 15 Pro ist ein Testgerät, kein bereits geprüfter Mindeststandard.
+
+## Aktive UI-, Eingabe- und Speicherziele aus Marcels Initialantwort – 06.10.2026
+
+Die Produktbasis verlangt skalierbare, gut lesbare Oberflächen, Untertitel, klare Kontraste, reduzierte Bewegung, freie Belegung wichtiger Fahraktionen und lokale Speicherung von Einstellungen, Bestzeiten und Fortschritt nach Rennen sowie wichtigen Einstellungsänderungen. Diagnosedaten bleiben lokal, ohne Übertragung. Das Audiomenü erhält getrennte Regler für Musik, Effekte, Stimmen und Ambiente. Bestehende Implementierungen werden an diesen Zielen gemessen. Vollständige Auswahl: [Fragebogen](../PROJECT-QUESTIONNAIRE.md).

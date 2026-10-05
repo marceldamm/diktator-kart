@@ -1,5 +1,8 @@
 # Bauplan und Fahrplan für die Entwicklung
 
+**Aktive Produktbasis:** Marcels Antworten in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md) und [docs/23-project-design-baseline.md](23-project-design-baseline.md) haben Vorrang vor älteren Pilot-/Meilensteinreihenfolgen. Der erste vollständige Qualitätsanker ist Hitler plus individuelles Kart; Sarahs Antworten sind keine Voraussetzung. Vorhandene Arbeit wird bewahrt und historisch belegt.
+
+
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
@@ -92,7 +95,7 @@ Der konkrete Ablauf für den ersten Abend steht in [history/20-first-evening-run
 
 ### M3 – Erster Vertical Slice
 
-**Historischer Vorschlag, 04.10.2026 überholt:** Dokument 14 empfahl zunächst Mussolini/Il Duce GT als ersten vollständig auszuarbeitenden Fahrer/Kart. Marcels neuer Masterauftrag und die aktuelle Arbeitsliste bestimmen nun Stalin als ersten Benchmark; das löst keine weiteren offenen Inhalts- oder Stilfragen und setzt die Abnahmekriterien des [Masterauftrags](22-character-vehicle-quality-master.md) nicht herab.
+**Historischer Vorschlag, 04.10.2026 überholt:** Mussolini/Il Duce GT war ein früherer Pilotvorschlag; danach wurde Stalin als erster Benchmark geführt. Marcels Initialantwort vom 06.10.2026 setzt nun Hitler samt individuellem Kart als ersten vollständigen Qualitätsanker. Bereits geleistete Arbeiten bleiben erhalten; die Abnahmekriterien des [Masterauftrags](22-character-vehicle-quality-master.md) gelten weiter.
 
 Dokument 01 hält einen quellenbasierten, fiktiven Berlin-/Stadion-Routenvorschlag mit Inhaltsprüfung fest. Für M3 genügt der dort abgegrenzte erste Abschnitt; die Route wird erst nach gemeinsamer Auswahl und M2-Abnahme produziert. Historische Fotos/Schilder und konkrete Zeichen brauchen vor Nutzung eigene Freigabe und Lizenzprüfung.
 
@@ -209,3 +212,7 @@ Offene Probleme:
 Nächster sinnvoller Schritt:
 Empfohlenes Modell für den nächsten Schritt:
 ```
+
+## Aktiver Konzept-/Abnahmepfad aus Marcels Initialantwort – 06.10.2026
+
+Zuerst wird Hitler samt individuellem Kart als vollständiges Konzept-/Qualitätspaar ausgearbeitet; danach folgt ein starkes vollständiges Rennen. Das Konzeptblatt zeigt Hero, Front, Seite, Heck und Details auf neutraler Bühne sowie klein in der Rennwelt. Laufzeitpakete erhalten aktuelle Vorher-/Nachher-Bilder unter gleichen Bedingungen. Menschliche Stil-/Fahrabnahme bleibt getrennt von Build- und Testnachweisen. Dies ist die aktuelle Produktionsreihenfolge; bereits vorhandene Arbeit anderer Fahrer bleibt erhalten. Siehe [Projektgrundgerüst](23-project-design-baseline.md).

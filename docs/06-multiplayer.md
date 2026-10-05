@@ -24,3 +24,7 @@ Netzwerkregeln würden schon früh Entscheidungen über Autorität, Tickrate, Re
 ## Startkriterien
 
 Multiplayer beginnt erst, wenn ein vollständiges Singleplayerrennen mit Bots, Items, Audio, Pause, Neustart, Ergebnis und Performance-Abnahme stabil ist. Dann werden Architektur und Technologie neu bewertet; keine alte Netzwerkimplementierung wird vorausgesetzt.
+
+## Einzelspieler-Priorität aus Marcels Initialantwort – 06.10.2026
+
+Zuerst wird der Einzelspieler-Grand-Prix vollständig ausgearbeitet. Multiplayer wird architektonisch später möglich gehalten, kommt aber nach dem stabilen Einzelspieler. Diese Reihenfolge ist Teil des aktiven Grundgerüsts; der übrige Multiplayer-Entwurf bleibt als nachgelagertes Ziel erhalten. Siehe [Projektgrundgerüst](23-project-design-baseline.md).

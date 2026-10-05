@@ -87,6 +87,8 @@ Im Rahmen dieses Projekts darf Codex:
 
 Codex darf keine Sicherheitskontrollen umgehen, keine fremden Konten verwenden, keine unklaren Daten löschen und keine alte technische Implementierung blind in den Babylon-Neustart kopieren. „Voller Zugriff“ bedeutet im Projektkontext selbstständiges Arbeiten mit begründeten, nachvollziehbaren Schritten.
 
+**Sichtprüfungen und Rechnerlast:** Sichtbare Spieländerungen werden in aktuellen, sichtbaren Chrome-Laufzeitbildern abgenommen. Vorher/Nachher-Aufnahmen entstehen an sinnvollen Paketgrenzen und unter vergleichbaren Bedingungen, nicht nach jedem Detail. Vor Nutzung älterer Screenshots prüft Codex Datum, dargestellte Szene und geladenen Commit. Bei langen Prüf- oder Assetläufen behält Codex CPU, Speicher und eigene Chrome-/Build-Prozesse im Blick und pausiert/stoppt nur eindeutig selbst gestartete, gerade unnötige Prüfinstanzen. Ablauf und Grenzen: [Team-Workflow](docs/21-team-workflow.md).
+
 ## 6. GitHub als gemeinsame Arbeitsbasis
 
 **Jetzt verbindlich:** main im Repository marceldamm/diktator-kart enthält ausschließlich das neue Babylon-Spiel. Der frühere Stand ist separat archiviert und nur historische Referenz. Dort keine Änderungen und keinen Spielstart. Die tägliche Git-Hilfe steht in [docs/21-team-workflow.md](docs/21-team-workflow.md).

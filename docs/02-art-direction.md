@@ -1,5 +1,8 @@
 # Art Direction
 
+**Aktive Art Direction, 06.10.2026:** Für alle neuen Arbeiten gilt [docs/23-project-design-baseline.md](23-project-design-baseline.md): hochwertig stilisiert, glaubwürdig erwachsen und filmisch; Hitler samt individuellem Kart ist der erste volle Qualitätsanker. Historische Daten, Lizenzen und die Regel „reale Opfer sind nicht Ziel des Spotts“ sind einzuhalten. Ältere Fahrer-/Stilprioritäten sind als Produktionshistorie zu lesen.
+
+
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
@@ -118,3 +121,7 @@ Die Machbarkeit wird über einen Vertical Slice geprüft. Nicht jedes Konzeptbil
 ## Ergänztes Straßenbild – 03.10.2026
 
 Vier Litfaßsäulen mit eigener Zeitungstypografie und kritischen Personenkult-/Bürokratieplakaten, zwei Haltestellen-/Bankgruppen, eigenständiger Adler als Architekturornament ohne Regimezeichen. Editierbar in src/period-details.ts. Fünf Materialgruppen, keine zusätzliche Physikkollision. Tatsächliche Nahbilder period-boulevard-v1.png/period-eagle-v1.png in evidence. Das ist zusätzliche Ausstattung, keine vollständige historische oder G–L-Rekonstruktion.
+
+## Aktive Art-/Audio-Richtung aus Marcels Initialantwort – 06.10.2026
+
+Aktiver Qualitätsmaßstab: hochwertige, glaubwürdige, filmische Stilisierung mit erwachsenen Proportionen, realitätsnahen Gesichtern, dezenter Hautstruktur und belegten historischen Schnitten. Der erste vollständige Konzeptanker ist Hitler samt individuellem Kart. Die Welt folgt einer eigenständigen historischen Berliner Stadionpracht, warmem spätem Nachmittagslicht, lesbarem strukturiertem Pflaster und klar bewegtem Kanalwasser. Fahrpartikel erscheinen deutlich im Fahrmoment und verschwinden rasch. Audio erhält einen eigenen orchestralen satirischen Rennmarsch, unterscheidbare Fahrzeug-/Item-/Trefferklänge und dezent gemischte Stadionstimmung. Dieser Maßstab gilt ab sofort; Sarahs Beiträge bleiben separat bewahrt und ändern ihn nicht automatisch. Vollständige Basis: [Projektgrundgerüst](23-project-design-baseline.md), Auswahlherkunft: [Fragebogen](../PROJECT-QUESTIONNAIRE.md).

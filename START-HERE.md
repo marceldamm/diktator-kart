@@ -5,6 +5,8 @@
 
 ## Kurzbefehle
 
+**Sichtbare Pakete brauchen aktuelle Laufzeitbilder als Abnahme:** sinnvolle Vorher-/Nachher-Zwischenstände unter vergleichbaren Bedingungen, nicht ein Bild für jede Kleinigkeit. Vorhandene Aufnahmen erst zeitlich und anhand des geladenen Branch-/Commit-Stands einordnen. Bei langen Tests die eigene Rechnerlast prüfen und nur eigene ungenutzte Prüfläufe stoppen. Details: [Team-Workflow](docs/21-team-workflow.md).
+
 **Arbeitslisten abarbeiten:** Erst offene kurzfristige Aufgaben aus CURRENT-WORKLIST.md umsetzen, anschließend selbstständig bestätigte Ziele aus LONG-TERM-GOALS.md in prüfbaren Paketen fortsetzen. Langzeitpaket jeweils in die aktuelle Liste übernehmen; Fortschritt, Blocker und nächsten Schritt zeigen. Budget-/Freigaberegeln bleiben gültig. Beispiel: **„Projektstart. Danach arbeite unsere Arbeitslisten ab: zuerst kurzfristig, dann langfristig.“** Projektstart allein synchronisiert und zeigt den Stand.
 
 Die Kurzbefehle **Projektstart** oder **Projekt Start** rufen den sicheren Startablauf auf; **Projektabschluss**, **Projektende** oder **Projekt Ende** den geprüften Abschluss mit Veröffentlichung. Keine langen Prompts nötig. Die vier zentralen Tabs gehören zum Start. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Naechstes anzeigen. Maßgebliche Anleitung: [TEAM-NOTES.md](TEAM-NOTES.md).
@@ -25,6 +27,10 @@ Gilt für Marcel und Sarah automatisch beim Projektstart und während ausdrückl
 Bei ungefähr **15 % Rest** in einem der beiden Limits keine neue große Aufgabe anfangen. Laufende Änderung fertigstellen, wichtigste Prüfungen/Spielbelege sichern, vier Arbeitsdateien und PROGRESS-LOG.md aktualisieren und lokalen Git-Checkpoint erstellen. Einen bereits autorisierten Teamabschluss rechtzeitig durchführen; Upload nur mit entsprechender Freigabe, keine Budgetregel als zusätzliche Push-Erlaubnis auslegen. Mit dem Ziel stoppen, **mindestens etwa 5 % Rest** für eigene Nutzernachrichten zu lassen. Checkpoints regelmäßig bereits während der Arbeit sichern.
 
 Wenn echte Werte nicht abrufbar sind, dies früh sagen, höchstens einmal nach den angezeigten Werten fragen und vorsichtigen Abschluss-Puffer nutzen. Keine Zusatzkontingente aktivieren, keine Resets oder kostenpflichtigen Dienste auslösen. Bei unerwarteter Sperre beim nächsten Kontakt ehrlich gesicherten und ungesicherten Stand nennen. Diese Regel garantiert keinen exakten Restwert; Prüfung und Abschluss brauchen selbst Kontingent.
+
+## Aktuelle Projektbasis – 06.10.2026
+
+Marcels Fragebogen und [aktives Grundgerüst](docs/23-project-design-baseline.md) bestimmen die initiale Produktbasis; Sarahs eigene Antworten ergänzen sie separat und sind kein Blocker. Sarah beim Projektstart auf [ihren Fragebogen](PROJECT-QUESTIONNAIRE.md) hinweisen. Der aktuelle priorisierte Umsetzungsauftrag steht in [docs/24-claude-overnight-master-prompt.md](docs/24-claude-overnight-master-prompt.md).
 
 ## Unsere vier Arbeitsdateien
 

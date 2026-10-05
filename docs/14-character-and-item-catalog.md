@@ -177,3 +177,7 @@ Das alte Konzept fordert mindestens einen Menschen plus fünf tatsächlich fahre
 | Itemkategorien | übernommen, Balance und Wirkung offen |
 | fünf Bots plus Spieler | sechs Teilnehmer beschlossen; ein ausgearbeiteter Fahrer/Kart, fünf zunächst einfachere Darstellungen |
 | historische Namen/Symbole | kreative Quelle, Inhalts- und Rechtsprüfung erforderlich |
+
+## Aktive Charakter-/Fahrzeugrichtung aus Marcels Initialantwort – 06.10.2026
+
+Der Startkader umfasst die sechs vorhandenen Figuren mit jeweils eigener Eitelkeit, Fahrweise und Reaktion. Erster Qualitätsanker ist Hitler samt individuellem Kart. Die Karts teilen ein Grundfahrwerk, erhalten eigenständige, flache und klar nicht treckerartige Silhouetten. Jedes Kart hat charakteristische Reifen; jedes Reifen-Set ist ab Spielbeginn auf jedem Kart frei auswählbar. Vorhandene Sarah-Zuordnungen und Originaltexte bleiben erhalten; sie ändern diese Basis nicht automatisch. Quelle: [Fragebogen](../PROJECT-QUESTIONNAIRE.md) und [Projektgrundgerüst](23-project-design-baseline.md).

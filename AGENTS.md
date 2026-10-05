@@ -64,6 +64,11 @@ Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 6. Sie senkt Qualitäts- oder Performanceziele nicht stillschweigend ab. Ein Ziel darf nur nach bewusster Entscheidung geändert werden.
 7. Sie benennt Blocker konkret, arbeitet an unabhängigen Punkten weiter und fragt nur dann nach, wenn eine echte Nutzerentscheidung nötig ist.
 8. Sie behauptet niemals, etwas getestet, gesehen, gehört oder umgesetzt zu haben, wenn dafür kein Beleg vorliegt.
+9. Sie prüft nach jedem größeren Paket den Fokus: Arbeitet sie noch am benannten sichtbaren/mechanischen Hauptziel oder verliert sie sich in einer Detailkorrektur? Detailarbeit wird nur fortgesetzt, wenn sie für Funktion, Lesbarkeit, Qualität oder Abnahme des Hauptziels nötig ist. Andernfalls wird sie notiert und das Hauptziel weitergeführt.
+10. Sichtbare Laufzeitziele werden in sinnvollen Paket-Zwischenständen mit aktuellen Spielbildern belegt. Für einen Paketvergleich möglichst eine passende Vorher- und Nachher-Ansicht unter gleichen Spiel-/Kamerabedingungen sichern; nicht für jede Kleinigkeit einen Screenshot erzeugen. Tests/Build allein sind keine visuelle Abnahme.
+11. Vor einer Bildbewertung vorhandene Belege sichten und zeitlich einordnen: Änderungsdatum, Dateiname/Eintrag, dargestellte Szene und zugehörigen Branch-/Commit-/Runtime-Stand prüfen. Ältere Bilder bleiben historische Vergleiche und dürfen nicht als aktueller Spielstand ausgegeben werden. Bei Unsicherheit einen neuen Laufzeitbeleg aus der tatsächlich aktuellen sichtbaren Chrome-Sitzung erstellen oder die Bildaussage als ungeprüft kennzeichnen.
+12. Bei längeren Browser-, Blender- oder Build-Arbeiten Auslastung in sinnvollen Abständen und nach auffälligen Verzögerungen kontrollieren. Hohe CPU-/Speicherlast einem Prozess/Tab und der eigenen Prüfinstanz zuordnen, bevor gehandelt wird. Eigene Prüfläufe pausieren/beenden, wenn sie nicht gebraucht werden; Nutzerfenster, fremde Prozesse und Server ohne eindeutige Eigentümerschaft nicht schließen.
+13. Marcels beantwortete [PROJECT-QUESTIONNAIRE.md](PROJECT-QUESTIONNAIRE.md) und das aktive [Projektgrundgerüst](docs/23-project-design-baseline.md) bestimmen die initialen Ziele und Grundpfeiler. Beim Projektstart mit bekanntem Owner Sarah nach der Synchronisierung den Fragebogen als zusätzlichen Dateitab öffnen, wenn möglich; ihre Antworten eigenständig erfassen und keine ihrer Originalideen umschreiben. Sarahs Zustimmung ist keine Voraussetzung für die Umsetzung von Marcels Basis. Ihre abweichenden Antworten werden als separate Sicht festgehalten und ändern die Basis nicht automatisch; die Grundpfeiler ändert nur Marcel durch eine ausdrückliche neue Entscheidung.
 
 ## Dokumentationspflege
 
@@ -78,6 +83,7 @@ Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 - `references/visuals/` enthält künftige Nutzerbilder für die Art Direction; Bilder werden nicht automatisch als technische Anforderungen interpretiert.
 - Bei jeder Änderung eines Grundpfeilers sind die vier Hauptdateien sowie `docs/09-roadmap.md`, `docs/10-open-questions.md` und alle betroffenen Fachdateien zu prüfen. Alte Ideen/Begründungen bleiben erhalten und werden nötigenfalls als historisch, offen oder überholt gekennzeichnet.
 - Neue Entscheidungen kommen in `docs/12-decision-log.md` mit Datum, Begründung und betroffenen Dokumenten.
+- Laufzeitbilder, Vergleichsbedingungen, Aktualitätsprüfung und Prozesshygiene sind Teil der Abnahme; der verbindliche Ablauf steht in `docs/21-team-workflow.md` und `docs/evidence/README.md`.
 
 ## Reihenfolge vor der eigentlichen Entwicklung
 

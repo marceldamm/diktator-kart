@@ -1,5 +1,17 @@
 # Echte Laufzeitbelege des Stadion-Slices
 
+## Belegregeln für künftige Pakete
+
+- Laufzeitbilder müssen aus dem tatsächlichen Babylon-Spiel in einem sichtbaren Chrome-Fenster stammen. Studio-, Konzept-, Headless- oder abweichende Testszene-Bilder sind keine Runtime-Abnahme.
+- Vor Änderungen nur dann eine Ausgangsaufnahme anlegen, wenn sie den sichtbaren Unterschied eines größeren Pakets nachvollziehbar macht. Danach eine gezielte Nachheraufnahme bzw. kurze Bewegungsfolge sichern; nicht jede Kleinigkeit bebildern.
+- Für einen brauchbaren Vergleich Szene, Fahrer, Kamera/Abstand, Wetter, Viewport und Grafikstufe möglichst gleich halten. Beschreibe Abweichungen und Grenzen.
+- Zu jedem neuen Beleg Datum/Uhrzeit, Datei, Zweck, Runtime-URL und wenn verfügbar Branch/Commit aus `/__diktator/status` angeben. Erst prüfen, was vorhandene Bilder zeigen und wie alt sie sind; das zuletzt gespeicherte Bild muss nicht zum neuesten Code gehören. Historische und Vorher-Bilder entsprechend kennzeichnen.
+- Bei fehlendem Runtime-/Commitnachweis keine aktuelle visuelle Abnahme behaupten. Technische Tests, sichtbare Wirkung, menschliches Qualitätsurteil und Leistungsmessung getrennt bewerten.
+
+Der Prozess für Selbstprüfung gegen Detaildrift und für das Beobachten eigener Browser-/Buildlast steht in [docs/21-team-workflow.md](../21-team-workflow.md).
+
+**Archivhinweis zum folgenden Bestand:** Die nachfolgenden datierten Einträge beschreiben frühere Aufnahmen und Prüfläufe, keine pauschal aktuelle Sicht des Spiels. Zum Beispiel ist `slice-first-inspection-quality-1005f.png` eine ältere Browseraufnahme; ihr Dateidatum liegt vor dem später erneuerten `hero-kart.glb`. Verwende sie nur als historischen Vergleich. Für Aussagen über den aktuellen Fahrer-/Fahrzeugstand ist ein frischer sichtbarer Lauf mit bestätigtem Runtime-Commit erforderlich.
+
 ## 05.10.2026 – aktueller Runtime-/Modellpass
 
 | Datei | Aussage / Grenze |

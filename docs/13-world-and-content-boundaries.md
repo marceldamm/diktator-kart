@@ -47,3 +47,7 @@ Vor Aufnahme eines realen Namens, Gebäudes, Symbols oder Ereignisses muss beant
 ## Gesten der Platzhalterfiguren (03.10.2026)
 
 Jubel- und Siegesgesten der Fahrer sind senkrechte, pumpende Fäuste oder Winken. Ein vorwärts schräg erhobener gestreckter Arm ist ausgeschlossen, um jede Gruß-Assoziation zu vermeiden. Gilt für alle Figuren, Zuschauer und Statuen.
+
+## Aktive Satire- und Weltvorgabe aus Marcels Initialantwort – 06.10.2026
+
+Die aktive Inhalts- und Art-Richtung verwendet möglichst faktennahe, wiedererkennbare historische Figuren in einer eigenständigen historischen Berlinwelt mit filmischer Stadionpracht. Der Humor ist derb und provokant, macht aber reale Opfer nicht lächerlich. Schilder, Ansagen, Kulissen, Slapstick und übersteigerte Selbstdarstellung tragen die Satire. Sarahs bestehende Inhaltsbeiträge bleiben in ihrer ursprünglichen Form erhalten. Quelle: [Projektgrundgerüst](23-project-design-baseline.md).

@@ -11,7 +11,7 @@ Marcel verlangt deutlich höhere, realitätsnähere Qualität aller Modelle, Cha
 
 Marcel präzisiert das Ziel: erkennbare und realitätsnahe Abbilder der echten historischen Fahrer, insbesondere Hitler; keine erfundenen Ersatzpersonen als Endergebnis. Satire entsteht durch Inszenierung und Spielhandlungen; Gesichter, Frisuren, Kleidung, Anatomie und Materialien sollen die jeweilige Person glaubwürdig erkennen lassen. Auch die Berlin-/Stadionwelt soll deutlich realitätsnäher werden. Die vorhandenen neutralen Modelle beschreiben nur den aktuellen Zwischenstand. Frühere neutrale Produktionsaufträge sind keine dauernde Beschränkung dieses Ziels. Die bisherige Verpflichtung auf große Köpfe/deutlich überzeichnete Körper wird durch diesen neuen Nutzerwunsch ersetzt. Kein Regimezeichen oder verherrlichende Inszenierung. Sarahs ursprüngliche Ideen werden nicht stillschweigend umbenannt; die Präzisierung ist als aktueller Nutzerauftrag nachvollziehbar.
 
-**Bestätigte Ergänzung, 04.10.2026:** Marcels aktueller Masterauftrag priorisiert Stalin als ersten vollständigen Qualitätsanker. Die Fahrzeuge behalten eine gemeinsame Kart-Grundarchitektur und bekommen viele fahrerspezifische Änderungen, sodass alle sechs ohne Farbe an der Silhouette unterscheidbar bleiben. Kein landwirtschaftlicher Trecker-Look; Stalins Traktor bleibt ein Wurfobjekt. Dies konkretisiert die bestätigte Fahrer-/Fahrzeugproduktion und ist keine erneute offene Grundsatzfrage.
+**Historischer Stand vom 04.10.2026, am 06.10.2026 überholt:** Marcels neuer Initialentscheid legt Hitler samt individuellem Kart als ersten vollständigen Qualitätsanker fest. Die Fahrzeuge behalten eine gemeinsame Kart-Grundarchitektur und bekommen viele fahrerspezifische Änderungen, sodass alle sechs ohne Farbe an der Silhouette unterscheidbar bleiben. Kein landwirtschaftlicher Trecker-Look; Stalins Traktor bleibt ein Wurfobjekt. Dies konkretisiert die bestätigte Fahrer-/Fahrzeugproduktion und ist keine erneute offene Grundsatzfrage.
 
 ## Gemeinsame Hauptbasis – 03.10.2026
 
@@ -20,17 +20,17 @@ Aktiv ist ausschließlich der neue Babylon-main auf GitHub, initial aus Claude Q
 
 ## Laufender großer Slice – 03.10.2026
 
-Der Nutzer hat den großen neutralen Vertical Slice ausdrücklich gestartet: kostenlose Werkzeuge/Assets dürfen installiert und verwendet werden, lokale Branch-Checkpoints ohne Push/Merge. Das ist keine Wahl eines historischen Art-Piloten und keine Änderung von Sarahs Ideen. Die 15 bestätigten Antworten bleiben gültig. Technische Details und vorläufige Balance autonom umsetzen; gemeinsame Stil-/Inhaltsabnahme und Geräteprüfungen offen.
+Marcels Antworten vom 06.10.2026 bilden nun die aktive initiale Produktbasis, unabhängig von Sarahs späteren Antworten. Erster Art-Anker ist Hitler samt Kart. Kostenlose Werkzeuge und Assets sind zulässig; Modell-, Stil- und Performanceabnahmen benötigen sichtbare Laufzeitbelege. Sarahs bestehende Ideen bleiben unverändert erhalten.
 
 Historische Zwischenstände und langfristige Abnahmen bleiben erhalten. Aktuelle Ergebnisse: [Fortschrittslog](../PROGRESS-LOG.md).
 
-Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworten werden nicht erneut als offene Grundsatzfragen geführt.
+Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Die untenstehenden Antworten dokumentieren den früheren Entscheidungsstand. Wo sie Marcels neuerem Fragebogen vom 06.10.2026 widersprechen, gilt die aktive Basis in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md) und [docs/23-project-design-baseline.md](23-project-design-baseline.md). Sarahs damalige Antworten/Inhalte bleiben als historische Quelle erhalten; nicht erneut als offene Grundsatzfragen stellen.
 
-## Bestätigte Antworten auf die 15 Prüfungsfragen
+## Früher bestätigte Projektfragen und aktiver Vorrang
 
 1. **Veröffentlichung:** zunächst privat für uns und Freunde, später öffentlich kostenlos; kein verkaufbares Produkt geplant.
 2. **Budget:** ausschließlich vorhandene und kostenlose Werkzeuge/Assets. Derzeit kein Zusatzbudget für Musik oder Stimmen; spätere Änderung nur nach neuer Entscheidung.
-3. **Fahrerproduktion:** sechs Fahrer im ersten abgenommenen Spielprototyp; Stalin samt Kart zuerst vollständig nach dem aktuellen Masterauftrag ausarbeiten, dann fünf einfachere Darstellungen auf denselben Stil entwickeln. Stilprüfung mit dem Nutzer vor weiterem Ausbau. Startkader aus der alten Auswahl: Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro.
+3. **Fahrerproduktion (aktive Priorität 06.10.2026):** zuerst Hitler samt individuellem Kart als vollständigen Qualitätsanker ausarbeiten und im echten Rennen abnehmen; danach den vorhandenen sechs Fahrer umfassenden Kader in derselben Qualitätsrichtung vervollständigen. Bereits erledigte Stalin-Arbeit bleibt erhalten und wird später weitergenutzt. Stilprüfung mit dem Nutzer vor weiterem Ausbau. Startkader aus der alten Auswahl: Hitler, Stalin, Mussolini, Mao, Kim Jong-un und Castro.
 4. **Figuren- und Fahrzeugstil (04.10.2026 präzisiert):** erwachsene, stilisierte und erkennbare historische Fahrer mit passenden Kopfformen/Details; gemeinsame Kart-Grundarchitektur plus je Person viele Silhouetten-/Karosserieabweichungen. Der frühere Vorschlag „große Köpfe, deutlich überzeichnete Körper“ ist als aktuelle Stilvorgabe überholt; Gesichtsmerkmale dürfen satirisch überhöht sein, ohne kindliche Chibi-Anmutung. Kein Trecker-Look; Traktor nur als Item.
 5. **Erste Strecke:** frei zusammengestellte historische Berlin-/Stadionwelt mit wiedererkennbaren Gebäuden und eigenen satirischen Details. Alte gemischte Hauptstadtstrecke bleibt Ideenquelle, kein Pflichtlayout.
 6. **Kamera:** nahe und entfernte Third-Person-Verfolgerkamera mit maßvoller Dynamik/ruhiger Einstellung plus First Person aus Fahreraugenhöhe mit Händen, Lenkradbewegung, Armaturen und Vorderrädern.
@@ -65,7 +65,7 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 
 ## Vor Art-Pilot / Performance-Abnahme
 
-- [x] Ersten vollständig auszuarbeitenden Fahrer als Vorschlag vorbereiten: Mussolini/Il Duce GT in Dokument 14; keine Auswahl oder Änderung an Sarahs Ideen beschlossen.
+- [x] Historische Vorbereitung: Mussolini/Il Duce GT war ein früher Kandidat; Marcels Antwort vom 06.10.2026 setzt Hitler samt Kart als aktive erste Priorität. Sarahs Ideen bleiben unangetastet.
 - [ ] Ersten Fahrer gemeinsam auswählen und die spätere Stilprobe aus allen drei Spielkameras abnehmen.
 - [x] Landmarken, Zeitbild und satirische Route als **Vorschlag** mit historischen Quellen und Inhaltsgrenzen in Dokument 01 ausgearbeitet; keine Strecke oder Symbole beschlossen.
 - [ ] Landmarken, Zeitbild, konkrete Zeichen und Streckenlayout gemeinsam prüfen und vor Assetproduktion bestätigen.
@@ -88,3 +88,7 @@ Stand: 03.10.2026, nach Gesamtprüfung und Nutzerantworten. Bestätigte Antworte
 ## Arbeitsregel
 
 Kleine technische und gestalterische Detailentscheidungen trifft die KI begründet selbst. Offene Nutzerentscheidungen mit großer Folgewirkung bleiben sichtbar. Einzelne fehlende Testgeräte oder spätere Inhaltsentscheidungen blockieren unabhängige vorbereitende Arbeit nicht, ersetzen aber keine spätere Abnahme.
+
+## Aktive Ausgangsbasis aus Marcels Fragebogen – 06.10.2026
+
+Marcel hat Spielrichtung, Stil, Technik, ersten Assetanker und Akustik festgelegt. Seine Antworten stehen in [PROJECT-QUESTIONNAIRE.md](../PROJECT-QUESTIONNAIRE.md); das aktive Grundgerüst in [docs/23-project-design-baseline.md](23-project-design-baseline.md). Bereits dort beantwortete Sarah-Fragen werden nicht verändert. Sarahs zusätzliche Antworten bleiben als ihre Perspektive getrennt und sind kein Freigabeschritt für Marcels Initialbasis.
