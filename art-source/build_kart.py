@@ -547,12 +547,16 @@ for sd in [-1, 1]:
                        (sd * .315, .06, .065), (sd * .306, .052, .025),
                        (sd * .294, .035, .015)], .009, skin, head)
     ellipsoid('Ear lobe', (sd * .295, .02, .005), (.02, .04, .027), skin, head, 12)
-    # Adult eyes: smaller, set under the brow ridge, with lids, lower lids and slight bags.
+    # Adult eyes: lids frame the eyeball rather than covering it with full ellipsoids.
     ellipsoid('Eye white', (sd * .095, .248, .14), (.05, .026, .036), eye_white, head)
     ellipsoid('Eye iris', (sd * .095, .268, .136), (.027, .01, .027), iris, head, 12)
     ellipsoid('Eye pupil', (sd * .095, .274, .136), (.012, .006, .014), leather, head, 10)
-    lid = ellipsoid('Heavy eyelid', (sd * .095, .252, .16), (.058, .032, .024), skin, head)
-    ellipsoid('Lower eyelid', (sd * .095, .25, .117), (.054, .028, .014), skin, head)
+    tube('Upper eyelid', [(sd * .043, .259, .143), (sd * .061, .273, .168),
+                          (sd * .095, .277, .176), (sd * .129, .273, .168),
+                          (sd * .147, .259, .143)], .008, skin, head)
+    tube('Lower eyelid rim', [(sd * .045, .253, .128), (sd * .067, .264, .109),
+                              (sd * .095, .268, .104), (sd * .123, .264, .109),
+                              (sd * .145, .253, .128)], .006, skin, head)
     tube('Bushy brow', [(sd * .04, .265, .2), (sd * .1, .272, .215), (sd * .16, .25, .2)], .016, hair, head)
     tube('Nasolabial fold', [(sd * .065, .3, .0), (sd * .095, .285, -.06), (sd * .1, .27, -.11)], .011, skin, head)
 # Mouth: real upper and lower lip with a slight self-satisfied corner, chin and philtrum.
@@ -593,12 +597,12 @@ for sd in [-1, 1]:
     tube('Stalin pocket seam', [(sd * .223, -.211, 1.405), (sd * .17, -.213, 1.405), (sd * .117, -.211, 1.405)], .003, stalin_stitch, stalin_tunic)
     tube('Stalin shoulder seam', [(sd * .13, -.56, 1.51), (sd * .25, -.57, 1.54), (sd * .37, -.55, 1.52)], .003, stalin_stitch, stalin_tunic)
 # The drooping walrus moustache covers the shared mouth anchor at portrait size.
-# Give Stalin his own lower-set, open mouth so the face still reads as a person speaking.
+# Place a small open mouth on the facial plane below the moustache, not floating forward.
 stalin_mouth = empty('cast-stalinmouth', (0, 0, 0), stalin_face)
-ellipsoid('Stalin mouth opening', (0, .305, -.143), (.078, .022, .025), mouth_inner, stalin_mouth, 24)
-tube('Stalin upper lip', [(-.09, .292, -.129), (-.045, .309, -.124), (0, .313, -.127),
-                          (.045, .309, -.124), (.09, .292, -.129)], .014, lips, stalin_mouth)
-tube('Stalin lower lip', [(-.073, .294, -.157), (0, .31, -.164), (.073, .294, -.157)], .017, lips, stalin_mouth)
+ellipsoid('Stalin mouth opening', (0, .232, -.158), (.072, .012, .022), mouth_inner, stalin_mouth, 24)
+tube('Stalin upper lip', [(-.082, .227, -.145), (-.043, .242, -.14), (0, .247, -.143),
+                          (.043, .242, -.14), (.082, .227, -.145)], .011, lips, stalin_mouth)
+tube('Stalin lower lip', [(-.068, .229, -.177), (0, .242, -.181), (.068, .229, -.177)], .013, lips, stalin_mouth)
 for sd in [-1, 1]:
     brow = ellipsoid('Stalin heavy brow plane', (sd * .095, .267, .205), (.083, .034, .033), skin, stalin_face, 18)
     brow.rotation_euler[1] = sd * -.12

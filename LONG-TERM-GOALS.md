@@ -86,6 +86,10 @@ Vorhanden: sechs Karts, Federung, Hop/Drift/Turbo, Kontakte und drei Kameras. Ne
 
 Vorhanden: editierbare Retro-Karts, vollständiger Stadionring, Materialien, Architektur, Licht und vorläufige Fahrer. Ziel deutlich höher. Details: [02](docs/02-art-direction.md), [05](docs/05-assets-and-visual-references.md), [14](docs/14-character-and-item-catalog.md), [16](docs/16-production-blueprint.md).
 
+**Teilpaket 05.10.2026 umgesetzt:** Die sechs Fahreraugen werden durch modellierte obere/untere Lidkanten eingerahmt statt von vollen Lidellipsoiden verdeckt; Stalins Mundöffnung/Lippen sind tiefer auf der Gesichtsebene unter dem Walrossbart angeordnet. Quelle, optimiertes GLB und alle sechs echten Fahrerwahlporträts wurden kontrolliert. Das ist ein technischer Lesbarkeitsschritt: der Mund ist in der kleinen Stalin-Karte weiterhin dezent, und Gesamtanker sowie menschliche Front-/Seiten-/Bewegungsabnahme bleiben offen.
+
+**Ausgewähltes M3-Weltpaket (05.10.2026):** Die abstrakten Übungskrater sollen von bloßer Ruckel-/Decaldekoration zu einer nachvollziehbaren, fairen Fall-/Bergungsgefahr werden; zusätzlich soll Schotter/Gras an befahrbaren Rand-/Abkürzungsflächen mit geteiltem Grip- und Partikelfeedback lesbar sein. Umsetzung gilt gleichermaßen für Spieler und Bots. Die Rennlinie, sichere Rücksetzung und technische/sichtbare Abnahme sind Paketkriterien.
+
 - [ ] Zuerst Stalin samt Kart als vollständigen Qualitätsanker nach Marcels aktuellem Masterauftrag ausarbeiten; danach den gleichen Qualitätsmaßstab auf die übrigen fünf übertragen. Hitlers Erkennbarkeit bleibt Bestandteil des Gesamtziels, bestimmt aber nicht mehr den ersten Produktionsslot.
 - **Teilfortschritt 04.10.:** Stalin hat einen breiteren Kiefer sowie modellierte Brauen-/Wangen-/Faltenebenen und einen gesonderten sichtbaren Mund unter dem Walrossbart erhalten; das Limousinen-Frontend und Heck wurden weiter individualisiert. Der sichtbare Laufzeitstand bleibt eine Karikatur-Zwischenstufe. Kein Qualitätsanker abgenommen.
 - [ ] Gesicht, Anatomie, Haare, Augen, Kleidung und Stoff-/Hautmaterialien realitätsnah ausarbeiten; benannte reale Person erkennbar, kein bloß umbenannter Platzhalter.

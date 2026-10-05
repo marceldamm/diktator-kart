@@ -703,3 +703,14 @@ Stalins zwei Schläfensträhnen liegen zusätzlich unter `cast-stalin-hairline`,
 **Beobachtet:** Die freie Fahrt startete im Codex-In-App-Browser; Fahrer, Item-HUD und die Itemkisten vor der Startgeraden waren sichtbar. Kurze `W`-Tastendrücke bewegten das Kart. Auf der Fahrt geriet es ins Hafenbecken; der HUD-Status meldete die Bergung und anschließend eine Rücksetzung. Der Slot blieb während des Versuchs `LEER`; es gab keine beobachtete Aufnahme. Deshalb wurden E-Halten/Loslassen, Bildschirmbutton sowie Maus-/Touch-Halten nicht bewertet.
 
 **Ergebnis/Limit:** Das ist keine Item-HUD-Abnahme und kein Hinweis auf einen HUD-Fehler: die Kisten wurden nicht nachweislich berührt. Die kurze Tastendrucksteuerung erlaubte hier keine ausreichend präzise Linienführung. Nächster Schritt ist eine kontrollierte Runde/Route, die sicher an einer aktiven Kiste vorbeiführt; erst danach Symbol, Status und Wurf visuell bewerten. Die Browseransicht wird vor Arbeitsende auf den Startbildschirm zurückgesetzt.
+### 2026-10-05 – Live-Gesichter: Lidkanten und Stalin-Mund
+
+**Auswahl:** Bestätigtes M3-Gesichts-Teilpaket vor Beginn in `CURRENT-WORKLIST.md` und `LONG-TERM-GOALS.md` eingetragen. Umfang: Augen in Fahrerwahlporträts besser lesbar machen und Stalins Mund unter dem Walrossbart körpernah setzen; kein Versprechen einer vollständigen Stil-/Anatomieabnahme.
+
+**Umgesetzt:** `art-source/build_kart.py` ersetzt die deckenden oberen/unteren Lidellipsoide am gemeinsamen Rig durch schmale, modellierte Lidbögen. Stalins Mundöffnung und Lippen sind tiefer auf der Gesichtsfläche unter dem Walrossbart angeordnet. Blender 4.5.3 erzeugte `.blend` und Roh-GLB; `node art-source/optimize_assets.mjs hero-kart` aktualisierte den Runtime-Export von 5.283.004 auf 5.280.092 Byte (-2.912 Byte, -0,055 %). Kein Castvertrag oder Fahrwerk geändert.
+
+**Verifiziert:** `node --test tests/cast.test.mjs` 2/2 und `npm run build` erfolgreich (1.296 Module; bekannte Hauptchunkwarnung ~2.023 kB). Frischer In-App-Browser-Reload bis zur Fahrerwahl; alle sechs Live-Porträts geladen. Iris/Augenweiß sind sichtbarer. In Stalins kleiner Karte ist die Mundöffnung noch subtil, aber unter dem Bart getrennt sichtbar. Der GLB-Optimizer fasst Meshgruppen zusammen, daher keine separate Laufzeitknotengarantie für die Lidnamen.
+
+**Offen:** Keine menschliche Stilabnahme, keine nahe Front-/Profil-/Bewegungsansicht; Stalin-M3-Qualitätsanker bleibt offen. Nächster Schritt: weitere bestätigte M3-Aufgaben priorisieren und vor Codeänderung sichtbar in beiden Arbeitslisten auswählen.
+
+**Limitstand:** Offizielle Werte nach dem Paket: 8 % Fünf-Stunden-Verbrauch (92 % Rest), 43 % Wochenverbrauch (57 % Rest; bindendes Fenster). Kein Reset oder Zusatzkontingent verwendet.
