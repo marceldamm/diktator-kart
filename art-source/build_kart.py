@@ -96,6 +96,9 @@ paint = teal                                     # 'Petrol enamel', recoloured p
 trim = gold
 ivory = cream
 leather = black
+limousine_glass = mat('Limousine touring glass', (.18, .36, .39), .12, .18)
+limousine_glass.node_tree.nodes.get('Principled BSDF').inputs['Alpha'].default_value = .24
+limousine_glass.surface_render_method = 'BLENDED'
 uniform = mat('Uniform racing suit', (.8, .77, .68), 0, .78)
 skin = mat('Mature skin', (.5, .35, .27), 0, .84)
 cape_cloth = mat('Cape cloth', (.5, .04, .06), 0, .72)
@@ -153,6 +156,19 @@ for sd in [-1, 1]:
             tube('Limousine bonnet louvre', [(sd * .17, vent_y + offset, vent_z + .006),
                                               (sd * .205, vent_y + offset, vent_z + .01),
                                               (sd * .24, vent_y + offset, vent_z + .006)], .0035, chrome, b)
+# A compact, slanted touring screen makes the open saloon read as coachbuilt rather
+# than an exposed generic kart. Export alpha as BLEND and support the pane with a
+# proper bright frame, central divider, hinges and glass-contact wiper.
+screen_corners = [(-.43, .405, 1.13), (-.40, .325, 1.42), (.40, .325, 1.42), (.43, .405, 1.13)]
+mesh('Limousine touring windscreen glass', screen_corners, [(0, 1, 2, 3)], limousine_glass, b)
+for sd in [-1, 1]:
+    tube('Limousine windscreen side post', [(sd * .43, .405, 1.13), (sd * .415, .365, 1.275), (sd * .40, .325, 1.42)], .018, chrome, b)
+    cyl('Limousine windscreen hinge', (sd * .43, .412, 1.14), .034, .025, trim, b, 'Y', verts=16)
+tube('Limousine windscreen lower rail', [(-.43, .405, 1.13), (0, .405, 1.13), (.43, .405, 1.13)], .021, trim, b)
+tube('Limousine windscreen top rail', [(-.40, .325, 1.42), (0, .325, 1.42), (.40, .325, 1.42)], .021, trim, b)
+tube('Limousine windscreen centre divider', [(0, .399, 1.15), (0, .365, 1.275), (0, .329, 1.405)], .009, chrome, b)
+tube('Limousine windscreen wiper arm', [(-.19, .397, 1.16), (-.11, .389, 1.195), (.01, .376, 1.217)], .007, chrome, b)
+tube('Limousine windscreen wiper blade', [(-.27, .396, 1.151), (-.11, .382, 1.207), (.07, .365, 1.233)], .011, black, b)
 box('Limousine front bumper', (0, 1.48, .36), (1.22, .09, .075), chrome, .035, b)
 box('Limousine rear bumper', (0, -1.48, .34), (1.18, .08, .07), chrome, .035, b)
 box('Limousine trunk lid', (0, -1.17, .79), (.82, .36, .045), paint, .08, b)
@@ -195,7 +211,7 @@ for sd in [-1, 1]:
     for y in [-.25, -.08, .09, .26]: box('Side cooling vent', (sd * .855, y, .42), (.03, .09, .13), leather, .012, kart)
     box('Ivory pod inset', (sd * .84, 0, .36), (.04, .62, .08), ivory, .02, kart)
     # Fenders arch over the fat tyres.
-    for (wy, wr, width, a0, a1) in [(.8, .36, .38, -.15, 2.2), (-.74, .43, .48, .55, 3.25)]:
+    for (wy, wr, width, a0, a1) in [(.8, .36, .38, -.15, 2.2), (-.74, .36, .48, .55, 3.25)]:
         rings_ = []
         for k in range(11):
             a = a0 + (a1 - a0) * k / 10; r = wr + .1
@@ -279,12 +295,14 @@ for x, r in [(-.2, .06), (0, .085), (.2, .06)]:
     tube('Gauge needle', [(x, .394, 1.1), (x + .02, .394, 1.1 + r * .65)], .004, leather, kart)
 
 # --- Wheels: fat balloon tyres, brass dish rims, chrome caps ------------------------------------
-for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .43), (.92, -.74, .43)]):
-    zoff = r - .34   # rear tyres are taller: their axle sits higher than the shared pivot height
+for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .36), (.92, -.74, .36)]):
+    zoff = r - .34   # Keep each tyre bottom at the ground plane around the shared pivot.
     pivot = empty('wheelPivot-' + str(i), (x, y, .34), kart)
     spin = empty('wheelSpin-' + str(i), (0, 0, zoff), pivot)
     limo_wheel_style = empty('wheelStyle-limousine-' + str(i), parent=spin)
-    w = .34 if i < 2 else .44
+    # Keep a powered-rear stance without oversized rear balloons that make the
+    # diplomatic saloon read as farm machinery instead of a road car.
+    w = .34 if i < 2 else .39
     prof = [(r * .55, -w / 2), (r * .86, -w / 2 - .01), (r * .97, -w * .42), (r, -w * .25), (r, w * .25), (r * .97, w * .42), (r * .86, w / 2 + .01), (r * .55, w / 2)]
     lathe('Tire ' + str(i), prof, rubber, spin, 32)
     for k in range(20):
@@ -703,6 +721,11 @@ for sd in [-1, 1]:
     # the sideburns instead of ending as a smooth helmet edge.
     strand('Stalin temple lock', [(sd * .12, .205, .305), (sd * .205, .17, .275),
                                   (sd * .255, .105, .225), (sd * .265, .02, .17)],
+           [.034, .043, .032, .012], .021, hair, c, centre=(0, 0, .08), n=10)
+c = cast('stalin-hairline')                    # cap keeps only the side hairline exposed
+for sd in [-1, 1]:
+    strand('Stalin temple hair beneath cap', [(sd * .12, .205, .305), (sd * .205, .17, .275),
+           (sd * .255, .105, .225), (sd * .265, .02, .17)],
            [.034, .043, .032, .012], .021, hair, c, centre=(0, 0, .08), n=10)
 c = cast('walrus')                                # Stalin: heavy drooping moustache
 for sd in [-1, 1]:

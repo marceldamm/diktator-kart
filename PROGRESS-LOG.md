@@ -608,3 +608,21 @@ Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umges
 **Nicht abgenommen:** Kein menschlicher Vergleich des neuen Hautmaterials in Front-/Nahansicht, unterschiedlichen Licht-/Wetterlagen; keine Aussage, die gewählte Porenstärke sei gestalterisch fertig. Die Textur bleibt bewusst subtil und kann anhand der nächsten echten In-Game-Nahansicht angepasst werden. Abschließendes `git diff --check` erfolgreich; Git meldete nur übliche LF→CRLF-Hinweise für Windows.
 
 **Geänderte Dateien:** `src/surface-textures.ts`, `src/slice-scene.ts`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `art-source/README.md`, `docs/22-character-vehicle-quality-master.md`, `PROGRESS-LOG.md`.
+
+### 2026-10-05 – Stalin-Limousine: Touring-Scheibe, Straßenwagen-Proportionen und Feldmützen-Haarlinie
+
+**Befund:** Die jüngste echte Limousinenrevision hatte noch kein Windschutzteil, das die offene Staatslimousinenform klar vom generischen Kart absetzt. Eine maßstabsgetreue Blender-Studioansicht zeigte außerdem, dass 0,43-m-/0,44-m-Hinterreifen hinter den 0,36-m-Vorderrädern zusammen mit den hohen Radbögen noch einen Trecker-Eindruck erzeugten. Die erste Vorschau ließ auch Stalins swept Deckhaar über die Feldmütze ragen.
+
+**Umgesetzt:** `art-source/build_kart.py` ergänzt nur unter `body-limousine` eine leicht nach hinten geneigte Touring-Scheibe (eigene Glasfläche, Metallseitenpfosten, Ober-/Unterrahmen, Mittelsteg, Scharniere und flach anliegender Wischer mit Gummilippe). `Limousine touring glass` bleibt in Babylon als GLB-Material transparent (`alphaMode: BLEND`, doppelseitig, Alpha .24) und als eigener, vom Body-Variantenknoten abstammender Mesh-Materialknoten erhalten. Die sichtbare Hinterradgröße wurde für die gemeinsame Grundbereifung auf Radius .36 m und Breite .39 m reduziert; vorn bleibt .36/.34. Hinterkotflügel folgt demselben Radius. Radpositionen, Radstand, Physik und Radbewegungs-Knoten wurden nicht verändert.
+
+Stalins zwei Schläfensträhnen liegen zusätzlich unter `cast-stalin-hairline`, damit sein Feldmützen-Cast das separate swept Deckhaar nicht mehr aktiviert. Mund, Walrossbart, individuelle Nasenbrücke und übrige sechs Kopf-/Kartvarianten bleiben im Cast. Blender regenerierte `art-source/hero-kart.blend` (16.205.420 Byte) und Roh-GLB (7.365.372 Byte); glTF Transform schrieb 5.283.004 Byte Runtime, +52.692 Byte/+1,0 % zum vorherigen 5.230.312-Byte-Stand. Exakte Größen im [Optimierungsbericht](docs/evidence/slice-asset-optimization.json).
+
+**Quellbildkontrolle:** [Stalin-Limousinen-Assetvorschau](docs/evidence/stalin-limousine-windscreen-asset-preview.png) rendert die Blender-Quelle mit ausgewählter Limousine/Cast, ist aber ausdrücklich keine Babylon-Spielaufnahme. Sie belegt weder den In-Game-Sitz der Scheibe/des Wischers noch Profil, Fahrt, Lenkeinschlag oder Stilakzeptanz.
+
+**Verifiziert:** `tests/cast.test.mjs`: 2/2, einschließlich GLB-BLEND-Alpha, eigenständigem Glas-Materialknoten unter `body-limousine` und Cap-Haarlinienkonfiguration. Vollsuite `npm test`: 57/57 in 407,3 s. `npm run build`: TypeScript/Vite erfolgreich, 1.296 Module; bestehende große Hauptchunkwarnung (~2.022,68 kB) bleibt. `dist/assets/models/hero-kart.glb` stimmt bytegenau mit der öffentlichen Runtime-Datei überein (5.283.004 Byte). `git diff --check` sauber, nur normale Windows-LF/CRLF-Hinweise.
+
+**Offen:** Eine separate headless Chrome-Sitzung auf Port 9230 startete nicht (Chrome beendet sich vor Listenerstart mit `mojo ... Zugriff verweigert`). Chrome-/Profil-Port 9223 des Nutzers wurde nicht berührt. Die vorhandene Codex-In-App-Spielseite wurde daher nicht interaktiv mit dem neuen Asset neu geladen/ausgewählt; echte Babylon-Nah-/Seiten-/Fahrbilder, Fahrerwahl, Sichtfeld, Windschutzscheiben-Culling/Reflexionen und menschliche Trecker-/Stilabnahme stehen weiter aus. Das vollständige Qualitätsanker- und Masterziel bleibt offen.
+
+**Dokumentiert:** `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `art-source/README.md`, `docs/evidence/README.md`.
+
+**Limitstand:** Offizielle Werte nach dem Paket: 6 % des Fünf-Stunden-Fensters verbraucht, 39 % des Wochenlimits verbraucht. Keine Zusatzkontingente oder Resets ausgelöst.

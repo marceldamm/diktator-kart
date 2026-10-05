@@ -12,6 +12,8 @@ Es gibt **keinen** verwendbaren Laufzeit-Nahbeleg für Stalins am 05.10. erneuer
 
 Der neuere 05.10.-Pass ergänzt `cast-stalin-nose` als eigenen Nasenbaustein und enthält ihn im optimierten Runtime-GLB. `tests/cast.test.mjs` bestätigt die Knoten-/Cast-Zuordnung; ein aktuelles In-Game-Nahbild für Feldmütze, Nase und Radkappen fehlt noch. Ein isolierter Blender-Render wird nicht als Laufzeitbeleg verwendet, weil er die Cast-/Materialaktivierung des Babylon-Rigs nicht abbildete.
 
+`stalin-limousine-windscreen-asset-preview.png` ist eine getrennte Blender-Studioansicht des Stalin-Casts und seiner Limousinenvariante. Sie dient der Quelldetailkontrolle und ist ausdrücklich keine Babylon-Laufzeitaufnahme. Die Echtzeit-Profil-/Nah-/Bewegungsansicht bleibt offen.
+
 ## Früher Konzeptbild-Ladebildschirm – 03.10.2026
 
 loading-early-desktop.png / loading-early-mobile.png zeigen den tatsächlich geöffneten Ladebildschirm bei pausiertem Spielmodul (Konzeptillustration, nicht Spielgrafik). loading-real-progress.png zeigt echte 3/6 abgeschlossene Ladeabschnitte bei pausiertem Hero-Download. loading-module-error.png / loading-asset-error.png zeigen echte abgebrochene Requests und bedienbare Fehleranzeige. loading-to-real-menu.png zeigt danach die gerenderte Babylon-Szene. Rohdaten: loading-browser-check.json; reproduzierbare Probe tests/loading-browser.mjs gegen Produktionspreview 4174 mit isoliertem Chrome 9226, CDP_PORT/SLICE_URL konfigurierbar. Desktop 1600 × 900, schmale Ansicht 390 × 844 emuliert; keine Handy-/Performanceabnahme.

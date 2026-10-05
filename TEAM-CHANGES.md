@@ -1,5 +1,6 @@
 # Gemeinsamer Änderungsverlauf
 
+- **05.10.2026 – Stalin-Limousine und Feldmütze:** eigene transparente Touring-Windschutzscheibe mit Rahmen/Wischer ergänzt; die sichtbar zu großen Hinterräder wurden auf Vorderradgröße gebracht, um die Straßenlimousine klarer vom Trecker-Look zu lösen. Deckhaar und unter der Mütze sichtbare Seitenhaarlinie sind getrennt. Modell, GLB, Blender-Quellvorschau und Cast-/Glasregression aktualisiert; echte In-Game-Profil- und Fahrtabnahme bleibt offen.
 - **05.10.2026 – Kanalwasserlinie verfeinert:** Zwei dezente prozedurale Schaumkanten markieren die Wassergrenzen. Sie verändern weder Fahrfläche noch Kollision/Partikelbudget. Regression und Produktionsbuild bestanden; visuelle Nahabnahme im Rennen bleibt offen.
 - **05.10.2026 – Item-HUD-Bestand abgeglichen:** Die offene Arbeitsliste war veraltet: Ein-Item-Slot, Symbol/Name, leerer/belegter Zustand, Bildschirm-Wurfbutton und die vorhandene E-Schild-/Loslasslogik sind bereits im Spielcode. Die echte Aufnahme-/Wurf-/Touch-Abnahme bleibt noch offen.
 - **05.10.2026 – Stalin-Gesicht weiter individualisiert:** Eigene loftmodellierte Nase samt Nasenflügeln und zurückhaltenden Nasenlöchern ergänzt und ausschließlich Stalin zugeordnet. Blender-Quelle, optimiertes Runtime-GLB, Cast-Regression und Build sind aktualisiert; In-Game-Nahabnahme bleibt ausstehend.
