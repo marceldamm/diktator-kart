@@ -8,6 +8,16 @@
 
 **Verifizierung:** Gezielter `tests/cast.test.mjs`: 1/1; `npm run build`: erfolgreich, 1.296 Module; bekannte ~2.022-kB-Babylon-Hauptchunkwarnung bleibt. `npm test`: Vollsuite 55/55 bestanden (219,8 s); `git diff --check` sauber. Erste Blender→Optimizer-Runde stieß kurz auf einen Schreibfehler beim Runtime-GLB; Wiederholung nach abgeschlossenem Export erfolgreich.
 
+### 2026-10-05 – Stalin-Gesichtspass 2: Kiefer und Schläfenhaar
+
+**Umgesetzt:** In `art-source/build_kart.py` wurden Stalins Wangen, Masseter, Kieferwinkel und flacheres Kinn als kontinuierliche Verformung der eigenen Schädelmeshvariante modelliert. Zwei konturfolgende Haarlocks erweitern seine zurückgekämmte Frisur zu den Schläfen, ohne die Kopfoberfläche mit getrennten Wangenkugeln zu belegen. Die individuellen Driver-Rigs, Gesichtsauswahl und Fahrphysik bleiben gleich.
+
+**Assetpipeline:** Blender 4.5.3 erzeugte `art-source/hero-kart.blend` und den GLB; der Export lief mit den bestehenden `Keine Maschendaten zum verknüpfen`-Warnungen durch und endete mit `KART_COMPLETE`. GlTF Transform optimierte 7.099.272 Rohbytes auf 5.084.136 Runtimebytes (+2.568 Byte gegenüber 5.081.568 vorher; ca. +0,05 %). Die neue Haargeometrie ist in der bestehenden cast-swept-Materialgruppe konsolidiert und bleibt runtime-schaltbar.
+
+**Verifiziert:** Cast-/GLB-Regressionsprüfung 1/1; `npm test` 56/56; `npm run build` erfolgreich mit 1.296 Modulen; echte Fahrerwahlansicht frisch nach Runtime-Reload geprüft, alle sechs Porträts inklusive Stalin geladen. Vite meldet weiter den bekannten 2.022,65-kB-Hauptchunk. `git diff --check` beim Checkpoint erneut ausführen.
+
+**Nicht abgenommen:** Der Screenshot zeigte die Fahrerwahlfront in Porträtgröße; Profil, sehr nahe Gesichtsansicht, Mimik/Fahrt, Nutzerstilprüfung und ein verlässlicher echter In-Game-Screenshot aus Seiten-/Bewegungsperspektive fehlen. Stalin-/Fahrzeugqualitätsanker bleibt offen; dieser Pass ist kein Fertigstatus.
+
 ### 2026-10-05 – Schadensmeter für Screenreader ausgezeichnet
 
 `#health` benennt seinen Zustand jetzt als ARIA-Meter (0–100) und aktualisiert `aria-valuenow`/`aria-valuetext` mit dem aktuellen Karosseriezustand; Totalschaden wird zusätzlich verständlich benannt. Der sichtbare Balken und Schadenswert werden nicht verändert. `npm run build` erfolgreich (1.296 Module); Vite meldet den bestehenden ~2.022-kB-Hauptchunk.

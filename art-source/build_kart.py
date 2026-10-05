@@ -445,10 +445,16 @@ for identity in ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro']:
         if identity == 'hitler':
             x *= 1 - .1 * lower; y += .012 * bump(x, z, 0, -.13, .08, .08)
         elif identity == 'stalin':
-            # Broad temples and a heavier, squarer lower face; keep the jaw transition continuous.
-            x *= 1 + .24 * lower + .055 * bump(x, z, .2, .13, .12, .12)
-            y += .05 * bump(x, z, 0, -.14, .19, .105) + .018 * bump(x, z, .2, .08, .08, .09)
-            z -= .025 * lower
+            # Shape the lower face as one continuous skull surface: broad cheek planes,
+            # readable masseter corners, a tucked cheek hollow and a flatter chin.
+            jaw_corner = bump(abs(x), z, .18, -.105, .052, .092)
+            cheek = bump(abs(x), z, .155, .025, .075, .09)
+            cheek_hollow = bump(abs(x), z, .115, -.07, .048, .04)
+            chin = bump(x, z, 0, -.205, .105, .043)
+            temple = bump(abs(x), z, .205, .15, .09, .11)
+            x *= 1 + .15 * lower + .12 * jaw_corner + .055 * temple
+            y += .048 * chin + .038 * cheek - .012 * cheek_hollow + .018 * bump(x, z, 0, -.13, .17, .095)
+            z -= .018 * lower
         elif identity == 'mussolini':
             x *= 1 + .06 * lower; y += .045 * bump(x, z, 0, -.19, .095, .055); z -= .02 * bump(x, z, 0, -.18, .13, .07)
         elif identity == 'mao':
@@ -675,6 +681,12 @@ hair_shell('Swept-back hair', c, lambda x, y, z: z > .16 and (y < .19 or z > .29
 for k in range(5):
     x = -.16 + k * .08
     strand('Combed strand', [(x, .19, .35), (x * 1.05, .02, .41), (x * 1.08, -.18, .38)], .028, .012, hair, c)
+for sd in [-1, 1]:
+    # Two tapered temple locks make the swept hairline turn around the skull into
+    # the sideburns instead of ending as a smooth helmet edge.
+    strand('Stalin temple lock', [(sd * .12, .205, .305), (sd * .205, .17, .275),
+                                  (sd * .255, .105, .225), (sd * .265, .02, .17)],
+           [.034, .043, .032, .012], .021, hair, c, centre=(0, 0, .08), n=10)
 c = cast('walrus')                                # Stalin: heavy drooping moustache
 for sd in [-1, 1]:
     strand('Walrus moustache', [(0, .345, -.025), (sd * .07, .34, -.04), (sd * .13, .315, -.075), (sd * .16, .29, -.11)], [.045, .05, .04, .02], .03, hair, c)

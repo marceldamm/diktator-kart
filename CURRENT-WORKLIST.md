@@ -28,6 +28,10 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Aktuell/Nächster Schritt:** Stalin im normalen interaktiven Browser auswählen und den neuen Hut, die separate Nase, vier Radkappen, Kopf-/Kragenansatz und Lenkradgriff aus Front, Seite, Nähe und Bewegung kontrollieren; danach ein tatsächliches Welt-/Wasserkontaktbild sichern. Die Kanal-Wasserlinie hat jetzt zwei leichte, fest begrenzte Schaumkanten; Sichtprüfung auf dem laufenden Spielbild fehlt weiterhin. Die isolierte Headless-Fahrprobe empfing `W`, aber innerhalb 21 s keinen weiteren gerenderten Physikschritt; sie ist deshalb kein Fahrbeleg. Der letzte Auswahl-Screenshot nach dem langen Software-Renderlauf war leer und wird nicht als Beleg behalten.
 
+**M3-Teilpaket (05.10., erledigt):** Stalin-Kiefer/Wangen sind als kontinuierliche Schädelverformung statt aufgesetzter Wangenkugeln modelliert; zwei anliegende Schläfensträhnen führen die swept-back-Frisur seitlich. Blender-Quelle, optimierter Cast-Knoten, Build, Vollsuite und echte Fahrerwahlporträts geprüft. Das ist sichtbarer Teilfortschritt, aber keine vollständige Gesichts-/Profil-/Bewegungsabnahme.
+
+**Nächstes Teilpaket:** Qualität des Stalin-Kopfes in der interaktiven Laufzeit weiter vom Frontporträt auf Nah-/Seiten-/Fahrtwinkel übertragen; danach nächste große Modell-/Kartsilhouetteniteration. Fassaden-, Wasser- und Drift-Sichtprüfungen bleiben ebenfalls offen.
+
 ## Wasserkanal-Bergung – 04.10.2026 (Marcel)
 
 **Aktuell:** beheben, dass ein Kart nach dem Herausziehen aus dem quer über die Strecke laufenden Wasserkanal wieder im selben Wasserbereich abgesetzt wird und erneut abstürzt.

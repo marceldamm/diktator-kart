@@ -26,6 +26,8 @@ test('the six current drivers keep distinct kart and face variants with delibera
   assert.ok(byName.Stalin.face.includes('stalin-nose'), 'Stalin has a dedicated, modeled nasal bridge rather than the shared generic nose');
   assert.ok(CAST_PARTS.includes('stalin-nose'), 'the runtime roster can enable Stalin’s independent nose assembly');
   assert.ok([...glbNodeNames].some((name) => name.startsWith('cast-stalin-nose /')), 'the dedicated nose assembly is present in the exported runtime model');
+  assert.ok(glbNodeNames.has('cast-swept / Hair and leather helmet'), 'Stalin’s cast-enabled swept hairstyle, including the baked temple locks, is present in the optimized export');
+  assert.ok(byName.Stalin.faceStyle === 'stalin', 'the individually sculpted jaw profile remains assigned to Stalin only');
   assert.ok(byName.Stalin.face.includes('stalin-tunic'), 'Stalin has a tailored, high-collar tunic variant');
   assert.ok([0, 1, 2, 3].every((i) => glbNodeNames.has(`wheelStyle-limousine-${i}`)), 'the custom saloon wheel detail follows all four spinning wheel pivots');
   assert.ok([...glbNodeNames].some((name) => name.startsWith('cast-stalin-cap /')), 'the dedicated, uninsigniaed Stalin cap mesh is present in the runtime model');
