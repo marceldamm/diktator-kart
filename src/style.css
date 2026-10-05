@@ -115,7 +115,7 @@ button:disabled { opacity: .5; cursor: default; }
 .item-copy { min-width:0; }
 .item-card strong { display:block;font-size:12px;color:#e9d6a9; }
 .item-card small { display:block;margin-top:5px;font-size:9px;color:#b6c8c4; }
-.item-card button { margin-left:auto;min-width:60px;font-size:10px;letter-spacing:.05em; }
+.item-card button { margin-left:auto;min-width:60px;font-size:10px;letter-spacing:.05em;touch-action:none;user-select:none; }
 #item-warning { position:absolute;top:160px;left:50%;transform:translateX(-50%);padding:9px 14px;color:#f5d59c;background:#742c28dc;font-size:12px; }
 .photo-mode .item-card,.photo-mode #item-warning { display:none !important; }
 #touch-controls { display:none; }

@@ -89,6 +89,38 @@ export function attachKeyboard(input: InputHub): () => void {
   };
 }
 
+/** A held button/pen/touch action that shares keyboard hold/release semantics. */
+export function attachPointerHold(input: InputHub, element: HTMLElement, action: Action, sourceName: string): () => void {
+  const sources = new Map<number, string>();
+  const down = (event: PointerEvent) => {
+    if (event.button !== 0 || (element as HTMLButtonElement).disabled) return;
+    const source = `pointer:${sourceName}:${event.pointerId}`;
+    sources.set(event.pointerId, source);
+    input.setAction(source, action, true);
+    try { element.setPointerCapture(event.pointerId); } catch { /* Synthetic events and older browsers may not support capture. */ }
+  };
+  const up = (event: PointerEvent) => {
+    const source = sources.get(event.pointerId);
+    if (!source) return;
+    input.releaseSource(source); sources.delete(event.pointerId);
+  };
+  const release = () => { for (const source of sources.values()) input.releaseSource(source); sources.clear(); };
+  const blurTarget = typeof window === 'undefined' ? undefined : window;
+  element.addEventListener('pointerdown', down);
+  element.addEventListener('pointerup', up);
+  element.addEventListener('pointercancel', up);
+  element.addEventListener('lostpointercapture', up);
+  blurTarget?.addEventListener('blur', release);
+  return () => {
+    release();
+    element.removeEventListener('pointerdown', down);
+    element.removeEventListener('pointerup', up);
+    element.removeEventListener('pointercancel', up);
+    element.removeEventListener('lostpointercapture', up);
+    blurTarget?.removeEventListener('blur', release);
+  };
+}
+
 /** Pointer IDs keep simultaneous touch steering, gas and drift independent. */
 export function attachTouch(input:InputHub,root:HTMLElement):()=>void {
   const sources=new Map<number,string>();

@@ -12,6 +12,18 @@
 
 `#health` benennt seinen Zustand jetzt als ARIA-Meter (0–100) und aktualisiert `aria-valuenow`/`aria-valuetext` mit dem aktuellen Karosseriezustand; Totalschaden wird zusätzlich verständlich benannt. Der sichtbare Balken und Schadenswert werden nicht verändert. `npm run build` erfolgreich (1.296 Module); Vite meldet den bestehenden ~2.022-kB-Hauptchunk.
 
+### 2026-10-05 – Item-HUD: Maus-/Touch-Halten und kurze Taps
+
+**Befund:** Der Screenbutton war bisher nur ein Click-Wurfknopf. Pointer-/Touch-Eingabe konnte das Item nicht wie `E` als Schild halten; zusätzlich konnte ein kurzes Loslassen zwischen zwei Physikframes verloren gehen.
+
+**Umgesetzt:** `attachPointerHold` ordnet Pointer-IDs getrennte Inputquellen zu und gibt sie bei Loslassen, Abbruch, verlorenem Capture, Fensterfokusverlust und App-Abbau frei. Der Screenbutton reicht echte Pointerklicks nicht zusätzlich als zweiten Wurf weiter; Tastatur-/assistive synthetische Clicks bleiben nutzbar. Die Simulationsschleife wertet das einmalige `pressed`-Signal für den schnellen Tap aus, während ein gehaltener Button weiterhin den Schild aktiviert. Touch verhindert natives Scroll-/Zoomverhalten auf dem Aktionsknopf.
+
+**Verifiziert:** `tests/input.test.mjs` deckt Halten, Loslassen, Tap zwischen Frames und Pointercancel ab (2/2). Vollsuite `npm test`: 56/56 bestanden, inklusive Teamworkflow- und Fahr-/Itemregressionen (208,5 s). `npm run build`: erfolgreich; TypeScript/Vite erzeugte 1.296 Module und meldet den bestehenden 2.022,65-kB-Hauptchunk. `git diff --check` sauber (nur Windows-Zeilenendenhinweise).
+
+**Laufzeitbeobachtung:** Separater In-App-Prüftab (der offene Nutzer-Tab blieb unberührt) lud die echte Babylon-Szene, Fahrerwahl, Stalin-Kart, HUD und ein laufendes 6-Kart-Rennen. Kurze `W`-Eingaben änderten die angezeigte Geschwindigkeit; der Ein-Item-Slot zeigte initial korrekt „LEER“. Itemkästen waren im Streckenbild sichtbar, aber die begrenzte Eingabegeste erreichte keine bestätigte Aufnahme. Deshalb keine Aussage zu Itemaufnahme, Buttonwurf oder Touch-Haltepose im Live-Rennen.
+
+**Nicht verifiziert:** Der Browser-Zyklus mit echter Itemaufnahme und Maus-/Touchgeste wurde nicht interaktiv abgenommen. Die Pointer-Logik ist automatisiert geprüft, die normale Spielinteraktion bleibt offen.
+
 ### 2026-10-05 – Kanal-Wasserlinie und HUD-Arbeitslistenabgleich
 
 **Weltpass:** `src/track-world.ts` erzeugt zwei schwach sichtbare, prozedurale Schaumstreifen am Anfang und Ende der Kanalwasserfläche. Beide liegen bei y=.048 über Wasser y=.04, sind höchstens .16 m lang und vollständig innerhalb der Kanalgrenzen. Die Alpha-Textur nutzt gebrochene, variierte Wellen und kleine Schaumflecken. Das ist reine Darstellung: keine neue Kollisionsfläche und kein Partikelsystem. `canalFoamBands` ist gegen Grenzlage, Maximalbreite und Null-/Negativlänge getestet.
