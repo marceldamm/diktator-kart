@@ -239,6 +239,7 @@ Ziel:
 - sinnvolle Griffposition am Lenkrad
 - Hand, Handschuh, Manschette und Unterarm bleiben als zusammenhängende Silhouette verbunden; der Griff darf die Hände nicht als abgelöste Meshes am Lenkrad fixieren.
 - Beim Lenkeinschlag muss der komplette verbundene Arm den rotierenden Griff erreichen; eine gleichmäßige Laufzeit-Reichweitenanpassung darf den Handschuh nicht sichtbar vergrößern/verkleinern.
+- Die Laufzeit-IK muss neben dem Griffpunkt auch die Hand-/Fingertangente an der rotierenden Lenkrad-Tangente halten, damit die Hände beim Lenken nicht um den Unterarm kippen. Technischer Stand 05.10.2026: implementiert und über beide Seiten/fünf Lenkwinkel regressionsgeprüft; statische Fahreransicht nach Runtime-Reload bestätigt beide Handschuhe am Kranz.
 - Links-/Rechtslenkeinschlag und Außenansicht gehören zur Abnahme, nicht nur die gerade Fahrerperspektive.
 
 Keine Kugeln oder undefinierte Klumpen.

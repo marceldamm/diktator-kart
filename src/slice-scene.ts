@@ -30,7 +30,7 @@ import { TRACK, trackLocate, trackPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
-import { airTrickRoll, armGripReach } from './kart-visuals';
+import { airTrickRoll, armGripPose } from './kart-visuals';
 import { canalSurfaceSprayRate } from './environment-effects';
 import type { KartState } from './kart-model';
 import type { TestScene } from './scene';
@@ -188,7 +188,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         const restOffset = Vector3.TransformCoordinates(centre, driver.getWorldMatrix().clone().invert()).subtract(arm.position);
         // Preserve the authored shoulder-to-grip distance: the solver uses its length
         // as the neutral arm reach, not only its direction.
-        return [{ arm, hand, anchor, rest: restOffset.clone(), restOffset: hand.position.clone(), q: new Quaternion(), inverse: new Quaternion(), inverseRotation: Matrix.Identity() }];
+        return [{ arm, hand, anchor, rest: restOffset.clone(), restOffset: hand.position.clone(), upAnchor: Vector3.Up(), q: new Quaternion(), inverse: new Quaternion(), inverseRotation: Matrix.Identity() }];
       });
       for (const node of [...pivots, ...spins, driver, head, scarf, steering]) if (node) node.rotationQuaternion = null;
       // Wheel assemblies have an unsprung parent; body squat/roll must never lift grounded tyres.
@@ -792,7 +792,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
                 g.hand.position.copyFrom(g.restOffset); g.hand.scaling.setAll(1); continue;
               }
               const target = Vector3.TransformCoordinates(Vector3.TransformCoordinates(g.anchor, v.steering.getWorldMatrix()), inverse).subtract(g.arm.position);
-              const reach = armGripReach(g.rest, target, g.q);
+              const wheelUp = Vector3.TransformNormal(Vector3.TransformNormal(g.upAnchor, v.steering.getWorldMatrix()), inverse);
+              const reach = armGripPose(g.rest, target, Vector3.Up(), wheelUp, g.q);
               g.arm.rotationQuaternion = g.q; g.arm.scaling.setAll(reach);
               Quaternion.InverseToRef(g.q, g.inverse); Matrix.FromQuaternionToRef(g.inverse, g.inverseRotation);
               Vector3.TransformCoordinatesToRef(target.scale(1 / reach), g.inverseRotation, g.hand.position);

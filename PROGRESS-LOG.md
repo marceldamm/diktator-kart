@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Verdrehte Handorientierung am Lenkrad
+
+**Befund:** Der bestehende Arm-IK-Solver traf die bewegliche Griffposition exakt und hielt den Handschuh an der Manschetten-/Armhierarchie. Er rotierte aber nur den Vektor Schulter→Hand. Die Rollrichtung um diesen Vektor war unbeschränkt; dadurch konnten Finger-/Daumenseite beim Lenkeinschlag kippen, obwohl der Griffpunkt-Test bestand.
+
+**Umgesetzt:** `src/kart-visuals.ts` bietet jetzt `armGripPose`: zuerst wird der Arm an den bewegten Griff geführt, anschließend wird seine projizierte Hoch-/Fingerachse auf die mitdrehende Tangente des Lenkrads ausgerichtet. `src/slice-scene.ts` gibt die tatsächliche Wheel-up-Achse aus dem Lenkradtransform in den Driverraum und verwendet dieselbe Lösung pro Fahrer. Griffposition, komplette Arm-Hand-Verbindung und Skalierungskompensation bleiben erhalten.
+
+**Verifiziert:** `tests/kart-visuals.test.mjs`: 2/2. Neue Regression prüft links/rechts über fünf Winkel, exakten Griffpunkt, Tangentenorientierung und begrenzte Armlänge. Produktionsbuild erfolgreich: 1.296 Module; die bekannte Vite-Warnung des rund 2.023-kB-Hauptchunks bleibt. Der erste sandboxierte Test/Build scheiterte mit `spawn EPERM`; erneuter Build und Test mit dem nötigen Prozesszugriff bestanden. `git diff --check` sauber (nur Windows-Zeilenendenhinweise).
+
+**Laufzeitansicht / Grenze:** Der In-App-Browser lud frisch bis in Stalins Rennen; die Cockpitansicht zeigt beide Handschuhe am Lenkrad und keinen sichtbaren Laufzeitfehler. CUA konnte keine Fahrttaste halten, daher gab es keine zuverlässige Lenkbewegung. Kein menschlicher Links-/Rechtseinschlag, keine Außen-/Seiten-Nahansicht und keine vollständige Formabnahme behauptet.
+
 ### 2026-10-05 – Selektive Laden-Ausleger an der Boulevardzeile
 
 **Auswahl/Auftrag:** Nach den Townhouse-Läden und Blumenkästen wurde ein bestätigtes M3-Stadtweltziel vor der Umsetzung in CURRENT-WORKLIST.md und LONG-TERM-GOALS.md festgehalten: nur ausgewählte Fassaden mit eigenständigen, lesbaren Laden-Auslegern variieren.
