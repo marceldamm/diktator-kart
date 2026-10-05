@@ -75,3 +75,16 @@ test('Stalins touring windscreen keeps transparent glass inside only the limousi
   }
   assert.ok(ancestors.has('body-limousine'), 'the screen is switched with the Stalin limousine, not the shared kart chassis');
 });
+
+test('seat upholstery details stay flat and non-metallic instead of reading as loose rods', () => {
+  assert.ok(![...glbNodeNames].some((name) => /Seat stitching/.test(name)), 'the floating gold seat rods are absent from the runtime model');
+  const seamNode = glbDocument.nodes.find(({ name }) => name.endsWith('Seat upholstery thread'));
+  assert.ok(seamNode?.mesh !== undefined, 'subtle upholstery seams remain in the optimized model');
+  const seamMaterial = glbDocument.materials.find(({ name }) => name === 'Seat upholstery thread');
+  assert.ok(seamMaterial, 'seat seams use their dedicated cloth-thread material');
+  assert.ok((seamMaterial.pbrMetallicRoughness?.metallicFactor ?? 0) < .05, 'the thread is not metallic trim');
+  assert.ok((seamMaterial.pbrMetallicRoughness?.roughnessFactor ?? 0) >= .9, 'the thread has a matte upholstery finish');
+  const position = glbDocument.accessors[glbDocument.meshes[seamNode.mesh].primitives[0].attributes.POSITION];
+  const depth = (position.max[2] - position.min[2]) * seamNode.scale[2] / (position.normalized ? 32767 : 1);
+  assert.ok(depth < .01, `upholstery thread stays under 1 cm thick (got ${depth.toFixed(4)} m)`);
+});

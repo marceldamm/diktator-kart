@@ -23,6 +23,8 @@
 
 **Diktator-Kart-starten.cmd:** Spiel aus dem aktiven Projektordner öffnen.
 
+**Chrome bei Spielprüfungen sichtbar lassen:** Jeder Browserlauf mit dem Spiel läuft in einem für Marcel/Sarah sichtbaren Google-Chrome-Fenster. Keine Headless- oder versteckte/minimierte Ausführung. Ein CDP-Test nutzt bei Bedarf ein eigenes sichtbares Fenster; Spiel pausieren und genau diese Testinstanz nach dem Lauf schließen, normale Chrome-Fenster offen lassen. So könnt ihr den geprüften Zustand mitverfolgen.
+
 **Projekt-starten.cmd:** Einfachen Git-Start ausführen. **Projekt-abschliessen.cmd:** Einfachen geprüften Git-Abschluss ausführen. Bei Konflikten/ungesicherten Dateien hilft Codex; die Batches selbst sind keine KI. Der Spielstarter synchronisiert GitHub nicht.
 
 **Limit-Puffer für beide:** Die KI prüft eure eigenen offiziellen Fünf-Stunden-/Wochenwerte. Ab etwa **15 % Rest** beginnt sie keine große Aufgabe mehr und schließt geordnet ab; Ziel: mindestens etwa **5 % für euch übrig**. Ohne Zugriff meldet sie das und nutzt einen vorsichtigen Puffer. Keine automatischen Resets oder Zusatzkosten. Details in [AGENTS.md](AGENTS.md).
@@ -39,7 +41,15 @@ Details zu Dateien, Zusammenarbeit und Modellwahl stehen darunter.
 
 **Weitere autonom bearbeitete Pakete (Codex, 05.10.):** Stadtfassaden erhielten selektive Laden-Ausleger; Laufzeitdatei, Build und Hauptmenü-Reload sind geprüft, Detail-/Stilabnahme fehlt. Offizieller Limitstand zuletzt: 3 % Fünf-Stunden-Verbrauch und 42 % Wochenverbrauch (97 %/58 % Rest; Woche bindet). Keine Resets/Zusatzkontingente.
 
+**Laufende autonome Sitzung (Codex, 05.10.):** Die herausstehenden Sitznähte wurden als Ursache der Rückenstäbe identifiziert, in Blender korrigiert und aus frischer Babylon-Heck-/3/4-Ansicht geprüft. Der Ein-Item-Weg ist im Grand Prix abgenommen: Kiste → Symbol/Name/„IM SLOT“ → Buttonwurf und separater E-Wurf → leerer Slot/„… unterwegs“. Der Kanalspray bleibt visuell offen; nächster Schritt ist ein kontrollierter niedriger Kanalpass mit Bild während des Kontakts. Offizielle Werte zuletzt 19 % Fünf-Stunden-Verbrauch / 45 % Wochenverbrauch (81 %/55 % Rest, Woche bindet); ab etwa 15 % Rest keine neue Großaufgabe. Keine Zusatzkontingente/Resets.
+
+**Sichtbares Chrome bei Spielprüfungen (Marcel, 05.10.2026):** Wenn Codex das Spiel in Google Chrome ausführt oder testet, soll Marcel/Sarah das echte Spielfenster sehen und den Ablauf mitverfolgen können. Headless-, versteckte und minimierte Prüffenster sind ausgeschlossen. Nach dem Beleg Rendering pausieren und nur die eigene Testinstanz schließen. Dauerhafte Regeln: [AGENTS.md](AGENTS.md), [Team-Workflow](docs/21-team-workflow.md).
+
 **Handgriff-Korrektur (Codex, 05.10.):** Die Laufzeit-IK richtet die verbundene Hand jetzt zusätzlich zur Griffstelle an der Tangente des drehenden Lenkrads aus; 2/2 gezielte Regressionen und Build bestanden. Der Browser lud einen frischen Stalin-Rennstart; beide Hände liegen am Rad. Keine gehaltene Links-/Rechtslenkung oder visuelle Außen-Nahaufnahme bestätigt.
+
+**M7-Rendertexturpaket (Codex, 05.10.):** Das Stadion-TV pausiert nun außerhalb von 130 m und aktualisiert sich wieder beim Annähern. Wiederholter A/B in derselben pausierten Sechs-Kart-Szene: P50 71,3 → 53,5 ms, P95 161,2 → 125,8 ms und 617 weniger Draws. Helpertests 2/2, TypeScript, Produktionsbuild und ein echter Grand-Prix-Start geprüft. Große FPS-/Geräteabnahme bleibt offen. Offizielle Werte nach dem Paket: 4 % Fünf-Stundenverbrauch und 46 % Wochenverbrauch (96 %/54 % Rest; Woche bindet). Nächster Schritt: Blender-Stadtszenenbau profilieren und beschleunigen, bevor das blockierte Fassadenentwässerungs-Asset erneut gebaut wird.
+
+**M3-Stadtpaket und Builderprofil (Codex, 05.10.):** Die Regenrinnen-/Ladenfassaden sind nach 48 Townhouses, 32 zusammengeführten Materialmeshes und knapp 69 Minuten Blender-Bau bis ins Runtime-GLB exportiert; neue Welt im frischen Rennen geladen. Der erste eindeutige Phasenlog belegt, dass der statische Join deutlich langsamer bleibt als der GLB-Export. Gutter-/Planter-/Shutter-/Sign-Knoten sind per Test vorhanden; künstlerische Nahabnahme steht aus. Offizielle Werte nach dem Paket: 12 % Fünf-Stundenverbrauch und 48 % Wochenverbrauch (88 %/52 % Rest; Woche bindet). Kein Zusatzkontingent oder Reset genutzt. Nächster gewählter Punkt: bewegte Laufzeit-Renderkosten M7.
 
 ## So arbeiten Marcel und Sarah gemeinsam
 
@@ -220,3 +230,10 @@ Das bestätigte M3-Weltpaket „Übungskrater mit echter Bergung und lesbares Sc
 **Budget-/Folgepaket (Codex, 05.10.):** Nach dem Cast-Regressionspaket zeigt die offizielle Codex-Anzeige 12 % Fünf-Stunden- und 44 % Wochenverbrauch. Die Woche bindet (56 % Rest). Als nächstes ist der bestätigte M3-Laufzeitpass Stalin/Limousine in Front-, Profil-, Nah- und Bewegungsansicht vor Codeänderungen dokumentiert.
 
 **Budget-/Folgepaket (Codex, 05.10., aktualisiert):** Nach dem Stalin-Mützenexport zeigt die offizielle Codex-Anzeige 14 % Fünf-Stunden- und 44 % Wochenverbrauch (86 %/56 % Rest; Woche bindet). Der Mützen-Teilpass ist umgesetzt; nächstes bestätigtes Paket ist der reale Wasser-/Kontaktpartikelbeleg. Keine Resets/Zusatzkontingente aktiviert.
+
+
+### 2026-10-05 – Weiterarbeit an bestätigten Langzeitzielen (Marcel-Auftrag)
+
+**Auftrag/Status:** Marcel bat nach dem aktuellen Paket um weitere bestätigte Ziele bis nahe ans Nutzungslimit. Das M3-Welt-Merge-/Exportpaket ist nach Vollbau, GLB-Prüfung, 66/66 Tests, Produktionsbuild und echtem Browserlauf technisch abgeschlossen. Die automatisierte Fassaden-Nahansicht liegt bei docs/evidence/world-facade-closeup-hybrid-m3.png; menschliche Stilabnahme ist nicht vorgetäuscht. Als Nächstes ist das bestätigte M7-Leistungspaket vor jeder Optimierung als Instrumentierungs-/Hotspot-Audit in CURRENT-WORKLIST.md gewählt.
+
+**Offizieller Limitstand nach dem Paket:** 7 % im Fünf-Stunden-Fenster und 50 % im Wochenfenster verbraucht (93 %/50 % Rest; Woche bindet). Keine Credits, Resets oder Zusatzkontingente eingesetzt.

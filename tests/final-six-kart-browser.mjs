@@ -1,11 +1,9 @@
 // Actual current scene; bounded workload check, not a low-end or 60 FPS approval.
 import assert from'node:assert/strict';import{writeFile}from'node:fs/promises';
-import{send,delay,evaluate,load,tap,socket,errors}from'./cdp.mjs';
+import{send,delay,evaluate,load,startGrandPrix,tap,socket,errors}from'./cdp.mjs';
 try{
  await send('Runtime.enable');await send('Page.bringToFront');await send('Emulation.setFocusEmulationEnabled',{enabled:true});await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
- await load('?demo=1');await evaluate(`document.querySelector('#race-start').click()`);
- for(let i=0;i<100&&await evaluate(`window.__DK.phase`)!=='race';i++)await delay(100);
- assert.equal(await evaluate(`window.__DK.phase`),'race');
+ await load('?demo=1');await startGrandPrix();
  const initial=await evaluate(`({meshes:window.__DK.scene.meshes.length,distance:window.__DK.progress[0].distance})`),windows=[];
  for(let i=0;i<3;i++){
   if(i)await tap('c','KeyC',67);await delay(1500);

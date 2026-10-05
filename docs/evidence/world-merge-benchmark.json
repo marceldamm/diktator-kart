@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-05",
+  "blender": "4.5.3 LTS",
+  "purpose": "Compare the existing Blender operator join with the NumPy/foreach bulk merge before another full stadium export.",
+  "fixture": {
+    "objects": 13338,
+    "materialGroups": 32,
+    "vertices": 426816,
+    "faces": 240084,
+    "groupObjectCounts": [
+      5047,
+      1219,
+      1493,
+      994,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      157
+    ],
+    "geometry": "Repeated 16-segment cylinder wall meshes with varied object translation, rotation, and scale; this is not the production city geometry."
+  },
+  "operatorJoinSeconds": 320.57,
+  "bulkMergeSeconds": 230.53,
+  "speedup": 1.39,
+  "outputValidation": "Both paths produced 32 merged meshes with matching total vertex and polygon counts.",
+  "limits": [
+    "The repeated fixture has simpler surfaces and shared source mesh datablocks than the 13,338-object production world.",
+    "The first full-world Python-list merge attempt was slower than the previous operator on its first material group and was interrupted before save/export.",
+    "Full production timing showed no bulk speedup; only the separate small fixture checks exact geometry equivalence between merge output and source surfaces."
+  ],
+  "productionFollowup": {
+    "fullWorldCompleted": true,
+    "bulkThresholdUsedForBuild": 2000,
+    "groups": [
+      {
+        "material": "Sandstone shadow",
+        "objects": 1219,
+        "path": "operator",
+        "seconds": 131.3,
+        "historicalOperatorSeconds": 138.4
+      },
+      {
+        "material": "Carved ivory stone",
+        "objects": 5047,
+        "path": "bulk",
+        "seconds": 444.8,
+        "historicalOperatorSeconds": 438.7
+      },
+      {
+        "material": "Warm limestone",
+        "objects": 994,
+        "path": "operator",
+        "seconds": 73.5,
+        "historicalOperatorSeconds": 70.8
+      },
+      {
+        "material": "Recessed blue glass",
+        "objects": 1493,
+        "path": "operator",
+        "seconds": 87.9,
+        "historicalOperatorSeconds": 95.8
+      }
+    ],
+    "futureDefaultDirectMinimumObjects": 6000,
+    "conclusion": "Synthetic bulk speedup did not transfer to production geometry. Default threshold is above all current groups; keep bulk as a tested alternative only."
+  }
+}

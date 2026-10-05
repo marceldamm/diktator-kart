@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {writeFile} from 'node:fs/promises';
-import {send,evaluate,delay,load,tap,errors,socket} from './cdp.mjs';
+import {send,evaluate,delay,load,startGrandPrix,tap,errors,socket} from './cdp.mjs';
 const evidence=[];
 const snap=()=>evaluate(`(()=>{const d=window.__DK;return {phase:d.phase,stats:d.items.stats,objects:d.items.objects,meshes:d.scene.meshes.length,dogs:d.scene.transformNodes.filter(n=>n.name.startsWith('shepherd ' )&&n.name.split(' ').length===3&&n.isEnabled()).map(n=>({name:n.name,position:n.position.asArray(),legs:n.getDescendants().filter(n=>n.name.endsWith('dogLeg-0')).map(n=>n.rotation.x)})),puff:d.scene.particleSystems.find(p=>p.name==='Shepherd comic impact cloud').manualEmitCount};})()`);
 try{
  await send('Runtime.enable');await send('Page.bringToFront');await send('Emulation.setFocusEmulationEnabled',{enabled:true});await send('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
- await load('?demo=1');await evaluate(`document.querySelector('#race-start').click()`);await delay(4400);
+ await load('?demo=1');await startGrandPrix();await delay(4400);
  const initial=await snap();
  for(const kind of ['direct','homing']){
   await tap('p','KeyP',80);

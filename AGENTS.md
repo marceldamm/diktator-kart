@@ -52,6 +52,8 @@ Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentw
 
 ## Proaktive Arbeitsweise der KI
 
+**Sichtbare Browserprüfung:** Wenn das Spiel in Google Chrome gestartet oder automatisiert geprüft wird, muss das Chrome-Fenster für Marcel/Sarah sichtbar bleiben, damit sie den geprüften Spielstand beobachten können. Keine Headless-Ausführung und kein verstecktes/minimiertes Testfenster. Ein eigenes CDP-Testprofil darf in einem separaten, sichtbaren Chrome-Fenster laufen. Nach der Prüfung den Spiel-Renderloop pausieren und ausschließlich die eigens gestartete Testinstanz schließen; normale Nutzerfenster nicht beenden. Prüfbilder und den tatsächlich sichtbaren Zustand dokumentieren.
+
 Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 
 1. Sie prüft vor jeder größeren Änderung zuerst die vier Hauptdateien: CURRENT-WORKLIST.md (aktuelle Arbeit), LONG-TERM-GOALS.md (Ziele), TEAM-CHANGES.md (bestätigte Änderungen), TEAM-NOTES.md (Notizen/offene Punkte). README.md ist die kurze Projektübersicht; danach prüft sie die betroffenen Detaildokumente.

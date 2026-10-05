@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-05",
+  "package": "M7 live broadcast render-target throttling",
+  "environment": {
+    "hardware": "NVIDIA RTX 3070 Laptop GPU",
+    "graphicsApi": "WebGL2 / ANGLE D3D11",
+    "viewport": "1600x1000",
+    "scene": "paused Grand Prix with six karts",
+    "method": "180 requestAnimationFrame samples per pass; repeated refreshRate order 3, 0, 3, 0 in the same scene"
+  },
+  "passes": [
+    { "refreshRate": 3, "p50FrameMs": 71.3, "p95FrameMs": 161.3, "p99FrameMs": 230.3, "drawCalls": 1815, "triangles": 4129000 },
+    { "refreshRate": 0, "p50FrameMs": 54.0, "p95FrameMs": 125.9, "p99FrameMs": 161.4, "drawCalls": 1198, "triangles": 2887000 },
+    { "refreshRate": 3, "p50FrameMs": 71.4, "p95FrameMs": 161.2, "p99FrameMs": 232.3, "drawCalls": 1815, "triangles": 4129000 },
+    { "refreshRate": 0, "p50FrameMs": 53.5, "p95FrameMs": 125.8, "p99FrameMs": 213.3, "drawCalls": 1198, "triangles": 2887000 }
+  ],
+  "interpretation": "Pausing the stadium RenderTargetTexture removed 617 draw calls and about 1.242 million sampled triangles; repeated P50/P95 results were consistent. GPU timer-query values varied substantially between passes and are intentionally excluded from the conclusion. Runtime now enables refreshRate 3 only within 130 world units of the TV wall and uses 0 outside that radius.",
+  "limitations": [
+    "The benchmark is a paused single-scene render-cost comparison, not a moving-race FPS guarantee.",
+    "The 130-unit runtime gate is covered by helper regression tests and production compilation; it is not a separate automated distance-teleport integration benchmark.",
+    "The full M7 device/performance target remains open."
+  ]
+}

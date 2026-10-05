@@ -1,4 +1,4 @@
-// Purpose-built local Chrome checks and real in-game evidence.
+// Purpose-built local Chrome checks and real in-game evidence. Connect only to a visible Chrome window (no headless/minimized game tests).
 import { writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 const targets=await(await fetch(`http://127.0.0.1:${process.env.CDP_PORT??9223}/json`)).json();
@@ -16,5 +16,7 @@ const key=async(type,key,code,virtual)=>send('Input.dispatchKeyEvent',{type,key,
 const tap=async(k,c,v)=>{await key('keyDown',k,c,v);await key('keyUp',k,c,v);await delay(150);};
 const shot=async name=>{await delay(600);const r=await send('Page.captureScreenshot',{format:'png'});const version=process.env.EVIDENCE_SUFFIX??'-v2';await writeFile(`docs/evidence/${name}${version}.png`,Buffer.from(r.data,'base64'));};
 const load=async(query='')=>{await send('Page.navigate',{url:`${base}${query}`});for(let i=0;i<120;i++){await delay(250);const status=await evaluate(`document.querySelector('#status').textContent`);if(status==='Testszene läuft')return;if(status==='Startfehler')throw Error(await evaluate(`document.querySelector('#message').textContent`));}throw Error('Start timeout');};
+const startGrandPrix=async()=>{await evaluate(`document.querySelector('#menu-race').click()`);for(let i=0;i<80;i++){if(await evaluate(`document.body.classList.contains('select-open')`))break;await delay(100);}if(!await evaluate(`document.body.classList.contains('select-open')`))throw Error('Grand Prix did not open driver selection');await evaluate(`document.querySelector('#driver-go').click()`);for(let i=0;i<100;i++){if(await evaluate(`window.__DK.phase==='race'`))return;await delay(100);}throw Error(`Grand Prix did not start (phase: ${await evaluate(`window.__DK.phase`)})`);};
+const setQuality=async(label)=>{for(let i=0;i<3;i++){const current=await evaluate(`document.querySelector('#quality-toggle').textContent`);if(current===label)return;await evaluate(`document.querySelector('#quality-toggle').click()`);await delay(250);}throw Error(`Could not select ${label}; current setting: ${await evaluate(`document.querySelector('#quality-toggle').textContent`)}`);};
 
-export {send,delay,evaluate,key,tap,shot,load,errors,socket};
+export {send,delay,evaluate,key,tap,shot,load,startGrandPrix,setQuality,errors,socket};

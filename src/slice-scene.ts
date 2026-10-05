@@ -29,6 +29,7 @@ import type { Camera } from '@babylonjs/core/Cameras/camera';
 import { TRACK, drivingSurfaceAt, trackLocate, trackPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
+import { shouldRefreshBroadcastFeed } from './broadcast-feed';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
 import { airTrickRoll, armGripPose } from './kart-visuals';
 import { canalSurfaceSprayRate, looseSurfaceDustRate } from './environment-effects';
@@ -484,7 +485,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // 'Staatsfernsehen LIVE': a giant wall beside the grandstand straight shows a live feed of the race leader.
     const tvCamera = new FreeCamera('Staatsfernsehen camera', new Vector3(0, 5, 0), scene); tvCamera.fov = .5; tvCamera.minZ = .1;
     const feed = new RenderTargetTexture('Staatsfernsehen feed', { width: 768, height: 432 }, scene, false);
-    feed.activeCamera = tvCamera; feed.refreshRate = 3; scene.customRenderTargets.push(feed);
+    feed.activeCamera = tvCamera; feed.refreshRate = 0; scene.customRenderTargets.push(feed);
     // A null render list would reuse the main camera's culled meshes: karts outside the player's view vanished
     // from the wall and only their shadows remained. Render the whole scene, and show the player's own driver.
     feed.renderList = scene.meshes;
@@ -643,6 +644,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       },
       present(state, others) {
         const dt = Math.min(engine.getDeltaTime() / 1000, .05), time = performance.now() / 1000;
+        const feedRefreshRate = shouldRefreshBroadcastFeed(state.x, state.z, wallAt.x, wallAt.z) ? 3 : 0;
+        if (feed.refreshRate !== feedRefreshRate) feed.refreshRate = feedRefreshRate;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         if (sunDisc.isEnabled() && gameCamera) { const c = gameCamera.position; sunDisc.position.set(c.x - sunDirection.x * 380, c.y - sunDirection.y * 380, c.z - sunDirection.z * 380); sunDiscMaterial.alpha = 1 - Math.min(1, timeOfDay * 1.6); sunDisc.isVisible = timeOfDay < .6 && !raining && !snowing; }
         trackWorld.animate(time);

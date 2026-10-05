@@ -5,10 +5,13 @@ Original geometry only; fictional civic architecture without historical insignia
 Blender X/Y equal game x/z. Local track frames: +Y along the driving direction, +X to the driver's right.
 """
 import os, sys, json, math, random
+import time
+from mathutils import Matrix
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mesh_tools import *
 import mesh_tools as mt
 mt.BUILD_WORLD = True
+mt.begin_world_profile()
 random.seed(1936)
 
 T = json.load(open(os.path.join(ROOT, 'art-source', 'track-layout.json'), encoding='utf8'))
@@ -49,9 +52,18 @@ def frame_at(x, y, rot, name='frame'):
 
 def bake(e):
     """Moves children of a placement frame into world space and removes the frame."""
-    bpy.context.view_layer.update()
-    for o in [c for c in bpy.data.objects if c.parent == e]:
-        mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+    # All transforms are authored directly on these placement frames and their
+    # children. Compose Blender's parent chain explicitly instead of forcing a
+    # full dependency-graph evaluation for every frame in a growing city.
+    chain = []; cursor = e
+    while cursor:
+        chain.append(cursor); cursor = cursor.parent
+    frame_world = Matrix.Identity(4)
+    for item in reversed(chain):
+        frame_world = frame_world @ item.matrix_parent_inverse @ item.matrix_basis
+    for o in list(e.children):
+        mw = frame_world @ o.matrix_parent_inverse @ o.matrix_basis
+        o.parent = None; o.matrix_world = mw
         if o.type == 'MESH':
             o.data.transform(o.matrix_basis); o.matrix_basis.identity()
     bpy.data.objects.remove(e)
@@ -76,6 +88,7 @@ brick = mat('Terracotta render', (.42, .2, .11), 0, .88)
 ochre = mat('Ochre render limestone', (.62, .45, .24), 0, .85)
 shutter_green = mat('Weathered blue-green timber shutters', (.16, .25, .22), 0, .9)
 shutter_red = mat('Weathered burgundy timber shutters', (.32, .10, .09), 0, .9)
+rain_hardware = mat('Aged zinc rain hardware', (.19, .23, .22), .55, .62)
 shop_enamel_green = mat('Shop sign deep green enamel', (.025, .13, .12), .2, .3)
 shop_enamel_red = mat('Shop sign oxblood enamel', (.25, .035, .04), .16, .34)
 shop_enamel_cream = mat('Shop sign warm ivory enamel', (.72, .57, .34), .12, .42)
@@ -101,6 +114,30 @@ def tube_lo(name, points, r, m, parent=None):
     bpy.ops.object.convert(target='MESH'); o.select_set(False); return o
 
 def blob(name, pos, size, m, parent=None, seg=8, rings=6):
+    if mt.BUILD_WORLD:
+        # Build the same low-resolution UV sphere directly. bpy.ops adds and
+        # updates an object for every spectator head and coat in a growing city.
+        x, y, z = pos; rx, ry, rz = size
+        vs = [(x, y, z + rz)]
+        for ring in range(1, rings - 1):
+            a = math.pi * ring / (rings - 1)
+            for j in range(seg):
+                b = 2 * math.pi * j / seg
+                vs.append((x + rx * math.sin(a) * math.cos(b), y + ry * math.sin(a) * math.sin(b), z + rz * math.cos(a)))
+        bottom = len(vs); vs.append((x, y, z - rz)); fs = []
+        first = 1; last = first + (rings - 3) * seg
+        for j in range(seg):
+            nxt = (j + 1) % seg
+            fs.append((0, first + j, first + nxt))
+            fs.append((bottom, last + nxt, last + j))
+        for ring in range(rings - 3):
+            upper = 1 + ring * seg; lower = upper + seg
+            for j in range(seg):
+                nxt = (j + 1) % seg
+                fs.append((upper + j, lower + j, lower + nxt, upper + nxt))
+        o = mesh(name, vs, fs, m, parent)
+        for p in o.data.polygons: p.use_smooth = True
+        return o
     bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=rings, location=pos)
     o = bpy.context.object; o.scale = size
     for pg in o.data.polygons: pg.use_smooth = True
@@ -271,6 +308,23 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
             mesh('Window pediment', vs, [(0, 1, 2), (3, 5, 4), (0, 3, 4, 1), (1, 4, 5, 2), (2, 5, 3, 0)], trim_stone, e)
     box('Main cornice', (face - .45, 0, hgt - .15), (.9, width + .9, .32), trim_stone, .02, e)
     for k in range(int(width / .55)): box('Cornice dentil', (face - .82, -width / 2 + .3 + k * .55, hgt - .42), (.18, .22, .22), trim_stone, .005, e)
+    # Select a restrained quarter of houses for complete, period-neutral drainage
+    # details. The gutter follows the cornice and one pipe uses the quieter edge
+    # so it does not obscure the shopfront, windows, or the main entrance.
+    if idx % 4 == 1:
+        gutter_x = face - .91
+        gutter_z = hgt - .43
+        pipe_y = -(width / 2 - .58) if idx % 8 == 1 else width / 2 - .58
+        pipe_x = face - .86
+        tube_lo('Eaves gutter', [(gutter_x, -width / 2 + .12, gutter_z), (gutter_x, width / 2 - .12, gutter_z)], .065, rain_hardware, e)
+        for bracket_y in [-width / 2 + .5, -width / 4, 0, width / 4, width / 2 - .5]:
+            tube_lo('Gutter iron bracket', [(face - .49, bracket_y, gutter_z + .05), (face - .7, bracket_y, gutter_z - .03), (gutter_x, bracket_y, gutter_z - .06)], .022, rain_hardware, e)
+        tube_lo('Downpipe upper offset', [(gutter_x, pipe_y, gutter_z), (pipe_x, pipe_y, gutter_z - .11), (pipe_x, pipe_y, hgt - .82)], .052, rain_hardware, e)
+        tube_lo('Downpipe shaft', [(pipe_x, pipe_y, hgt - .82), (pipe_x, pipe_y, .62)], .052, rain_hardware, e)
+        for strap_z in [1.05, 2.8, 4.6, 6.4, 8.2, hgt - 1.4]:
+            if strap_z < hgt - .5:
+                box('Downpipe wall strap', (face - .68, pipe_y, strap_z), (.26, .1, .055), rain_hardware, .014, e)
+        tube_lo('Downpipe ground shoe', [(pipe_x, pipe_y, .64), (pipe_x - .08, pipe_y, .37), (face - 1.2, pipe_y, .31)], .052, rain_hardware, e)
     for dy in [-width / 4, width / 4]:
         box('Roof dormer', (face + 1.6, dy, hgt + 1.1), (1.6, 1.6, 1.6), body, .02, e)
         box('Dormer window', (face + .79, dy, hgt + 1.0), (.06, .9, 1.0), window, .01, e)
@@ -373,6 +427,7 @@ def cypress(x, y, h=6.5):
     for p in t.data.polygons: p.use_smooth = True
 
 # --- Palace beyond the palace sweeper ------------------------------------------------
+print('WORLD_STAGE palace-start',flush=True)
 PX, PY = LM['palace']
 box('Palace podium', (PX, PY, 1), (66, 24, 2), darkstone, .12)
 box('Palace forecourt', (PX, PY - 22, .08), (70, 22, .16), pale, .02)
@@ -407,6 +462,7 @@ text('Satirical subtitle', 'APPLAUS NUR MIT GENEHMIGUNG', (PX, PY - 7.98, 16.2),
 for step in range(5): box('Palace stairs', (PX, PY - 12 + step * .7, .16 + step * .18), (49, 1.1, .32 + step * .36), pale, .03)
 
 # --- Track-side architecture ---------------------------------------------------------
+print(f'WORLD_STAGE trackside-start elapsed={time.perf_counter()-mt.BUILD_PROGRESS_START:.1f}s',flush=True)
 finish_gantry()
 gate(LM['gateProgress'])
 grandstand(4 * F, 44 * F, 1); grandstand(52 * F, 92 * F, 1); grandstand(24 * F, 70 * F, -1)
@@ -425,6 +481,7 @@ for s in range(0, int(L), 17):
 print('townhouses', placed)
 
 # --- Park, fountains and the monument to the unknown clerk ---------------------------
+print(f'WORLD_STAGE park-start elapsed={time.perf_counter()-mt.BUILD_PROGRESS_START:.1f}s',flush=True)
 for fx, fy in LM['fountains']: fountain(fx, fy)
 cx, cy = 14, 56
 if clearance(cx, cy) > PROM + 4:
@@ -457,6 +514,7 @@ for (x, y, rot) in [(4, 30, 0), (16, 44, 1.2), (-8, 14, .4)]:
     bake(e)
 
 # --- Railway hall and distant city ring ----------------------------------------------
+print(f'WORLD_STAGE railway-start elapsed={time.perf_counter()-mt.BUILD_PROGRESS_START:.1f}s',flush=True)
 box('Station base', (0, -146, .32), (72, 25, .64), stone, .04)
 box('Station hall walls', (0, -149, 5.2), (68, 18, 10.4), brick, .045)
 for x in range(-30, 31, 5):

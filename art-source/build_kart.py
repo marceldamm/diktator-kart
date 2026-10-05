@@ -287,7 +287,13 @@ seat_rings = []
 for k in range(5):
     seat_rings.append([(p[0] * (1 - k * .05), -.88 + p[2], .8 + k * .1) for p in ring(.36, .07, 0, 0, 16)])
 loft('Seat back shell', seat_rings, leather, kart, 1)
-for x in [-.18, 0, .18]: tube('Seat stitching', [(x, -.97, .86), (x, -.97, 1.0), (x, -.96, 1.16)], .008, trim, kart)
+# Fine upholstery seams sit nearly flush with the leather back shell. The former
+# 8 mm bright-metal tubes floated behind the shell and read as three loose rods.
+seat_thread = mat('Seat upholstery thread', (.19, .145, .105), 0, .94)
+for x in [-.18, 0, .18]:
+    tube('Seat upholstery vertical seam', [(x, -.881, .86), (x, -.881, 1.0), (x, -.881, 1.16)], .0018, seat_thread, kart)
+for z in [.91, 1.105]:
+    tube('Seat upholstery cross seam', [(-.235, -.881, z), (0, -.881, z), (.235, -.881, z)], .0018, seat_thread, kart)
 box('Dashboard', (0, .5, 1.06), (.74, .14, .18), paint, .05, kart)
 for x, r in [(-.2, .06), (0, .085), (.2, .06)]:
     cyl('Gauge brass bezel', (x, .42, 1.1), r, .025, trim, kart, 'Y')

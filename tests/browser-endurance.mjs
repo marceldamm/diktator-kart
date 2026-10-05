@@ -1,4 +1,4 @@
-// Longer local GPU probe. Requires Vite on 4173 and an isolated Chrome CDP tab on 9223.
+// Longer local GPU probe. Requires Vite on 4173 and a visible isolated Chrome CDP tab on 9223.
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
 
@@ -130,7 +130,7 @@ try {
   assert.equal(samples.length, 6);
   assert.ok(samples.every((sample) => sample.frames === 300));
   assert.equal(exceptions.length, 0, `Browser exceptions: ${exceptions.join('; ')}`);
-  const result = { date: new Date().toISOString(), world, viewport: '1280x800', method: 'Headless Chrome CDP, 300 requestAnimationFrame intervals per view; W+A held', samples, exceptions };
+  const result = { date: new Date().toISOString(), world, viewport: '1280x800', method: 'Visible Chrome CDP, 300 requestAnimationFrame intervals per view; W+A held', samples, exceptions };
   await writeFile(process.argv[2] ?? 'docs/evidence/m2f-rtx-endurance.json', `${JSON.stringify(result, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(result)}\n`);
 } finally {

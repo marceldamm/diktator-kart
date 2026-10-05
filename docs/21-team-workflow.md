@@ -67,6 +67,10 @@ Die Batch `Projekt-abschliessen.cmd` kann einen bereits dokumentierten, committe
 
 `Diktator-Kart-starten.cmd` im **aktiven Repository-Hauptordner** doppelklicken. Es startet den dort ausgecheckten neuen Babylon-Stand; es synchronisiert Git nicht nebenbei.
 
+### Browserprüfungen sichtbar durchführen
+
+Wenn Codex das Spiel in Google Chrome startet oder per CDP prüft, bleibt ein echtes Chrome-Fenster sichtbar auf dem Spiel. Headless-, versteckte oder minimierte Fenster sind für diese Spielprüfungen ausgeschlossen. Für isolierte CDP-Läufe ein eigenes sichtbares Chrome-Fenster mit eigenem Debugging-Port/Profil nutzen und währenddessen offen lassen. Den Spiel-Renderloop nach dem Beleg pausieren; anschließend nur diese Testinstanz schließen, nie normale Nutzerfenster. Belegbilder müssen aus dem tatsächlich sichtbaren Lauf stammen.
+
 Der Starter prueft Projektmarkierung/Abstammung und Archivbranch. Vite liefert unter `/__diktator/status` Root, Edition, Branch und Commit. Ein vorhandener Server wird nur fuer exakt denselben Checkout wiederverwendet. Ein alter oder fremder Server wird nicht beendet; der Starter waehlt einen freien lokalen Port (4173 bis 4192) und zeigt die richtige URL. Deshalb kann die URL von 4173 abweichen. Ein bereits laufender Produktionspreview muss nach Code-/Assetaenderungen neu gebaut/gestartet werden; fuer normale Arbeit den Dev-Starter verwenden.
 
 ## Sarahs einmaliger Umstieg

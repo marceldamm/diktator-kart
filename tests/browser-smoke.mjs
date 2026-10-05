@@ -1,5 +1,5 @@
 // Run against a local Vite server and Chrome with CDP on 127.0.0.1:9223.
-// Example: npm run dev; chrome --headless=new --remote-debugging-port=9223 http://127.0.0.1:4173/
+// Example: npm run dev; chrome --remote-debugging-port=9223 --user-data-dir=.tools/chrome-visible http://127.0.0.1:4173/
 import assert from 'node:assert/strict';
 import { access, writeFile as saveFile } from 'node:fs/promises';
 

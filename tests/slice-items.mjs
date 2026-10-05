@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {writeFile} from 'node:fs/promises';
-import {send,delay,evaluate,tap,shot,load,errors,socket} from './cdp.mjs';
+import {send,delay,evaluate,tap,shot,load,startGrandPrix,errors,socket} from './cdp.mjs';
 const samples=[];
 try {
   await send('Runtime.enable');await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
-  await load('?demo=1');await evaluate(`document.querySelector('#race-start').click()`);await delay(4500);
+  await load('?demo=1');await startGrandPrix();await delay(4500);
   const meshes=await evaluate(`window.__DK.scene.meshes.length`);let captured=false,paused=false;
   for(let i=0;i<90;i++) {
     await delay(1500);

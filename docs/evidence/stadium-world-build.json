@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-05",
+  "blenderVersion": "4.5.3 LTS",
+  "source": "art-source/build_world.py",
+  "worldTownhouses": 48,
+  "meshFactoryCalls": 12500,
+  "preMergeSceneObjects": 13338,
+  "staticMaterialGroups": 32,
+  "approximatePhaseSeconds": {
+    "geometry": 3203,
+    "staticMergeTotal": 940.6,
+    "blendSave": 11.9,
+    "gltfExportAndRuntimeCopy": 25.6
+  },
+  "largestJoinGroups": [
+    {
+      "material": "Carved ivory stone",
+      "objects": 5047,
+      "seconds": 438.7
+    },
+    {
+      "material": "Sandstone shadow",
+      "objects": 1219,
+      "seconds": 138.4
+    },
+    {
+      "material": "Recessed blue glass",
+      "objects": 1493,
+      "seconds": 95.8
+    },
+    {
+      "material": "Warm limestone",
+      "objects": 994,
+      "seconds": 70.8
+    }
+  ],
+  "assetBytes": {
+    "blend": 24211767,
+    "rawGlb": 22586788,
+    "runtimeGlb": 16232868,
+    "previousRuntimeGlb": 16135400
+  },
+  "runtimeMeshCount": 32,
+  "runtimeMaterialCount": 32,
+  "runtimeNodesVerified": [
+    "Eaves gutter",
+    "Weathered timber window shutter",
+    "Terracotta shop window planter",
+    "Shop planter flower",
+    "Shop blade sign enamel"
+  ],
+  "optimization": {
+    "rawToRuntimeReductionPercent": 28.13,
+    "runtimeIncreaseBytes": 97468,
+    "runtimeIncreasePercent": 0.6,
+    "uvQuantizationSkipped": "Planar metre UV coordinates exceed [0,1] by design so tiled surface maps remain intact."
+  },
+  "runtimeCheck": {
+    "freshGrandPrixLoaded": true,
+    "facadeCloseupReviewed": true,
+    "humanStyleReview": false,
+    "automatedVisualInspection": true,
+    "facadeScreenshot": "docs/evidence/world-facade-closeup-hybrid-m3.png"
+  },
+  "limitations": [
+    "Blender grouped mesh merge remains a long build phase; full merge took 940.6 seconds and the bulk experiment did not improve the largest real material group.",
+    "The fresh Grand Prix and a manually framed in-engine close-up load the updated world and show the new façade details. Human art-direction review remains open."
+  ],
+  "mergeExperiment": {
+    "policyDuringThisBuild": "operator through 1999 objects; bulk from 2000",
+    "bulkGroupMeasured": {
+      "material": "Carved ivory stone",
+      "objects": 5047,
+      "seconds": 444.8,
+      "historicalOperatorSeconds": 438.7
+    },
+    "operatorGroupsMeasured": [
+      {
+        "material": "Sandstone shadow",
+        "objects": 1219,
+        "seconds": 131.3,
+        "historicalOperatorSeconds": 138.4
+      },
+      {
+        "material": "Warm limestone",
+        "objects": 994,
+        "seconds": 73.5,
+        "historicalOperatorSeconds": 70.8
+      },
+      {
+        "material": "Recessed blue glass",
+        "objects": 1493,
+        "seconds": 87.9,
+        "historicalOperatorSeconds": 95.8
+      }
+    ],
+    "futureDefaultDirectMinimumObjects": 6000,
+    "conclusion": "Synthetic speedup did not transfer to real world meshes; production defaults to Blender operator for every current group."
+  }
+}

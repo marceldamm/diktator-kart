@@ -1,0 +1,424 @@
+{
+  "date": "2026-10-05T19:50:33.704Z",
+  "method": "Isolated Chrome CDP session; six moving Grand Prix karts; 1600x1000. This session used a long-lived test browser whose freshly loaded source/build was not confirmed; retain as a diagnostic trace only, not as LOD or baseline proof.",
+  "start": {
+    "meshes": 1895,
+    "distance": -12.504962137171105
+  },
+  "end": {
+    "distance": 920.9576583493716,
+    "positions": [
+      [
+        80.01861250527845,
+        -21.314926929648998,
+        13.910000000000005
+      ],
+      [
+        79.04973071923837,
+        5.35669311148921,
+        14.38630580210159
+      ],
+      [
+        81.79391825506849,
+        27.56894550494245,
+        17.02200000000001
+      ],
+      [
+        51.05124658463428,
+        116.1750331102116,
+        13.760000000000023
+      ],
+      [
+        78.26737101853905,
+        26.13631486884637,
+        14.456439711176039
+      ],
+      [
+        67.09485098131755,
+        96.88383344175554,
+        14.844000000000019
+      ]
+    ]
+  },
+  "views": [
+    {
+      "view": "Verfolger nah",
+      "phase": "race",
+      "karts": 6,
+      "meshPool": 1895,
+      "activeMeshes": 544,
+      "activeVertices": 893407,
+      "activeMeshTriangles": 844517,
+      "activeTriangles": 2272920,
+      "estimatedSubmeshDraws": 538,
+      "lastFrame": {
+        "drawCalls": 1210,
+        "cpuFrameMs": 50.90000009536743,
+        "gpuFrameMs": 56.363008
+      },
+      "activeNameGroups": {
+        "world": 29,
+        "track": 13,
+        "vehicle": 403
+      },
+      "shadowGenerators": [
+        {
+          "light": "Late afternoon sun",
+          "resolution": {
+            "width": 2048,
+            "height": 2048
+          },
+          "enabled": true,
+          "casters": 160,
+          "enabledCasters": 160
+        }
+      ],
+      "renderTargets": [
+        {
+          "name": "Staatsfernsehen feed",
+          "refreshRate": 0,
+          "renderList": 1895,
+          "activeCamera": "Staatsfernsehen camera"
+        }
+      ],
+      "frameMs": {
+        "p50": 66.80000000000291,
+        "p95": 133.5,
+        "p99": 166.89999999999418,
+        "max": 483.6000000000058
+      },
+      "topTriangles": [
+        {
+          "name": "Architecture / Carved ivory stone",
+          "triangles": 81732,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Brushed champagne brass",
+          "triangles": 72490,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Ivory enamel",
+          "triangles": 23488,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Recessed blue glass",
+          "triangles": 17916,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Sandstone shadow",
+          "triangles": 15716,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/body-limousine / Petrol enamel",
+          "triangles": 14396,
+          "subMeshes": 1
+        },
+        {
+          "name": "Racing surface",
+          "triangles": 14256,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Park burgundy flowers",
+          "triangles": 13824,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/cast-face-stalin / Mature skin",
+          "triangles": 12352,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart0/cast-face-hitler / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart2/cast-face-mussolini / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart3/cast-face-mao / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart4/cast-face-kim / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart5/cast-face-castro / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Warm limestone",
+          "triangles": 11448,
+          "subMeshes": 1
+        }
+      ]
+    },
+    {
+      "view": "Verfolger fern",
+      "phase": "race",
+      "karts": 6,
+      "meshPool": 1895,
+      "activeMeshes": 274,
+      "activeVertices": 703984,
+      "activeMeshTriangles": 591734,
+      "activeTriangles": 1708818,
+      "estimatedSubmeshDraws": 271,
+      "lastFrame": {
+        "drawCalls": 666,
+        "cpuFrameMs": 48.799999952316284,
+        "gpuFrameMs": 24.557568
+      },
+      "activeNameGroups": {
+        "world": 24,
+        "track": 3,
+        "vehicle": 220
+      },
+      "shadowGenerators": [
+        {
+          "light": "Late afternoon sun",
+          "resolution": {
+            "width": 2048,
+            "height": 2048
+          },
+          "enabled": true,
+          "casters": 130,
+          "enabledCasters": 130
+        }
+      ],
+      "renderTargets": [
+        {
+          "name": "Staatsfernsehen feed",
+          "refreshRate": 0,
+          "renderList": 1895,
+          "activeCamera": "Staatsfernsehen camera"
+        }
+      ],
+      "frameMs": {
+        "p50": 66.59999999999854,
+        "p95": 100.09999999999854,
+        "p99": 133.40000000000146,
+        "max": 150.09999999999854
+      },
+      "topTriangles": [
+        {
+          "name": "Architecture / Carved ivory stone",
+          "triangles": 81732,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Brushed champagne brass",
+          "triangles": 72490,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Ivory enamel",
+          "triangles": 23488,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Recessed blue glass",
+          "triangles": 17916,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Sandstone shadow",
+          "triangles": 15716,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/body-limousine / Petrol enamel",
+          "triangles": 14396,
+          "subMeshes": 1
+        },
+        {
+          "name": "Racing surface",
+          "triangles": 14256,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Park burgundy flowers",
+          "triangles": 13824,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/cast-face-stalin / Mature skin",
+          "triangles": 12352,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart0/cast-face-hitler / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart2/cast-face-mussolini / Mature skin",
+          "triangles": 11776,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Warm limestone",
+          "triangles": 11448,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart0/cast-shorthair / Hair and leather helmet",
+          "triangles": 8692,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/cast-shorthair / Hair and leather helmet",
+          "triangles": 8692,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/cast-stalin-cap / Hat cloth",
+          "triangles": 7616,
+          "subMeshes": 1
+        }
+      ]
+    },
+    {
+      "view": "Fahrerperspektive",
+      "phase": "race",
+      "karts": 6,
+      "meshPool": 1895,
+      "activeMeshes": 521,
+      "activeVertices": 1423429,
+      "activeMeshTriangles": 1083995,
+      "activeTriangles": 2671688,
+      "estimatedSubmeshDraws": 512,
+      "lastFrame": {
+        "drawCalls": 1126,
+        "cpuFrameMs": 37,
+        "gpuFrameMs": 124.65664
+      },
+      "activeNameGroups": {
+        "world": 34,
+        "track": 12,
+        "vehicle": 363
+      },
+      "shadowGenerators": [
+        {
+          "light": "Late afternoon sun",
+          "resolution": {
+            "width": 2048,
+            "height": 2048
+          },
+          "enabled": true,
+          "casters": 127,
+          "enabledCasters": 125
+        }
+      ],
+      "renderTargets": [
+        {
+          "name": "Staatsfernsehen feed",
+          "refreshRate": 3,
+          "renderList": 1895,
+          "activeCamera": "Staatsfernsehen camera"
+        }
+      ],
+      "frameMs": {
+        "p50": 66.69999999999709,
+        "p95": 150,
+        "p99": 183.5,
+        "max": 216.79999999998836
+      },
+      "topTriangles": [
+        {
+          "name": "Architecture / Carved ivory stone",
+          "triangles": 81732,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Brushed champagne brass",
+          "triangles": 72490,
+          "subMeshes": 1
+        },
+        {
+          "name": "park 36 60/tree_small_02_LOD0.002",
+          "triangles": 39926,
+          "subMeshes": 1
+        },
+        {
+          "name": "park -21 90/tree_small_02_LOD0.002",
+          "triangles": 39926,
+          "subMeshes": 1
+        },
+        {
+          "name": "park 42 3/tree_small_02_LOD0.002",
+          "triangles": 39926,
+          "subMeshes": 1
+        },
+        {
+          "name": "park -9 60/tree_small_02_LOD0.002",
+          "triangles": 39926,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Warm skin",
+          "triangles": 27712,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Ivory enamel",
+          "triangles": 23488,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Recessed blue glass",
+          "triangles": 17916,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Sandstone shadow",
+          "triangles": 15716,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/body-limousine / Petrol enamel",
+          "triangles": 14396,
+          "subMeshes": 1
+        },
+        {
+          "name": "Racing surface",
+          "triangles": 14256,
+          "subMeshes": 1
+        },
+        {
+          "name": "Architecture / Park burgundy flowers",
+          "triangles": 13824,
+          "subMeshes": 1
+        },
+        {
+          "name": "kart1/cast-face-stalin / Mature skin",
+          "triangles": 12352,
+          "subMeshes": 1
+        },
+        {
+          "name": "park-LOD45 36 60/tree_small_02_LOD0.002",
+          "triangles": 11964,
+          "subMeshes": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "One RTX development device; not a weak-PC/mobile or 60-FPS approval.",
+    "No rendering, shadow, image quality, or physics settings were changed.",
+    "Largest active meshes and per-camera work counts prioritize the next causal A/B test; they do not alone prove a bottleneck.",
+    "The test Chrome had been running since 05.10 03:51. A later LOD registration check failed; treat this trace only as a diagnostic, not as proof of LOD or a before/after baseline."
+  ]
+}
