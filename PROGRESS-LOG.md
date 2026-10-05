@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Hitlers Schnurrbartregression im Runtime-Porträt
+
+**Befund:** Frische Babylon-Fahrerwahl zeigte Hitlers Augen und Mund, jedoch keinen lesbaren Schnurrbart. Die Cast-Konfiguration enthielt `toothbrush`; ein passender GLB-Knoten samt Mesh war bereits exportiert. Die bisherige einzelne kleine Quaderform war im Porträtmaßstab trotzdem nicht erkennbar.
+
+**Umgesetzt:** `art-source/build_kart.py` ersetzt den Quader durch zwei kompakte, volumetrisch gesweepte Bartflügel mit klarer Silhouette vor der Nase/Gesichtsebene. Blender-Neubau erzeugte `art-source/hero-kart.blend`, Roh-GLB und optimiertes `public/assets/models/hero-kart.glb` (5.300.540 Byte). `tests/cast.test.mjs` prüft nun aktive Hitler-Zuordnung, registriertes Laufzeitteil, tatsächlich enthaltene GLB-Positionen, Mindestbreite und Frontlage.
+
+**Verifiziert:** Cast-/GLB-Regression 2/2 bestanden. `npm run build` erfolgreich, 1.296 Module; bekannte Vite-Hauptchunkwarnung bei 2.026,22 kB bleibt. Der frische echte Browserstart und die neue Fahrerwahl zeigen den Schnurrbart dunkel und klar an Hitlers Gesicht; alle sechs Porträts wurden im selben Bild auf unbeabsichtigte Nebenänderungen verglichen.
+
+**Grenze:** Das korrigiert die konkrete Sichtbarkeitsregression; keine Front-/Profil-/Bewegungs- oder menschliche Stilabnahme des gesamten Fahrers beansprucht. Der Stalin-/Limousinen-Qualitätsanker bleibt offen.
+
 ### 2026-10-05 – Verdrehte Handorientierung am Lenkrad
 
 **Befund:** Der bestehende Arm-IK-Solver traf die bewegliche Griffposition exakt und hielt den Handschuh an der Manschetten-/Armhierarchie. Er rotierte aber nur den Vektor Schulter→Hand. Die Rollrichtung um diesen Vektor war unbeschränkt; dadurch konnten Finger-/Daumenseite beim Lenkeinschlag kippen, obwohl der Griffpunkt-Test bestand.

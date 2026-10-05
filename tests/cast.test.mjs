@@ -15,6 +15,15 @@ test('the six current drivers keep distinct kart and face variants with delibera
   assert.equal(new Set(CAST.map(({ faceStyle }) => faceStyle)).size, CAST.length, 'each driver has an individually sculpted head variant');
   const byName = Object.fromEntries(CAST.map((member) => [member.name, member]));
   assert.equal(byName.Hitler.hat, 'peaked');
+  assert.ok(byName.Hitler.face.includes('toothbrush'), 'Hitler keeps the compact moustache in his active face parts');
+  assert.ok(CAST_PARTS.includes('toothbrush'), 'the runtime roster can enable the Hitler-specific moustache');
+  const toothbrushNode = glbDocument.nodes.find(({ name }) => name.startsWith('cast-toothbrush /'));
+  assert.ok(toothbrushNode?.mesh !== undefined, 'the exported Hitler moustache retains visible mesh geometry');
+  const toothbrushPosition = glbDocument.accessors[glbDocument.meshes[toothbrushNode.mesh].primitives[0].attributes.POSITION];
+  const positionNormalization = toothbrushPosition.normalized ? 32767 : 1;
+  const toothbrushWidth = (toothbrushPosition.max[0] - toothbrushPosition.min[0]) * toothbrushNode.scale[0] / positionNormalization;
+  assert.ok(toothbrushWidth > .12, 'both moustache lobes remain wide enough to read in a driver portrait');
+  assert.ok(toothbrushNode.translation[2] < -.35, 'the moustache projects in front of the face after glTF axis conversion');
   assert.equal(byName.Stalin.hat, 'stalin-cap');
   assert.ok(CAST_PARTS.includes('stalin-cap'), 'runtime roster can enable Stalin’s tailored cap');
   assert.equal(byName.Mussolini.hat, 'peaked');

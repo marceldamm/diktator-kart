@@ -713,8 +713,12 @@ hair_shell('Slick parted hair', c, lambda x, y, z: z > .2 and (y < .17 or z > .3
 strand('Forelock', [(-.11, .08, .375), (-.04, .19, .34), (.05, .25, .285), (.12, .275, .23), (.18, .27, .19), (.205, .25, .17)], [.04, .08, .095, .08, .05, .02], .03, hair, c)
 strand('Forelock lower strand', [(-.02, .2, .33), (.07, .262, .27), (.14, .278, .215)], [.03, .045, .02], .022, hair, c)
 strand('Parting edge', [(-.1, -.15, .35), (-.1, 0, .375), (-.09, .12, .37)], .012, .012, hair, c)
-c = cast('toothbrush')                            # Hitler: characteristic compact, square moustache with softly clipped corners
-box('Toothbrush moustache', (0, .337, -.045), (.14, .055, .052), hair, .02, c)
+c = cast('toothbrush')                            # Hitler: compact, square brush split into two visible tapered lobes
+# Two separate, softly squared locks make the characteristic silhouette survive small portraits.
+# Their front edge sits just ahead of the shared nose tip so the face cannot swallow them.
+for sd in [-1, 1]:
+    strand('Toothbrush moustache lobe', [(sd * .009, .395, -.035), (sd * .038, .394, -.039),
+            (sd * .075, .382, -.049), (sd * .105, .36, -.056)], [.021, .027, .023, .009], .026, hair, c)
 c = cast('swept')                                 # Stalin: thick hair brushed straight back
 hair_shell('Swept-back hair', c, lambda x, y, z: z > .16 and (y < .19 or z > .29), .032, .12)
 for k in range(5):
