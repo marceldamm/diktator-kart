@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { canalFoamBands, canalSurfaceSprayRate } from '../src/environment-effects.ts';
+import { canalFoamBands, canalSurfaceSprayRate, looseSurfaceDustRate } from '../src/environment-effects.ts';
 
 test('canal spray requires moving water contact and remains bounded in reduced mode', () => {
   assert.equal(canalSurfaceSprayRate(false, 14, .1, false), 0);
@@ -25,4 +25,15 @@ test('canal shoreline washes remain narrow and inside both water boundaries', ()
   }
   assert.deepEqual(canalFoamBands(12, 0), []);
   assert.deepEqual(canalFoamBands(12, -4), []);
+});
+
+test('loose-surface dust is visible on gravel/turf but suppressed on cobbles, while still bounded',()=>{
+  assert.equal(looseSurfaceDustRate('cobble',true,15,false),0);
+  assert.equal(looseSurfaceDustRate('gravel',false,15,false),0);
+  assert.equal(looseSurfaceDustRate('grass',true,2.9,false),0);
+  assert.equal(looseSurfaceDustRate('gravel',true,15,false),22);
+  assert.equal(looseSurfaceDustRate('gravel',true,15,true),8);
+  assert.equal(looseSurfaceDustRate('grass',true,15,false),11);
+  assert.equal(looseSurfaceDustRate('grass',true,15,true),4);
+  assert.ok(22*.46<18,'each 18-particle surface pool stays below capacity at maximum lifetime');
 });

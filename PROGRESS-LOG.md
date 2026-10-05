@@ -714,3 +714,18 @@ Stalins zwei Schläfensträhnen liegen zusätzlich unter `cast-stalin-hairline`,
 **Offen:** Keine menschliche Stilabnahme, keine nahe Front-/Profil-/Bewegungsansicht; Stalin-M3-Qualitätsanker bleibt offen. Nächster Schritt: weitere bestätigte M3-Aufgaben priorisieren und vor Codeänderung sichtbar in beiden Arbeitslisten auswählen.
 
 **Limitstand:** Offizielle Werte nach dem Paket: 8 % Fünf-Stunden-Verbrauch (92 % Rest), 43 % Wochenverbrauch (57 % Rest; bindendes Fenster). Kein Reset oder Zusatzkontingent verwendet.
+### 2026-10-05 – M3-Welt: Übungskrater und befahrbare Untergründe
+
+**Auswahl/Auftrag:** Das bestätigte M3-Ziel wurde vor der Änderung in `CURRENT-WORKLIST.md` und `LONG-TERM-GOALS.md` als gemeinsames Paket festgehalten. Der bestehende Übungsplatz besaß nur Oberflächen-Decals/Ränder und einen einmaligen Ruck; verlangt war eine tatsächliche Fall-/Bergungsreaktion. Schotter-/Grasgrip und Kontaktpartikel waren ebenfalls offene Ziele.
+
+**Umgesetzt:** `src/track.ts` unterscheidet Außenring (`craterAt`) und tiefe Mitte (`craterPitAt`). Nur ein geerdetes Kart ohne laufende Bergung startet in der inneren Zone den 3,2-s-Fall-/Bergungszustand; die Szene senkt das Kart in die dunkle Senke und hebt es ohne Kranseil wieder an. `recoverKart` setzt bei Kraterfall auf einer freien, kraterfreien Spur am selben Streckenfortschritt zurück; die neue Regression belegt keine Zusatzdistanz. Außenkontakt behält den kurzen Ruck und losen Untergrund.
+
+`drivingSurfaceAt`/`applySurfaceDrag` liefern drei Zustände: Fahrbahnpflaster, Schotter-Abkürzung und eine 25,5 m lange befahrbare Grasverge am Kurvenrand. Schotter begrenzt die Höchstgeschwindigkeit wie zuvor, verlangsamt zusätzlich bei niedrigerem Tempo und dämpft die Gierbewegung; Gras reduziert Tempo/Lenkantwort stärker. `src/track-world.ts` ergänzt einen deterministischen 256²-Kieseltexturpool und ein dunkles Kratermaul; die Grasfläche liegt 9 mm über der Fahrbahn, um Z-Fighting zu vermeiden. Das HUD nennt Schotter/Gras. Pro Kart ist loser Staub auf 18 Partikel begrenzt, normal 22/11 Partikel/s, reduziert 8/4; stationär, in der Luft, auf Pflaster oder bei Schnee aus.
+
+**Verifiziert:** Gezielt `tests/track.test.mjs` + `tests/environment-effects.test.mjs`: 15/15. Gesamtsuite `npm test`: 62/62 (430,3 s), darunter Sechs-Kart-/Botrenntests und Track-Workflowregressionen. `npm run build` mit TypeScript und Vite bestanden, 1.296 Module; bestehende Chunkwarnung bei rund 2.026 kB. Ein erster Build-Lauf meldete nur einen ungenutzten Import; nach Entfernen bestanden.
+
+**Laufzeitprüfung / offen:** Nach dem finalen Reload erreichte die echte Babylon-App das Hauptmenü und danach den freien Fahrtmodus. Die Szene-/Assetladung wurde bestätigt. Keine präzise Fahrt in Gras oder Krater ausgelöst: Browser-Input ist hier nicht zuverlässig haltbar. Daher keine menschliche Sicht-/Fahrabnahme der Partikel, Fallanimation, Belohnungsfreiheit oder Oberflächenlesbarkeit behauptet.
+
+**Änderungsdateien:** `src/track-layout.ts`, `src/track.ts`, `src/track-world.ts`, `src/main.ts`, `src/scene.ts`, `src/slice-scene.ts`, `src/environment-effects.ts`, `tests/track.test.mjs`, `tests/environment-effects.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `art-source/README.md`, `PROGRESS-LOG.md`.
+
+**Limitstand:** Offiziell nach Paketabschluss: 10 % Fünf-Stunden-Verbrauch / 90 % Rest; 43 % Wochenverbrauch / 57 % Rest, die Woche bindet. Keine Zusatzkontingente oder Resets aktiviert.

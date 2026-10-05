@@ -1,6 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
 - **05.10.2026 – Lid-/Mundlesbarkeit:** Lidellipsoide weichen oberen/unteren Lidkanten; Stalins Mund sitzt körpernah unter dem Walrossbart. Asset, gezielter Casttest, Build und sechs Live-Porträts geprüft. Gesamtanker und menschlicher Nah-/Profilpass bleiben offen; Details im [Fortschrittslog](PROGRESS-LOG.md).
+- **05.10.2026 – Übungskrater und Untergrundfeedback:** Fallzone plus sichere gleiche-Fortschritt-Bergung an den drei Übungskratern; prozeduraler Schotter in der Abkürzung und befahrbarer Grasrand mit eigener Lenk-/Tempo-/Staubreaktion. Vollsuite 62/62 und Build bestanden; gezielte Sicht-/Fahrabnahme steht noch aus.
 
 - **05.10.2026 – Itemschaden für Panzerform geschlossen:** Ein Item-Aufprall während der Transformation zählte mangels Spin zuvor nicht zur Haltbarkeit. Derselbe begrenzte Itemschaden wird jetzt einmal pro Treffer gezählt; normale Item-, Wand- und Kartschäden bleiben auf dem bisherigen Pfad. Regression geprüft; menschliche Balancefahrt bleibt offen. Belege im [Fortschrittslog](PROGRESS-LOG.md).
 - **05.10.2026 – Stadtfassaden:** Verwitterte Fensterläden und wenige bepflanzte Ladenfenster bringen selektive Varianten in den Townhouse-Block. Der neue Blender-Export und die optimierte Weltdatei sind kleiner als der vorherige Runtime-GLB; In-Game-Nahabnahme bleibt offen. Technische Belege im [Fortschrittslog](PROGRESS-LOG.md).

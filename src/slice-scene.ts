@@ -26,12 +26,12 @@ import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
 import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
-import { TRACK, trackLocate, trackPoint } from './track';
+import { TRACK, drivingSurfaceAt, trackLocate, trackPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
 import { airTrickRoll, armGripPose } from './kart-visuals';
-import { canalSurfaceSprayRate } from './environment-effects';
+import { canalSurfaceSprayRate, looseSurfaceDustRate } from './environment-effects';
 import type { KartState } from './kart-model';
 import type { TestScene } from './scene';
 import { surfaceTextures } from './surface-textures';
@@ -261,6 +261,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     dust.minEmitBox = new Vector3(-.7, 0, -.08); dust.maxEmitBox = new Vector3(.7, .05, .08);
     dust.direction1 = new Vector3(-.3, .2, -.3); dust.direction2 = new Vector3(.3, .65, .3);
     dust.color1 = new Color4(.65, .58, .47, .38); dust.color2 = new Color4(.77, .71, .60, .3); dust.colorDead = new Color4(.7, .64, .53, 0); dust.start();
+    const looseDustTexture = particleTexture(scene);
+    const looseDust = visuals.map((_, i) => {
+      const system = new ParticleSystem(`Loose gravel and grass dust ${i}`, 18, scene); system.particleTexture = looseDustTexture;
+      system.minSize = .14; system.maxSize = .38; system.minLifeTime = .22; system.maxLifeTime = .46; system.emitRate = 0;
+      system.minEmitBox = new Vector3(-.52, 0, -.08); system.maxEmitBox = new Vector3(.52, .03, .08);
+      system.minEmitPower = .35; system.maxEmitPower = .9; system.gravity = new Vector3(0, -2, 0);
+      system.start(); return system;
+    });
     const sparks = new ParticleSystem('Drift sparks', 140, scene); sparks.particleTexture = particleTexture(scene);
     sparks.billboardMode = ParticleSystem.BILLBOARDMODE_STRETCHED; sparks.minEmitPower = 2.5; sparks.maxEmitPower = 5;
     sparks.minSize = .025; sparks.maxSize = .055; sparks.minScaleY = 2.5; sparks.maxScaleY = 4; sparks.minLifeTime = .08; sparks.maxLifeTime = .24;
@@ -553,7 +561,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         g.root.setEnabled(true); g.root.position.set(ghost.x, ghost.height, ghost.z); g.root.rotation.y = ghost.heading;
       },
       trackEvent() { zeppelinTime = 0; zeppelin.setEnabled(true); },
-      splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : .9;
+      splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
+        if (kind === 'crater') { burst(puff, at, reducedEffects ? 14 : 42); return; }
         if (kind === 'cliff') { burst(puff, at, reducedEffects ? 10 : 30); return; }
         if (kind === 'lava') { fireball.emitter = new Vector3(at.x, .2, at.z); fireball.manualEmitCount = reducedEffects ? 40 : 120; wreckSmoke.emitter = new Vector3(at.x, .5, at.z); wreckSmoke.manualEmitCount = reducedEffects ? 30 : 90; return; }
         splash.emitter = new Vector3(at.x, 0, at.z); splash.manualEmitCount = reducedEffects ? 40 : 160; },
@@ -689,6 +698,18 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         skids.update([state, ...others]);
         lastStates = [state, ...others];
         for (const [i, k] of lastStates.entries()) {
+          const loose = looseDust[i];
+          if (loose) {
+            const surface = drivingSurfaceAt(k.x,k.z), rate = looseSurfaceDustRate(surface,k.grounded,k.speed,reducedEffects);
+            loose.emitRate = snowing ? 0 : rate;
+            if (rate > 0) {
+              loose.emitter = new Vector3(k.x - Math.sin(k.heading) * .95, .1 + k.height, k.z - Math.cos(k.heading) * .95);
+              const tint = surface === 'grass' ? [new Color4(.34,.43,.24,.32),new Color4(.48,.53,.33,.24),new Color4(.4,.47,.29,0)] : [new Color4(.48,.4,.29,.4),new Color4(.64,.55,.41,.32),new Color4(.56,.47,.35,0)];
+              loose.color1=tint[0]; loose.color2=tint[1]; loose.colorDead=tint[2];
+              loose.direction1.set(-Math.sin(k.heading)*1.5-.35,.2,-Math.cos(k.heading)*1.5-.35);
+              loose.direction2.set(-Math.sin(k.heading)*.8+.35,.75,-Math.cos(k.heading)*.8+.35);
+            }
+          }
           const spray = canalSprays[i]; if (!spray) continue;
           const progress = trackLocate(k.x, k.z).s;
           const inCanal = progress >= CANAL_FROM && progress <= CANAL_FROM + CANAL_LENGTH;
@@ -804,7 +825,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           { const left = salvageNow[index] ?? 0, cable = cables[index];
             if (left > 0) { const t = 3.2 - left, d = salvageDepth[index] ?? .9, y = t < 1 ? -d * t : -d + Math.min(1, (t - 1) / 1.4) * (d + 3.2);
               v.root.position.y = y + Math.sin(time * 3) * (t > 2.4 ? .08 : 0); v.root.rotation.z = t > 1 ? Math.sin(time * 2.4) * .12 : 0;
-              cable.setEnabled(t > .7); const top = 11, bottom = y + 1.6; cable.scaling.y = Math.max(.1, top - bottom); cable.position.set(s.x, (top + bottom) / 2, s.z);
+              cable.setEnabled(t > .7 && d < 1.5); const top = 11, bottom = y + 1.6; cable.scaling.y = Math.max(.1, top - bottom); cable.position.set(s.x, (top + bottom) / 2, s.z);
             } else { cable.setEnabled(false); v.root.rotation.z = 0; } }
           // Damage look: soot on the paint, engine smoke, and the comic driver ejection during a wreck.
           const health = healthNow[index] ?? 100, wrecked = (wreckedNow[index] ?? 0) > 0;

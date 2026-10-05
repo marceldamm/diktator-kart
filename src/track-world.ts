@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
+import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 import { canalFoamBands } from './environment-effects';
@@ -149,6 +149,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const island = MeshBuilder.CreateGround('Park lawn island', { width: x1 - x0, height: z1 - z0 }, scene);
     island.position.set((x0 + x1) / 2, .05, (z0 + z1) / 2); island.material = lawn; island.receiveShadows = true; island.isPickable = false; island.freezeWorldMatrix();
   }
+  // Narrow walkable turf shoulders make the park edge read as grass and trigger the same soft-grip rule.
+  for (const [from,to,inner,outer] of GRASS_VERGES) sweep(scene,'Park-side grass verge',[[inner,.029],[outer,.029]],lawn,{uScale:4,vScale:4,step:.45,from,to});
 
   // Painted kerbs and the start line.
   const kerbTexture = canvasTexture(scene, 'Kerb stripes', 256, 32, (c) => {
@@ -269,12 +271,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
     }
   }
-  { // Shell craters: scorched dirt decals with a raised rim and a training-ground sign (abstract, no real place).
+  { // Shell craters: dark recessed-looking bowls, scorched soil and raised rims at the abstract practice ground.
     const scorch = canvasTexture(scene, 'Crater scorch', 256, 256, (c) => { const g = c.createRadialGradient(128, 128, 10, 128, 128, 126); g.addColorStop(0, '#1b140e'); g.addColorStop(.55, '#3a2a1c'); g.addColorStop(.8, '#5b4630'); g.addColorStop(1, 'rgba(91,70,48,0)'); c.fillStyle = g; c.fillRect(0, 0, 256, 256); }, true);
     const scorchMaterial = new StandardMaterial('Crater scorch', scene); scorchMaterial.diffuseTexture = scorch; scorchMaterial.useAlphaFromDiffuseTexture = true; scorchMaterial.specularColor = Color3.Black(); scorchMaterial.zOffset = -2;
     const dirt = pbr(scene, 'Crater dirt rim', '#5b4630', 0, .95);
+    const bowlMaterial = pbr(scene, 'Crater bowl shadow', '#21180f', 0, 1);
     for (const [s, lane, r] of CRATERS) { const p = trackPoint(s, lane);
       const decal = MeshBuilder.CreateGround('Crater decal', { width: r * 2.6, height: r * 2.6 }, scene); decal.position.set(p.x, .045, p.z); decal.material = scorchMaterial; decal.isPickable = false;
+      const bowl = MeshBuilder.CreateDisc('Crater bowl', { radius: r * .49, tessellation: 28 }, scene); bowl.rotation.x = Math.PI / 2; bowl.position.set(p.x, .052, p.z); bowl.material = bowlMaterial; bowl.isPickable = false;
       const rim = MeshBuilder.CreateTorus('Crater rim', { diameter: r * 2, thickness: .32, tessellation: 20 }, scene); rim.position.set(p.x, .02, p.z); rim.scaling.y = .35; rim.material = dirt; rim.isPickable = false; }
     const sign = canvasTexture(scene, 'Training ground sign', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a'; c.textAlign = 'center';
       c.font = 'bold 44px Georgia'; c.fillText('STAATLICHES', 256, 80); c.fillText('ÜBUNGSGELÄNDE', 256, 135); c.font = '26px Georgia'; c.fillText('Trichter bitte umfahren', 256, 195); });
@@ -327,9 +331,17 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const plate = MeshBuilder.CreatePlane('Salvage office plate', { width: 4, height: 1 }, scene); plate.material = plateMaterial; plate.position.set(mid.x, 6, mid.z); plate.rotation.y = Math.atan2(dx, dz) + Math.PI; plate.isPickable = false;
     for (const m of [mast, boom]) { m.isPickable = false; shadow.addShadowCaster(m); }
   }
-  // Backyard alley: darker, rougher cobbles between clipped hedges, opening onto both legs.
+  // Backyard alley: loose gravel between clipped hedges, distinct from the cobbled racing ribbon.
+  const gravelTexture = canvasTexture(scene, 'Backyard gravel', 256, 256, (c) => {
+    c.fillStyle = '#80715b'; c.fillRect(0, 0, 256, 256);
+    let seed = 4721; const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    for (let i = 0; i < 620; i++) { const x = random() * 256, y = random() * 256, r = 1 + random() * 3.4, tone = Math.round(78 + random() * 74);
+      c.fillStyle = `rgba(${tone},${tone * .88|0},${tone * .68|0},${.2 + random() * .42})`; c.beginPath(); c.ellipse(x, y, r * 1.4, r, random() * 3.14, 0, Math.PI * 2); c.fill(); }
+  });
+  gravelTexture.uScale = gravelTexture.vScale = 2;
+  const gravel = pbr(scene, 'Loose alley gravel', '#a18c68', 0, 1); gravel.albedoTexture = gravelTexture;
   const alleyAt = (u: number, lane: number) => shortcutPoint(u, lane);
-  sweep(scene, 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], road, { uScale: 2, vScale: 2, step: .5, to: SHORTCUT_LENGTH, at: alleyAt,
+  sweep(scene, 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], gravel, { uScale: 2, vScale: 2, step: .5, to: SHORTCUT_LENGTH, at: alleyAt,
     color: (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
   const hedgeMaterial = pbr(scene, 'Clipped alley hedge', '#ffffff', 0, .95);
   const hedgeMaps = surfaceTextures(scene, 'Hedge', 'leaf'); hedgeMaps.color.hasAlpha = false; hedgeMaterial.albedoTexture = hedgeMaps.color; hedgeMaterial.bumpTexture = hedgeMaps.normal; hedgeMaterial.albedoColor = Color3.FromHexString('#5e8a4c');

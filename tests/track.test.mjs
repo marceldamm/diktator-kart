@@ -2,8 +2,8 @@ import { HAZARDS } from '../src/track-layout.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
-import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH } from '../src/track-layout.ts';
-import { TRACK, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, overCanal, recoverKart } from '../src/track.ts';
+import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
+import { TRACK, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
 import { SHORTCUT } from '../src/track-layout.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
@@ -26,6 +26,28 @@ test('canal rescue places a fallen kart beyond the water without awarding progre
   assert.equal(overCanal(rescued.x,rescued.z),false);
   assert.ok(progress>=CANAL_FROM+CANAL_LENGTH+2,`rescued progress ${progress} should be clear of the landing edge`);
   assert.ok(Math.abs(progress-trackProgress(fallen.x,fallen.z))>=3,`rescue gap ${progress-trackProgress(fallen.x,fallen.z)} must not be awarded as race progress`);
+});
+test('practice craters have an outer jolt zone and a deep fall bowl with a safe same-progress recovery',()=>{
+  const [s,lane,r]=CRATERS[0],center=trackPoint(s,lane),rim=trackPoint(s,lane+r*.72);
+  assert.equal(craterAt(center.x,center.z),0); assert.equal(craterPitAt(center.x,center.z),0);
+  assert.equal(craterAt(rim.x,rim.z),0); assert.equal(craterPitAt(rim.x,rim.z),-1);
+  assert.equal(shouldStartCraterFall(center.x,center.z,true,0),true);
+  assert.equal(shouldStartCraterFall(center.x,center.z,false,0),false);
+  assert.equal(shouldStartCraterFall(center.x,center.z,true,1),false);
+  assert.equal(shouldStartCraterFall(rim.x,rim.z,true,0),false);
+  const fallen={...gridKart(0),...center,speed:12};
+  const rescued=recoverKart(fallen,[fallen]);
+  assert.equal(craterPitAt(rescued.x,rescued.z),-1); assert.equal(projectTrack(rescued.x,rescued.z).kind,null);
+  assert.ok(Math.abs(trackProgress(rescued.x,rescued.z)-trackProgress(fallen.x,fallen.z))<.02,'recovery changes lane but awards no progress');
+});
+test('loose surfaces have distinct shared speed/grip response and grass is reachable on marked verge',()=>{
+  const gravel=shortcutPoint(SHORTCUT_LENGTH/2),fast={...gridKart(0),...gravel,speed:14,yawRate:1};
+  const gravelResult=applySurfaceDrag(fast,1/60); assert.equal(drivingSurfaceAt(fast.x,fast.z),'gravel');
+  assert.ok(gravelResult.speed<fast.speed); assert.ok(gravelResult.yawRate<fast.yawRate);
+  const [from,to,minLane,maxLane]=GRASS_VERGES[0],grass=trackPoint((from+to)/2,(minLane+maxLane)/2),onGrass={...fast,...grass};
+  const grassResult=applySurfaceDrag(onGrass,1/60); assert.equal(drivingSurfaceAt(onGrass.x,onGrass.z),'grass');
+  assert.ok(grassResult.speed<onGrass.speed); assert.ok(grassResult.yawRate<onGrass.yawRate);
+  assert.equal(applySurfaceDrag({...onGrass,grounded:false},1/60).speed,onGrass.speed);
 });
 test('air trick supplies one shared body and wheel roll over the jump duration',()=>{
   assert.equal(airTrickRoll(false,.5,1),0);

@@ -45,8 +45,8 @@ export interface TestScene {
   setDamage?(health: number[], wrecked: number[]): void;
   /** 0 = day, .5 = dusk, 1 = night (layered on top of the weather). */
   setTimeOfDay?(t: number): void;
-  /** Harbour fall and salvage: splash, per-kart salvage timers (crane lift), back on the track. */
-  splash?(kart: number, kind?: 'water' | 'lava' | 'cliff'): void;
+  /** World fall/recovery animation for water, furnace, cliff or practice crater. */
+  splash?(kart: number, kind?: 'water' | 'lava' | 'cliff' | 'crater'): void;
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
   /** Announced decorative track event (lap 2 propaganda zeppelin flyover). */

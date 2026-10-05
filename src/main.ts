@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub,type Action } 
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { setBotSkill, atRampLip, boostPadAt, craterAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -753,7 +753,10 @@ class App {
           { const allKarts=[this.kart,...this.loadKarts];
             allKarts.forEach((k,i)=>{ if(!k.grounded||craterAt(k.x,k.z)<0){this.inCrater[i]=false;return;}
               allKarts[i]={...k,speed:k.speed*(1-1.5*FIXED_STEP),suspensionVelocity:this.inCrater[i]?k.suspensionVelocity:k.suspensionVelocity-1.4,drifting:false,driftCharge:0};
-              if(!this.inCrater[i]){this.testScene?.craterHit?.(i);if(i===0)this.audio.itemEvent('hit');} this.inCrater[i]=true; });
+              if(!this.inCrater[i]){this.testScene?.craterHit?.(i);if(i===0)this.audio.itemEvent('hit');} this.inCrater[i]=true;
+              if(shouldStartCraterFall(k.x,k.z,k.grounded,this.salvage[i]??0)){this.salvage[i]=3.2;this.testScene?.splash?.(i,'crater');
+                if(i===0){this.itemMessage='Granattrichter · Das Staatliche Bergungsamt zieht dich heraus';this.itemMessageUntil=this.items.time+3.2;this.audio.itemEvent('hit');}}
+            });
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Harbour: a kart past the open quay sinks, the state salvage crane lifts it back at the same progress.
           const all=[this.kart,...this.loadKarts];
@@ -819,7 +822,8 @@ class App {
             : `Drift lädt ${Math.round(this.kart.driftCharge / KART_TUNING.driftTiers[0] * 100)} %`
           : this.kart.height > 0 ? 'Hop' : 'Bereit';
       const maximumContact = Math.max(...this.kart.wheelGroundHeights);
-      surfaceDisplay.textContent = this.kart.grounded && maximumContact > 0.02
+      const surface = drivingSurfaceAt(this.kart.x,this.kart.z);
+      surfaceDisplay.textContent = surface === 'gravel' ? 'Schotter · loser Untergrund' : surface === 'grass' ? 'Gras · weniger Grip' : this.kart.grounded && maximumContact > 0.02
         ? `Bodenwelle · Radkontakt ${Math.round(maximumContact * 100)} cm`
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';

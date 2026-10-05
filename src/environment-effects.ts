@@ -6,6 +6,12 @@ export function canalSurfaceSprayRate(inCanal: boolean, speed: number, height: n
   return reducedEffects ? 14 : 30;
 }
 
+/** Bounded loose-surface dust; no emission while parked, airborne or on the paved racing line. */
+export function looseSurfaceDustRate(surface: 'cobble' | 'gravel' | 'grass', grounded: boolean, speed: number, reducedEffects: boolean): number {
+  if (surface === 'cobble' || !grounded || Math.abs(speed) < 3) return 0;
+  return surface === 'gravel' ? reducedEffects ? 8 : 22 : reducedEffects ? 4 : 11;
+}
+
 /** Narrow visual foam washes sit just inside the transverse canal surface. */
 export function canalFoamBands(from: number, length: number): [number, number][] {
   const width = Math.min(.16, Math.max(0, length) / 2);

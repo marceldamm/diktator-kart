@@ -102,6 +102,9 @@ export const BOOST_PADS: readonly (readonly [number, number])[] = [[62 * S, -2],
 /** Abstract 'Staatliches Übungsgelände': marked shell craters [progress, lane, radius] on the straight before the gate; avoidable. */
 export const CRATERS: readonly (readonly [number, number, number])[] = [[298 * S, -3, 1.7], [305 * S, 2.6, 1.9], [312 * S, -.6, 1.6]];
 
+/** Short park-side turf verges on the raceable edge; [from, to, lane start, lane end]. */
+export const GRASS_VERGES: readonly (readonly [number, number, number, number])[] = [[345 * S, 362 * S, 4.8, 5.8]];
+
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
 export const HARBOUR = { from: 236 * S, to: 262 * S, side: 1, basin: 9 } as const;
 /** Open-edge hazards: harbour water (west bend) and a surreal satirical furnace pit (north-east bend). */

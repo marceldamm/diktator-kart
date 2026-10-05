@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -116,10 +116,30 @@ export function trackProgress(x: number, z: number): number {
   return Math.abs(alley.lane) <= SHORTCUT.halfWidth + .3 ? alley.s : main.s;
 }
 
-/** Rough alley cobbles: speed above the cap bleeds away unless a mini-turbo is running. */
+export type DrivingSurface = 'cobble' | 'gravel' | 'grass';
+
+/** Surface under the kart: the racing ribbon stays cobble, the alley is gravel, park edges are grass. */
+export function drivingSurfaceAt(x: number, z: number): DrivingSurface {
+  if (inShortcut(x, z)) return 'gravel';
+  const { s, lane } = trackLocate(x, z);
+  if (GRASS_VERGES.some(([from,to,minLane,maxLane]) => s >= from && s <= to && lane >= minLane && lane <= maxLane)) return 'grass';
+  if (Math.abs(lane) > TRACK.halfWidth + .65 && LANDMARKS.lawns.some(([x0, z0, x1, z1]) => x >= x0 && x <= x1 && z >= z0 && z <= z1)) return 'grass';
+  return 'cobble';
+}
+
+/** Loose gravel and turf slow and soften steering; turbo keeps the existing shortcut speed exception. */
 export function applySurfaceDrag(state: KartState, dt: number): KartState {
-  if (state.turboRemaining > 0 || state.speed <= SHORTCUT.speedCap || !inShortcut(state.x, state.z)) return state;
-  return { ...state, speed: Math.max(SHORTCUT.speedCap, state.speed - 14 * dt) };
+  if (!state.grounded || Math.abs(state.speed) < .01) return state;
+  const surface = drivingSurfaceAt(state.x, state.z);
+  if (surface === 'cobble') return state;
+  if (surface === 'gravel') {
+    const capDrag = state.turboRemaining > 0 || state.speed <= SHORTCUT.speedCap ? 0 : 14;
+    const rollingDrag = state.turboRemaining > 0 ? 0 : 2.5;
+    const loss = Math.max(capDrag, rollingDrag) * dt;
+    return { ...state, speed: Math.sign(state.speed) * Math.max(0, Math.abs(state.speed) - loss), yawRate: state.yawRate * .82 };
+  }
+  const speed = Math.sign(state.speed) * Math.max(0, Math.abs(state.speed) - 6 * dt);
+  return { ...state, speed, yawRate: state.yawRate * .62 };
 }
 
 /** Largest absolute centreline curvature in [from, from + distance]. */
@@ -168,6 +188,16 @@ export function craterAt(x: number, z: number): number {
   return CRATERS.findIndex(([s, lane, r]) => { const p = trackPoint(s, lane); return Math.hypot(p.x - x, p.z - z) < r; });
 }
 
+/** Deep centre of a marked practice-shell crater; rim crossings only jolt, the bowl causes recovery. */
+export function craterPitAt(x: number, z: number): number {
+  return CRATERS.findIndex(([s, lane, r]) => { const p = trackPoint(s, lane); return Math.hypot(p.x - x, p.z - z) < r * .48; });
+}
+
+/** A grounded kart entering a bowl falls once; an existing salvage timer suppresses retriggering. */
+export function shouldStartCraterFall(x: number, z: number, grounded: boolean, salvageRemaining: number): boolean {
+  return grounded && salvageRemaining <= 0 && craterPitAt(x,z) >= 0;
+}
+
 /** Index of the boost pad under a kart, or -1. */
 export function boostPadAt(x: number, z: number): number {
   const { s, lane } = trackLocate(x, z);
@@ -212,10 +242,15 @@ export function recoverKart(state: KartState, others: KartState[]): KartState {
   // The canal spans the whole road, so the usual same-progress respawn would
   // place the kart back over water. Put it just beyond the landing edge. The
   // gap is larger than advanceRace's teleport allowance, so rescue grants no lap progress.
+  const fellIntoCrater = craterPitAt(state.x, state.z) >= 0;
   const s = fellIntoCanal
     ? CANAL_FROM + CANAL_LENGTH + KART_TUNING.collisionRadius + 1
     : trackProgress(state.x,state.z);
-  const lanes = [-3,0,3].map(lane=>({lane,p:trackPoint(s,lane)}));
+  // A same-progress crater respawn must leave the bowl or it would trigger an endless fall loop.
+  let lanes = (fellIntoCrater ? [-4.8, 4.8, -3.5, 3.5, 0] : [-3,0,3]).map(lane=>({lane,p:trackPoint(s,lane)}))
+    .filter(({p}) => !fellIntoCrater || craterPitAt(p.x,p.z) < 0)
+    .filter(({p}) => !hazardAt(p.x,p.z) && projectTrack(p.x,p.z).kind === null);
+  if (!lanes.length) lanes = [-4.8,4.8].map(lane=>({lane,p:trackPoint(s,lane)}));
   lanes.sort((a,b)=> {
     const clearance=(p:{x:number;z:number})=>Math.min(20,...others.filter(o=>o!==state).map(o=>Math.hypot(p.x-o.x,p.z-o.z)));
     return clearance(b.p)-clearance(a.p);
