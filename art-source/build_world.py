@@ -74,6 +74,8 @@ leaf = mat('Cypress foliage', (.06, .16, .065), 0, .92)
 trunk = mat('Bark', (.13, .07, .035), 0, .96)
 brick = mat('Terracotta render', (.42, .2, .11), 0, .88)
 ochre = mat('Ochre render limestone', (.62, .45, .24), 0, .85)
+shutter_green = mat('Weathered blue-green timber shutters', (.16, .25, .22), 0, .9)
+shutter_red = mat('Weathered burgundy timber shutters', (.32, .10, .09), 0, .9)
 wood = mat('Oiled stadium wood', (.17, .11, .055), 0, .76)
 canvas = mat('Striped canopy cloth', (.025, .16, .17), 0, .91)
 water = mat('Fountain basin water', (.06, .23, .25), .2, .12)
@@ -219,13 +221,21 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
     cols = [-width / 2 + 2.2 + k * 3.6 for k in range(int((width - 2.6) / 3.6) + 1)]
     for f in range(1, floors):
         z = 4.2 + (f - 1) * 3.4 + 1.6
-        for dy in cols:
+        for column_index, dy in enumerate(cols):
             box('Window recess', (face + .04, dy, z), (.14, 1.5, 2.0), window, .02, e)
             box('Window moulding', (face - .1, dy, z + 1.12), (.24, 1.9, .16), pale, .02, e)
             box('Window sill', (face - .12, dy, z - 1.08), (.28, 1.8, .12), pale, .02, e)
             for jamb in [-.74, .74]: box('Window vertical casing', (face - .09, dy + jamb, z), (.22, .11, 1.98), trim_stone, .012, e)
             box('Window sash mullion', (face - .105, dy, z), (.23, .075, 1.86), darkstone, .008, e)
             box('Window cross rail', (face - .11, dy, z + .34), (.24, 1.38, .075), pale, .008, e)
+            # Restrict the denser shutters to two upper windows on every fourth
+            # building so the full city export stays light.
+            if idx % 4 == 1 and f == 1 and column_index in (0, len(cols) - 1):
+                shutter = shutter_red if (idx + f) % 3 == 0 else shutter_green
+                for side in [-1, 1]:
+                    shutter_y = dy + side * .99
+                    box('Weathered timber window shutter', (face - .17, shutter_y, z), (.10, .27, 1.78), shutter, .018, e)
+                    box('Timber shutter brace', (face - .23, shutter_y, z - .42), (.035, .31, .06), darkstone, .008, e)
             if (f + idx) % 2 == 0:
                 box('Balcony slab', (face - .55, dy, z - 1.2), (1.0, 2.0, .14), pale, .03, e)
                 tube_lo('Balcony rail', [(face - 1.0, dy - .95, z - .7), (face - 1.0, dy + .95, z - .7)], .035, black, e)
@@ -268,6 +278,13 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
         for j in range(5):
             aw = box('Shop striped awning', (face - .7, dy - 1.2 + j * .6, 3.35), (1.5, .59, .12), canvas if (j + idx) % 2 else cream, .01, e)
             aw.rotation_euler[1] = .2
+        # Only every third block gets restrained shop-window planters, keeping
+        # the street edge varied without turning every facade into the same prop set.
+        if idx % 3 == 1 and dy == cols[len(cols) // 2]:
+            box('Terracotta shop window planter', (face - .28, dy, .67), (.38, 2.2, .24), brick, .025, e)
+            blob('Shop planter foliage left', (face - .32, dy - .43, .9), (.11, .2, .18), hedge, e, 6, 4)
+            blob('Shop planter foliage right', (face - .32, dy + .36, .9), (.11, .2, .18), hedge, e, 6, 4)
+            blob('Shop planter flower', (face - .37, dy - .04, 1.0), (.08, .1, .1), flower, e, 6, 4)
     if idx % 2 == 0:
         facade_banner(face - .12, cols[len(cols) // 2] if len(cols) > 2 else 0, hgt * .55, hgt * .5, e, -1)
     bake(e)

@@ -25,6 +25,16 @@ test('small bumps and steady driving cause no damage; item hits do', () => {
   stepDamage(world, [k], [{ ...k, spinRemaining: .95 }], step); assert.equal(world.health[0], 100 - DAMAGE_RULES.itemHit);
 });
 
+test('item hits damage a transformed kart once even when its armor prevents spin', () => {
+  const world = createDamage(1);
+  const tank = { ...initialKartState(), tankRemaining: 7 };
+  const hit = { ...tank, speed: tank.speed * .88, impactRemaining: .12, impactKind: 'item' };
+  stepDamage(world, [tank], [hit], step);
+  assert.equal(world.health[0], 100 - DAMAGE_RULES.itemHit);
+  stepDamage(world, [hit], [hit], step);
+  assert.equal(world.health[0], 100 - DAMAGE_RULES.itemHit, 'one impact state must not count repeatedly');
+});
+
 test('repeated item hits wear down a player or bot until the shared wreck and repair path starts', () => {
   for (const kartIndex of [0, 4]) {
     const world = createDamage(6);

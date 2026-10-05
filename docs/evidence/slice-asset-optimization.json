@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-05T02:31:35.830Z",
+  "date": "2026-10-05T05:21:49.293Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -13,14 +13,14 @@
       "runtimeBytes": 322012
     },
     {
-      "name": "stadium-world",
-      "originalBytes": 22076572,
-      "runtimeBytes": 15632728
-    },
-    {
       "name": "hero-kart",
       "originalBytes": 7365372,
       "runtimeBytes": 5283004
+    },
+    {
+      "name": "stadium-world",
+      "originalBytes": 21890552,
+      "runtimeBytes": 15528128
     }
   ]
 }

@@ -1,5 +1,29 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Itemschaden bei Panzerform
+
+**Befund:** Die Item-/Trefferlogik zog normalen Spieler- und Botkarts bereits 14 Haltbarkeit pro Treffer ab; Mehrfachtreffer, Totalschaden und gemeinsame Reparatur waren vorhanden. Während der Panzerverwandlung dämpft `stepItems` Itemtreffer in einen kurzen Aufprall (`impactKind: 'item'`) ohne `spinRemaining`. `stepDamage` erkannte Itemschaden ausschließlich an einem frischen Spin und ließ dadurch diesen Fall ungezählt.
+
+**Umgesetzt:** `src/damage.ts` erkennt jetzt entweder einen frischen Item-Spin oder einen frischen Item-Aufprall. Beide Wege lösen denselben einzelnen, gedeckelten `DAMAGE_RULES.itemHit`-Abzug aus; ein unveränderter Zustand zählt im Folgeframe nicht erneut. Itemimmunität, Reparaturschutz, Panzerabschwächung des Tempos und normale Kollisionsschäden sind unberührt.
+
+**Verifiziert:** `tests/damage.test.mjs`: 4/4 einschließlich schwerer Einschläge, kleiner Rempler, normaler Itemtreffer, Itemtreffer ohne Spin während des Panzers, Nicht-Doppelzählung, wiederholte Treffer bis Totalschaden und Reparatur für Spieler/Bot. Der erste sandboxierte Node-Test scheiterte mit `spawn EPERM`; die freigegebene Ausführung bestand. Vollsuite `npm test`: 58/58, 406,6 s. `npm run build`: TypeScript und Vite erfolgreich, 1.296 Module; bestehende Hauptchunkwarnung (2.022,75 kB) bleibt.
+
+**Offen:** Keine menschliche Balance-/Fahrprüfung; die vorhandenen Zahlen bleiben vorläufig. Der Effekt ist während des nur acht Sekunden dauernden Panzerzustands einmal pro erfolgreichem Treffer, nicht pro Simulationsframe.
+
+**Limitstand:** Nach dem Schadenspaket unverändert 18 % Fünf-Stunden- und 41 % Wochenverbrauch (82 %/59 % Rest; Woche bindet). Keine Resets oder Zusatzkontingente aktiviert.
+
+### 2026-10-05 – Selektive Townhouse-Fassadenvarianten
+
+**Auswahl/Auftrag:** Nach dem Kanalspray wurde ein bestätigtes M3-Weltziel vor Beginn in `CURRENT-WORKLIST.md` und `LONG-TERM-GOALS.md` aufgenommen: wiederkehrende Straßenhäuser durch wenige gezielte Fassadendetails variieren.
+
+**Umgesetzt:** `art-source/build_world.py` ergänzt zwei verwitterte blaugrüne/burgunderrote Holzläden samt schlichter Querstrebe an den äußeren oberen Fenstern jedes vierten Townhouses. Jeder dritte Geschäftsblock erhält am mittleren Ladenfenster einen Terrakotta-Blumenkasten mit begrenztem Blattwerk und einer Blüte. Nicht alle Fassaden tragen dieselben Elemente. Nach Abbruch eines zu dichten, noch nicht exportierten Blender-Laufs wurde die Geometriedichte vor dem erfolgreichen vollständigen Neubau reduziert; die alte Runtime-Datei blieb bis zum abgeschlossenen Ersatz bestehen.
+
+**Verifiziert:** Blender meldete 48 Townhouses und speicherte `art-source/stadium-world.blend` (24.077.009 Byte). Roh-GLB: 21.890.552 Byte; optimierte `public/assets/models/stadium-world.glb`: 15.528.128 Byte, 104.600 Byte (0,67 %) kleiner als der vorherige Runtime-Stand. glTF-Strukturprüfung bestätigte 28 Meshes sowie Fensterladen-/Blumenkasten-Knoten und neues Ladenmaterial. Produktionsbuild erfolgreich (1.296 Module); `dist/assets/models/stadium-world.glb` ist bytegleich zum öffentlichen GLB. `git diff --check` erfolgreich; nur übliche LF/CRLF-Hinweise.
+
+**Laufzeitbeleg / offen:** Das Spiel lud nach frischem In-App-Browser-Reload bis zur freien Startaufstellung. Die Fassaden waren dort nicht nah genug für einen verlässlichen visuellen Abgleich; keine Sicht-/Stilabnahme oder Fahrbildwirkung behauptet. Ein früherer dichter Blender-Entwurf wurde vor dem Schreiben von Ergebnissen abgebrochen. Keine fremden Browserprofile wurden verwendet.
+
+**Limitstand:** Offizielle Kontowerte nach diesem Paket: 18 % des Fünf-Stunden-Fensters und 41 % des Wochenfensters verbraucht (82 %/59 % Rest; Woche ist bindend). Keine Resets oder Zusatzkontingente aktiviert.
+
 ### 2026-10-05 – Stalin-Nase als eigener Gesichtsbaustein
 
 **Umgesetzt:** In `art-source/build_kart.py` ersetzt `cast-stalin-nose` für Stalin die allgemeine Nase: eigene loftmodellierte Brücke (0,17 m), breitere Flügel und zurückhaltende Nasenlöcher. `src/cast.ts` aktiviert das Teil nur in Stalins Cast. `art-source/hero-kart.blend`, Roh-GLB und optimierter Export wurden mit Blender 4.5.3/glTF Transform reproduziert. Optimiertes Runtime-GLB: 5.081.568 Byte gegenüber 5.046.100 Byte vorher (+35.468 Byte, rund +0,7 %); die GLB-Knotenzuordnung wird von `tests/cast.test.mjs` geprüft.

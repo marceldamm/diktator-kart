@@ -42,7 +42,10 @@ export function stepDamage(world: DamageWorld, before: KartState[], after: KartS
     const loss = Math.max(0, Math.abs(was.speed) - Math.abs(now.speed));
     const freshImpact = now.impactRemaining > (was.impactRemaining ?? 0) + 1e-6 && now.impactKind !== 'item';
     const freshScrape = (now.scrapeRemaining ?? 0) > (was.scrapeRemaining ?? 0) + 1e-6 && now.scrapeKind === 'wall';
-    const freshItem = (now.spinRemaining ?? 0) > (was.spinRemaining ?? 0) + 1e-6;
+    // Normal item hits spin the kart; the transformed tank instead receives a
+    // short, non-spinning impact. Count either fresh state transition once.
+    const freshItem = (now.spinRemaining ?? 0) > (was.spinRemaining ?? 0) + 1e-6
+      || (now.impactKind === 'item' && now.impactRemaining > (was.impactRemaining ?? 0) + 1e-6);
     let amount = 0;
     if (freshImpact && loss >= DAMAGE_RULES.minimumLoss) amount += loss * DAMAGE_RULES.impactFactor;
     else if (freshScrape && loss >= DAMAGE_RULES.minimumLoss) amount += loss * DAMAGE_RULES.scrapeFactor;
