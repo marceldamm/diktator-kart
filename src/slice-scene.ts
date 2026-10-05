@@ -30,6 +30,7 @@ import { TRACK, drivingSurfaceAt, trackLocate, trackPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
 import { addTrackWorld } from './track-world';
 import { shouldRefreshBroadcastFeed } from './broadcast-feed';
+import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
 import { airTrickRoll, armGripPose } from './kart-visuals';
 import { canalSurfaceSprayRate, looseSurfaceDustRate } from './environment-effects';
@@ -113,6 +114,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       spray.color1 = new Color4(.7, .86, .87, .6); spray.color2 = new Color4(.9, .92, .84, .5); spray.colorDead = new Color4(.7, .85, .9, 0); spray.start();
     }
     const staticShadowMeshes=[...(shadow.getShadowMap()?.renderList??[])];
+    let lastShadowCasterRefresh = Number.NaN;
     const treeShadows: {root:TransformNode;meshes:Mesh[]}[]=[];
     const treeContainer = await LoadAssetContainerAsync('/assets/models/park-tree.glb', scene);
     report?.('trees');
@@ -872,10 +874,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           } else if (v.wreckAge >= 0 && !wrecked) { v.wreckAge = -1; v.driver.position.y = 0; burst(puff, s, reducedEffects ? 8 : 26); }
         });
         const map=shadow.getShadowMap();
-        if(map)map.renderList=[...staticShadowMeshes,
-          ...treeShadows.filter(t=>Math.hypot(t.root.position.x-state.x,t.root.position.z-state.z)<44).flatMap(t=>t.meshes),
-          ...visuals.filter(v=>Math.hypot(v.root.position.x-state.x,v.root.position.z-state.z)<45).flatMap(v=>v.shadowMeshes),
-          ...itemShadowMeshes.filter(mesh=>mesh.isEnabled())];
+        if(map&&shouldRefreshShadowCasters(time,lastShadowCasterRefresh)) {
+          map.renderList=[...staticShadowMeshes,
+            ...treeShadows.filter(t=>Math.hypot(t.root.position.x-state.x,t.root.position.z-state.z)<44).flatMap(t=>t.meshes),
+            ...visuals.filter(v=>Math.hypot(v.root.position.x-state.x,v.root.position.z-state.z)<45).flatMap(v=>v.shadowMeshes),
+            ...itemShadowMeshes.filter(mesh=>mesh.isEnabled())];
+          lastShadowCasterRefresh=time;
+        }
         const back = new Vector3(state.x - Math.sin(state.heading) * 1.15, .12 + state.height, state.z - Math.cos(state.heading) * 1.15);
         dust.emitter = back;
         boostFire.emitter = new Vector3(state.x - Math.sin(state.heading) * 1.75, .62 + state.height, state.z - Math.cos(state.heading) * 1.75);

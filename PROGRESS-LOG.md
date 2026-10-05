@@ -1,5 +1,19 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-06 – Projektabschluss: M7-Schattenlistenpaket
+
+**Ausgang und Branch:** Fortsetzung auf `codex/team-marcel-20261005-205839-799`, Ausgangscommit `e0e8d417c7309709be3fac0ca7f05bc3e4b7d6b8`; `project-state.json` bestätigt die aktive Babylon-Basis. `origin/main` blieb bei Abruf `751a39f2fc9bbb306e623d078d4a10efc2309cf0`; keine lokalen uncommitteten Fremdänderungen. Der Nutzer ordnete anschließend Projektstopp, Dokumentation und Veröffentlichung an.
+
+**Änderung:** In `src/slice-scene.ts` wird die dynamische Shadow-Map-Mitgliederliste nicht mehr pro Präsentationsframe neu gefiltert/verkettet/zugewiesen, sondern höchstens zehnmal pro Sekunde. Die erste Liste wird sofort aufgebaut; bisherige statische Caster, Baumreichweite 44 m, Kartreichweite 45 m und aktivierte Itemcaster bleiben in der Liste. `src/shadow-caster-refresh.ts` isoliert die Zeitregel, `tests/shadow-caster-refresh.test.mjs` deckt Initialisierung, 10-Hz-Grenze und ungültige Werte ab. Schattenauflösung, Filter, Grafikqualität, Reichweite und Fahrphysik wurden nicht geändert.
+
+**Prüfungen:** Gezielt 2/2 und vollständige Node-Suite 74/74 bestanden; `npm run build` bestand (1.298 Module). Der erste Lauf wurde von der Sandbox mit `spawn EPERM` gestoppt; die autorisierten Wiederholungen mit Prozesszugriff liefen erfolgreich. Der bekannte Vite-Warnhinweis zum >500-kB-Hauptchunk bleibt bestehen. Ein neuer, sichtbarer Chrome-Tab lud das reguläre Babylon-Hauptmenü (`http://127.0.0.1:4173/`). Es wurde kein Rennen gestartet und kein FPS- oder Shadow-A/B durchgeführt; eine Leistungsverbesserung ist somit **nicht gemessen**. Die Runtime-/Fahrtabnahme bleibt offen.
+
+**Dokumentation:** CURRENT-WORKLIST und LONG-TERM-GOALS kennzeichnen das Paket als technische Teilumsetzung und halten das M7-A/B als nächsten Schritt offen; TEAM-CHANGES fasst die sichtbare Funktionsänderung zusammen. TEAM-NOTES wurde auf offene, zuzuordnende Nutzerhinweise geprüft; dieser Abschluss erzeugte keine neue persönliche Notiz oder Teamnachricht.
+
+**Geänderte Dateien:** `src/slice-scene.ts`, `src/shadow-caster-refresh.ts`, `tests/shadow-caster-refresh.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `PROGRESS-LOG.md`.
+
+**Nächster Schritt:** Auf demselben Gerät/Viewport eine normale Sechs-Kart-Szene vor/nach der Änderung kontrolliert messen und während der Fahrt Baum-/Kartschatten an der 44-/45-m-Grenze beurteilen. Danach offene menschliche M3-/Drift-/Wasserabnahmen fortsetzen. Sarahs lokaler Stand wurde nicht geprüft.
+
 ## 2026-10-06 – Projektlisten fortsetzen: Browser-Prüfpfad abgegrenzt
 
 **Startstand:** Projektstart synchronisierte den sauberen Babylon-Hauptordner auf `origin/main` (`751a39f`) und erzeugte Marcels Arbeitsbranch `codex/team-marcel-20261005-205839-799`. Die vier Arbeitsdateien wurden geöffnet und gelesen. Der vorgeschriebene `fetch` brauchte einmalig erweiterten Git-Zugriff auf `.git/FETCH_HEAD`; danach war die Synchronisierung erfolgreich.
