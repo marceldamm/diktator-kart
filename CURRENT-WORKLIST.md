@@ -11,6 +11,16 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Sarah – Steuerung und Items, 05.10.2026
+
+- [x] Rohrpost/Suchauftrag richtungswählbar: E+V nach vorn, E+H nach hinten; E allein behält Schild/Standardwurf. Fotomodus auf F verschoben, Hupe auf V. Dokumentiert in README, START-HERE und docs/19.
+- [x] Zensurbalken als seltenes viertes Item in Babylon wieder aufgenommen: protziges Messingschild, Meldung „FAKTENLAGE ERFOLGREICH GESCHWÄRZT“, 2,6 s begrenzte Lenkeinschränkung für Gegner; Item-Immunität schützt. Kein Vollbildfilter, Fahrbahnwarnungen und Rangliste bleiben sichtbar. Umsetzung und Tests: PROGRESS-LOG.md.
+
+## Sarah – Kim-Fähigkeit, 05.10.2026
+
+- [x] „Propaganda-Sieg“ für Kim umgesetzt: Q aktiviert zehn Sekunden goldene Paradeveredelung, kurzen Triumphschub und anschließenden kleinen Motoraussetzer. Banner in zwei Phasen: „Rennergebnis NICHT manipuliert. Kim Jong-Un freut sich über seine demokratische Bestzeit.“; danach Nachprüfung mit Motorstottern. Die echte Rangliste bleibt unverändert. Details/Tests: PROGRESS-LOG.md.
+
+
 ## Umsetzungsauftrag: Qualitätsanker, Spielwelt und Fahrgefühl – 05.10.2026 (Marcel)
 
 **Quelle/Vorrang:** Marcels heute eingefügter Leitauftrag „Arbeite als leitender Entwickler, Technical Artist und Art Director …“ erweitert die bestehende Bild-/Masteraufgabe. Umgesetzt wird in der bestätigten Reihenfolge: (1) Stalin samt eigenständigem Kart als echter Runtime-Qualitätsanker, (2) sichtbare Stadion-/Berlinwelt und begrenzte Material-/Kontaktpartikel, (3) kontrollierbarer Drift mit Kurven-, Gegenlenk-, Geschwindigkeits-, Turbo- und Kontaktprüfung. Danach folgen die übrigen ausführbaren aktuellen Punkte und anschließend bestätigte Langzeitpakete. Die Arbeitsreihenfolge ist keine Abnahme: Tests, Spielbilder und menschliche Fahr-/Stilprüfung bleiben getrennte Belege.

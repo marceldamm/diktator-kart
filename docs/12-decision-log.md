@@ -3,6 +3,18 @@
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 
+## 05.10.2026 – Zensurbalken als seltenes viertes Item
+
+Sarah beauftragt, den Zensurbalken aus dem historischen Itempool in die aktuelle Babylon-Optik zurückzubringen. Umsetzung als seltenes viertes Item (vorläufig 10 % Boxchance): schwarz-messingfarbenes Schild und übertrieben amtliches Banner „Faktenlage erfolgreich geschwärzt“. Beim Einsatz werden Rivalen begrenzt (2,6 s) in der Lenkung beeinträchtigt; beim getroffenen Spieler erscheint das Banner schmal und kurz, nie als Vollbildfilter. Bestehende Trefferimmunität schützt. Der neue Inhalt bleibt vom Richtungsmodifier E+V/E+H ausgeschlossen. Betroffen: Items, HUD, Botlenkung, Tests, docs/07/14/15. Beleg und Prüfungen: PROGRESS-LOG.md.
+
+## 05.10.2026 – Item-Richtung und Foto-/Hupentasten
+
+Sarah bestätigt E+V für Rohrpost/Suchauftrag nach vorn und E+H nach hinten. E allein behält die bisherige Schild-/Wurffunktion; Fallen bleiben unverändert. V als Modifier löst nicht zugleich die Hupe aus. Fotomodus wechselt von V auf F, Hupe von F auf V. Betroffen: InputHub, Itemzielauswahl, HUD/Bedienhinweise und Eingabetests; Details in PROGRESS-LOG.md.
+
+## 05.10.2026 – Kim „Propaganda-Sieg“ umgesetzt
+
+Sarah bestätigt die vorgeschlagene Kim-Fähigkeit und ergänzt zehn Sekunden optische Veredelung von Fahrer und Kart. Babylon-Umsetzung: goldene Paradeornamente und vergoldete Lack-/Uniformtönung; Q gibt einen kurzen Triumphschub, danach folgt ein kurzer Motoraussetzer. Der Banner lautet „Rennergebnis NICHT manipuliert. Kim Jong-Un freut sich über seine demokratische Bestzeit.“; tatsächliche Platzierung und Rennresultat bleiben unangetastet. Die Fähigkeit läuft für Spieler und Kim-Bot, mit gemeinsamer 18-s-Abklingzeit. Historische Frühfassung bleibt Belegquelle, kein übernommener Code. Betroffen: abilities, main, slice-scene, cast, Tests, docs/14 und START-HERE. Prüfbelege: PROGRESS-LOG.md.
+
 ## 04.10.2026 – Wandkontakte, Fahrzeugschaden und Streckenleben
 
 Marcel bestätigt als nächste Arbeitsrichtung: das noch zu abrupte Stehenbleiben an Wänden weiter entschärfen, ohne harte Frontalaufpralle wirkungslos zu machen; frühere Tests zu gleitendem Schrägkontakt und Rückprall bleiben historische Grundlage. Schaden über Wände/Kartrempler sichtbarer und kumulativ ausbauen; Idee eines satirischen Fahrzeugausfalls/Explosionsmoments mit komischer Fahrerreaktion und kurzer Respawn-Animation samt Sound prüfen. Zusätzlich realitätsnähere Fahrer/Cockpit, Pedale/Hände/Spiegel/Räder, sanfter Tag-Dämmerung-Nacht-Verlauf mit Tages-/Nachtleben. Für Fahrerhupen echte historische Aufnahmen bevorzugt; Provenienz, Inhalt und kostenlose Rechte vor Einbindung belegen. Diese Einträge sind Arbeitsrichtung; Balance, Zufallsverteilung und Abnahme bleiben offen. Betroffen: vier Hauptdateien, 01, 02, 05, 07, 12, 14, 16.

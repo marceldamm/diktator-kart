@@ -69,7 +69,7 @@ Streckendaten beschreiben mindestens:
 
 ## Items und Feedback
 
-Jedes Item erhält eine Datenbeschreibung mit Auslöser, Ziel, Dauer, Begrenzung, Gegenmaßnahme, visueller Wirkung, Audio, UI und Botübersetzung. Das erste Set umfasst geradliniges Projektil, zielsuchendes Projektil und Falle. Die Wirkungen sind bei allen Fahrern gleich; Modelle, Sounds und Animationen wechseln. Weitere Altideen bleiben im Katalog erhalten.
+Jedes Item erhält eine Datenbeschreibung mit Auslöser, Ziel, Dauer, Begrenzung, Gegenmaßnahme, visueller Wirkung, Audio, UI und Botübersetzung. Der gemeinsame Startpool umfasst geradliniges Projektil, zielsuchendes Projektil und Falle; Sarahs wieder aufgenommener Zensurbalken ist ein seltenes viertes Item. Die Wirkungen sind bei allen Fahrern gleich; Modelle, Sounds und Animationen wechseln. Weitere Altideen bleiben im Katalog erhalten.
 
 Hintere Plätze erhalten maßvoll bessere Chancen auf hilfreiche Items; diese positionsabhängige Verteilung gilt für Menschen und Bots gleichermaßen. Keine heimlichen Geschwindigkeitsvorteile. Treffer verursachen kurze Rutscher/Tempoverluste mit Warnungen und Schutz gegen Trefferketten; vollständige Kontrollentziehung bleibt sparsam.
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { attachPointerHold, InputHub } from '../src/input.ts';
+import { attachKeyboard, attachPointerHold, InputHub } from '../src/input.ts';
 
 test('a tap between frames is visible once and actions remain separate', () => {
   const input = new InputHub();
@@ -42,4 +42,55 @@ test('item HUD pointer holds share the shield action and taps survive between fr
   pointer('pointercancel', 6);
   assert.equal(input.isDown('item'), false, 'cancelled touch cannot leave the shield stuck on');
   detach();
+});
+
+
+test('V is a forward-item modifier with E and only triggers the horn on its own', () => {
+  const previousWindow = globalThis.window;
+  const listeners = new Map();
+  globalThis.window = {
+    addEventListener: (name, listener) => listeners.set(name, listener),
+    removeEventListener: (name) => listeners.delete(name),
+  };
+  try {
+    const input = new InputHub();
+    attachKeyboard(input);
+    const key = (name, code) => listeners.get(name)({ code, preventDefault() {} });
+
+    key('keydown', 'KeyE'); key('keydown', 'KeyV');
+    key('keyup', 'KeyE'); key('keyup', 'KeyV');
+    let frame = input.read();
+    assert.ok(frame.pressed.has('itemForward'));
+    assert.ok(!frame.pressed.has('horn'));
+
+    key('keydown', 'KeyV'); key('keyup', 'KeyV');
+    frame = input.read();
+    assert.ok(frame.pressed.has('horn'));
+    assert.ok(!frame.pressed.has('photo'));
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  }
+});
+
+test('F remains the photo key and H selects backward item direction', () => {
+  const previousWindow = globalThis.window;
+  const listeners = new Map();
+  globalThis.window = {
+    addEventListener: (name, listener) => listeners.set(name, listener),
+    removeEventListener: (name) => listeners.delete(name),
+  };
+  try {
+    const input = new InputHub();
+    attachKeyboard(input);
+    const key = (name, code) => listeners.get(name)({ code, preventDefault() {} });
+    key('keydown', 'KeyF'); key('keyup', 'KeyF');
+    assert.ok(input.read().pressed.has('photo'));
+    key('keydown', 'KeyE'); key('keydown', 'KeyH');
+    assert.ok(input.isDown('itemBackward'));
+    assert.ok(input.isDown('item'));
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  }
 });

@@ -1,6 +1,6 @@
 export type Action =
   | 'accelerate' | 'brake' | 'steerLeft' | 'steerRight' | 'hopDrift'
-  | 'camera' | 'item' | 'special' | 'pause' | 'restart' | 'debug' | 'photo' | 'recover' | 'menu' | 'lookBack' | 'horn';
+  | 'camera' | 'item' | 'itemForward' | 'itemBackward' | 'special' | 'pause' | 'restart' | 'debug' | 'photo' | 'recover' | 'menu' | 'lookBack' | 'horn';
 
 export interface InputFrame {
   throttle: number;
@@ -15,9 +15,8 @@ const bindings: Record<string, Action> = {
   ArrowLeft: 'steerLeft', KeyA: 'steerLeft',
   ArrowRight: 'steerRight', KeyD: 'steerRight',
   Space: 'hopDrift', KeyC: 'camera', KeyE: 'item', KeyQ: 'special',
-  KeyP: 'pause', KeyR: 'restart', F3: 'debug', KeyV: 'photo', KeyB: 'recover',Escape:'menu',
+  KeyP: 'pause', KeyR: 'restart', F3: 'debug', KeyF: 'photo', KeyV: 'itemForward', KeyH: 'itemBackward', KeyB: 'recover',Escape:'menu',
   KeyX: 'lookBack',
-  KeyF: 'horn',
 };
 
 // All devices write through this interface. A later touch adapter can use its own source ID.
@@ -65,10 +64,13 @@ export class InputHub {
 }
 
 export function attachKeyboard(input: InputHub): () => void {
+  let forwardModifierUsedForItem = false;
   const onKeyDown = (event: KeyboardEvent) => {
     const action = bindings[event.code];
     if (!action) return;
     event.preventDefault();
+    if (event.code === 'KeyV' && input.isDown('item')) forwardModifierUsedForItem = true;
+    if (event.code === 'KeyE' && input.isDown('itemForward')) forwardModifierUsedForItem = true;
     input.setAction(`keyboard:${event.code}`, action, true);
   };
   const onKeyUp = (event: KeyboardEvent) => {
@@ -76,8 +78,17 @@ export function attachKeyboard(input: InputHub): () => void {
     if (!action) return;
     event.preventDefault();
     input.setAction(`keyboard:${event.code}`, action, false);
+    if (event.code === 'KeyV') {
+      if (!forwardModifierUsedForItem) {
+        input.setAction('keyboard:KeyV:horn', 'horn', true);
+        input.setAction('keyboard:KeyV:horn', 'horn', false);
+      }
+      if (!input.isDown('item')) forwardModifierUsedForItem = false;
+    } else if (event.code === 'KeyE' && !input.isDown('itemForward')) {
+      forwardModifierUsedForItem = false;
+    }
   };
-  const onBlur = () => input.reset();
+  const onBlur = () => { input.reset(); forwardModifierUsedForItem = false; };
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
   window.addEventListener('blur', onBlur);

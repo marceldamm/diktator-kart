@@ -34,3 +34,26 @@ test('tank shoves and throttles nearby karts once per protection window and resp
   for (let i = 0; i < 60; i++) slowed = advanceKart(slowed, { throttle: 1, steering: 0 }, step);
   assert.ok(slowed.speed < 11, `throttled while slowed ${slowed.speed}`);
 });
+
+test('Kim gets a ten-second polish, a short triumph boost and a timed motor audit without rank state', () => {
+  const world = createAbilities(1); let karts = [initialKartState()];
+  karts = stepAbilities(world, karts, [true], [0], step, ['kim']);
+  assert.equal(karts[0].tankRemaining, 0);
+  assert.equal(world.kimPolishRemaining[0], ABILITY_RULES.kimPolishDuration);
+  assert.equal(world.kimBoostRemaining[0], ABILITY_RULES.kimBoostDuration);
+  assert.equal(karts[0].turboRemaining, ABILITY_RULES.kimBoostDuration);
+  assert.ok(karts[0].speed > 0);
+  assert.equal(world.cooldown[0], ABILITY_RULES.cooldown);
+  assert.equal(world.events[0].kind, 'kim-surge');
+  assert.equal(abilityReady(world, 0, karts[0]), false);
+
+  let audited = false;
+  for (let i = 0; i < 60; i++) {
+    karts = [advanceKart(karts[0], { throttle: 1, steering: 0 }, step)];
+    stepAbilities(world, karts, [false], [0], step, ['kim']);
+    if (world.events.some((event) => event.kind === 'kim-audit')) { audited = true; break; }
+  }
+  assert.ok(audited, 'the short boost is followed by its timed audit');
+  assert.equal(world.kimPenaltyRemaining[0], ABILITY_RULES.kimPenaltyDuration);
+  assert.ok(world.kimPolishRemaining[0] > 8, 'the visual finish continues after the boost');
+});

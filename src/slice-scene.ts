@@ -163,7 +163,27 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const limousineWheelStyles = Array.from({length:4},(_,i)=>nodes.find(n=>n.name===`kart${index}/wheelStyle-limousine-${i}`));
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
       const faces = ['hitler','stalin','mussolini','mao','kim','castro'].map(style=>[style,nodes.find((n)=>n.name===`kart${index}/cast-face-${style}`)] as const);
+      const kimCarPolish=new TransformNode(`Kim triumph parade details ${index}`,scene);kimCarPolish.parent=orientation;kimCarPolish.setEnabled(false);
+      const kimHeadPolish=new TransformNode(`Kim triumph laurel ${index}`,scene);kimHeadPolish.parent=head;kimHeadPolish.setEnabled(false);
+      const kimGold=new PBRMaterial(`Kim triumph gold ${index}`,scene);kimGold.albedoColor=Color3.FromHexString('#c99b42');kimGold.metallic=.82;kimGold.roughness=.22;kimGold.clearCoat.isEnabled=true;kimGold.clearCoat.intensity=.55;kimGold.emissiveColor=new Color3(.08,.045,.008);
+      const kimRed=new PBRMaterial(`Kim triumph parade red ${index}`,scene);kimRed.albedoColor=Color3.FromHexString('#8e2635');kimRed.metallic=.28;kimRed.roughness=.38;kimRed.clearCoat.isEnabled=true;kimRed.clearCoat.intensity=.45;
+      const kimDecorMeshes:Mesh[]=[];
+      const polishMesh=(mesh:Mesh,parent:TransformNode,material:PBRMaterial)=>{mesh.parent=parent;mesh.material=material;mesh.isPickable=false;mesh.receiveShadows=true;shadow.addShadowCaster(mesh);kimDecorMeshes.push(mesh);markGlow(mesh);return mesh;};
+      for(const side of [-1,1]){
+        polishMesh(MeshBuilder.CreateBox(`Kim gilded kart rail ${index} ${side}`,{width:.075,height:.07,depth:1.55},scene),kimCarPolish,kimGold).position.set(side*.98,.42,0);
+        const pole=polishMesh(MeshBuilder.CreateCylinder(`Kim parade pennant pole ${index} ${side}`,{diameter:.035,height:.56,tessellation:8},scene),kimCarPolish,kimGold);pole.position.set(side*.76,1.02,1.13);
+        const pennant=polishMesh(MeshBuilder.CreateBox(`Kim blank parade pennant ${index} ${side}`,{width:.36,height:.24,depth:.025},scene),kimCarPolish,kimRed);pennant.position.set(side*.76+side*.19,1.12,1.13);
+      }
+      const hoodSeal=polishMesh(MeshBuilder.CreateTorus(`Kim official hood seal ${index}`,{diameter:.38,thickness:.065,tessellation:20},scene),kimCarPolish,kimGold);hoodSeal.position.set(0,.72,-1.12);
+      const livery=polishMesh(MeshBuilder.CreateBox(`Kim approved livery plate ${index}`,{width:.62,height:.12,depth:.04},scene),kimCarPolish,kimRed);livery.position.set(0,.55,-1.16);
+      const laurel=polishMesh(MeshBuilder.CreateTorus(`Kim laurel crown band ${index}`,{diameter:.88,thickness:.055,tessellation:24},scene),kimHeadPolish,kimGold);laurel.position.y=.38;laurel.rotation.x=Math.PI/2;
+      for(let spike=0;spike<5;spike++){
+        const angle=(spike/5)*Math.PI*2,crown=polishMesh(MeshBuilder.CreateCylinder(`Kim laurel crown point ${index} ${spike}`,{diameterTop:.01,diameterBottom:.095,height:.18,tessellation:6},scene),kimHeadPolish,kimGold);
+        crown.position.set(Math.cos(angle)*.39,.49,Math.sin(angle)*.39);
+      }
       const recolourable: {mesh:Mesh;kind:'paint'|'uniform'|'cape'|'hatColor'|'hair';material:PBRMaterial}[] = [];
+      const kimPaintBase=new Map<PBRMaterial,{color:Color3;metallic:number;roughness:number;emissive:Color3}>();
+      const rememberKimPaint=()=>{kimPaintBase.clear();for(const part of recolourable)if(part.kind==='paint'||part.kind==='uniform'||part.kind==='cape')if(!kimPaintBase.has(part.material))kimPaintBase.set(part.material,{color:part.material.albedoColor.clone(),metallic:part.material.metallic??0,roughness:part.material.roughness??0,emissive:part.material.emissiveColor.clone()});};
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const pedals = ['gas', 'brake'].map((p) => nodes.find((n) => n.name === `kart${index}/pedal-${p}`) as TransformNode | undefined);
       for (const p of pedals) if (p) p.rotationQuaternion = null;
@@ -227,7 +247,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); markGlow(flame); flame.setEnabled(false); return flame;
       });
-      const v = { root, orientation, wheelFrame, pivots, spins, driver,head, scarf, steering, arms, grips, flames, pedals, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
+      const v = { root, orientation, wheelFrame, pivots, spins, driver,head, scarf, steering, arms, grips, flames, pedals, kimCarPolish, kimHeadPolish, kimPolish:false, setKimPolish(active:boolean){
+          if(v.kimPolish===active)return;v.kimPolish=active;kimCarPolish.setEnabled(active);kimHeadPolish.setEnabled(active);
+          for(const [material,base] of kimPaintBase){if(active){material.albedoColor=Color3.Lerp(base.color,Color3.FromHexString('#d2ac57'),.58);material.metallic=Math.max(base.metallic,.68);material.roughness=Math.min(base.roughness,.28);material.emissiveColor=new Color3(.045,.025,.004);}else{material.albedoColor.copyFrom(base.color);material.metallic=base.metallic;material.roughness=base.roughness;material.emissiveColor.copyFrom(base.emissive);}}
+        }, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
         paintColour: Color3.Black(), soot: -1, wreckAge: -1,
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
@@ -240,6 +263,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const [style,node] of faces) node?.setEnabled(style === cast.faceStyle);
           for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }
           v.paintColour = Color3.FromHexString(cast.paint).toLinearSpace(); v.soot = -1;
+          rememberKimPaint();
           // First person keeps only the gloves on the wheel; torso, cape and epaulettes would fill the view.
           v.bodyMeshes=driver.getChildMeshes().filter(mesh=>!/White glove/.test(mesh.name)&&!mesh.isDescendantOf(head)&&mesh.isEnabled());
           // Only the big silhouettes cast kart shadows: body, tyres, uniform, cape and cap (fewer shadow draws).
@@ -526,6 +550,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       abilityEvent(kind, kart, target) {
         const at = lastStates[kind === 'crush' ? target ?? kart : kart]; if (!at) return;
         if (kind === 'crush') { burst(puff, at, reducedEffects ? 10 : 40); burst(paper, at, reducedEffects ? 8 : 25); return; }
+        if (kind === 'kim-surge') { burst(paper, at, reducedEffects ? 14 : 42); burst(puff, at, reducedEffects ? 8 : 24); return; }
+        if (kind === 'kim-audit') { smoke.emitter=new Vector3(at.x,.35,at.z);smoke.manualEmitCount=reducedEffects?8:24;return; }
         smoke.emitter = new Vector3(at.x, .4, at.z); smoke.manualEmitCount = reducedEffects ? 40 : 160;
       },
       setRain(on) {
@@ -551,6 +577,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         for (const system of [dust, puff]) { system.color1 = powder[0]; system.color2 = powder[1]; system.colorDead = powder[2]; }
       },
       puddles() { return raining ? trackWorld.puddles : []; },
+      setKimPolish(timers) { visuals.forEach((v,i)=>v.setKimPolish((timers[i]??0)>0)); },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
       craterHit(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 10 : 34); },
@@ -578,13 +605,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           d.mesh.setEnabled(true); d.mesh.position.set(at.x, 1, at.z); d.mesh.scaling.setAll(1); d.vx = Math.sin(a) * p; d.vz = Math.cos(a) * p; d.vy = 3 + Math.random() * 2; d.life = 9; }
       },
       setRoster(order) {
-        roster = order.slice(); visuals.forEach((v, i) => v.dress(CAST[order[i] ?? i]));
+        roster = order.slice(); visuals.forEach((v, i) => { v.setKimPolish(false);v.dress(CAST[order[i] ?? i]); });
         const owner = Math.max(0, order.indexOf(0));
         if (owner !== tankOwner) {
           for (const mesh of kartOnlyMeshes) mesh.isVisible = true; visuals[tankOwner].driver.position.y = 0;
           tankOwner = owner; tankRoot.parent = visuals[owner].root; kartOnlyMeshes = kartMeshesOf(owner); tankBlend = 0; tankRoot.setEnabled(false);
         }
-        for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
+        visuals.forEach((v)=>v.setKimPolish(false));for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
       },
       async portraits(order) {
         // Head-and-shoulders shots straight from the race models, one per roster member.
@@ -756,6 +783,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           visuals[tankOwner].driver.position.y = tankBlend * .85; }
         [state, ...others].forEach((s, index) => {
           const v = visuals[index]; if (!v) return;
+          if(v.kimPolish){v.kimCarPolish.rotation.y=Math.sin(time*3+index)*.025;v.kimHeadPolish.rotation.y=Math.sin(time*2.4+index)*.035;}
           contactShadows[index].position.x=s.x;contactShadows[index].position.z=s.z;contactShadows[index].rotation.y=s.heading;
           contactShadows[index].visibility=Math.max(.15,1-s.height*.9);
           v.root.position.set(s.x, s.height + s.suspensionOffset, s.z);

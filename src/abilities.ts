@@ -1,9 +1,8 @@
-import type { KartState } from './kart-model.ts';
+import { KART_TUNING, type KartState } from './kart-model.ts';
 
 /**
- * Special abilities (Q). First restored ability: Sarah's archived 'Größenbefehl' parade tank
- * (archive e292070, client/src/game/abilities.ts and bots.ts:runOver). Durations are the archived
- * provisional values; distances and impulses are retuned for the Babylon world, not copied.
+ * Special abilities (Q): Sarah's archived 'Größenbefehl' parade tank and Kim's 'Propaganda-Sieg'.
+ * Archive timings are provisional; distances and impulses are retuned for the Babylon world.
  */
 export const ABILITY_RULES = {
   tankDuration: 8,
@@ -16,15 +15,20 @@ export const ABILITY_RULES = {
   slowDuration: 2.4,
   push: 6.5,
   speedFactor: .55,
+  kimPolishDuration: 10,
+  kimBoostDuration: .9,
+  kimSpeedKick: 1.8,
+  kimPenaltyDuration: .7,
 } as const;
 
 export const ABILITY_NAME = 'Größenbefehl';
+export type AbilityOwner = 'tank' | 'kim' | 'none';
 
-export interface AbilityEvent { kind: 'transform' | 'revert' | 'crush'; kart: number; target?: number }
-export interface AbilityWorld { cooldown: number[]; active: boolean[]; repeat: number[][]; events: AbilityEvent[] }
+export interface AbilityEvent { kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit'; kart: number; target?: number }
+export interface AbilityWorld { cooldown: number[]; active: boolean[]; repeat: number[][]; kimPolishRemaining: number[]; kimBoostRemaining: number[]; kimPenaltyRemaining: number[]; events: AbilityEvent[] }
 
 export function createAbilities(count: number): AbilityWorld {
-  return { cooldown: Array(count).fill(0), active: Array(count).fill(false), repeat: Array.from({ length: count }, () => Array(count).fill(0)), events: [] };
+  return { cooldown: Array(count).fill(0), active: Array(count).fill(false), repeat: Array.from({ length: count }, () => Array(count).fill(0)), kimPolishRemaining: Array(count).fill(0), kimBoostRemaining: Array(count).fill(0), kimPenaltyRemaining: Array(count).fill(0), events: [] };
 }
 
 /** Bot use: the tank's owner transforms when it is ready and a rival is close enough to be shoved. */
@@ -33,21 +37,41 @@ export function botWantsAbility(world: AbilityWorld, kart: number, karts: KartSt
   return abilityReady(world, kart, self) && karts.some((other, j) => j !== kart && Math.hypot(other.x - self.x, other.z - self.z) < 9);
 }
 
-export const abilityReady = (world: AbilityWorld, kart: number, state: KartState) => world.cooldown[kart] <= 0 && (state.tankRemaining ?? 0) <= 0;
+export const abilityReady = (world: AbilityWorld, kart: number, state: KartState) => world.cooldown[kart] <= 0 && (state.tankRemaining ?? 0) <= 0 && world.kimPolishRemaining[kart] <= 0;
 
 /**
  * Activation, expiry and tank contacts for all karts. `immune` is the shared item protection:
  * a protected kart is neither pushed nor slowed, exactly like item hits.
  */
-export function stepAbilities(world: AbilityWorld, karts: KartState[], activations: boolean[], immune: number[], dt: number): KartState[] {
+export function stepAbilities(world: AbilityWorld, karts: KartState[], activations: boolean[], immune: number[], dt: number, owners: AbilityOwner[] = []): KartState[] {
   world.events = [];
   const result = karts.map((k) => ({ ...k }));
   world.cooldown = world.cooldown.map((c) => Math.max(0, c - dt));
   world.repeat = world.repeat.map((row) => row.map((r) => Math.max(0, r - dt)));
+  world.kimPolishRemaining = world.kimPolishRemaining.map((remaining) => Math.max(0, remaining - dt));
+  world.kimPenaltyRemaining = world.kimPenaltyRemaining.map((remaining) => Math.max(0, remaining - dt));
+  world.kimBoostRemaining = world.kimBoostRemaining.map((remaining, i) => {
+    const next = Math.max(0, remaining - dt);
+    if (remaining > 0 && next === 0) {
+      world.kimPenaltyRemaining[i] = ABILITY_RULES.kimPenaltyDuration;
+      world.events.push({ kind: 'kim-audit', kart: i });
+    }
+    return next;
+  });
   result.forEach((k, i) => {
     if (activations[i] && abilityReady(world, i, k)) {
-      k.tankRemaining = ABILITY_RULES.tankDuration; world.cooldown[i] = ABILITY_RULES.cooldown;
-      world.active[i] = true; world.events.push({ kind: 'transform', kart: i });
+      const owner = owners[i] ?? 'tank';
+      if (owner === 'kim') {
+        world.kimPolishRemaining[i] = ABILITY_RULES.kimPolishDuration;
+        world.kimBoostRemaining[i] = ABILITY_RULES.kimBoostDuration;
+        k.turboRemaining = Math.max(k.turboRemaining, ABILITY_RULES.kimBoostDuration);
+        k.speed = Math.min(KART_TUNING.maxTurboSpeed, k.speed + ABILITY_RULES.kimSpeedKick);
+        world.cooldown[i] = ABILITY_RULES.cooldown;
+        world.events.push({ kind: 'kim-surge', kart: i });
+      } else if (owner === 'tank') {
+        k.tankRemaining = ABILITY_RULES.tankDuration; world.cooldown[i] = ABILITY_RULES.cooldown;
+        world.active[i] = true; world.events.push({ kind: 'transform', kart: i });
+      }
     } else if (world.active[i] && (k.tankRemaining ?? 0) <= 0) {
       world.active[i] = false; world.events.push({ kind: 'revert', kart: i });
     }

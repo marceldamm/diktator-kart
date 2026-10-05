@@ -8,7 +8,7 @@ import { setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, dr
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
-import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityWorld } from './abilities';
+import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
 import { attachMouseCamera } from './mouse-camera';
@@ -101,6 +101,7 @@ class App {
   private botLevel:0|1|2=1;
   private itemHeld=false;
   private queuedItemUse=false;
+  private itemDirection:'forward'|'backward'='forward';
   /** 'gp' = Grand Prix with five bots; 'timetrial' = solo three laps against your saved ghost. */
   private mode:'gp'|'timetrial'='gp';
   private ghostRun:{time:number;driver:number;samples:number[][]}|null=null;
@@ -116,9 +117,12 @@ class App {
   private weather:'sun'|'rain'|'snow'='sun';
   /** Rolled per Grand Prix: half the races run from day through dusk into night over the three laps. */
   private dayToNight=false;
-  private abilityStats={transform:0,revert:0,crush:0};
+  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0};
   private itemMessage='';
   private itemMessageUntil=0;
+  private abilityAnnouncementUntil=0;
+  private abilityAnnouncementTitle='Rennergebnis NICHT manipuliert.';
+  private abilityAnnouncementDetail='Kim Jong-Un freut sich über seine demokratische Bestzeit.';
   private reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
   private quality = 1;
   private reducedEffects = false;
@@ -280,7 +284,8 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.queuedItemUse=false;this.abilityStats={transform:0,revert:0,crush:0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0};
+    this.queuedItemUse=false;this.itemDirection='forward';
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -428,7 +433,8 @@ class App {
     this.testScene.setGhost?.(null);
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedItemUse=false;this.itemHeld=false;
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
+    this.queuedItemUse=false;this.itemHeld=false;this.itemDirection='forward';
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
@@ -451,7 +457,7 @@ class App {
     const place=rankRace(this.progress).indexOf(0)+1;
     document.body.classList.toggle('race-finished',this.racePhase==='finished');
     document.body.classList.toggle('racing',this.racePhase==='countdown'||this.racePhase==='race');
-    document.querySelector('#place')!.textContent = `${place}`;
+        document.querySelector('#place')!.textContent = `${place}`;
     document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
     document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `${this.mode==='timetrial'?'ZEITFAHREN':'STADION GRAND PRIX'} · ${this.castOf(0).name.toUpperCase()}`;
@@ -462,9 +468,9 @@ class App {
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
     const own=this.castOf(0);
-    const itemName=item?(item==='trap'?ITEM_NAMES[item]:`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`):'';
+    const itemName=item?(item==='direct'||item==='homing'?`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`:ITEM_NAMES[item]):'';
     document.querySelector('#item-name')!.textContent=item?itemName:'Sendung abholen';
-    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':'✉';
+    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':'✉';
     const itemCard=document.querySelector<HTMLElement>('#item-card')!,itemSlot=document.querySelector<HTMLElement>('#item-slot')!;
     itemCard.dataset.state=item?'ready':'empty';itemSlot.dataset.state=item?'ready':'empty';
     itemSlot.setAttribute('aria-label',item?`Item im Slot: ${itemName}`:'Item-Slot leer');
@@ -472,16 +478,22 @@ class App {
     const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;
     itemButton.disabled=!item||this.racePhase!=='race';itemButton.textContent=item?'WERFEN':'E';
     itemButton.setAttribute('aria-label',item?`${itemName} werfen`:'Kein Item verfügbar');
-    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E/Touch halten: Schild · loslassen oder antippen: werfen'):'Leerer Slot · leuchtende Postkisten einsammeln';
+    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E/Touch halten: Schild · loslassen oder antippen: werfen'):this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
+    const abilityAnnouncement=document.querySelector<HTMLElement>('#ability-announcement')!;
+    abilityAnnouncement.hidden=this.racePhase!=='race'||this.items.time>=this.abilityAnnouncementUntil;
+    document.querySelector('#ability-announcement-title')!.textContent=this.abilityAnnouncementTitle;
+    document.querySelector('#ability-announcement-detail')!.textContent=this.abilityAnnouncementDetail;
+    document.querySelector<HTMLElement>('#censor-banner')!.hidden=this.racePhase!=='race'||this.items.censorBannerRemaining[0]<=0;
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
-    const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent='⚠ Rohrpost im Anflug · ausweichen';
+    const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent=this.items.objects.some(o=>o.kind==='censor'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15)?'⚠ Zensurbalken im Anflug · ausweichen':'⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
-      const owns=this.order[0]===0,tank=this.kart.tankRemaining>0,ready=owns&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
+      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0;
+      const implemented=ownsTank||ownsKim,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
       const card=document.querySelector<HTMLElement>('#ability-card');
-      if(card){card.classList.toggle('active',tank);card.classList.toggle('ready',ready);
-        document.querySelector('#ability-name')!.textContent=owns?ABILITY_NAME:this.castOf(0).abilityIdea.split(' –')[0];
-        document.querySelector('#ability-info')!.textContent=!owns?'Q · noch nicht gebaut':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:ready?'Q · Panzer bereit':`Q · bereit in ${Math.ceil(cool)} s`;
-        document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
+      if(card){card.classList.toggle('active',tank||kim);card.classList.toggle('ready',ready);
+        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':this.castOf(0).abilityIdea.split(' –')[0];
+        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
+        document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:kim?this.abilities.kimPolishRemaining[0]/ABILITY_RULES.kimPolishDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
     }
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
     document.querySelector('#race-start')!.textContent = this.racePhase === 'practice' ? 'Rennen starten ↵' : 'Neues Rennen ↵';
@@ -583,7 +595,7 @@ class App {
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') {
-        if (this.order[0] === 0) { this.queuedSpecial = true; this.lastAction = 'Größenbefehl (Q)'; }
+        if (this.order[0] === 0 || this.order[0] === 4) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : 'Propaganda-Sieg (Q)'; }
         else { this.itemMessage = `${this.castOf(0).name}: eigene Fähigkeit folgt`; this.itemMessageUntil = this.items.time + 1.8; }
       }
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
@@ -614,10 +626,15 @@ class App {
         const assisted = { ...frame, hopPressed: this.queuedHopPress && !((this.kart.jumpRemaining ?? 0) > 0) };
         if (this.autoGas && frame.throttle >= 0 && this.racePhase !== 'practice' || this.autoGas && frame.throttle > 0) assisted.throttle = frame.throttle < 0 ? frame.throttle : 1;
         if (this.steerAssist && !LAB_WORLD) { const help = botInput(this.kart, 0, traffic).steering; assisted.steering = Math.max(-1, Math.min(1, frame.steering + help * (frame.steering === 0 ? .55 : .25))); }
+        if(this.items.censorRemaining[0]>0)assisted.steering*=.72;
+        if(this.abilities.kimPenaltyRemaining[0]>0)assisted.throttle*=.55;
         this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : assisted, FIXED_STEP, project, terrain);
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
-          let next = advanceKart(other, LAB_WORLD ? { throttle: 1, steering: CONTACT_SCENARIO ? 0 : .75 } : botInput(other, index + 1, traffic), FIXED_STEP, project, terrain);
+          let botDrive=LAB_WORLD?{throttle:1,steering:CONTACT_SCENARIO?0:.75}:botInput(other,index+1,traffic);
+          if(!LAB_WORLD&&this.items.censorRemaining[index+1]>0)botDrive={...botDrive,steering:botDrive.steering*.72};
+          if(!LAB_WORLD&&this.abilities.kimPenaltyRemaining[index+1]>0)botDrive={...botDrive,throttle:botDrive.throttle*.55};
+          let next = advanceKart(other, botDrive, FIXED_STEP, project, terrain);
           return next;
         });
         if(!LAB_WORLD) {
@@ -645,18 +662,34 @@ class App {
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
-          // Q: Sarah's 'Größenbefehl' parade tank for the player's driver; shared protection from items.
           const all=[this.kart,...this.loadKarts];
-          // Only Hitler owns the 'Größenbefehl'; as a bot he uses it when rivals are close.
-          const tankOwner=this.order.indexOf(0),botsActive=this.racePhase==='race';
-          const changed=stepAbilities(this.abilities,all,all.map((_,i)=>i===tankOwner&&(i===0?this.queuedSpecial:botsActive&&botWantsAbility(this.abilities,i,all))),this.items.immune,FIXED_STEP);
+          const botsActive=this.racePhase==='race';
+          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':'none');
+          const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all));
+          const changed=stepAbilities(this.abilities,all,activations,this.items.immune,FIXED_STEP,owners);
           this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
+          this.testScene?.setKimPolish?.(this.abilities.kimPolishRemaining);
           for(const event of this.abilities.events){
             this.abilityStats[event.kind]++;this.testScene?.abilityEvent?.(event.kind,event.kart,event.target);
-            const source=all[event.kart];if(event.kart===0||event.target===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)this.audio.ability(event.kind);
+            const source=all[event.kart],near=event.kart===0||event.target===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35;
+            if(near&&(event.kind==='transform'||event.kind==='revert'||event.kind==='crush'))this.audio.ability(event.kind);
+            else if(event.kind==='kim-surge'&&near)this.audio.itemEvent('launch');
+            else if(event.kind==='kim-audit'&&event.kart===0)this.audio.itemEvent('hit');
             if(event.kind==='transform'&&event.kart!==0&&Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35){this.itemMessage='Achtung · Hitler wird zum Panzer';this.itemMessageUntil=this.items.time+2;}
             if(event.kind==='transform'&&event.kart===0){this.itemMessage='Größenbefehl · Panzer für 8 s';this.itemMessageUntil=this.items.time+2.2;this.audio.cheer(.8);}
             if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}
+            if(event.kind==='kim-surge'&&(event.kart===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)){
+              this.abilityAnnouncementTitle='Rennergebnis NICHT manipuliert.';
+              this.abilityAnnouncementDetail='Kim Jong-Un freut sich über seine demokratische Bestzeit.';
+              this.abilityAnnouncementUntil=this.items.time+ABILITY_RULES.kimBoostDuration;
+              this.audio.cheer(event.kart===0?.8:.35);
+            }
+            if(event.kind==='kim-audit'&&event.kart===0){
+              this.abilityAnnouncementTitle='NACHPRÜFUNG: RENNERGEBNIS UNVERÄNDERT.';
+              this.abilityAnnouncementDetail='Der Motor stottert. Die demokratische Bestzeit muss kurz warten.';
+              this.abilityAnnouncementUntil=this.items.time+2.6;
+              this.itemMessage='Motor stottert · Nachprüfung läuft';this.itemMessageUntil=this.items.time+1.8;
+            }
           }
         }
         if (!LAB_WORLD && this.racePhase === 'race') {
@@ -665,23 +698,27 @@ class App {
           // Hold E: the item trails behind as a shield; release E: throw it. Bots shield while they wait to use theirs.
           const actionPressed=frame.pressed.has('item'),down=this.input.isDown('item'),release=this.itemHeld&&!down,tap=actionPressed&&!down;this.itemHeld=down;
           const buttonUse=this.queuedItemUse;this.queuedItemUse=false;
+          if(down&&(this.input.isDown('itemBackward')||frame.pressed.has('itemBackward')))this.itemDirection='backward';
+          else if(down&&(this.input.isDown('itemForward')||frame.pressed.has('itemForward')))this.itemDirection='forward';
           this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
           const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
-          const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
+          const directions=all.map((_,i)=>i===0?this.itemDirection:'forward');
+          const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP,directions);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
+          if(release)this.itemDirection='forward';
           for(const event of this.items.events) if(event.kart===0) {
             const projectile=this.castOf(0).projectileName;
             if(event.kind==='block'){this.itemMessage='Abgewehrt · Item als Schild verbraucht';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('hit');continue;}
-            this.itemMessage=event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
-            this.itemMessageUntil=this.items.time+1.8;
-            if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);
+            this.itemMessage=event.item==='censor'?(event.kind==='hit'?'Faktenlage amtlich geschwärzt':'FAKTENLAGE ERFOLGREICH GESCHWÄRZT'):event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
+            this.itemMessageUntil=this.items.time+(event.item==='censor'?2.6:1.8);
+            if(event.kind==='launch'&&event.item!=='trap'&&event.item!=='censor'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);
             // Everyone else shouts their own line while throwing their character projectile.
-            if(event.kind==='launch'&&event.item!=='trap'&&this.castOf(0).projectile!=='dog'&&this.voiceCooldown===0){this.audio.voice(`${this.castOf(0).voice}-horn`,{channel:'driver',rate:this.castOf(0).voiceRate,volume:.8});this.voiceCooldown=6;}
+            if(event.kind==='launch'&&event.item!=='trap'&&event.item!=='censor'&&this.castOf(0).projectile!=='dog'&&this.voiceCooldown===0){this.audio.voice(`${this.castOf(0).voice}-horn`,{channel:'driver',rate:this.castOf(0).voiceRate,volume:.8});this.voiceCooldown=6;}
             if(event.kind==='hit')this.say(0,'hit');
           }
           // A nearby rival's dog barks too (Hitler as a bot).
           for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
-            this.audio.voice(event.item==='trap'?'announcer-stamp':'announcer-delivery');this.audio.cheer(.5);
+            this.audio.voice(event.item==='trap'||event.item==='censor'?'announcer-stamp':'announcer-delivery');this.audio.cheer(.5);
             window.setTimeout(()=>this.say(event.kart,'hit',.75),900);
           }
           if(this.mode==='timetrial'){
@@ -793,6 +830,7 @@ class App {
       const renderBots = this.loadKarts.map((kart,i) => interpolateKart(this.previousLoadKarts[i] ?? kart, kart, alpha));
       if (!LAB_WORLD) { const progress = Math.max(0, this.progress[0]?.distance ?? 0) / (3 * TRACK.length);
         this.testScene.setTimeOfDay?.(this.racePhase === 'practice' ? (new URLSearchParams(location.search).get('night') === '1' ? 1 : 0) : this.dayToNight ? Math.max(0, Math.min(1, (progress - .2) / .65)) : 0); }
+      this.testScene.setKimPolish?.(this.racePhase==='finished'?[]:this.abilities.kimPolishRemaining);
       this.testScene.present(this.renderKart, renderBots);
       if (this.mode === 'timetrial' && this.ghostRun && this.racePhase !== 'practice') {
         const f = Math.min(this.ghostRun.samples.length - 1, Math.max(0, this.raceTime * 20)), a = this.ghostRun.samples[Math.floor(f)], b = this.ghostRun.samples[Math.min(this.ghostRun.samples.length - 1, Math.floor(f) + 1)], u = f - Math.floor(f);

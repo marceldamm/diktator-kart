@@ -138,7 +138,9 @@ Vorhanden: 593-m-Rundkurs, fünf Bots, drei Runden, Rang, Ziel, Revanche, Rücks
 Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-boundaries.md), [14](docs/14-character-and-item-catalog.md), [15](docs/15-item-feasibility-and-production.md).
 
 - [ ] Persönliche Fähigkeiten mit eigener Eingabe und festen Abklingzeiten; keine fahrleistungsabhängige Pflicht-Aufladung. Konkrete Balance noch abstimmen.
-- [ ] Sarahs gemeldete Panzerverwandlung und weitere belegte Alt-Fähigkeiten/Itemideen bewahren und in neuer Engine ausarbeiten; Panzer zuerst laut CURRENT-WORKLIST.md. Keine alten Bot-Tempoprämien übernehmen. Quellen und Abweichungen: [Altstand-Abgleich](docs/sarah-feature-audit.md).
+- [x] Sarahs gemeldete Panzerverwandlung als „Größenbefehl“ in Babylon wiederhergestellt; dieselben Treffer-/Schutzregeln und Bots.
+- [x] Kim-Fähigkeit „Propaganda-Sieg“ aus Sarahs bestätigter Richtung neu umgesetzt: zehn Sekunden Goldpass, kurzer Triumphschub, Motor-Nachprüfung; echte Rangliste bleibt korrekt.
+- [ ] Vier weitere belegte Alt-Fähigkeiten (Stalin, Mussolini, Mao, Castro) und zusätzliche Items bewahren und nach gemeinsamer Bestätigung in Babylon neu bewerten. Keine alten Bot-Tempoprämien übernehmen. Quellen und Abweichungen: [Altstand-Abgleich](docs/sarah-feature-audit.md).
 - [ ] Wand- und Kartkontakte weiter abstimmen: schräge Bandenkontakte gleiten mit nachvollziehbarem Tempoverlust; typische Kontakte sollen nicht abrupt zum Vollstopp führen, während harte frontale Einschläge deutlich bleiben.
 - [ ] Kumulative Haltbarkeit und gestufte sichtbare Schäden ausarbeiten: Spiegel, Auspuff, Abdeckungen, Ruß/Rauch/Funken; bei wiederholten schweren Treffern ein satirischer Fahrzeugausfall/Explosion, komische Fahrerreaktion, dann nach wenigen Sekunden ein besonderer Respawn mit Animation und Sound. Trefferketten/Fairness/Botgleichheit prüfen; keine Gore-Darstellung und keine festgelegten Zahlen, bevor Fahrtests vorliegen.
 - [ ] Lokale Weltreaktionen und thematische Wettervarianten prüfen: Regen/nasse Fahrbahn zuerst als Produktionswunsch, später Schnee/Eis/Blätter nach Priorisierung.

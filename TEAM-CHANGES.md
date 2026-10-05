@@ -30,6 +30,12 @@
 
 Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Änderungen, jeweils wenige Zeilen. Kein Werkzeug-/Testprotokoll. Technische Belege und offene Annahmen stehen in [PROGRESS-LOG.md](PROGRESS-LOG.md), laufende Aufgaben in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md), Zukunftsziele in [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md).
 
+## 05.10.2026
+
+- **Steuerung erweitert Sarah:** Rohrpost/Suchauftrag mit E+V vorwärts oder E+H rückwärts; E allein bleibt unverändert. Foto liegt auf F, Hupe auf V.
+- **Zensurbalken wieder aufgenommen Sarah:** Seltenes viertes Item, kurzes satirisches Banner und begrenzte Lenkeinschränkung für Gegner; Schutzzeiten bleiben wirksam.
+- **Kims „Propaganda-Sieg“ umgesetzt Sarah:** Zehn Sekunden goldene Paradeveredelung, kurzer Triumphschub und anschließender Motoraussetzer. Zweite Bannerphase zeigt die Nachprüfung; echter Rang bleibt unverändert.
+
 ## 04.10.2026
 
 - **Bildbasierte Qualitätsrichtung ergänzt:** Marcels lokale Ladebild-Referenz setzt den Anspruch für echte Laufzeitmodelle, Karts, Gebäude, Boden/Wasser und Fahrpartikel. Umsetzung als eigenständiges Berlin/Stadiondesign ohne konkrete Referenzmodelle oder politische Zeichen. Bestätigte Slot-Anzeige/Bedienung und kumulativer Itemtreffer-Schaden sind in der Arbeitsliste aufgenommen.

@@ -22,6 +22,7 @@ Die ursprünglichen Itemideen bleiben erhalten. Sie werden so übersetzt, dass E
 | Idee | Machbarkeit | Babylon-Umsetzung | sichtbare Wirkung | Grenze / Fallback |
 |---|---|---|---|---|
 | Propaganda-Plakat | A/B | kurzer Screen-/World-Space-Overlay mit animiertem Plakat, optional ein vorbeiziehendes Kartonpanel | Sicht wird satirisch gestört, Warnrahmen bleibt sichtbar | nie die gesamte Fahrbahn verdecken; bei schwacher Hardware nur Overlay + Audio |
+| Zensurbalken | A/B | Seltenes viertes Item; Gegnerlenkung kurz begrenzen und beim getroffenen Spieler einen schmalen Banner mit übertrieben amtlichem Text zeigen | schwarz-messingfarbenes Schild, „Faktenlage erfolgreich geschwärzt“ und bürokratischer Untertitel | 2,6 s, Immunität schützt, Lenkung bleibt aktiv, kein Vollbild; keine Richtungswahl |
 | Roter Aktenordner | A | entfernt das gegnerische Item oder setzt dessen Zustand zurück | Ordner klappt auf, Papierstempel und kurzer Ton | keine komplexe Item-Manipulation; Fallback ist „gegnerisches Item verbraucht“ |
 | Personenkult-Statue | B | vorgefertigte, gepoolte Hindernis-Instanz an erlaubter Spawnzone | Statue wächst/klappt auf, Schatten und kurzer Bodenimpuls | keine zufällige Vollsperrung; sichere Linie und Ablauf-Timer |
 | Zensurstempel | A | HUD-/Minimap-Maske mit Stempelanimation | Stempel schlägt ein, UI-Teil wird kurz unlesbar | Rennstrecke, Warnungen und tatsächliche Rangliste bleiben zugänglich |
