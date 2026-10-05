@@ -1,5 +1,13 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Stalin-Nase als eigener Gesichtsbaustein
+
+**Umgesetzt:** In `art-source/build_kart.py` ersetzt `cast-stalin-nose` für Stalin die allgemeine Nase: eigene loftmodellierte Brücke (0,17 m), breitere Flügel und zurückhaltende Nasenlöcher. `src/cast.ts` aktiviert das Teil nur in Stalins Cast. `art-source/hero-kart.blend`, Roh-GLB und optimierter Export wurden mit Blender 4.5.3/glTF Transform reproduziert. Optimiertes Runtime-GLB: 5.081.568 Byte gegenüber 5.046.100 Byte vorher (+35.468 Byte, rund +0,7 %); die GLB-Knotenzuordnung wird von `tests/cast.test.mjs` geprüft.
+
+**Sichtprüfung und Grenzen:** Ein isolierter Blender-Studio-Render war keine gültige Geometrieabnahme: der Quell-Scene-Aufbau lädt die Babylon-Cast-/Materialzustände nicht und zeigte mehrere Gesichtsteile isoliert. Diese Aufnahme wird nicht als Projektbeleg geführt. Es gibt noch keinen aktuellen Stalin-Nahblick im echten Spiel; die Form kann deshalb technisch exportiert, aber nicht als visuell überzeugend oder realistisch abgenommen gemeldet werden.
+
+**Verifizierung:** Gezielter `tests/cast.test.mjs`: 1/1; `npm run build`: erfolgreich, 1.296 Module; bekannte ~2.022-kB-Babylon-Hauptchunkwarnung bleibt. `npm test`: Vollsuite 55/55 bestanden (219,8 s); `git diff --check` sauber. Erste Blender→Optimizer-Runde stieß kurz auf einen Schreibfehler beim Runtime-GLB; Wiederholung nach abgeschlossenem Export erfolgreich.
+
 ### 2026-10-05 – Kanal-Wasserlinie und HUD-Arbeitslistenabgleich
 
 **Weltpass:** `src/track-world.ts` erzeugt zwei schwach sichtbare, prozedurale Schaumstreifen am Anfang und Ende der Kanalwasserfläche. Beide liegen bei y=.048 über Wasser y=.04, sind höchstens .16 m lang und vollständig innerhalb der Kanalgrenzen. Die Alpha-Textur nutzt gebrochene, variierte Wellen und kleine Schaumflecken. Das ist reine Darstellung: keine neue Kollisionsfläche und kein Partikelsystem. `canalFoamBands` ist gegen Grenzlage, Maximalbreite und Null-/Negativlänge getestet.

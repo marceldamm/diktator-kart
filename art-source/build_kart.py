@@ -526,6 +526,12 @@ ellipsoid('Uniform collar', (0, -.035, -.205), (.19, .19, .065), uniform, unifor
 stalin_crease = mat('Warm skin crease', (.34, .22, .18), 0, .92)
 stalin_highlight = mat('Warm skin highlight', (.58, .42, .33), 0, .82)
 stalin_face = face_variants['stalin']
+# A separate, broader nasal bridge keeps Stalin's face legible beneath the heavy moustache.
+stalin_nose = empty('cast-stalin-nose', (0, 0, 0), head)
+nose('Stalin modeled nasal bridge', .17, .06, .13, stalin_nose, .012)
+for sd in [-1, 1]:
+    ellipsoid('Stalin nasal wing', (sd * .049, .318, -.026), (.034, .032, .027), skin, stalin_nose, 18)
+    ellipsoid('Stalin nostril recess', (sd * .04, .344, -.043), (.012, .007, .006), stalin_crease, stalin_nose, 12)
 # Stalin's quiet, closed-collar field tunic replaces the generic parade dressing.
 # These cloth-only construction lines and pockets keep the silhouette tailored without insignia.
 stalin_tunic = empty('cast-stalin-tunic', (0, 0, 0), driver)
