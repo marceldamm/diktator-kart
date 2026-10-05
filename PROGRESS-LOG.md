@@ -1,5 +1,17 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Selektive Laden-Ausleger an der Boulevardzeile
+
+**Auswahl/Auftrag:** Nach den Townhouse-Läden und Blumenkästen wurde ein bestätigtes M3-Stadtweltziel vor der Umsetzung in CURRENT-WORKLIST.md und LONG-TERM-GOALS.md festgehalten: nur ausgewählte Fassaden mit eigenständigen, lesbaren Laden-Auslegern variieren.
+
+**Umgesetzt:** `art-source/build_world.py` erzeugt an Häusern mit `idx % 7 == 2` einen auskragenden Schildkörper mit drei Emaillevarianten, Messingrahmen, geschwungenem Wandhalter, einem der Piktogramme Tasse/Brot/Brief und der Aufschrift KAFFEE/BROT/POST. Im 48er-Townhouse-Block betrifft das sieben Häuser, nicht jede Fassade. Der erste Blender-Aufruf enthielt eine ungültige Materialreferenz `ivory` und scheiterte vor dem Speichern; sie wurde auf das vorhandene Material `pale` korrigiert. Erst der anschließende komplette Blender-Neubau erzeugte die neue Quell-.blend und den Roh-GLB.
+
+**Asset/Build:** `art-source/stadium-world.blend` ist 25.320.898 Byte. Die Laufzeit-GLB wurde von 15.528.128 auf 16.135.400 Byte vergrößert (+607.272 Byte/+3,91 %); der Roh-GLB liegt bei 22.892.132 Byte. Ein Optimiererlauf konnte die vom Browser verwendete GLB zunächst nicht überschreiben. Nach Navigation des Prüf-Tabs auf `about:blank` gelang derselbe Export ohne Datenverlust. Die GLB-Strukturprüfung fand 31 Meshes und drei neue Shop-enamel-Meshes/Materialien; Rahmungen, Schilderdetails und Schriftgeometrie werden in Materialgruppen zusammengefasst. `npm run build` bestand mit 1.296 Modulen. Die gebaute `dist/assets/models/stadium-world.glb` stimmt bytegleich mit `public/assets/models/stadium-world.glb` überein. Der frische In-App-Browser-Reload erreichte das Hauptmenü ohne beobachteten Assetladefehler.
+
+**Sichtprüfung / Grenzen:** Das Hauptmenü bestätigt das Laden der geänderten Laufzeitwelt, aber kein Schild ist dort nah genug für Lesbarkeits-, Montage-, Fahrspur- oder Stilabnahme. Dafür liegt noch kein gültiger Fassaden-Nahblick aus einer normalen Spielfahrt vor. Keine visuelle Fertigstellung behauptet.
+
+**Limitstand:** Offizielle Kontowerte nach diesem Paket: 3 % Fünf-Stunden-Verbrauch und 42 % Wochenverbrauch (97 %/58 % Rest; Woche bindet). Keine Resets oder Zusatzkontingente aktiviert.
+
 ### 2026-10-05 – Itemschaden bei Panzerform
 
 **Befund:** Die Item-/Trefferlogik zog normalen Spieler- und Botkarts bereits 14 Haltbarkeit pro Treffer ab; Mehrfachtreffer, Totalschaden und gemeinsame Reparatur waren vorhanden. Während der Panzerverwandlung dämpft `stepItems` Itemtreffer in einen kurzen Aufprall (`impactKind: 'item'`) ohne `spinRemaining`. `stepDamage` erkannte Itemschaden ausschließlich an einem frischen Spin und ließ dadurch diesen Fall ungezählt.

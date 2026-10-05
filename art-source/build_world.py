@@ -76,6 +76,9 @@ brick = mat('Terracotta render', (.42, .2, .11), 0, .88)
 ochre = mat('Ochre render limestone', (.62, .45, .24), 0, .85)
 shutter_green = mat('Weathered blue-green timber shutters', (.16, .25, .22), 0, .9)
 shutter_red = mat('Weathered burgundy timber shutters', (.32, .10, .09), 0, .9)
+shop_enamel_green = mat('Shop sign deep green enamel', (.025, .13, .12), .2, .3)
+shop_enamel_red = mat('Shop sign oxblood enamel', (.25, .035, .04), .16, .34)
+shop_enamel_cream = mat('Shop sign warm ivory enamel', (.72, .57, .34), .12, .42)
 wood = mat('Oiled stadium wood', (.17, .11, .055), 0, .76)
 canvas = mat('Striped canopy cloth', (.025, .16, .17), 0, .91)
 water = mat('Fountain basin water', (.06, .23, .25), .2, .12)
@@ -285,6 +288,32 @@ def townhouse(s, side, depth=13.0, width=15.0, idx=0):
             blob('Shop planter foliage left', (face - .32, dy - .43, .9), (.11, .2, .18), hedge, e, 6, 4)
             blob('Shop planter foliage right', (face - .32, dy + .36, .9), (.11, .2, .18), hedge, e, 6, 4)
             blob('Shop planter flower', (face - .37, dy - .04, 1.0), (.08, .1, .1), flower, e, 6, 4)
+    # Occasional projecting blade signs add a readable street-level silhouette
+    # and distinct shop identities without repeating a prop on every building.
+    if idx % 7 == 2:
+        sign_y = cols[0] + .1
+        enamel = [shop_enamel_green, shop_enamel_red, shop_enamel_cream][idx % 3]
+        sign_x = face - 1.0
+        box('Shop blade sign enamel', (sign_x, sign_y, 3.18), (.09, .92, .76), enamel, .04, e)
+        # Raised warm brass border and two short scroll brackets tie the sign to the stonework.
+        for dz in [-.37, .37]: box('Shop blade sign brass border', (sign_x - .055, sign_y, 3.18 + dz), (.035, .98, .04), gold, .01, e)
+        for dy_border in [-.47, .47]: box('Shop blade sign brass border', (sign_x - .055, sign_y + dy_border, 3.18), (.035, .04, .74), gold, .01, e)
+        tube_lo('Shop sign wrought iron bracket', [(face - .16, sign_y, 3.62), (face - .48, sign_y, 3.62), (face - .83, sign_y, 3.55)], .035, black, e)
+        tube_lo('Shop sign bracket curl', [(face - .25, sign_y, 3.63), (face - .35, sign_y + .14, 3.71), (face - .52, sign_y + .2, 3.63), (face - .6, sign_y + .18, 3.57)], .018, gold, e)
+        word = ['KAFFEE', 'BROT', 'POST'][idx % 3]
+        text('Shop blade sign lettering', word, (sign_x - .056, sign_y, 3.18), .16, pale, (math.pi / 2, 0, -math.pi / 2), e)
+        # A simple, raised shop pictogram sits above the lettering: cup, loaf, or envelope.
+        icon_z = 3.38
+        if idx % 3 == 0:
+            box('Cafe cup icon', (sign_x - .058, sign_y, icon_z), (.025, .2, .14), pale, .02, e)
+            tube_lo('Cafe cup handle', [(sign_x - .075, sign_y + .1, icon_z + .04), (sign_x - .075, sign_y + .16, icon_z + .04), (sign_x - .075, sign_y + .16, icon_z - .03), (sign_x - .075, sign_y + .1, icon_z - .03)], .014, gold, e)
+            tube_lo('Cafe steam', [(sign_x - .07, sign_y - .055, icon_z + .11), (sign_x - .07, sign_y - .08, icon_z + .15), (sign_x - .07, sign_y - .04, icon_z + .18)], .012, pale, e)
+        elif idx % 3 == 1:
+            blob('Bakery loaf icon', (sign_x - .06, sign_y, icon_z), (.025, .2, .075), pale, e, 12, 8)
+            for slash in [-.055, 0, .055]: tube_lo('Bread scoring', [(sign_x - .087, sign_y + slash, icon_z - .02), (sign_x - .087, sign_y + slash + .03, icon_z + .035)], .008, gold, e)
+        else:
+            box('Post envelope icon', (sign_x - .058, sign_y, icon_z), (.025, .23, .14), pale, .009, e)
+            tube_lo('Envelope fold', [(sign_x - .075, sign_y - .1, icon_z + .055), (sign_x - .075, sign_y, icon_z - .015), (sign_x - .075, sign_y + .1, icon_z + .055)], .009, gold, e)
     if idx % 2 == 0:
         facade_banner(face - .12, cols[len(cols) // 2] if len(cols) > 2 else 0, hgt * .55, hgt * .5, e, -1)
     bake(e)
