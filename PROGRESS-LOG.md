@@ -1,5 +1,12 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-06 – Projektlisten fortsetzen: Browser-Prüfpfad abgegrenzt
+
+**Startstand:** Projektstart synchronisierte den sauberen Babylon-Hauptordner auf `origin/main` (`751a39f`) und erzeugte Marcels Arbeitsbranch `codex/team-marcel-20261005-205839-799`. Die vier Arbeitsdateien wurden geöffnet und gelesen. Der vorgeschriebene `fetch` brauchte einmalig erweiterten Git-Zugriff auf `.git/FETCH_HEAD`; danach war die Synchronisierung erfolgreich.
+
+**Laufzeitprobe und Grenze:** Eine sichtbare Chrome-Sitzung wurde mit `?world=lab` geöffnet. Der Screen zeigte die reduzierte technische M2-Testszene (dunkle Fläche, vereinfachte Kartmodelle), nicht das normale Spiel. Dort funktionierten Teststart, ein kurzfristiger Geschwindigkeitsanstieg durch einzelne W-Tastimpulse, Nah-/Fernkamerawechsel, Pause/Fortsetzen und Neustart; die Browser-Konsole meldete keine Fehler. Die API konnte keinen gehaltenen Gasimpuls reproduzierbar halten; normales Fahrerwahl-/Grand-Prix-Verhalten, alle drei Kameras, Kanalwasser-/Spraykontakt, Items und Fahrqualität sind durch diese Szene nicht belegt. Eine erste normale Spielansicht war wegen Steuerungs-Timeouts nicht belastbar zu bedienen. Die separate CDP-Chrome-Instanz meldete trotz Start ohne Headless-Flag den `HeadlessChrome`-User-Agent; es wurde darin kein Runtime-Test durchgeführt. Der von Codex erzeugte Tab wurde pausiert und geschlossen; danach wurden sämtliche Tabs der eigenen CDP-Instanz geschlossen und der Browser über sein eigenes CDP-`Browser.close` beendet. Nutzer-Chrome-Fenster wurden nicht geschlossen.
+
+**Ergebnis für CURRENT-WORKLIST:** Laufzeit-/Fahrprüfung bleibt offen; die M2-Labprobe ist nur ein abgegrenzter Harness-Befund. Keine Änderung am Spielcode, an Fahrphysik oder Partikeleffekt. Nächster Schritt ist die sichtbare Prüfung im normalen Spiel mit zuverlässig gehaltener Eingabe; bis dahin Wasser-/Spray- oder Fahrabnahme nicht behaupten. Sarahs Checkout, mobile Geräte und menschliche Stil-/Fahrabnahme bleiben unabhängig offen.
 ### 2026-10-05 – Stalin-Feldmütze: Runtime-Plattenprofil korrigiert
 
 **Befund:** Das echte Foto-Dreiviertelbild zeigte die Mützenkrone wie eine hochkant stehende, abgelöste Scheibe. GLB-Messung der bisherigen `cast-stalin-cap / Hat cloth`-Geometrie: ca. 4,4 cm Front-/Rücktiefe gegenüber 35,6 cm Höhe. Ursache war, dass der für vertikale Seitenschnitte bestimmte `ring()`-Helfer wiederholt Kronprofile auf XZ-Ebenen legte.
