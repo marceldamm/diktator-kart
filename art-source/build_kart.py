@@ -136,6 +136,23 @@ for sd in [-1, 1]:
     tube('Limousine bonnet spear', [(sd * .2, .38, .84), (sd * .34, .82, .82), (sd * .34, 1.19, .73)], .012, chrome, b)
     tube('Limousine running-board moulding', [(sd * .55, -.82, .46), (sd * .58, -.35, .47), (sd * .57, .08, .48)], .022, chrome, b)
     ellipsoid('Limousine rear lamp', (sd * .42, -1.42, .58), (.07, .05, .075), red, b, 16)
+    # A low coachline follows the changing side width of the hand-built shell.
+    # It breaks the plain pod silhouette without crossing the shared wheel/fender rig.
+    tube('Limousine side coachline', [(sd * .55, -.92, .62), (sd * .55, -.62, .65),
+                                      (sd * .54, -.28, .66), (sd * .52, .04, .66),
+                                      (sd * .49, .24, .68)], .009, trim, b)
+    for handle_y, handle_x, handle_z in [(-.42, .55, .66), (.08, .52, .67)]:
+        box('Limousine door handle escutcheon', (sd * handle_x, handle_y, handle_z), (.018, .105, .034), chrome, .009, b)
+        tube('Limousine door handle', [(sd * (handle_x + .012), handle_y - .032, handle_z + .01),
+                                       (sd * (handle_x + .022), handle_y, handle_z + .013),
+                                       (sd * (handle_x + .012), handle_y + .032, handle_z + .01)], .009, trim, b)
+    # Paired recessed bonnet vents sit on the sloped panel and leave the central spear clear.
+    for vent_y, vent_z in [(.48, .846), (.66, .851), (.82, .832)]:
+        box('Limousine bonnet louvre recess', (sd * .205, vent_y, vent_z), (.105, .11, .009), black, .012, b)
+        for offset in [-.031, 0, .031]:
+            tube('Limousine bonnet louvre', [(sd * .17, vent_y + offset, vent_z + .006),
+                                              (sd * .205, vent_y + offset, vent_z + .01),
+                                              (sd * .24, vent_y + offset, vent_z + .006)], .0035, chrome, b)
 box('Limousine front bumper', (0, 1.48, .36), (1.22, .09, .075), chrome, .035, b)
 box('Limousine rear bumper', (0, -1.48, .34), (1.18, .08, .07), chrome, .035, b)
 box('Limousine trunk lid', (0, -1.17, .79), (.82, .36, .045), paint, .08, b)

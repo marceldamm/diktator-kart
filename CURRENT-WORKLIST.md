@@ -32,6 +32,10 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Nächstes Teilpaket:** Qualität des Stalin-Kopfes in der interaktiven Laufzeit weiter vom Frontporträt auf Nah-/Seiten-/Fahrtwinkel übertragen; danach nächste große Modell-/Kartsilhouetteniteration. Fassaden-, Wasser- und Drift-Sichtprüfungen bleiben ebenfalls offen.
 
+**M3-Fahrzeugteilpaket (05.10., erledigt):** Stalins Limousine hat eine körpernahe seitliche Coachline, zwei Metalltürgriffe und beidseitige eingelassene Haubenlüfter mit Lamellen. Blender-Quelle/GLB/Optimizer, Cast-/Karosserieknoten, Build, Vollsuite und frischen echten Runtime-Reload geprüft. Runtime-Zuwachs: 146.176 Byte (+2,9 %). Nahsicht/Seiten-/Fahrtabnahme bleibt offen.
+
+**Nächster Schritt:** Karosserie und Modellanker in echter Nah-/Seiten-/Fahrtansicht beurteilen; danach Welt-/Wassereffekte bei Kontakt sowie kontrollierte Driftfahrt weiter abnehmen. Laufender Bildqualitätsauftrag bleibt insgesamt offen.
+
 ## Wasserkanal-Bergung – 04.10.2026 (Marcel)
 
 **Aktuell:** beheben, dass ein Kart nach dem Herausziehen aus dem quer über die Strecke laufenden Wasserkanal wieder im selben Wasserbereich abgesetzt wird und erneut abstürzt.

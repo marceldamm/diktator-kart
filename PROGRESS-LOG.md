@@ -18,6 +18,16 @@
 
 **Nicht abgenommen:** Der Screenshot zeigte die Fahrerwahlfront in Porträtgröße; Profil, sehr nahe Gesichtsansicht, Mimik/Fahrt, Nutzerstilprüfung und ein verlässlicher echter In-Game-Screenshot aus Seiten-/Bewegungsperspektive fehlen. Stalin-/Fahrzeugqualitätsanker bleibt offen; dieser Pass ist kein Fertigstatus.
 
+### 2026-10-05 – Stalin-Limousine: Coachwork-Pass
+
+**Umgesetzt:** `art-source/build_kart.py` ergänzt in der nur bei Stalin aktiven `body-limousine`-Gruppe eine der Schale folgenden seitlichen Coachline, zwei Türgriffe mit Escutcheon sowie sechs dunkle, eingelassene Haubenlüfter samt je drei Metalllamellen. Keine neue Geometrie ist am gemeinsamen Rad-/Fahrwerkspivot oder an anderen Karosserien befestigt.
+
+**Assetpipeline:** Blender 4.5.3 erzeugte `hero-kart.blend` und GLB; Warnungen `Keine Maschendaten zum verknüpfen` bleiben wie im bisherigen Generator bestehen, Export endet mit `KART_COMPLETE`. glTF Transform optimierte 7.315.132 Rohbytes auf 5.230.312 Runtimebytes (+146.176 Byte gegenüber 5.084.136; +2,9 %). Optimierungsmanifest ist aktualisiert.
+
+**Verifiziert:** Cast-/Assettest 1/1; Vollsuite `npm test` 56/56 in 319,3 s; `npm run build` erfolgreich mit 1.296 Modulen, bekannte Vite-Warnung beim 2.022,65-kB-Hauptchunk. Eigener In-App-Prüftab frisch geladen; Fahrerwahlporträts und Stadionszene erscheinen ohne GLB/WebGL-Ladefehler. Im Auswahlbild ist die Limousine zu klein, um Coachline, Türgriffe und Lüfter einzeln zu bewerten.
+
+**Nicht abgenommen:** Keine Fahrzeugnah-/Seiten-/Heck-/Fahrtansicht der neuen Teile, kein Performancevergleich. Keine Aussage über visuelle Fertigstellung oder menschliche Qualitätsabnahme.
+
 ### 2026-10-05 – Schadensmeter für Screenreader ausgezeichnet
 
 `#health` benennt seinen Zustand jetzt als ARIA-Meter (0–100) und aktualisiert `aria-valuenow`/`aria-valuetext` mit dem aktuellen Karosseriezustand; Totalschaden wird zusätzlich verständlich benannt. Der sichtbare Balken und Schadenswert werden nicht verändert. `npm run build` erfolgreich (1.296 Module); Vite meldet den bestehenden ~2.022-kB-Hauptchunk.
