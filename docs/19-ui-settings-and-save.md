@@ -5,7 +5,7 @@
 
 ## Endgültige Mausgeste – 03.10.2026
 
-Linke Maustaste halten: frei umsehen. Rechte Maustaste oder X halten: Rückblick. E: Item. Der Cursor wird nur während der Mausgeste unsichtbar und an seiner ursprünglichen Position festgehalten (temporärer nativer Pointer Lock); Loslassen zeigt ihn dort wieder. Loslassen/Fokusverlust/Menü/Pause/Neustart/Kamerawechsel beenden die Geste. Freiere Rundumsicht und vertikaler Blick; nach Loslassen weich nach vorn.
+Linke Maustaste halten: frei umsehen. Rechte Maustaste oder X halten: Rückblick. E halten: Item als Schild, loslassen: werfen; Rohrpost und Suchauftrag nutzen E+V für nach vorn und E+H für nach hinten. F schaltet den Fotomodus, V die Sprachhupe. Der Cursor wird nur während der Mausgeste unsichtbar und an seiner ursprünglichen Position festgehalten (temporärer nativer Pointer Lock); Loslassen zeigt ihn dort wieder. Loslassen/Fokusverlust/Menü/Pause/Neustart/Kamerawechsel beenden die Geste. Freiere Rundumsicht und vertikaler Blick; nach Loslassen weich nach vorn.
 
 Technik: Pointer Lock beendet zuvor gesetzten Pointer Capture automatisch (W3C Pointer Events, https://www.w3.org/TR/pointerevents/). Das lostpointercapture-Ereignis während aktiver Bindung ist deshalb kein Loslassen. Diese falsche Behandlung verursachte den vom Nutzer beobachteten kurzen Rückblick. Eigener Chrome: alle drei Ansichten, Halten, Freigabe, Menü, Fokusverlust, E und keine dauernde Bindung geprüft; Rohdaten docs/evidence/mouse-camera-final-check.json. Headless-Prüfung braucht aktive Dokumentfokussierung, sonst lehnt Chrome Lock mit WrongDocumentError ab. Betriebssystem-Cursorpixel nicht per Headless-Bild überprüfbar; Wiederherstellung folgt der nativen API.
 

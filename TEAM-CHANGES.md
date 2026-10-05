@@ -9,6 +9,12 @@
 
 Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Änderungen, jeweils wenige Zeilen. Kein Werkzeug-/Testprotokoll. Technische Belege und offene Annahmen stehen in [PROGRESS-LOG.md](PROGRESS-LOG.md), laufende Aufgaben in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md), Zukunftsziele in [LONG-TERM-GOALS.md](LONG-TERM-GOALS.md).
 
+## 05.10.2026
+
+- **Steuerung erweitert Sarah:** Rohrpost/Suchauftrag mit E+V vorwärts oder E+H rückwärts; E allein bleibt unverändert. Foto liegt auf F, Hupe auf V.
+- **Zensurbalken wieder aufgenommen Sarah:** Seltenes viertes Item, kurzes satirisches Banner und begrenzte Lenkeinschränkung für Gegner; Schutzzeiten bleiben wirksam.
+- **Kims „Propaganda-Sieg“ umgesetzt Sarah:** Zehn Sekunden goldene Paradeveredelung, kurzer Triumphschub und anschließender Motoraussetzer. Zweite Bannerphase zeigt die Nachprüfung; echter Rang bleibt unverändert.
+
 ## 04.10.2026
 
 - **Morgenpaket Marcel (05.10.):** Wand-/Kartkontakte und kumulative Schäden mit Fahrzeugausfall/komischem Respawn angehen; realitätsnähere Fahrer/Cockpit-Animation, Tag-Nacht-Streckenleben und echte historische Sprachhupen prüfen. Detailwünsche und offene Werte in TEAM-NOTES.md und CURRENT-WORKLIST.md; Stimmen erst nach Quellen-/Rechteprüfung verwenden.

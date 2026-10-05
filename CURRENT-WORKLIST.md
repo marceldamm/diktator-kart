@@ -11,6 +11,15 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Sarah – Steuerung und Items, 05.10.2026
+
+- [x] Rohrpost/Suchauftrag richtungswählbar: E+V nach vorn, E+H nach hinten; E allein behält Schild/Standardwurf. Fotomodus auf F verschoben, Hupe auf V. Dokumentiert in README, START-HERE und docs/19.
+- [x] Zensurbalken als seltenes viertes Item in Babylon wieder aufgenommen: protziges Messingschild, Meldung „FAKTENLAGE ERFOLGREICH GESCHWÄRZT“, 2,6 s begrenzte Lenkeinschränkung für Gegner; Item-Immunität schützt. Kein Vollbildfilter, Fahrbahnwarnungen und Rangliste bleiben sichtbar. Umsetzung und Tests: PROGRESS-LOG.md.
+
+## Sarah – Kim-Fähigkeit, 05.10.2026
+
+- [x] „Propaganda-Sieg“ für Kim umgesetzt: Q aktiviert zehn Sekunden goldene Paradeveredelung, kurzen Triumphschub und anschließenden kleinen Motoraussetzer. Banner in zwei Phasen: „Rennergebnis NICHT manipuliert. Kim Jong-Un freut sich über seine demokratische Bestzeit.“; danach Nachprüfung mit Motorstottern. Die echte Rangliste bleibt unverändert. Details/Tests: PROGRESS-LOG.md.
+
 ## Qualitätssprung + Mechanik-Vergleich – 04.10.2026 (Nachmittag, Claude)
 
 **Vergleich mit Mario Kart World / 8 Deluxe (Prinzipien, keine Kopie; Referenz: nintendo.com, mariokart8.nintendo.com):**
@@ -107,7 +116,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [ ] Historische Sprachhupen: echte unproblematische Mitschnitte mit belegter Person/Quelle und geklärten kostenlosen Nutzungsrechten. Aktuelle sechs Clips sind eigene synthetische Parodien.
 - [x] Abschließender Teamabschluss (41 Tests und Build bestanden, GitHub main 2c6e92d verifiziert): Tests/Build, echte Spielbelege, vier Arbeitsdateien/PROGRESS-LOG.md aktualisieren, neuesten Teamstand integrieren, geprüft nach main veröffentlichen.
 
-- [ ] Fünf weitere archivierte Fähigkeiten (Stalin, Mussolini, Mao, Kim, Castro) nach gemeinsamer Bestätigung umsetzen; heute bewusst nicht, da es keine Fahrerwahl gibt und die Wirkungen von den Katalogideen abweichen (siehe Abgleich).
+- [ ] Vier weitere archivierte Fähigkeiten (Stalin, Mussolini, Mao, Castro) nach gemeinsamer Bestätigung umsetzen; Kim hat seit 05.10. den „Propaganda-Sieg“. Wirkungen aus dem Archiv bleiben Vorschläge und weichen teils von den Katalogideen ab (siehe Abgleich).
 - [ ] Bots: saubere Ideallinie durch die Hinterhofgasse. (Panzer für den Hitler-Bot erledigt am 04.10.)
 
 - [x] 04.10., Claude: Wetter „Regen“ (Optionen → Wetter, auch `?weather=rain`): nasse glänzende Fahrbahn, Pfützen mit Spritzern und Wasserbremse, Blitz mit Donner, Regengeräusch. Im Batch-Server geprüft (Rennen, 2 365 Regenpartikel, Bild). Offen: Wolkenschatten, Hörprobe, Feinabstimmung der Spritzer.

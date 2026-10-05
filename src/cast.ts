@@ -13,7 +13,7 @@ export interface CastMember {
   /** Legacy title and creative core (docs/14-character-and-item-catalog.md); flavour text, not balance. */
   title: string;
   flavour: string;
-  /** Catalogued ability idea; only Hitler's 'Größenbefehl' is built so far. */
+  /** Current ability label and design note; Hitler and Kim have active Babylon implementations. */
   abilityIdea: string;
   /** Character projectile look for the shared direct/homing item rules (same effect for everyone). Sources: legacy
    *  moving details in docs/14 (loudspeakers, rulebook, briefcase), kart names (rocket, five-year plan) and Marcel's dog. */
@@ -46,7 +46,7 @@ export const CAST: CastMember[] = [
     face: ['chin', 'bignose', 'epaulettes', 'medals', 'collartabs'], projectile: 'megaphone', projectileName: 'Balkon-Megafon', projectileIcon: '📢', body: 'racer', kit: 'radio', voice: 'imperator', voiceRate: 1.04 },
   { name: 'Mao', kartName: 'Kultur-Kart', title: 'Großer Lenker, mittelgroße Lenkung', flavour: 'Leicht und wendig, mit einem flatternden Regelheft für alles.', abilityIdea: 'Kulturrevolution – noch nicht gebaut', paint: '#b72f2b', uniform: '#8a8c7e', cape: null, hat: 'none', hatColor: '#000000', hair: '#14110f',
     face: ['maohair', 'shorthair', 'flatnose', 'chubby'], projectile: 'book', projectileName: 'Rotes Regelheft', projectileIcon: '📕', body: 'rounded', kit: 'none', voice: 'kommandant', voiceRate: .98 },
-  { name: 'Kim Jong-un', kartName: 'Propaganda-Rakete', title: 'Sieger vor Rennbeginn', flavour: 'Raketen-Parade auf Rädern; das Ergebnis steht schon in der Zeitung.', abilityIdea: 'Propaganda-Sieg – noch nicht gebaut', paint: '#263f70', uniform: '#1f2125', cape: null, hat: 'none', hatColor: '#6e5444', hair: '#0f0d0c',
+  { name: 'Kim Jong-un', kartName: 'Propaganda-Rakete', title: 'Sieger vor Rennbeginn', flavour: 'Raketen-Parade auf Rädern; das Ergebnis steht schon in der Zeitung.', abilityIdea: 'Propaganda-Sieg: amtlicher Platz 1, Triumphschub und Nachprüfung', paint: '#263f70', uniform: '#1f2125', cape: null, hat: 'none', hatColor: '#6e5444', hair: '#0f0d0c',
     face: ['undercut', 'flatnose', 'chubby'], projectile: 'rocket', projectileName: 'Mini-Propaganda-Rakete', projectileIcon: '🚀', body: 'rocket', kit: 'none', voice: 'kim', voiceRate: 1.02 },
   { name: 'Castro', kartName: 'Revolutions-Cabrio', title: 'Dienstältester Boxengassenredner', flavour: 'Leichtes Cabrio, lange Reden, immer eine Zigarre zur Hand.', abilityIdea: 'Blockade – noch nicht gebaut', paint: '#315d42', uniform: '#55603e', cape: null, hat: 'patrol', hatColor: '#4c5536', hair: '#17120e',
     face: ['beard', 'shorthair', 'cigar', 'bignose'], projectile: 'briefcase', projectileName: 'Aufklappender Aktenkoffer', projectileIcon: '💼', body: 'jeep', kit: 'none', voice: 'castro', voiceRate: .96 },

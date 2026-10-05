@@ -46,6 +46,26 @@ function buildProjectile(scene:Scene,style:Exclude<ProjectileStyle,'dog'>,name:s
   return root;
 }
 
+function buildCensorBar(scene:Scene,name:string):TransformNode{
+  const root=new TransformNode(name,scene);
+  const material=(id:string,hex:string,metallic:number,roughness:number)=>{
+    const key=`Censor bar ${id}`,found=scene.getMaterialByName(key) as PBRMaterial|null;
+    if(found)return found;
+    const value=new PBRMaterial(key,scene);value.albedoColor=Color3.FromHexString(hex).toLinearSpace();value.metallic=metallic;value.roughness=roughness;return value;
+  };
+  const add=(part:string,width:number,height:number,depth:number,x:number,y:number,z:number,surface:PBRMaterial)=>{
+    const mesh=MeshBuilder.CreateBox(`${name} ${part}`,{width,height,depth},scene);mesh.parent=root;mesh.position.set(x,y,z);mesh.material=surface;return mesh;
+  };
+  const enamel=material('enamel','#111519',.45,.32),brass=material('brass','#c6a054',.82,.27),seal=material('seal','#8e2635',.3,.4);
+  add('blackout beam',1.8,.34,.2,0,.32,0,enamel);
+  add('upper gilt rail',1.96,.055,.24,0,.52,0,brass);
+  add('lower gilt rail',1.96,.055,.24,0,.12,0,brass);
+  add('left gilt cap',.08,.5,.24,-.94,.32,0,brass);
+  add('right gilt cap',.08,.5,.24,.94,.32,0,brass);
+  add('official seal',.25,.16,.08,0,.32,.14,seal);
+  return root;
+}
+
 /** Fixed pools: no mesh allocation during racing, all resources belong to the scene. */
 export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,styleOf:(owner:number)=>ProjectileStyle) {
   const container=await LoadAssetContainerAsync('/assets/models/items.glb',scene);
@@ -57,9 +77,15 @@ export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,s
     for(const mesh of root.getChildMeshes()){mesh.isPickable=false;mesh.receiveShadows=true;shadow.addShadowCaster(mesh);}
     root.setEnabled(false);return root;
   };
-  const kinds:ItemKind[]=['direct','homing','trap'];
-  type Look=ProjectileStyle|'neutral';
-  const pools=kinds.flatMap(kind=>Array.from({length:6},(_,i)=>({kind,id:-1,look:'neutral' as Look,dog:false,root:copy(kind,`item ${kind} ${i}`),legs:[] as TransformNode[],tail:undefined as TransformNode|undefined})));
+  type Look=ProjectileStyle|'neutral'|'censor';
+  type Pool={kind:ItemKind;id:number;look:Look;dog:boolean;root:TransformNode;legs:TransformNode[];tail:TransformNode|undefined};
+  const kinds:Exclude<ItemKind,'censor'>[]=['direct','homing','trap'];
+  const pools:Pool[]=kinds.flatMap(kind=>Array.from({length:6},(_,i)=>({kind,id:-1,look:'neutral' as Look,dog:false,root:copy(kind,`item ${kind} ${i}`),legs:[] as TransformNode[],tail:undefined as TransformNode|undefined})));
+  for(let i=0;i<6;i++){
+    const root=buildCensorBar(scene,`censor bar ${i}`);
+    for(const mesh of root.getChildMeshes()){mesh.isPickable=false;mesh.receiveShadows=true;shadow.addShadowCaster(mesh);}
+    root.setEnabled(false);pools.push({kind:'censor',id:-1,look:'censor',dog:false,root,legs:[],tail:undefined});
+  }
   for(const look of ['tractor','megaphone','book','rocket','briefcase'] as const)for(const kind of ['direct','homing'] as const)for(let i=0;i<4;i++){
     const root=buildProjectile(scene,look,`${look} ${kind} ${i}`);
     for(const mesh of root.getChildMeshes()){mesh.isPickable=false;mesh.receiveShadows=true;shadow.addShadowCaster(mesh);}
@@ -96,7 +122,7 @@ export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,s
     for(const p of pools) if(!visible.some(o=>o.id===p.id)){p.id=-1;p.root.setEnabled(false);}
     for(const o of visible) {
       // Each driver throws their own character projectile; traps stay the shared neutral stamp.
-      const look:Look=o.kind==='trap'?'neutral':styleOf(o.owner);
+      const look:Look=o.kind==='trap'?'neutral':o.kind==='censor'?'censor':styleOf(o.owner);
       const p=pools.find(p=>p.id===o.id)??pools.find(p=>p.id===-1&&p.kind===o.kind&&p.look===look)??pools.find(p=>p.id===-1&&p.kind===o.kind&&p.look==='neutral');if(!p)continue;
       const grounded=p.dog||p.look==='tractor';
       p.id=o.id;p.root.setEnabled(true);p.root.position.set(o.x,grounded?.045+Math.abs(Math.sin(world.time*15+o.id))*(p.dog?.07:.035):o.kind==='trap'?.03:.95+Math.sin(world.time*13+o.id)*.06,o.z);p.root.rotation.y=o.heading;

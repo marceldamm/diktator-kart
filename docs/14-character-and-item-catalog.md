@@ -16,7 +16,7 @@ Alle sechs bestätigten Fahrer sind im Babylon-Spiel als Karikaturen mit erkennb
 | Kim Jong-un | Mini-Propaganda-Rakete | Kartname „Propaganda-Rakete“ |
 | Castro | Aufklappender Aktenkoffer | Altdetail „aufklappender Aktenkoffer“ |
 
-Nur Hitler besitzt bisher eine Fähigkeit (Größenbefehl); die Katalogfähigkeiten der anderen erscheinen in der Fahrerwahl als „noch nicht gebaut“.
+Hitler besitzt „Größenbefehl“; Kim besitzt seit 05.10.2026 „Propaganda-Sieg“. Die Fähigkeiten der übrigen vier Startfahrer sind weiterhin nur Katalogideen und werden in der Fahrerwahl als „noch nicht gebaut“ angezeigt.
 
 ## Spieler-Schäferhund – tatsächliche Zwischenumsetzung
 
@@ -50,7 +50,7 @@ Die folgende Zwölferliste bewahrt Originalideen. Namen und Wirkungen sind keine
 | Josef Stalin | Fünfjahresplan 3000 | massiv, industriell, schwer | **Große Säuberung:** Mehrere Hindernisse oder Items verschwinden; als Eigennachteil verschwindet auch etwas Eigenes. |
 | Benito Mussolini | Il Duce GT | sportlich, elegant, selbstgefällig | **Große Pose:** starker kurzer Turbo nach einer übertriebenen dramatischen Pose. |
 | Mao Zedong | Kultur-Kart | leicht, gute Beschleunigung und Handhabung | **Kulturrevolution:** gegnerische Steuerung wird kurz beeinflusst oder vertauscht; danach trifft ein kürzerer Nachteil den eigenen Fahrer. |
-| Kim Jong-un | Propaganda-Rakete | Raketen-/Paradeästhetik | **Propaganda-Sieg:** Die Platzierungsanzeige zeigt kurz fälschlich Platz 1; danach kehrt die echte Rangliste zurück. |
+| Kim Jong-un | Propaganda-Rakete | Raketen-/Paradeästhetik | **Propaganda-Sieg (Babylon, 05.10.):** zehn Sekunden goldene Paradeveredelung, kurzer Triumphschub, anschließender Motoraussetzer und satirische Platz-1-Meldung; die echte Rangliste bleibt sichtbar und unverändert. Historische Frühfassung: 20-Sekunden-Meldung plus erfundener Acht-Runden-Vorsprung, ohne echten Rangwechsel. |
 | Muammar al-Gaddafi | Wüstenkreuzer | Wüstenfahrzeug, staubige Silhouette | **Wüstensturm:** Sand und Staub erschweren Sicht oder Strecke; die eigene Figur bleibt nicht vollständig verschont. |
 | Fidel Castro | Revolutions-Cabrio | leichtes, gut lenkbares Cabrio | **Blockade:** Eine Streckenbarriere entsteht und kann auch den eigenen Fahrer behindern. |
 | Saddam Hussein | Goldpalast GT | schwer, übertrieben luxuriös und golden | **Goldener Palast:** Ein goldenes Hindernis entsteht und kann die eigene Ideallinie blockieren. |
@@ -140,6 +140,7 @@ Die Fahrer reagieren sichtbar auf Bremsen, Boost, Drift, Sprünge, Kollisionen u
 | Personenkult-Statue | erzeugt ein übertriebenes Hindernis | sichere Ausweichmöglichkeit, klare Vorwarnung, kein permanentes Blockieren. |
 | Zensurstempel | blendet Teile von UI oder Minimap kurz aus | wichtige Fahrbahn- und Trefferwarnungen bleiben zugänglich. |
 | Geheimpolizei | zielsuchendes Angriffsitem gegen einen vorausfahrenden Fahrer | gemeinsame Treffer-, Schutz- und Immunitätslogik. |
+| Zensurbalken | stört kurz die gegnerische Lenk-/Sichtwahrnehmung | In Babylon als seltenes viertes Item umgesetzt; schmale Bildschirmmeldung, keine Vollbildverdunkelung. Details in docs/15 und PROGRESS-LOG.md. |
 | Wirtschaftsplan | starker Turbo mit anschließendem satirischem Leistungsverlust | Gas und Lenkung bleiben nutzbar; Nachteil hebt den Gewinn nicht regelmäßig auf. |
 | Dienstweg-Rakete | geradliniges Rohrpostgeschoss mit Aktenflügeln | begrenzte Lebensdauer, höchstens ein Ziel, Papier-/Stempelstaub, hörbare Ankündigung. |
 | Diplomatische Immunität | transparenter Schutz aus Pässen und Stempeln | fängt definierte Angriffe ab, zeigt Restdauer, endet mit Papierkonfetti, erlaubt kein Wanddurchfahren. |
