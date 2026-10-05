@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH } from '../src/track-layout.ts';
-import { TRACK, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, overCanal, recoverKart } from '../src/track.ts';
+import { TRACK, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, overCanal, recoverKart } from '../src/track.ts';
 import { SHORTCUT } from '../src/track-layout.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
@@ -43,6 +43,21 @@ test('five bots complete three laps using the shared kart controller without tel
     states.forEach((s,i)=>{advanceRace(races[i],s,step/60);assert.ok(Number.isFinite(s.x+s.z+s.speed));});
   }
   assert.ok(races.every(r=>r.finished),JSON.stringify(races));
+});
+test('bot drifters release before cutting into the inside barrier on three curves',()=>{
+  const curves=[{s:823.63,sign:-1},{s:333.52,sign:-1},{s:679.78,sign:1}];
+  for(const curve of curves)for(const speed of [9,12,15]){
+    const p=trackPoint(curve.s-10,0);let state={...gridKart(0),...p,travelHeading:p.heading,speed};
+    let maxInside=-Infinity,driftSeconds=0;
+    for(let frame=0;frame<300;frame++){
+      const lane=trackLocate(state.x,state.z).lane;maxInside=Math.max(maxInside,lane*curve.sign);
+      state=advanceKart(state,botInput(state,0,[state]),1/60,projectTrack,trackHeightAt);
+      if(state.drifting)driftSeconds+=1/60;
+    }
+    assert.ok(driftSeconds>.35,`drift remains available at s=${curve.s}, speed=${speed}: ${driftSeconds}`);
+    assert.ok(maxInside<5.8,`bot should release before the inside barrier at s=${curve.s}, speed=${speed}: lane=${maxInside}`);
+    assert.notEqual(state.impactKind,'boundary');
+  }
 });
 test('designated bot takes the backyard alley and finishes without losing mapped progress',()=>{
   let state=gridKart(3),sawAlley=false;const race=createRaceProgress(state);

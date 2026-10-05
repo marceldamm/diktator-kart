@@ -266,6 +266,7 @@ for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .43
     zoff = r - .34   # rear tyres are taller: their axle sits higher than the shared pivot height
     pivot = empty('wheelPivot-' + str(i), (x, y, .34), kart)
     spin = empty('wheelSpin-' + str(i), (0, 0, zoff), pivot)
+    limo_wheel_style = empty('wheelStyle-limousine-' + str(i), parent=spin)
     w = .34 if i < 2 else .44
     prof = [(r * .55, -w / 2), (r * .86, -w / 2 - .01), (r * .97, -w * .42), (r, -w * .25), (r, w * .25), (r * .97, w * .42), (r * .86, w / 2 + .01), (r * .55, w / 2)]
     lathe('Tire ' + str(i), prof, rubber, spin, 32)
@@ -287,6 +288,20 @@ for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .43
             # Eight real fasteners sit between the hub and rim; paired with the spokes,
             # they read as a serviceable wheel assembly at the chase-camera distance.
             cyl('Wheel rim lug nut', (sd * w * .515, r * .39 * math.sin(a), r * .39 * math.cos(a)), .019, .025, chrome, spin, 'X', verts=8)
+        # Stalin's saloon gets a restrained coachbuilt art-deco hubcap, while all
+        # drivers keep the same wheelbase, tyre, steering pivot, and rolling wheel.
+        # Eight tapered fan spokes and a bright outer bead distinguish the profile
+        # at road distance without turning it into a tractor or a regime emblem.
+        hub_x = sd * (w * .48 + .008)
+        cyl('Limousine enamel hubcap', (hub_x, 0, 0), r * .34, .018, ivory, limo_wheel_style, 'X', verts=32)
+        torus('Limousine hubcap bright bead', (sd * (w * .48 + .02), 0, 0), r * .36, .009, chrome, limo_wheel_style, 'X')
+        for k in range(8):
+            a = k * math.pi / 4
+            rod('Limousine hubcap fan spoke',
+                (sd * (w * .48 + .027), r * .075 * math.sin(a), r * .075 * math.cos(a)),
+                (sd * (w * .48 + .027), r * .31 * math.sin(a + .08), r * .31 * math.cos(a + .08)),
+                .008, trim, limo_wheel_style)
+        cyl('Limousine domed hub badge', (sd * (w * .48 + .04), 0, 0), r * .085, .032, chrome, limo_wheel_style, 'X', verts=24)
 
 # --- Steering ------------------------------------------------------------------------------------
 steering = empty('steeringWheel', (0, .2, 1.2), kart)
@@ -560,6 +575,21 @@ ellipsoid('Cap visor', (0, .22, .3), (.25, .14, .025), leather, c)
 for sd in [-1, 1]:
     tube('Peaked cap panel seam', [(sd * .025, .02, .575), (sd * .16, .02, .53), (sd * .28, 0, .44), (sd * .29, -.01, .34)], .006, leather, c)
 ellipsoid('Peaked cap top button', (0, .02, .58), (.023, .023, .012), leather, c, 12)
+c = cast('stalin-cap')                           # tailored field cap, deliberately without insignia
+loft('Stalin tailored cap crown', [
+    ring(.255, .045, .32, -.005, 28, 2.4),
+    ring(.278, .13, .39, -.025, 28, 2.4),
+    ring(.255, .14, .49, -.045, 28, 2.4),
+    ring(.225, .09, .545, -.05, 28, 2.4),
+], hat_cloth, c, 2)
+loft('Stalin cap sweatband', [
+    ring(.259, .035, .305, -.005, 28, 2.4),
+    ring(.263, .035, .34, -.005, 28, 2.4),
+], leather, c, 1)
+ellipsoid('Stalin cap visor', (0, .225, .32), (.255, .155, .027), leather, c, 24)
+for sd in [-1, 1]:
+    tube('Stalin cap crown seam', [(0, -.055, .55), (sd * .12, -.045, .52), (sd * .22, .0, .45), (sd * .26, .07, .35)], .005, fur, c)
+ellipsoid('Stalin cap crown button', (0, -.05, .552), (.018, .02, .009), leather, c, 10)
 c = cast('naval')                                # white naval cap with gold leaves
 cyl('Naval cap crown', (0, -.02, .4), .32, .14, ivory, c, r2=.37, verts=28)
 cyl('Naval cap band', (0, -.02, .32), .29, .08, leather, c, verts=28)

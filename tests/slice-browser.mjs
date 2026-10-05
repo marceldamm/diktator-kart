@@ -14,14 +14,27 @@ const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;};
 const key=async(type,key,code,virtual)=>send('Input.dispatchKeyEvent',{type,key,code,windowsVirtualKeyCode:virtual});
 const tap=async(k,c,v)=>{await key('keyDown',k,c,v);await key('keyUp',k,c,v);await delay(400);};
+const photoMode=async expected=>{for(let i=0;i<20;i++){if(await evaluate(`document.body.classList.contains('photo-mode')`)===expected)return;await delay(150);}assert.equal(await evaluate(`document.body.classList.contains('photo-mode')`),expected,'Photo-mode key transition completes');};
+const cameraMode=async expected=>{for(let i=0;i<30;i++){if(await evaluate(`document.querySelector('#camera-mode').textContent`)===expected)return;await delay(150);}assert.equal(await evaluate(`document.querySelector('#camera-mode').textContent`),expected,'Camera-mode key transition completes');};
+const racePhase=async expected=>{for(let i=0;i<80;i++){if(await evaluate(`window.__DK.phase`)===expected)return;await delay(500);}const state=await evaluate(`JSON.stringify({phase:window.__DK.phase,state:window.__DK.state,countdown:document.querySelector('#countdown').textContent,menu:window.__DK.menu,selecting:document.body.classList.contains('select-open')})`);assert.equal(JSON.parse(state).phase,expected,`Race phase transition completes: ${state}`);};
 const shot=async name=>{await delay(600);const r=await send('Page.captureScreenshot',{format:'png'});const version=process.env.EVIDENCE_SUFFIX??'-v2';await writeFile(`docs/evidence/${name}${version}.png`,Buffer.from(r.data,'base64'));};
 const load=async(query='')=>{await send('Page.navigate',{url:`${base}${query}`});for(let i=0;i<120;i++){await delay(250);const status=await evaluate(`document.querySelector('#status').textContent`);if(status==='Testszene läuft')return;if(status==='Startfehler')throw Error(await evaluate(`document.querySelector('#message').textContent`));}throw Error('Start timeout');};
 await send('Runtime.enable');
 await send('Page.bringToFront');await send('Emulation.setFocusEmulationEnabled',{enabled:true});
-await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
+await send('Emulation.setDeviceMetricsOverride',{width:1280,height:800,deviceScaleFactor:1,mobile:false});
 try{
   const mode=process.argv[2]||'capture';
-  if(mode==='inspect'){
+  if(mode==='inspect-driver'){
+    await load();await delay(1400);await shot('slice-main-menu');
+    await evaluate(`document.querySelector('#race-start').click()`);await delay(300);
+    assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Race start opens driver selection');
+    await evaluate(`document.querySelectorAll('.driver-card')[1].click()`);await delay(350);
+    for(let i=0;i<60;i++){if(await evaluate(`document.querySelectorAll('.driver-card img').length===6`))break;await delay(500);}
+    assert.equal(await evaluate(`document.querySelectorAll('.driver-card img').length`),6,'All six live Babylon portraits finish rendering');
+    const selected=await evaluate(`JSON.stringify({name:document.querySelector('#driver-detail h3')?.textContent,card:document.querySelector('.driver-card.selected strong')?.textContent})`);
+    assert.ok(JSON.parse(selected).card?.includes('Stalin'),`Stalin portrait selected: ${selected}`);
+    await shot('slice-stalin-driver-selection');console.log(`STALIN_DRIVER_SELECTION ${selected}`);
+  }else if(mode==='inspect'){
     console.log(await evaluate(`JSON.stringify(window.__DK.scene?.lights.map(l=>({name:l.name,intensity:l.intensity,enabled:l.isEnabled(),shadow:l.getShadowGenerator()?.getShadowMap()?.renderList?.length,min:l.shadowMinZ,max:l.shadowMaxZ,left:l.orthoLeft,right:l.orthoRight,shadowMatrix:l.getShadowGenerator()?.getTransformMatrix()?.asArray()})))`));
     console.log(await evaluate(`JSON.stringify({status:document.querySelector('#status').textContent,message:document.querySelector('#message').textContent,debug:document.querySelector('#debug').textContent})`));
     console.log(await evaluate(`JSON.stringify({kart:window.__DK.kart,camera:window.__DK.scene?.activeCamera?.position,handed:window.__DK.scene?.useRightHandedSystem,meshes:window.__DK.scene?.meshes.filter(m=>/441|Panoramic|Park and|Sculpted|Petrol|__root/.test(m.name)).map(m=>({name:m.name,enabled:m.isEnabled(),pos:m.position,scale:m.scaling,quat:m.rotationQuaternion,normal:m.getVerticesData('normal')?.slice(0,6),texture:m.material?.emissiveTexture?.isReady(),bounds:m.getBoundingInfo().boundingBox.minimumWorld.toString()+' / '+m.getBoundingInfo().boundingBox.maximumWorld.toString()}))})`));
@@ -30,16 +43,22 @@ try{
     await load();await delay(2000);
     await shot('slice-main-menu');await evaluate(`document.querySelector('#menu-practice').click()`);await delay(300);
     await shot('slice-stadium-near');
-    await tap('v','KeyV',86);assert.equal(await evaluate(`document.body.classList.contains('photo-mode')`),true);await shot('slice-hero-photo');await tap('v','KeyV',86);
-    await tap('c','KeyC',67);assert.equal(await evaluate(`document.querySelector('#camera-mode').textContent`),'Verfolger fern');await shot('slice-stadium-far');
-    await tap('c','KeyC',67);assert.equal(await evaluate(`document.querySelector('#camera-mode').textContent`),'Fahrerperspektive');await shot('slice-stadium-cockpit');
+    if(!await evaluate(`document.body.classList.contains('photo-mode')`)){await tap('v','KeyV',86);await photoMode(true);}
+    await shot('slice-hero-photo');await tap('v','KeyV',86);await photoMode(false);
+    await tap('c','KeyC',67);await cameraMode('Verfolger fern');await shot('slice-stadium-far');
+    await tap('c','KeyC',67);await cameraMode('Fahrerperspektive');await shot('slice-stadium-cockpit');
     await tap('c','KeyC',67);
-    await evaluate(`document.querySelector('#race-start').click()`);await delay(4200);
-    await key('keyDown','w','KeyW',87);await delay(1200);await key('keyUp','w','KeyW',87);
-    assert.ok(parseInt(await evaluate(`document.querySelector('#speed').textContent`))>10,'Driving failed');
+    await evaluate(`document.querySelector('#race-start').click()`);await delay(300);
+    assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Race start opens driver selection');
+    await evaluate(`document.querySelector('#driver-go').click()`);await racePhase('race');
+    await evaluate(`(async()=>{const {trackPoint,TRACK}=await import('/src/track.ts');const p=trackPoint(TRACK.start+24,0);Object.assign(window.__DK.kart,{x:p.x,z:p.z,heading:p.heading,travelHeading:p.heading,speed:0,yawRate:0,steer:0});})()`);
+    await key('keyDown','w','KeyW',87);await delay(1800);await key('keyUp','w','KeyW',87);await delay(400);
+    const driven=await evaluate(`JSON.stringify({speed:window.__DK.kart.speed,phase:window.__DK.phase,debug:document.querySelector('#debug').textContent})`);
+    console.log(`Driven state: ${driven}`);assert.ok(JSON.parse(driven).speed>3,'Driving failed');
     await evaluate(`document.querySelector('#pause').click()`);assert.equal(await evaluate(`document.querySelector('#status').textContent`),'Pausiert');
     await evaluate(`document.querySelector('#pause').click()`);
-    await evaluate(`document.querySelector('#race-start').click()`);await delay(500);
+    await key('keyDown','t','KeyT',84);await key('keyUp','t','KeyT',84);await delay(500);
+    await racePhase('countdown');
     assert.match(await evaluate(`document.querySelector('#countdown').textContent`),/[123]/);
     await shot('slice-race-countdown');
     await delay(3500);assert.equal(await evaluate(`document.querySelector('#countdown').hidden`),true);

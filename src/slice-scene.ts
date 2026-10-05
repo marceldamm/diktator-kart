@@ -40,7 +40,7 @@ import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineIns
 import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
-import { CAST, CAST_PARTS, type CastMember } from './cast';
+import { CAST, CAST_PARTS, DRIVER_HEAD_SCALE, type CastMember } from './cast';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import { CreateScreenshotUsingRenderTargetAsync } from '@babylonjs/core/Misc/screenshotTools';
 import type { LoadingReporter } from './loading-progress';
@@ -159,6 +159,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
       const kits = ['radio','spare','luggage','fin','parade'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/variant-${kind}`)] as const);
       const bodies = ['roadster','limousine','racer','rounded','rocket','jeep'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/body-${kind}`)] as const);
+      const limousineWheelStyles = Array.from({length:4},(_,i)=>nodes.find(n=>n.name===`kart${index}/wheelStyle-limousine-${i}`));
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
       const faces = ['hitler','stalin','mussolini','mao','kim','castro'].map(style=>[style,nodes.find((n)=>n.name===`kart${index}/cast-face-${style}`)] as const);
       const recolourable: {mesh:Mesh;kind:'paint'|'uniform'|'cape'|'hatColor'|'hair';material:PBRMaterial}[] = [];
@@ -213,7 +214,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (mesh.material instanceof PBRMaterial && /Warm skin/.test(mesh.material.name) && !mesh.material.subSurface.isTranslucencyEnabled) {
           const m = mesh.material; m.roughness = .58; m.metallic = 0; m.subSurface.isTranslucencyEnabled = true; m.subSurface.translucencyIntensity = .35; m.subSurface.tintColor = new Color3(1, .45, .32);
           m.sheen.isEnabled = true; m.sheen.intensity = .12; m.sheen.color = new Color3(1, .82, .72);
-          m.albedoTexture = skinMaps.color; m.bumpTexture = skinMaps.normal; m.bumpTexture.level = .08;
+          m.albedoTexture = skinMaps.color; m.bumpTexture = skinMaps.normal; m.bumpTexture.level = .05;
         }
         if (mesh.material instanceof PBRMaterial && /Eye white|Eye iris/.test(mesh.material.name) && !mesh.material.clearCoat.isEnabled) { mesh.material.clearCoat.isEnabled = true; mesh.material.clearCoat.intensity = 1; mesh.material.clearCoat.roughness = .05; }
         if (mesh.material instanceof PBRMaterial && /racing suit|leather/.test(mesh.material.name)) {
@@ -230,8 +231,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
         dress(cast: CastMember) {
+          head.scaling.set(...DRIVER_HEAD_SCALE);
           for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
           for (const [kind,node] of bodies) node?.setEnabled(kind===cast.body);
+          for (const node of limousineWheelStyles) node?.setEnabled(cast.body==='limousine');
           for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
           for (const [style,node] of faces) node?.setEnabled(style === cast.faceStyle);
           for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }

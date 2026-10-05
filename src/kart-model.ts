@@ -83,7 +83,7 @@ export const KART_TUNING = {
   driftChargeTime: 1.6,
   /** Mini-turbo tiers by charge (s): 1 short, 2 medium, 3 full boost. */
   driftTiers: [0.6, 1.1, 1.6] as const,
-  driftYawMultiplier: 1.05,
+  driftYawMultiplier: .98,
   driftHeadingFollow: 1.6,
   driftMaxSlip: 0.42,
   normalHeadingFollow: 5.5,
@@ -249,13 +249,14 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   // The wheel needs time to turn and the body needs time to rotate: steering input -> steer -> yaw rate.
   const previousSteer = state.steer ?? 0, returning = Math.abs(steering) < Math.abs(previousSteer) || steering * previousSteer < 0;
   const steer = previousSteer + (steering - previousSteer) * Math.min(1, (returning ? KART_TUNING.steerReturnRate : KART_TUNING.steerRate) * dt);
-  // Drift arc (retuned 04.10.: the old .5 neutral pulled karts into the inner wall on the larger map).
-  const turn = drifting ? driftDirection * (.38 + .32 * steer * driftDirection) : steer;
+  // The original drift kept a strong fixed yaw even while countersteering. Let countersteer widen the arc.
+  const driftSteer = steer * driftDirection;
+  const turn = drifting ? driftDirection * (.38 + .32 * driftSteer) : steer;
   const targetYaw = Math.max(-KART_TUNING.maxYawRate,
     Math.min(KART_TUNING.maxYawRate, speed * turn * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
   const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, (drifting ? 5 : KART_TUNING.yawResponse) * dt);
   let heading = state.heading + yawRate * dt;
-  const wantedTravel = heading - (drifting ? driftDirection * (.14 + .12 * Math.max(0, steer * driftDirection)) : 0);
+  const wantedTravel = heading - (drifting ? driftDirection * (.08 + .06 * Math.max(0, driftSteer)) : 0);
   const angleDifference = Math.atan2(Math.sin(wantedTravel - state.travelHeading), Math.cos(wantedTravel - state.travelHeading));
   const follow = (drifting ? KART_TUNING.driftHeadingFollow : KART_TUNING.normalHeadingFollow) * dt;
   let travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));

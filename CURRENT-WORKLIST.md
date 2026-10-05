@@ -11,6 +11,21 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
+## Umsetzungsauftrag: Qualitätsanker, Spielwelt und Fahrgefühl – 05.10.2026 (Marcel)
+
+**Quelle/Vorrang:** Marcels heute eingefügter Leitauftrag „Arbeite als leitender Entwickler, Technical Artist und Art Director …“ erweitert die bestehende Bild-/Masteraufgabe. Umgesetzt wird in der bestätigten Reihenfolge: (1) Stalin samt eigenständigem Kart als echter Runtime-Qualitätsanker, (2) sichtbare Stadion-/Berlinwelt und begrenzte Material-/Kontaktpartikel, (3) kontrollierbarer Drift mit Kurven-, Gegenlenk-, Geschwindigkeits-, Turbo- und Kontaktprüfung. Danach folgen die übrigen ausführbaren aktuellen Punkte und anschließend bestätigte Langzeitpakete. Die Arbeitsreihenfolge ist keine Abnahme: Tests, Spielbilder und menschliche Fahr-/Stilprüfung bleiben getrennte Belege.
+
+- [x] Leitauftrag gelesen und auf aktive Babylon-Quellen, bisherige Teilstände, vorhandene Fahr-/Effektpfade und verbindliche Budget-/Git-Regeln bezogen.
+- [ ] Laufzeitansichten/Steuerablauf robust prüfen: drei Kameras, echte Fahrerauswahl, Rennen, Bewegung, Pause und Neustart. Headless-Eingabe/Taktprobleme als Testgrenze oder Harness-Fehler vom Spielverhalten unterscheiden.
+- [x] Erster weiterer Fahrer-/Stalin-Modellpass: Köpfe sind wieder sichtbar größer relativ zum Oberkörper skaliert; Stalin erhält eine eigens geschnittene, genähte Feldmütze ohne Insignien sowie vier Art-déco-Radkappen der Limousine. Die Radkappen folgen den drehenden Radknoten und bleiben bei allen anderen Karosserien verborgen.
+- [ ] Stalin-Qualitätsanker und Limousinen-Silhouette in Front/Seite/Nähe/Bewegung weiterentwickeln; nach jedem Asset-Neubau in der Laufzeit prüfen. Nah-/Seiten-/Bewegungsprüfung mit eindeutig ausgewähltem Stalin fehlt noch.
+- [ ] Fassaden-, Wasser-, Straßen- und Partikeleffekte anhand echter Spielkontakte sichtbar abnehmen und auf klare Fahrspur/Performance achten.
+- [x] Technische Driftmatrix für drei Streckenbögen bei 9/12/15 m/s ergänzt: Bot-Drift bleibt mindestens 0,35 s aktiv, löst vor dem inneren Sperrband und fährt in der Regression ohne Grenzkontakt durch; Gegenlenk-Schlupf wird auf höchstens 0,081 rad begrenzt.
+- [ ] Drift weniger aggressiv und enger abstimmen; menschliche Eingabe, Turboauslösung und Wandkontakt noch im normalen Browser/Fahrtest beurteilen. Eine technische Diagnose ersetzt kein menschliches Fahrurteil.
+- [ ] Erst nach Paketprüfungen Status in den älteren Einzelaufgaben und bestätigten M2–M7-Zielen fortschreiben; nicht geprüfte menschliche oder Geräteabnahmen sichtbar offen lassen.
+
+**Aktuell/Nächster Schritt:** Stalin im normalen interaktiven Browser auswählen und den neuen Hut, vier Radkappen, Kopf-/Kragenansatz und Lenkradgriff aus Front, Seite, Nähe und Bewegung kontrollieren; danach ein tatsächliches Welt-/Wasserkontaktbild sichern. Die isolierte Headless-Fahrprobe empfing `W`, aber innerhalb 21 s keinen weiteren gerenderten Physikschritt; sie ist deshalb kein Fahrbeleg. Der letzte Auswahl-Screenshot nach dem langen Software-Renderlauf war leer und wird nicht als Beleg behalten.
+
 ## Wasserkanal-Bergung – 04.10.2026 (Marcel)
 
 **Aktuell:** beheben, dass ein Kart nach dem Herausziehen aus dem quer über die Strecke laufenden Wasserkanal wieder im selben Wasserbereich abgesetzt wird und erneut abstürzt.

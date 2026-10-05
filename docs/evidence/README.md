@@ -1,5 +1,15 @@
 # Echte Laufzeitbelege des Stadion-Slices
 
+## 05.10.2026 – aktueller Runtime-/Modellpass
+
+| Datei | Aussage / Grenze |
+|---|---|
+| `slice-first-inspection-quality-1005f.png` | Echter Spielstart im headless Chrome nach GLB-Neubau und größerer gemeinsamer Kopfskalierung. Belegt, dass Szene und Modell laufen; zeigt Stalin nicht nah/seitlich und nimmt weder seine Radkappen noch Fahrverhalten visuell ab. |
+| `slice-stadium-near-quality-1005d.png`, `slice-stadium-far-quality-1005d.png`, `slice-stadium-cockpit-quality-1005d.png` | Drei statische Browseransichten der vorherigen Assetrevision: Nähe, Verfolger fern und Fahrerperspektive. Sie prüfen grob Umgebung/Kamera, keine echte menschlich gefahrene Bewegung. |
+| `slice-hero-photo-quality-1005b.png` | Fotoansicht der vorherigen Assetrevision bei dunkler Lichtstimmung; Umgebungs-/Fahrzeugkomposition, keine fertige Charakterabnahme. |
+
+Es gibt **keinen** verwendbaren Laufzeit-Nahbeleg für Stalins am 05.10. erneuerte Mütze und Radkappen: der Software-Renderer zeigte nach dem langsamen Porträtlauf eine leere Fläche. Das wird nicht als Spielbild geführt.
+
 ## Früher Konzeptbild-Ladebildschirm – 03.10.2026
 
 loading-early-desktop.png / loading-early-mobile.png zeigen den tatsächlich geöffneten Ladebildschirm bei pausiertem Spielmodul (Konzeptillustration, nicht Spielgrafik). loading-real-progress.png zeigt echte 3/6 abgeschlossene Ladeabschnitte bei pausiertem Hero-Download. loading-module-error.png / loading-asset-error.png zeigen echte abgebrochene Requests und bedienbare Fehleranzeige. loading-to-real-menu.png zeigt danach die gerenderte Babylon-Szene. Rohdaten: loading-browser-check.json; reproduzierbare Probe tests/loading-browser.mjs gegen Produktionspreview 4174 mit isoliertem Chrome 9226, CDP_PORT/SLICE_URL konfigurierbar. Desktop 1600 × 900, schmale Ansicht 390 × 844 emuliert; keine Handy-/Performanceabnahme.

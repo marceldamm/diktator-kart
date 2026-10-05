@@ -270,9 +270,10 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const tight = radius < 17 && speed > 9 && Math.abs(currentLane) < 4.2;
   if (state.drifting) {
     const near = curvatureAhead(s + 1, 7), outward = -currentLane * state.driftDirection;
+    const inside = currentLane * state.driftDirection;
     const opening = near.curvature < 1 / 24 || near.sign !== state.driftDirection;
     const against = error * state.driftDirection < -.3;
-    const release = against || outward > 3.4 || state.driftCharge >= KART_TUNING.driftChargeTime && (opening || outward > 2.6);
+    const release = against || outward > 3.4 || inside > 3.8 || state.driftCharge >= KART_TUNING.driftChargeTime && (opening || outward > 2.6);
     const driftSteer = Math.max(-1, Math.min(1, state.driftDirection * (.45 + Math.max(0, outward - .8) * .35) + error * 1.6));
     return { throttle: .9, steering: release ? steering : driftSteer, hopDrift: !release };
   }

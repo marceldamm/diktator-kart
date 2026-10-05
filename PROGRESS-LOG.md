@@ -1,5 +1,20 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Stalin-Limousine/Kopfbedeckung und Driftregression
+
+**Auftrag/Prio:** Marcels eingefügter Leitauftrag für die autonome Arbeitssitzung gelesen; seine Reihenfolge lautet aktueller Rückstand, Stalin samt individuellem Kart, Laufzeitwelt/-partikel, kontrollierbarer Drift, dann bestätigte Langzeitziele. Budgetfreigabe nicht als unbegrenzt interpretiert; gemeinsamer Puffer aus `AGENTS.md` bleibt verbindlich.
+
+**Modellpass:** `art-source/build_kart.py` ergänzt eine eigene, insignefreie Stalin-Feldmütze mit modellierter Krone, Schweißband, Schirm und Nähten. Vier Limousinen-Art-déco-Radkappen mit emaillierter Fläche, Metallrand, acht radialen Fächern und Nabe hängen je unter `wheelSpin-*`. `src/cast.ts` wählt die neue Mütze und Limousine; `src/slice-scene.ts` aktiviert die Radkappen ausschließlich an dieser Karosserie. Zusätzlich setzt die Laufzeit die sechs Köpfe rund 10 % größer als bisher (`DRIVER_HEAD_SCALE = [.82,.79,.77]`, vorher `.74/.72/.70`) als direkten Proportionspass. Blender 4.5.3 schrieb die editierbare Blend-Datei und Roh-GLB; der Optimierer erzeugte das Runtime-GLB. Rohquelle 7.047.324 Byte, Runtime 5.046.100 Byte; Runtime ist +202.176 Byte (+4,2 %) gegenüber dem vorherigen 4.843.924-Byte-Kartasset. Die Rad-/Fahrerhierarchie bleibt regressiongeprüft. Frischer Runtime-Hauptmenübeleg: [slice-first-inspection-quality-1005f.png](docs/evidence/slice-first-inspection-quality-1005f.png); er bestätigt den Start mit dem aktualisierten Modellpass, zeigt Stalin aber nicht eindeutig nah genug, um seine Details optisch abzunehmen.
+
+**Driftpaket:** die Spielerdriftantwort begrenzt den seitlichen Winkel bei vollem Gegenlenken auf .08 rad plus einen kleinen verbleibenden Steueranteil; die maximale Inside-Gegensteuerung bleibt im Regressionstest bei höchstens .081 rad. Die Bot-Driftentscheidung löst zusätzlich aus, sobald das Fahrzeug mehr als 3,8 m in die innere Kurvenseite gerät. Regression für drei Kurven und 9, 12 und 15 m/s: Drifts bleiben mindestens .35 s aktiv, fahren vor der Innenbarriere aus und kollidieren in den Testläufen nicht mit der äußeren Grenze. `tests/drift-control.test.mjs` und `tests/track.test.mjs` decken Schlupf, Ladung, Gegengas/Lenkung und Kurvenpassagen ab.
+
+**Verifiziert:** `npm test` vollständig 54/54 bestanden (einschließlich Teamworkflow-Fixtures; Laufzeit 248,2 s). `npm run build` erfolgreich, 1.296 Module; bekannte Warnung: ein minifizierter Babylon-Hauptchunk liegt bei circa 2.021 kB. `git diff --check` sauber, nur Windows-Hinweise zur LF→CRLF-Konvertierung. Die erste sandboxierte Vollsuite/Vite-Build scheiterte an `spawn EPERM`; Wiederholung mit Freigabe bestand.
+
+**Browsergrenze:** `tests/drive-polish-browser.mjs` wartete 21 s auf eine echte neue Physikbewegung nach simuliertem Fahrinput und lief im lokalen headless/Software-Renderer aus. Die frühere Diagnose maß dort nur ca. 0,39 FPS und ca. 2,0 s pro Renderdelta. `tests/slice-browser.mjs inspect-driver` bestätigte die Stalin-Auswahl, aber sein abschließender Screenshot war eine leere Rendererfläche; dieser falsche Beleg wird nicht behalten. Keine menschliche Fahrt, Stalin-Nah-/Seitenansicht, Radrotation unter Fahrt, drei Kameras, Turbo/Wandkontakt oder Stilabnahme behaupten. Die automatische Fahr- und Effektvisualprüfung bleibt offen.
+
+**Geänderte Dateien:** `art-source/build_kart.py`, `art-source/hero-kart.blend`, `public/assets/models/hero-kart.glb`, `docs/evidence/slice-asset-optimization.json`, `src/cast.ts`, `src/slice-scene.ts`, `src/kart-model.ts`, `src/track.ts`, `tests/cast.test.mjs`, `tests/drift-control.test.mjs`, `tests/track.test.mjs`, `tests/drive-polish-browser.mjs`, `tests/slice-browser.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `docs/evidence/README.md`, `PROGRESS-LOG.md` sowie die gültige Laufzeitaufnahme.
+
+
 **Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
@@ -532,7 +547,7 @@ Projektstart auf `codex/team-marcel-20261004-094440-433` (main `76234f0`). Umges
 
 ### 2026-10-04 – Fahrer-Hautmaterial in Nahansichten
 
-**Umgesetzt:** `src/surface-textures.ts` ergänzt einen deterministischen Hauttexturtyp: eine 512×512-Farb-/Normaltextur mit sehr schwachen Poren, warm/kühlen Mikrovariationen und `.08` Normalstärke. `src/slice-scene.ts` erzeugt sie einmal pro Szene und weist sie beim Initialisieren des gemeinsam genutzten `Warm skin`-Materials zu. Gesichtsgeometrie, Gesichtsprofile, Farbe des GLB-Grundmaterials und Stoffmaterialien bleiben unverändert. Die Generierung ist beschränkt auf genau ein Texturpaar statt einer Textur je Fahrer.
+**Umgesetzt:** `src/surface-textures.ts` ergänzt einen deterministischen Hauttexturtyp: eine 512×512-Farb-/Normaltextur mit sehr schwachen Poren, warm/kühlen Mikrovariationen und `.05` Normalstärke. `src/slice-scene.ts` erzeugt sie einmal pro Szene und weist sie beim Initialisieren des gemeinsam genutzten `Warm skin`-Materials zu. Gesichtsgeometrie, Gesichtsprofile, Farbe des GLB-Grundmaterials und Stoffmaterialien bleiben unverändert. Die Generierung ist beschränkt auf genau ein Texturpaar statt einer Textur je Fahrer. Der erste Headless-Blick zeigte ein zu punktiges Resultat; Dichte, Kontrast und Relief wurden anschließend reduziert.
 
 **Verifiziert:** `npm run build` erfolgreich, 1.296 Module. `npm test`: 53/53. Der erste sandboxierte Versuch brach an `spawn EPERM` ab; die autorisierte Wiederholung bestand. `git diff --check` bestand vor diesem Pass, Warnungen waren nur LF→CRLF-Hinweise; nach dem Paket erneut prüfen.
 

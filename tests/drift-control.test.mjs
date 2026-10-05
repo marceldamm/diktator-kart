@@ -19,6 +19,10 @@ test('inside steering tightens the arc, outside widens it; neutral charges and b
   let inside=base,outside=base,neutral=base;
   for(let i=0;i<80;i++){inside=step(inside,1);outside=step(outside,-1);neutral=step(neutral,0);}
   assert.ok(inside.heading>outside.heading*2);assert.ok(outside.heading>0);
+  const slip=s=>Math.abs(Math.atan2(Math.sin(s.heading-s.travelHeading),Math.cos(s.heading-s.travelHeading)));
+  assert.ok(slip(inside)<=.141,'drift slip stays controlled at full inside steering');
+  assert.ok(slip(outside)<=.081,'countersteering widens the arc without preserving the full side angle');
+  assert.ok(slip(outside)<slip(inside),'countersteer reduces side slip');
   assert.ok(neutral.driftCharge>0);
   const brake=step(inside,1,false,-1);assert.equal(brake.turboRemaining,0);
 });

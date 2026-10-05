@@ -1,5 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
+- **05.10.2026 – Qualitätsauftrag konkret umgesetzt:** Alle Köpfe wurden relativ zu den Oberkörpern wieder um rund 10 % vergrößert. Stalin hat im editierbaren Blender-Asset eine eigene schlichte Feldmütze ohne Abzeichen und eine individuell detaillierte Limousine mit vier mitdrehenden Art-déco-Radkappen erhalten. Technische Driftregression deckt drei Kurven bei drei Geschwindigkeiten ab. Vollständige menschliche Fahrer-/Fahrzeug- und Fahrgefühlabnahme bleibt offen; Details und Einschränkungen stehen in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md) und [PROGRESS-LOG.md](PROGRESS-LOG.md).
+
 > **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Chronologischer Kurzverlauf bestätigter Änderungen. Neuere ausdrückliche Nutzerentscheidungen gehen älteren Einträgen vor; ältere Einträge bleiben als Verlauf erhalten und werden bei Bedarf als überholt gekennzeichnet. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
 
 

@@ -6,6 +6,9 @@
  */
 export type ProjectileStyle = 'dog' | 'tractor' | 'megaphone' | 'book' | 'rocket' | 'briefcase';
 
+/** Shared, slightly enlarged head scale keeps the driver portrait readable over the broad kart bodies. */
+export const DRIVER_HEAD_SCALE = [0.82, 0.79, 0.77] as const;
+
 export interface CastMember {
   name: string;
   /** Kart nickname from the legacy production brief. */
@@ -42,7 +45,7 @@ export interface CastMember {
 export const CAST: CastMember[] = [
   { name: 'Hitler', kartName: 'Größenwahn-Mobil', title: 'Selbsternannter Streckenbesitzer', flavour: 'Schwer, pompös und überzeugt, dass ihm die Ideallinie gehört.', abilityIdea: 'Größenbefehl: acht Sekunden Paradepanzer (Sarahs Idee)', paint: '#8e2635', uniform: '#7a6a4f', cape: null, hat: 'peaked', hatColor: '#25292b', hair: '#16110d', faceStyle: 'hitler',
     face: ['sidepart', 'shorthair', 'toothbrush', 'straightnose', 'medals', 'collartabs', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'dog', projectileName: 'Schäferhund', projectileIcon: '🐕', body: 'roadster', kit: 'parade', voice: 'general', voiceRate: .97 },
-  { name: 'Stalin', kartName: 'Fünfjahresplan 3000', title: 'Vorsitzender der Kurvenkommission', flavour: 'Massiv, industriell, plant jede Kurve fünf Jahre im Voraus.', abilityIdea: 'Große Säuberung – noch nicht gebaut', paint: '#6f2424', uniform: '#74796d', cape: null, hat: 'peaked', hatColor: '#383834', hair: '#6a645d', faceStyle: 'stalin',
+  { name: 'Stalin', kartName: 'Fünfjahresplan 3000', title: 'Vorsitzender der Kurvenkommission', flavour: 'Massiv, industriell, plant jede Kurve fünf Jahre im Voraus.', abilityIdea: 'Große Säuberung – noch nicht gebaut', paint: '#6f2424', uniform: '#74796d', cape: null, hat: 'stalin-cap', hatColor: '#383834', hair: '#6a645d', faceStyle: 'stalin',
     face: ['swept', 'shorthair', 'walrus', 'stalinmouth', 'bignose', 'pipe', 'stalin-tunic'], projectile: 'tractor', projectileName: 'Fünfjahresplan-Traktor', projectileIcon: '🚜', body: 'limousine', kit: 'none', voice: 'marschall', voiceRate: .9 },
   { name: 'Mussolini', kartName: 'Il Duce GT', title: 'Balkonfahrer ohne Balkon', flavour: 'Sportlich, elegant und vor allem mit sich selbst zufrieden.', abilityIdea: 'Große Pose – noch nicht gebaut', paint: '#31557a', uniform: '#1d1e22', cape: '#31557a', hat: 'peaked', hatColor: '#292724', hair: '#1a1410', faceStyle: 'mussolini',
     face: ['chin', 'bignose', 'epaulettes', 'medals', 'collartabs', 'sash', 'uniformbuttons', 'uniformcollar'], projectile: 'megaphone', projectileName: 'Balkon-Megafon', projectileIcon: '📢', body: 'racer', kit: 'radio', voice: 'imperator', voiceRate: 1.04 },
@@ -56,7 +59,7 @@ export const CAST: CastMember[] = [
 
 export const CAST_PARTS = ['peaked', 'naval', 'fur', 'crown', 'beret', 'octagonal', 'diva', 'moustache', 'beard', 'glasses', 'furcollar',
   'shorthair', 'medals', 'epaulettes', 'collartabs', 'sidepart', 'toothbrush', 'swept', 'walrus', 'pipe', 'chin', 'maohair',
-  'undercut', 'patrol', 'cigar', 'bignose', 'straightnose', 'flatnose', 'chubby', 'stalinmouth', 'stalin-tunic', 'sash', 'uniformbuttons', 'uniformcollar'];
+  'undercut', 'patrol', 'cigar', 'bignose', 'straightnose', 'flatnose', 'chubby', 'stalinmouth', 'stalin-tunic', 'stalin-cap', 'sash', 'uniformbuttons', 'uniformcollar'];
 
 /** Kart slots → CAST index: the chosen driver takes kart 0 (player), the others keep catalogue order. */
 export function rosterOrder(chosen: number): number[] {
