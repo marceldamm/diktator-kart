@@ -803,6 +803,7 @@ class App {
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
       { const health=Math.round(this.damage.health[0]),meter=document.querySelector<HTMLElement>('#health')!;
         meter.classList.toggle('worn',health<66);meter.classList.toggle('critical',health<33);meter.classList.toggle('wrecked',this.damage.wrecked[0]>0);meter.classList.toggle('shown',this.racePhase==='practice');
+        meter.setAttribute('aria-valuenow',String(health));meter.setAttribute('aria-valuetext',health===0?'Totalschaden':`${health} Prozent Fahrzeugzustand`);
         document.querySelector<HTMLElement>('#health-fill')!.style.width=`${health}%`;document.querySelector('#health-value')!.textContent=`${health} %`;
         this.testScene.setDamage?.(this.damage.health,this.damage.wrecked); }
       modeDisplay.textContent = this.damage.wrecked[0]>0 ? `Totalschaden · Staatliche Werkstatt ${this.damage.wrecked[0].toFixed(1)} s` : this.recoveryRemaining[0]>0 ? `Rücksetzung · ${this.recoveryRemaining[0].toFixed(1)} s`

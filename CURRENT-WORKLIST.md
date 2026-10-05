@@ -101,6 +101,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] Ein-Item-HUD ist bereits umgesetzt: projektil-/fahrerabhängiges Symbol, Name, leerer/„IM SLOT“-Status, zugänglicher Status-/Buttontext und Mausbutton; E halten hängt das Item als Schild an, loslassen wirft es. Ein-Ziel- und Itemregeln sind automatisiert abgedeckt.
 - [ ] Den HUD-Zyklus im normalen Browser interaktiv abnehmen: aufnehmen, Slotstatus beobachten, per E loslassen und über den Bildschirmbutton werfen; Touchbedienung ebenfalls prüfen.
 - [x] **Itemtreffer-Schaden ist in `src/damage.ts` bereits umgesetzt:** jeder frische Projektil-/Fallen-Treffer zieht Haltbarkeit ab; Mensch und Bots teilen dieselbe Logik. Wiederholte Treffer bis Totalschaden und Reparaturpfad werden zusätzlich regressionsgeprüft.
+- [x] Der 0–100-Karosseriezustand ist auch als zugänglicher ARIA-Meter mit aktuellem Prozentwert und verständlichem Totalschaden-Text ausgezeichnet.
 - [ ] Bildreferenz in Paketen auf Laufzeitmodelle übertragen: echtes Spielbild, Winkel/Bewegung, Lesbarkeit und begrenzte Geometrie-/Partikelkosten abnehmen. Konzeptillustrationen ersetzen keine 3D-Laufzeitprüfung.
 
 **Nächster Schritt:** Sichtbar nahe Fassadenfront, Wasserstruktur, Rad-Detailpass und ausgelösten Regen-/Kanalspray bei einer kontrollierten Fahrt belegen. Danach den Fahrer-/Kartanker mit Nah-, Seiten- und Bewegungsbildern fortsetzen. Item-Slot und kumulativer Schaden sind bereits umgesetzt und regressionsgeprüft.

@@ -8,6 +8,10 @@
 
 **Verifizierung:** Gezielter `tests/cast.test.mjs`: 1/1; `npm run build`: erfolgreich, 1.296 Module; bekannte ~2.022-kB-Babylon-Hauptchunkwarnung bleibt. `npm test`: Vollsuite 55/55 bestanden (219,8 s); `git diff --check` sauber. Erste Blender→Optimizer-Runde stieß kurz auf einen Schreibfehler beim Runtime-GLB; Wiederholung nach abgeschlossenem Export erfolgreich.
 
+### 2026-10-05 – Schadensmeter für Screenreader ausgezeichnet
+
+`#health` benennt seinen Zustand jetzt als ARIA-Meter (0–100) und aktualisiert `aria-valuenow`/`aria-valuetext` mit dem aktuellen Karosseriezustand; Totalschaden wird zusätzlich verständlich benannt. Der sichtbare Balken und Schadenswert werden nicht verändert. `npm run build` erfolgreich (1.296 Module); Vite meldet den bestehenden ~2.022-kB-Hauptchunk.
+
 ### 2026-10-05 – Kanal-Wasserlinie und HUD-Arbeitslistenabgleich
 
 **Weltpass:** `src/track-world.ts` erzeugt zwei schwach sichtbare, prozedurale Schaumstreifen am Anfang und Ende der Kanalwasserfläche. Beide liegen bei y=.048 über Wasser y=.04, sind höchstens .16 m lang und vollständig innerhalb der Kanalgrenzen. Die Alpha-Textur nutzt gebrochene, variierte Wellen und kleine Schaumflecken. Das ist reine Darstellung: keine neue Kollisionsfläche und kein Partikelsystem. `canalFoamBands` ist gegen Grenzlage, Maximalbreite und Null-/Negativlänge getestet.

@@ -128,7 +128,7 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 ## M6 – Vollständiger Singleplayer
 
 - [ ] Fahrer-/Kartwahl, Menü, HUD, Optionen, Tutorial und Startablauf auf einen gemeinsamen Qualitätsstand bringen. **04.10.: Fahrerwahl mit Live-Porträts vorhanden; Siegerkarte mit Porträts und Ziel-Feuerwerk.**
-- **Teilfortschritt 05.10.:** Das Ein-Item-HUD zeigt schon Symbol, Itemname, „IM SLOT“/„LEER“, barrierefreien Status und den Buttonzustand; Bildschirmbutton und E-Halten-Schild/Loslassen-Wurf sind im Quellpfad verdrahtet. Maus-/Touch-/Laufzeitabnahme für Aufnahme → Anzeige → Wurf bleibt offen. Keine Mehrfachslots ohne neue Umfangsentscheidung.
+- **Teilfortschritt 05.10.:** Das Ein-Item-HUD zeigt schon Symbol, Itemname, „IM SLOT“/„LEER“, barrierefreien Status und den Buttonzustand; Bildschirmbutton und E-Halten-Schild/Loslassen-Wurf sind im Quellpfad verdrahtet. Der Karosseriezustand ist als ARIA-Meter mit aktuellem Prozentwert ausgezeichnet. Maus-/Touch-/Laufzeitabnahme für Aufnahme → Anzeige → Wurf bleibt offen. Keine Mehrfachslots ohne neue Umfangsentscheidung.
 - [ ] Verständliche deutsche Bedienung und Statusmeldungen; Diagnose bleibt optional, keine technischen Interna als normaler Spielerablauf.
 - [ ] Alle sechs Fahrer und erste historische Strecke mit Material-/Animations-/Audioqualität fertigstellen.
 - [ ] Siegerehrung, Ergebnis-/Rennbericht und Revanche ausarbeiten.
