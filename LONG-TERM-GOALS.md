@@ -21,6 +21,8 @@ Das gesamte Spiel auf eine deutlich höhere Qualitätsstufe bringen: wesentlich 
 
 **Laufzeitpaket 1 (04.10.2026):** Häusergenerator um freigelegte Ladenfronten, schmale Granitsockel, Doppeltür und gegliederte Fenster ergänzt; der frische Stadt-GLB ist 22.076.572 Bytes Quelle / 15.632.728 Bytes Runtime (−29,2 % durch Optimierung, +25,2 % Runtime-Größe gegenüber der vorherigen Weltdatei). Wasser erhielt sanft bewegte Normalen; der Folgepass hebt die Normalstärke auf `.27` und den Flussversatz auf `.035/.009` an. Regen-Reifensprühnebel (44 Partikel je Kart) und flacher Kanalsurface-Spray (28 je Kart) sind begrenzt und nach Kontaktbedingungen geschaltet; sechs Karts ergeben höchstens 264 bzw. 168 Partikel in den einzelnen Effektlagen. Blender-Neubau, Produktionsbuild, Volltests und Regenstart im Spiel bestätigt. Der sichtbare Nah-/Pfützen-/Kanalkontaktbeleg, hochwertige Fahrer-/Fahrzeuge und weitere Umweltdetails sind weiterhin Qualitätsarbeit, keine abgeschlossenen Ziele. Details: [Arbeitsliste](CURRENT-WORKLIST.md) und [Fortschrittslog](PROGRESS-LOG.md).
 
+**Laufzeitpaket 2 (05.10.2026):** Zwei nur 16 cm breite, prozedural texturierte Schaumkanten machen Ein- und Auslauf des querliegenden Kanals lesbarer. Sie liegen 8 mm über der Wasserfläche, vollständig innerhalb der Kanalgrenzen, berühren weder Kollision noch Fahrbahn und fügen keine dynamischen Partikel hinzu. Build und Regression der Geometriegrenzen bestanden; echte In-Game-Nahansicht noch offen.
+
 **Fahrzeug-Paket 1 (04.10.2026):** Die gemeinsame Felge wurde in der editierbaren Kart-Quelle um feine Seitenwandrippen und acht kleine Befestiger pro Felgenseite ergänzt. Der Rad-/Spinvertrag bleibt erhalten; der optimierte GLB wuchs dadurch nicht. Das ist ein erster sichtbarer Detailbaustein, nicht die abgeschlossene individuelle Silhouetten- und Qualitätsüberarbeitung aller Karts. Laufzeitnahsicht und Fahrtprüfung stehen weiter aus.
 
 **Fahrer-Paket 1 (04.10.2026):** Das gemeinsame Laufzeit-Skinmaterial bekommt eine subtil gekörnte Farb-/Normaltextur samt sehr niedriger Reliefstärke, damit Gesichter in Nahansichten mehr Oberflächenvariation haben. Es ersetzt keine anatomische Modellierung und ist ohne Browser-Nahprüfung noch nicht visuell abgenommen.
@@ -124,7 +126,7 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 ## M6 – Vollständiger Singleplayer
 
 - [ ] Fahrer-/Kartwahl, Menü, HUD, Optionen, Tutorial und Startablauf auf einen gemeinsamen Qualitätsstand bringen. **04.10.: Fahrerwahl mit Live-Porträts vorhanden; Siegerkarte mit Porträts und Ziel-Feuerwerk.**
-- [ ] Nach Itemaufnahme den Ein-Slot-Bestand durch Symbol/Slotstatus klar zeigen und das Werfen über Bildschirmtaste sowie Tastatur/Touch zuverlässig auslösen. Die Anzeige ergänzt die bestehende E-Halten-Schild-/Loslassen-Werfen-Steuerung; keine Mehrfachslots ohne neue Umfangsentscheidung.
+- **Teilfortschritt 05.10.:** Das Ein-Item-HUD zeigt schon Symbol, Itemname, „IM SLOT“/„LEER“, barrierefreien Status und den Buttonzustand; Bildschirmbutton und E-Halten-Schild/Loslassen-Wurf sind im Quellpfad verdrahtet. Maus-/Touch-/Laufzeitabnahme für Aufnahme → Anzeige → Wurf bleibt offen. Keine Mehrfachslots ohne neue Umfangsentscheidung.
 - [ ] Verständliche deutsche Bedienung und Statusmeldungen; Diagnose bleibt optional, keine technischen Interna als normaler Spielerablauf.
 - [ ] Alle sechs Fahrer und erste historische Strecke mit Material-/Animations-/Audioqualität fertigstellen.
 - [ ] Siegerehrung, Ergebnis-/Rennbericht und Revanche ausarbeiten.

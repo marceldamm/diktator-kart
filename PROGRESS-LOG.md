@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+### 2026-10-05 – Kanal-Wasserlinie und HUD-Arbeitslistenabgleich
+
+**Weltpass:** `src/track-world.ts` erzeugt zwei schwach sichtbare, prozedurale Schaumstreifen am Anfang und Ende der Kanalwasserfläche. Beide liegen bei y=.048 über Wasser y=.04, sind höchstens .16 m lang und vollständig innerhalb der Kanalgrenzen. Die Alpha-Textur nutzt gebrochene, variierte Wellen und kleine Schaumflecken. Das ist reine Darstellung: keine neue Kollisionsfläche und kein Partikelsystem. `canalFoamBands` ist gegen Grenzlage, Maximalbreite und Null-/Negativlänge getestet.
+
+**HUD-Abgleich:** Bei der Prüfung der aktuellen Aufgabe zeigte sich, dass der offene Arbeitslistenpunkt Ein-Item-HUD veraltet war. `src/main.ts` zeigt bereits fahrerspezifisches Projektilsymbol/Name, `IM SLOT`/`LEER`, Screen-Wurfbutton, ARIA-Status und den Schild-beim-Halten-/Wurf-beim-Loslassen-Pfad. Die bestehende Item-Simulationssuite deckt Aufnahme und Verbrauch/Abwehr ab. Die tatsächliche UI-Sequenz Aufnahme → sichtbarer Slot → Bildschirm-/Tastatur-/Touchwurf wurde in diesem Paket nicht im interaktiven Rennen gefahren; sie bleibt offen und ist jetzt in den Arbeitslisten getrennt ausgewiesen.
+
+**Verifiziert:** `node --test tests/environment-effects.test.mjs`: 2/2. `npm run build`: erfolgreich, 1.296 Module; Vite meldet weiter den bekannten 2.022-kB-Hauptchunk. `npm test`: vollständige Suite 55/55, einschließlich langsamer Git-Workflowtests, in 217,7 s. `git diff --check`: sauber. Erste sandboxierte Node/Vite-Aufrufe stießen auf `spawn EPERM`; Wiederholung mit nötigem Prozessstartzugriff erfolgreich.
+
+**Nicht verifiziert:** keine neue Laufzeit-Nahaufnahme des Kanals, keine Spielerfahrt durch Sprühzone, keine Maus-/Touch-Itembedienung und keine Fahrer-Stilabnahme. Der vorhandene Software-Headlesslauf ist wegen zu langsamem Render-/Physiktakt kein Ersatz für einen normalen interaktiven Fahrtbeleg. `git fetch origin` war erfolgreich; `origin/main` blieb bei `00e8173`. Das nachgelagerte Team-Statusskript konnte `FETCH_HEAD` im nicht erhöhten Skriptaufruf nicht erneut öffnen; die bereits erfolgreiche direkte Fetch-Ausgabe und die unveränderte Remote-Referenz wurden separat geprüft.
+
 ### 2026-10-05 – Stalin-Limousine/Kopfbedeckung und Driftregression
 
 **Auftrag/Prio:** Marcels eingefügter Leitauftrag für die autonome Arbeitssitzung gelesen; seine Reihenfolge lautet aktueller Rückstand, Stalin samt individuellem Kart, Laufzeitwelt/-partikel, kontrollierbarer Drift, dann bestätigte Langzeitziele. Budgetfreigabe nicht als unbegrenzt interpretiert; gemeinsamer Puffer aus `AGENTS.md` bleibt verbindlich.

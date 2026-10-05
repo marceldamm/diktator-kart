@@ -14,6 +14,7 @@ import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTC
 import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
+import { canalFoamBands } from './environment-effects';
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
 export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
@@ -225,6 +226,34 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const canalWater = pbr(scene, 'Canal water', '#1d3b44', .25, .08); canalWater.alpha = .95;
     canalWater.bumpTexture = waterRipple; waterRipple.level = .27;
     sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
+    // A broken, low-contrast foam wash helps read where the dark canal begins/ends.
+    // It is visual-only and floats 8 mm above the water to avoid z-fighting.
+    const foamTexture = canvasTexture(scene, 'Canal shoreline foam', 256, 64, (c) => {
+      c.clearRect(0, 0, 256, 64);
+      for (const [y, alpha, width] of [[18, .2, 3], [32, .12, 2], [46, .16, 2]] as const) {
+        c.strokeStyle = `rgba(199,224,219,${alpha})`; c.lineWidth = width;
+        c.beginPath();
+        for (let x = 0; x <= 256; x += 8) {
+          const wave = y + Math.sin(x * .055 + y) * 2 + Math.sin(x * .021 + y * .3) * 1.2;
+          if (x === 0) c.moveTo(x, wave); else c.lineTo(x, wave);
+        }
+        c.stroke();
+      }
+      for (let i = 0; i < 70; i++) {
+        const x = (i * 73) % 256, y = (i * 37) % 64;
+        c.fillStyle = `rgba(210,232,225,${.08 + (i % 4) * .025})`;
+        c.fillRect(x, y, 2 + i % 3, 1 + i % 2);
+      }
+    }, true);
+    foamTexture.uScale = 1; foamTexture.vScale = 1;
+    const foam = new StandardMaterial('Canal shoreline foam', scene);
+    foam.diffuseTexture = foamTexture; foam.useAlphaFromDiffuseTexture = true; foam.alpha = .7;
+    foam.diffuseColor = Color3.White(); foam.specularColor = new Color3(.12, .16, .16);
+    foam.backFaceCulling = false;
+    for (const [from, to] of canalFoamBands(CANAL_FROM, CANAL_LENGTH)) {
+      sweep(scene, 'Canal shoreline foam', [[-W - 1.3, .048], [W + 1.3, .048]], foam,
+        { uScale: .16, vScale: 4.4, step: .04, from, to });
+    }
     const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
     edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
