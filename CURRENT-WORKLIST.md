@@ -144,7 +144,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 **Aktuell:** PC-Checkout sauber, nach `origin`-Fetch auf dem gemeinsamen Commit `00e8173`; Team-Workflow meldet neue Babylon-Basis, keine ungesicherten Dateien und keine Überschneidungen. Der Arbeitsbranch ist `codex/team-marcel-20261004-132611-615`.
 
-- [x] **PC-/Cloud-Stand geprüft:** `origin/main`, lokaler Stand und Doku stimmen auf `00e8173` überein. Neuester Stand nach den heutigen Änderungen: `npm test` 47/47 bestanden; `npm run build` bestanden. Bekannte Warnung zum 2,01-MB-Hauptchunk bleibt.
+- [x] **PC-/Cloud-Stand geprüft:** Projektstart hat `origin/main` von `00e8173` auf `babd984` aktualisiert; die zwei Remote-Dokumentänderungen wurden mit den lokalen Inhalten zusammengeführt. Die alten 47/47-Test- und Buildbelege beziehen sich auf den früheren Stand `00e8173`; nach dem aktuellen Merge sind Tests/Build erneut auszuführen. Bekannte Warnung zum großen Hauptchunk bleibt bestehen.
 - [x] **Handyänderungen abgeglichen:** die aktuelle Arbeitsliste und Marcels neue Spielideen/Abnahmepunkte liegen bereits auf `origin/main`; keine lokale Abweichung oder Kollision.
 - [ ] **Sarahs tatsächlichen Abruf prüfen:** ihre Geräte-/Kontoseite ist in diesem Checkout nicht sichtbar. GitHub-Remote ist erreichbar; Sarahs erfolgreichen Fetch nicht behaupten.
 - [x] **Vorhandenes Kontakt-/Schadenspaket technisch geprüft:** Wandgleiten, kumulativer Schaden, dreisekündige Werkstattpause und Schutz nach Reparatur sind bereits im gemeinsamen Stand. Modelltests decken flache Wandkontakte, Kartkontakte, Schaden und Ausfall ab. Die echte menschliche Fahrgefühl-Abnahme bleibt offen; deshalb in diesem Paket keine Balancewerte geändert.
@@ -212,10 +212,14 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] Live-Videowand zeigt wieder alle Fahrer (vorher nur Schatten außerhalb des Blickfelds).
 - [ ] Offen: echte historische Sprachhupen (Quellen-/Lizenzprüfung, Download nur mit Freigabe), Landeschub (braucht erst eine echte Rampe, sonst per Hop ausnutzbar), weitere Oberflächen.
 
-## Morgen prüfen – 05.10.2026
+## GitHub-Abgleich und Arbeitsstand – 05.10.2026
 
-- [x] **PC-/Cloud-Lauf und Veröffentlichung verifizieren:** lokaler PC-Stand und `origin/main` stimmen auf `00e8173` überein; 46 Tests und Produktionsbuild bestehen. Sarahs tatsächlichen Abruf auf ihrem Konto/Gerät kann nur sie bestätigen.
-- [x] **Handyänderungen im PC-Stand prüfen:** neue Handy-Notizen und Abnahmepunkte liegen auf `origin/main` und sind im aktiven Checkout sichtbar; keine Kollision.
+- [x] **Remote-PC-Branch gegen damaliges main geprüft:** `codex/team-marcel-20261004-110953-055` war bei `00e8173` mit main identisch; der ältere Branch `codex/team-marcel-20261004-094440-433` lag 16 Commits zurück und hatte keine exklusiven Commits. Die Handy-Dokumentcommits `6efbc49`, `afdd515` und `76234f0` sind Vorfahren dieses main-Stands.
+- [x] **Lokaler Projektstart und Synchronisierung:** `git fetch origin` fand `00e8173..babd984`; das Startskript verglich die beiden Seiten. Die Überlappung lag in `CURRENT-WORKLIST.md` und `PROGRESS-LOG.md`; beide Seiten wurden inhaltlich zusammengeführt. Die zwei verifizierten Remote-Notizcommits bleiben in der Historie; lokale Babylon-Arbeit blieb erhalten.
+- [ ] **Geräteabnahme:** Sarahs tatsächlichen Abruf und Marcels separate Handy-App können hier nicht verifiziert werden.
+- [x] **Bereits implementierte Mechaniken nicht doppelt bauen:** Wandgleiten, kumulative Schäden/Werkstatt, Kanal/Hafen/Lava/Klippe/Kran, Tag-Nacht/Partikel, Cockpit-Grundfunktionen, Boostflächen, Start-/Landeschub, Zeppelinereignis, Item-Schild/-Warnung und Neustart sind laut Code/Tests bereits vorhanden. Die gezielten visuellen und menschlichen Abnahmen bleiben einzeln offen.
+- [ ] **Bestätigte Restziele:** persönliche Wand-/Schadensfahrt; Gesichts-/Sitz-/Beinpass und Qualitätsanker; abstrakte Übungsgrube mit echter Absturz-/Bergungsreaktion; Schotter-/Grasfeedback; echte historische Sprachhupen nur nach Quellen-, Inhalts-, Rechte- und Hörprüfung.
+- [ ] **Arbeitsreihenfolge:** zuerst laufender Stalin-/Limousinen-Qualitätsanker, dann Welt-/Wasserkontakte und Drift nach dem priorisierten Leitauftrag. Danach geeignete Restziele aus M4/M5 in prüfbaren Paketen.
 
 ## Morgen arbeiten – 05.10.2026
 

@@ -119,6 +119,18 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+## 2026-10-05 – Remote-Abgleich zum Morgenauftrag (historischer Snapshot)
+
+**Remote-Snapshot bei `00e8173`:** Der GitHub-Abgleich meldete `codex/team-marcel-20261004-110953-055` identisch mit main und `codex/team-marcel-20261004-094440-433` 16 Commits dahinter ohne exklusive Commits. Die Handy-Dokumentcommits `6efbc49`, `afdd515` und `76234f0` waren Vorfahren von main. Dieser Snapshot konnte damals weder Marcels lokalen Windows-Checkout noch Sarahs Gerät bestätigen.
+
+**Damals erkannte Restpunkte:** Die Übungsgelände-Granattrichter waren kleine Bodenhindernisse mit Rüttel-/Tempoverlust und lösten keinen Fall aus; eine absturzfähige Übungsgrube fehlte. Schotter-/Grasfeedback war noch offen. Gesichts-/Sitz-/Beinqualität sowie menschliche Wand-/Schadensfahrt blieben Abnahmen. Echte historische Hupen benötigen Quelle, Inhalts- und Rechteprüfung; TTS war als Zwischenstand zurückgestellt.
+
+**Damals bekannte Prüflücke:** Die Remote-Automation hatte keinen PC-Checkout und führte keine Tests, keinen Build oder Gerätetest für `00e8173` durch. Der damalige Folgeschritt „Projektstart auf dem Marcel-PC“ ist durch den nachfolgenden lokalen Fetch am 05.10. überholt. Der Inhalt dieses Snapshots bleibt als Herkunftsnachweis erhalten; die laufende Reihenfolge steht in CURRENT-WORKLIST.md.
+
+## 2026-10-05 – Lokaler Projektstart auf neuerem main
+
+`git fetch origin` aktualisierte main von `00e8173` auf `babd984`. Das Projektskript stellte zwei dokumentationsseitige Überschneidungen fest (`CURRENT-WORKLIST.md`, `PROGRESS-LOG.md`). Der Merge wird inhaltlich aufgelöst und erhält sowohl die lokale Babylon-Arbeit als auch die Remote-Abgleichnotiz. Tests und Produktionsbuild müssen nach dieser Integration erneut ausgeführt werden; es wird kein frischer Beleg vom früheren Remote-Snapshot übernommen.
+
 ### 2026-10-04 – Sprungtrick, Rampenoberfläche und Roadster-Wimpel
 
 **Umgesetzt:** `airTrickRoll` liefert eine gemeinsame zeitabhängige Rollkurve für Karosserie und getrennte Radgruppe; am Ende setzt der volle Kreis auf die identische Vorwärtslage zurück. Ein Regressionstest deckt ausgeschalteten Trick, Start, Halbzeit, Abschluss und ungültige Dauer ab. Die Holzrampenfläche und Stirnseite liegen 5 cm über dem Straßenprofil, das dieselbe Rampe bereits nachzeichnet; dadurch werden die zuvor exakt koplanaren Oberflächen getrennt. `art-source/build_kart.py` ergänzt auf beiden Parade-Wimpeln ein beidseitig sichtbares eigenes Adlerrelief in Messing, ohne Regimezeichen.
