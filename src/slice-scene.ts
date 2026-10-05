@@ -406,7 +406,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // surface. High clean jumps and the deliberate salvage animation stay clear.
     const canalSprays = visuals.map((_, i) => {
       const spray = new ParticleSystem(`Canal surface spray ${i}`, 28, scene); spray.particleTexture = particleTexture(scene);
-      spray.minSize = .09; spray.maxSize = .24; spray.minLifeTime = .2; spray.maxLifeTime = .42;
+      spray.minSize = .12; spray.maxSize = .29; spray.minLifeTime = .24; spray.maxLifeTime = .48;
       spray.emitRate = 0; spray.minEmitBox = new Vector3(-.5, 0, -.1); spray.maxEmitBox = new Vector3(.5, .03, .1);
       spray.minEmitPower = .55; spray.maxEmitPower = 1.3; spray.gravity = new Vector3(0, -6, 0);
       spray.color1 = new Color4(.52, .78, .84, .65); spray.color2 = new Color4(.78, .91, .94, .52); spray.colorDead = new Color4(.65, .84, .88, 0);

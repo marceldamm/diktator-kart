@@ -626,3 +626,17 @@ Stalins zwei Schläfensträhnen liegen zusätzlich unter `cast-stalin-hairline`,
 **Dokumentiert:** `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `art-source/README.md`, `docs/evidence/README.md`.
 
 **Limitstand:** Offizielle Werte nach dem Paket: 6 % des Fünf-Stunden-Fensters verbraucht, 39 % des Wochenlimits verbraucht. Keine Zusatzkontingente oder Resets ausgelöst.
+
+### 2026-10-05 – Kanalspray: Lesbarkeit bei flacher Wasserquerung
+
+**Auswahl/Auftrag:** Marcels fortgesetzter autonomer Auftrag umfasst weitere bestätigte Ziele bis nahe an die offizielle Budgetgrenze. Nach dem Stalin-/Limousinenpass wurde aus dem bestätigten M3-Weltziel das Laufzeitpaket „flacher Kanalspray klarer lesbar“ vor Beginn in `CURRENT-WORKLIST.md` und `LONG-TERM-GOALS.md` aufgenommen.
+
+**Befund und Änderung:** `canalSurfaceSprayRate` gab bei normaler Grafik nur 18, im Sparmodus nur 7 Sprites/s aus. Bei höchstens .42 s Lebenszeit bedeutete das in einer Überfahrt maximal wenige Partikel. Rate auf 30 (normal) und 14 (reduziert) angehoben; Sprites von .09–.24 auf .12–.29 m vergrößert, Lebenszeit auf .24–.48 s gestreckt. Jeder Kartpool bleibt bei 28 Teilchen, also maximal 168 für sechs Karts. Trigger bleibt Kanalabschnitt + mehr als 6 m/s + Höhe höchstens .35 m; Wasserphysik, Bergung, hoher Sprung und item-/absturzbedingter Splash blieben getrennt/unverändert.
+
+**Verifiziert:** `tests/environment-effects.test.mjs`: 2/2. Abdeckung prüft Wasser-/Tempo-/Höhenfilter, Vorwärts- und Rückwärtsfahrt, normalen/geringeren Effektmodus, Partikelpool-Rechnung und die bestehenden engen Schaumkanten. `npm run build` nach dem ersten sandboxierten `spawn EPERM` erfolgreich wiederholt: TypeScript und Vite, 1.296 Module; bestehende Hauptchunkwarnung 2.022,68 kB bleibt. `git diff --check` folgt beim Checkpoint.
+
+**Laufzeitbeleg / offen:** Im bestehenden Codex-In-App-Spiel wurden Fahrerwahl und stehende Stalin-Startaufstellung mit geladenen Fahrer-/Kartmodellen angesehen. Der Spieler blieb stehen; es wurde kein Wasser-/Kontaktpartikel ausgelöst. Keine echte Kanaldurchfahrt, Nahsicht auf das Wasser oder menschliche Lesbarkeitsabnahme behauptet. Die Browsersteuerung konnte hier keine gehaltene Fahrt ausführen. Chrome-Profil/Port 9223 blieb unangetastet.
+
+**Geänderte Dateien:** `src/environment-effects.ts`, `src/slice-scene.ts`, `tests/environment-effects.test.mjs`, `CURRENT-WORKLIST.md`, `LONG-TERM-GOALS.md`, `TEAM-CHANGES.md`, `TEAM-NOTES.md`, `docs/22-character-vehicle-quality-master.md`, `PROGRESS-LOG.md`.
+
+**Limitstand:** Nach dem Paket offiziell geprüft: 8 % Fünf-Stunden-Fenster und 40 % Wochenfenster verbraucht (92 % bzw. 60 % Rest; Wochenfenster ist aktuell bindend). Keine Zusatzkontingente/Resets aktiviert.

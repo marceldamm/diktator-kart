@@ -1,7 +1,9 @@
 /** Particles that need to touch a surface are suppressed while airborne or stationary. */
 export function canalSurfaceSprayRate(inCanal: boolean, speed: number, height: number, reducedEffects: boolean): number {
   if (!inCanal || Math.abs(speed) <= 6 || height > .35) return 0;
-  return reducedEffects ? 7 : 18;
+  // Seven particles/s left only a handful of droplets in a short canal pass.
+  // Keep the reduced setting readable while the per-kart pool remains a hard cap.
+  return reducedEffects ? 14 : 30;
 }
 
 /** Narrow visual foam washes sit just inside the transverse canal surface. */

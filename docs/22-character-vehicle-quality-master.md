@@ -666,3 +666,9 @@ Eine nach der ersten Studioansicht geprüfte Proportionskorrektur nahm die ungew
 Die Feldmütze hatte gleichzeitig ein Deckhaar, das optisch über die Krone ragte. Zwei anliegende Schläfensträhnen sitzen deshalb nun unter `cast-stalin-hairline`; Stalins Cast wählt diesen Knoten statt `cast-swept`. Das allgemeine `cast-shorthair`, Mund/Bart, Nase und Körper-Rig bleiben gesondert zugeordnet.
 
 Blender 4.5.3 regeneriert `hero-kart.blend` und GLB; glTF Transform erzeugt 5.283.004 Byte Runtime aus 7.365.372 Byte Rohquelle. Gegenüber 5.230.312 Byte zuvor: +52.692 Byte (+1,0 %). Die gezielte GLB-/Cast-Prüfung bestätigt die transparente Materialdefinition, den Windschutzscheiben-Knoten unter `body-limousine` und die eigene Haarlinien-Zuordnung. [Stalin-Limousinen-Assetvorschau](evidence/stalin-limousine-windscreen-asset-preview.png) ist ein Blender-Studio-Render, **keine** echte Babylon-Laufzeitaufnahme. Drei-Rundumansichten, In-Game-Nah-/Seiten-/Fahrtbilder und menschliche Abnahme bleiben offen.
+
+## Kanalspray: Lesbarkeit und Poolgrenze, 05.10.2026
+
+Der niedrige Kanaloberflächen-Spray ist bei der Querung von 18 auf 30 Partikel/s gestiegen; der Sparmodus steigt von 7 auf 14 Partikel/s. Spritegröße .12–.29 m und Partikellebensdauer .24–.48 s lassen bei sechs je 28 Partikel großen Pools maximal 168 Teilchen für diese Effektlage zu. Test deckt Kontakt-/Tempo-/Höhenschwellen, beide Raten und Poolrechnung ab; Produktionsbuild erfolgreich. Kein Eingriff in Physik, Wasser-Rettung, hohe Sprünge oder separates Absturz-Splash.
+
+Die aktuelle In-App-Ansicht zeigt Fahrerwahl und stehende Startaufstellung mit den geladenen Modellen. Eine gehaltene Eingabe für eine Fahrt durch den Kanal stand nicht zur Verfügung; dadurch ist noch nicht geprüft, ob der stärkere Spray aus normaler Fahrkamera gut sichtbar ist. Die Wasser-/Partikel-Nahsicht und Qualitätsabnahme bleiben offen.

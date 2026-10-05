@@ -7,9 +7,12 @@ test('canal spray requires moving water contact and remains bounded in reduced m
   assert.equal(canalSurfaceSprayRate(true, 5.99, .1, false), 0);
   assert.equal(canalSurfaceSprayRate(true, 6, .1, false), 0);
   assert.equal(canalSurfaceSprayRate(true, 14, .36, false), 0);
-  assert.equal(canalSurfaceSprayRate(true, 6.01, .2, false), 18);
-  assert.equal(canalSurfaceSprayRate(true, -14, .2, false), 18);
-  assert.equal(canalSurfaceSprayRate(true, 14, .2, true), 7);
+  assert.equal(canalSurfaceSprayRate(true, 6.01, .2, false), 30);
+  assert.equal(canalSurfaceSprayRate(true, -14, .2, false), 30);
+  assert.equal(canalSurfaceSprayRate(true, 14, .2, true), 14);
+  assert.ok(30 * .48 < 28, 'normal spray leaves headroom in each 28-particle kart pool');
+  assert.ok(14 * .48 < 28, 'reduced spray leaves headroom in each 28-particle kart pool');
+  assert.equal(28 * 6, 168, 'six karts keep this effect layer below 168 live particles');
 });
 
 test('canal shoreline washes remain narrow and inside both water boundaries', () => {
