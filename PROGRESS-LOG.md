@@ -1051,3 +1051,13 @@ Der Commit `173212e` wurde auf den persönlichen Branch gepusht. Eine PR-Vorscha
 **Dokumentation:** START-HERE erklärt nun direkt, dass Marcel einfach sein Arbeitsziel in natürlicher Sprache nennen kann und Codex Issues, Board, passende Milestones, PR und Checks verwaltet. CURRENT-WORKLIST, LONG-TERM-GOALS, TEAM-CHANGES und TEAM-NOTES führen denselben Stand. Das Arbeits-Intranet bleibt ein getrenntes Ziel, bis Firmen-Repository und Regeln vorliegen.
 
 **Grenzen/offen:** Sarahs Zugang zum privaten Project-Board und gemeinsamer Praxistest sind noch nicht erledigt. Die im lokalen Arbeitsbaum bereits vorhandenen TV-Code-Änderungen und acht ungetrackten Performance-Belege blieben unangetastet. Der Arbeitsbranch wurde per Fast-Forward von `228786d` auf `origin/main` (`04eeb01`) aktualisiert; die vorhandenen Codeänderungen sind davon getrennt und nicht Teil dieses Dokumentationspakets.
+
+### 2026-10-06 – Projektabschluss: Stadion-TV-Renderpass
+
+**Branch/Issue:** `codex/team-marcel-20261006-202908-182`; [Issue #4](https://github.com/marceldamm/diktator-kart/issues/4) wurde mit Marcels bestätigter Wahl (Live-TV aus, statisches Stadionmotiv) und offenen Abnahmepunkten aktualisiert. Die beiden TV-Änderungscommits und Performance-JSONs werden im ausdrücklichen Projektabschluss zur PR-Veröffentlichung vorbereitet.
+
+**Änderung/Abnahme:** Zweitkamera, 768×432-RenderTarget, Szenen-Renderliste und Kameraführung sind aus `src/slice-scene.ts` entfernt; das Display zeigt die vorhandene Stadiontextur, und die Rennstand-Leiste bleibt bestehen. Der vorherige kontrollierte A/B misst den zweiten Renderpass als Ursache (P95 83,2–83,4 ms mit Feed gegenüber 16,8 ms ohne). Der sichtbare Grand-Prix-Lauf auf dem lokalen Stand zeigte das statische Motiv. Das ist kein Framezeitvergleich nach dem finalen Entfernen und keine Intel-UHD-Abnahme; Issue #4 bleibt dafür offen.
+
+**Abschlussprüfungen:** `npm test` **72/72 bestanden**. Dazu wurde der Workflow-Fixture-Test korrigiert: Er prüft jetzt, dass `Finish` den geänderten Arbeitsbranch hochlädt und den Main-Branch unverändert lässt, danach aber bewusst die PR-Handübergabe meldet. Das alte Fixture erwartete fälschlich einen direkten Main-Push. `npm run build` bestanden (1.298 Module; bekannte Chunkgrößenwarnung beim ca. 2,05-MB-Hauptbundle). `git diff --check` bestanden. Die Browser-Sichtprüfung stammt aus dem vorangegangenen sichtbaren Grand-Prix-Lauf desselben TV-Code-Commits.
+
+**Veröffentlichungsstand:** PR-Erstellung, Actions-Check und Integration nach `main` sind Teil des laufenden Projektabschlusses und werden nach Bestätigung separat mit PR-/Commit-Link dokumentiert.
