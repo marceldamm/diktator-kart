@@ -91,7 +91,7 @@ Vorhanden: sechs Karts, Federung, Hop/Drift/Turbo, Kontakte und drei Kameras. Ne
 - [ ] Rückwärtsgeschwindigkeit als vorgemerkten Balancewunsch später prüfen.
 - [ ] Verbleibende GPU-/Bildzeitruckler getrennt von behobener Positionsquantisierung untersuchen; keine RTX-Messung als schwache-PC-Abnahme.
 - [ ] Modell-/Browserregressionen für gemeinsame Fahrregeln und verlässliche Pause/Neustarts erhalten.
-- [x] Der teure zweite Rennszenen-Renderpass für das Stadion-TV wurde auf Marcels Wunsch entfernt; das Display nutzt das vorhandene statische Stadionmotiv. Das größere Ziel flüssiger Laufzeit bleibt offen: Framezeit nach Fix und Intel-UHD-Abnahme stehen in [Issue #4](https://github.com/marceldamm/diktator-kart/issues/4) noch aus.
+- [x] Der teure zweite Rennszenen-Renderpass für das Stadion-TV wurde auf Marcels Wunsch entfernt und in [PR #6](https://github.com/marceldamm/diktator-kart/pull/6) in `main` integriert; das Display nutzt das vorhandene statische Stadionmotiv. Das größere Ziel flüssiger Laufzeit bleibt offen: Framezeit nach Fix und Intel-UHD-Abnahme stehen in [Issue #4](https://github.com/marceldamm/diktator-kart/issues/4) noch aus.
 
 ## M3 – Sichtbarer Qualitätssprung im fahrenden Spiel
 
