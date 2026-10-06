@@ -62,7 +62,7 @@ Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssi
 
 ### GitHub-Zusammenarbeit – Marcel, 06.10.2026
 
-- [x] Im Diktator-Kart-Projekt klare Aufträge über Issues, passende Vorhaben über Milestones und das Teamboard, Änderungen über Pull Requests und automatische GitHub-Checks verfolgen. Die Einrichtung ist mit PR #1, die sichtbare Status-/Einstiegsaktualisierung mit PR #5 in `main` integriert.
+- [x] Im Diktator-Kart-Projekt klare Aufträge über Issues, passende Vorhaben über Milestones und das Teamboard, Änderungen über Pull Requests und automatische GitHub-Checks verfolgen. Die Basis aus PR #1, der Einstieg aus PR #5 und die Board-Automation aus PR #8 sind in `main` integriert.
 - [ ] Mit Sarah den gemeinsamen Ablauf einmal praktisch erproben. Status und Kriterien stehen in [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2).
 
 - Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
