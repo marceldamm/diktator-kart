@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 4173 --strictPort",
     "typecheck": "tsc --noEmit",
-    "test": "node --test --test-isolation=none tests/*.test.mjs",
+    "test": "node --test --experimental-test-isolation=none tests/*.test.mjs",
     "test:browser": "node tests/browser-smoke.mjs",
     "test:endurance": "node tests/browser-endurance.mjs",
     "build": "tsc --noEmit && vite build",

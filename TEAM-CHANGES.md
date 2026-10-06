@@ -1,6 +1,6 @@
 # Gemeinsamer Änderungsverlauf
 
-- **06.10.2026 – GitHub als Aufgaben- und Prüfablauf vorbereitet (Marcel):** Beschlossen ist, die vier Markdown-Hauptdateien als maßgebliche Teamsteuerung zu behalten und GitHub Issues für einzelne konkrete Aufgaben, Pull Requests für menschlich prüfbare Änderungen und Actions für automatisierte Tests/Builds zu ergänzen. Lokale Vorlagen und Workflows sind Teil dieses Arbeitsbranches; GitHub-Einstellungen und Veröffentlichung bleiben ausstehend. Copilot-Agent-Verfügbarkeit ist kontogebunden und wurde nicht vorausgesetzt.
+- **06.10.2026 – GitHub als Aufgaben- und Prüfablauf vorbereitet (Marcel):** Die vier Markdown-Hauptdateien bleiben maßgeblich; Issues erfassen Einzelaufgaben, PRs halten Änderungen zur Review bereit und Actions führen Tests/Build aus. PR #1 ist offen. Der erste Actions-Lauf fand die falsche Node-22-Testoption `--test-isolation=none`; das Testskript wird auf `--experimental-test-isolation=none` korrigiert. Milestones, Projects und Pilot-Issues sind noch nicht eingerichtet. Copilot Cloud Agent ist im Konto nicht verfügbar; kein kostenpflichtiger Plan wurde aktiviert.
 
 - **06.10.2026 – Streckenstart und unsichtbare Strecke (Sarah):** Die Fahrerporträtaufnahme blendete während sechs Offscreen-Renderings die Welt-Meshes aus, während der Hauptloop diesen Zwischenstand renderte. Der Hauptframe bleibt nun währenddessen stehen und der Start wartet auf die fertigen Porträts. Im sichtbaren Browser waren Strecke und alle 271 Stadt-Meshes beim Countdown wieder sichtbar. Intel-UHD-Ruckeln bleibt separat offen.
 
