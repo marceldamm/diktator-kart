@@ -9,6 +9,12 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## GitHub-Dokumentation, Aufgaben und Prüfungen – 06.10.2026 (Marcel)
+
+**Status:** Marcel hat ausdrücklich beauftragt, GitHub-Aufgaben, KI-Vorgaben und automatische Prüfungen in unseren Ablauf einzubauen. Öffentliches Repo mit Issues aktiviert wurde über die GitHub-API geprüft. Lokal sind jetzt Issues für Fehler/Aufgaben, PR-Vorlage, Copilot-Repositoryanweisungen und der automatische PR-Check für `npm ci`, `npm test`, `npm run build` vorbereitet. Die vier Markdown-Hauptdateien bleiben die gemeinsame Steuerungsquelle. CLI und Browserkonto sind nicht angemeldet; Copilot-Agent-Tarif/Berechtigung und Pflichtcheck-/Branchschutz-Einstellung bleiben ungeprüft. Die Formulare/Checks werden erst nach Veröffentlichung auf main für Sarah sichtbar.
+
+**Nächster Schritt:** Konfiguration statisch prüfen und auf dem persönlichen Branch sichern. Für den Live-Rollout GitHub im bereitliegenden Browser selbst anmelden und den Teamabschluss autorisieren; anschließend `validate / tests-and-build` als Pflichtcheck setzen. Copilot Cloud Agent erst verwenden, wenn Konto-Zugang und Richtlinien es erlauben; nur bestätigte, klar abgegrenzte Issues zuweisen und PRs menschlich prüfen. Das Arbeits-Intranet ist ein separates Ziel; dessen Repository, Sichtbarkeit und Firmenrichtlinien erst bei konkreter Einrichtung prüfen.
+
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
 ## Aktive Produktbasis und Reihenfolge – 06.10.2026

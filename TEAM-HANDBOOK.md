@@ -95,6 +95,8 @@ Codex darf keine Sicherheitskontrollen umgehen, keine fremden Konten verwenden, 
 
 Auf beiden PCs im eigenen Checkout arbeiten. Vor jeder Sitzung neuesten main holen und eigene Änderungen sichern/integrieren. Größere Arbeit auf eigenem Branch; Tests, echte Belege und Dokumentation vor Veröffentlichung. Der ausdrückliche Projektabschluss autorisiert Push und geprüfte Zusammenführung; kein Force-Push und keine pauschale Konfliktauswahl. Bei Branchschutz PR/Freigabe statt Umgehung.
 
+**Issues und Checks (Marcel, 06.10.2026):** Die vier Teamdateien bleiben die gemeinsame Wahrheit. Für konkrete bestätigte Arbeit gibt es GitHub-Issues mit eigener Vorlage; PRs führen die automatischen Tests und den Build aus. Sarah nutzt dieselben Formulare und Checks über Repository-Zugriff. Copilot Cloud Agent ist nur verfügbar, wenn der passende Tarif und die Repository-/Kontorichtlinien es erlauben; Zuweisung nur an vollständig beschriebene, bestätigte Issues. Agenten-PRs immer menschlich prüfen; Pflichtstatus für `main` muss in den GitHub-Repoeinstellungen aktiviert werden. Details: [GitHub-Team-Workflow](docs/21-team-workflow.md).
+
 ## 7. Euer täglicher Ablauf
 
 **Beginn:** „Projektstart. Synchronisiere unseren gemeinsamen Babylon-Stand und sichere lokale Arbeit. Danach: [Aufgabe].“

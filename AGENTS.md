@@ -16,6 +16,14 @@ Die Kurzbefehle **Projektstart/Projekt Start**, **Zwischenstand sichern** und **
 
 Diktierte Wünsche selbstständig in die passende Arbeitsdatei eintragen: „Heute möchte ich …“ in CURRENT-WORKLIST.md, „Langfristiges Ziel: …“ in LONG-TERM-GOALS.md, „Notiere: …“ und „Nachricht an Sarah/Marcel: …“ in TEAM-NOTES.md (Datum, Autor, Zielperson, Status). Nutzer müssen Dateien nicht selbst schreiben. Beim Projektstart offene Notizen und für den Nutzer bestimmte Teamnachrichten kurz anzeigen; Empfang/Antwort nicht erfinden.
 
+## GitHub-Issues, Coding Agents und automatische Prüfungen
+
+- Die vier Hauptdateien bleiben die kanonische Projektsteuerung. Ein GitHub Issue ergänzt sie als verlinkbare, abgrenzbare Aufgabe; es ersetzt weder bestätigte Ziele noch Nutzerentscheidungen.
+- Bei ausdrücklichem Wunsch oder verfügbarem GitHub-Issue-Zugriff ein bestätigtes, konkretes Arbeitspaket als Issue nach `.github/ISSUE_TEMPLATE/work-item.yml` erfassen und Herkunft, Akzeptanzkriterien, Grenzen sowie Belegstatus angeben. Keine Issues für bloße Erwähnungen erzeugen und unbestätigte Vorschläge nie einem Coding Agent zuweisen.
+- Wenn dieses Modell keinen GitHub-Schreibzugriff oder kein autorisiertes Tool hat, ehrlich sagen und den Auftrag lokal fortsetzen; niemals eine Issue-Erstellung oder Agentenzuweisung vortäuschen. Copilot Cloud Agent ist ein separater, tarif-/richtlinienabhängiger Agent und wird nur bei vorhandener Freigabe sowie klar bestätigtem Issue verwendet.
+- KI-Ergebnisse gehen als Pull Request in menschliche Prüfung. `main` nicht direkt beschreiben und keine Repo-Einstellungen stillschweigend ändern. `.github/workflows/validate.yml` führt auf Pull Requests `npm ci`, `npm test` und `npm run build` aus; den Check in den GitHub-Einstellungen nur nach ausdrücklicher Autorisierung als merge-blockierend markieren.
+- Sichtbare Spiel-, Stil-, Audio- und Gerätetests bleiben getrennt von Headless-CI und brauchen die bestehenden menschlichen Belegregeln.
+
 ## Gemeinsame Budgetregel für autonome Arbeit
 
 Gilt für Marcel und Sarah automatisch beim Projektstart und während ausdrücklich beauftragter autonomer Arbeit. Zu Beginn und nach jedem größeren Paket die offiziellen Codex-Werte des aktuellen Kontos für Fünf-Stunden- und Wochenlimit prüfen, sofern verfügbar (get_usage_limits oder tatsächliche Usage-Anzeige). Maßgeblich ist der kleinere Restwert. Es gelten Sarahs eigene Kontowerte, nicht Marcels letzte Zahlen. Kontextgröße und geschätzte Tokens sind kein Planlimit; keine Prozentwerte erfinden.

@@ -43,6 +43,16 @@ Fuer eine Sicherung mitten in der Arbeit reicht **„Zwischenstand sichern.“**
 
 Alternativ `$diktator-projektabschluss`. Dieser ausdrueckliche Abschlussauftrag autorisiert Branch-Push und die getestete Zusammenfuehrung nach main in diesem Repository. Die KI braucht dafuer keine wiederholte Freigabe. Force-Push, fremde Repositories, kostenpflichtige Dienste oder bewusstes Verwerfen fremder Arbeit sind nicht umfasst.
 
+## GitHub Issues, KI-Aufträge und Checks – 06.10.2026
+
+Die vier Teamdateien bleiben die gemeinsame Quelle für Aufträge, bestätigte Ziele, Entscheidungen und Notizen. GitHub Issues ergänzen sie für einzeln bearbeitbare Aufgaben und Fehler. Die Formulare in `.github/ISSUE_TEMPLATE/` fragen Herkunft/Bestätigungsstatus, Ziel, Abnahmekriterien, Grenzen und Belegstatus ab. Sarah sieht dieselben Issues und Vorlagen im gemeinsamen Repository. Für offene Vorschläge kein Coding Agent zuweisen.
+
+Eine GitHub Coding-Agent-Zuweisung ist ein separater Schritt und hängt von Konto-Tarif, aktivierten Richtlinien und Repository-Zugriff ab. Nur klare, bestätigte Aufgaben delegieren. Der Agent erstellt einen Branch und Pull Request; Teamreview, Test-/Buildstatus und nötige sichtbare Spielabnahmen bleiben erforderlich. Spätere Issue-Kommentare ersetzen keine vollständige Aufgabenbeschreibung vor der Zuweisung.
+
+`.github/workflows/validate.yml` führt auf Pull Requests `npm ci`, `npm test` und `npm run build` aus und zeigt den Statuscheck `validate / tests-and-build`. Er belegt keine sichtbare oder menschliche Spiel-/Stilabnahme. Ein Check blockiert den Merge erst, wenn ein Repository-Administrator ihn in den Branch-Regeln als Pflichtcheck setzt. Das ist eine separate Einstellung und darf nicht stillschweigend geändert werden. Issues, Pull Requests und der Checktab werden automatisch mit den GitHub-Konten sichtbar, die Repository-Zugriff haben.
+
+Marcel hat die lokale Vorbereitung am 06.10. beauftragt. Die aktuelle Repository-API zeigt öffentliches Repository mit Issues aktiviert; dadurch sind Standardrunner in GitHub Actions laut GitHub kostenlos. Copilot-Zugriff und Branchregeln wurden nicht geprüft. Ein für alle sichtbarer Rollout beginnt erst nach Veröffentlichung auf `main`; keine automatische Veröffentlichung aus einem lokalen Arbeitsbranch behaupten.
+
 ## Was beim Projektstart passiert
 
 1. Repository, origin, Branch, Worktrees und ungesicherte Dateien pruefen. Keine parallelen Agenten im selben Checkout. Vorhandene aktive Git-Operationen zuerst klaeren.

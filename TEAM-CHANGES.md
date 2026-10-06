@@ -1,5 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
+- **06.10.2026 – GitHub als Aufgaben- und Prüfablauf vorbereitet (Marcel):** Beschlossen ist, die vier Markdown-Hauptdateien als maßgebliche Teamsteuerung zu behalten und GitHub Issues für einzelne konkrete Aufgaben, Pull Requests für menschlich prüfbare Änderungen und Actions für automatisierte Tests/Builds zu ergänzen. Lokale Vorlagen und Workflows sind Teil dieses Arbeitsbranches; GitHub-Einstellungen und Veröffentlichung bleiben ausstehend. Copilot-Agent-Verfügbarkeit ist kontogebunden und wurde nicht vorausgesetzt.
+
 - **06.10.2026 – Streckenstart und unsichtbare Strecke (Sarah):** Die Fahrerporträtaufnahme blendete während sechs Offscreen-Renderings die Welt-Meshes aus, während der Hauptloop diesen Zwischenstand renderte. Der Hauptframe bleibt nun währenddessen stehen und der Start wartet auf die fertigen Porträts. Im sichtbaren Browser waren Strecke und alle 271 Stadt-Meshes beim Countdown wieder sichtbar. Intel-UHD-Ruckeln bleibt separat offen.
 
 - **06.10.2026 – Streckenauswahl (Sarah):** Vor Grand Prix, Zeitfahren und erneutem Rennstart steht jetzt eine Streckenauswahl. Nur der bestehende Stadionring ist spielbar; fünf Zukunftsstrecken sind als „In Planung · nicht spielbar“ mit Orten markiert: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom), Genossen-Gerade (Moskau).

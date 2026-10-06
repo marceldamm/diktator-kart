@@ -7,6 +7,14 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+## GitHub als Ergänzung zum Teamablauf – 06.10.2026 (Marcel)
+
+**Herkunft/Status:** Marcel hat beauftragt, diese Funktionen in unseren Ablauf zu integrieren. Die vier Hauptdateien bleiben die kanonische gemeinsame Steuerung. Konkrete Aufgaben werden als GitHub Issues mit Ziel, Abnahmekriterien und Grenzen geführt; Projects kann sie optional ordnen; PRs halten KI-Ergebnisse zur menschlichen Prüfung bereit; Actions melden bestehende Tests und den Produktionsbuild. Die GitHub-Wiki bleibt aus, damit kein zweiter Dokumentationsort entsteht. Das Diktator-Kart-Repository ist öffentlich und Issues sind aktiviert (öffentliche GitHub-Repository-API geprüft).
+
+Copilot Cloud Agent kann Issues übernehmen und einen PR vorbereiten, aber die Zuweisung hängt von einem passenden Copilot-Tarif und aktivierten Richtlinien ab. Ich konnte diesen Konto-/Richtlinienstatus nicht verifizieren; der lokale Ablauf setzt Copilot daher nicht voraus. Jede Agentenänderung bleibt reviewpflichtig. Actions sind für Standardrunner in öffentlichen Repositories kostenfrei; erforderliche Pflichtchecks/Branchschutz sind eine separate GitHub-Einstellung und noch nicht gesetzt. Die GitHub-CLI fehlt in dieser Umgebung. Die sichtbare Copilot-Seite verlangt eine Anmeldung; ich habe keine Zugangsdaten eingegeben. Das Arbeits-Intranet bleibt ein separates Ziel: Firmen-Repository, Datenschutzrichtlinien und Pages-Zugriff müssen dort gesondert geklärt werden. GitHub Pages kann öffentlich sein, selbst wenn sein Quell-Repository privat ist.
+
+Offizielle Doku: [Issues](https://docs.github.com/en/issues), [Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects), [Copilot Cloud Agent](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github), [Status Checks](https://docs.github.com/en/pull-requests/reference/status-checks), [Actions-Abrechnung](https://docs.github.com/en/billing/concepts/product-billing/github-actions), [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+
 ## Git für euch – der kurze gemeinsame Ablauf
 
 **Jede Person arbeitet auf einem eigenen Arbeitsbranch; `main` ist der gemeinsame, geprüfte Spielstand.** Die KI kümmert sich um Abgleich, Sicherung, Konfliktlösung und Veröffentlichung – ihr müsst keine Git-Befehle kennen.
