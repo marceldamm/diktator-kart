@@ -7,7 +7,7 @@ import './style.css';
 import { BOT_STYLES, botStyleOf, setBotStyles, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
-import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
+import {createItems,stepItems,botUsesItem,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
@@ -134,7 +134,7 @@ class App {
   private weather:'sun'|'rain'|'snow'='sun';
   /** Rolled per Grand Prix: half the races run from day through dusk into night over the three laps. */
   private dayToNight=false;
-  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0};
+  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
   private itemMessage='';
   private itemMessageUntil=0;
   private abilityAnnouncementUntil=0;
@@ -338,7 +338,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
     this.queuedItemUse=false;this.itemDirection='forward';
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
@@ -614,12 +614,12 @@ class App {
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent=this.items.objects.some(o=>o.kind==='censor'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15)?'⚠ Zensurbalken im Anflug · ausweichen':'⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
-      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,ownsPose=driver===2,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0,pose=(this.abilities.poseRemaining?.[0]??0)>0;
-      const implemented=ownsTank||ownsKim||ownsPose,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
+      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,ownsPose=driver===2,ownsBlockade=driver===5,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0,pose=(this.abilities.poseRemaining?.[0]??0)>0;
+      const implemented=ownsTank||ownsKim||ownsPose||ownsBlockade,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
       const card=document.querySelector<HTMLElement>('#ability-card');
       if(card){card.classList.toggle('active',tank||kim||pose);card.classList.toggle('ready',ready);
-        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':ownsPose?'Große Pose':this.castOf(0).abilityIdea.split(' –')[0];
-        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':pose?'Pose · Kinn hoch':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':ownsPose?'Q · Pose bereit':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
+        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':ownsPose?'Große Pose':ownsBlockade?'Blockade':this.castOf(0).abilityIdea.split(' –')[0];
+        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':pose?'Pose · Kinn hoch':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':ownsPose?'Q · Pose bereit':ownsBlockade?'Q · Schranken bereit':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
         document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:kim?this.abilities.kimPolishRemaining[0]/ABILITY_RULES.kimPolishDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
     }
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
@@ -813,7 +813,7 @@ class App {
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') {
-        if (this.order[0] === 0 || this.order[0] === 4 || this.order[0] === 2) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : this.order[0] === 2 ? 'Große Pose (Q)' : 'Propaganda-Sieg (Q)'; }
+        if (this.order[0] === 0 || this.order[0] === 4 || this.order[0] === 2 || this.order[0] === 5) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : this.order[0] === 2 ? 'Große Pose (Q)' : this.order[0] === 5 ? 'Blockade (Q)' : 'Propaganda-Sieg (Q)'; }
         else { this.itemMessage = `${this.castOf(0).name}: eigene Fähigkeit folgt`; this.itemMessageUntil = this.items.time + 1.8; }
       }
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
@@ -884,8 +884,8 @@ class App {
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
           const all=[this.kart,...this.loadKarts];
           const botsActive=this.racePhase==='race';
-          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':driver===2?'pose':'none');
-          const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all));
+          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':driver===2?'pose':driver===5?'blockade':'none');
+          const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all,owners[i]));
           const changed=stepAbilities(this.abilities,all,activations,this.items.immune,FIXED_STEP,owners);
           this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
           this.testScene?.setKimPolish?.(this.abilities.kimPolishRemaining);
@@ -901,6 +901,15 @@ class App {
               this.abilityAnnouncementTitle='GROSSE POSE · KINN 40 GRAD';
               this.abilityAnnouncementDetail=event.kart===0?'Das Volk applaudiert. Pflichtgemäß.':`${this.castOf(event.kart).name} posiert. Bitte nicht überholen, er schaut gerade.`;
               this.abilityAnnouncementUntil=this.items.time+ABILITY_RULES.poseDuration+.6;this.audio.cheer(event.kart===0?.9:.4);
+            }
+            if(event.kind==='blockade'){
+              const k=all[event.kart];
+              for(const lane of [-1.7,1.7]){const back=4.2,x=k.x-Math.sin(k.heading)*back+Math.cos(k.heading)*lane,z=k.z-Math.cos(k.heading)*back-Math.sin(k.heading)*lane;
+                this.items.objects.push({id:this.items.nextId++,kind:'trap',owner:event.kart,x,z,heading:k.heading,age:0,remaining:ITEM_RULES.trapLifetime,target:null});}
+              if(event.kart===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<35){
+                this.abilityAnnouncementTitle='BLOCKADE · DURCHFAHRT NUR MIT VISUM';
+                this.abilityAnnouncementDetail=event.kart===0?'Zwei Paragraphenschranken hinter dir.':`${this.castOf(event.kart).name} sperrt die Straße. Antrag auf Durchfahrt läuft.`;
+                this.abilityAnnouncementUntil=this.items.time+2.2;this.audio.itemEvent('launch');}
             }
             if(event.kind==='pose-applause'&&event.kart===0){this.itemMessage='Pflichtapplaus · Schub und kurz geschützt';this.itemMessageUntil=this.items.time+1.8;this.audio.cue('start');}
             if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}

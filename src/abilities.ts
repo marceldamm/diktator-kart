@@ -28,18 +28,22 @@ export const ABILITY_RULES = {
 } as const;
 
 export const ABILITY_NAME = 'Größenbefehl';
-export type AbilityOwner = 'tank' | 'kim' | 'pose' | 'none';
+export type AbilityOwner = 'tank' | 'kim' | 'pose' | 'blockade' | 'none';
 
-export interface AbilityEvent { kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit' | 'pose' | 'pose-applause'; kart: number; target?: number }
+export interface AbilityEvent { kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit' | 'pose' | 'pose-applause' | 'blockade'; kart: number; target?: number }
 export interface AbilityWorld { /** Mussolini's pose seconds left (reduced throttle, see main.ts). */ poseRemaining: number[]; cooldown: number[]; active: boolean[]; repeat: number[][]; kimPolishRemaining: number[]; kimBoostRemaining: number[]; kimPenaltyRemaining: number[]; events: AbilityEvent[] }
 
 export function createAbilities(count: number): AbilityWorld {
   return { poseRemaining: Array(count).fill(0), cooldown: Array(count).fill(0), active: Array(count).fill(false), repeat: Array.from({ length: count }, () => Array(count).fill(0)), kimPolishRemaining: Array(count).fill(0), kimBoostRemaining: Array(count).fill(0), kimPenaltyRemaining: Array(count).fill(0), events: [] };
 }
 
-/** Bot use: the tank's owner transforms when it is ready and a rival is close enough to be shoved. */
-export function botWantsAbility(world: AbilityWorld, kart: number, karts: KartState[]): boolean {
+/** Bot use: the tank's owner transforms when it is ready and a rival is close enough to be shoved; a blockade needs a rival right behind. */
+export function botWantsAbility(world: AbilityWorld, kart: number, karts: KartState[], owner: AbilityOwner = 'tank'): boolean {
   const self = karts[kart];
+  if (owner === 'blockade') return abilityReady(world, kart, self) && karts.some((other, j) => {
+    if (j === kart) return false; const dx = other.x - self.x, dz = other.z - self.z, ahead = dx * Math.sin(self.heading) + dz * Math.cos(self.heading);
+    return ahead < -3 && ahead > -16 && Math.hypot(dx, dz) < 17;
+  });
   return abilityReady(world, kart, self) && karts.some((other, j) => j !== kart && Math.hypot(other.x - self.x, other.z - self.z) < 9);
 }
 
@@ -79,7 +83,9 @@ export function stepAbilities(world: AbilityWorld, karts: KartState[], activatio
   result.forEach((k, i) => {
     if (activations[i] && abilityReady(world, i, k)) {
       const owner = owners[i] ?? 'tank';
-      if (owner === 'pose') {
+      if (owner === 'blockade') {  // the caller drops two paragraph barriers behind the kart (same trap rules as the item)
+        world.cooldown[i] = ABILITY_RULES.cooldown; world.events.push({ kind: 'blockade', kart: i });
+      } else if (owner === 'pose') {
         world.poseRemaining[i] = ABILITY_RULES.poseDuration; world.cooldown[i] = ABILITY_RULES.cooldown;
         world.events.push({ kind: 'pose', kart: i });
       } else if (owner === 'kim') {

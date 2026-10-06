@@ -72,3 +72,15 @@ test('Mussolini pose: reduced-throttle window, then applause push and item prote
   assert.ok(karts[0].turboRemaining > 0 && immune[0] > 0);
   assert.ok(world.cooldown[0] > 0 && world.cooldown[0] <= ABILITY_RULES.cooldown);
 });
+
+test('Castro blockade triggers only with a rival close behind and uses the shared cooldown', async () => {
+  const { createAbilities, stepAbilities, botWantsAbility } = await import('../src/abilities.ts');
+  const { initialKartState } = await import('../src/kart-model.ts');
+  const world = createAbilities(2);
+  const self = { ...initialKartState(), x: 0, z: 0, heading: 0 }, behind = { ...initialKartState(), x: 0, z: -8 }, ahead = { ...initialKartState(), x: 0, z: 8 };
+  assert.equal(botWantsAbility(world, 0, [self, ahead], 'blockade'), false);
+  assert.equal(botWantsAbility(world, 0, [self, behind], 'blockade'), true);
+  stepAbilities(world, [self, behind], [true, false], [0, 0], 1 / 60, ['blockade', 'none']);
+  assert.ok(world.events.some(e => e.kind === 'blockade'));
+  assert.equal(botWantsAbility(world, 0, [self, behind], 'blockade'), false, 'cooldown after use');
+});
