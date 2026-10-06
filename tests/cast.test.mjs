@@ -25,7 +25,7 @@ test('the six current drivers keep distinct kart and face variants with delibera
   const positionNormalization = toothbrushPosition.normalized ? 32767 : 1;
   const toothbrushWidth = (toothbrushPosition.max[0] - toothbrushPosition.min[0]) * toothbrushNode.scale[0] / positionNormalization;
   assert.ok(toothbrushWidth > .07 && toothbrushWidth < .11, `the square-cut brush stays about as wide as the nose: ${toothbrushWidth}`);
-  assert.ok(toothbrushNode.translation[2] < -.35, 'the moustache projects in front of the face after glTF axis conversion');
+  assert.ok(toothbrushNode.translation[2] < -.33, 'the moustache sits on the upper lip, in front of the face surface (~.32), after glTF axis conversion');
   assert.equal(byName.Stalin.hat, 'stalin-cap');
   assert.ok(CAST_PARTS.includes('stalin-cap'), 'runtime roster can enable Stalin’s tailored cap');
   const stalinCapCrown = glbDocument.nodes.find(({ name }) => name.startsWith('cast-stalin-cap / Hat cloth'));

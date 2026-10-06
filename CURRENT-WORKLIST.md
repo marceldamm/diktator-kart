@@ -15,6 +15,19 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 Marcels Antworten im [Projektfragebogen](PROJECT-QUESTIONNAIRE.md) und [aktiven Projektgrundgerüst](docs/23-project-design-baseline.md) sind die initial verbindliche Arbeitsbasis für Produktziele, Qualität und Priorität. Sarahs Beiträge bleiben unverändert erhalten; ihre Antworten ergänzen eine getrennte Perspektive und sind weder Freigabe noch Blocker. Der erste vollständige Art-Anker ist Hitler samt individuellem Kart. Frühere Stalin-Aufträge bleiben als ausgeführte Historie dokumentiert; offene Stalin-Arbeiten werden nach dem Hitler-Anker fortgesetzt.
 
+## Umfassendes Redesign – Claude-Nachtlauf 06.10.2026 (Marcel-Auftrag)
+
+**Aktuell:** Strecke, Stadtwelt, Hitler/Kart-Anker, Licht, Konfetti und Motorklang im echten Rennen umgesetzt und geprüft; Abschluss nach main über den Teamablauf.
+**Nächster Schritt:** Hitler-Gesicht realitätsnah weiterführen (höher aufgelöste Kopfskulptur), danach die übrigen fünf Fahrer; Brandwände/Bäume verfeinern; Motor und Mix menschlich anhören.
+**Arbeitsbranch:** `claude/team-marcel-redesign-20261006-012236` (vom aktuellen origin/main `8e3a6e9`; lokaler Altstand vorher als `archive/before-sync-claude-20261006-012236` gesichert).
+
+- [x] **Strecke größer und anders:** 1366 m statt 891 m. Neuer Ostbogen mit Spree-Kai (offene Wasserkante), Prachtallee, Haarnadel um die „Säule der Eitelkeit“, Tiergarten-Esses und Zielkurve; alle bestehenden Abschnitte/Regeln erhalten. Details: [docs/25](docs/25-redesign-art-system.md).
+- [x] **Welt als Baukasten:** 28 wiederverwendbare Blender-Module mit gemeinsamer Palette (`art-source/build_city_kit.py`, Bauzeit ca. 2 s statt ca. 70 min); Laufzeitplatzierung in Bezirken (`src/city-world.ts`) mit Gründerzeitstraßen, Tribünen, Palast, Dom, Tor, Zielportal, Fluss mit Brücken und Kaimauern, Parks und Straßenmöbeln.
+- [x] **Hitler samt Kart (Zwischenstufe):** eigener 1930er-Grand-Prix-Wagen, zivile Jacke mit Hemd/Krawatte, kompakter Zweifingerbart, Nase, Brauen, Kiefer; erwachsenere Kopfgröße; ohne Mütze, Wimpel und Abzeichen. Erkennbare Karikatur, noch kein realitätsnahes Porträt.
+- [x] **Licht/Effekte/Ton:** wärmeres Spätnachmittagslicht und Dunst, Flusswellen, Blütenkonfetti über der Stadiongeraden, neuer synthetischer Achtzylinder-Motor (Pegel angeglichen, nicht angehört).
+- [x] Prüfung: 74/74 Unit-Tests, TypeScript, Produktionsbuild; sichtbares Chrome mit Sechs-Kart-Rennen, drei Kameras, Fahrerwahl, Nahansichten, Renn-/Itemlauf; Vorher-/Nachher-Bilder unter gleichen Bedingungen. Einzelheiten und bekannte Grenzen in [PROGRESS-LOG.md](PROGRESS-LOG.md).
+- [ ] Offen: realitätsnahes Hitler-Gesicht, übrige Fahrer, Höhenprofil (Brückenbuckel), Brandwände/Bäume, Hörabnahme, Messung auf schwachen Geräten. Vorbestehender Fehlschlag `tests/browser-smoke.mjs` (Laborszene, Bodenwellen-Erwartung) bestand auch vor dem Redesign nicht.
+
 ## Git-Ablauf verständlich gemacht – 05.10.2026 (Marcel)
 
 - [x] In TEAM-NOTES.md oben eine knappe Git-Erklärung ergänzt: persönlicher Branch, gespeicherter Zwischenstand/Commit, gemeinsames geprüftes `main` und welche Schritte die KI übernimmt.

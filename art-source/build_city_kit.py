@@ -306,6 +306,17 @@ def townhouse(name, width, axes, floors, roof='mansard', erker=False, giant=Fals
             for k in (-1, 1): window(M, cx + k * bw / 4, z, bw * .32, 2.1, 'key')
             M.pop()
         M.prism_x(COPPER, cx - bw / 2 - .1, cx + bw / 2 + .1, [(-1.4, zt), (0, zt), (0, zt + 1.8)], 1.0)
+    # Firewall ends (Brandwaende): rusticated base, band and cornice returns plus weathered plaster patches.
+    for sd in (-1, 1):
+        x0, x1 = sorted((sd * width / 2, sd * (width / 2 + .08)))
+        M.box(DARK, x0, x1, 0, depth, 0, gf, .82)
+        for f in range(floors):
+            zb = gf + (f + 1) * fh - .12
+            M.box(STONE, x0, x1 + (.04 if sd > 0 else -.04) * 0, 0, depth, zb, zb + .2, .9)
+        M.box(LIME, x0, x1, 0, depth, top - .2, top + .4, .93)
+        for k in range(3):
+            pz = gf + 1.5 + k * 3.4 + random.uniform(-.5, .5); py = random.uniform(1.5, depth - 4)
+            M.box(PLASTER, x0 - (.01 if sd < 0 else -.01), x1 + (.01 if sd > 0 else -.01), py, py + random.uniform(2, 3.5), pz, pz + random.uniform(1.2, 2.4), (.88, .86, .82))
     # crown cornice with dentils
     M.prism_x(LIME, -width / 2 - .05, width / 2 + .05, [(y * 1.4, z * 1.3 + top - .2) for y, z in CORNICE], .97)
     for k in range(int(width / .45)):

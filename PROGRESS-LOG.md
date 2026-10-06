@@ -1,5 +1,39 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-06 – Claude-Nachtlauf: umfassendes Redesign (Strecke, Stadtbaukasten, Hitler-Anker, Licht, Motor)
+
+**Auftrag:** [Claude-Masterauftrag](docs/24-claude-overnight-master-prompt.md) von Marcel (neue größere Strecke, Welt als zusammenhängendes Art-System, Hitler samt Kart als erster Qualitätsanker, Licht/Effekte/Audio, Abschluss nach main).
+
+**Projektstart:** Hauptordner `D:\Diktator-Kart` stand auf altem lokalem `main` (`d2e2e41`, 140 Commits hinter origin) mit ungesicherten Doku-Änderungen samt neuerem Masterprompt. Diese wurden als `archive/before-sync-claude-20261006-012236` (Commit `4319988`) gesichert; Arbeitsbranch `claude/team-marcel-redesign-20261006-012236` auf origin/main `8e3a6e9`; der neuere Masterprompt wurde übernommen. `git fetch origin --prune` erfolgreich. Bereits laufender Vite-Server desselben Checkouts (Status-Endpunkt bestätigte Root/Branch/Commit) wurde weiterverwendet.
+
+**Vorher-Beleg:** sichtbares Chrome (eigenes CDP-Profil `.tools/claude-chrome-profile`), 1600 × 1000, `?demo=1&weather=sun`, Hitler, Verfolger nah, Commit `8e3a6e9`: `docs/evidence/before-redesign-*-20261006.png`. Zustand: flache Kistenfassaden, große leere Plätze, Spielzeugfiguren.
+
+**Umgesetzt:**
+- Strecke 891 → 1366 m (`src/track-layout.ts`): neuer Ostbogen (Spree-Kai mit offener Wasserkante `SPREE_QUAY`, Prachtallee, Säulen-Haarnadel, Tiergarten-Esses, Zielkurve), zwei neue Boostfelder, Landmarke `column`, Konstanten `RIVER`/`GROUND`. Alle bisherigen Abschnitte/Fortschrittswerte unverändert. Engster Radius ca. 10 m, getrennte Streckenteile mindestens 28 m auseinander.
+- Stadtbaukasten `art-source/build_city_kit.py` (28 Module, 20 Materialien, Vertexfarben, ca. 58 000 Flächen, Bau ca. 2 s) und Laufzeitplatzierung `src/city-world.ts` (Bezirke, Kollisions-/Korridorprüfung, Zusammenfassung pro Material und 260-m-Kachel: 246 Meshes, ca. 2,47 Mio. Vertices/1,53 Mio. Dreiecke). Spree mit Bett, Ufermauern, zwei Brücken; Boden mit Flusslücke. `stadium-world.glb` (16,2 MB) nicht mehr geladen und aus `public/` entfernt; `city-kit.glb` 6,1 MB.
+- Hitler-Anker in `art-source/build_kart.py`/`src/cast.ts`: `body-grandprix`, `cast-hitler-jacket`, `cast-hitler-tache`, `cast-hitler-nose`, `cast-hitler-brows`, schärferer Schädel, `headScale` 0,7; Mütze, Paradewimpel und generische Paradeuniformteile für Hitler entfernt. `hero-kart.glb` 6,0 MB.
+- Licht: Sonne 3,9 (1/0,77/0,5), Himmelslicht wärmer, Dunst Exp2 0,0024 warm. Blütenkonfetti über der Stadiongeraden (260 Partikel). Fluss mit animierter Normalmap.
+- Motor: `art-source/build_engine.mjs` → `motor.wav` (Achtzylinder-Synthese, RMS 0,25, Spitze 0,51, Schleifennaht 0,011).
+- Tests angepasst: Zeitbudgets der Bot-/Browser-Rennen skalieren mit der Rundenlänge; Driftkurve s = 1210; `tests/city-kit.test.mjs` ersetzt den alten Welttest; Cast-Test auf die neue Hitler-Ausstattung umgestellt (Bartbreite 7–11 cm, Bart vor der Gesichtsfläche).
+- Brandwände der Reihenhäuser: Rustikasockel, Gurt- und Gesimsrückläufe, Putzflicken.
+- Nachher-Belege: `docs/evidence/after-redesign-*-20261006.png` (gleiche Bedingungen wie vorher), Rundfahrt `after-redesign-tour-0…6-20261006.png` (s ≈ 193–1437), Hitler-Nahansichten `hitler-anchor-*-20261006.png`.
+
+**Geprüft (tatsächlich ausgeführt):**
+- `npm test`: 74/74 bestanden. `tsc --noEmit` und `npm run build` bestanden (bekannte Chunk-Größenwarnung).
+- Sichtbares Chrome: `tests/final-six-kart-browser.mjs` PASS (sechs fahrende Karts, alle drei Kameras, konstanter Meshpool; p50 18 ms, p95 36 ms Frame-Abstand). `tests/slice-race.mjs` (Zeitlimit auf 1366 m skaliert; nach dem Ziel öffnet Enter seit Einführung der Fahrerwahl zunächst die Auswahl, der Test bestätigt sie jetzt) PASS `FULL_RACE_AND_REMATCH_PASS`: drei Runden in 295 s, Ergebnis-/Rundenanzeige, Revanche, Kameras. `tests/slice-items.mjs` (Zeitlimit skaliert) PASS: Items gesammelt, abgefeuert, Treffer, Pause friert Items ein, konstanter Mesh-Pool.
+- Rundfahrten mit Bildern durch alle neuen Abschnitte; Momentwerte 43–56 FPS (vorher 49–52 FPS) auf Marcels RTX-3070-Laptop, 1600 × 1000. Keine Dauer- oder Schwachgerätemessung.
+- Hitler-Nahansichten aus dem laufenden Babylon-Rennen (Dreiviertel, Profil, Heck, Gesicht) und Fahrerwahl.
+
+**Bekannte Grenzen / nicht verifiziert:**
+- `tests/browser-smoke.mjs` (Laborszene `?world=lab`, erwartet „Bodenwelle“) scheitert; derselbe Test scheitert auch mit dem Code vor dem Redesign (gegengeprüft), also vorbestehend.
+- Konsolenwarnung „Feedback loop formed between Framebuffer and active Texture“: die Staatsfernsehen-Rendertextur rendert `scene.meshes` inklusive ihres eigenen Bildschirms; nicht neu eingeführt, nicht behoben.
+- Nachts war der Bildschirm gesperrt/aus; das eigene Testfenster lief mit abgeschalteter Hintergrund-/Verdeckungsdrosselung. Niemand konnte die Prüfung live sehen.
+- Gesicht ist eine erkennbare Karikatur, kein realitätsnahes Porträt; Motor/Mix nicht angehört; kein Höhenprofil; Brandwände der Reihenenden noch ungegliedert.
+
+**Budget:** Pro-Plan, 5-Stunden-Fenster beim Start 3 %, nach Strecke/Welt 25 %, nach Hitler-Anker 31 %; Wochenlimit 0 → 5 %. Keine Zusatzkontingente.
+
+**Nächster Schritt:** realitätsnaher Hitler-Kopf (höher aufgelöste Skulptur), danach übrige Fahrer; Brandwände/Bäume; Hörabnahme.
+
 ## 2026-10-06 – Team-Fragebogen für den gemeinsamen Projektleitgedanken
 
 **Auftrag:** Marcel wollte die bisher interaktiv gestellten Fragen dauerhaft als beantwortbares Dokument sichern und Sarah beim nächsten Projektstart automatisch auf Marcels Antworten sowie eigene Antwortfelder hinweisen lassen. Der gemeinsame Leitgedanke soll erst nach beidseitigem Abgleich entstehen.

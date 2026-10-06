@@ -138,3 +138,10 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 
 - **Stadtwelt-Export und Produktionsmessung (05.10.):** Voller 48-Häuser/32-Material-Blender-Neubau und optimierter Runtime-GLB. Der synthetische Bulk-Join-Vorteil überträgt sich nicht auf Produktionsmeshes; die Standard-Schwelle liegt jetzt oberhalb aller aktuellen Gruppen. GLB-/Build-/Suite-/Browserlauf bestanden. Menschliche Stilabnahme bleibt offen.
 - **M7-Fahrmessung aktualisiert (05.10.):** Echter Sechs-Kart-Lauf in drei Kameras; Meshpool stabil bei 1.871, P95 142–179 ms. Als Nächstes werden Drawcalls, Schatten und Sichtbarkeit pro Kamera gemessen, bevor Grafik-/Rennlogik angefasst wird.
+
+## 06.10.2026 – Redesign umgesetzt (Claude)
+
+- **Neue, größere Strecke:** 1366 m mit Spree-Kai, Prachtallee, Säulen-Haarnadel, Tiergarten und Zielkurve; alte Abschnitte und Regeln unverändert.
+- **Neue Welt aus einem Baukasten:** wiederverwendbare Blender-Module (Häuser, Tribünen, Palast, Dom, Tor, Brücke, Möbel, Bäume) mit gemeinsamer Farb- und Materialfamilie ersetzen die alte Einzelwelt. Neue Gebäude lassen sich in Sekunden neu bauen.
+- **Hitler-Anker als Zwischenstufe:** eigener Grand-Prix-Wagen, Jacke mit Krawatte, kompakter Bart, ohne Mütze und Abzeichen. Realitätsnahes Gesicht bleibt nächster Schritt.
+- **Atmosphäre:** wärmeres Licht, Fluss, Konfetti, neuer Motorklang (noch nicht angehört).

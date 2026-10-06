@@ -9,7 +9,7 @@ try {
   await send('Runtime.enable');await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
   await load('?demo=1');await setQuality('Grafik Standard');await startGrandPrix();
   const start=Date.now();let finished=false;
-  for(let i=0;i<24;i++) {
+  for(let i=0;i<38;i++) { // 1366 m lap since the 06.10.2026 redesign (was 24 × 10 s for 891 m)
     await delay(10000);const data=await snapshot();samples.push({elapsed:(Date.now()-start)/1000,...data});
     console.log(JSON.stringify({elapsed:samples.at(-1).elapsed,phase:data.phase,metres:data.progress[0].distance,fps:data.fps}));
     if(i===2)await shot('slice-race-midway');
@@ -18,7 +18,7 @@ try {
     if(i===8)await tap('c','KeyC',67);
     if(data.phase==='finished'){finished=true;break;}
   }
-  assert.ok(finished,'Real browser race did not finish in four minutes');
+  assert.ok(finished,'Real browser race did not finish in six and a half minutes');
   assert.equal(samples.at(-1).progress.length,6);assert.ok(samples.at(-1).progress[0].distance>=3*await evaluate(`window.__DK.trackLength`));
   assert.equal(await evaluate(`document.querySelector('#finish-card').hidden`),false);await shot('slice-race-finish');
   assert.equal(await evaluate(`document.querySelectorAll('#finish-results li').length`),6);
@@ -26,7 +26,8 @@ try {
   assert.match(await evaluate(`document.querySelector('#finish-best').textContent`),/Demonstrationsfahrt/);
   assert.match(await evaluate(`document.querySelector('#finish-title').textContent`),new RegExp('Platz '+await evaluate(`document.querySelector('#place').textContent`)+' '),'HUD and result rank disagree');
   const meshCount=samples.at(-1).meshes;
-  await tap('Enter','Enter',13);assert.equal((await snapshot()).phase,'countdown');await delay(5000);
+  // Since the driver selection exists, Enter after the finish opens it; confirming starts the next countdown.
+  await tap('Enter','Enter',13);await delay(600);if(await evaluate(`document.body.classList.contains('select-open')`))await evaluate(`document.querySelector('#driver-go').click()`);await delay(300);assert.equal((await snapshot()).phase,'countdown');await delay(5000);
   assert.equal((await snapshot()).phase,'race');assert.equal((await snapshot()).meshes,meshCount);assert.equal(await evaluate(`document.querySelector('#finish-card').hidden`),true);
   const endurance=[];
   for(let camera=0;camera<3;camera++) {

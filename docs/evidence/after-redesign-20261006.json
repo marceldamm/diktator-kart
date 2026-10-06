@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-06T01:06:01.712Z",
+  "viewport": "1600x1000 CSS px, visible Chrome 154 CDP profile .tools/claude-chrome-profile",
+  "scene": "normal stadium race, ?demo=1 autopilot through normal input",
+  "log": [
+    {
+      "name": "race-start",
+      "progress": 85,
+      "view": "Verfolger nah",
+      "phase": "race"
+    },
+    {
+      "name": "race-a",
+      "progress": 233,
+      "view": "Verfolger nah",
+      "phase": "race"
+    },
+    {
+      "name": "race-b",
+      "progress": 381,
+      "view": "Verfolger nah",
+      "phase": "race"
+    },
+    {
+      "name": "race-c",
+      "progress": 521,
+      "view": "Verfolger nah",
+      "phase": "race"
+    },
+    {
+      "name": "race-d",
+      "progress": 667,
+      "view": "Verfolger nah",
+      "phase": "race"
+    }
+  ],
+  "fps": 40,
+  "errors": []
+}

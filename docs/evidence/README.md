@@ -83,3 +83,13 @@ Ein 60-FPS-F3-Standbild ersetzt keinen Kaltlauf. RTX, Headless und Touch-Emulati
 Aktueller technischer Nachweis in [PROGRESS-LOG.md](../../PROGRESS-LOG.md). mouse-camera-final-check.json und drive-polish-check.json belegen Maus/Drift/Radkontakt; shepherd-browser-check.json die bestehenden Itemtreffer mit Hundendarstellung. shepherd-art-inspection-v1.png zeigt das eigene stilisierte Hundemodell in der tatsächlichen pausierten Sechskart-Welt mit QA-Platzierung/Inspektionskamera. period-boulevard-v1.png/period-eagle-v1.png sind entsprechende Artinspektionen der zusätzlichen Straßenmöbel. voice-horn-check.json belegt F-Abklingzeit/Clipdekodierung, keine Hörabnahme oder historische Mitschnitte. Keine schwache-PC-/Mobil-Abnahme.
 
 *-drive-polish.png: aktuelle normale Kameras, Menü, Fahr-/Countdown-/Neustartregression (slice-browser PASS). final-six-kart-load.json: bewegter aktueller dev-Sechskart-Lastlauf über drei kurze Kamerafenster, konstante 967 Meshes; keine Drei-Runden-/Kaltlauf-/Geräteabnahme.
+
+## Redesign 06.10.2026 (Claude-Nachtlauf)
+
+Gleiche Bedingungen für Vorher/Nachher: sichtbares Chrome 154 (eigenes CDP-Profil), 1600 × 1000 CSS-Pixel, `?demo=1&weather=sun`, Fahrerwahl Hitler, Verfolger nah, Bilder 9 s nach Rennstart und dann alle 9 s.
+
+- **Vorher (Commit `8e3a6e9`, vor jeder Änderung):** `before-redesign-race-start/-a/-b/-c/-d-20261006.png`, Übersicht `before-redesign-contact-20261006.png`, Fahrerwahl `before-redesign-menu-20261006.png`, Metadaten `before-redesign-20261006.json`.
+- **Nachher (Redesign-Stand, Commit siehe PROGRESS-LOG):** `after-redesign-race-start/-a/-b/-c/-d-20261006.png`, Übersicht `after-redesign-contact-20261006.png`, Fahrerwahl `after-redesign-menu-20261006.png`, Metadaten `after-redesign-20261006.json`.
+- **Neue Abschnitte im Rennen:** `after-redesign-tour-0…6-20261006.png` (s ≈ 193, 399, 599, 802 Spree-Kai, 1007 Prachtallee, 1215 Tiergarten, 1437 zweite Runde); Säulen-Haarnadel nur in der Fahrt, nicht als Einzelbild.
+- **Hitler-Anker in der Laufzeitszene:** `hitler-anchor-face/-faceside/-threequarter/-profile/-rear-20261006.png` (Nahkamera im laufenden Babylon-Rennen, kein Blender-Render).
+- Die Aufnahmen entstanden nachts bei gesperrtem/abgeschaltetem Bildschirm: Das Testfenster war geöffnet, aber für niemanden sichtbar; Chrome lief deshalb mit abgeschalteter Hintergrund-/Verdeckungsdrosselung. FPS-Angaben sind Momentwerte dieses Laufs, keine Dauermessung.

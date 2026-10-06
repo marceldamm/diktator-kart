@@ -6,7 +6,7 @@ try {
   await send('Runtime.enable');await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
   await load('?demo=1');await startGrandPrix();await delay(4500);
   const meshes=await evaluate(`window.__DK.scene.meshes.length`);let captured=false,paused=false;
-  for(let i=0;i<90;i++) {
+  for(let i=0;i<230;i++) { // scaled for the 1366 m redesign lap (~300 s demo race)
     await delay(1500);
     const sample=await evaluate(`(()=>{const d=window.__DK;return {phase:d.phase,stats:d.items.stats,objects:d.items.objects.length,immune:d.items.immune,progress:d.progress[0].distance,meshes:d.scene.meshes.length,slot:d.items.slots[0],time:d.items.time};})()`);samples.push(sample);
     assert.equal(sample.meshes,meshes,'Item pool allocated new meshes');assert.ok(sample.objects<=18);

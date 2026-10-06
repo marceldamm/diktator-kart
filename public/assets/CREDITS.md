@@ -47,3 +47,8 @@ Litfaßsäulen, Plakattexte/-grafiken, Bänke, Haltestellen und eigenständiger 
 Sprachupdate: eigene freundliche kurze Sprechertexte und sechs eigene Parodie-Sprachhupen, offline Piper, unveränderte Nutzungsgrundlagen oben. WAV-Peak .8, reduzierter Lautsprecherhall/Drive. Keine historischen Mitschnitte übernommen; Yle-/NARA-Recherche ohne festgestellte freie Spielfreigabe, siehe PROGRESS-LOG.md.
 
 | `audio/voice/imperator-horn.wav` | **Echter historischer Mitschnitt:** Benito Mussolini, „Bivacco“-Rede vor der Abgeordnetenkammer, 16.11.1922, Redebeginn (ca. 3,3 s ab 1,1 s). Quelle: Wikimedia Commons, „Discorso di Benito Mussolini del 16 novembre 1922.wav“ (https://commons.wikimedia.org/wiki/File:Discorso_di_Benito_Mussolini_del_16_novembre_1922.wav), Lizenz laut Commons: Public domain (Credit MyFreeMP3.eu). | Schnitt reproduzierbar mit `art-source/cut_real_voices.mjs` (Quelle lokal unter `.tools/voice-sources/`, nicht in Git). Nur der dokumentierte Redebeginn, keine Parolen. Menschliche Hörprüfung offen. Kandidat, nicht eingebaut (Inhalt erst anhören): „Adolf Hitler Speech in 1935.ogg“ (Commons, Public domain). |
+
+## Redesign 06.10.2026
+
+- `models/city-kit.glb` (Stadtbaukasten) und die neuen Hitler-/Grand-Prix-Teile in `models/hero-kart.glb`: originale prozedurale Projektgeometrie aus `art-source/build_city_kit.py` bzw. `art-source/build_kart.py`. Keine externen Modelle, Texturen oder Logos.
+- `audio/motor.wav`: originale Synthese aus `art-source/build_engine.mjs`, keine Samples.

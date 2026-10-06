@@ -9,6 +9,8 @@ import { VertexBuffer } from '@babylonjs/core/Buffers/buffer';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
+import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
+import { Color4 } from '@babylonjs/core/Maths/math.color';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackLocate, shortcutLocate, SHORTCUT_LENGTH } from './track';
 import { GROUND, HAZARDS, LANDMARKS, RIVER } from './track-layout';
@@ -320,6 +322,18 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     bank.position.set(river.position.x, -1.5, z + (z === RIVER.north ? .3 : -.3)); bank.material = bedMaterial; bank.isPickable = false;
   }
   meshes.push(river, bed);
+  // Red and gold paper petals drifting over the grandstand straight (loading-art mood), hard-capped and cheap.
+  const petalTexture = new DynamicTexture('Petal sprite', { width: 32, height: 32 }, scene, false);
+  { const c = petalTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 13, 7, .6, 0, Math.PI * 2); c.fill(); petalTexture.hasAlpha = true; petalTexture.update(); }
+  const straightA = trackPoint(10, 0), straightB = trackPoint(170, 0);
+  const petals = new ParticleSystem('Stadium petals', 260, scene); petals.particleTexture = petalTexture;
+  petals.emitter = new Vector3((straightA.x + straightB.x) / 2, 14, (straightA.z + straightB.z) / 2);
+  petals.minEmitBox = new Vector3(-26, 0, -(Math.abs(straightB.z - straightA.z) / 2)); petals.maxEmitBox = new Vector3(26, 6, Math.abs(straightB.z - straightA.z) / 2);
+  petals.direction1 = new Vector3(-.6, -.4, -.3); petals.direction2 = new Vector3(.6, -.2, .4); petals.gravity = new Vector3(.25, -.55, .1);
+  petals.minEmitPower = .2; petals.maxEmitPower = .6; petals.minLifeTime = 9; petals.maxLifeTime = 14; petals.emitRate = 22;
+  petals.minSize = .09; petals.maxSize = .17; petals.minAngularSpeed = -3; petals.maxAngularSpeed = 3;
+  petals.color1 = new Color4(.72, .08, .1, 1); petals.color2 = new Color4(.9, .7, .3, 1); petals.colorDead = new Color4(.7, .1, .1, 0);
+  petals.blendMode = ParticleSystem.BLENDMODE_STANDARD; petals.preWarmCycles = 60; petals.start();
   return {
     glowMeshes, meshes,
     animate(time: number) { ripple.uOffset = time * .012; ripple.vOffset = time * .004; },

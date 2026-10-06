@@ -65,7 +65,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
   try {
     // Warm late-afternoon look (G/J): low sun from the south-west, cool sky fill, light aerial haze.
     scene.clearColor = new Color4(.62, .72, .84, 1);
-    scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0032; scene.fogColor = new Color3(.80, .78, .74);
+    scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0024; scene.fogColor = new Color3(.86, .80, .70); // warm golden haze over the larger city
     scene.environmentTexture = CubeTexture.CreateFromPrefilteredData('/assets/textures/studio.env', scene);
     scene.environmentIntensity = .55;
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
@@ -73,10 +73,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     scene.imageProcessingConfiguration.exposure = 1.12;
     scene.imageProcessingConfiguration.contrast = 1.22;
     const hemisphere = new HemisphericLight('Blue sky fill', new Vector3(0, 1, 0), scene);
-    hemisphere.diffuse = new Color3(.66, .76, 1); hemisphere.groundColor = new Color3(.42, .32, .22); hemisphere.intensity = .42;
+    hemisphere.diffuse = new Color3(.64, .74, 1); hemisphere.groundColor = new Color3(.5, .36, .22); hemisphere.intensity = .46;
     const sunDirection = new Vector3(.42, -.52, .74).normalize();
     const sun = new DirectionalLight('Late afternoon sun', sunDirection, scene);
-    sun.diffuse = new Color3(1, .8, .58); sun.intensity = 3.6;
+    sun.diffuse = new Color3(1, .77, .5); sun.intensity = 3.9;
     sun.orthoLeft = -46; sun.orthoRight = 46; sun.orthoTop = 56; sun.orthoBottom = -56;
     sun.shadowMinZ = 1; sun.shadowMaxZ = 220; sun.autoUpdateExtends = false; sun.shadowOrthoScale = 0;
     const shadow = new ShadowGenerator(engine.webGLVersion > 1 ? 2048 : 1024, sun);
