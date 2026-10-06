@@ -1066,8 +1066,12 @@ Der Commit `173212e` wurde auf den persönlichen Branch gepusht. Eine PR-Vorscha
 
 Marcel hat klargestellt, dass sein Firmen-Intranet nichts mit Diktator Kart zu tun hat und aus diesem Projektumfang herausfällt. Frühere Erwähnungen bleiben als Verlauf dokumentiert; dafür besteht hier keine offene Aufgabe.
 
-Sarahs GitHub-Konto ist `@Castessa` (von Marcel bestätigt). Das Repository hatte bereits ihren `write`-Zugriff; zusätzlich wurde sie im privaten Project „Diktator Kart – Teamarbeit“ mit Rolle `Write` eingetragen. Issue #2 bleibt für den gemeinsamen praktischen Teamtest offen. Eine E-Mail-Adresse war dafür nicht erforderlich.
+Marcel bestätigte, dass die für den Pilot vorgesehene Teilnehmerin bereits mit GitHub verbunden ist; eine E-Mail-Adresse war dafür nicht erforderlich. Konten- und Rollenangaben zum privaten Project werden aus öffentlichen Texten herausgehalten; die echten Berechtigungen wurden dabei nicht geändert. Issue #2 bleibt für den gemeinsamen praktischen Teamtest offen.
 
 ### 2026-10-06 – GitHub Project: Review-Status automatisieren
 
 Die zuvor deaktivierte Project-Regel `Code changes requested` wurde aktiviert und so gesetzt, dass eine Review mit angeforderten Änderungen den PR-Status auf `In progress` setzt. Neue offene Items starten gemäß der bestehenden Regel im `Backlog`. PR #8 wurde nach dem grünen `validate / tests-and-build`-Check von `Backlog` nach `In review` verschoben; Boardansicht und aktivierte Regel wurden im Browser geprüft.
+
+### 2026-10-06 – Öffentliche Projekttexte bereinigt und Abschluss vorbereitet
+
+Die automatische Sicherheitsprüfung wies darauf hin, dass die öffentliche PR-Beschreibung Sarahs Konto mit einer Rolle im privaten Board verknüpfte. PR-Titel und Beschreibung wurden bereinigt. Dieselbe Account-/Rollenangabe wurde aus dem öffentlichen Issue #2, den beiden Issue-Statuskommentaren sowie den geänderten Teamdokumenten entfernt; die tatsächlichen GitHub-Berechtigungen blieben unverändert. Der Run #14 für den vorherigen PR-Commit `29442af` war erfolgreich. Dieser neue Dokumentationsstand muss noch lokal geprüft, committet, als PR-Commit validiert und nach grünem Check zusammengeführt werden.
