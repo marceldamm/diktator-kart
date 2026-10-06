@@ -15,6 +15,8 @@ Copilot Cloud Agent ist im angemeldeten Konto laut GitHub nicht verfügbar („a
 
 **Issue #4 – Abschlussstand (06.10.2026):** Marcel entschied, die Live-TV-Zweitkamera zu deaktivieren. PR #6 integrierte die Umsetzung samt statischem Stadionmotiv in `main` (Merge `1d015da`); Actions und lokaler Abschlusslauf bestanden. Das Issue bleibt für den Framezeitvergleich des finalen Stands und den Intel-UHD-Lauf offen. Ein früherer Feed-A/B belegt den Renderpass als Übeltäter, ersetzt jedoch nicht die Messung nach dem Entfernen.
 
+**Board-Automation:** Review-Änderungswünsche setzen PRs automatisch auf `In progress`. Neue PRs starten zunächst im `Backlog`; offene PR #8 steht für seine Prüfung auf `In review`.
+
 Offizielle Doku: [Issues](https://docs.github.com/en/issues), [Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects), [Copilot Cloud Agent](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github), [Status Checks](https://docs.github.com/en/pull-requests/reference/status-checks), [Actions-Abrechnung](https://docs.github.com/en/billing/concepts/product-billing/github-actions), [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
 
 ## Git für euch – der kurze gemeinsame Ablauf

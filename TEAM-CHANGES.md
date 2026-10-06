@@ -1,5 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
+- **06.10.2026 – Review-Änderungen automatisch ins Board übernehmen (Marcel):** Die GitHub-Project-Regel `Code changes requested` ist aktiviert und setzt PRs mit angeforderten Änderungen automatisch auf `In progress`. Neue PRs landen zunächst im `Backlog`; PR #8 wurde für die tatsächliche Prüfung auf `In review` gesetzt. Die Regel ist unter Workflows im privaten Project sichtbar.
+
 - **06.10.2026 – Stadion-TV-Ruckeln vorläufig behoben (Marcel):** PR #6 integrierte den entfernten zweiten vollständigen Szenen-Renderpass samt statischem Stadionmotiv und Rennstand-Leiste in `main` (Merge `1d015da`). Sichtbarer Grand-Prix-Lauf, 72/72 Tests, Produktionsbuild und GitHub Actions sind bestanden. Issue #4 bleibt für den abschließenden Framezeitvergleich und Intel-UHD-Lauf offen.
 
 - **06.10.2026 – GitHub-Pilot sichtbar abgeschlossen (Marcel):** PR #5 dokumentierte den tatsächlichen Pilotstand und wurde mit bestandenem `validate / tests-and-build`-Check in `main` zusammengeführt. Das private Teamboard zeigt den PR automatisch unter `Done`; Sarahs Zugriff (`@Castessa`, Rolle `Write`) ist eingerichtet. Issue #2 bleibt für den gemeinsamen Praxistest offen. START-HERE erklärt in Alltagssprache: Marcel nennt nur sein Ziel, Codex führt Issue/Board/PR/Checks passend dazu.

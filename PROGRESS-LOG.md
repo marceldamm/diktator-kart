@@ -1067,3 +1067,7 @@ Der Commit `173212e` wurde auf den persönlichen Branch gepusht. Eine PR-Vorscha
 Marcel hat klargestellt, dass sein Firmen-Intranet nichts mit Diktator Kart zu tun hat und aus diesem Projektumfang herausfällt. Frühere Erwähnungen bleiben als Verlauf dokumentiert; dafür besteht hier keine offene Aufgabe.
 
 Sarahs GitHub-Konto ist `@Castessa` (von Marcel bestätigt). Das Repository hatte bereits ihren `write`-Zugriff; zusätzlich wurde sie im privaten Project „Diktator Kart – Teamarbeit“ mit Rolle `Write` eingetragen. Issue #2 bleibt für den gemeinsamen praktischen Teamtest offen. Eine E-Mail-Adresse war dafür nicht erforderlich.
+
+### 2026-10-06 – GitHub Project: Review-Status automatisieren
+
+Die zuvor deaktivierte Project-Regel `Code changes requested` wurde aktiviert und so gesetzt, dass eine Review mit angeforderten Änderungen den PR-Status auf `In progress` setzt. Neue offene Items starten gemäß der bestehenden Regel im `Backlog`. PR #8 wurde nach dem grünen `validate / tests-and-build`-Check von `Backlog` nach `In review` verschoben; Boardansicht und aktivierte Regel wurden im Browser geprüft.
