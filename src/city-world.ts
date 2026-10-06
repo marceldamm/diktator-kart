@@ -80,6 +80,19 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     paintEmblem(c, 128, 255, 86);
     banner.update();
   }
+  // Shop lettering atlas: eight original, satirical trade names (rows match art-source/build_city_kit.py).
+  const signs = new DynamicTexture('Kit shop sign atlas', { width: 512, height: 512 }, scene, true);
+  {
+    const c = signs.getContext() as CanvasRenderingContext2D;
+    const names = ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
+    names.forEach((name, k) => {
+      const y = k * 64;
+      c.fillStyle = ['#1f3b30', '#5c1a22', '#1d2a3c', '#2b2b26'][k % 4]; c.fillRect(0, y, 512, 64);
+      c.strokeStyle = '#d9b25e'; c.lineWidth = 3; c.strokeRect(5, y + 5, 502, 54);
+      c.fillStyle = '#ecd08a'; c.font = `bold ${name.length > 16 ? 30 : 36}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(name, 256, y + 34);
+    });
+    signs.update();
+  }
   const glowMeshes: Mesh[] = [];
   for (const m of kit.materials) {
     if (!(m instanceof PBRMaterial)) continue;
@@ -87,6 +100,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (/plaster/.test(m.name)) { m.bumpTexture = plaster.normal; }
     if (/Kit cloth|crowd$/.test(m.name)) { m.bumpTexture = cloth.normal; }
     if (/banner/.test(m.name)) { m.albedoTexture = banner; m.bumpTexture = cloth.normal; }
+    // glTF stores V flipped and DynamicTexture inverts Y again: flip V so the lettering stands upright (rows map k → 7-k).
+    if (/shop sign/.test(m.name)) { m.albedoTexture = signs; signs.wrapV = 1 /* WRAP */; signs.vScale = -1; m.metallic = .1; m.roughness = .45; }
     if (/foliage/.test(m.name)) { m.albedoTexture = leaf.color; m.bumpTexture = leaf.normal; m.backFaceCulling = false; }
     if (/glass/.test(m.name) && !/lamp/.test(m.name)) { m.roughness = .08; m.metallic = .35; m.environmentIntensity = 1.4; }
     if (/gilded/.test(m.name)) { m.clearCoat.isEnabled = true; m.clearCoat.intensity = .4; }

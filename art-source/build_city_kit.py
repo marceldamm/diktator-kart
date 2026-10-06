@@ -50,6 +50,7 @@ IRON = mat('iron green', hexrgb('#27382f'), .55, .45)
 GOLD = mat('gilded brass', hexrgb('#d4a64e'), .95, .28)
 CLOTH = mat('cloth', hexrgb('#ffffff'), 0, .85)            # stripes and colours via vertex colour
 BANNER = mat('banner cloth', hexrgb('#ffffff'), 0, .8)     # runtime emblem texture, UV fit
+SIGN = mat('shop sign', hexrgb('#ffffff'), .2, .45)        # runtime lettering atlas: 8 rows (src/city-world.ts)
 WOOD = mat('wood', hexrgb('#7a5235'), 0, .7)
 LEAF = mat('foliage', hexrgb('#71904a'), 0, .9)
 BARK = mat('bark', hexrgb('#5a4637'), 0, .95)
@@ -78,10 +79,11 @@ class Module:
         p['c'] += [col] * len(verts)
         p['f'] += [tuple(base + i for i in f) for f in faces]
         p['smooth'] += [smooth] * len(faces)
-        if uvfit:  # project this element's front onto 0..1 (banners, clock faces)
+        if uvfit:  # project this element's front onto 0..1, or onto an atlas region (u0, u1, v0, v1)
+            u0, u1, v0, v1 = uvfit if isinstance(uvfit, tuple) else (0, 1, 0, 1)
             xs = [v[0] for v in verts]; zs = [v[2] for v in verts]
             x0, x1, z0, z1 = min(xs), max(xs), min(zs), max(zs)
-            p['uv'] += [((v[0] - x0) / (x1 - x0 or 1), (v[2] - z0) / (z1 - z0 or 1)) for v in verts]
+            p['uv'] += [(u0 + (u1 - u0) * (v[0] - x0) / (x1 - x0 or 1), v0 + (v1 - v0) * (v[2] - z0) / (z1 - z0 or 1)) for v in verts]
         else:
             p['uv'] += [None] * len(verts)
 
@@ -279,6 +281,12 @@ def townhouse(name, width, axes, floors, roof='mansard', erker=False, giant=Fals
             M.box(GOLD, x - .5, x + .5, -.24, -.2, 3.95, 4.05)
         else:
             shopfront(M, x - step / 2 + .25, x + step / 2 - .25, 0, gf - .5, awning=random.choice([OXBLOOD, BOTTLE, NAVY]), frame=random.choice([BOTTLE, (.32, .16, .14), (.16, .2, .26)]))
+            # Shop sign between the ground-floor band and the first-floor windows; text from the atlas row.
+            k = random.randrange(8); sw = min(step - .9, 3.4)
+            v = [(x - sw / 2, -.16, gf + .12), (x + sw / 2, -.16, gf + .12), (x + sw / 2, -.16, gf + .62), (x - sw / 2, -.16, gf + .62),
+                 (x - sw / 2, -.04, gf + .12), (x + sw / 2, -.04, gf + .12), (x + sw / 2, -.04, gf + .62), (x - sw / 2, -.04, gf + .62)]
+            M.add(SIGN, v, [(0, 1, 2, 3), (4, 7, 6, 5), (0, 4, 5, 1), (2, 6, 7, 3), (0, 3, 7, 4), (1, 5, 6, 2)], 1.0, uvfit=(0, 1, 1 - (k + 1) / 8, 1 - k / 8))
+            M.box(GOLD, x - sw / 2 - .05, x + sw / 2 + .05, -.18, -.15, gf + .08, gf + .12)
     M.prism_x(STONE, -width / 2, width / 2, [(y * 1.3, z * 1.2 + gf - .1) for y, z in BAND], .95)
     hoods = ['tri', 'cornice', 'key', 'key', 'key']
     for f in range(floors):
@@ -797,7 +805,7 @@ def to_blender(M, offset):
                 elif ax == 0: uvs += (v[1] * .5, v[2] * .5)
                 else: uvs += (v[0] * .5, v[2] * .5)
                 c = p['c'][vi]; g = 1.0
-                if M.grime and mname not in (GLASS, LAMP, GOLD, BANNER, CROWD, SKIN): g = .74 + .26 * min(1, max(0, v[2] / 2.6)) ** .7
+                if M.grime and mname not in (GLASS, LAMP, GOLD, BANNER, CROWD, SKIN, SIGN): g = .74 + .26 * min(1, max(0, v[2] / 2.6)) ** .7
                 cols += (c[0] * g, c[1] * g, c[2] * g, 1)
         # Re-fetch layers after both exist: adding an attribute invalidates earlier layer references.
         me.uv_layers['UVMap'].data.foreach_set('uv', uvs)

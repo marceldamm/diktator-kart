@@ -1,1380 +1,1380 @@
 {
-  "date": "2026-10-06T01:04:42.911Z",
+  "date": "2026-10-06T06:28:41.816Z",
   "method": "Real-time visible Chrome, demo controller through normal kart input, 3 laps; 300 rAF intervals per camera at 1600x1000",
   "samples": [
     {
-      "elapsed": 10.016,
+      "elapsed": 10.051,
       "phase": "race",
       "progress": [
         {
-          "last": 164.9376599646248,
-          "distance": 119.9376599646248,
+          "last": 165.5920492952498,
+          "distance": 120.59204929524981,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 191.60285391471052,
-          "distance": 146.60285391471052,
+          "last": 192.33129293257684,
+          "distance": 147.33129293257684,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 183.44397765478584,
-          "distance": 138.44397765478584,
+          "last": 184.1570797724571,
+          "distance": 139.1570797724571,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 179.48037951951846,
-          "distance": 134.48037951951846,
+          "last": 180.27497737449448,
+          "distance": 135.27497737449448,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 183.70833147232543,
-          "distance": 138.70833147232543,
+          "last": 184.41621240029372,
+          "distance": 139.41621240029372,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 172.31355978637976,
-          "distance": 127.31355978637976,
+          "last": 173.15836559980312,
+          "distance": 128.15836559980312,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.236581553851886,
-      "meshes": 2334,
-      "fps": 37.069072039747574,
-      "drawCalls": 1385,
-      "cpuFrameMs": 16,
-      "gpuFrameMs": 21.367808,
-      "activeTriangles": 7396720,
+      "speed": 13.322581553851887,
+      "meshes": 2366,
+      "fps": 25.83311805841025,
+      "drawCalls": 2261,
+      "cpuFrameMs": 71.89999997615814,
+      "gpuFrameMs": 12.112896,
+      "activeTriangles": 12441196,
       "particles": 346,
       "camera": "Verfolger nah",
-      "heap": 767869758
+      "heap": 1151375386
     },
     {
-      "elapsed": 20.036,
+      "elapsed": 20.066,
       "phase": "race",
       "progress": [
         {
-          "last": 307.13492592792227,
-          "distance": 262.13492592792227,
+          "last": 308.624968697344,
+          "distance": 263.624968697344,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 339.3368301837547,
-          "distance": 294.3368301837547,
+          "last": 340.8400410019524,
+          "distance": 295.8400410019524,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 326.89418131450066,
-          "distance": 281.89418131450066,
+          "last": 328.3073917180857,
+          "distance": 283.3073917180857,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 327.6145393229597,
-          "distance": 282.6145393229597,
+          "last": 329.1898390244635,
+          "distance": 284.1898390244635,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 329.26765269044995,
-          "distance": 284.26765269044995,
+          "last": 330.70508590550367,
+          "distance": 285.70508590550367,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 324.60683377171426,
-          "distance": 279.60683377171426,
+          "last": 326.1250563506683,
+          "distance": 281.1250563506683,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.75658155385191,
-      "meshes": 2334,
-      "fps": 44.020542920029605,
-      "drawCalls": 1493,
-      "cpuFrameMs": 15.699999928474426,
-      "gpuFrameMs": 14.575616,
-      "activeTriangles": 7772494,
-      "particles": 452,
-      "camera": "Verfolger nah",
-      "heap": 799416302
-    },
-    {
-      "elapsed": 30.073,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 450.809146335361,
-          "distance": 405.809146335361,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 468.3453469153999,
-          "distance": 423.3453469153999,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 467.5659233090562,
-          "distance": 422.5659233090562,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 462.1051444111399,
-          "distance": 417.1051444111399,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 457.52578911388787,
-          "distance": 412.52578911388787,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 473.5878924418698,
-          "distance": 428.5878924418698,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 16.54258155385193,
-      "meshes": 2334,
-      "fps": 44.2673749493381,
-      "drawCalls": 1561,
-      "cpuFrameMs": 25.799999952316284,
-      "gpuFrameMs": 22.020096,
-      "activeTriangles": 8964544,
-      "particles": 422,
-      "camera": "Verfolger nah",
-      "heap": 794445750
-    },
-    {
-      "elapsed": 41.394,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 603.9768261412494,
-          "distance": 558.9768261412494,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 600.9455092935812,
-          "distance": 555.9455092935812,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 636.7909897508682,
-          "distance": 591.7909897508682,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 702.3010653911367,
-          "distance": 641.3837134202624,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 580.7883367215172,
-          "distance": 535.7883367215172,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 651.5287384031233,
-          "distance": 606.5287384031233,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.66064700938898,
-      "meshes": 2334,
-      "fps": 49.358341563596255,
-      "drawCalls": 1241,
-      "cpuFrameMs": 20.100000023841858,
-      "gpuFrameMs": 13.029376,
-      "activeTriangles": 8376388,
-      "particles": 422,
-      "camera": "Verfolger nah",
-      "heap": 805523354
-    },
-    {
-      "elapsed": 51.418,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 750.7144938867025,
-          "distance": 705.7144938867025,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 753.9119177177461,
-          "distance": 708.9119177177461,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 797.4221716943996,
-          "distance": 752.4221716943996,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 850.7443147473302,
-          "distance": 789.826962776456,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 728.4711882728859,
-          "distance": 683.4711882728859,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 805.1248699066389,
-          "distance": 760.1248699066389,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 14.133475623827144,
-      "meshes": 2334,
-      "fps": 38.51585569510655,
-      "drawCalls": 1377,
-      "cpuFrameMs": 19.799999952316284,
-      "gpuFrameMs": 23.05536,
-      "activeTriangles": 8619276,
-      "particles": 432,
-      "camera": "Verfolger nah",
-      "heap": 796136258
-    },
-    {
-      "elapsed": 63.032,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 913.6875653938334,
-          "distance": 868.6875653938334,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 918.2794630965661,
-          "distance": 873.2794630965661,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 970.896274132924,
-          "distance": 925.896274132924,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1006.2846682190354,
-          "distance": 945.3673162481612,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 895.7484331172288,
-          "distance": 850.7484331172288,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 965.4770197190039,
-          "distance": 920.4770197190039,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.85147562382717,
-      "meshes": 2334,
-      "fps": 49.83388704318975,
-      "drawCalls": 1297,
-      "cpuFrameMs": 13.300000071525574,
-      "gpuFrameMs": 12.802048,
-      "activeTriangles": 7249416,
+      "speed": 13.746581553851911,
+      "meshes": 2366,
+      "fps": 47.2069236821399,
+      "drawCalls": 1521,
+      "cpuFrameMs": 15.600000023841858,
+      "gpuFrameMs": 12.205056,
+      "activeTriangles": 7793352,
       "particles": 425,
-      "camera": "Verfolger fern",
-      "heap": 794080076
-    },
-    {
-      "elapsed": 73.045,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 1057.058646888505,
-          "distance": 1012.0586468885051,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1063.3987847035958,
-          "distance": 1018.3987847035958,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1124.4823301317444,
-          "distance": 1079.4823301317444,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1143.523217341644,
-          "distance": 1082.6058653707698,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1038.0100996438184,
-          "distance": 993.0100996438184,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1103.094189560117,
-          "distance": 1058.094189560117,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.943475623827194,
-      "meshes": 2334,
-      "fps": 48.278081743475944,
-      "drawCalls": 1322,
-      "cpuFrameMs": 17.200000047683716,
-      "gpuFrameMs": 17.306624,
-      "activeTriangles": 8087772,
-      "particles": 431,
-      "camera": "Verfolger fern",
-      "heap": 826010616
-    },
-    {
-      "elapsed": 84.606,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 1225.4473258411215,
-          "distance": 1180.4473258411215,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1239.0310776596277,
-          "distance": 1194.0310776596277,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1307.878063591447,
-          "distance": 1262.878063591447,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1313.0067243284345,
-          "distance": 1252.0893723575603,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1211.6602647645184,
-          "distance": 1166.6602647645184,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1281.5798947405326,
-          "distance": 1236.5798947405326,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.78947562382722,
-      "meshes": 2334,
-      "fps": 39.5308999818554,
-      "drawCalls": 1922,
-      "cpuFrameMs": 39,
-      "gpuFrameMs": 18.644992,
-      "activeTriangles": 13191924,
-      "particles": 441,
-      "camera": "Fahrerperspektive",
-      "heap": 810052829
-    },
-    {
-      "elapsed": 94.624,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 19.43655092685094,
-          "distance": 1340.860716531519,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 20.316407017051006,
-          "distance": 1341.7405726217191,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 100.67786905516073,
-          "distance": 1422.1020346598289,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 101.79643461940645,
-          "distance": 1407.3032482532003,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1363.9271418986011,
-          "distance": 1318.9271418986011,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 73.01910363882007,
-          "distance": 1394.4432692434882,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 15.679999999999996,
-      "meshes": 2334,
-      "fps": 35.69728700720032,
-      "drawCalls": 1377,
-      "cpuFrameMs": 17.5,
-      "gpuFrameMs": 32.758784,
-      "activeTriangles": 9202902,
-      "particles": 431,
-      "camera": "Fahrerperspektive",
-      "heap": 801836553
-    },
-    {
-      "elapsed": 104.866,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 168.3467025997884,
-          "distance": 1489.7708682044565,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 171.13962066245472,
-          "distance": 1492.5637862671229,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 259.0656306193914,
-          "distance": 1580.4897962240595,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 244.00101241903963,
-          "distance": 1549.5078260528335,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 145.25966852440774,
-          "distance": 1466.6838341290759,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 225.93219444650367,
-          "distance": 1547.3563600511718,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.847999999999999,
-      "meshes": 2334,
-      "fps": 40.155267031244335,
-      "drawCalls": 1272,
-      "cpuFrameMs": 22.899999976158142,
-      "gpuFrameMs": 26.330112,
-      "activeTriangles": 7069838,
-      "particles": 448,
       "camera": "Verfolger nah",
-      "heap": 729487338
+      "heap": 1154503014
     },
     {
-      "elapsed": 114.884,
+      "elapsed": 30.094,
       "phase": "race",
       "progress": [
         {
-          "last": 310.5148345248117,
-          "distance": 1631.9390001294798,
+          "last": 452.4282346719499,
+          "distance": 407.4282346719499,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 312.2574674351747,
-          "distance": 1633.6816330398428,
+          "last": 468.37606427400465,
+          "distance": 423.37606427400465,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 409.69208269124397,
-          "distance": 1731.116248295912,
+          "last": 468.3056371343887,
+          "distance": 423.3056371343887,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 386.44201171750706,
-          "distance": 1691.948825351301,
+          "last": 463.7847966596173,
+          "distance": 418.7847966596173,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 286.934250457972,
-          "distance": 1608.3584160626401,
+          "last": 457.5407890967833,
+          "distance": 412.5407890967833,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 375.89244075023794,
-          "distance": 1697.316606354906,
+          "last": 475.1043172772386,
+          "distance": 430.1043172772386,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.726000000000022,
-      "meshes": 2334,
-      "fps": 53.504547893395696,
-      "drawCalls": 1133,
-      "cpuFrameMs": 21.600000023841858,
-      "gpuFrameMs": 14.227456,
-      "activeTriangles": 7329796,
-      "particles": 439,
+      "speed": 16.35058155385193,
+      "meshes": 2366,
+      "fps": 46.49721016395349,
+      "drawCalls": 1575,
+      "cpuFrameMs": 15.799999952316284,
+      "gpuFrameMs": 12.07808,
+      "activeTriangles": 8982794,
+      "particles": 416,
       "camera": "Verfolger nah",
-      "heap": 731452874
+      "heap": 1165188510
     },
     {
-      "elapsed": 124.902,
+      "elapsed": 41.406,
       "phase": "race",
       "progress": [
         {
-          "last": 453.5351956293598,
-          "distance": 1774.959361234028,
+          "last": 605.1868219313712,
+          "distance": 560.1868219313712,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 461.16065655205034,
-          "distance": 1782.5848221567185,
+          "last": 602.0795684896514,
+          "distance": 557.0795684896514,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 504.2962803026687,
-          "distance": 1825.7204459073369,
+          "last": 638.2946018236746,
+          "distance": 593.2946018236746,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 526.6804884892447,
-          "distance": 1825.0401289545862,
+          "last": 703.860428096549,
+          "distance": 642.9430761256747,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 431.9190608027295,
-          "distance": 1753.3432264073977,
+          "last": 581.9185976014428,
+          "distance": 536.9185976014428,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 530.5621171798296,
-          "distance": 1851.9862827844977,
+          "last": 652.7940430666056,
+          "distance": 607.7940430666056,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.868867016006503,
-      "meshes": 2334,
-      "fps": 46.253469008475605,
-      "drawCalls": 1361,
-      "cpuFrameMs": 19.5,
-      "gpuFrameMs": 16.683008,
-      "activeTriangles": 8081828,
-      "particles": 458,
+      "speed": 13.50064700938898,
+      "meshes": 2366,
+      "fps": 55.94927266691877,
+      "drawCalls": 1271,
+      "cpuFrameMs": 14.400000095367432,
+      "gpuFrameMs": 11.542528,
+      "activeTriangles": 8515192,
+      "particles": 425,
       "camera": "Verfolger nah",
-      "heap": 733395239
+      "heap": 1167858050
     },
     {
-      "elapsed": 134.921,
+      "elapsed": 51.461,
       "phase": "race",
       "progress": [
         {
-          "last": 539.2090652855536,
-          "distance": 1860.6332308902217,
+          "last": 751.4204756039437,
+          "distance": 706.4204756039437,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 548.2224671748234,
-          "distance": 1869.6466327794915,
+          "last": 754.7089991831351,
+          "distance": 709.7089991831351,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 667.1352312004676,
-          "distance": 1988.5593968051357,
+          "last": 798.1709820560584,
+          "distance": 753.1709820560584,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 753.1944659236135,
-          "distance": 2042.7904628218687,
+          "last": 851.42048174149,
+          "distance": 790.5031297706157,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 586.3813412386996,
-          "distance": 1907.8055068433678,
+          "last": 729.3406030512394,
+          "distance": 684.3406030512394,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 682.500966812652,
-          "distance": 2003.9251324173201,
+          "last": 805.8565315847679,
+          "distance": 760.8565315847679,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.884000000000029,
-      "meshes": 2334,
-      "fps": 53.54274495122332,
-      "drawCalls": 1108,
-      "cpuFrameMs": 13.5,
-      "gpuFrameMs": 11.321344,
-      "activeTriangles": 7725970,
-      "particles": 520,
-      "camera": "Verfolger nah",
-      "heap": 738353004
-    },
-    {
-      "elapsed": 144.941,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 679.9565323494792,
-          "distance": 2001.3806979541473,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 700.1869879036037,
-          "distance": 2021.6111535082719,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 813.9617504875757,
-          "distance": 2135.385916092244,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 889.1708819901448,
-          "distance": 2178.7668788884002,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 738.1203527956457,
-          "distance": 2059.544518400314,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 835.7278458070566,
-          "distance": 2157.1520114117247,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.794000000000052,
-      "meshes": 2334,
-      "fps": 41.10152075761073,
-      "drawCalls": 2024,
-      "cpuFrameMs": 25.600000023841858,
-      "gpuFrameMs": 12.474368,
-      "activeTriangles": 13504404,
-      "particles": 496,
-      "camera": "Verfolger nah",
-      "heap": 738594056
-    },
-    {
-      "elapsed": 154.966,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 829.2979339800684,
-          "distance": 2150.7220995847365,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 846.3077297229522,
-          "distance": 2167.7318953276204,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 957.9116597982863,
-          "distance": 2279.3358254029545,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1023.7460363162684,
-          "distance": 2313.342033214524,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 881.1633611716627,
-          "distance": 2202.587526776331,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 979.5932862523562,
-          "distance": 2301.0174518570243,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.930000000000005,
-      "meshes": 2334,
-      "fps": 54.31830526184133,
-      "drawCalls": 1073,
-      "cpuFrameMs": 14.5,
-      "gpuFrameMs": 12.998656,
-      "activeTriangles": 7497386,
+      "speed": 14.037475623827143,
+      "meshes": 2366,
+      "fps": 25.83311805575842,
+      "drawCalls": 2284,
+      "cpuFrameMs": 75.20000004768372,
+      "gpuFrameMs": 13.945856,
+      "activeTriangles": 13696434,
       "particles": 435,
       "camera": "Verfolger nah",
-      "heap": 744917944
+      "heap": 1182809898
     },
     {
-      "elapsed": 164.974,
+      "elapsed": 62.957,
       "phase": "race",
       "progress": [
         {
-          "last": 963.2734503915997,
-          "distance": 2284.697615996268,
+          "last": 913.2096452178396,
+          "distance": 868.2096452178396,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 987.8546230408608,
-          "distance": 2309.278788645529,
+          "last": 917.8066828167659,
+          "distance": 872.8066828167659,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1102.3107085385643,
-          "distance": 2423.7348741432324,
+          "last": 970.3985229480097,
+          "distance": 925.3985229480097,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1163.0154351993413,
-          "distance": 2452.6114320975967,
+          "last": 1005.8307919582724,
+          "distance": 944.9134399873981,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1023.4258702202585,
-          "distance": 2344.8500358249266,
+          "last": 895.2754417209014,
+          "distance": 850.2754417209014,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1123.4905305376249,
-          "distance": 2444.914696142293,
+          "last": 965.000730318128,
+          "distance": 920.000730318128,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.808000000000028,
-      "meshes": 2334,
-      "fps": 52.724077328646864,
-      "drawCalls": 1009,
-      "cpuFrameMs": 10.399999976158142,
-      "gpuFrameMs": 10.715136,
-      "activeTriangles": 6268978,
-      "particles": 433,
+      "speed": 13.91547562382717,
+      "meshes": 2366,
+      "fps": 56.242969631310146,
+      "drawCalls": 1321,
+      "cpuFrameMs": 15.599999904632568,
+      "gpuFrameMs": 12.652544,
+      "activeTriangles": 7266186,
+      "particles": 430,
+      "camera": "Verfolger fern",
+      "heap": 1186429244
+    },
+    {
+      "elapsed": 72.98,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 1056.8131444061844,
+          "distance": 1011.8131444061844,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1063.1176184016106,
+          "distance": 1018.1176184016106,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1124.2250735275018,
+          "distance": 1079.2250735275018,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1143.2668849623199,
+          "distance": 1082.3495329914456,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1037.767573878719,
+          "distance": 992.7675738787191,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1102.8687504934335,
+          "distance": 1057.8687504934335,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.975475623827194,
+      "meshes": 2366,
+      "fps": 52.65005265445857,
+      "drawCalls": 1350,
+      "cpuFrameMs": 14.5,
+      "gpuFrameMs": 13.44,
+      "activeTriangles": 8106080,
+      "particles": 419,
+      "camera": "Verfolger fern",
+      "heap": 1206379516
+    },
+    {
+      "elapsed": 84.428,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 1223.8592951014468,
+          "distance": 1178.8592951014468,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1237.5586575505838,
+          "distance": 1192.5586575505838,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1306.0569960298765,
+          "distance": 1261.0569960298765,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1311.4066388536228,
+          "distance": 1250.4892868827485,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1209.6927745027785,
+          "distance": 1164.6927745027785,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1279.810356895681,
+          "distance": 1234.810356895681,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.83147562382722,
+      "meshes": 2366,
+      "fps": 28.19548872180448,
+      "drawCalls": 1089,
+      "cpuFrameMs": 11.5,
+      "gpuFrameMs": 54.429696,
+      "activeTriangles": 8171304,
+      "particles": 445,
+      "camera": "Fahrerperspektive",
+      "heap": 1205047373
+    },
+    {
+      "elapsed": 94.445,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 17.330507866186053,
+          "distance": 1338.7546734708542,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 18.40931412748091,
+          "distance": 1339.833479732149,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 98.68343853015222,
+          "distance": 1420.1076041348203,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 99.93618803106006,
+          "distance": 1405.443001664854,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1362.1968140826882,
+          "distance": 1317.1968140826882,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 71.01363976065682,
+          "distance": 1392.437805365325,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 15.935999999999996,
+      "meshes": 2366,
+      "fps": 25.833118055758405,
+      "drawCalls": 1409,
+      "cpuFrameMs": 13.200000047683716,
+      "gpuFrameMs": 69.549056,
+      "activeTriangles": 9224526,
+      "particles": 445,
+      "camera": "Fahrerperspektive",
+      "heap": 1195458697
+    },
+    {
+      "elapsed": 104.734,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 165.3360931623813,
+          "distance": 1486.7602587670494,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 168.09372095766776,
+          "distance": 1489.517886562336,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 255.821937020507,
+          "distance": 1577.2461026251751,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 241.05257685596052,
+          "distance": 1546.5593904897544,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 141.64612520752348,
+          "distance": 1463.0702908121916,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 222.86197043163202,
+          "distance": 1544.2861360363001,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.899999999999999,
+      "meshes": 2366,
+      "fps": 27.631942524345984,
+      "drawCalls": 2192,
+      "cpuFrameMs": 73.69999992847443,
+      "gpuFrameMs": 15.524864,
+      "activeTriangles": 12179548,
+      "particles": 445,
       "camera": "Verfolger nah",
-      "heap": 735459768
+      "heap": 961591091
     },
     {
-      "elapsed": 174.987,
+      "elapsed": 114.74,
       "phase": "race",
       "progress": [
         {
-          "last": 1099.480969966856,
-          "distance": 2420.905135571524,
+          "last": 307.74350399363107,
+          "distance": 1629.1676695982992,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1136.761585604985,
-          "distance": 2458.185751209653,
+          "last": 309.60785935054923,
+          "distance": 1631.0320249552174,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1255.3902811612295,
-          "distance": 2576.8144467658976,
+          "last": 406.98519089010074,
+          "distance": 1728.4093564947689,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1309.504578542805,
-          "distance": 2599.1005754410603,
+          "last": 383.95939897904964,
+          "distance": 1689.4662126128435,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1175.936188873862,
-          "distance": 2497.36035447853,
+          "last": 284.2902612264995,
+          "distance": 1605.7144268311677,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1280.2815565852268,
-          "distance": 2601.705722189895,
+          "last": 372.9693587312977,
+          "distance": 1694.3935243359658,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.900000000000052,
-      "meshes": 2334,
-      "fps": 56.253515837195714,
-      "drawCalls": 1015,
-      "cpuFrameMs": 16.899999976158142,
-      "gpuFrameMs": 10.580992,
-      "activeTriangles": 7964890,
+      "speed": 13.714000000000022,
+      "meshes": 2366,
+      "fps": 55.90756615480265,
+      "drawCalls": 1103,
+      "cpuFrameMs": 13.200000047683716,
+      "gpuFrameMs": 11.565056,
+      "activeTriangles": 7278348,
+      "particles": 439,
+      "camera": "Verfolger nah",
+      "heap": 972251547
+    },
+    {
+      "elapsed": 124.764,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 451.0225019032539,
+          "distance": 1772.446667507922,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 458.2356526561632,
+          "distance": 1779.6598182608313,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 501.5419009438501,
+          "distance": 1822.9660665485183,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 515.4195277676008,
+          "distance": 1820.9263414013947,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 429.2588093876079,
+          "distance": 1750.682974992276,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 527.6179180233496,
+          "distance": 1849.0420836280177,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.856867016006502,
+      "meshes": 2366,
+      "fps": 52.083333333333336,
+      "drawCalls": 1382,
+      "cpuFrameMs": 13.5,
+      "gpuFrameMs": 15.527936,
+      "activeTriangles": 8099364,
       "particles": 438,
       "camera": "Verfolger nah",
-      "heap": 752785144
+      "heap": 941684812
     },
     {
-      "elapsed": 185.016,
+      "elapsed": 134.779,
       "phase": "race",
       "progress": [
         {
-          "last": 1244.9586447060726,
-          "distance": 2566.3828103107408,
+          "last": 536.4565950177382,
+          "distance": 1857.8807606224063,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1287.9283926575129,
-          "distance": 2609.352558262181,
+          "last": 546.2648828601143,
+          "distance": 1867.6890484647824,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 48.46778457884261,
-          "distance": 2736.3161157881796,
+          "last": 664.2821760735765,
+          "distance": 1985.7063416782446,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 98.00270249897858,
-          "distance": 2754.022865001908,
+          "last": 750.3159946980625,
+          "distance": 2039.9119915963176,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 1322.3761447076265,
-          "distance": 2643.8003103122946,
+          "last": 583.1583658732654,
+          "distance": 1904.5825314779336,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 71.42875895564384,
-          "distance": 2759.277090164974,
+          "last": 679.7365714064197,
+          "distance": 2001.1607370110878,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.904000000000028,
+      "meshes": 2366,
+      "fps": 56.22188905296018,
+      "drawCalls": 1120,
+      "cpuFrameMs": 13.699999928474426,
+      "gpuFrameMs": 12.292096,
+      "activeTriangles": 7724576,
+      "particles": 521,
+      "camera": "Verfolger nah",
+      "heap": 959770865
+    },
+    {
+      "elapsed": 144.801,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 677.7619555881697,
+          "distance": 1999.1861211928378,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 697.9357773358131,
+          "distance": 2019.3599429404812,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 811.9696771189108,
+          "distance": 2133.393842723579,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 886.9256276033259,
+          "distance": 2176.5216245015813,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 735.3132073443896,
+          "distance": 2056.7373729490578,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 833.3651632925782,
+          "distance": 2154.7893288972464,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.750000000000052,
+      "meshes": 2366,
+      "fps": 27.637033625057562,
+      "drawCalls": 1179,
+      "cpuFrameMs": 15.399999976158142,
+      "gpuFrameMs": 13.019136,
+      "activeTriangles": 8464018,
+      "particles": 503,
+      "camera": "Verfolger nah",
+      "heap": 955176257
+    },
+    {
+      "elapsed": 154.819,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 826.8438525755525,
+          "distance": 2148.2680181802207,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 843.7794219468917,
+          "distance": 2165.20358755156,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 955.3000957672978,
+          "distance": 2276.724261371966,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1021.2270975495992,
+          "distance": 2310.8230944478546,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 878.5542691746493,
+          "distance": 2199.9784347793175,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 976.9816903136964,
+          "distance": 2298.4058559183645,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.918000000000005,
+      "meshes": 2366,
+      "fps": 46.01932811949238,
+      "drawCalls": 1091,
+      "cpuFrameMs": 13.5,
+      "gpuFrameMs": 12.209152,
+      "activeTriangles": 7513946,
+      "particles": 432,
+      "camera": "Verfolger nah",
+      "heap": 944065241
+    },
+    {
+      "elapsed": 164.828,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 960.6047758127509,
+          "distance": 2282.028941417419,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 984.9873625404923,
+          "distance": 2306.4115281451604,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1099.4373620452923,
+          "distance": 2420.8615276499604,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1160.064548128981,
+          "distance": 2449.6605450272364,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1020.5421015036802,
+          "distance": 2341.9662671083483,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1120.688836971521,
+          "distance": 2442.113002576189,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.828000000000028,
+      "meshes": 2366,
+      "fps": 56.40157923410609,
+      "drawCalls": 1045,
+      "cpuFrameMs": 13.300000071525574,
+      "gpuFrameMs": 12.665856,
+      "activeTriangles": 6748112,
+      "particles": 431,
+      "camera": "Verfolger nah",
+      "heap": 966127409
+    },
+    {
+      "elapsed": 174.842,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 1096.9795990244072,
+          "distance": 2418.4037646290753,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1134.0371468182268,
+          "distance": 2455.461312422895,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1251.9756750323265,
+          "distance": 2573.3998406369947,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1306.9776237472422,
+          "distance": 2596.5736206454976,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1172.7600513098703,
+          "distance": 2494.1842169145384,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1277.489122701704,
+          "distance": 2598.913288306372,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.888000000000051,
+      "meshes": 2366,
+      "fps": 56.15874205169741,
+      "drawCalls": 1029,
+      "cpuFrameMs": 14.900000095367432,
+      "gpuFrameMs": 10.878976,
+      "activeTriangles": 7887384,
+      "particles": 427,
+      "camera": "Verfolger nah",
+      "heap": 963083273
+    },
+    {
+      "elapsed": 184.849,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 1242.1761245078767,
+          "distance": 2563.600290112545,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1285.2895017032276,
+          "distance": 2606.713667307896,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 45.72092955350058,
+          "distance": 2733.569260762838,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 95.44383707866336,
+          "distance": 2751.4639995815924,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 1319.7175960341403,
+          "distance": 2641.1417616388085,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 68.67584671420582,
+          "distance": 2756.524177923536,
           "finished": false,
           "finishTime": null
         }
       ],
       "speed": 16,
-      "meshes": 2334,
-      "fps": 42.49291784702549,
-      "drawCalls": 1937,
-      "cpuFrameMs": 34.60000002384186,
-      "gpuFrameMs": 18.21184,
-      "activeTriangles": 13277226,
-      "particles": 462,
+      "meshes": 2366,
+      "fps": 31.72588832407321,
+      "drawCalls": 1095,
+      "cpuFrameMs": 14.700000047683716,
+      "gpuFrameMs": 13.294592,
+      "activeTriangles": 8169992,
+      "particles": 470,
       "camera": "Verfolger nah",
-      "heap": 729912916
+      "heap": 967726609
     },
     {
-      "elapsed": 195.037,
+      "elapsed": 194.864,
       "phase": "race",
       "progress": [
         {
-          "last": 35.29761573561996,
-          "distance": 2723.145946944955,
+          "last": 31.35033205172249,
+          "distance": 2719.1986632610583,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 69.78749443588458,
-          "distance": 2757.635825645222,
+          "last": 65.66643508826087,
+          "distance": 2753.514766297598,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 198.69172865243718,
-          "distance": 2886.5400598617816,
+          "last": 194.64493418610368,
+          "distance": 2882.4932653954484,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 238.02806786629367,
-          "distance": 2894.0482303692256,
+          "last": 234.17187815453894,
+          "distance": 2890.1920406574704,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 105.37391880713744,
-          "distance": 2793.222250016477,
+          "last": 101.2795216094255,
+          "distance": 2789.1278528187654,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 221.91059755320543,
-          "distance": 2909.758928762536,
+          "last": 217.9249822848367,
+          "distance": 2905.7733134941664,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.977999999999996,
-      "meshes": 2334,
-      "fps": 35.25264394829612,
-      "drawCalls": 1514,
-      "cpuFrameMs": 17.800000071525574,
-      "gpuFrameMs": 29.314048,
-      "activeTriangles": 8608682,
-      "particles": 439,
+      "speed": 13.975999999999996,
+      "meshes": 2366,
+      "fps": 23.879646582136957,
+      "drawCalls": 2434,
+      "cpuFrameMs": 83.69999992847443,
+      "gpuFrameMs": 15.80544,
+      "activeTriangles": 13916394,
+      "particles": 437,
       "camera": "Verfolger nah",
-      "heap": 754010183
+      "heap": 946764293
     },
     {
-      "elapsed": 205.06,
+      "elapsed": 204.866,
       "phase": "race",
       "progress": [
         {
-          "last": 176.268316899841,
-          "distance": 2864.116648109173,
+          "last": 172.96542878991409,
+          "distance": 2860.813759999245,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 215.37756998525947,
-          "distance": 2903.225901194599,
+          "last": 211.9280056270834,
+          "distance": 2899.776336836422,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 346.190688226342,
-          "distance": 3034.0390194356833,
+          "last": 342.32006295397036,
+          "distance": 3030.168394163312,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 380.79721796360855,
-          "distance": 3036.817380466542,
+          "last": 377.48538966357273,
+          "distance": 3033.5055521665054,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 248.34735726161944,
-          "distance": 2936.1956884709552,
+          "last": 244.8189464701477,
+          "distance": 2932.667277679485,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 373.7868075692463,
-          "distance": 3061.635138778579,
+          "last": 369.8573544462736,
+          "distance": 3057.7056856556064,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.958000000000016,
-      "meshes": 2334,
-      "fps": 37.712130735386495,
-      "drawCalls": 984,
+      "speed": 13.892000000000015,
+      "meshes": 2366,
+      "fps": 28.823981553972377,
+      "drawCalls": 1013,
+      "cpuFrameMs": 11,
+      "gpuFrameMs": 53.64224,
+      "activeTriangles": 6754490,
+      "particles": 426,
+      "camera": "Verfolger nah",
+      "heap": 967298455
+    },
+    {
+      "elapsed": 214.895,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 308.9426212946378,
+          "distance": 2996.7909525039668,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 357.4342469141993,
+          "distance": 3045.2825781235333,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 496.63770836889535,
+          "distance": 3184.4860395782334,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 514.324903971178,
+          "distance": 3170.345066474107,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 389.35443669790425,
+          "distance": 3077.2027679072435,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 525.1704261912162,
+          "distance": 3213.018757400546,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.770000000000039,
+      "meshes": 2366,
+      "fps": 55.26897567436758,
+      "drawCalls": 975,
+      "cpuFrameMs": 14.5,
+      "gpuFrameMs": 15.108096,
+      "activeTriangles": 7129270,
+      "particles": 503,
+      "camera": "Verfolger nah",
+      "heap": 939381867
+    },
+    {
+      "elapsed": 224.923,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 452.23660971517074,
+          "distance": 3140.0849409245,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 503.2894408794473,
+          "distance": 3191.1377720887717,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 653.4644932080557,
+          "distance": 3341.312824417387,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 748.1774277495058,
+          "distance": 3388.629831311455,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 479.368546817499,
+          "distance": 3167.2168780268394,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 679.0294771853239,
+          "distance": 3366.8778083946545,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.926557032929912,
+      "meshes": 2366,
+      "fps": 51.35227661340518,
+      "drawCalls": 1328,
+      "cpuFrameMs": 15.399999976158142,
+      "gpuFrameMs": 14.134272,
+      "activeTriangles": 8296448,
+      "particles": 483,
+      "camera": "Verfolger nah",
+      "heap": 948207379
+    },
+    {
+      "elapsed": 234.945,
+      "phase": "race",
+      "progress": [
+        {
+          "last": 596.1955258989003,
+          "distance": 3284.0438571082286,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 662.7677489505033,
+          "distance": 3350.6160801598276,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 806.7559580528207,
+          "distance": 3494.6042892621513,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 884.6677842973156,
+          "distance": 3525.1201878592647,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 625.2361769041095,
+          "distance": 3313.0845081134503,
+          "finished": false,
+          "finishTime": null
+        },
+        {
+          "last": 832.3898550721349,
+          "distance": 3520.2381862814655,
+          "finished": false,
+          "finishTime": null
+        }
+      ],
+      "speed": 13.841671114805557,
+      "meshes": 2366,
+      "fps": 48.575129531803476,
+      "drawCalls": 1433,
       "cpuFrameMs": 17.200000047683716,
-      "gpuFrameMs": 14.797824,
-      "activeTriangles": 6602622,
-      "particles": 453,
+      "gpuFrameMs": 15.492096,
+      "activeTriangles": 8258892,
+      "particles": 443,
       "camera": "Verfolger nah",
-      "heap": 728723001
+      "heap": 963613380
     },
     {
-      "elapsed": 215.075,
+      "elapsed": 244.956,
       "phase": "race",
       "progress": [
         {
-          "last": 312.37766766402524,
-          "distance": 3000.225998873354,
+          "last": 750.1618603450117,
+          "distance": 3438.0101915543414,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 361.21304700623955,
-          "distance": 3049.0613782155715,
+          "last": 807.7350591715397,
+          "distance": 3495.5833903808643,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 500.3634501640672,
-          "distance": 3188.211781373404,
+          "last": 950.5718442348441,
+          "distance": 3638.4201754441747,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 525.1141725664993,
-          "distance": 3174.6079211103697,
+          "last": 1018.7363079377153,
+          "distance": 3659.1887114996644,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 392.9438939107904,
-          "distance": 3080.7922251201294,
+          "last": 773.4387648654649,
+          "distance": 3461.2870960748073,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 529.221416245429,
-          "distance": 3217.0697474547587,
+          "last": 975.7829376407906,
+          "distance": 3663.631268850121,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.654000000000039,
-      "meshes": 2334,
-      "fps": 55.49389566902866,
-      "drawCalls": 1001,
-      "cpuFrameMs": 13.299999952316284,
-      "gpuFrameMs": 12.534784,
-      "activeTriangles": 7193556,
-      "particles": 477,
+      "speed": 16.191999999999997,
+      "meshes": 2366,
+      "fps": 24.262029923170193,
+      "drawCalls": 1404,
+      "cpuFrameMs": 18.899999976158142,
+      "gpuFrameMs": 81.069056,
+      "activeTriangles": 8571308,
+      "particles": 442,
       "camera": "Verfolger nah",
-      "heap": 739711313
+      "heap": 937796136
     },
     {
-      "elapsed": 225.09,
+      "elapsed": 254.985,
       "phase": "race",
       "progress": [
         {
-          "last": 455.4937328371668,
-          "distance": 3143.3420640464965,
+          "last": 888.1629875826791,
+          "distance": 3576.0113187920088,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 506.68331621781476,
-          "distance": 3194.5316474271394,
+          "last": 948.9067966327091,
+          "distance": 3636.7551278420337,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 656.9076597982987,
-          "distance": 3344.7559910076297,
+          "last": 1095.1476633585842,
+          "distance": 3782.9959945679147,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 751.5098575973423,
-          "distance": 3391.9622611592913,
+          "last": 1157.7926764231695,
+          "distance": 3798.2450799851185,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 482.69929844860894,
-          "distance": 3170.547629657949,
+          "last": 914.2662572487905,
+          "distance": 3602.114588458133,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 682.2405351446439,
-          "distance": 3370.0888663539745,
+          "last": 1119.9565885111795,
+          "distance": 3807.80491972051,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.842557032929912,
-      "meshes": 2334,
-      "fps": 48.39490240547468,
-      "drawCalls": 1304,
-      "cpuFrameMs": 13.5,
-      "gpuFrameMs": 14.508032,
-      "activeTriangles": 8275824,
-      "particles": 462,
+      "speed": 13.854000000000015,
+      "meshes": 2366,
+      "fps": 56.211354701181136,
+      "drawCalls": 1034,
+      "cpuFrameMs": 13.600000023841858,
+      "gpuFrameMs": 11.849728,
+      "activeTriangles": 6869624,
+      "particles": 443,
       "camera": "Verfolger nah",
-      "heap": 755873141
+      "heap": 957996152
     },
     {
-      "elapsed": 235.113,
+      "elapsed": 265,
       "phase": "race",
       "progress": [
         {
-          "last": 599.8246628215377,
-          "distance": 3287.672994030866,
+          "last": 1022.5189469706272,
+          "distance": 3710.367278179957,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 665.9361996498628,
-          "distance": 3353.784530859187,
+          "last": 1096.4433511986083,
+          "distance": 3784.291682407933,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 810.1293639404337,
-          "distance": 3497.9776951497643,
+          "last": 1246.860632030645,
+          "distance": 3934.7089632399757,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 887.8287055485455,
-          "distance": 3528.2811091104945,
+          "last": 1304.8758800978014,
+          "distance": 3945.3282836597505,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 628.8861068025137,
-          "distance": 3316.7344380118548,
+          "last": 1058.8407816763372,
+          "distance": 3746.6891128856796,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 835.7024862004416,
-          "distance": 3523.550817409772,
+          "last": 1276.6480838443074,
+          "distance": 3964.496415053638,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.757671114805557,
-      "meshes": 2334,
-      "fps": 47.42333227769405,
-      "drawCalls": 1409,
-      "cpuFrameMs": 19.300000071525574,
-      "gpuFrameMs": 15.353856,
-      "activeTriangles": 8489876,
-      "particles": 450,
+      "speed": 13.914000000000039,
+      "meshes": 2366,
+      "fps": 56.16925669099538,
+      "drawCalls": 1041,
+      "cpuFrameMs": 12.399999976158142,
+      "gpuFrameMs": 11.04896,
+      "activeTriangles": 7092150,
+      "particles": 470,
       "camera": "Verfolger nah",
-      "heap": 752932855
+      "heap": 944526384
     },
     {
-      "elapsed": 245.145,
+      "elapsed": 275.019,
       "phase": "race",
       "progress": [
         {
-          "last": 754.6514547792833,
-          "distance": 3442.499785988613,
+          "last": 1161.6405394519554,
+          "distance": 3849.488870661285,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 811.472070729373,
-          "distance": 3499.3204019386976,
+          "last": 1247.9297890651462,
+          "distance": 3935.778120274471,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 954.374890521415,
-          "distance": 3642.2232217307455,
+          "last": 41.274388506895775,
+          "distance": 4095.546885320893,
           "finished": false,
           "finishTime": null
-        },
-        {
-          "last": 1022.3989699899928,
-          "distance": 3662.851373551942,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 777.1688321463259,
-          "distance": 3465.0171633556683,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 979.5679288164195,
-          "distance": 3667.41626002575,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 15.679999999999996,
-      "meshes": 2334,
-      "fps": 36.85503685503677,
-      "drawCalls": 1370,
-      "cpuFrameMs": 18.799999952316284,
-      "gpuFrameMs": 18.633728,
-      "activeTriangles": 8239244,
-      "particles": 444,
-      "camera": "Verfolger nah",
-      "heap": 744054047
-    },
-    {
-      "elapsed": 255.157,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 891.5374109433985,
-          "distance": 3579.385742152728,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 952.430454421163,
-          "distance": 3640.2787856304876,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1098.7528582507691,
-          "distance": 3786.6011894600997,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1161.513070379863,
-          "distance": 3801.965473941812,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 917.7941967664344,
-          "distance": 3605.642527975777,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1123.4616536833994,
-          "distance": 3811.30998489273,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.920000000000016,
-      "meshes": 2334,
-      "fps": 54.70459518837382,
-      "drawCalls": 1024,
-      "cpuFrameMs": 12.200000047683716,
-      "gpuFrameMs": 12.711936,
-      "activeTriangles": 6904402,
-      "particles": 447,
-      "camera": "Verfolger nah",
-      "heap": 729690523
-    },
-    {
-      "elapsed": 265.185,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 1025.951462802018,
-          "distance": 3713.799794011348,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1100.0426137179436,
-          "distance": 3787.8909449272683,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1251.0916614182013,
-          "distance": 3938.939992627532,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1308.3445029648199,
-          "distance": 3948.796906526769,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1063.140196821331,
-          "distance": 3750.9885280306735,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1280.4584788707823,
-          "distance": 3968.306810080113,
-          "finished": false,
-          "finishTime": null
-        }
-      ],
-      "speed": 13.98000000000004,
-      "meshes": 2334,
-      "fps": 56.03287260862206,
-      "drawCalls": 1037,
-      "cpuFrameMs": 13.800000071525574,
-      "gpuFrameMs": 14.127104,
-      "activeTriangles": 7408410,
-      "particles": 451,
-      "camera": "Verfolger nah",
-      "heap": 749483371
-    },
-    {
-      "elapsed": 275.207,
-      "phase": "race",
-      "progress": [
-        {
-          "last": 1165.5668621351685,
-          "distance": 3853.415193344498,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 1251.793677114312,
-          "distance": 3939.6420083236367,
-          "finished": false,
-          "finishTime": null
-        },
-        {
-          "last": 45.01780285197424,
-          "distance": 4099.290299665972,
-          "finished": true,
-          "finishTime": 275.2000000000784
         },
         {
           "last": 92.40574068086084,
@@ -1383,8 +1383,8 @@
           "finishTime": 274.883333333412
         },
         {
-          "last": 1218.669542211387,
-          "distance": 3906.5178734207293,
+          "last": 1214.396054888103,
+          "distance": 3902.2443860974454,
           "finished": false,
           "finishTime": null
         },
@@ -1395,30 +1395,30 @@
           "finishTime": 273.4333333334133
         }
       ],
-      "speed": 13.644000000000062,
-      "meshes": 2334,
-      "fps": 36.873156341102366,
-      "drawCalls": 1398,
-      "cpuFrameMs": 16.40000009536743,
-      "gpuFrameMs": 17.125376,
-      "activeTriangles": 9270854,
+      "speed": 13.792000000000062,
+      "meshes": 2366,
+      "fps": 26.605179140976936,
+      "drawCalls": 1450,
+      "cpuFrameMs": 13.5,
+      "gpuFrameMs": 15.917056,
+      "activeTriangles": 9152844,
       "particles": 448,
       "camera": "Verfolger nah",
-      "heap": 740709119
+      "heap": 963933644
     },
     {
-      "elapsed": 285.219,
+      "elapsed": 285.03,
       "phase": "race",
       "progress": [
         {
-          "last": 1312.0914355670682,
-          "distance": 3999.939766776398,
+          "last": 1308.44032174391,
+          "distance": 3996.2886529532398,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 33.22126541678631,
-          "distance": 4087.4937622307775,
+          "last": 29.37729798832379,
+          "distance": 4083.6497948023152,
           "finished": false,
           "finishTime": null
         },
@@ -1435,8 +1435,8 @@
           "finishTime": 274.883333333412
         },
         {
-          "last": 1364.9255215382975,
-          "distance": 4052.77385274764,
+          "last": 1361.4292399789654,
+          "distance": 4049.277571188308,
           "finished": false,
           "finishTime": null
         },
@@ -1447,19 +1447,19 @@
           "finishTime": 273.4333333334133
         }
       ],
-      "speed": 12.992000000000004,
-      "meshes": 2334,
-      "fps": 55.8347291941305,
-      "drawCalls": 753,
-      "cpuFrameMs": 8.100000023841858,
-      "gpuFrameMs": 14.818304,
-      "activeTriangles": 7080792,
-      "particles": 452,
+      "speed": 12.958000000000004,
+      "meshes": 2366,
+      "fps": 56.19029779854099,
+      "drawCalls": 751,
+      "cpuFrameMs": 9.700000047683716,
+      "gpuFrameMs": 10.816512,
+      "activeTriangles": 6752210,
+      "particles": 449,
       "camera": "Verfolger nah",
-      "heap": 736174967
+      "heap": 961739528
     },
     {
-      "elapsed": 295.243,
+      "elapsed": 295.063,
       "phase": "finished",
       "progress": [
         {
@@ -1500,15 +1500,15 @@
         }
       ],
       "speed": 13.907999999999998,
-      "meshes": 2334,
-      "fps": 34.68609087851418,
-      "drawCalls": 1514,
-      "cpuFrameMs": 21.800000071525574,
-      "gpuFrameMs": 14.880768,
-      "activeTriangles": 8495188,
-      "particles": 1678,
+      "meshes": 2366,
+      "fps": 24.721878862793467,
+      "drawCalls": 2428,
+      "cpuFrameMs": 80.89999997615814,
+      "gpuFrameMs": 14.34112,
+      "activeTriangles": 13580036,
+      "particles": 1514,
       "camera": "Verfolger nah",
-      "heap": 753835535
+      "heap": 951720453
     }
   ],
   "endurance": [
@@ -1517,228 +1517,228 @@
       "phase": "race",
       "progress": [
         {
-          "last": 76.39670825605072,
-          "distance": 31.396708256050715,
+          "last": 75.09435957596565,
+          "distance": 30.094359575965655,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 95.30489959593524,
-          "distance": 50.30489959593524,
+          "last": 93.46814544851804,
+          "distance": 48.468145448518044,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 91.32061415226735,
-          "distance": 46.32061415226735,
+          "last": 89.82293573796301,
+          "distance": 44.82293573796301,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 81.43556071024773,
-          "distance": 36.43556071024773,
+          "last": 80.04139854518348,
+          "distance": 35.04139854518348,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 86.34098528264258,
-          "distance": 41.34098528264258,
+          "last": 84.92674958883936,
+          "distance": 39.92674958883936,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 79.03503620006995,
-          "distance": 34.03503620006995,
+          "last": 77.55509462500049,
+          "distance": 32.55509462500049,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.748581553851885,
-      "meshes": 2334,
-      "fps": 32.49214773264301,
-      "drawCalls": 2466,
-      "cpuFrameMs": 46.40000009536743,
-      "gpuFrameMs": 23.998464,
-      "activeTriangles": 13710286,
-      "particles": 589,
+      "speed": 13.394581553851884,
+      "meshes": 2366,
+      "fps": 24.503798089658023,
+      "drawCalls": 2481,
+      "cpuFrameMs": 89.09999990463257,
+      "gpuFrameMs": 18.429952,
+      "activeTriangles": 13723458,
+      "particles": 603,
       "camera": "Verfolger nah",
-      "heap": 735030025,
-      "p50": 34.70000000001164,
-      "p95": 36.90000000002328,
-      "p99": 54.09999999997672,
-      "max": 54.40000000002328,
-      "over33": 155
+      "heap": 948010697,
+      "p50": 18.100000000034925,
+      "p95": 89.19999999995343,
+      "p99": 89.89999999996508,
+      "max": 105.90000000002328,
+      "over33": 126
     },
     {
       "quality": "Standard",
       "phase": "race",
       "progress": [
         {
-          "last": 228.83130397822197,
-          "distance": 183.83130397822197,
+          "last": 274.9882893520719,
+          "distance": 229.9882893520719,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 259.4078288454614,
-          "distance": 214.40782884546138,
+          "last": 305.8706896138149,
+          "distance": 260.8706896138149,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 248.21946144222943,
-          "distance": 203.21946144222943,
+          "last": 295.50867268381216,
+          "distance": 250.50867268381216,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 246.63763628425613,
-          "distance": 201.63763628425613,
+          "last": 293.80307940535954,
+          "distance": 248.80307940535954,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 249.22522986935087,
-          "distance": 204.22522986935087,
+          "last": 296.96230873905597,
+          "distance": 251.96230873905597,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 243.2734863321591,
-          "distance": 198.2734863321591,
+          "last": 291.04754808375014,
+          "distance": 246.04754808375014,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.932581553851898,
-      "meshes": 2334,
-      "fps": 36.06202668693316,
-      "drawCalls": 1331,
-      "cpuFrameMs": 19.100000023841858,
-      "gpuFrameMs": 15.473664,
-      "activeTriangles": 6623936,
-      "particles": 401,
+      "speed": 13.858581553851906,
+      "meshes": 2366,
+      "fps": 51.33470226082092,
+      "drawCalls": 1423,
+      "cpuFrameMs": 18.600000023841858,
+      "gpuFrameMs": 16.992256,
+      "activeTriangles": 7314916,
+      "particles": 419,
       "camera": "Verfolger fern",
-      "heap": 756182500,
-      "p50": 18.099999999976717,
-      "p95": 36.199999999953434,
-      "p99": 36.70000000001164,
-      "max": 53.59999999997672,
-      "over33": 93
+      "heap": 957983007,
+      "p50": 18,
+      "p95": 35.79999999998836,
+      "p99": 36.100000000034925,
+      "max": 36.29999999998836,
+      "over33": 53
     },
     {
       "quality": "Standard",
       "phase": "race",
       "progress": [
         {
-          "last": 367.127606668862,
-          "distance": 322.127606668862,
+          "last": 398.6176318701166,
+          "distance": 353.6176318701166,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 396.0190752463325,
-          "distance": 351.0190752463325,
+          "last": 430.43021054593805,
+          "distance": 385.43021054593805,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 374.86813286014694,
-          "distance": 329.86813286014694,
+          "last": 410.7877937340427,
+          "distance": 365.7877937340427,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 376.8785627277914,
-          "distance": 331.8785627277914,
+          "last": 408.2559750988546,
+          "distance": 363.2559750988546,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 388.9283372651146,
-          "distance": 343.9283372651146,
+          "last": 423.3547601422672,
+          "distance": 378.3547601422672,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 381.4517476696392,
-          "distance": 336.4517476696392,
+          "last": 416.7181517391414,
+          "distance": 371.7181517391414,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.69858155385192,
-      "meshes": 2334,
-      "fps": 37.68844221105518,
-      "drawCalls": 1830,
-      "cpuFrameMs": 24.199999928474426,
-      "gpuFrameMs": 16.54784,
-      "activeTriangles": 10906546,
-      "particles": 411,
+      "speed": 13.854581553851926,
+      "meshes": 2366,
+      "fps": 47.02194357366745,
+      "drawCalls": 1574,
+      "cpuFrameMs": 16.5,
+      "gpuFrameMs": 14.619648,
+      "activeTriangles": 9078448,
+      "particles": 403,
       "camera": "Fahrerperspektive",
-      "heap": 726840033,
-      "p50": 18,
-      "p95": 36.09999999997672,
+      "heap": 940899304,
+      "p50": 17.900000000023283,
+      "p95": 35.70000000001164,
       "p99": 36.399999999965075,
-      "max": 36.5,
-      "over33": 92
+      "max": 36.90000000002328,
+      "over33": 30
     },
     {
       "quality": "Basis",
       "phase": "race",
       "progress": [
         {
-          "last": 493.56164959812645,
-          "distance": 448.56164959812645,
+          "last": 511.577807298964,
+          "distance": 466.577807298964,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 482.5926257281392,
-          "distance": 437.5926257281392,
+          "last": 500.6709946897565,
+          "distance": 455.6709946897565,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 517.1591503234288,
-          "distance": 472.1591503234288,
+          "last": 536.2432051635694,
+          "distance": 491.2432051635694,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 509.2285044875159,
-          "distance": 464.2285044875159,
+          "last": 539.5960362973099,
+          "distance": 487.5194037528561,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 468.6161877855702,
-          "distance": 423.6161877855702,
+          "last": 486.45923846861115,
+          "distance": 441.45923846861115,
           "finished": false,
           "finishTime": null
         },
         {
-          "last": 529.0982015100587,
-          "distance": 484.09820151005874,
+          "last": 544.7216702974704,
+          "distance": 499.7216702974704,
           "finished": false,
           "finishTime": null
         }
       ],
-      "speed": 13.89347543254939,
-      "meshes": 2334,
-      "fps": 46.21072088385161,
-      "drawCalls": 868,
-      "cpuFrameMs": 16.300000071525574,
-      "gpuFrameMs": 14.157824,
-      "activeTriangles": 5506612,
-      "particles": 381,
+      "speed": 15.813475432549392,
+      "meshes": 2366,
+      "fps": 55.9910414383531,
+      "drawCalls": 843,
+      "cpuFrameMs": 13.599999904632568,
+      "gpuFrameMs": 10.702848,
+      "activeTriangles": 5276754,
+      "particles": 440,
       "camera": "Fahrerperspektive",
-      "heap": 768548923,
-      "p50": 17.899999999965075,
-      "p95": 18.5,
-      "p99": 35.70000000001164,
-      "max": 36.399999999965075,
-      "over33": 4
+      "heap": 967730364,
+      "p50": 17.800000000046566,
+      "p95": 18.20000000001164,
+      "p99": 18.70000000001164,
+      "max": 18.800000000046566,
+      "over33": 0
     }
   ],
   "errors": []

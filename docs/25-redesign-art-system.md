@@ -46,10 +46,17 @@ Laufzeit geprüft in Fahrerwahl, Rennen und Nahansicht (siehe Belege). Das ist e
 - Blütenkonfetti in Rot und Gold über der Stadiongeraden (max. 260 Partikel).
 - Motor: neuer synthetischer Achtzylinder-Rennmotor (`art-source/build_engine.mjs` → `public/assets/audio/motor.wav`), phasengekoppelte Zündimpulse durch zwei Auspuffresonatoren, Kurbelwellen-Brummen, Ventiltrieb und Ansaugrauschen; nahtlose 2-s-Schleife, Pegel an den alten Loop angeglichen (RMS 0,25 statt 0,27), Drehzahl/Gangwechsel weiter aus `src/audio.ts`. **Nicht menschlich angehört.**
 
+## Detailpass 06.10.2026 (zweiter Lauf)
+
+- **Höhenprofil:** `CREST` in `src/track-layout.ts`, `elevationAt()` in `src/track.ts`: Kosinus-Kuppe 2,4 m auf der Prachtallee (s 1010–1094). Fahrbahn, Randsteine, Banden, Promenade, Boostfeld, Laternen, Banner, Fahnen, Promenadenmöbel, Items/Boxen/Ring, Partikel-Emitter und alle Kameras folgen; Stützmauern und Brüstung aus Quadern trennen die erhöhte Allee von der Straße. Physik folgt über die vorhandene Federung (wie bei den Rampen).
+- **Hitler-Kopf:** eigene Lidfalte und Unterlid, blaue Iris mit Pupille und Glanzpunkt, Nasolabialfalten, eingefallene Schläfen, Wangenknochen, strengere Mundwinkel, saubere sehr kurze Seiten (`cast-hitler-sides`) statt des gemeinsamen Kurzhaarteils mit Treppenkanten, Hemd- und Jackenkragen. `plainSuit` blendet goldene Ärmelmanschetten und Hosenstreifen aus.
+- **Welt:** Ladenschilder über den Läden (Schriftatlas mit acht eigenen Namen: Kaffeehaus Eitelkeit, Ordensmanufaktur, Jubelbedarf, Stempel & Formulare, Hofbäckerei, Uniformschneiderei, Balkon-Apotheke, Fahnen & Banner); Lindenkronen mit innen dunkleren, oben helleren Laubclustern.
+- **Ton:** `art-source/build_surface_audio.mjs` erzeugt `roll-cobble/-gravel/-grass.wav` (nahtlose Schleifen) und `splash.wav`; `src/audio.ts` blendet je Untergrund mit Tempo und spielt den Platscher beim Eintauchen in Kanal/Hafen/Spree.
+
 ## Offen und nächste Schritte
 
 1. Hitler-Gesicht wirklich realitätsnah: höher aufgelöster Kopf (eigene Skulptur oder frei lizenzierte Basismesh mit dokumentierter Lizenz), Hautshading, Augenpartie; Hände/Arme weniger kantig. Danach gleicher Pass für die übrigen fünf Fahrer.
 2. Seitenwände der Reihenhäuser an Reihenenden (Brandwände) mit Gliederung, Bäume weiter verfeinern oder Instanzen des CC0-Parkbaums nutzen, Laternen des Track-World-Systems an den Kit-Stil angleichen.
-3. Höhenprofil (z. B. Brückenbuckel am Spree-Kai) ist nicht umgesetzt: Fahrbahn, Physik und Welt sind weiterhin eben bis auf Rampen/Bodenwelle.
+3. Höhenprofil: Prachtallee-Kuppe umgesetzt (siehe oben); weitere Höhenzüge bewusst nicht ergänzt.
 4. Hörabnahme Motor/Mix; materialabhängige Reifen-/Wasser-/Publikumsklänge sind unverändert.
 5. Performance nur auf Marcels RTX-3070-Laptop gemessen (siehe PROGRESS-LOG); schwache Geräte offen.

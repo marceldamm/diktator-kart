@@ -145,3 +145,4 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Neue Welt aus einem Baukasten:** wiederverwendbare Blender-Module (Häuser, Tribünen, Palast, Dom, Tor, Brücke, Möbel, Bäume) mit gemeinsamer Farb- und Materialfamilie ersetzen die alte Einzelwelt. Neue Gebäude lassen sich in Sekunden neu bauen.
 - **Hitler-Anker als Zwischenstufe:** eigener Grand-Prix-Wagen, Jacke mit Krawatte, kompakter Bart, ohne Mütze und Abzeichen. Realitätsnahes Gesicht bleibt nächster Schritt.
 - **Atmosphäre:** wärmeres Licht, Fluss, Konfetti, neuer Motorklang (noch nicht angehört).
+- **Detailpass (Claude, zweiter Lauf):** Prachtallee steigt jetzt als Kuppe an, Ladenschilder mit satirischen Namen, Hitler-Kopf und Anzug verfeinert, Reifen klingen je nach Untergrund, Wasser platscht. Zwei alte Testfehler behoben.

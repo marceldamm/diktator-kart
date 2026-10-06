@@ -17,8 +17,8 @@ Marcels Antworten im [Projektfragebogen](PROJECT-QUESTIONNAIRE.md) und [aktiven 
 
 ## Umfassendes Redesign – Claude-Nachtlauf 06.10.2026 (Marcel-Auftrag)
 
-**Aktuell:** Strecke, Stadtwelt, Hitler/Kart-Anker, Licht, Konfetti und Motorklang im echten Rennen umgesetzt und geprüft; Abschluss nach main über den Teamablauf.
-**Nächster Schritt:** Hitler-Gesicht realitätsnah weiterführen (höher aufgelöste Kopfskulptur), danach die übrigen fünf Fahrer; Brandwände/Bäume verfeinern; Motor und Mix menschlich anhören.
+**Aktuell (06.10., zweiter Lauf):** Detailpass abgeschlossen: Prachtallee-Kuppe mit Stützmauern, Kamera/Items/Effekte auf Geländehöhe, Hitler-Kopf (Lider, blaue Iris, Falten, saubere kurze Seiten, Hemd-/Jackenkragen, ziviler Anzug ohne Goldbesatz), Ladenschilder, natürlichere Bäume, untergrundabhängige Rollgeräusche und Wasserplatscher, TV-Wand-WebGL-Fehler und alter `browser-smoke`-Fehlschlag behoben.
+**Nächster Schritt:** Hörabnahme Motor/Rollgeräusche/Platscher; menschliche Stilabnahme des Hitler-Ankers; danach die übrigen fünf Fahrer auf denselben Stand bringen.
 **Arbeitsbranch:** `claude/team-marcel-redesign-20261006-012236` (vom aktuellen origin/main `8e3a6e9`; lokaler Altstand vorher als `archive/before-sync-claude-20261006-012236` gesichert).
 
 - [x] **Strecke größer und anders:** 1366 m statt 891 m. Neuer Ostbogen mit Spree-Kai (offene Wasserkante), Prachtallee, Haarnadel um die „Säule der Eitelkeit“, Tiergarten-Esses und Zielkurve; alle bestehenden Abschnitte/Regeln erhalten. Details: [docs/25](docs/25-redesign-art-system.md).
@@ -26,7 +26,8 @@ Marcels Antworten im [Projektfragebogen](PROJECT-QUESTIONNAIRE.md) und [aktiven 
 - [x] **Hitler samt Kart (Zwischenstufe):** eigener 1930er-Grand-Prix-Wagen, zivile Jacke mit Hemd/Krawatte, kompakter Zweifingerbart, Nase, Brauen, Kiefer; erwachsenere Kopfgröße; ohne Mütze, Wimpel und Abzeichen. Erkennbare Karikatur, noch kein realitätsnahes Porträt.
 - [x] **Licht/Effekte/Ton:** wärmeres Spätnachmittagslicht und Dunst, Flusswellen, Blütenkonfetti über der Stadiongeraden, neuer synthetischer Achtzylinder-Motor (Pegel angeglichen, nicht angehört).
 - [x] Prüfung: 74/74 Unit-Tests, TypeScript, Produktionsbuild; sichtbares Chrome mit Sechs-Kart-Rennen, drei Kameras, Fahrerwahl, Nahansichten, Renn-/Itemlauf; Vorher-/Nachher-Bilder unter gleichen Bedingungen. Einzelheiten und bekannte Grenzen in [PROGRESS-LOG.md](PROGRESS-LOG.md).
-- [ ] Offen: realitätsnahes Hitler-Gesicht, übrige Fahrer, Höhenprofil (Brückenbuckel), Brandwände/Bäume, Hörabnahme, Messung auf schwachen Geräten. Vorbestehender Fehlschlag `tests/browser-smoke.mjs` (Laborszene, Bodenwellen-Erwartung) bestand auch vor dem Redesign nicht.
+- [x] Detailpass 06.10. (zweiter Lauf): Höhenprofil als 2,4-m-Kuppe der Prachtallee (s 1010–1094) samt Stützmauern/Brüstung; Hitler-Kopf und -Anzug verfeinert; Ladenschilder mit eigenen satirischen Namen; Bäume mit Licht-/Schattenverlauf; Rollgeräusche Pflaster/Schotter/Gras und Platscher; TV-Wand-Rückkopplung und `browser-smoke` behoben (Labor nutzt keine Hauptstrecken-Untergründe mehr, veraltete Drift-Texterwartung aktualisiert). Belege: `docs/evidence/redesign2-*-20261006.png`.
+- [ ] Offen: realitätsnahes Porträt jenseits der prozeduralen Karikatur (bräuchte eine echte Skulptur oder lizenzierte Basismesh), übrige fünf Fahrer, Hörabnahme, Messung auf schwachen Geräten, WebGL-Warnung „Mismatch between texture format and sampler type“ (Ursache nicht ermittelt).
 
 ## Git-Ablauf verständlich gemacht – 05.10.2026 (Marcel)
 

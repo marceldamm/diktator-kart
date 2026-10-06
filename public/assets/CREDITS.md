@@ -52,3 +52,4 @@ Sprachupdate: eigene freundliche kurze Sprechertexte und sechs eigene Parodie-Sp
 
 - `models/city-kit.glb` (Stadtbaukasten) und die neuen Hitler-/Grand-Prix-Teile in `models/hero-kart.glb`: originale prozedurale Projektgeometrie aus `art-source/build_city_kit.py` bzw. `art-source/build_kart.py`. Keine externen Modelle, Texturen oder Logos.
 - `audio/motor.wav`: originale Synthese aus `art-source/build_engine.mjs`, keine Samples.
+- `audio/roll-cobble.wav`, `roll-gravel.wav`, `roll-grass.wav`, `splash.wav`: originale Synthese aus `art-source/build_surface_audio.mjs`, keine Samples.

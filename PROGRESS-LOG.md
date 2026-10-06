@@ -1,5 +1,25 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-06 (vormittags) – Claude-Detailpass zum Redesign: Kuppe, Hitler-Kopf, Schilder, Untergrundklang, Testfehler
+
+**Auftrag (Marcel):** Den Masterauftrag vom Vortag vollständig weiter umsetzen, Details optimieren und offene Punkte abarbeiten; danach PC in den Ruhezustand.
+
+**Start:** Branch `claude/team-marcel-redesign-20261006-012236` = origin/main `8a6fd56`, sauber; Fetch ohne neue Commits. Vite neu gestartet (Vorschau-Konfiguration `dk-dev`), eigenes Test-Chrome mit abgeschalteter Hintergrunddrosselung.
+
+**Umgesetzt:**
+- Prachtallee-Kuppe (`CREST`, `elevationAt`): 2,4 m Kosinusprofil s 1010–1094; Fahrbahn und alle Streckenmöbel, Items/Boxen/Immunitätsring, Partikel-Emitter, alle Kameramodi folgen; Quader-Stützmauern und Brüstung. Erster Test zeigte die Verfolgerkamera unter der Fahrbahn → Kamera hebt sich jetzt mit der Geländehöhe.
+- Hitler: Lidfalte/Unterlid, blaue Iris, Nasolabialfalten, Schläfen/Wangenknochen, Mundwinkel, saubere kurze Seiten (`cast-hitler-sides` statt des gemeinsamen Kurzhaarteils mit Treppenkanten), Hemd-/Jackenkragen, `plainSuit` ohne Goldmanschetten/Hosenstreifen.
+- Ladenschilder mit Schriftatlas (acht eigene Namen); erste Fassung stand kopf (glTF-V-Umkehr + DynamicTexture), mit `vScale = -1` korrigiert und per Nahkamera geprüft.
+- Bäume: Laub heller, Cluster innen/unten dunkler, oben heller.
+- Ton: Rollgeräusche Pflaster/Schotter/Gras (Tempo-abhängig), Platscher beim Eintauchen in Kanal/Hafen/Spree.
+- Fehler: TV-Wand rendert ihr eigenes Bild nicht mehr (WebGL-„Feedback loop“ weg); `browser-smoke` besteht wieder (Laborszene ohne Hauptstrecken-Untergründe, veraltete Texterwartung „Drift geladen“ → „Drift Stufe“).
+
+**Geprüft (tatsächlich ausgeführt):** `npm test` 74/74; `npm run build` bestanden (bekannte Chunk-Warnung); im Test-Chrome `tests/slice-race.mjs` PASS (`FULL_RACE_AND_REMATCH_PASS`, drei Runden 295 s), `tests/slice-items.mjs` PASS, `tests/final-six-kart-browser.mjs` PASS, `tests/browser-smoke.mjs` PASS (vorher seit längerem rot). Laufzeitbilder `docs/evidence/redesign2-*-20261006.png` (Kuppe s 1030/1060, Ladenschild-Nahkamera, Hitler Gesicht/Dreiviertel/Profil im pausierten Rennen). FPS-Momentwerte auf der Kuppe 53–56 (RTX-3070-Laptop, 1600 × 1000).
+
+**Nicht verifiziert / offen:** Hörabnahme aller neuen Klänge; menschliche Stilabnahme; schwache Geräte; WebGL-Warnung „Mismatch between texture format and sampler type“ (Ursache nicht ermittelt); realitätsnahes Porträt bleibt eine prozedurale Karikatur.
+
+**Budget:** 5-Stunden-Fenster 8 % beim Start, 20 % nach Kuppe/Kopf/Ton; Wochenlimit 7–9 %.
+
 ## 2026-10-06 – Claude-Nachtlauf: umfassendes Redesign (Strecke, Stadtbaukasten, Hitler-Anker, Licht, Motor)
 
 **Auftrag:** [Claude-Masterauftrag](docs/24-claude-overnight-master-prompt.md) von Marcel (neue größere Strecke, Welt als zusammenhängendes Art-System, Hitler samt Kart als erster Qualitätsanker, Licht/Effekte/Audio, Abschluss nach main).

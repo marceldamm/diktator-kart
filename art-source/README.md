@@ -11,6 +11,8 @@ Stand 03.10.2026. Alle Kart-, Gebäude-, Requisiten- und Itemmodelle sind origin
 - `build_city_kit.py` → `city-kit.blend` und `.tools/raw-models/city-kit.glb`; danach `node art-source/optimize_assets.mjs city-kit`. 28 Module mit gemeinsamer Palette, eine Meshgruppe pro Kit-Material (`kit-<modul>|<material>`), Vertexfarben für Verschmutzung/Streifen. Bauzeit ca. 2 s. Platzierung und Zusammenfassung zur Laufzeit in `src/city-world.ts`; neue Module dort in `DIMS` und den Bezirksfamilien eintragen. Art-System und Streckenabschnitte: [docs/25](../docs/25-redesign-art-system.md).
 - `build_world.py`/`stadium-world.blend` sind ab jetzt historisch; `stadium-world.glb` wird nicht mehr geladen.
 - `build_kart.py`, Abschnitt „Hitler quality anchor“: `body-grandprix`, `cast-hitler-jacket`, `cast-hitler-tache`, `cast-hitler-nose`, `cast-hitler-brows`; danach `node art-source/optimize_assets.mjs hero-kart`.
+- `build_surface_audio.mjs` erzeugt `roll-cobble.wav`, `roll-gravel.wav`, `roll-grass.wav` und `splash.wav` (eigene Synthese).
+- Ladenschilder: Kit-Material `Kit shop sign`, UV je Schild auf eine von acht Atlaszeilen; Schriftzüge zeichnet `src/city-world.ts`.
 - `build_engine.mjs` erzeugt nur `public/assets/audio/motor.wav` (eigene Synthese, eigener Zufallsstrom; `build_audio.mjs` würde den Motor wieder überschreiben – danach `build_engine.mjs` erneut ausführen).
 
 ## Quellen und Laufzeit (Qualitätsstufe 2)
