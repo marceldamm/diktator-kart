@@ -96,3 +96,11 @@ test('rival styles change visible choices only: style shortcut users take the al
     for (const style of BOT_STYLES) assert.deepEqual(Object.keys(style).sort(), ['drift', 'itemPatience', 'label', 'lane', 'pass', 'shortcut'], 'no speed or grip field');
   } finally { setBotStyles([]); }
 });
+
+test('Duce-Drom park lawns stay clear of the road, kerbs and promenades', onRome(() => {
+  const clear = TRACK.halfWidth + 1.45 + layout.LANDMARKS.promenade + .5;
+  for (const p of TRACK.samples) for (const [x0, z0, x1, z1] of layout.LANDMARKS.lawns) {
+    const dx = Math.max(x0 - p.x, 0, p.x - x1), dz = Math.max(z0 - p.z, 0, p.z - z1);
+    assert.ok(Math.hypot(dx, dz) > clear, `lawn ${[x0, z0, x1, z1]} reaches the road at s=${p.s.toFixed(0)}`);
+  }
+}));

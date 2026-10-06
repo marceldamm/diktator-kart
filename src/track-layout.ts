@@ -139,7 +139,7 @@ const DUCE_DROM: TrackDefinition = {
   landmarks: {
     palace: null, fountains: [], trees: [],
     column: [150 * R, -78 * R], gateProgress: 1050,
-    lawns: [[-185, -108, 95, 60], [-185, 60, 40, 128]], promenade: 5,
+    lawns: [[-172, -100, 95, 60], [-160, 60, 40, 124]], promenade: 5,
   },
   river: { north: 262, south: 186, west: -460, east: 520, level: -1.15 },
   ground: { west: -460, east: 520, north: 470, south: -420 },

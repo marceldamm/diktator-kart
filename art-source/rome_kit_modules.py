@@ -177,10 +177,15 @@ def triumphal_arch():
             for cx in (11.8, 15.6):
                 column_order(M, side * cx, yy + sgn * .75, 2.2, 14.6, .62)
                 M.boxc(LIME, side * cx, yy + sgn * .75, 0, 1.9, 1.9, 2.2, .9)
-        M.box(LIME, x0 - .4, x1 + .4, yy + (-1.6 if yy < 0 else 0), yy + (0 if yy < 0 else 1.6), 17.15, 18.4, .95)
-        M.prism_y(GOLD, yy - (.12 if yy < 0 else -.02), yy + (.02 if yy < 0 else .12), [(-1.0, 17.0), (1.0, 17.0), (1.3, 19.4), (-1.3, 19.4)])   # keystone
-        for side in (-1, 1):  # relief panels: flying figures above the arch
-            M.box(GOLD, side * 4.5 - 2.6, side * 4.5 + 2.6, yy + (-.14 if yy < 0 else 0), yy + (0 if yy < 0 else .14), 13.6, 16.4, .85)
+        y0, y1 = yy + (-1.6 if yy < 0 else 0), yy + (0 if yy < 0 else 1.6)
+        for ea, eb in ((x0 - .4, -half - .4), (half + .4, x1 + .4)):   # entablature over the column pairs only
+            M.box(LIME, ea, eb, y0, y1, 16.8, 18.0, .95)
+        M.prism_y(LIME, yy - (.3 if yy < 0 else -.02), yy + (.02 if yy < 0 else .3), [(-1.0, 19.1), (1.0, 19.1), (1.3, 21.3), (-1.3, 21.3)], .9)   # keystone on the crown
+        for side in (-1, 1):  # relief panels above the arch, below the attic
+            M.box(LIME, side * 5.3 - 2.9, side * 5.3 + 2.9, yy + (-.22 if yy < 0 else 0), yy + (0 if yy < 0 else .22), 20.3, 22.5, .8)
+            for k in range(3):  # carved figures standing out of the relief panel
+                fx = side * 5.3 - 1.8 + k * 1.8
+                M.sphere(LIME, fx, yy + (-.3 if yy < 0 else .3), 21.4, .32, .2, .75, 8, 5, .9)
     # attic with the inscription panel (lettering is painted at runtime)
     M.box(LIME, x0 - .5, x1 + .5, -4.8, 4.8, ztop, ztop + .8, .95)
     M.box(LIME, x0 + 1, x1 - 1, -4.3, 4.3, ztop + .8, ztop + 7.0, .97)
