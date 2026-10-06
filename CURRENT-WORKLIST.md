@@ -18,6 +18,9 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Paket 2 – Live-Rangliste rechts:** alle sechs Fahrer mit Porträt, Farbe und Platz unter der Minikarte; Führender golden, Spieler hell markiert; Datenquelle ist ausschließlich `rankRace` (dieselbe Rangfolge wie Platzanzeige/Ziel). Ruhige Positionswechsel (Gleitanimation, höchstens ca. 7 Aktualisierungen/s), Zielhäkchen, kompakte Varianten für kleine Fenster.
 - [x] **Paket 3 – Grand Prix als Meisterschaft:** „Großer Preis der Eitelkeit“ über Stadionring → Duce-Drom, Punkte 10/7/5/3/2/1 aus der echten Zielreihenfolge, Zwischenwertung, Gesamtwertung mit Siegerehrung, „Nächstes Rennen“/„Neuer Grand Prix“/Menü. Gleichstand: Siege, bestes Einzelergebnis, letztes Rennen. Knappe satirische Einleitung je Rennen.
 - [x] **Paket 4 – Zeitfahren:** Bestzeit, beste Runde und Geist werden je Strecke lokal gespeichert, nur nach vollständigem Lauf; HUD zeigt den Abstand zum Geist. Stadionring-Schlüssel unverändert (bisherige Bestzeiten bleiben).
+- [x] **Fragebogen-Ziel Bedienung:** Tastenbelegung für zehn Fahraktionen in den Optionen (lokal gespeichert, Pfeiltasten bleiben); Gamepad-Standardbelegung (Stick lenkt analog, RT/LT Gas/Bremse, A Drift, X Item, Y Kamera, RB Fähigkeit, Menüs mit A/B/Steuerkreuz) – mit echtem Controller noch ungeprüft.
+- [x] **Paket 5 – Rivalenstile:** Linie, Drift/Haftung, Abkürzung, Überholdrang und Item-Geduld je Figur, ohne Tempo- oder Gripbonus; Hinweis „Als Rivale“ in der Fahrerwahl.
+- [x] Fragebogen-Abgleich mit Status je Ziel: [docs/27-questionnaire-status.md](docs/27-questionnaire-status.md).
 - [x] Streckenereignis Duce-Drom: angekündigte „Balkonrede“ in Runde 2 mit Rosenregen über der Prunkstraße und Jubel (rein visuell, für alle gleich).
 - [ ] Menschliche Fahr-, Stil- und Hörabnahme der neuen Strecke; Intel-UHD-Messung beider Strecken (Issue #4 bleibt offen).
 

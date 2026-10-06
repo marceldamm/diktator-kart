@@ -22,7 +22,9 @@
 - Sichtbares Chrome (eigenes Profil, CDP 9231, 1600×1000, RTX 3070 Laptop), `demo=1` (Spielerkart fährt mit Bot-Regler): Einzelrennen Duce-Drom komplett (Runden 87,75/86,75/87,00 s; alle sechs im Ziel), Grand Prix komplett über beide Strecken (Rennen 1 Stadionring, Rennen 2 Duce-Drom, korrekte Zwischen-/Gesamtwertung inkl. Gleichstand 3:3 nach letztem Rennen aufgelöst). Keine Seitenfehler. FPS-Anzeige im Rennen 44–57 (Duce-Drom) bzw. 52 (Stadionring) – unkontrollierte Momentwerte, keine M7-Messung.
 - Belege: `docs/evidence/rome-*-20261007.png`, `docs/evidence/gp-*-20261007.png` (Index in `docs/evidence/README.md`).
 
-**Nicht geprüft / offen:** menschliche Fahr-, Stil- und Hörprobe; Speicherung von Bestzeit/Geist im echten Zeitfahren (Demo speichert absichtlich nicht); Intel UHD und kontrollierte Framezeit beider Strecken (Issue #4); Ton für die Balkonrede; Pull Request/Issue-Anlage (in dieser Umgebung kein GitHub-CLI/Connector – Branch ist gepusht, PR muss über GitHub geöffnet werden).
+**Nachtrag (gleicher Lauf):** Tastenbelegung (`REBINDABLE`, `rebind`, `dk-keys-v1`) und Gamepad-Abfrage (`pollGamepads`, analoge Achsen in `InputHub`) ergänzt; `tests/input-bindings.test.mjs` 2/2; im sichtbaren Chrome Item auf J umgelegt, gespeichert und zurückgesetzt. Ein echtes Gamepad stand nicht zur Verfügung. Triumphbogen-Reliefs/Schlussstein sitzen jetzt über der Öffnung, Duce-Drom-Rasenflächen halten Abstand zur Fahrbahn (neuer Test). Ansichten: `docs/evidence/rome-view-*-20261007.png`.
+
+**Nicht geprüft / offen:** menschliche Fahr-, Stil- und Hörprobe; echtes Gamepad; Speicherung von Bestzeit/Geist im echten Zeitfahren (Demo speichert absichtlich nicht); Intel UHD und kontrollierte Framezeit beider Strecken (Issue #4); Ton für die Balkonrede; Pull Request/Issue-Anlage (in dieser Umgebung kein GitHub-CLI/Connector – Branch ist gepusht, PR muss über GitHub geöffnet werden).
 
 ## 2026-10-06 – Strecke vor Rennstart unsichtbar und Laufzeitruckeln geprüft
 

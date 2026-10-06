@@ -26,11 +26,11 @@ Status: **umgesetzt** (im Spiel und geprüft) · **teilweise** · **ungeprüft**
 | Figurenstimmen nur aus geklärten Aufnahmen | **blockiert** | Keine Aufnahmen mit geklärten Rechten | Rechteklärung durch Marcel |
 | Desktop/Laptop inkl. integrierter Grafik, stabile 60 FPS | **offen** | RTX-3070-Demo ca. 50–57 FPS im Rennen (Duce-Drom), Intel UHD ca. 14 FPS (Issue #4) | Kontrollierte M7-Messung beider Strecken |
 | Automatische Grafikabstimmung + manueller Regler | **teilweise** | Manueller Regler vorhanden, Automatik fehlt | Startwert aus Framezeit-Probe |
-| Tastatur + Gamepad, Tasten neu belegbar | **teilweise** | Tastatur/Touch; Gamepad und Neubelegung fehlen | Gamepad-API und Belegungsmenü |
+| Tastatur + Gamepad, Tasten neu belegbar | **teilweise** | Zehn Fahraktionen in den Optionen neu belegbar (lokal gespeichert, im Chrome geprüft, `docs/evidence/options-keymap-20261007.png`); Gamepad-Standardbelegung mit analoger Lenkung/Gas eingebaut, aber **ohne echtes Gamepad ungeprüft** | Test mit einem echten Xbox-/PlayStation-Controller |
 | Offline, lokale Einstellungen/Bestzeiten/Fortschritt | **umgesetzt** | localStorage, je Strecke | – |
 | Skalierbare UI, Untertitel, Kontraste, reduzierte Bewegung | **teilweise** | Reduzierte Bewegung, Kontraste; Untertitel fehlen | Untertitel für Ansagen |
 | Verständliche Fehler mit Wiederholung/Diagnose | **umgesetzt** | Ladefehler mit Wiederholen, Diagnosepanel | – |
 | Blender-Quellen und Laufzeitmodelle gemeinsam versioniert | **umgesetzt** | Rom-Module als Python-Quelle + `.blend` + GLB | – |
 | Mehrspieler später | **offen (bewusst später)** | – | – |
 
-**Empfohlene Reihenfolge danach:** (1) M7-Messung beider Strecken inkl. Intel UHD, (2) Gamepad + Tastenbelegung, (3) Fähigkeiten der übrigen vier Fahrer, (4) dritte Strecke aus Sarahs Liste, (5) Reifenauswahl.
+**Empfohlene Reihenfolge danach:** (1) M7-Messung beider Strecken inkl. Intel UHD, (2) Gamepad-Praxistest, (3) Fähigkeiten der übrigen vier Fahrer, (4) dritte Strecke aus Sarahs Liste, (5) Reifenauswahl.

@@ -1,6 +1,6 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
-import { attachKeyboard, attachPointerHold, attachTouch, InputHub,type Action } from './input';
+import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, exportBindings, importBindings, keyLabel, pollGamepads, primaryKey, rebind, resetBindings, type Action } from './input';
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
@@ -112,6 +112,10 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  private padButtons=new Map<string,boolean>();
+  private gamepadSeen=false;
+  /** Action waiting for its new key in the options (null = not listening). */
+  private rebinding:Action|null=null;
   /** Best lap of the current run; reset on every start, saved per track on a complete run only. */
   private ghostDelta:number|null=null;
   private ghostRun:{time:number;driver:number;samples:number[][];track?:string}|null=null;
@@ -177,6 +181,15 @@ class App {
     const botLabel=()=>{setBotSkill(this.botLevel);document.querySelector('#bots-toggle')!.textContent=`Gegner ${['leicht','mittel','schwer'][this.botLevel]}`;};
     document.querySelector('#bots-toggle')?.addEventListener('click',()=>{this.botLevel=((this.botLevel+1)%3) as 0|1|2;try{localStorage.setItem('dk-bot-level',String(this.botLevel));}catch{}botLabel();});
     botLabel();
+    try{importBindings(JSON.parse(localStorage.getItem('dk-keys-v1')??'null'));}catch{}
+    this.renderKeymap();
+    window.addEventListener('keydown',(event)=>{
+      if(!this.rebinding)return;
+      event.preventDefault();event.stopImmediatePropagation();
+      if(event.code!=='Escape'&&!rebind(this.rebinding,event.code)){this.lastAction='Taste reserviert';}
+      this.rebinding=null;try{localStorage.setItem('dk-keys-v1',JSON.stringify(exportBindings()));}catch{}
+      this.renderKeymap();
+    },true);
     document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection());
     document.querySelector('#track-go')?.addEventListener('click',()=>this.confirmTrackSelection());
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>card.addEventListener('click',()=>{
@@ -657,6 +670,20 @@ class App {
     this.lastRank = rank;
   }
 
+  /** Options: rebinding list for the main driving actions (keys saved locally). */
+  private renderKeymap(): void {
+    const root = document.querySelector<HTMLElement>('#keymap'); if (!root) return;
+    root.replaceChildren();
+    for (const { action, label } of REBINDABLE) {
+      const button = document.createElement('button'); button.type = 'button';
+      button.textContent = this.rebinding === action ? `${label}: Taste drücken …` : `${label}: ${keyLabel(primaryKey(action))}`;
+      button.addEventListener('click', () => { this.rebinding = action; this.renderKeymap(); });
+      root.append(button);
+    }
+    const reset = document.createElement('button'); reset.type = 'button'; reset.textContent = 'Standardtasten';
+    reset.addEventListener('click', () => { resetBindings(); try { localStorage.removeItem('dk-keys-v1'); } catch { /* optional */ } this.renderKeymap(); });
+    root.append(reset);
+  }
   /** localStorage keys per circuit; the Stadionring keeps its earlier keys so existing records survive. */
   private storageKey(kind: 'race' | 'timetrial' | 'ghost' | 'lap'): string {
     if (TRACK.id === 'stadionring') return { race: 'dk-best-stadium-v2', timetrial: 'dk-best-timetrial-v2', ghost: 'dk-ghost-v2', lap: 'dk-best-lap-stadionring-v1' }[kind];
@@ -737,6 +764,11 @@ class App {
       } else this.frameTimes = [];
     } else if (this.state !== 'running' || document.hidden) this.frameTimes = [];
     this.lastFrameAt = now;
+    { // Gamepads: polled once per rendered frame; in menus A/B/D-pad behave like Enter/Escape/arrows.
+      const menu=!!this.camera?.introMode||this.selecting||this.selectingTrack||this.racePhase==='finished';
+      const found=pollGamepads(this.input,menu,(code)=>{window.dispatchEvent(new KeyboardEvent('keydown',{code,key:code,bubbles:true}));window.dispatchEvent(new KeyboardEvent('keyup',{code,key:code,bubbles:true}));},this.padButtons);
+      if(found&&!this.gamepadSeen){this.gamepadSeen=true;this.itemMessage='Gamepad erkannt · Stick lenkt, RT Gas, A Drift, X Item';this.itemMessageUntil=this.items.time+3;}
+    }
     const frame = this.input.read();
     this.camera?.setLookBack(this.state === 'running' && !this.camera.introMode && this.input.isDown('lookBack'));
     if(frame.pressed.has('menu')&&!this.selecting&&!document.body.classList.contains('select-open')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}

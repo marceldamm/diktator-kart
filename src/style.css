@@ -287,3 +287,5 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 #gp-standings li small { font-variant-numeric:tabular-nums;color:#f0dfb7; }
 #gp-standings li.player-result { background:#3d5a4e88; }
 #finish-card { max-height:calc(100vh - 24px);overflow:auto; }
+.keymap-title { margin:10px 0 4px;font-size:9px;letter-spacing:.1em;color:#d7bc86; }
+.keymap button { font-size:10px; }
