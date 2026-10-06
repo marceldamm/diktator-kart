@@ -717,6 +717,7 @@ class App {
     }
     const gp = this.gp;
     awardPoints(gp, TRACK.id, order.map((slot) => this.order[slot] ?? slot), this.raceTime);
+    window.setTimeout(() => this.audio.voice(gp.round >= gp.tracks.length - 1 ? 'announcer-gp-champion' : 'announcer-gp-standings', { force: true }), 6500);
     const rows = standings(gp), last = gp.round >= gp.tracks.length - 1, me = this.chosen;
     const head = document.createElement('b'); head.textContent = last ? 'GESAMTWERTUNG · SIEGEREHRUNG' : `ZWISCHENWERTUNG NACH RENNEN ${gp.round + 1}/${gp.tracks.length}`; table.append(head);
     const list = document.createElement('ol');
@@ -927,6 +928,10 @@ class App {
             if(Math.round(this.raceTime*60)%3===0)this.ghostRecord.push([+this.kart.x.toFixed(2),+this.kart.z.toFixed(2),+this.kart.heading.toFixed(3),+this.kart.height.toFixed(2),+Math.max(0,this.progress[0].distance).toFixed(1)]);
             if(this.ghostRun&&Math.round(this.raceTime*60)%15===0)this.ghostDelta=this.ghostGap();
           }
+          if(this.raceTime<5&&this.raceTime+FIXED_STEP>=5&&this.mode!=='timetrial'){
+            if(this.mode==='gp'&&this.gp&&this.gp.round===0)this.audio.voice('announcer-gp-intro',{force:true});
+            else if(TRACK.id==='duce-drom')this.audio.voice('announcer-rome',{force:true});
+          }
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
@@ -936,7 +941,7 @@ class App {
             this.lapNoticeUntil=this.raceTime+3;
             if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);}
             if(this.lapTimes.length===1){
-              if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);}
+              if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}
           }

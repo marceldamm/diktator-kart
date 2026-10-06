@@ -21,6 +21,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Fragebogen-Ziel Bedienung:** Tastenbelegung für zehn Fahraktionen in den Optionen (lokal gespeichert, Pfeiltasten bleiben); Gamepad-Standardbelegung (Stick lenkt analog, RT/LT Gas/Bremse, A Drift, X Item, Y Kamera, RB Fähigkeit, Menüs mit A/B/Steuerkreuz) – mit echtem Controller noch ungeprüft.
 - [x] **Paket 5 – Rivalenstile:** Linie, Drift/Haftung, Abkürzung, Überholdrang und Item-Geduld je Figur, ohne Tempo- oder Gripbonus; Hinweis „Als Rivale“ in der Fahrerwahl.
 - [x] Fragebogen-Abgleich mit Status je Ziel: [docs/27-questionnaire-status.md](docs/27-questionnaire-status.md).
+- [x] **Ansagen:** fünf neue Sprecherinnen-Zeilen (Piper/Kerstin wie die vorhandenen Platzhalterstimmen): Grand-Prix-Begrüßung, Duce-Drom-Begrüßung, Balkonrede, Zwischenwertung, Gesamtsieger. Im Chrome geladen (43 Zeilen) und `announcer-rome` im Rennen ausgelöst; Hörabnahme offen.
 - [x] Streckenereignis Duce-Drom: angekündigte „Balkonrede“ in Runde 2 mit Rosenregen über der Prunkstraße und Jubel (rein visuell, für alle gleich).
 - [ ] Menschliche Fahr-, Stil- und Hörabnahme der neuen Strecke; Intel-UHD-Messung beider Strecken (Issue #4 bleibt offen).
 

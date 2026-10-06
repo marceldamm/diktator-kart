@@ -4,6 +4,31 @@
     "text": "Hallo zusammen! Willkommen im Stadion der Eitelkeit. Sechs Fahrer, drei Runden. Viel Spaß!",
     "emotion": null
   },
+  "announcer-gp-intro": {
+    "voice": "announcer",
+    "text": "Willkommen zum Großen Preis der Eitelkeit. Zwei Rennen, eine Wertung. Das Ergebnis wird ausnahmsweise gezählt.",
+    "emotion": null
+  },
+  "announcer-rome": {
+    "voice": "announcer",
+    "text": "Willkommen im Duce-Drom. Der Balkon ist besetzt, das Rednerpult ist leer. Applaus bitte trotzdem.",
+    "emotion": null
+  },
+  "announcer-balcony": {
+    "voice": "announcer",
+    "text": "Achtung, der Balkon spricht. Rosen auf der Prunkstraße. Bitte weiterfahren.",
+    "emotion": null
+  },
+  "announcer-gp-standings": {
+    "voice": "announcer",
+    "text": "Die Zwischenwertung ist amtlich. Einsprüche nur schriftlich und nach dem Rennen.",
+    "emotion": null
+  },
+  "announcer-gp-champion": {
+    "voice": "announcer",
+    "text": "Der Große Preis ist entschieden. Der Pokal war schon graviert. Diesmal stimmt sogar der Name.",
+    "emotion": null
+  },
   "announcer-grid": {
     "voice": "announcer",
     "text": "Alle bereit? Dann ab an den Start!",
