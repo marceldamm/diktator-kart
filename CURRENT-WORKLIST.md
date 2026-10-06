@@ -9,6 +9,12 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## GitHub-Dokumentation, Aufgaben und Prüfungen – 06.10.2026 (Marcel)
+
+**Status:** Pilot als offene GitHub-Arbeit eingerichtet: [PR #1](https://github.com/marceldamm/diktator-kart/pull/1) enthält Issue-Formulare, PR-Vorlage und Actions für `npm ci`, `npm test`, `npm run build`; der erste Lauf deckte den Node-22-Schalterfehler auf, der Folgelauf ist grün. Aktive Ruleset-Regel für `main` verlangt PR und `tests-and-build`. [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2) und [Milestone](https://github.com/marceldamm/diktator-kart/milestone/1) verfolgen den Pilot. Das private [Projektboard](https://github.com/users/marceldamm/projects/1/views/1) enthält Issue #2 („In progress“) und PR #1 („In review“); offene Issues und PRs werden künftig automatisch ergänzt. Copilot Cloud Agent ist nicht verfügbar. Die vier Markdown-Hauptdateien bleiben kanonisch; Sarahs Zugriff auf das private Board und der PR-Merge sind noch offen.
+
+**Nächster Schritt:** PR #1 im vereinbarten Projektabschluss prüfen und zusammenführen; damit werden die Vorlagen/Actions auch auf `main` verfügbar. Issue #2 bleibt offen, bis Sarahs Boardzugriff und der Team-Pilot geklärt sind. Das Arbeits-Intranet danach ausschließlich in dessen Firmen-Repository einrichten, sobald URL und Richtlinien vorliegen; keine Unternehmensinhalte ins persönliche Spiel-Repository kopieren.
+
 **Dokuordnung geprüft (04.10.2026):** Die vier Hauptdateien führen aktuelle Aufträge, Ziele, bestätigte Änderungen und offene Notizen. Aktive Fachdateien verweisen nun auf diese Rangfolge; alte Vorgaben bleiben mit historischem Status erhalten. Die ausdrücklich überholte Großkopf-/Neutral-Slice-Festlegung wurde in den betroffenen Zusammenfassungen korrigiert. Technische Historie bleibt im PROGRESS-LOG.md.
 
 ## Aktive Produktbasis und Reihenfolge – 06.10.2026

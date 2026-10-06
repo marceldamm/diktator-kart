@@ -208,6 +208,18 @@ Details: [06](docs/06-multiplayer.md), [09](docs/09-roadmap.md).
 
 ## Zusammenarbeit dauerhaft verbessern
 
+### GitHub-Aufgabenfluss für Marcel und Sarah
+
+- [x] Vier Markdown-Hauptdateien als kanonische Projektsteuerung behalten; Issues, PR-Vorlage und Actions-Workflow ergänzen sie.
+- [x] GitHub Actions führt `npm ci`, `npm test` und `npm run build` aus; PR #1 hat nach Korrektur des Node-22-Schalters einen erfolgreichen Check.
+- [x] `main`-Ruleset verlangt Pull Request und den Actions-Check `tests-and-build`; Force-Push und Löschen sind gesperrt. Keine Review-Stimme vorgeschrieben.
+- [x] Pilot-Issue #2, Milestone `GitHub-Workflow-Pilot` und privates GitHub Project sind angelegt; Issue und PR #1 stehen in „In progress“/„In review“.
+- [x] Projekt-Workflow ergänzt ab jetzt automatisch offene Issues und PRs aus dem Repository.
+- [ ] PR #1 im vereinbarten Projektabschluss prüfen und zusammenführen; erst dann stehen Vorlagen/Actions auf `main` bereit.
+- [ ] Sarah Zugriff auf das private Projekt geben und gemeinsam prüfen; keine Sichtbarkeit auf öffentlich umstellen.
+- [ ] GitHub-Coding-Agent nur nutzen, wenn Konto/Tarif und Repository-Richtlinien Zugriff erlauben; andernfalls Codex-Aufträge und menschliche Review verwenden.
+- [ ] Arbeits-Intranet als getrennten Anwendungsfall mit Firmen-Repository, Vertraulichkeit, Freigaben und gewünschter Sichtbarkeit prüfen; keine Arbeitsdaten ins öffentliche Spiel-Repository kopieren.
+
 - [ ] Start-/Abschlussbefehle auf Sarahs realem Checkout einmal gemeinsam prüfen; ihre lokalen unveröffentlichten Dateien erhalten.
 - [ ] Aufgabenpakete zwischen Marcel und Sarah absprechen; bei denselben Dateien Überschneidungen bewusst integrieren.
 - [ ] Aktuelle CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und kurzer TEAM-CHANGES.md an jedem Start/Abschluss pflegen; keine alte Enginearbeit.

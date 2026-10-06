@@ -7,6 +7,14 @@
 
 [Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
 
+## GitHub als Ergänzung zum Teamablauf – 06.10.2026 (Marcel)
+
+**Herkunft/Status:** Marcel möchte GitHub-Funktionen in den laufenden Arbeitsablauf einbeziehen. Die vier Hauptdateien bleiben die kanonische gemeinsame Steuerung. Bestätigte konkrete Aufträge werden als Issues mit Ziel, Abnahmekriterien und Grenzen geführt; mehrteilige Vorhaben erhalten Milestones; das private Project-Board führt Status. Offene Issues/PRs aus dem Repository werden automatisch zum Board hinzugefügt. Änderungen gehen als PR in Review; Actions prüfen Tests/Build. Die GitHub-Wiki bleibt aus, damit kein zweiter Dokumentationsort entsteht. Das `diktator-kart`-Repository ist öffentlich, das Board privat.
+
+Copilot Cloud Agent ist im angemeldeten Konto laut GitHub nicht verfügbar („access unavailable for plan“); kein Upgrade/Testzeitraum wurde aktiviert. PR #1, Issue #2 und Milestone `GitHub-Workflow-Pilot` sind eingerichtet. Die Actions-Prüfung war beim ersten Versuch rot; nach Korrektur von `--test-isolation=none` zu `--experimental-test-isolation=none` sind `npm ci`, `npm test` und `npm run build` erfolgreich. Aktives `main`-Ruleset verlangt PR und `tests-and-build`, ohne zusätzliche Review-Anzahl; Force-Push und Branchlöschung sind gesperrt. Das private Board hat automatische Aufnahme offener Issues/PRs aktiviert; Issue #2 steht in „In progress“, PR #1 in „In review“. PR #1 ist nicht zusammengeführt. Sarah hat aktuell keinen Zugriff auf das private Board. Das Arbeits-Intranet ist ein getrenntes Ziel: erst mit konkretem Firmen-Repository und dessen Datenschutz-/Nutzungsregeln einrichten; keine Unternehmensinhalte im persönlichen öffentlichen Repository ablegen. GitHub Pages kann öffentlich sein, selbst wenn sein Quell-Repository privat ist.
+
+Offizielle Doku: [Issues](https://docs.github.com/en/issues), [Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects), [Copilot Cloud Agent](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github), [Status Checks](https://docs.github.com/en/pull-requests/reference/status-checks), [Actions-Abrechnung](https://docs.github.com/en/billing/concepts/product-billing/github-actions), [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+
 ## Git für euch – der kurze gemeinsame Ablauf
 
 **Jede Person arbeitet auf einem eigenen Arbeitsbranch; `main` ist der gemeinsame, geprüfte Spielstand.** Die KI kümmert sich um Abgleich, Sicherung, Konfliktlösung und Veröffentlichung – ihr müsst keine Git-Befehle kennen.

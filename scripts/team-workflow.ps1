@@ -170,14 +170,16 @@ try {
     $null = Git @('fetch', 'origin', '--prune')
     if ((Git @('rev-parse', 'origin/main')) -ne $remote) { throw 'main advanced during verification. Run Projektabschluss again to merge and recheck. No main push.' }
     $null = Git @('push', '-u', 'origin', "HEAD:refs/heads/$branch")
-    $publish = GitResult @('push', 'origin', 'HEAD:refs/heads/main')
-    if ($publish.Code -ne 0) { throw "Main push rejected (for example concurrent update/protected branch). Work branch uploaded; ask Codex to integrate or create a PR. $($publish.Text)" }
     $null = Git @('fetch', 'origin', '--prune')
-    $published = Git @('rev-parse', 'HEAD')
-    if ((Git @('rev-parse', 'origin/main')) -ne $published) { throw 'Remote changed after publication. Your commit was uploaded; inspect the newer main before proceeding.' }
-    Write-Host "VEROEFFENTLICHT: main = $published. Work branch preserved. No force push."
-    Write-Host 'Use Projektstart before the next task.'
-    exit 0
+    $savedHead = Git @('rev-parse', 'HEAD')
+    if ((Git @('rev-parse', "refs/remotes/origin/$branch")) -ne $savedHead) { throw 'The reviewed work branch was not confirmed byte-for-byte on GitHub; local commit remains preserved.' }
+    if ((Git @('rev-parse', 'origin/main')) -ne $remote) { throw 'main advanced during verification. Keep the uploaded work branch, integrate current main with Codex, and rerun checks before opening the PR.' }
+    $repositoryUrl = ([string]$remoteState.repositoryUrl -replace '\.git$', '').TrimEnd('/')
+    $encodedBranch = [Uri]::EscapeDataString($branch)
+    $compareUrl = "$repositoryUrl/compare/main...$encodedBranch?expand=1"
+    Write-Host "GEPRUEFTER BRANCH AUF GITHUB: $branch = $savedHead"
+    Write-Host "Pull-Request-Vergleich: $compareUrl"
+    throw 'The batch does not create or merge pull requests. Do not push main directly. Continue in Codex: create/update this PR, wait for the required Actions check, merge under the explicit Projektabschluss authorization, and verify origin/main.'
 } catch {
     Write-Host "TEAM-WORKFLOW: $($_.Exception.Message)" -ForegroundColor Red
     exit 1

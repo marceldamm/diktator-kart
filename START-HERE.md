@@ -13,6 +13,8 @@ Die Kurzbefehle **Projektstart** oder **Projekt Start** rufen den sicheren Start
 
 **Git im Alltag:** Jede Person arbeitet getrennt auf einem persönlichen Branch; `main` bleibt der gemeinsame geprüfte Stand. Die KI übernimmt die technischen Git-Schritte und erklärt Konflikte verständlich.
 
+**GitHub-Aufgaben und automatische Checks:** Für bestätigte, einzeln abnehmbare Aufgaben GitHub-Issues mit Herkunft, Kriterien und Grenzen verwenden; offene Vorschläge nicht an einen Coding Agent delegieren. Pull Requests erhalten automatisch `npm test` und `npm run build` über GitHub Actions. Menschliche und sichtbare Spielabnahmen bleiben nötig. Details und Kontogrenzen: [Team-Workflow](docs/21-team-workflow.md) und [GitHub-Anweisungen](.github/copilot-instructions.md).
+
 - **Projekt Start:** neuesten Stand holen und persönlichen Arbeitsbranch vorbereiten.
 - **Zwischenstand sichern:** Änderungen als Commit auf dem persönlichen Branch speichern und dorthin hochladen; `main` bleibt unverändert.
 - **Projektabschluss:** beide Arbeitsstände integrieren, prüfen und den geprüften gemeinsamen Stand nach `main` veröffentlichen.
