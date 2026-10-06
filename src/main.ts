@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub,type Action } 
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, setBotStyles, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
@@ -13,6 +13,9 @@ import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
+import { TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
+import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
+import { RankingBoard } from './ranking-hud';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -102,9 +105,16 @@ class App {
   private itemHeld=false;
   private queuedItemUse=false;
   private itemDirection:'forward'|'backward'='forward';
-  /** 'gp' = Grand Prix with five bots; 'timetrial' = solo three laps against your saved ghost. */
-  private mode:'gp'|'timetrial'='gp';
-  private ghostRun:{time:number;driver:number;samples:number[][]}|null=null;
+  /** 'gp' = two-race Grand Prix with five bots; 'single' = one race on the chosen track; 'timetrial' = solo three laps against your saved ghost. */
+  private mode:'gp'|'single'|'timetrial'='gp';
+  /** Running championship (null outside a Grand Prix). */
+  private gp:GrandPrix|null=null;
+  private finishAction:()=>void=()=>void this.beginRace();
+  private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
+  private gpIntroUntil=0;
+  /** Best lap of the current run; reset on every start, saved per track on a complete run only. */
+  private ghostDelta:number|null=null;
+  private ghostRun:{time:number;driver:number;samples:number[][];track?:string}|null=null;
   private ghostRecord:number[][]=[];
   private steerAssist=false;
   private inCrater:boolean[]=[];
@@ -136,7 +146,7 @@ class App {
   private leadCooldown=0;
   private chosen=0;
   private order=rosterOrder(0);
-  private selectedTrackId='stadionring';
+  private selectedTrackId:TrackId='stadionring';
   private selectingTrack=false;
   private selecting=false;
   private portraitCaptureInProgress=false;
@@ -149,6 +159,13 @@ class App {
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
+    { // Last chosen circuit (or ?track=duce-drom) is loaded first.
+      let wanted:unknown=new URLSearchParams(location.search).get('track');
+      try{if(!isTrackId(wanted))wanted=localStorage.getItem('dk-track');}catch{}
+      if(isTrackId(wanted))selectTrack(wanted);
+      this.selectedTrackId=TRACK.id;
+      this.drawTrackCards();
+    }
     try{const saved=Number(localStorage.getItem('dk-driver'));if(Number.isInteger(saved)&&saved>=0&&saved<CAST.length)this.chosen=saved;}catch{}
     this.order=rosterOrder(this.chosen);
     try{this.autoGas=localStorage.getItem('dk-auto-gas')==='1';this.steerAssist=localStorage.getItem('dk-steer-assist')==='1';}catch{}
@@ -163,7 +180,7 @@ class App {
     document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection());
     document.querySelector('#track-go')?.addEventListener('click',()=>this.confirmTrackSelection());
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>card.addEventListener('click',()=>{
-      this.selectedTrackId=card.dataset.trackId??'stadionring';this.renderTrackSelection();
+      const id=card.dataset.trackId;if(isTrackId(id)){if(id===this.selectedTrackId)this.confirmTrackSelection();else{this.selectedTrackId=id;this.renderTrackSelection();}}
     }));
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
@@ -194,11 +211,12 @@ class App {
     });
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
-    document.querySelector('#menu-race')?.addEventListener('click',()=>{this.mode='gp';void this.startRace();});
-    document.querySelector('#menu-timetrial')?.addEventListener('click',()=>{this.mode='timetrial';void this.startRace();});
+    document.querySelector('#menu-race')?.addEventListener('click',()=>this.startGrandPrix());
+    document.querySelector('#menu-single')?.addEventListener('click',()=>{this.mode='single';this.gp=null;this.openTrackSelection();});
+    document.querySelector('#menu-timetrial')?.addEventListener('click',()=>{this.mode='timetrial';this.gp=null;this.openTrackSelection();});
     document.querySelector('#menu-practice')?.addEventListener('click',()=>{if(this.mode==='timetrial'){this.mode='gp';void this.restart();return;}this.closeMenu();void this.audio.unlock().then(()=>setTimeout(()=>this.welcome(),400));});
     document.querySelector('#menu-button')?.addEventListener('click',()=>this.openMenu());
-    document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.beginRace());
+    document.querySelector('#finish-retry')?.addEventListener('click',()=>this.finishAction());
     document.querySelector('#finish-menu')?.addEventListener('click',()=>this.openMenu());
     document.querySelector<HTMLButtonElement>('#item-use')?.addEventListener('click',(event)=>{if(event.detail===0)this.queuedItemUse=true;});
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
@@ -210,6 +228,7 @@ class App {
       if (!LAB_WORLD) void this.audio.unlock();
       // T: instant race restart with the same driver (no selection, no scene reload).
       if (event.code === 'KeyT' && !this.selecting && this.state !== 'loading' && this.racePhase !== 'practice') { void this.beginRace(); return; }
+      if (event.code === 'Enter' && this.racePhase === 'finished' && !this.selecting && !this.selectingTrack && !document.body.classList.contains('menu-open')) { event.preventDefault(); this.finishAction(); return; }
       if (event.code === 'Enter' && this.racePhase !== 'countdown') void this.startRace();
     });
     pauseButton.addEventListener('click', () => this.togglePause());
@@ -271,14 +290,15 @@ class App {
     return `Framefenster: ${values.length}/300 · P50 ${at(0.5)} ms · P95 ${at(0.95)} ms · P99 ${at(0.99)} ms\n>25 ms: ${values.filter((value) => value > 25).length} · >33 ms: ${values.filter((value) => value > 33).length}`;
   }
 
-  private async restart(): Promise<void> {
+  private async restart(after?: () => void): Promise<void> {
     const generation = ++this.generation;
     this.portraitCaptureInProgress=false;
     const driverGo=document.querySelector<HTMLButtonElement>('#driver-go');
     if(driverGo){driverGo.disabled=false;driverGo.innerHTML='Rennen starten <span>↵</span>';}
     this.mouse.release();
     const loading = new LoadingProgress(!LAB_WORLD);
-    const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail }));
+    const loadingText = { heading: `${TRACK_INFO.name} wird vorbereitet`, footnote: `${TRACK_INFO.city} · ${TRACK_INFO.name} · ${this.gp ? `Grand Prix · Rennen ${this.gp.round + 1}/${this.gp.tracks.length}` : 'Diktator Kart'}` };
+    const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail: { ...detail, ...loadingText } }));
     const report = (phase: LoadingPhase) => { if (generation === this.generation) notify(loading.complete(phase)); };
     this.show('loading', 'Asset-Manifest und Szene werden geladen.');
     notify(loading.initial());
@@ -294,7 +314,8 @@ class App {
     this.queuedHopPress = false;
     document.body.classList.remove('photo-mode');
     document.body.classList.remove('menu-open');
-    document.body.classList.remove('select-open');this.selecting=false;this.portraits=undefined;
+    // Driver portraits do not depend on the circuit: keep them across track loads.
+    document.body.classList.remove('select-open');this.selecting=false;
     this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.lapTimes=[];this.lapNoticeUntil=0;
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
@@ -339,7 +360,7 @@ class App {
       this.testScene.scene.render();
       report('ready');
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
-      if(!LAB_WORLD&&!DEMO)this.openMenu();
+      if(after)after();else if(!LAB_WORLD&&!DEMO)this.openMenu();
     } catch (error) {
       if (generation === this.generation) this.show('error', error instanceof Error ? error.message : String(error));
     }
@@ -385,12 +406,48 @@ class App {
     if(this.racePhase==='finished')document.querySelector('#finish-card')?.removeAttribute('hidden');
   }
 
-  /** Every new Grand Prix starts with the driver selection; Revanche keeps the current driver. */
+  /** Enter / the panel button: confirm the open selection, or start the current mode's selection flow. */
   private async startRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
     if (this.selectingTrack) { this.confirmTrackSelection(); return; }
     if (this.selecting) { this.confirmSelection(); return; }
-    this.openTrackSelection();
+    if (this.mode === 'gp') this.startGrandPrix(); else this.openTrackSelection();
+  }
+  /** A new Grand Prix: all playable circuits in a fixed order, points per finish, driver chosen once. */
+  private startGrandPrix(): void {
+    if (LAB_WORLD || this.state === 'loading') return;
+    this.mode = 'gp'; this.gp = createGrandPrix(GP_TRACKS);
+    this.closeTrackSelection(); this.openSelection();
+  }
+  /** Loads the GP round's circuit if needed, then starts the race. */
+  private startGpRound(): void {
+    if (!this.gp) return;
+    const id = this.gp.tracks[this.gp.round];
+    if (TRACK.id !== id) void this.loadTrack(id, () => void this.beginRace());
+    else void this.beginRace();
+  }
+  /** Rebuilds the scene for another circuit and continues with `then` once it renders. */
+  private async loadTrack(id: TrackId, then: () => void): Promise<void> {
+    selectTrack(id); this.selectedTrackId = id;
+    try { localStorage.setItem('dk-track', id); } catch { /* storage optional */ }
+    this.drawTrackCards();
+    await this.restart(then);
+  }
+  /** Small route outlines on the playable track cards (same centreline data as the race). */
+  private drawTrackCards(): void {
+    document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card) => {
+      const id = card.dataset.trackId; if (!isTrackId(id)) return;
+      const holder = card.querySelector<HTMLElement>('.track-map'); if (!holder || holder.querySelector('canvas')) return;
+      const canvas = document.createElement('canvas'); canvas.width = 260; canvas.height = 120; const c = canvas.getContext('2d'); if (!c) return;
+      const pts = sampleTrack(TRACKS[id].controlPoints, 4).samples, xs = pts.map((p) => p.x), zs = pts.map((p) => p.z);
+      const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs), k = Math.min(220 / (maxX - minX), 92 / (maxZ - minZ));
+      const at = (p: { x: number; z: number }) => [130 + (p.x - (minX + maxX) / 2) * k, 58 - (p.z - (minZ + maxZ) / 2) * k] as const;
+      c.lineJoin = 'round';
+      for (const [w, col] of [[9, '#0b1a1ecc'], [4, '#e2c27f']] as const) { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); pts.forEach((p, i) => { const [x, y] = at(p); if (i) c.lineTo(x, y); else c.moveTo(x, y); }); c.closePath(); c.stroke(); }
+      const start = pts[Math.round(TRACKS[id].start / 4) % pts.length]; const [sx, sy] = at(start); c.fillStyle = '#f3eee0'; c.beginPath(); c.arc(sx, sy, 4, 0, Math.PI * 2); c.fill();
+      canvas.style.cssText = 'position:absolute;inset:6px 8px auto 8px;width:calc(100% - 16px);height:auto;opacity:.92';
+      holder.append(canvas);
+    });
   }
   private openTrackSelection(): void {
     if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
@@ -402,9 +459,10 @@ class App {
     this.selectingTrack = false; document.body.classList.remove('track-select-open');
   }
   private confirmTrackSelection(): void {
-    if (this.selectedTrackId !== 'stadionring') return;
+    if (!isTrackId(this.selectedTrackId)) return;
     this.closeTrackSelection();
-    this.openSelection();
+    if (TRACK.id !== this.selectedTrackId) void this.loadTrack(this.selectedTrackId, () => this.openSelection());
+    else this.openSelection();
   }
   private renderTrackSelection(): void {
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>{
@@ -416,6 +474,7 @@ class App {
     if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
     if (!this.camera?.introMode) this.openMenu();
     this.selecting = true; document.body.classList.add('select-open');
+    document.querySelector('#driver-kicker')!.textContent = this.mode === 'gp' && this.gp ? `FAHRERWAHL · GRAND PRIX · ${this.gp.tracks.map((t) => TRACKS[t].name).join(' → ')}` : `FAHRERWAHL · ${this.mode === 'timetrial' ? 'ZEITFAHREN' : 'EINZELRENNEN'} · ${TRACK.name.toUpperCase()}`;
     this.renderSelection();
     if(this.portraitCaptureInProgress){const button=document.querySelector<HTMLButtonElement>('#driver-go');if(button)button.disabled=true;}
     if (!this.portraits && this.testScene.portraits && !this.portraitCaptureInProgress) {
@@ -431,7 +490,7 @@ class App {
     if(this.portraitCaptureInProgress)return;
     this.closeSelection();
     try { localStorage.setItem('dk-driver', String(this.chosen)); } catch { /* storage optional */ }
-    void this.beginRace();
+    if (this.mode === 'gp' && this.gp) this.startGpRound(); else void this.beginRace();
   }
   private pick(index: number): void {
     this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order);
@@ -456,14 +515,17 @@ class App {
     const line = document.createElement('div'); line.textContent = `„${m.title}“ – ${m.flavour}`;
     const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit (Q):</em> '; ability.append(m.abilityIdea + ' · ');
     const item = document.createElement('em'); item.textContent = 'Wurfobjekt:'; ability.append(item, ` ${m.projectileIcon} ${m.projectileName}`);
-    detail.append(title, line, ability);
+    const rival = document.createElement('div'); rival.innerHTML = '<em>Als Rivale:</em> '; rival.append(BOT_STYLES[this.chosen]?.label ?? '');
+    detail.append(title, line, ability, rival);
   }
 
   private async beginRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
     const generation=this.generation;
-    await this.audio.unlock();
+    // A suspended AudioContext can wait for a fresh gesture: never let sound hold back the start.
+    await Promise.race([this.audio.unlock(), new Promise((resolve) => setTimeout(resolve, 400))]);
     if(generation!==this.generation||!this.testScene)return;
+    setBotStyles(this.order.map((driver, slot) => slot === 0 ? undefined : BOT_STYLES[driver]));
     this.closeMenu();
     this.mouse.release(); this.camera?.resetLook();
     if (this.camera?.photoMode) this.camera.togglePhoto(); document.body.classList.remove('photo-mode');
@@ -471,7 +533,8 @@ class App {
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = this.mode === 'timetrial' ? [] : initialLoadKarts();
     this.testScene.setBotsVisible?.(this.mode !== 'timetrial');
     this.ghostRecord = []; this.ghostRun = null;
-    if (this.mode === 'timetrial') { try { const saved = JSON.parse(localStorage.getItem('dk-ghost-v2') ?? 'null'); if (saved && Array.isArray(saved.samples)) this.ghostRun = saved; } catch { /* no ghost yet */ } }
+    if (this.mode === 'timetrial') { try { const saved = JSON.parse(localStorage.getItem(this.storageKey('ghost')) ?? 'null'); if (saved && Array.isArray(saved.samples) && (saved.track ?? 'stadionring') === TRACK.id) this.ghostRun = saved; } catch { /* no ghost yet */ } }
+    this.ghostDelta = null;
     this.testScene.setGhost?.(null);
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
@@ -483,6 +546,8 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
+    this.ranking.reset();
+    this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
     this.accumulator = 0; this.queuedHopPress = false;
@@ -502,7 +567,10 @@ class App {
         document.querySelector('#place')!.textContent = `${place}`;
     document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
-    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `${this.mode==='timetrial'?'ZEITFAHREN':'STADION GRAND PRIX'} · ${this.castOf(0).name.toUpperCase()}`;
+    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? `FREIE FAHRT · ${TRACK.name.toUpperCase()}` : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `${this.mode==='timetrial'?'ZEITFAHREN':this.mode==='gp'&&this.gp?`GRAND PRIX ${this.gp.round+1}/${this.gp.tracks.length}`:'EINZELRENNEN'} · ${TRACK.name.toUpperCase()} · ${this.castOf(0).name.toUpperCase()}${this.mode==='timetrial'&&this.ghostDelta!==null?` · GEIST ${this.ghostDelta>=0?'+':'−'}${Math.abs(this.ghostDelta).toFixed(1)} s`:''}`;
+    document.querySelector<HTMLElement>('#gp-intro')!.hidden = !(this.racePhase === 'countdown' || this.racePhase === 'race' && this.raceTime < this.gpIntroUntil);
+    if (this.racePhase !== 'practice') this.ranking.update(rankRace(this.progress), (i) => ({ name: i === 0 ? `${this.castOf(0).name}` : this.castOf(i).name, paint: this.castOf(i).paint, portrait: this.portraits?.[this.order[i] ?? i], finished: this.progress[i]?.finished ?? false }), this.racePhase === 'finished', performance.now());
+    document.body.classList.toggle('ranking-on', this.racePhase !== 'practice' && this.mode !== 'timetrial');
     const notice=document.querySelector<HTMLElement>('#lap-notice')!;notice.hidden=this.racePhase!=='race'||this.raceTime>=this.lapNoticeUntil;notice.textContent=this.lapNotice;
     const meter=document.querySelector<HTMLElement>('#drift-meter')!;meter.hidden=!this.kart.drifting&&this.kart.turboRemaining<=0;
     meter.classList.toggle('charged',driftTier(this.kart.driftCharge)>0||this.kart.turboRemaining>0);meter.dataset.tier=String(driftTier(this.kart.driftCharge));
@@ -566,7 +634,7 @@ class App {
     const a = trackPoint(TRACK.start, -6), b = trackPoint(TRACK.start, 6), [ax, ay] = this.minimapPoint(a.x, a.z), [bx, by] = this.minimapPoint(b.x, b.z);
     c.strokeStyle = '#f3eee0'; c.lineWidth = 3; c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke();
     this.minimapTrack = canvas;
-    document.querySelector('.map-card span')!.textContent = `${Math.round(TRACK.length)} m · STADIONRING`;
+    document.querySelector('.map-card span')!.textContent = `${Math.round(TRACK.length)} m · ${TRACK.name.toUpperCase()}`;
   }
 
   /** Welcome announcement once per page load, after the first gesture unlocked audio. */
@@ -587,6 +655,66 @@ class App {
     }
     if (this.kart.turboRemaining > KART_TUNING.turboDuration - .05 && this.voiceCooldown === 0 && Math.random() < .35) { this.say(0, 'boost'); this.voiceCooldown = 12; }
     this.lastRank = rank;
+  }
+
+  /** localStorage keys per circuit; the Stadionring keeps its earlier keys so existing records survive. */
+  private storageKey(kind: 'race' | 'timetrial' | 'ghost' | 'lap'): string {
+    if (TRACK.id === 'stadionring') return { race: 'dk-best-stadium-v2', timetrial: 'dk-best-timetrial-v2', ghost: 'dk-ghost-v2', lap: 'dk-best-lap-stadionring-v1' }[kind];
+    return `dk-${kind === 'ghost' ? 'ghost' : kind === 'lap' ? 'best-lap' : `best-${kind}`}-${TRACK.id}-v1`;
+  }
+  /** Seconds ahead (−) or behind (+) the saved ghost at the player's current race distance. */
+  private ghostGap(): number | null {
+    const samples = this.ghostRun?.samples; if (!samples?.length || samples[0].length < 5) return null;
+    const d = Math.max(0, this.progress[0].distance);
+    let i = samples.findIndex((p) => p[4] >= d); if (i < 0) i = samples.length - 1;
+    return this.raceTime - i / 20;
+  }
+  private showGpIntro(): void {
+    const intro = document.querySelector<HTMLElement>('#gp-intro')!;
+    const lines: Record<TrackId, [string, string]> = {
+      stadionring: ['Das Komitee hat den Sieger bereits beglückwünscht.', 'Gefahren wird trotzdem – aus Gründen der Tradition.'],
+      'duce-drom': ['Der Balkon erwartet Applaus in alphabetischer Reihenfolge.', 'Die Züge sind pünktlich. Behauptet zumindest das Programmheft.'],
+    };
+    const [title, detail] = lines[TRACK.id];
+    document.querySelector('#gp-intro-kicker')!.textContent = this.mode === 'gp' && this.gp ? `GROSSER PREIS DER EITELKEIT · RENNEN ${this.gp.round + 1}/${this.gp.tracks.length} · ${TRACK_INFO.city.toUpperCase()}` : this.mode === 'timetrial' ? `ZEITFAHREN · ${TRACK.name.toUpperCase()}` : `EINZELRENNEN · ${TRACK.name.toUpperCase()} · ${TRACK_INFO.city.toUpperCase()}`;
+    document.querySelector('#gp-intro-title')!.textContent = this.mode === 'timetrial' ? (this.ghostRun ? `Dein Geist fährt ${this.ghostRun.time.toFixed(2)} s vor.` : 'Noch kein Geist gespeichert.') : title;
+    document.querySelector('#gp-intro-detail')!.textContent = this.mode === 'timetrial' ? 'Nur vollständige Läufe zählen als Bestzeit.' : detail;
+    intro.hidden = false; this.gpIntroUntil = 3.5;
+  }
+  /** Finish card buttons and Grand Prix standings: points are awarded once, from the race system's own ranking. */
+  private presentFinishActions(order: number[]): void {
+    const retry = document.querySelector<HTMLButtonElement>('#finish-retry')!, table = document.querySelector<HTMLElement>('#gp-standings')!;
+    table.hidden = true; table.replaceChildren();
+    if (this.mode !== 'gp' || !this.gp) {
+      retry.innerHTML = 'Revanche <span>↵</span>'; this.finishAction = () => void this.beginRace(); return;
+    }
+    const gp = this.gp;
+    awardPoints(gp, TRACK.id, order.map((slot) => this.order[slot] ?? slot), this.raceTime);
+    const rows = standings(gp), last = gp.round >= gp.tracks.length - 1, me = this.chosen;
+    const head = document.createElement('b'); head.textContent = last ? 'GESAMTWERTUNG · SIEGEREHRUNG' : `ZWISCHENWERTUNG NACH RENNEN ${gp.round + 1}/${gp.tracks.length}`; table.append(head);
+    const list = document.createElement('ol');
+    rows.forEach((row, place) => {
+      const li = document.createElement('li'); li.classList.toggle('player-result', row.driver === me);
+      const gained = gp.results.at(-1)?.points[row.driver] ?? 0;
+      li.innerHTML = `<span></span><strong></strong><small></small>`;
+      li.querySelector('span')!.textContent = `${place + 1}.`; li.querySelector('strong')!.textContent = row.driver === me ? `Du · ${CAST[row.driver].name}` : CAST[row.driver].name;
+      li.querySelector('small')!.textContent = `${row.points} P${gained ? ` (+${gained})` : ''}`;
+      list.append(li);
+    });
+    table.append(list); table.hidden = false;
+    if (last) {
+      const champion = rows[0].driver, won = champion === me;
+      document.querySelector('#finish-title')!.textContent = won ? 'Grand-Prix-Sieg · amtlich bestätigt' : `Grand Prix an ${CAST[champion].name}`;
+      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}`;
+      const podium = document.querySelector<HTMLImageElement>('#finish-portrait');
+      if (podium) { const shot = this.portraits?.[champion]; podium.hidden = !shot; if (shot) { podium.src = shot; podium.alt = `Grand-Prix-Sieger ${CAST[champion].name}`; } }
+      retry.innerHTML = 'Neuer Grand Prix <span>↵</span>';
+      this.finishAction = () => { this.gp = createGrandPrix(GP_TRACKS); this.startGpRound(); };
+    } else {
+      const next = TRACKS[gp.tracks[gp.round + 1]];
+      retry.innerHTML = `Nächstes Rennen: ${next.name} <span>↵</span>`;
+      this.finishAction = () => { if (!this.gp) return; this.gp.round++; this.startGpRound(); };
+    }
   }
 
   private togglePause(): void {
@@ -743,7 +871,7 @@ class App {
           if(down&&(this.input.isDown('itemBackward')||frame.pressed.has('itemBackward')))this.itemDirection='backward';
           else if(down&&(this.input.isDown('itemForward')||frame.pressed.has('itemForward')))this.itemDirection='forward';
           this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
-          const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
+          const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all,botStyleOf(i)?.itemPatience));
           const directions=all.map((_,i)=>i===0?this.itemDirection:'forward');
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP,directions);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           if(release)this.itemDirection='forward';
@@ -764,7 +892,8 @@ class App {
             window.setTimeout(()=>this.say(event.kart,'hit',.75),900);
           }
           if(this.mode==='timetrial'){
-            if(Math.round(this.raceTime*60)%3===0)this.ghostRecord.push([+this.kart.x.toFixed(2),+this.kart.z.toFixed(2),+this.kart.heading.toFixed(3),+this.kart.height.toFixed(2)]);
+            if(Math.round(this.raceTime*60)%3===0)this.ghostRecord.push([+this.kart.x.toFixed(2),+this.kart.z.toFixed(2),+this.kart.heading.toFixed(3),+this.kart.height.toFixed(2),+Math.max(0,this.progress[0].distance).toFixed(1)]);
+            if(this.ghostRun&&Math.round(this.raceTime*60)%15===0)this.ghostDelta=this.ghostGap();
           }
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
@@ -774,13 +903,17 @@ class App {
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
             this.lapNoticeUntil=this.raceTime+3;
             if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);}
-            if(this.lapTimes.length===1){this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';this.itemMessageUntil=this.items.time+3;}
+            if(this.lapTimes.length===1){
+              if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);}
+              else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
+              this.itemMessageUntil=this.items.time+3;}
           }
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
             this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.audio.cheer(1.4);
             {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});const champion=rankRace(this.progress)[0];window.setTimeout(()=>this.say(won?0:champion,'win',won?1:.85),3200);}
             const place=rankRace(this.progress).indexOf(0)+1;
+            document.querySelector('#finish-kicker')!.textContent=this.mode==='gp'&&this.gp?`GRAND PRIX · RENNEN ${this.gp.round+1}/${this.gp.tracks.length} · ${TRACK.name.toUpperCase()}`:this.mode==='timetrial'?`ZEITFAHREN · ${TRACK.name.toUpperCase()}`:`EINZELRENNEN · ${TRACK.name.toUpperCase()}`;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
             const names=this.order.map((_,i)=>i===0?`Du · ${this.castOf(0).name}`:this.castOf(i).name);
@@ -791,14 +924,17 @@ class App {
             // Winner's portrait on the podium card.
             const winner=ranking[0]?.i??0,podium=document.querySelector<HTMLImageElement>('#finish-portrait');
             if(podium){const shot=this.portraits?.[this.order[winner]];podium.hidden=!shot;if(shot){podium.src=shot;podium.alt=`Sieger ${this.castOf(winner).name}`;}}
-            const bestKey=this.mode==='timetrial'?'dk-best-timetrial-v2':'dk-best-stadium-v2';let improved=false;
+            const bestKey=this.storageKey(this.mode==='timetrial'?'timetrial':'race');let improved=false;
             let best:number|null=null;try{const value=Number(localStorage.getItem(bestKey));if(value>0&&Number.isFinite(value))best=value;if(!DEMO&&(best===null||this.raceTime<best)){best=this.raceTime;improved=true;localStorage.setItem(bestKey,String(best));}}catch{}
-            if(this.mode==='timetrial'&&improved){try{localStorage.setItem('dk-ghost-v2',JSON.stringify({time:this.raceTime,driver:this.chosen,samples:this.ghostRecord}));}catch{}}
+            if(this.mode==='timetrial'&&improved&&!DEMO){try{localStorage.setItem(this.storageKey('ghost'),JSON.stringify({time:this.raceTime,driver:this.chosen,samples:this.ghostRecord,track:TRACK.id,laps:this.lapTimes}));}catch{}}
+            let bestLap:number|null=null;
+            try{const lap=Math.min(...this.lapTimes);const stored=Number(localStorage.getItem(this.storageKey('lap')));bestLap=stored>0&&Number.isFinite(stored)?stored:null;if(!DEMO&&Number.isFinite(lap)&&(bestLap===null||lap<bestLap)){bestLap=lap;localStorage.setItem(this.storageKey('lap'),String(lap));}}catch{}
             // Time-trial medals by total time on the course (average 15.8 / 14.5 / 13 m/s; hard bots win in ~164 s).
             if(this.mode==='timetrial'){const medal=([[3*TRACK.length/15.8,'Gold'],[3*TRACK.length/14.5,'Silber'],[3*TRACK.length/13,'Bronze']] as [number,string][]).find(([t])=>this.raceTime<=t);
               document.querySelector('#finish-detail')!.textContent+=` · ${medal?`Medaille ${medal[1]}`:`Bronze ab ${(3*TRACK.length/13).toFixed(0)} s`}`;}
             if(this.mode==='timetrial')document.querySelector('#finish-title')!.textContent=improved?'Neue Bestzeit · Geist gespeichert':`Zeitfahren · ${this.ghostRun?`Geist ${this.ghostRun.time.toFixed(2)} s`:'beendet'}`;
-            document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Deine Bestzeit ${best.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
+            document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Bestzeit ${TRACK.name} ${best.toFixed(2)} s`:''}${bestLap!==null?` · Beste Runde ${bestLap.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
+            this.presentFinishActions(rankRace(this.progress));
             document.querySelector('#finish-card')!.removeAttribute('hidden');
           }
         }

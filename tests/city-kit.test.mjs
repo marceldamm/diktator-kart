@@ -24,7 +24,9 @@ test('city kit exposes every module the runtime city places, one mesh per shared
   const nodes = new Set(document.nodes.map(node => node.name));
   for (const module of ['kit-house-a', 'kit-house-b', 'kit-house-c', 'kit-house-d', 'kit-corner', 'kit-palace', 'kit-cathedral', 'kit-column',
     'kit-grandstand', 'kit-gate', 'kit-finish', 'kit-bridge', 'kit-quay', 'kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-lamp', 'kit-bench',
-    'kit-litfass', 'kit-flag', 'kit-kiosk', 'kit-urn', 'kit-hedge', 'kit-linden', 'kit-cypress', 'kit-fountain', 'kit-statue']) {
+    'kit-litfass', 'kit-flag', 'kit-kiosk', 'kit-urn', 'kit-hedge', 'kit-linden', 'kit-cypress', 'kit-fountain', 'kit-statue',
+    // Duce-Drom (Rome) modules
+    'kit-insula-a', 'kit-insula-b', 'kit-insula-c', 'kit-balcony-palace', 'kit-arch', 'kit-obelisk', 'kit-pine', 'kit-pine-b', 'kit-aqueduct', 'kit-ruin']) {
     assert.ok(nodes.has(module), `expected module root ${module}`);
     assert.ok([...nodes].some(name => name.startsWith(`${module}|`)), `expected material meshes under ${module}`);
   }

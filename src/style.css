@@ -249,3 +249,41 @@ button:disabled { opacity: .5; cursor: default; }
 body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 90px 18px #d0281f88;animation:incoming-pulse .5s ease-in-out infinite alternate;z-index:5; }
 @keyframes incoming-pulse { from { opacity:.35; } to { opacity:1; } }
 @media(prefers-reduced-motion:reduce) { body.incoming-item::after { animation:none; } }
+
+/* Live ranking (07.10.2026): right column under the minimap, rows slide to their place. */
+.ranking { display:none; }
+.showcase.ranking-on .ranking { display:block;position:absolute;top:238px;right:26px;width:168px;height:calc(6 * 31px);margin:0;padding:0;list-style:none;pointer-events:none;z-index:3; }
+.ranking li { position:absolute;left:0;right:0;top:0;height:28px;display:flex;align-items:center;gap:6px;padding:0 8px 0 0;background:linear-gradient(90deg,#0d2128e6,#11272fcc);border-left:3px solid transparent;color:#e7d7b3;font-size:11px;letter-spacing:.04em;transform:translateY(calc(var(--place,0) * 31px));transition:transform .32s cubic-bezier(.3,.7,.2,1),background .2s;will-change:transform; }
+.ranking li b { width:22px;text-align:center;font:italic bold 15px Georgia,serif;color:#f1dcab;font-variant-numeric:tabular-nums; }
+.ranking li i { width:4px;height:18px;flex:none;border-radius:1px; }
+.ranking-face { width:22px;height:22px;flex:none;border-radius:50%;background:#20363c center/cover no-repeat;box-shadow:0 0 0 1px #d8bb7d66; }
+.ranking-name { flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis; }
+.ranking li small { font-size:8px;letter-spacing:.12em;color:#e9c57d; }
+.ranking li.leader { background:linear-gradient(90deg,#4a3a17ee,#2a2814d6);border-left-color:#e7c06a; }
+.ranking li.leader b { color:#ffd98a; }
+.ranking li.me { border-left-color:#ffe1a0;background:linear-gradient(90deg,#3d5a4ef2,#1c3a3ae0);box-shadow:0 0 0 1px #ffe1a088;color:#fff3d6;font-weight:700; }
+.ranking li.done .ranking-name::after { content:' ✓';color:#9fe0b8; }
+.menu-open .ranking,.photo-mode .ranking { display:none !important; }
+@media (max-height:700px) { .showcase.ranking-on .ranking { top:210px;height:calc(6 * 25px); } .ranking li { height:23px;font-size:10px;transform:translateY(calc(var(--place,0) * 25px)); } .ranking-face { width:18px;height:18px; } }
+@media (max-width:600px) { .showcase.ranking-on .ranking { top:70px;right:10px;width:132px; } .ranking-face { display:none; } }
+@media (prefers-reduced-motion: reduce) { .ranking li { transition:none; } }
+.reduced-motion .ranking li { transition:none; }
+
+/* Grand Prix intro card during the countdown and the first seconds of a race. */
+.gp-intro { position:absolute;top:118px;left:50%;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));padding:12px 20px;text-align:center;background:linear-gradient(100deg,#142a30ee,#2a1418dd);border-top:2px solid #ddbd7a;color:#f0dcb0;pointer-events:none; }
+.gp-intro[hidden] { display:none !important; }
+.gp-intro span { display:block;font-size:9px;letter-spacing:.22em;color:#d7bc86; }
+.gp-intro strong { display:block;margin-top:6px;font:italic 19px/1.25 Georgia,serif; }
+.gp-intro small { display:block;margin-top:4px;font-size:11px;color:#bacbc7; }
+.menu-open .gp-intro,.photo-mode .gp-intro { display:none !important; }
+
+/* Championship table on the finish card. */
+#gp-standings { margin:10px auto 14px;max-width:360px;text-align:left; }
+#gp-standings b { display:block;margin-bottom:6px;font-size:10px;letter-spacing:.18em;color:#d7bc86;text-align:center; }
+#gp-standings ol { margin:0;padding:0;list-style:none; }
+#gp-standings li { display:flex;gap:8px;align-items:baseline;padding:3px 8px;border-bottom:1px solid #d3b47722;color:#e4d6b6;font-size:13px; }
+#gp-standings li span { width:22px;color:#d7bc86; }
+#gp-standings li strong { flex:1;font-weight:600; }
+#gp-standings li small { font-variant-numeric:tabular-nums;color:#f0dfb7; }
+#gp-standings li.player-result { background:#3d5a4e88; }
+#finish-card { max-height:calc(100vh - 24px);overflow:auto; }

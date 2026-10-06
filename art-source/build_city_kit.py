@@ -824,6 +824,9 @@ modules = [
     corner_tower(), palace(), cathedral(), victory_column(), grandstand(), gate(), finish_gantry(), bridge(), quay(),
     skyline('kit-sky-a', 22, 14, 20, 'mansard'), skyline('kit-sky-b', 30, 16, 26, 'dome'), skyline('kit-sky-c', 18, 12, 16, 'gable'),
 ] + props()
+# Second circuit (Duce-Drom, Rome): Roman modules share this kit and its materials.
+exec(open(os.path.join(ROOT, 'art-source', 'rome_kit_modules.py'), encoding='utf-8').read())
+modules += rome_modules()
 x = 0
 for M in modules:
     to_blender(M, x); x += 120

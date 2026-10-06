@@ -1,5 +1,6 @@
 import { TRACK, trackLocate, trackPoint, trackProgress, wrap } from './track.ts';
-import { MAP_SCALE } from './track-layout.ts';
+import { ITEM_BOX_PROGRESS } from './track-layout.ts';
+export { ITEM_BOX_PROGRESS };
 import type { KartState } from './kart-model.ts';
 
 export type ItemKind = 'direct' | 'homing' | 'trap' | 'censor';
@@ -14,8 +15,7 @@ export interface ItemWorld { /** Karts holding their item behind them as a shiel
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
 export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3,censorDuration:2.6,censorSpeedFactor:.72,censorBannerDuration:.9};
-/** Dispatch box rows: end of the grandstand straight, the boulevard and the archive leg. */
-export const ITEM_BOX_PROGRESS=[72,330,520].map(s=>s*MAP_SCALE);
+/** Dispatch box rows come from the active circuit (track-layout.ts). */
 export function createItems(count:number,seed=921):ItemWorld {
   return {slots:Array(count).fill(null),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
     boxes:ITEM_BOX_PROGRESS.flatMap((s,row)=>[-3,0,3].map((lane,col)=>({id:row*3+col,...trackPoint(s,lane),readyIn:0}))),events:[],random:seed,nextId:1,time:0,
@@ -106,8 +106,8 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
   world.objects=world.objects.filter(o=>o.remaining>0);return result;
 }
 
-export function botUsesItem(world:ItemWorld,index:number,karts:KartState[]):boolean {
-  const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2)return false;
+export function botUsesItem(world:ItemWorld,index:number,karts:KartState[],patience=1):boolean {
+  const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2*patience)return false;
   const k=karts[index];
   if(kind==='trap')return world.heldFor[index]>2;
   if(kind==='censor')return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<65)||world.heldFor[index]>5;

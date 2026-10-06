@@ -26,7 +26,7 @@ import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
 import { TRACK, drivingSurfaceAt, elevationAt, trackLocate, trackPoint } from './track';
-import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
+import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, TRACK_INFO } from './track-layout';
 import { addCityWorld } from './city-world';
 import { addTrackWorld } from './track-world';
 import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
@@ -497,13 +497,27 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     let zeppelinTime = -1;
+    // Duce-Drom lap-2 event: the empty balcony 'speaks' and a rose-petal shower drifts over the Prunkstraße (decorative, same for all).
+    const roseTexture = new DynamicTexture('Rose petal sprite', { width: 32, height: 32 }, scene, false);
+    { const c = roseTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 12, 8, .4, 0, Math.PI * 2); c.fill(); roseTexture.hasAlpha = true; roseTexture.update(); }
+    const roses = new ParticleSystem('Balcony rose shower', 420, scene); roses.particleTexture = roseTexture;
+    { const a = trackPoint(TRACK_INFO.dressing.heroes[0]?.s ?? 0, 0), b = trackPoint((TRACK_INFO.dressing.heroes[0]?.s ?? 0) + 90, 0);
+      roses.emitter = new Vector3((a.x + b.x) / 2, 15, (a.z + b.z) / 2);
+      const hx = Math.max(10, Math.abs(b.x - a.x) / 2), hz = Math.max(10, Math.abs(b.z - a.z) / 2);
+      roses.minEmitBox = new Vector3(-hx, 0, -hz); roses.maxEmitBox = new Vector3(hx, 4, hz); }
+    roses.direction1 = new Vector3(-.5, -.5, -.4); roses.direction2 = new Vector3(.5, -.2, .4); roses.gravity = new Vector3(.3, -.9, .1);
+    roses.minEmitPower = .3; roses.maxEmitPower = .8; roses.minLifeTime = 7; roses.maxLifeTime = 11; roses.emitRate = 0;
+    roses.minSize = .12; roses.maxSize = .22; roses.minAngularSpeed = -4; roses.maxAngularSpeed = 4;
+    roses.color1 = new Color4(.86, .12, .2, 1); roses.color2 = new Color4(.95, .5, .55, 1); roses.colorDead = new Color4(.7, .1, .15, 0);
+    roses.blendMode = ParticleSystem.BLENDMODE_STANDARD; roses.start();
+    let roseTime = -1;
     const cableMaterial = new StandardMaterial('Salvage cable', scene); cableMaterial.diffuseColor = new Color3(.1, .1, .1);
     const cables = visuals.map((_, i) => { const c = MeshBuilder.CreateCylinder(`Salvage cable ${i}`, { diameter: .06, height: 1 }, scene); c.material = cableMaterial; c.isPickable = false; c.setEnabled(false);
       const hook = MeshBuilder.CreateTorus(`Salvage hook ${i}`, { diameter: .5, thickness: .08, tessellation: 12 }, scene); hook.material = cableMaterial; hook.parent = c; hook.position.y = -.5; return c; });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
     report?.('items');
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
-    const wallAt = trackPoint(66 * MAP_SCALE, -(TRACK.halfWidth + 11));
+    const wallAt = trackPoint(TRACK_INFO.dressing.screenProgress, -(TRACK.halfWidth + 11));
     const tv = new TransformNode('Staatsfernsehen wall', scene); tv.position.set(wallAt.x, 0, wallAt.z); tv.rotation.y = wallAt.heading - .45;
     const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = new Texture('/assets/textures/loading-stadium-v1.webp', scene, true, false); screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.White();
     const screen = MeshBuilder.CreatePlane('Staatsfernsehen picture', { width: 9.6, height: 5.4 }, scene); screen.parent = tv; screen.position.y = 9.2; screen.material = screenMaterial;
@@ -574,7 +588,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (!botsShownForGhost) { botsShownForGhost = true; for (const m of g.root.getChildMeshes()) m.visibility = .35; }
         g.root.setEnabled(true); g.root.position.set(ghost.x, ghost.height, ghost.z); g.root.rotation.y = ghost.heading;
       },
-      trackEvent() { zeppelinTime = 0; zeppelin.setEnabled(true); },
+      trackEvent(kind) { if (kind === 'balcony') { roseTime = 0; roses.emitRate = 70; } else { zeppelinTime = 0; zeppelin.setEnabled(true); } },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
         if (kind === 'crater') { burst(puff, at, reducedEffects ? 14 : 42); return; }
         if (kind === 'cliff') { burst(puff, at, reducedEffects ? 10 : 30); return; }
@@ -638,7 +652,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
         if (kind === 'finish') { fireworkTime = reducedEffects ? 4 : 9; nextBurst = 0; }
       },
-      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); },
+      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); roseTime = -1; roses.emitRate = 0; roses.reset(); },
       setQuality(level, reduced) {
         pipelineLevel = level;
         if(level!==skyQuality) {
@@ -660,6 +674,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         if (sunDisc.isEnabled() && gameCamera) { const c = gameCamera.position; sunDisc.position.set(c.x - sunDirection.x * 380, c.y - sunDirection.y * 380, c.z - sunDirection.z * 380); sunDiscMaterial.alpha = 1 - Math.min(1, timeOfDay * 1.6); sunDisc.isVisible = timeOfDay < .6 && !raining && !snowing; }
         trackWorld.animate(time); city.animate(time);
+        if (roseTime >= 0) { roseTime += dt; if (roseTime > 16) { roseTime = -1; roses.emitRate = 0; } }
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;
           if (u >= 1) { zeppelinTime = -1; zeppelin.setEnabled(false); } }

@@ -10,6 +10,16 @@
 
 Der Prozess für Selbstprüfung gegen Detaildrift und für das Beobachten eigener Browser-/Buildlast steht in [docs/21-team-workflow.md](../21-team-workflow.md).
 
+## 07.10.2026 – Duce-Drom, Live-Rangliste, Grand Prix (Claude)
+
+Sichtbares, eigens gestartetes Chrome-Fenster (CDP 9231, 1600×1000, RTX-3070-Laptop von Marcel), Vite-Dev-Server `http://127.0.0.1:4173/`, Branch `codex/team-marcel-20261006-214551-132` auf Basis `110fa15` mit den ungesicherten Änderungen dieses Laufs. `demo=1` lässt den Spielerkart vom gemeinsamen Bot-Regler fahren (keine menschliche Fahrprobe); Wetter Sonne.
+
+- `rome-first-load-20261007.png`: erster Start auf dem Duce-Drom (Circus-Gerade, Startportal, Tribünen, Pinien).
+- `rome-countdown-20261007.png`: Einzelrennen-Countdown mit Einleitungskarte und Live-Rangliste rechts.
+- `rome-race-0…7-20261007.png`: Rennverlauf alle 15 s (u. a. Abfahrt zum Tiber-Kai `rome-race-2`, Balkonrede-Meldung und Rangliste `rome-race-5`).
+- `rome-finish-20261007.png`: Ziel mit vollständiger Ergebnisliste, Rangliste mit Zielhäkchen.
+- `gp-*-20261007.png`: Grand Prix über beide Strecken – Fahrerwahl, Countdown, Rennen und Zwischen-/Gesamtwertung je Runde.
+
 **Archivhinweis zum folgenden Bestand:** Die nachfolgenden datierten Einträge beschreiben frühere Aufnahmen und Prüfläufe, keine pauschal aktuelle Sicht des Spiels. Zum Beispiel ist `slice-first-inspection-quality-1005f.png` eine ältere Browseraufnahme; ihr Dateidatum liegt vor dem später erneuerten `hero-kart.glb`. Verwende sie nur als historischen Vergleich. Für Aussagen über den aktuellen Fahrer-/Fahrzeugstand ist ein frischer sichtbarer Lauf mit bestätigtem Runtime-Commit erforderlich.
 
 ## 05.10.2026 – aktueller Runtime-/Modellpass

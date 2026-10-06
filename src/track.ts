@@ -1,10 +1,9 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { CREST, BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, ELEVATION, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, TRACK_INFO, isTrackId, sampleTrack, setTrackLayout, type TrackId, type TrackSample } from './track-layout.ts';
 
-const built = sampleTrack();
-const SAMPLES = built.samples;
-/** Inner face of the barrier wall (lane metres); karts may use the kerbs right up to it. */
-export const TRACK = { halfWidth: TRACK_HALF_WIDTH, wall: TRACK_HALF_WIDTH + 1, length: built.length, start: START_PROGRESS, samples: SAMPLES };
+let SAMPLES: TrackSample[] = [];
+/** Inner face of the barrier wall (lane metres); karts may use the kerbs right up to it. Mutated in place by `selectTrack`. */
+export const TRACK = { halfWidth: TRACK_HALF_WIDTH, wall: TRACK_HALF_WIDTH + 1, length: 0, start: START_PROGRESS, samples: SAMPLES, id: TRACK_INFO.id as TrackId, name: TRACK_INFO.name };
 /** Half the visual kart width (rear tyre outer edge). */
 const KART_SIDE = 1.15;
 export const wrap = (s: number) => ((s % TRACK.length) + TRACK.length) % TRACK.length;
@@ -13,10 +12,26 @@ const signedGap = (s: number) => { const d = wrap(s); return d > TRACK.length / 
 // Uniform hash grid over centreline samples for nearest-segment lookup.
 const CELL = 6;
 const grid = new Map<string, number[]>();
-SAMPLES.forEach((p, i) => {
-  const key = `${Math.floor(p.x / CELL)},${Math.floor(p.z / CELL)}`;
-  const list = grid.get(key) ?? []; list.push(i); grid.set(key, list);
-});
+
+/** Builds the centreline, lookup grid and shortcut path of the active layout. */
+function rebuild(): void {
+  const built = sampleTrack();
+  SAMPLES = built.samples;
+  Object.assign(TRACK, { halfWidth: TRACK_HALF_WIDTH, wall: TRACK_HALF_WIDTH + 1, length: built.length, start: START_PROGRESS, samples: SAMPLES, id: TRACK_INFO.id, name: TRACK_INFO.name });
+  grid.clear();
+  SAMPLES.forEach((p, i) => {
+    const key = `${Math.floor(p.x / CELL)},${Math.floor(p.z / CELL)}`;
+    const list = grid.get(key) ?? []; list.push(i); grid.set(key, list);
+  });
+  SHORTCUT_PATH = buildShortcutPath(); SHORTCUT_LENGTH = SHORTCUT_PATH.length;
+}
+
+/** Switches the whole simulation to another circuit (layout bindings, centreline, shortcut). */
+export function selectTrack(id: TrackId): void {
+  if (TRACK.length > 0 && TRACK.id === id) return;
+  setTrackLayout(id); rebuild();
+}
+export { isTrackId };
 
 function sampleIndexAt(s: number): number {
   const target = wrap(s);
@@ -65,7 +80,7 @@ export function trackLocate(x: number, z: number): { s: number; lane: number } {
 }
 
 // Shortcut centreline: Catmull-Rom through the inside lanes of both legs and the backyard points.
-const SHORTCUT_PATH = (() => {
+function buildShortcutPath() {
   const raw = [trackPoint(SHORTCUT.from, -3), ...SHORTCUT.points.map(([x, z]) => ({ x, z })), trackPoint(SHORTCUT.to, -3)];
   const pts: { x: number; z: number }[] = [];
   for (let i = 0; i < raw.length - 1; i++) {
@@ -79,8 +94,10 @@ const SHORTCUT_PATH = (() => {
   pts.push(raw[raw.length - 1]);
   const u = [0]; for (let i = 1; i < pts.length; i++) u.push(u[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z));
   return { pts, u, length: u[u.length - 1] };
-})();
-export const SHORTCUT_LENGTH = SHORTCUT_PATH.length;
+}
+let SHORTCUT_PATH: { pts: { x: number; z: number }[]; u: number[]; length: number } = { pts: [], u: [], length: 0 };
+export let SHORTCUT_LENGTH = 0;
+rebuild();
 
 /** Point and heading on the shortcut at distance u (0..length) with a lateral offset (positive = right). */
 export function shortcutPoint(u: number, lane = 0): { x: number; z: number; heading: number } {
@@ -162,10 +179,14 @@ function shortcutCurvatureAhead(from: number, distance: number): { curvature: nu
   return { curvature: best, sign };
 }
 
-/** Smooth road elevation along the circuit (cosine crest on the Prachtallee); 0 elsewhere. */
+/** Smooth road elevation along the circuit: cosine-eased between the layout's keyframes; 0 elsewhere. */
 export function elevationAt(s: number): number {
-  const t = (wrap(s) - CREST.from) / (CREST.to - CREST.from);
-  return t <= 0 || t >= 1 ? 0 : CREST.height * (.5 - .5 * Math.cos(t * Math.PI * 2));
+  const p = wrap(s);
+  for (let i = 0; i < ELEVATION.length - 1; i++) {
+    const [a, ha] = ELEVATION[i], [b, hb] = ELEVATION[i + 1];
+    if (p >= a && p <= b) { const t = (p - a) / (b - a || 1); return ha + (hb - ha) * (.5 - .5 * Math.cos(t * Math.PI)); }
+  }
+  return 0;
 }
 
 export function trackHeightAt(x: number, z: number): number {
@@ -270,6 +291,26 @@ export function recoverKart(state: KartState, others: KartState[]): KartState {
   return {...initialKartState(),...p,travelHeading:p.heading};
 }
 
+/**
+ * Rival styles (07.10.2026, Paket 5): each caricature makes recognisable, fair choices – preferred line on the
+ * straights, drift or grip through tight bends, whether it risks the shortcut, how eagerly it commits to a
+ * passing line and how long it saves an item. No style changes speed, grip or the shared kart physics.
+ */
+export interface BotStyle { label: string; lane: number; drift: boolean; shortcut: boolean; pass: number; itemPatience: number }
+/** Indexed like CAST: Hitler, Stalin, Mussolini, Mao, Kim Jong-un, Castro. */
+export const BOT_STYLES: readonly BotStyle[] = [
+  { label: 'beansprucht die Mitte, drängelt beim Überholen', lane: 0, drift: true, shortcut: false, pass: 1.45, itemPatience: .7 },
+  { label: 'schwer und geduldig auf der Innenlinie, kein Drift', lane: -2.8, drift: false, shortcut: false, pass: .65, itemPatience: 1.6 },
+  { label: 'Außenlinie mit Pose, nimmt jede Abkürzung', lane: 2.8, drift: true, shortcut: true, pass: 1.2, itemPatience: 1 },
+  { label: 'gleichmäßig innen, Haftung statt Drift', lane: -2.8, drift: false, shortcut: false, pass: .9, itemPatience: 1.3 },
+  { label: 'sprunghaft, riskiert die Abkürzung, wirft früh', lane: 0, drift: true, shortcut: true, pass: 1.3, itemPatience: .55 },
+  { label: 'Langstreckenlinie außen, driftet sauber', lane: 2.8, drift: true, shortcut: false, pass: 1, itemPatience: 1.1 },
+];
+let botStyles: (BotStyle | undefined)[] = [];
+/** Style per kart slot (slot 0 = player, ignored); without styles the earlier slot-based defaults apply. */
+export function setBotStyles(styles: (BotStyle | undefined)[]): void { botStyles = styles; }
+export const botStyleOf = (index: number): BotStyle | undefined => botStyles[index];
+
 /** Shared bot driver: racing lane choice, corner braking, traffic and drift-boost through tight bends. */
 /** Bot pace offset per difficulty (m/s on the base pace; never above the shared kart top speed). */
 let botSkill = 0;
@@ -277,7 +318,9 @@ export function setBotSkill(level: 0 | 1 | 2): void { botSkill = [-1.3, 0, 1.2][
 
 export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {
   const main = trackLocate(state.x, state.z);
-  const alley = inShortcut(state.x, state.z) || (index === 3 && main.s >= SHORTCUT.from - 14 && main.s < SHORTCUT.to);
+  const style = botStyles[index];
+  const takesAlley = style ? style.shortcut : index === 3;
+  const alley = inShortcut(state.x, state.z) || (takesAlley && main.s >= SHORTCUT.from - 14 && main.s < SHORTCUT.to);
   const shortcut = alley ? shortcutLocate(state.x, state.z) : null;
   const { s, lane: currentLane } = shortcut ?? main;
   const speed = Math.abs(state.speed);
@@ -290,11 +333,12 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
     return { ahead: wrap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
   }).filter((other) => other.sameRoute && other.ahead > .05 && other.ahead < 14);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
-  const preferred = radius < 30 ? corner.sign * 2.8 : [-2.8, 0, 2.8][index % 3];
+  const preferred = radius < 30 ? corner.sign * 2.8 : style ? style.lane : [-2.8, 0, 2.8][index % 3];
+  const eagerness = style?.pass ?? 1;
   // Overtaking: lanes holding a slower kart ahead are strongly avoided, so a faster bot commits to a passing line.
   const slower = traffic.filter((t) => t.speed < speed + .5);
   const score = (lane: number) => Math.abs(lane - currentLane) * .3 + Math.abs(lane - preferred) * (slower.length ? .05 : .14) +
-    traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.2 ? (14 - t.ahead) * (t.speed < speed + .5 ? 3.2 : 1.2) : 0), 0);
+    traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.2 ? (14 - t.ahead) * (t.speed < speed + .5 ? 3.2 * eagerness : 1.2) : 0), 0);
   const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
   const target = alley
     ? shortcutPoint(shortcut!.u + 6.5 + speed * .38, 0)
@@ -328,7 +372,7 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
     return { throttle: .9, steering: committed ? corner.sign * Math.max(.5, Math.abs(steering)) : steering, hopDrift: committed };
   }
   // Two of three bots are drifters; the third keeps grip, so the field races with different lines.
-  if (tight && index % 3 !== 1 && Math.abs(steering) > .35 && Math.sign(steering) === corner.sign)
+  if (tight && (style ? style.drift : index % 3 !== 1) && Math.abs(steering) > .35 && Math.sign(steering) === corner.sign)
     return { throttle: .9, steering, hopDrift: true, hopPressed: true };
   return { throttle, steering };
 }

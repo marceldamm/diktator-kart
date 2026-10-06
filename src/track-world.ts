@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { CREST, GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
+import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, TRACK_INFO, raisedSpans } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 import { canalFoamBands } from './environment-effects';
@@ -22,9 +22,6 @@ const trackLocateS = (x: number, z: number) => trackLocate(x, z).s;
 export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
 const W = TRACK.halfWidth;
-/** Progress ranges dressed with slogan boards instead of plain striped barriers. */
-const BOARD_RANGES: [number, number][] = [[2 * MAP_SCALE, 92 * MAP_SCALE], [282 * MAP_SCALE, 372 * MAP_SCALE]];
-const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
   const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
@@ -106,7 +103,11 @@ function without(from: number, to: number, gaps: [number, number][]): [number, n
 }
 
 export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld {
-  addPeriodDetails(scene,shadow);
+  /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
+  const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
+  const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
+  const rome = TRACK_INFO.theme === 'rome';
+  if (!rome) addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
   const road = pbr(scene, 'Cobblestone boulevard', '#d8d2c2', 0, 1);
@@ -181,7 +182,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-  const slogans = ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+  const slogans = rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {
@@ -234,7 +235,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const wallStone = pbr(scene, 'Crest retaining ashlar', '#cbb894', 0, .85);
     const maps = surfaceTextures(scene, 'Crest ashlar', 'stone'); wallStone.albedoTexture = maps.color; wallStone.bumpTexture = maps.normal;
     const outer = W + 1.45 + LANDMARKS.promenade;
-    for (const side of [-1, 1]) {
+    for (const [crestFrom, crestTo] of raisedSpans()) for (const side of [-1, 1]) {
+      const CREST = { from: crestFrom, to: crestTo };
       const positions: number[] = [], indices: number[] = [], uvs: number[] = [];
       const steps = Math.round((CREST.to - CREST.from) / 1.5);
       for (let k = 0; k <= steps; k++) {
@@ -242,6 +244,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
         positions.push(p.x, -.02, p.z, p.x, top, p.z); uvs.push(s / 2, 0, s / 2, top / 2);
         if (k < steps) { const i = k * 2; indices.push(...(side > 0 ? [i, i + 2, i + 1, i + 1, i + 2, i + 3] : [i, i + 1, i + 2, i + 1, i + 3, i + 2])); }
       }
+      // Open hazard edges (quay basins) keep their own walls instead of a parapet.
+      if (side > 0 && HAZARDS.some((h) => h.from < CREST.to && h.to > CREST.from)) continue;
       const wall = new Mesh(`Crest retaining wall ${side}`, scene), data = new VertexData(), normals: number[] = [];
       VertexData.ComputeNormals(positions, indices, normals); data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs;
       data.applyToMesh(wall); wall.material = wallStone; wall.receiveShadows = true; wall.isPickable = false; wall.freezeWorldMatrix(); shadow.addShadowCaster(wall);
@@ -253,7 +257,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   { // Canal across the road (in front of the grandstands) with a timber take-off ramp.
     const canalWater = pbr(scene, 'Canal water', '#1d3b44', .25, .08); canalWater.alpha = .95;
     canalWater.bumpTexture = waterRipple; waterRipple.level = .27;
-    sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
+    if (CANAL_LENGTH > 0) sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
     // A broken, low-contrast foam wash helps read where the dark canal begins/ends.
     // It is visual-only and floats 8 mm above the water to avoid z-fighting.
     const foamTexture = canvasTexture(scene, 'Canal shoreline foam', 256, 64, (c) => {
@@ -278,22 +282,22 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     foam.diffuseTexture = foamTexture; foam.useAlphaFromDiffuseTexture = true; foam.alpha = .7;
     foam.diffuseColor = Color3.White(); foam.specularColor = new Color3(.12, .16, .16);
     foam.backFaceCulling = false;
-    for (const [from, to] of canalFoamBands(CANAL_FROM, CANAL_LENGTH)) {
+    if (CANAL_LENGTH > 0) for (const [from, to] of canalFoamBands(CANAL_FROM, CANAL_LENGTH)) {
       sweep(scene, 'Canal shoreline foam', [[-W - 1.3, .048], [W + 1.3, .048]], foam,
         { uScale: .16, vScale: 4.4, step: .04, from, to });
     }
     const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
     edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
-    for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
+    if (CANAL_LENGTH > 0) for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
     const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let y = 0; y < 256; y += 32) { c.fillStyle = y % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(0, y + 2, 256, 28); }
       c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let y = 40; y < 256; y += 90) { c.beginPath(); c.moveTo(40, y + 40); c.lineTo(128, y); c.lineTo(216, y + 40); c.stroke(); } });
     const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
     for (const end of RAMP_LIPS) {
       const paths: Vector3[][] = [];
       // The road follows the same ramp profile; lift the timber by a thin plank thickness to avoid coplanar flicker.
-      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
+      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + RAMP_HEIGHT * k / 12 + elevationAt(s), p.z)); } paths.push(path); }
       const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
-      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane); return [new Vector3(p.x, RAMP_HEIGHT + .07, p.z), new Vector3(p.x, -.2, p.z)]; });
+      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane), e = elevationAt(end); return [new Vector3(p.x, RAMP_HEIGHT + .07 + e, p.z), new Vector3(p.x, -.2 + e, p.z)]; });
       const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
     }
   }
@@ -309,8 +313,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const sign = canvasTexture(scene, 'Training ground sign', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a'; c.textAlign = 'center';
       c.font = 'bold 44px Georgia'; c.fillText('STAATLICHES', 256, 80); c.fillText('ÜBUNGSGELÄNDE', 256, 135); c.font = '26px Georgia'; c.fillText('Trichter bitte umfahren', 256, 195); });
     const signMaterial = pbr(scene, 'Training ground sign', '#ffffff', 0, .6); signMaterial.albedoTexture = sign;
-    const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
-    board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; }
+    if (CRATERS.length) { const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
+    board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; } }
   { // Boost pads: glowing chevrons painted on the cobbles.
     const chevrons = canvasTexture(scene, 'Boost chevrons', 128, 256, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 128, 256); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
       for (let y = 30; y < 256; y += 64) { c.beginPath(); c.moveTo(14, y + 34); c.lineTo(64, y); c.lineTo(114, y + 34); c.stroke(); } });
@@ -339,7 +343,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
     const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
-      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : rome ? 'TIBER' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
     const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
     for (const at of [from - 4, to + 4]) {
       const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
@@ -506,9 +510,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const mast = MeshBuilder.CreateCylinder('Flag mast', { diameterTop: .09, diameterBottom: .16, height: 9.5, tessellation: 8 }, scene);
   mast.material = brass; mast.isPickable = false;
   const mastMatrices: number[] = [], flagMatrices: number[] = [];
-  for (let s = 112 * MAP_SCALE; s <= 205 * MAP_SCALE; s += 13) {
+  for (let s = TRACK_INFO.dressing.flagRange[0]; s <= TRACK_INFO.dressing.flagRange[1]; s += 13) {
     const p = trackPoint(s, W + 4.2);
-    mastMatrices.push(...Matrix.Translation(p.x, 4.75, p.z).asArray());
+    mastMatrices.push(...Matrix.Translation(p.x, 4.75 + elevationAt(s), p.z).asArray());
     flagMatrices.push(...Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(p.x, 8.2 + elevationAt(trackLocateS(p.x, p.z)), p.z)).asArray());
   }
   mast.thinInstanceSetBuffer('matrix', new Float32Array(mastMatrices), 16, true);
@@ -528,12 +532,12 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   // Pennant strings across the straights: one vertex-coloured mesh, gently swaying.
   const pennantPositions: number[] = [], pennantColors: number[] = [], pennantIndices: number[] = [];
   const palette = [new Color4(.62, .1, .13, 1), new Color4(.86, .68, .34, 1), new Color4(.93, .89, .78, 1), new Color4(.08, .28, .28, 1)];
-  for (const s of [12, 60, 300, 345, 515]) {
-    const a = trackPoint(s, -W - 2.6), b = trackPoint(s, W + 2.6);
+  for (const s of TRACK_INFO.dressing.pennants) {
+    const a = trackPoint(s, -W - 2.6), b = trackPoint(s, W + 2.6), lift = elevationAt(s);
     const count = 22;
     for (let i = 0; i < count; i++) {
       const t0 = i / count, t1 = (i + .8) / count;
-      const sag = (t: number) => 7.3 - Math.sin(Math.PI * t) * 1.3;
+      const sag = (t: number) => 7.3 + lift - Math.sin(Math.PI * t) * 1.3;
       const x0 = a.x + (b.x - a.x) * t0, z0 = a.z + (b.z - a.z) * t0, x1 = a.x + (b.x - a.x) * t1, z1 = a.z + (b.z - a.z) * t1;
       const k = pennantPositions.length / 3;
       pennantPositions.push(x0, sag(t0), z0, x1, sag(t1), z1, (x0 + x1) / 2, sag((t0 + t1) / 2) - .62, (z0 + z1) / 2);

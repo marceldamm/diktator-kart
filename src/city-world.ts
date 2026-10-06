@@ -13,7 +13,7 @@ import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
 import { Color4 } from '@babylonjs/core/Maths/math.color';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackLocate, shortcutLocate, SHORTCUT_LENGTH, elevationAt } from './track';
-import { GROUND, HAZARDS, LANDMARKS, RIVER } from './track-layout';
+import { GROUND, HAZARDS, LANDMARKS, RIVER, TRACK_INFO } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import { paintEmblem } from './track-world';
 
@@ -41,12 +41,22 @@ const DIMS: Record<string, Footprint> = {
   'kit-statue': { u0: -2.4, u1: 2.4, v0: -1.5, v1: 1.5 }, 'kit-fountain': { u0: -6.6, u1: 6.6, v0: -6.6, v1: 6.6 },
   'kit-kiosk': { u0: -2, u1: 2, v0: -2, v1: 2 }, 'kit-urn': { u0: -.8, u1: .8, v0: -.8, v1: .8 },
   'kit-hedge': { u0: -2, u1: 2, v0: -.5, v1: .5 },
+  // Roman modules (Duce-Drom, art-source/rome_kit_modules.py)
+  'kit-insula-a': { u0: -7.4, u1: 7.4, v0: -1.6, v1: 14 }, 'kit-insula-b': { u0: -5.4, u1: 5.4, v0: -1.4, v1: 13 },
+  'kit-insula-c': { u0: -9.4, u1: 9.4, v0: -1.6, v1: 16 }, 'kit-balcony-palace': { u0: -24, u1: 24, v0: -3, v1: 25 },
+  'kit-obelisk': { u0: -3.4, u1: 3.4, v0: -3.4, v1: 3.4 }, 'kit-pine': { u0: -1.5, u1: 1.5, v0: -1.5, v1: 1.5 },
+  'kit-pine-b': { u0: -1.5, u1: 1.5, v0: -1.5, v1: 1.5 }, 'kit-aqueduct': { u0: -12.3, u1: 12.3, v0: -1.6, v1: 1.6 },
+  'kit-ruin': { u0: -6.6, u1: 6.6, v0: -5, v1: 4.4 },
 };
-const PLASTER_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c7c9a6', '#d49d7c', '#e8d3b0'].map((h) => Color3.FromHexString(h).toLinearSpace());
+const BERLIN_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c7c9a6', '#d49d7c', '#e8d3b0'];
+/** Roman ochre, sienna, terracotta and pale travertine plasters. */
+const ROME_TINTS = ['#e2a85e', '#cf7d4b', '#e8bd7c', '#bd6a42', '#ecd3a2', '#d9925c', '#cfa77c', '#f1dcb2', '#c9885c'];
 
 function rng(seed: number) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
 export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promise<CityWorld> {
+  const rome = TRACK_INFO.theme === 'rome';
+  const PLASTER_TINTS = (rome ? ROME_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
   const kit = await LoadAssetContainerAsync('/assets/models/city-kit.glb', scene);
   kit.addAllToScene();
   scene.onDisposeObservable.add(() => kit.dispose());
@@ -84,7 +94,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const signs = new DynamicTexture('Kit shop sign atlas', { width: 512, height: 512 }, scene, true);
   {
     const c = signs.getContext() as CanvasRenderingContext2D;
-    const names = ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
+    const names = rome ? ['CAFFÈ DEL BALCONE', 'MARMOR & PATHOS', 'GELATO GENEHMIGT', 'BÜSTEN NACH MASS', 'TRIUMPHBOGEN-VERLEIH', 'APPLAUS-AGENTUR', 'SCHÄRPEN & ORDEN', 'TOGA-REINIGUNG']
+      : ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
     names.forEach((name, k) => {
       const y = k * 64;
       c.fillStyle = ['#1f3b30', '#5c1a22', '#1d2a3c', '#2b2b26'][k % 4]; c.fillRect(0, y, 512, 64);
@@ -92,6 +103,15 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
       c.fillStyle = '#ecd08a'; c.font = `bold ${name.length > 16 ? 30 : 36}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(name, 256, y + 34);
     });
     signs.update();
+  }
+  // Arch attic inscription (Roman theme): an original satirical dedication, not a historical text.
+  const inscription = new DynamicTexture('Kit inscription', { width: 1024, height: 256 }, scene, true);
+  {
+    const c = inscription.getContext() as CanvasRenderingContext2D;
+    c.fillStyle = '#e6dcc4'; c.fillRect(0, 0, 1024, 256); c.fillStyle = '#9a7a3e'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.font = 'bold 74px Georgia'; c.fillText('SENATVS POPVLVSQVE', 512, 78); c.fillText('APPLAVDENS', 512, 168);
+    c.font = 'italic 26px Georgia'; c.fillText('Beifall amtlich angeordnet · Vorfahrt dem Sieger von morgen', 512, 230);
+    inscription.update();
   }
   const glowMeshes: Mesh[] = [];
   for (const m of kit.materials) {
@@ -102,6 +122,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (/banner/.test(m.name)) { m.albedoTexture = banner; m.bumpTexture = cloth.normal; }
     // glTF stores V flipped and DynamicTexture inverts Y again: flip V so the lettering stands upright (rows map k → 7-k).
     if (/shop sign/.test(m.name)) { m.albedoTexture = signs; signs.wrapV = 1 /* WRAP */; signs.vScale = -1; m.metallic = .1; m.roughness = .45; }
+    if (/inscription/.test(m.name)) { m.albedoTexture = inscription; inscription.wrapV = 1; inscription.vScale = -1; m.metallic = 0; m.roughness = .7; }
     if (/foliage/.test(m.name)) { m.albedoTexture = leaf.color; m.bumpTexture = leaf.normal; m.backFaceCulling = false; }
     if (/glass/.test(m.name) && !/lamp/.test(m.name)) { m.roughness = .08; m.metallic = .35; m.environmentIntensity = 1.4; }
     if (/gilded/.test(m.name)) { m.clearCoat.isEnabled = true; m.clearCoat.intensity = .4; }
@@ -116,7 +137,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const reserved: { x: number; z: number; r: number }[] = [
     ...LANDMARKS.fountains.map(([x, z]) => ({ x, z, r: 10 })), ...LANDMARKS.trees.map(([x, z]) => ({ x, z, r: 6 })),
   ];
-  const tv = trackPoint(66 * 1.5, -(W + 11)); reserved.push({ x: tv.x, z: tv.z, r: 13 });
+  const tv = trackPoint(TRACK_INFO.dressing.screenProgress, -(W + 11)); reserved.push({ x: tv.x, z: tv.z, r: 13 });
   const inLawn = (x: number, z: number) => LANDMARKS.lawns.some(([x0, z0, x1, z1]) => x >= x0 - 2 && x <= x1 + 2 && z >= z0 - 2 && z <= z1 + 2);
   const inRiver = (_x: number, z: number) => z < RIVER.north + 1 && z > RIVER.south - 1;
   /** Lateral room the circuit needs at progress s on one side (corridor, promenade, open hazard basins, video wall, gate). */
@@ -159,35 +180,31 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
 
   // --- Hero buildings and fixed civic pieces ---------------------------------------------------------
   const gateAt = trackPoint(LANDMARKS.gateProgress, 0), finishAt = trackPoint(TRACK.start, 0);
-  placements.push({ m: 'kit-gate', x: gateAt.x, z: gateAt.z, yaw: gateAt.heading });
-  placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, yaw: finishAt.heading });
-    tryPlace({ m: 'kit-palace', x: LANDMARKS.palace[0], z: LANDMARKS.palace[1], yaw: 0 }, { lawnOk: true });
-  tryPlace({ m: 'kit-column', x: LANDMARKS.column[0], z: LANDMARKS.column[1], yaw: 0 });
-  for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; tryPlace({ m: 'kit-urn', x: LANDMARKS.column[0] + Math.cos(a) * 12.5, z: LANDMARKS.column[1] + Math.sin(a) * 12.5, yaw: -a }); }
-  tryPlace({ m: 'kit-cathedral', x: 150, z: RIVER.south - 70, yaw: Math.PI }, { riverOk: false });
-  for (const x of [-150, 330]) placements.push({ m: 'kit-bridge', x, z: (RIVER.north + RIVER.south) / 2, yaw: Math.PI / 2, sx: 1.16 });
+  placements.push({ m: rome ? 'kit-arch' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
+  placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
+  if (LANDMARKS.palace) tryPlace({ m: 'kit-palace', x: LANDMARKS.palace[0], z: LANDMARKS.palace[1], yaw: 0 }, { lawnOk: true });
+  tryPlace({ m: rome ? 'kit-obelisk' : 'kit-column', x: LANDMARKS.column[0], z: LANDMARKS.column[1], yaw: 0 }, { lawnOk: true });
+  for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; tryPlace({ m: rome ? 'kit-cypress' : 'kit-urn', x: LANDMARKS.column[0] + Math.cos(a) * 12.5, z: LANDMARKS.column[1] + Math.sin(a) * 12.5, yaw: -a }, { lawnOk: true }); }
+  for (const h of TRACK_INFO.dressing.heroes) {
+    if (h.s !== undefined) { const p = trackPoint(h.s, h.lane ?? 0); tryPlace({ m: h.m, x: p.x, z: p.z, yaw: h.yaw ?? facing(p.x, p.z) }, { lawnOk: true }); }
+    else tryPlace({ m: h.m, x: h.x ?? 0, z: h.z ?? 0, yaw: h.yaw ?? 0 }, { lawnOk: true });
+  }
+  const cathedral = TRACK_INFO.dressing.cathedral;
+  if (cathedral) tryPlace({ m: 'kit-cathedral', x: cathedral.x, z: cathedral.z, yaw: cathedral.yaw }, { riverOk: false });
+  for (const x of TRACK_INFO.dressing.bridges) placements.push({ m: 'kit-bridge', x, z: (RIVER.north + RIVER.south) / 2, yaw: Math.PI / 2, sx: 1.16 * Math.abs(RIVER.north - RIVER.south) / 72 });
   // Quay walls along both banks (front toward the water).
   for (let x = RIVER.west + 5; x < RIVER.east; x += 10) {
-    placements.push({ m: 'kit-quay', x, z: RIVER.north, yaw: 0 }, { m: 'kit-quay', x, z: RIVER.south, yaw: Math.PI });
+    placements.push({ m: 'kit-quay', x, z: Math.max(RIVER.north, RIVER.south), yaw: 0 }, { m: 'kit-quay', x, z: Math.min(RIVER.north, RIVER.south), yaw: Math.PI });
   }
   for (let x = RIVER.west; x < RIVER.east; x += 2) { for (const z of [RIVER.north, RIVER.south]) { const c = cellOf(x, z); if (c >= 0) occupied[c] = 1; } }
 
   // --- Districts along the circuit -------------------------------------------------------------------
   type District = { from: number; to: number; left: string; right: string };
-  const districts: District[] = [
-    { from: 2, to: 182, left: 'stands', right: 'stands' },
-    { from: 182, to: 300, left: 'park', right: 'city' },
-    { from: 300, to: 445, left: 'park', right: 'park' },
-    { from: 445, to: 545, left: 'boulevard', right: 'boulevard' },
-    { from: 545, to: 735, left: 'city', right: 'city' },
-    { from: 735, to: 842, left: 'city', right: 'city' },
-    { from: 842, to: 990, left: 'riverfront', right: 'quay' },
-    { from: 990, to: 1112, left: 'avenue', right: 'avenue' },
-    { from: 1112, to: 1188, left: 'plaza', right: 'corner' },
-    { from: 1188, to: 1302, left: 'park', right: 'park' },
-    { from: 1302, to: TRACK.length - 1, left: 'stands', right: 'stands' },
-  ];
-  const families: Record<string, string[]> = {
+  const districts: District[] = TRACK_INFO.dressing.districts.map((d) => ({ ...d, to: Math.min(d.to, TRACK.length - 1) }));
+  const families: Record<string, string[]> = rome ? {
+    insula: ['kit-insula-a', 'kit-insula-b', 'kit-insula-c', 'kit-insula-a', 'kit-insula-b'],
+    avenue: ['kit-insula-c', 'kit-insula-a', 'kit-insula-c'],
+  } : {
     city: ['kit-house-a', 'kit-house-b', 'kit-house-c', 'kit-house-a', 'kit-house-d', 'kit-house-b'],
     boulevard: ['kit-house-d', 'kit-house-a', 'kit-house-d', 'kit-house-b'],
     riverfront: ['kit-house-a', 'kit-house-d', 'kit-house-c', 'kit-house-b'],
@@ -211,13 +228,29 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
         if (tryPlace({ m, x: p.x, z: p.z, yaw: facing(p.x, p.z), tint: tint(), s })) s += (DIMS[m].u1 - DIMS[m].u0) * .55;
       }
     }
+    // Roman hill gardens and forum ruins: umbrella pines, cypresses, columns and statues.
+    if (kind === 'pines' || kind === 'ruins') {
+      for (let s = d.from; s < d.to; s += kind === 'pines' ? 7 : 12) {
+        const rows = [PROMENADE + 3 + random() * 3, PROMENADE + 11 + random() * 8];
+        for (const lane of rows) {
+          const p = trackPoint(s + random() * 3, side * lane);
+          const m = random() < .3 ? 'kit-cypress' : random() < .5 ? 'kit-pine' : 'kit-pine-b';
+          tryPlace({ m, x: p.x, z: p.z, yaw: random() * 6.28, sc: .85 + random() * .35 }, { lawnOk: true });
+        }
+      }
+      for (let s = d.from + 10; s < d.to - 6; s += kind === 'ruins' ? 26 : 40) {
+        const p = trackPoint(s, side * (PROMENADE + 8 + random() * 4));
+        const m = kind === 'ruins' ? (random() < .55 ? 'kit-ruin' : 'kit-statue') : 'kit-statue';
+        tryPlace({ m, x: p.x, z: p.z, yaw: facing(p.x, p.z) }, { lawnOk: true });
+      }
+    }
     // Trees: avenue lindens, park groves and the quay promenade.
     if (kind === 'park' || kind === 'avenue' || kind === 'quay' || kind === 'plaza') {
       for (let s = d.from; s < d.to; s += kind === 'park' ? 4.5 : 11) {
         const rows = kind === 'park' ? [PROMENADE + 3 + random() * 4, PROMENADE + 9 + random() * 8, PROMENADE + 18 + random() * 12] : [PROMENADE + 2.6];
         for (const lane of rows) {
           const p = trackPoint(s + random() * 3, side * lane);
-          const m = kind === 'park' && random() < .28 ? 'kit-cypress' : 'kit-linden';
+          const m = rome ? (random() < .35 ? 'kit-cypress' : 'kit-pine') : kind === 'park' && random() < .28 ? 'kit-cypress' : 'kit-linden';
           tryPlace({ m, x: p.x, z: p.z, yaw: random() * 6.28, sc: .85 + random() * .4 }, { lawnOk: true });
         }
       }
@@ -228,8 +261,10 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     }
   }
   // Infield park lawns get groves as well.
-  for (const [x0, z0, x1, z1] of LANDMARKS.lawns) for (let x = x0 + 5; x < x1 - 4; x += 9) for (let z = z0 + 5; z < z1 - 4; z += 9) {
-    tryPlace({ m: random() < .3 ? 'kit-cypress' : 'kit-linden', x: x + random() * 4, z: z + random() * 4, yaw: random() * 6.28, sc: .9 + random() * .4 }, { lawnOk: true });
+  const grove = rome ? 17 : 9;
+  for (const [x0, z0, x1, z1] of LANDMARKS.lawns) for (let x = x0 + 5; x < x1 - 4; x += grove) for (let z = z0 + 5; z < z1 - 4; z += grove) {
+    const m = rome ? (random() < .25 ? 'kit-cypress' : random() < .5 ? 'kit-pine' : 'kit-pine-b') : random() < .3 ? 'kit-cypress' : 'kit-linden';
+    tryPlace({ m, x: x + random() * (rome ? 9 : 4), z: z + random() * (rome ? 9 : 4), yaw: random() * 6.28, sc: .9 + random() * .4 }, { lawnOk: true });
   }
   // Promenade furniture between the existing lamps (lamps every 24 m at lane W+2.6).
   const furniture = ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
@@ -250,7 +285,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const px = x + (random() - .5) * 10, pz = z + (random() - .5) * 10;
     const { lane } = trackLocate(px, pz);
     if (Math.abs(lane) < 34) continue;
-    const m = pick(['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
+    const m = pick(rome ? ['kit-insula-c', 'kit-insula-a', 'kit-insula-c', 'kit-insula-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
     const towardCentre = Math.atan2(-(60 - px), -(-20 - pz));
     const yaw = Math.abs(lane) < 70 ? facing(px, pz) : Math.round(towardCentre / (Math.PI / 2)) * Math.PI / 2;
     tryPlace({ m, x: px, z: pz, yaw, tint: tint() }, { extra: 18, skipCircuit: Math.abs(lane) > 70 });
@@ -340,10 +375,11 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   // Red and gold paper petals drifting over the grandstand straight (loading-art mood), hard-capped and cheap.
   const petalTexture = new DynamicTexture('Petal sprite', { width: 32, height: 32 }, scene, false);
   { const c = petalTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 13, 7, .6, 0, Math.PI * 2); c.fill(); petalTexture.hasAlpha = true; petalTexture.update(); }
-  const straightA = trackPoint(10, 0), straightB = trackPoint(170, 0);
+  const straightA = trackPoint(TRACK_INFO.dressing.petals[0], 0), straightB = trackPoint(TRACK_INFO.dressing.petals[1], 0);
   const petals = new ParticleSystem('Stadium petals', 260, scene); petals.particleTexture = petalTexture;
   petals.emitter = new Vector3((straightA.x + straightB.x) / 2, 14, (straightA.z + straightB.z) / 2);
-  petals.minEmitBox = new Vector3(-26, 0, -(Math.abs(straightB.z - straightA.z) / 2)); petals.maxEmitBox = new Vector3(26, 6, Math.abs(straightB.z - straightA.z) / 2);
+  const halfX = Math.max(26, Math.abs(straightB.x - straightA.x) / 2), halfZ = Math.max(26, Math.abs(straightB.z - straightA.z) / 2);
+  petals.minEmitBox = new Vector3(-halfX, 0, -halfZ); petals.maxEmitBox = new Vector3(halfX, 6, halfZ);
   petals.direction1 = new Vector3(-.6, -.4, -.3); petals.direction2 = new Vector3(.6, -.2, .4); petals.gravity = new Vector3(.25, -.55, .1);
   petals.minEmitPower = .2; petals.maxEmitPower = .6; petals.minLifeTime = 9; petals.maxLifeTime = 14; petals.emitRate = 22;
   petals.minSize = .09; petals.maxSize = .17; petals.minAngularSpeed = -3; petals.maxAngularSpeed = 3;
