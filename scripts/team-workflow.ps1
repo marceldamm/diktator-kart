@@ -176,7 +176,7 @@ try {
     if ((Git @('rev-parse', 'origin/main')) -ne $remote) { throw 'main advanced during verification. Keep the uploaded work branch, integrate current main with Codex, and rerun checks before opening the PR.' }
     $repositoryUrl = ([string]$remoteState.repositoryUrl -replace '\.git$', '').TrimEnd('/')
     $encodedBranch = [Uri]::EscapeDataString($branch)
-    $compareUrl = "$repositoryUrl/compare/main...$encodedBranch?expand=1"
+    $compareUrl = "$repositoryUrl/compare/main...${encodedBranch}?expand=1"
     Write-Host "GEPRUEFTER BRANCH AUF GITHUB: $branch = $savedHead"
     Write-Host "Pull-Request-Vergleich: $compareUrl"
     throw 'The batch does not create or merge pull requests. Do not push main directly. Continue in Codex: create/update this PR, wait for the required Actions check, merge under the explicit Projektabschluss authorization, and verify origin/main.'

@@ -93,10 +93,10 @@ test('team: disjoint parallel changes integrate, verify and upload branch for PR
   put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nAlice verified both\n'); commit(f.Alice, 'verified handoff');
   const result = run(f.Alice, 'Finish', false);
   assert.notEqual(result.status, 0, 'Finish returns a handoff sentinel until Codex creates/checks/merges the PR');
-  assert.match(result.stdout, /Pull-Request-Vergleich/);
+  const branch = git(f.Alice, 'branch', '--show-current');
+  assert.ok(result.stdout.includes(`/compare/main...${encodeURIComponent(branch)}?expand=1`), 'Finish prints an exact compare URL for the uploaded branch');
   assert.match(result.stdout, /Continue in Codex: create\/update this PR/);
   assert.equal(remoteHead(f), bob, 'Finish must not push directly to main');
-  const branch = git(f.Alice, 'branch', '--show-current');
   assert.equal(git(f.remote, 'rev-parse', `refs/heads/${branch}`), git(f.Alice, 'rev-parse', 'HEAD'));
   assert.equal(command(f.remote, 'git', ['merge-base', '--is-ancestor', bob, `refs/heads/${branch}`], false).status, 0);
 });
