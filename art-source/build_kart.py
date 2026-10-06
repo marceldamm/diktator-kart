@@ -484,7 +484,11 @@ for identity in ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro']:
         lower = max(0, min(1, (-z + .12) / .3))
         cheeks = bump(abs(x), z, .17, .015, .1, .14)
         if identity == 'hitler':
-            x *= 1 - .1 * lower; y += .012 * bump(x, z, 0, -.13, .08, .08)
+            sockets = bump(abs(x), z, .095, .14, .05, .04); hollow = bump(abs(x), z, .13, -.04, .05, .06)
+            jaw = bump(abs(x), z, .17, -.12, .06, .08)
+            x *= 1 - .1 * lower - .05 * jaw
+            y += .012 * bump(x, z, 0, -.13, .08, .08) - .014 * sockets - .012 * hollow + .01 * bump(x, z, 0, .08, .03, .09)
+            z -= .016 * lower
         elif identity == 'stalin':
             # Shape the lower face as one continuous skull surface: broad cheek planes,
             # readable masseter corners, a tucked cheek hollow and a flatter chin.
@@ -812,6 +816,99 @@ for sd in [-1, 1]:
         mesh('Independent spread-wing eagle pennant relief', eagle_verts, eagle_faces, trim, parade)
     ellipsoid('Eagle head', (cx + .035, -1.045, 1.94), (.025, .012, .02), trim, parade, 10)
     tube('Eagle beak', [(cx + .045, -1.052, 1.94), (cx + .065, -1.052, 1.93)], .008, trim, parade)
+
+# --- Redesign 06.10.2026: Hitler quality anchor ------------------------------------------------------
+# Individual 1930s Grand-Prix body 'body-grandprix': long louvred bonnet with leather straps, tall narrow
+# radiator, aero screen, side exhaust organ pipes and a pointed boat tail; deep red enamel with gilt
+# coachlines and an original laurel-lion grille badge. Shares the wheel/fender/seat rig of the roster.
+b = body('grandprix')
+gp = [(1.56, .15, .19, .6), (1.42, .19, .23, .61), (1.15, .23, .26, .62), (.8, .27, .28, .62), (.45, .33, .3, .6),
+      (.1, .39, .31, .56), (-.3, .41, .31, .54), (-.7, .41, .3, .55), (-1.0, .36, .28, .58), (-1.3, .27, .23, .62),
+      (-1.58, .14, .14, .66), (-1.76, .03, .04, .68)]
+loft('Grand Prix enamel body', [ring(w, hh, zc, y, 28, 2.4) for y, w, hh, zc in gp], paint, b, 2)
+# Tall narrow radiator: chrome shell, gilt vertical vanes, cap and badge.
+box('GP radiator shell', (0, 1.6, .64), (.36, .08, .52), chrome, .04, b)
+box('GP radiator core', (0, 1.645, .64), (.28, .02, .44), leather, .01, b)
+for k in range(9): box('GP radiator vane', (-.12 + k * .03, 1.655, .64), (.008, .012, .42), trim, .002, b)
+cyl('GP radiator cap', (0, 1.58, .93), .045, .06, trim, b)
+ellipsoid('GP radiator cap dome', (0, 1.58, .965), (.04, .04, .03), trim, b, 10)
+torus('GP grille badge laurel', (0, 1.675, .66), .085, .014, trim, b, 'Y')
+ellipsoid('GP grille badge lion mask', (0, 1.682, .66), (.055, .02, .06), trim, b, 10)
+for sd in [-1, 1]:
+    ellipsoid('GP lion mane lock', (sd * .045, 1.68, .69), (.02, .012, .035), trim, b, 6)
+    # Gilt coachline along the shoulder from radiator to tail.
+    tube('GP gilt coachline', [(sd * .17, 1.5, .76), (sd * .25, 1.0, .82), (sd * .33, .4, .85), (sd * .41, -.3, .82), (sd * .38, -.9, .8), (sd * .24, -1.35, .78), (sd * .06, -1.72, .72)], .012, trim, b)
+    # Louvre rows on the bonnet sides.
+    for k in range(9):
+        y = 1.3 - k * .085
+        w = .23 + (1.3 - y) * .1
+        box('GP bonnet louvre', (sd * (w - .005), y, .66), (.03, .045, .1), leather, .006, b)
+    # Ivory racing roundel (left blank: no number, no insignia) with gilt rim.
+    cyl('GP racing roundel', (sd * .41, -.55, .6), .15, .012, ivory, b, 'X')
+    torus('GP roundel rim', (sd * .418, -.55, .6), .15, .01, trim, b, 'X')
+for y in (1.08, .62):  # leather bonnet straps with buckles
+    r = .27 if y > 1 else .31
+    pts = [(math.cos(a) * r, y, .62 + math.sin(a) * r * .95) for a in [math.radians(d) for d in range(-10, 191, 20)]]
+    tube('GP bonnet strap', pts, .012, leather, b)
+    box('GP strap buckle', (0, y, .62 + r * .95 + .01), (.05, .03, .02), chrome, .004, b)
+# Organ-pipe side exhaust on the driver's right, merging into one chrome pipe above the side pod.
+for k in range(4):
+    y0 = 1.18 - k * .12
+    tube('GP exhaust header', [(.24, y0, .72), (.36, y0 - .02, .74), (.5, y0 - .1, .7), (.56, y0 - .22, .68)], .03, chrome, b)
+tube('GP exhaust main pipe', [(.56, .72, .68), (.6, .3, .7), (.62, -.2, .7), (.6, -.75, .66), (.56, -1.2, .6)], .055, chrome, b)
+cyl('GP exhaust tip', (.56, -1.23, .6), .05, .05, leather, b, 'Y')
+for y in (.1, -.3): torus('GP exhaust heat band', (.615, y, .7), .062, .008, trim, b, 'Y')
+# Aero screen and cockpit rim.
+mesh('GP aero screen', [(-.24, .3, .86), (.24, .3, .86), (.22, .24, 1.04), (-.22, .24, 1.04)], [(0, 1, 2, 3)], glass, b)
+tube('GP aero screen frame', [(-.24, .3, .86), (-.22, .24, 1.04), (.22, .24, 1.04), (.24, .3, .86)], .01, chrome, b)
+tube('GP cockpit leather rim', [(math.cos(a) * .36, -.42 + math.sin(a) * .5, .86) for a in [math.radians(d) for d in range(0, 361, 20)]], .028, leather, b)
+# Headrest fairing and boat-tail rivets.
+loft('GP headrest fairing', [ring(w, hh, zc, y, 14, 2) for y, w, hh, zc in [(-.88, .04, .04, .9), (-1.0, .13, .15, .9), (-1.25, .12, .12, .84), (-1.5, .04, .05, .76)]], paint, b, 1)
+for k in range(10):
+    ellipsoid('GP tail rivet', (0, -1.0 - k * .07, .87 - k * .016), (.012, .012, .008), trim, b, 6)
+tube('GP chrome bumper', [(-.3, 1.72, .38), (0, 1.76, .38), (.3, 1.72, .38)], .022, chrome, b)
+
+# Civilian double-breasted jacket with lapels, shirt and tie (cast-hitler-jacket); no armband, no insignia.
+shirt = mat('Shirt cotton', (.8, .78, .72), 0, .7)
+tie_silk = mat('Dark tie silk', (.09, .07, .06), 0, .5)
+plain_button = mat('Plain horn button', (.16, .12, .08), .05, .5)
+jacket = empty('cast-hitler-jacket', (0, 0, 0), driver)
+torso_profile = [(.3, .22, .86), (.36, .26, 1.0), (.4, .28, 1.18), (.44, .27, 1.38), (.38, .24, 1.5), (.16, .14, 1.58)]
+def torso_front(x, z, lift=.012):
+    w, d = torso_profile[-1][0], torso_profile[-1][1]
+    for (w0, d0, z0), (w1, d1, z1) in zip(torso_profile, torso_profile[1:]):
+        if z0 <= z <= z1:
+            t = (z - z0) / (z1 - z0); w, d = w0 + (w1 - w0) * t, d0 + (d1 - d0) * t; break
+    q = max(0.0, 1 - (x / max(w, .01)) ** 2)
+    return (x, -.45 + d * math.sqrt(q) + lift, z)
+def front_patch(name, outline, m, parent, lift=.012):
+    vs = [torso_front(x, z, lift) for x, z in outline]
+    back = [torso_front(x, z, lift - .01) for x, z in outline]
+    n = len(vs)
+    faces = [tuple(range(n)), tuple(n + i for i in reversed(range(n)))] + [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)]
+    return mesh(name, vs + back, faces, m, parent)
+front_patch('Shirt front', [(-.075, 1.555), (.075, 1.555), (.0, 1.24)], shirt, jacket, .014)
+front_patch('Tie', [(-.022, 1.53), (.022, 1.53), (.03, 1.3), (0, 1.26), (-.03, 1.3)], tie_silk, jacket, .022)
+ellipsoid('Tie knot', torso_front(0, 1.535, .03), (.028, .02, .025), tie_silk, jacket, 8)
+for sd in [-1, 1]:
+    front_patch('Jacket lapel', [(sd * .075, 1.56), (sd * .2, 1.48), (sd * .17, 1.42), (sd * .02, 1.2), (sd * .005, 1.24)], uniform, jacket, .03)
+    front_patch('Breast pocket flap', [(sd * .13, 1.36), (sd * .27, 1.36), (sd * .27, 1.32), (sd * .2, 1.3), (sd * .13, 1.32)], uniform, jacket, .03)
+    front_patch('Hip pocket flap', [(sd * .12, 1.06), (sd * .26, 1.06), (sd * .26, 1.02), (sd * .12, 1.02)], uniform, jacket, .03)
+    for z in (1.16, 1.06):
+        ellipsoid('Plain jacket button', torso_front(sd * .09, z, .035), (.016, .01, .016), plain_button, jacket, 8)
+tube('Jacket front edge', [torso_front(.0, 1.2, .032), torso_front(-.02, 1.05, .032), torso_front(-.03, .92, .032)], .006, tie_silk, jacket)
+# Compact toothbrush moustache (cast-hitler-tache): one narrow, tall, square-cut block no wider than the nose.
+tache = cast('hitler-tache')
+box('Toothbrush moustache block', (0, .343, -.026), (.084, .044, .046), hair, .012, tache)
+for k in range(7): box('Moustache bristle ridge', (-.036 + k * .012, .364, -.026), (.006, .008, .04), hair, .002, tache)
+# A longer, straighter nose with a defined bridge and tip, sitting directly above the brush.
+hitler_nose = cast('hitler-nose')
+nose('Hitler straight nose', .155, .042, .112, hitler_nose, .004)
+# Heavier upper-lid fold and straight brows for a deep-set, intense gaze.
+brows = cast('hitler-brows')
+for sd in [-1, 1]:
+    strand('Straight heavy brow', [(sd * .045, .27, .2), (sd * .09, .272, .205), (sd * .14, .255, .198)], [.012, .015, .01], .012, hair, brows)
+    tube('Hooded upper lid', [(sd * .05, .262, .158), (sd * .095, .27, .166), (sd * .138, .258, .155)], .01, skin, brows)
 
 apply_all()
 save('hero-kart')

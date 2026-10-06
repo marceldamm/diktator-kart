@@ -156,7 +156,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const driver = nodes.find((n) => n.name === `kart${index}/driverPose`) as TransformNode;
       const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
       const kits = ['radio','spare','luggage','fin','parade'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/variant-${kind}`)] as const);
-      const bodies = ['roadster','limousine','racer','rounded','rocket','jeep'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/body-${kind}`)] as const);
+      const bodies = ['roadster','limousine','racer','rounded','rocket','jeep','grandprix'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/body-${kind}`)] as const);
       const limousineWheelStyles = Array.from({length:4},(_,i)=>nodes.find(n=>n.name===`kart${index}/wheelStyle-limousine-${i}`));
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
       const faces = ['hitler','stalin','mussolini','mao','kim','castro'].map(style=>[style,nodes.find((n)=>n.name===`kart${index}/cast-face-${style}`)] as const);
@@ -252,7 +252,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
         dress(cast: CastMember) {
-          head.scaling.set(...DRIVER_HEAD_SCALE);
+          head.scaling.set(...(cast.headScale ?? DRIVER_HEAD_SCALE));
           for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
           for (const [kind,node] of bodies) node?.setEnabled(kind===cast.body);
           for (const node of limousineWheelStyles) node?.setEnabled(cast.body==='limousine');
