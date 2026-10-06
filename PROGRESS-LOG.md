@@ -1061,3 +1061,17 @@ Der Commit `173212e` wurde auf den persönlichen Branch gepusht. Eine PR-Vorscha
 **Abschlussprüfungen:** `npm test` **72/72 bestanden**. Dazu wurde der Workflow-Fixture-Test korrigiert: Er prüft jetzt, dass `Finish` den geänderten Arbeitsbranch hochlädt und den Main-Branch unverändert lässt, danach aber bewusst die PR-Handübergabe meldet. Das alte Fixture erwartete fälschlich einen direkten Main-Push. Beim realen Hand-off zeigte sich außerdem, dass PowerShell `?expand` ohne geklammerte Variableninterpolation an den Branchnamen bindet; Compare-URL und Regressionstest wurden korrigiert. `npm run build` bestanden (1.298 Module; bekannte Chunkgrößenwarnung beim ca. 2,05-MB-Hauptbundle). `git diff --check` bestanden. Die Browser-Sichtprüfung stammt aus dem vorangegangenen sichtbaren Grand-Prix-Lauf desselben TV-Code-Commits.
 
 **Veröffentlichung verifiziert:** [PR #6](https://github.com/marceldamm/diktator-kart/pull/6) bestand den erforderlichen `validate / tests-and-build`-Check und wurde zusammengeführt. Merge-Commit `1d015da7212e4ae67b1ff38f20fc3f204dd52c3a` ist nach erneutem `git fetch origin` nachweislich Vorfahr von `origin/main`. Lokales `main` wurde mangels weiterer aktiver Worktrees per Fast-Forward aktualisiert; anschließend wurde zum erhaltenen Arbeitsbranch zurückgewechselt. Issue #4 bleibt für den Framezeitvergleich nach vollständiger Entfernung und den Intel-UHD-Lauf offen.
+
+### 2026-10-06 – GitHub-Team-Pilot: Scope und Sarah-Zugriff geklärt
+
+Marcel hat klargestellt, dass sein Firmen-Intranet nichts mit Diktator Kart zu tun hat und aus diesem Projektumfang herausfällt. Frühere Erwähnungen bleiben als Verlauf dokumentiert; dafür besteht hier keine offene Aufgabe.
+
+Marcel bestätigte, dass die für den Pilot vorgesehene Teilnehmerin bereits mit GitHub verbunden ist; eine E-Mail-Adresse war dafür nicht erforderlich. Konten- und Rollenangaben zum privaten Project werden aus öffentlichen Texten herausgehalten; die echten Berechtigungen wurden dabei nicht geändert. Issue #2 bleibt für den gemeinsamen praktischen Teamtest offen.
+
+### 2026-10-06 – GitHub Project: Review-Status automatisieren
+
+Die zuvor deaktivierte Project-Regel `Code changes requested` wurde aktiviert und so gesetzt, dass eine Review mit angeforderten Änderungen den PR-Status auf `In progress` setzt. Neue offene Items starten gemäß der bestehenden Regel im `Backlog`. PR #8 wurde nach dem grünen `validate / tests-and-build`-Check von `Backlog` nach `In review` verschoben; Boardansicht und aktivierte Regel wurden im Browser geprüft.
+
+### 2026-10-06 – Öffentliche Projekttexte bereinigt und Abschluss vorbereitet
+
+Die automatische Sicherheitsprüfung wies darauf hin, dass die öffentliche PR-Beschreibung Sarahs Konto mit einer Rolle im privaten Board verknüpfte. PR-Titel und Beschreibung wurden bereinigt. Dieselbe Account-/Rollenangabe wurde aus dem öffentlichen Issue #2, den beiden Issue-Statuskommentaren sowie den geänderten Teamdokumenten entfernt; die tatsächlichen GitHub-Berechtigungen blieben unverändert. Der lokale Abschlusslauf bestand `npm test` mit 72/72 Tests; `npm run build` war erfolgreich (bekannte Chunkgrößenwarnung beim rund 2,05-MB-Hauptbundle). Der erforderliche GitHub-Actions-Check bleibt für PR #8 das Freigabegate. Es wurden keine Spielquellen oder Laufzeitassets geändert; eine Browser-Sichtprüfung war deshalb nicht einschlägig.

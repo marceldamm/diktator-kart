@@ -60,11 +60,10 @@ Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssi
 
 ## So arbeiten wir damit
 
-### GitHub-Zusammenarbeit und Arbeits-Intranet – Marcel, 06.10.2026
+### GitHub-Zusammenarbeit – Marcel, 06.10.2026
 
 - [x] Im Diktator-Kart-Projekt klare Aufträge über Issues, passende Vorhaben über Milestones und das Teamboard, Änderungen über Pull Requests und automatische GitHub-Checks verfolgen. Die Einrichtung ist mit PR #1, die sichtbare Status-/Einstiegsaktualisierung mit PR #5 in `main` integriert.
-- [ ] Sarahs Zugang zum privaten Teamboard einrichten und den gemeinsamen Ablauf einmal praktisch erproben; Status und Kriterien stehen in [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2).
-- [ ] Für das Arbeits-Intranet erst das zuständige Firmen-Repository und die Unternehmensregeln erhalten; anschließend die dort erlaubten GitHub-Funktionen getrennt prüfen. Keine Arbeitsinhalte in das öffentliche Diktator-Kart-Repository kopieren.
+- [ ] Mit Sarah den gemeinsamen Ablauf einmal praktisch erproben. Status und Kriterien stehen in [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2).
 
 - Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
@@ -223,9 +222,8 @@ Details: [06](docs/06-multiplayer.md), [09](docs/09-roadmap.md).
 - [x] Pilot-Issue #2, Milestone `GitHub-Workflow-Pilot` und privates GitHub Project sind angelegt; PR #1 ist mit erfolgreichem Pflichtcheck in `main` zusammengeführt. Issue #4 verfolgt die nächste konkrete Performance-Abnahme im Milestone `Redesign-Performance-Abnahme`.
 - [x] Projekt-Workflow ergänzt ab jetzt automatisch offene Issues und PRs aus dem Repository.
 - [x] Issue- und PR-Vorlagen, Actions, Copilot-Anweisungen und `main`-Ruleset stehen nach PR #1 auf `main` bereit.
-- [ ] Sarah Zugriff auf das private Projekt geben und gemeinsam prüfen; keine Sichtbarkeit auf öffentlich umstellen.
+- [x] Zugriff für den Team-Pilot auf das private Projekt einrichten; Sichtbarkeit bleibt privat. Der gemeinsame Praxistest steht noch aus (Issue #2).
 - [ ] GitHub-Coding-Agent nur nutzen, wenn Konto/Tarif und Repository-Richtlinien Zugriff erlauben; andernfalls Codex-Aufträge und menschliche Review verwenden.
-- [ ] Arbeits-Intranet als getrennten Anwendungsfall mit Firmen-Repository, Vertraulichkeit, Freigaben und gewünschter Sichtbarkeit prüfen; keine Arbeitsdaten ins öffentliche Spiel-Repository kopieren.
 
 - [ ] Start-/Abschlussbefehle auf Sarahs realem Checkout einmal gemeinsam prüfen; ihre lokalen unveröffentlichten Dateien erhalten.
 - [ ] Aufgabenpakete zwischen Marcel und Sarah absprechen; bei denselben Dateien Überschneidungen bewusst integrieren.
