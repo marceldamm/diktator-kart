@@ -60,6 +60,12 @@ Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssi
 
 ## So arbeiten wir damit
 
+### GitHub-Zusammenarbeit und Arbeits-Intranet – Marcel, 06.10.2026
+
+- [x] Im Diktator-Kart-Projekt klare Aufträge über Issues, passende Vorhaben über Milestones und das Teamboard, Änderungen über Pull Requests und automatische GitHub-Checks verfolgen. Die Einrichtung ist mit PR #1, die sichtbare Status-/Einstiegsaktualisierung mit PR #5 in `main` integriert.
+- [ ] Sarahs Zugang zum privaten Teamboard einrichten und den gemeinsamen Ablauf einmal praktisch erproben; Status und Kriterien stehen in [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2).
+- [ ] Für das Arbeits-Intranet erst das zuständige Firmen-Repository und die Unternehmensregeln erhalten; anschließend die dort erlaubten GitHub-Funktionen getrennt prüfen. Keine Arbeitsinhalte in das öffentliche Diktator-Kart-Repository kopieren.
+
 - Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
 - „Arbeitslisten abarbeiten“ beauftragt beide Listen: erst ausführbare kurzfristige Aufgaben, danach selbstständig bestätigte Langzeitziele in sinnvollen Paketen umsetzen. Nicht beim Vorschlagen stoppen. Blockierte Aufgaben erhalten und unabhängige Aufgaben fortsetzen; echte Entscheidungen/unbestätigte Vorschläge brauchen Klärung. Ohne diesen Umsetzungsauftrag zwei oder drei nächste Pakete vorschlagen. Budgetregel beachten.

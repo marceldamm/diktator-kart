@@ -1031,3 +1031,23 @@ Der Commit `173212e` wurde auf den persönlichen Branch gepusht. Eine PR-Vorscha
 **Pilot noch offen:** Issue #2 zeigt vier von sechs erledigte Kriterien. Sarahs Zugang zum privaten Board und der gemeinsame Test stehen aus. Copilot Cloud Agent bleibt laut angemeldetem Konto nicht verfügbar; der lokale Codex-Workflow verwendet Issues, PRs, Actions und das Project-Board trotzdem.
 
 **Arbeits-Intranet:** Noch kein Firmen-Repository oder keine Unternehmensrichtlinie angegeben. Die Einrichtung bleibt getrennt vom öffentlichen Spiel-Repository.
+
+### 2026-10-06 – Live-TV-Renderschleife vollständig entfernt
+
+**Nutzerbeobachtung und Entscheidung:** Marcel bestätigte, dass die Ruckler zurückkommen, sobald er die Kamera zur Videowand dreht. Damit blieb der sichtbare TV-Fall trotz vorherigem Frustum-Fix teuer. Auf Marcels Vorschlag hin wird die Live-Kamera vorerst vollständig deaktiviert.
+
+**Änderung:** In `src/slice-scene.ts` sind die TV-FreeCamera, das 768×432-RenderTarget, die Szenen-Renderliste, Kameraführung sowie Distanz-/Frustum-Aktualisierung aus dem Spiel entfernt. Das Wandbild zeigt stattdessen die vorhandene Runtime-Textur `/assets/textures/loading-stadium-v1.webp` als statisches Stadionmotiv. Die dynamische Rennstand-Leiste bleibt; ihr Badge heißt jetzt „DATEN“ statt irreführend „LIVE“. Der frühere A/B-Beleg bleibt erhalten: [Feed an/aus](docs/evidence/performance-broadcast-feed-ab-20261006.json).
+
+**Sichtprüfung:** Eigene sichtbare Codex-Browserinstanz auf der lokalen Produktionsruntime. Ein echter Grand-Prix-Start lud HUD, Strecke und die neue statische Stadiontextur auf der Wand bei der Anzeige 1366 m. Eine menschliche Nahansicht des TV und ein Framezeit-A/B des endgültigen Stands sind noch offen.
+
+**Prüfungen:** Produktionsbuild bestanden. Die Vollsuite ergab 71/72; allein `tests/team-workflow.test.mjs` („disjoint parallel changes integrate, verify and publish as fast-forward“) schlug fehl, weil das aktuelle Workflow-Skript beim PR-Abschluss mit Exitcode 1 auf den separaten Codex-PR-/Projektabschluss-Schritt verweist, während dieser Test Exitcode 0 erwartet. Der Fehler liegt außerhalb der Rennszene. Vite meldet die bekannte Warnung zum ca. 2,05-MB-Hauptchunk. `git diff --check` nach der Dokuaktualisierung bestanden.
+
+**Nächster Schritt:** Identischen Start-/Kurvenabschnitt mit vollständig entfernter Kamera messen und die Abnahme auf Intel UHD wiederholen. Das Display bleibt bis zu einem nachweislich günstigen Ersatz statisch.
+
+### 2026-10-06 – GitHub-Pilot-Status und einfache Bedienhilfe
+
+**Verifizierter GitHub-Stand:** `origin/main` wurde auf `04eeb01` aktualisiert. PR #5 ist zusammengeführt; die Timeline meldet den erfolgreichen Pflichtcheck `validate / tests-and-build` (43 s). Das Teamboard führt PR #5 unter `Done`; Issue #2 steht weiter auf `In progress`, Issue #4 auf `Backlog`. PR #5 wurde außerdem dem Milestone `GitHub-Workflow-Pilot` zugeordnet. Ein Statuskommentar in Issue #2 hält Merge, Check, Boardstatus und die zwei offenen Pilotkriterien fest.
+
+**Dokumentation:** START-HERE erklärt nun direkt, dass Marcel einfach sein Arbeitsziel in natürlicher Sprache nennen kann und Codex Issues, Board, passende Milestones, PR und Checks verwaltet. CURRENT-WORKLIST, LONG-TERM-GOALS, TEAM-CHANGES und TEAM-NOTES führen denselben Stand. Das Arbeits-Intranet bleibt ein getrenntes Ziel, bis Firmen-Repository und Regeln vorliegen.
+
+**Grenzen/offen:** Sarahs Zugang zum privaten Project-Board und gemeinsamer Praxistest sind noch nicht erledigt. Die im lokalen Arbeitsbaum bereits vorhandenen TV-Code-Änderungen und acht ungetrackten Performance-Belege blieben unangetastet. Der Arbeitsbranch wurde per Fast-Forward von `228786d` auf `origin/main` (`04eeb01`) aktualisiert; die vorhandenen Codeänderungen sind davon getrennt und nicht Teil dieses Dokumentationspakets.

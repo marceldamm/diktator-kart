@@ -70,6 +70,10 @@ JSON: `slice-production-race-rtx-q2.json` (Rennen, Revanche, Framefenster), `sli
 
 ## Leistung richtig lesen
 
+### 06.10.2026 – Stadion-TV-Zweitkamera als Ruckelursache
+
+Der sichtbare kontrollierte [Feed-an/aus-Vergleich](performance-broadcast-feed-ab-20261006.json) maß bei identischer Sechs-Kart-Szene in der Startzone P95 rAF 83,2–83,4 ms und 2.385 Drawcalls mit TV-RenderTarget gegenüber 16,8 ms und konstant 1.494 Drawcalls ohne den Zusatzpass. Weitere Effekte, Route, Regen und Audio sind in den zugehörigen `performance-*-20261006.json` belegt. Der spätere [Frustum-Lauf](performance-broadcast-feed-frustum-fix-20261006.json) pausierte den Feed nur offscreen. Nachdem Marcel Ruckeln beim Umdrehen bestätigte, wurde die TV-Zweitkamera vollständig entfernt. Ein sichtbarer Grand-Prix-Lauf bestätigte das statische Motiv auf dem Bildschirm; ein neuer Framezeitvergleich und Intel-UHD-Abnahme sind offen.
+
 `slice-controlled-pacing.json`: Produktionspreview, RTX 3070 Laptop, 1600 × 1000, sechs Karts, normales Drei-Runden-Rennen. 14 Fenster, gewöhnlich 300 requestAnimationFrame-Intervalle; letztes Fenster 115 bis Ziel. Kamerawechsel mit 1,5 s Abstand. Keine Screenshots und kein Asset-Build während dieses Laufs. Erste Standardfenster P95 37,4 / 66,7 / 33,5 ms; spätere überwiegend 16,8–19,2 ms. Basisfenster nach Revanche 18,2–18,4 ms. Stabiler 60-FPS-Start ist damit nicht abgenommen. CPU/GPU/Drawcalls sind einzelne Frame-Stichproben, keine Fenster-Mediane. Dieser Messlauf liegt vor dem anschließend ergänzten initialen Scene-Ready-Gate; dessen Start-/Kamerafunktion wurde mit v18 geprüft, eine Verbesserung der vollständigen Kaltlauf-Perzentile ist nicht belegt.
 
 `slice-production-race-rtx.json`: funktionierender echter Produktions-Rennlauf mit Ergebnis/Revanche. Blender lief während eines Teils dieses Laufs; seine FPS-/Endurancewerte sind verfälscht und gelten nicht als abschließende Leistungsmessung.
