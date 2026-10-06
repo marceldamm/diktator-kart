@@ -95,7 +95,7 @@ Codex darf keine Sicherheitskontrollen umgehen, keine fremden Konten verwenden, 
 
 Auf beiden PCs im eigenen Checkout arbeiten. Vor jeder Sitzung neuesten main holen und eigene Änderungen sichern/integrieren. Größere Arbeit auf eigenem Branch; Tests, echte Belege und Dokumentation vor Veröffentlichung. Der ausdrückliche Projektabschluss autorisiert den geprüften PR-Merge nach `main`; Branchregeln verlangen den grünen CI-Check. Kein Direkt-Push und keine Regelumgehung.
 
-**GitHub-Funktionen (Marcel, 06.10.2026):** Konkrete bestätigte Aufträge werden automatisch als Issue verlinkt; mehrteilige Ziele als Milestone gebündelt. Das Project-Board ordnet offene Issues und PRs automatisch ein. Jede Änderung geht als PR; GitHub Actions führt Tests und Build aus. `main` akzeptiert nur PRs mit grünem `tests-and-build`-Check. Die vier Teamdateien bleiben die kanonische Wahrheit. Das Pilotboard ist privat; Sarahs Zugriff ist noch zu klären. Copilot Cloud Agent ist im aktuellen Konto nicht verfügbar. Arbeitsintranet-Inhalte gehören ausschließlich ins Firmen-Repository. Details: [GitHub-Team-Workflow](docs/21-team-workflow.md).
+**GitHub-Funktionen (Marcel, 06.10.2026):** Konkrete bestätigte Aufträge werden automatisch als Issue verlinkt; mehrteilige Ziele als Milestone gebündelt. Das Project-Board ordnet offene Issues und PRs automatisch ein. Jede Änderung geht als PR; GitHub Actions führt Tests und Build aus. `main` akzeptiert nur PRs mit grünem `tests-and-build`-Check. Die vier Teamdateien bleiben die kanonische Wahrheit. Das Pilotboard ist privat; Sarah (`@Castessa`) hat Zugriff mit Rolle `Write`. Copilot Cloud Agent ist im aktuellen Konto nicht verfügbar. Details: [GitHub-Team-Workflow](docs/21-team-workflow.md).
 
 ## 7. Euer täglicher Ablauf
 
