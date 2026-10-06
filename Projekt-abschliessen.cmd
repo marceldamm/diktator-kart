@@ -9,6 +9,6 @@ if errorlevel 1 (
   exit /b 1
 )
 echo.
-echo Der gepruefte Stand wurde auf GitHub main veroeffentlicht.
-echo Dein Arbeitsbranch bleibt als nachvollziehbare Sicherung erhalten.
+echo Der gepruefte Arbeitsbranch ist auf GitHub gesichert.
+echo Codex muss den Pull Request, den Actions-Check und den Merge nach main noch abschliessen.
 pause
