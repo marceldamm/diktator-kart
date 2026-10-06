@@ -1,5 +1,25 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-06 – Strecke vor Rennstart unsichtbar und Laufzeitruckeln geprüft
+
+**Reproduktion / Ursache:** Im sichtbaren Browser zeigte die frische Hauptseite nach dem Laden die Strecke. Beim Übergang über Streckenwahl zur Fahrerwahl rendert `createSliceScene().portraits()` sechs Fahrerbilder als Render-Target-Aufnahmen. Dafür setzt die Funktion hunderte Szene-Meshes, darunter die Stadt, zeitweise auf `isVisible = false` und stellt sie erst nach der asynchronen Screenshotfolge wieder her. Parallel zeichnete `App.frame()` diese Zwischenzustände auf den Hauptcanvas: der Streckenhintergrund wurde einfarbig, kurz vor dem Rennstart fehlte die Strecke. Die Capture-Folge dauerte mehrere Sekunden und beanspruchte dabei ebenfalls den Renderer.
+
+**Korrektur:** `App.frame()` rendert den Hauptcanvas nicht während dieses Offscreen-Captures; dadurch bleibt das letzte vollständige Streckenbild stehen. Der Fahrer-Startbutton zeigt „Porträts werden vorbereitet …“, ist deaktiviert und wird nach Capture/Restore freigegeben. Tastatureingabe kann den gesperrten Zustand nicht umgehen. Bei Szenen-Neustart wird der Capturezustand zurückgesetzt.
+
+**Sichtprüfung:** In einer frischen sichtbaren Browserseite wurde Track-Auswahl → Fahrerwahl reproduziert. Während alle sechs Porträts noch Platzhalter waren, waren intern 271/271 Stadt-Meshes für das Capture ausgeblendet und der Startbutton gesperrt; der Canvas zeigte weiterhin die vollständige Strecke. Nach Capture waren alle 271/271 Stadt-Meshes sichtbar, der Button freigegeben und der Countdown startete mit der Strecke. Keine Bilddatei wurde in `docs/evidence/` abgelegt; die Prüfung erfolgte live im geteilten Browser.
+
+**Ruckeln – separater offener Befund:** Der Browser nutzte ANGLE/WebGL2 über Intel UHD Graphics (0x9BC4), bei 1186×888 und Standardqualität. Babylon meldete etwa 14 FPS; das 300-Frame-Fenster zeigte P50 40,5 ms, P95 150,8 ms, P99 177,8 ms, 294/300 Frames über 25 ms und 208/300 über 33 ms; Szene: 2.366 Meshes, davon rund 920 sichtbar/aktiv. WebGL protokollierte wiederholt `GL_INVALID_OPERATION: glDrawElements: Mismatch between texture format and sampler type`. Kurzer Qualitätsstufenvergleich war zu variabel (Standard ca. 15 FPS, Basis ca. 9) und belegt keinen Gewinn; Standard wurde wiederhergestellt. Das Ruckeln ist damit bestätigt, aber Ursache/Kostenanteile sind noch nicht isoliert. Keine Qualitäts-/Performanceziele abgesenkt.
+
+**Prüfungen:** `npm run typecheck`, `npm test` (74/74), Syntax aller geänderten Browser-Testskripte, `git diff --check` und `npm run build` bestanden. Vite meldet weiterhin die bekannte Warnung zum großen Hauptchunk (ca. 2.054 kB). Sichtbarer Browser bestätigte Auswahl-/Portrait-/Countdown-Übergang und vollständige Stadtmesh-Sichtbarkeit.
+
+## 2026-10-06 – Streckenauswahl ergänzt (Sarah-Auftrag)
+
+**Umgesetzt:** Vor Grand Prix, Zeitfahren und erneutem Rennstart erscheint eine Streckenauswahl. Nur `stadionring` ist auswählbar; die vorhandene Babylon-Strecke bleibt damit unverändert die Laufzeitstrecke. Die fünf Planungstitel erscheinen deaktiviert und ausdrücklich als „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Nach Bestätigung folgt weiterhin die bestehende Fahrerwahl und danach der Rennstart. Revanche umgeht die Auswahl wie bisher.
+
+**Prüfung:** `npm run typecheck`, `npm test` (74/74), geänderte CDP-/Browser-Testskripte mit `node --check` und `npm run build` bestanden. Der gemeinsame CDP-Rennstart prüft die sechs Namen, genau fünf deaktivierte Einträge und den Übergang zu Fahrerwahl/Rennen. Die spätere sichtbare Browserprüfung ist unter „Strecke vor Rennstart unsichtbar“ dokumentiert. Build zeigt die bekannte Warnung zum großen Hauptchunk.
+
+**Betroffen:** `index.html`, `src/main.ts`, `src/style.css`, CDP-/Browser-Testabläufe sowie CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md. Keine neuen Streckenassets, Streckenphysik oder spielbaren Streckeninhalte hinzugefügt.
+
 ## 2026-10-06 (vormittags) – Claude-Detailpass zum Redesign: Kuppe, Hitler-Kopf, Schilder, Untergrundklang, Testfehler
 
 **Auftrag (Marcel):** Den Masterauftrag vom Vortag vollständig weiter umsetzen, Details optimieren und offene Punkte abarbeiten; danach PC in den Ruhezustand.

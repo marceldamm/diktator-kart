@@ -8,7 +8,10 @@ try {
   await evaluate(`document.querySelector('#menu-practice').click()`);
   assert.equal(await evaluate(`getComputedStyle(document.querySelector('#touch-controls')).display`),'flex');
   assert.equal(await evaluate(`document.querySelector('#app').getBoundingClientRect().height`),430);
-  await evaluate(`document.querySelector('#race-start').click()`);await delay(4500);
+  await evaluate(`document.querySelector('#race-start').click()`);await delay(300);
+  await evaluate(`document.querySelector('#track-go').click()`);await delay(300);
+  for(let i=0;i<120&&await evaluate(`document.querySelector('#driver-go').disabled`);i++)await delay(100);
+  await evaluate(`document.querySelector('#driver-go').click()`);await delay(4500);
   const point=async(action,id)=>evaluate(`(()=>{const r=document.querySelector('[data-drive-action="${action}"]').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,id:${id},radiusX:8,radiusY:8,force:1};})()`);
   const gas=await point('accelerate',0),left=await point('steerLeft',1);
   await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[gas,left]});await delay(600);

@@ -136,13 +136,16 @@ class App {
   private leadCooldown=0;
   private chosen=0;
   private order=rosterOrder(0);
+  private selectedTrackId='stadionring';
+  private selectingTrack=false;
   private selecting=false;
+  private portraitCaptureInProgress=false;
   private portraits: string[] | undefined;
   /** Roster member driving kart slot i (slot 0 = player). */
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -157,10 +160,20 @@ class App {
     const botLabel=()=>{setBotSkill(this.botLevel);document.querySelector('#bots-toggle')!.textContent=`Gegner ${['leicht','mittel','schwer'][this.botLevel]}`;};
     document.querySelector('#bots-toggle')?.addEventListener('click',()=>{this.botLevel=((this.botLevel+1)%3) as 0|1|2;try{localStorage.setItem('dk-bot-level',String(this.botLevel));}catch{}botLabel();});
     botLabel();
+    document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection());
+    document.querySelector('#track-go')?.addEventListener('click',()=>this.confirmTrackSelection());
+    document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>card.addEventListener('click',()=>{
+      this.selectedTrackId=card.dataset.trackId??'stadionring';this.renderTrackSelection();
+    }));
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
     document.querySelector('#driver-random')?.addEventListener('click',()=>this.pick((this.chosen+1+Math.floor(Math.random()*(CAST.length-1)))%CAST.length));
     window.addEventListener('keydown',(event)=>{
+      if(this.selectingTrack){
+        if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();this.closeTrackSelection();}
+        if(event.code==='Enter'){event.preventDefault();event.stopImmediatePropagation();this.confirmTrackSelection();}
+        return;
+      }
       if(!this.selecting)return;
       if(event.code==='ArrowLeft'||event.code==='ArrowRight'){event.preventDefault();event.stopImmediatePropagation();this.pick((this.chosen+(event.code==='ArrowLeft'?CAST.length-1:1))%CAST.length);}
       if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();this.closeSelection();}
@@ -260,6 +273,9 @@ class App {
 
   private async restart(): Promise<void> {
     const generation = ++this.generation;
+    this.portraitCaptureInProgress=false;
+    const driverGo=document.querySelector<HTMLButtonElement>('#driver-go');
+    if(driverGo){driverGo.disabled=false;driverGo.innerHTML='Rennen starten <span>↵</span>';}
     this.mouse.release();
     const loading = new LoadingProgress(!LAB_WORLD);
     const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail }));
@@ -372,21 +388,47 @@ class App {
   /** Every new Grand Prix starts with the driver selection; Revanche keeps the current driver. */
   private async startRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
+    if (this.selectingTrack) { this.confirmTrackSelection(); return; }
     if (this.selecting) { this.confirmSelection(); return; }
+    this.openTrackSelection();
+  }
+  private openTrackSelection(): void {
+    if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
+    if (!this.camera?.introMode) this.openMenu();
+    this.selectingTrack = true; document.body.classList.add('track-select-open');
+    this.renderTrackSelection();
+  }
+  private closeTrackSelection(): void {
+    this.selectingTrack = false; document.body.classList.remove('track-select-open');
+  }
+  private confirmTrackSelection(): void {
+    if (this.selectedTrackId !== 'stadionring') return;
+    this.closeTrackSelection();
     this.openSelection();
+  }
+  private renderTrackSelection(): void {
+    document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>{
+      const selected=card.dataset.trackId===this.selectedTrackId;
+      card.classList.toggle('selected',selected);card.setAttribute('aria-pressed',String(selected));
+    });
   }
   private openSelection(): void {
     if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
     if (!this.camera?.introMode) this.openMenu();
     this.selecting = true; document.body.classList.add('select-open');
     this.renderSelection();
-    if (!this.portraits && this.testScene.portraits) {
+    if(this.portraitCaptureInProgress){const button=document.querySelector<HTMLButtonElement>('#driver-go');if(button)button.disabled=true;}
+    if (!this.portraits && this.testScene.portraits && !this.portraitCaptureInProgress) {
       const generation = this.generation;
-      void this.testScene.portraits(this.order).then((shots) => { if (generation === this.generation) { this.portraits = shots; this.renderSelection(); } }).catch(() => undefined);
+      this.portraitCaptureInProgress=true;
+      const button=document.querySelector<HTMLButtonElement>('#driver-go');
+      if(button){button.disabled=true;button.textContent='Porträts werden vorbereitet …';}
+      void this.testScene.portraits(this.order).then((shots) => { if (generation === this.generation) { this.portraits = shots; this.renderSelection(); } }).catch(() => undefined).finally(()=>{if(generation===this.generation){this.portraitCaptureInProgress=false;if(button){button.disabled=false;button.innerHTML='Rennen starten <span>↵</span>';}}});
     }
   }
   private closeSelection(): void { this.selecting = false; document.body.classList.remove('select-open'); }
   private confirmSelection(): void {
+    if(this.portraitCaptureInProgress)return;
     this.closeSelection();
     try { localStorage.setItem('dk-driver', String(this.chosen)); } catch { /* storage optional */ }
     void this.beginRace();
@@ -873,7 +915,7 @@ class App {
       const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);
       this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness, rollSurface);
     }
-    this.testScene?.scene.render();
+    if(!this.portraitCaptureInProgress)this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();
       debug.textContent = `Status: ${this.state}\nEngine: Babylon ${Engine.Version}\nWebGL: ${this.engine?.webGLVersion ?? '–'}\nGrafik: ${this.rendererName}\nAuflösung: ${canvas.width} × ${canvas.height} Pixel · DPR ${window.devicePixelRatio.toFixed(2)}\nFPS: ${this.engine?.getFps().toFixed(0) ?? '–'}\n${this.frameSummary()}\nMeshes: ${this.testScene?.scene.meshes.length ?? 0}\nFahrzeuge: ${this.loadKarts.length + 1}\nAssetgruppe: ${this.manifestName}\nTempo: ${this.kart.speed.toFixed(2)} m/s\nPosition: ${this.kart.x.toFixed(2)}, ${this.kart.z.toFixed(2)} m\nRichtung: ${this.kart.heading.toFixed(2)} rad\nHop: ${this.kart.height.toFixed(2)} m\nFederung: ${this.kart.suspensionOffset.toFixed(3)} m / ${this.kart.suspensionVelocity.toFixed(2)} m/s\nRadkontakte: ${this.kart.wheelGroundHeights.map((value) => value.toFixed(2)).join(', ')} m\nKarosserieneigung: ${this.kart.bodyPitch.toFixed(3)} / ${this.kart.bodyRoll.toFixed(3)} rad\nRandstoß: ${this.kart.impactRemaining.toFixed(2)} s\nDrift: ${this.kart.drifting ? `${this.kart.driftCharge.toFixed(2)} s` : 'aus'}\nTurbo: ${this.kart.turboRemaining.toFixed(2)} s\nGas/Bremse: ${frame.throttle}\nLenkung: ${frame.steering}\nHop/Drift-Taste: ${frame.hopDrift}\nLetzte Aktion: ${this.lastAction}`;

@@ -13,6 +13,16 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 ## Aktive Produktbasis und Reihenfolge – 06.10.2026
 
+## Streckenauswahl – 06.10.2026 (Sarah-Auftrag)
+
+- [x] Vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Der vorhandene Stadionring ist die einzige anwählbare und spielbare Strecke.
+- [x] Fünf weitere Plätze zeigen „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau).
+- [x] Sichtbarkeitsfehler beim Fahrerwahl-Übergang behoben: Die sechs asynchron gerenderten Porträts blendeten zuvor die Hauptstrecke aus, während der normale Renderloop den Zwischenzustand zeichnete. Während der Offscreen-Aufnahmen bleibt jetzt das letzte vollständige Streckenbild stehen; der Startbutton wird erst nach Wiederherstellung der Szene freigegeben.
+- [x] Sichtbare Laufzeitprüfung: Strecke im Auswahlbild sichtbar; nach Porträtabschluss alle 271/271 aktivierten Stadt-Meshes im Countdown sichtbar. Die automatisierten Browsertest-Helfer decken den Track-zu-Fahrer-zu-Rennen-Ablauf ab.
+- [ ] Laufzeitruckeln auf Intel UHD bleibt offen: WebGL2 bei 1186×888, Standard, ca. 14 FPS, P50 40,5 ms/P95 150,8 ms im 300-Frame-Fenster. Samplerformat-WebGL-Warnungen erscheinen weiter; gezielte M7-Ursachenmessung ist erforderlich. Grafikqualität nicht ohne kontrolliertes A/B senken.
+
+**Nächster Schritt:** Das bestätigte Intel-UHD-Ruckeln in einem kontrollierten Sechs-Kart-Lauf nach Renderkosten (Stadt, Glow, Schatten und Samplerwarnungen) aufschlüsseln. Die fünf geplanten Strecken erst dann spielbar machen, wenn ihre jeweilige Strecke tatsächlich gebaut und geprüft ist. Menschliche Stil- und Hörabnahme des Redesigns bleibt ebenfalls offen.
+
 Marcels Antworten im [Projektfragebogen](PROJECT-QUESTIONNAIRE.md) und [aktiven Projektgrundgerüst](docs/23-project-design-baseline.md) sind die initial verbindliche Arbeitsbasis für Produktziele, Qualität und Priorität. Sarahs Beiträge bleiben unverändert erhalten; ihre Antworten ergänzen eine getrennte Perspektive und sind weder Freigabe noch Blocker. Der erste vollständige Art-Anker ist Hitler samt individuellem Kart. Frühere Stalin-Aufträge bleiben als ausgeführte Historie dokumentiert; offene Stalin-Arbeiten werden nach dem Hitler-Anker fortgesetzt.
 
 ## Umfassendes Redesign – Claude-Nachtlauf 06.10.2026 (Marcel-Auftrag)

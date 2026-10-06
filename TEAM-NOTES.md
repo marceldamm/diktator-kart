@@ -122,6 +122,13 @@ Für zusammenhängende Spielentwicklung verwenden wir **GPT-6.1 Sol mit hoher De
 ## Teamnachrichten
 
 Hier hält die KI diktierte Nachrichten fest: **Datum · von · an · Nachricht · Status**. Beim Projektstart passende offene Nachrichten kurz anzeigen; „gelesen“ oder „beantwortet“ erst nach eurer Bestätigung vermerken.
+
+### 06.10.2026 – Nachricht von Sarah an Marcel: Streckenauswahl und Startbild
+
+**Von:** Sarah. **An:** Marcel. **Status:**
+
+Ich habe vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Der Stadionring bleibt als einzige Strecke spielbar. Die fünf Planungsstrecken zeigen jetzt auch ihre Orte: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Außerdem wurde der Fehler behoben, durch den die Strecke während der Fahrerporträt-Aufnahmen kurz vor dem Start verschwand. Das Ruckeln auf Intel UHD ist weiterhin offen und wird nicht durch eine unbelegte Grafikabsenkung kaschiert.
+
 ### 04.10.2026 – Nachricht von Marcel an Sarah: unser gemeinsamer Neustart
 
 **Von:** Marcel, auf seinen Auftrag von der KI formuliert. **An:** Sarah. **Status:** offen; gelesen erst nach deiner Bestätigung.

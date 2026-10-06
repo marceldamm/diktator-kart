@@ -27,7 +27,10 @@ try{
   if(mode==='inspect-driver'){
     await load();await delay(1400);await shot('slice-main-menu');
     await evaluate(`document.querySelector('#race-start').click()`);await delay(300);
-    assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Race start opens driver selection');
+    assert.equal(await evaluate(`document.body.classList.contains('track-select-open')`),true,'Race start opens track selection');
+    await evaluate(`document.querySelector('#track-go').click()`);await delay(300);
+    assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Track selection continues to driver selection');
+    assert.equal(await evaluate(`document.querySelector('#driver-go').disabled`),true,'Race start waits for driver portraits');
     await evaluate(`document.querySelectorAll('.driver-card')[1].click()`);await delay(350);
     for(let i=0;i<60;i++){if(await evaluate(`document.querySelectorAll('.driver-card img').length===6`))break;await delay(500);}
     assert.equal(await evaluate(`document.querySelectorAll('.driver-card img').length`),6,'All six live Babylon portraits finish rendering');
@@ -49,7 +52,11 @@ try{
     await tap('c','KeyC',67);await cameraMode('Fahrerperspektive');await shot('slice-stadium-cockpit');
     await tap('c','KeyC',67);
     await evaluate(`document.querySelector('#race-start').click()`);await delay(300);
-    assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Race start opens driver selection');
+    assert.equal(await evaluate(`document.body.classList.contains('track-select-open')`),true,'Race start opens track selection');
+    await evaluate(`document.querySelector('#track-go').click()`);await delay(300);
+    assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Track selection continues to driver selection');
+    for(let i=0;i<120&&await evaluate(`document.querySelector('#driver-go').disabled`);i++)await delay(100);
+    assert.equal(await evaluate(`document.querySelector('#driver-go').disabled`),false,'Race start enables after driver portraits');
     await evaluate(`document.querySelector('#driver-go').click()`);await racePhase('race');
     await evaluate(`(async()=>{const {trackPoint,TRACK}=await import('/src/track.ts');const p=trackPoint(TRACK.start+24,0);Object.assign(window.__DK.kart,{x:p.x,z:p.z,heading:p.heading,travelHeading:p.heading,speed:0,yawRate:0,steer:0});})()`);
     await key('keyDown','w','KeyW',87);await delay(1800);await key('keyUp','w','KeyW',87);await delay(400);

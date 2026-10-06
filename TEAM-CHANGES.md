@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+- **06.10.2026 – Streckenstart und unsichtbare Strecke (Sarah):** Die Fahrerporträtaufnahme blendete während sechs Offscreen-Renderings die Welt-Meshes aus, während der Hauptloop diesen Zwischenstand renderte. Der Hauptframe bleibt nun währenddessen stehen und der Start wartet auf die fertigen Porträts. Im sichtbaren Browser waren Strecke und alle 271 Stadt-Meshes beim Countdown wieder sichtbar. Intel-UHD-Ruckeln bleibt separat offen.
+
+- **06.10.2026 – Streckenauswahl (Sarah):** Vor Grand Prix, Zeitfahren und erneutem Rennstart steht jetzt eine Streckenauswahl. Nur der bestehende Stadionring ist spielbar; fünf Zukunftsstrecken sind als „In Planung · nicht spielbar“ mit Orten markiert: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom), Genossen-Gerade (Moskau).
+
 - **06.10.2026 – Aktives Projektgrundgerüst aus Marcels Antworten:** Der Fragebogen ist die initiale Produktbasis; Hitler samt Kart ist der erste Qualitätsanker. Sarahs Originalideen bleiben erhalten und ihre Antwort ändert die Basis nicht automatisch. Prioritätswidersprüche in Roadmap, Arbeitsliste, Frage-/Art-/Produktionsdokumenten sind zugunsten des neuesten Auftrags als historische Vorgaben markiert. Claude-Ist-/Soll-Analyse und gestaffelter Nachtauftrag: [docs/24-claude-overnight-master-prompt.md](docs/24-claude-overnight-master-prompt.md). Sarahs Inhalte wurden nicht umgeschrieben.
 
 

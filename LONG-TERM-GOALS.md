@@ -201,7 +201,7 @@ Details: [06](docs/06-multiplayer.md), [09](docs/09-roadmap.md).
 
 - [ ] Nach stabilem Singleplayer private Online-Lobbys per Einladung und Crossplay auf getrennten Geräten entwickeln.
 - [ ] Kostenlos tragfähigen Betrieb, Synchronisierung, Reconnect, faire Regeln und Schutz vor Manipulation prüfen.
-- [ ] Sechs Themenstrecken plus verbindende Strecke als langfristigen Umfang schrittweise priorisieren; keine pauschale Pflicht vor Multiplayer.
+- [ ] Sechs Themenstrecken plus verbindende Strecke als langfristigen Umfang schrittweise priorisieren; keine pauschale Pflicht vor Multiplayer. Derzeitige fünf Planungstitel mit Orten: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Sie sind in der Streckenauswahl sichtbar, aber nicht spielbar.
 - [ ] Weitere historische Fahrer aus dem Zwölf-Figuren-Katalog erst nach Besetzungs-/Produktionspriorisierung.
 - [ ] Geist/Ghost, Orden/Achievements und ausgebauter Fotomodus als spätere Vorschläge bewerten.
 - [ ] Öffentliche kostenlose Veröffentlichung erst nach Geräte-, Inhalts-, Rechte- und Qualitätsprüfung vorbereiten.

@@ -1,12 +1,12 @@
 // 'Größenbefehl' parade tank in the running game: Q, six karts, all cameras, run-over, revert, cooldown, restart.
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
-import { send, delay, evaluate, key, tap, shot, load, errors, socket } from './cdp.mjs';
+import { send, delay, evaluate, key, tap, shot, load, startGrandPrix, errors, socket } from './cdp.mjs';
 const dk = (expr) => evaluate(`(()=>{const d=window.__DK;return ${expr};})()`);
 const result = {};
 try {
   await send('Runtime.enable'); await send('Emulation.setDeviceMetricsOverride', { width: 1600, height: 1000, deviceScaleFactor: 1, mobile: false });
-  await load(); await evaluate(`document.querySelector('#menu-race').click()`);
+  await load(); await startGrandPrix();
   for (let i = 0; i < 80 && await dk('d.phase') !== 'race'; i++) await delay(150);
   assert.equal(await dk('d.bots.length + 1'), 6);
   await tap('q', 'KeyQ', 81); await delay(500);

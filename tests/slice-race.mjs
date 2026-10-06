@@ -27,7 +27,7 @@ try {
   assert.match(await evaluate(`document.querySelector('#finish-title').textContent`),new RegExp('Platz '+await evaluate(`document.querySelector('#place').textContent`)+' '),'HUD and result rank disagree');
   const meshCount=samples.at(-1).meshes;
   // Since the driver selection exists, Enter after the finish opens it; confirming starts the next countdown.
-  await tap('Enter','Enter',13);await delay(600);if(await evaluate(`document.body.classList.contains('select-open')`))await evaluate(`document.querySelector('#driver-go').click()`);await delay(300);assert.equal((await snapshot()).phase,'countdown');await delay(5000);
+  await tap('Enter','Enter',13);await delay(300);if(await evaluate(`document.body.classList.contains('track-select-open')`)){await evaluate(`document.querySelector('#track-go').click()`);await delay(300);for(let i=0;i<120&&await evaluate(`document.querySelector('#driver-go').disabled`);i++)await delay(100);await evaluate(`document.querySelector('#driver-go').click()`);}await delay(300);assert.equal((await snapshot()).phase,'countdown');await delay(5000);
   assert.equal((await snapshot()).phase,'race');assert.equal((await snapshot()).meshes,meshCount);assert.equal(await evaluate(`document.querySelector('#finish-card').hidden`),true);
   const endurance=[];
   for(let camera=0;camera<3;camera++) {
