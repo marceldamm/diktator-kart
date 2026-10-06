@@ -28,7 +28,7 @@ export interface TestScene {
   /** State TV wall: which kart the live camera follows and the caption under the picture. */
   broadcast?(kart: number, caption: string): void;
   /** Ability feedback: transformation burst, run-over dust and Kim's official audit effects. */
-  abilityEvent?(kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit', kart: number, target?: number): void;
+  abilityEvent?(kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit' | 'pose' | 'pose-applause', kart: number, target?: number): void;
   /** Per-kart remaining duration of Kim's temporary gilded propaganda finish. */
   setKimPolish?(timers: number[]): void;
   /** Weather: false = late-afternoon sun, true = rain with wet road, puddles and lightning. */

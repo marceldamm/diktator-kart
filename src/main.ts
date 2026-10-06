@@ -134,7 +134,7 @@ class App {
   private weather:'sun'|'rain'|'snow'='sun';
   /** Rolled per Grand Prix: half the races run from day through dusk into night over the three laps. */
   private dayToNight=false;
-  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0};
+  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0};
   private itemMessage='';
   private itemMessageUntil=0;
   private abilityAnnouncementUntil=0;
@@ -338,7 +338,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0};
     this.queuedItemUse=false;this.itemDirection='forward';
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
@@ -614,12 +614,12 @@ class App {
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent=this.items.objects.some(o=>o.kind==='censor'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15)?'⚠ Zensurbalken im Anflug · ausweichen':'⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
-      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0;
-      const implemented=ownsTank||ownsKim,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
+      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,ownsPose=driver===2,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0,pose=(this.abilities.poseRemaining?.[0]??0)>0;
+      const implemented=ownsTank||ownsKim||ownsPose,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
       const card=document.querySelector<HTMLElement>('#ability-card');
-      if(card){card.classList.toggle('active',tank||kim);card.classList.toggle('ready',ready);
-        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':this.castOf(0).abilityIdea.split(' –')[0];
-        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
+      if(card){card.classList.toggle('active',tank||kim||pose);card.classList.toggle('ready',ready);
+        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':ownsPose?'Große Pose':this.castOf(0).abilityIdea.split(' –')[0];
+        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':pose?'Pose · Kinn hoch':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':ownsPose?'Q · Pose bereit':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
         document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:kim?this.abilities.kimPolishRemaining[0]/ABILITY_RULES.kimPolishDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
     }
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
@@ -813,7 +813,7 @@ class App {
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') {
-        if (this.order[0] === 0 || this.order[0] === 4) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : 'Propaganda-Sieg (Q)'; }
+        if (this.order[0] === 0 || this.order[0] === 4 || this.order[0] === 2) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : this.order[0] === 2 ? 'Große Pose (Q)' : 'Propaganda-Sieg (Q)'; }
         else { this.itemMessage = `${this.castOf(0).name}: eigene Fähigkeit folgt`; this.itemMessageUntil = this.items.time + 1.8; }
       }
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
@@ -846,12 +846,14 @@ class App {
         if (this.steerAssist && !LAB_WORLD) { const help = botInput(this.kart, 0, traffic).steering; assisted.steering = Math.max(-1, Math.min(1, frame.steering + help * (frame.steering === 0 ? .55 : .25))); }
         if(this.items.censorRemaining[0]>0)assisted.steering*=.72;
         if(this.abilities.kimPenaltyRemaining[0]>0)assisted.throttle*=.55;
+        if((this.abilities.poseRemaining?.[0]??0)>0)assisted.throttle=Math.min(assisted.throttle,ABILITY_RULES.poseThrottle);
         this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : assisted, FIXED_STEP, project, terrain);
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
           let botDrive=LAB_WORLD?{throttle:1,steering:CONTACT_SCENARIO?0:.75}:botInput(other,index+1,traffic);
           if(!LAB_WORLD&&this.items.censorRemaining[index+1]>0)botDrive={...botDrive,steering:botDrive.steering*.72};
           if(!LAB_WORLD&&this.abilities.kimPenaltyRemaining[index+1]>0)botDrive={...botDrive,throttle:botDrive.throttle*.55};
+          if(!LAB_WORLD&&(this.abilities.poseRemaining?.[index+1]??0)>0)botDrive={...botDrive,throttle:Math.min(botDrive.throttle,ABILITY_RULES.poseThrottle)};
           let next = advanceKart(other, botDrive, FIXED_STEP, project, terrain);
           return next;
         });
@@ -882,7 +884,7 @@ class App {
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
           const all=[this.kart,...this.loadKarts];
           const botsActive=this.racePhase==='race';
-          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':'none');
+          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':driver===2?'pose':'none');
           const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all));
           const changed=stepAbilities(this.abilities,all,activations,this.items.immune,FIXED_STEP,owners);
           this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
@@ -895,6 +897,12 @@ class App {
             else if(event.kind==='kim-audit'&&event.kart===0)this.audio.itemEvent('hit');
             if(event.kind==='transform'&&event.kart!==0&&Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35){this.itemMessage='Achtung · Hitler wird zum Panzer';this.itemMessageUntil=this.items.time+2;}
             if(event.kind==='transform'&&event.kart===0){this.itemMessage='Größenbefehl · Panzer für 8 s';this.itemMessageUntil=this.items.time+2.2;this.audio.cheer(.8);}
+            if(event.kind==='pose'&&(event.kart===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)){
+              this.abilityAnnouncementTitle='GROSSE POSE · KINN 40 GRAD';
+              this.abilityAnnouncementDetail=event.kart===0?'Das Volk applaudiert. Pflichtgemäß.':`${this.castOf(event.kart).name} posiert. Bitte nicht überholen, er schaut gerade.`;
+              this.abilityAnnouncementUntil=this.items.time+ABILITY_RULES.poseDuration+.6;this.audio.cheer(event.kart===0?.9:.4);
+            }
+            if(event.kind==='pose-applause'&&event.kart===0){this.itemMessage='Pflichtapplaus · Schub und kurz geschützt';this.itemMessageUntil=this.items.time+1.8;this.audio.cue('start');}
             if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}
             if(event.kind==='kim-surge'&&(event.kart===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)){
               this.abilityAnnouncementTitle='Rennergebnis NICHT manipuliert.';

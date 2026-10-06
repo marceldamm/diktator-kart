@@ -497,6 +497,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     let zeppelinTime = -1;
+    /** Mussolini's 'Große Pose': chin up until this time (seconds) per kart slot. */
+    const posingUntil: number[] = [];
     // Duce-Drom lap-2 event: the empty balcony 'speaks' and a rose-petal shower drifts over the Prunkstraße (decorative, same for all).
     const roseTexture = new DynamicTexture('Rose petal sprite', { width: 32, height: 32 }, scene, false);
     { const c = roseTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 12, 8, .4, 0, Math.PI * 2); c.fill(); roseTexture.hasAlpha = true; roseTexture.update(); }
@@ -552,6 +554,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (kind === 'crush') { burst(puff, at, reducedEffects ? 10 : 40); burst(paper, at, reducedEffects ? 8 : 25); return; }
         if (kind === 'kim-surge') { burst(paper, at, reducedEffects ? 14 : 42); burst(puff, at, reducedEffects ? 8 : 24); return; }
         if (kind === 'kim-audit') { smoke.emitter=new Vector3(at.x,.35,at.z);smoke.manualEmitCount=reducedEffects?8:24;return; }
+        if (kind === 'pose') { posingUntil[kart] = performance.now() / 1000 + 1.3; return; }
+        if (kind === 'pose-applause') { burst(paper, at, reducedEffects ? 12 : 36); return; }
         smoke.emitter = new Vector3(at.x, .4, at.z); smoke.manualEmitCount = reducedEffects ? 40 : 160;
       },
       setRain(on) {
@@ -821,7 +825,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // The driver leans into the bend against the body roll.
           v.driver.rotation.z = (s.drifting ? s.driftDirection * .1 : 0) + Math.max(-.14, Math.min(.14, lateral * .013));
           v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;
-          v.head.rotation.x=s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
+          v.head.rotation.x=(posingUntil[index]??0)>time?-.42:s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
           if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }
           // Pedals follow what the driver is doing: gas while gaining speed, brake while slowing hard.
           v.gas += ((longitudinal > .4 && s.speed > 0 ? 1 : 0) - v.gas) * Math.min(1, dt * 14); v.brake += ((longitudinal < -3 ? 1 : 0) - v.brake) * Math.min(1, dt * 14);

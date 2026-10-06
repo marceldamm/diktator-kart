@@ -19,16 +19,22 @@ export const ABILITY_RULES = {
   kimBoostDuration: .9,
   kimSpeedKick: 1.8,
   kimPenaltyDuration: .7,
+  /** Mussolini's 'Große Pose': 1.3 s of chin-up posing at reduced throttle, then an applause push and item protection. */
+  poseDuration: 1.3,
+  poseThrottle: .45,
+  poseBoost: 1.0,
+  poseSpeedKick: 1.6,
+  poseImmunity: 2.2,
 } as const;
 
 export const ABILITY_NAME = 'Größenbefehl';
-export type AbilityOwner = 'tank' | 'kim' | 'none';
+export type AbilityOwner = 'tank' | 'kim' | 'pose' | 'none';
 
-export interface AbilityEvent { kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit'; kart: number; target?: number }
-export interface AbilityWorld { cooldown: number[]; active: boolean[]; repeat: number[][]; kimPolishRemaining: number[]; kimBoostRemaining: number[]; kimPenaltyRemaining: number[]; events: AbilityEvent[] }
+export interface AbilityEvent { kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit' | 'pose' | 'pose-applause'; kart: number; target?: number }
+export interface AbilityWorld { /** Mussolini's pose seconds left (reduced throttle, see main.ts). */ poseRemaining: number[]; cooldown: number[]; active: boolean[]; repeat: number[][]; kimPolishRemaining: number[]; kimBoostRemaining: number[]; kimPenaltyRemaining: number[]; events: AbilityEvent[] }
 
 export function createAbilities(count: number): AbilityWorld {
-  return { cooldown: Array(count).fill(0), active: Array(count).fill(false), repeat: Array.from({ length: count }, () => Array(count).fill(0)), kimPolishRemaining: Array(count).fill(0), kimBoostRemaining: Array(count).fill(0), kimPenaltyRemaining: Array(count).fill(0), events: [] };
+  return { poseRemaining: Array(count).fill(0), cooldown: Array(count).fill(0), active: Array(count).fill(false), repeat: Array.from({ length: count }, () => Array(count).fill(0)), kimPolishRemaining: Array(count).fill(0), kimBoostRemaining: Array(count).fill(0), kimPenaltyRemaining: Array(count).fill(0), events: [] };
 }
 
 /** Bot use: the tank's owner transforms when it is ready and a rival is close enough to be shoved. */
@@ -37,7 +43,7 @@ export function botWantsAbility(world: AbilityWorld, kart: number, karts: KartSt
   return abilityReady(world, kart, self) && karts.some((other, j) => j !== kart && Math.hypot(other.x - self.x, other.z - self.z) < 9);
 }
 
-export const abilityReady = (world: AbilityWorld, kart: number, state: KartState) => world.cooldown[kart] <= 0 && (state.tankRemaining ?? 0) <= 0 && world.kimPolishRemaining[kart] <= 0;
+export const abilityReady = (world: AbilityWorld, kart: number, state: KartState) => world.cooldown[kart] <= 0 && (state.tankRemaining ?? 0) <= 0 && world.kimPolishRemaining[kart] <= 0 && (world.poseRemaining?.[kart] ?? 0) <= 0;
 
 /**
  * Activation, expiry and tank contacts for all karts. `immune` is the shared item protection:
@@ -58,10 +64,25 @@ export function stepAbilities(world: AbilityWorld, karts: KartState[], activatio
     }
     return next;
   });
+  world.poseRemaining ??= Array(karts.length).fill(0);
+  world.poseRemaining = world.poseRemaining.map((remaining, i) => {
+    const next = Math.max(0, remaining - dt);
+    if (remaining > 0 && next === 0) {  // the pose ends: the obligatory applause pushes the kart on
+      const k = result[i];
+      k.turboRemaining = Math.max(k.turboRemaining, ABILITY_RULES.poseBoost);
+      k.speed = Math.min(KART_TUNING.maxTurboSpeed, Math.max(0, k.speed) + ABILITY_RULES.poseSpeedKick);
+      immune[i] = Math.max(immune[i] ?? 0, ABILITY_RULES.poseImmunity);
+      world.events.push({ kind: 'pose-applause', kart: i });
+    }
+    return next;
+  });
   result.forEach((k, i) => {
     if (activations[i] && abilityReady(world, i, k)) {
       const owner = owners[i] ?? 'tank';
-      if (owner === 'kim') {
+      if (owner === 'pose') {
+        world.poseRemaining[i] = ABILITY_RULES.poseDuration; world.cooldown[i] = ABILITY_RULES.cooldown;
+        world.events.push({ kind: 'pose', kart: i });
+      } else if (owner === 'kim') {
         world.kimPolishRemaining[i] = ABILITY_RULES.kimPolishDuration;
         world.kimBoostRemaining[i] = ABILITY_RULES.kimBoostDuration;
         k.turboRemaining = Math.max(k.turboRemaining, ABILITY_RULES.kimBoostDuration);
