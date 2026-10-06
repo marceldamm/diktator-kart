@@ -82,7 +82,7 @@ test('team: checkpoint commits and uploads only the named work branch', { skip: 
   assert.equal(git(f.Alice, 'status', '--porcelain'), '');
   assert.equal(git(f.Alice, 'show', `${branchHead}:checkpoint.txt`), 'recoverable work');
 });
-test('team: disjoint parallel changes integrate, verify and publish as fast-forward', { skip: !windows }, () => {
+test('team: disjoint parallel changes integrate, verify and upload branch for PR handoff', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   assert.match(git(f.Alice, 'branch', '--show-current'), /^codex\/team-alice-/);
   put(f.Alice, 'alice.txt', 'Alice'); commit(f.Alice, 'Alice change');
@@ -91,9 +91,14 @@ test('team: disjoint parallel changes integrate, verify and publish as fast-forw
   assert.equal(readFileSync(join(f.Alice, 'alice.txt'), 'utf8'), 'Alice');
   assert.equal(readFileSync(join(f.Alice, 'bob.txt'), 'utf8'), 'Bob');
   put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nAlice verified both\n'); commit(f.Alice, 'verified handoff');
-  const result = run(f.Alice, 'Finish'); assert.match(result.stdout, /VEROEFFENTLICHT/);
-  assert.equal(remoteHead(f), git(f.Alice, 'rev-parse', 'HEAD'));
-  assert.equal(command(f.remote, 'git', ['merge-base', '--is-ancestor', bob, 'main'], false).status, 0);
+  const result = run(f.Alice, 'Finish', false);
+  assert.notEqual(result.status, 0, 'Finish returns a handoff sentinel until Codex creates/checks/merges the PR');
+  const branch = git(f.Alice, 'branch', '--show-current');
+  assert.ok(result.stdout.includes(`/compare/main...${encodeURIComponent(branch)}?expand=1`), 'Finish prints an exact compare URL for the uploaded branch');
+  assert.match(result.stdout, /Continue in Codex: create\/update this PR/);
+  assert.equal(remoteHead(f), bob, 'Finish must not push directly to main');
+  assert.equal(git(f.remote, 'rev-parse', `refs/heads/${branch}`), git(f.Alice, 'rev-parse', 'HEAD'));
+  assert.equal(command(f.remote, 'git', ['merge-base', '--is-ancestor', bob, `refs/heads/${branch}`], false).status, 0);
 });
 test('team: overlapping conflicting edits are reported and remote main stays intact', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');

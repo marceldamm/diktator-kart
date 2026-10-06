@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-06T20:04:35.123Z",
+  "method": "Visible isolated Chrome CDP, current post-fix dev runtime, RTX host, six demo racers, forced sun, Standard/full, 1600x1000. Same approximate route/camera/position as direct baseline (92m, paused, inside 130m radius), 300 rAF samples. The feed remains eligible only if screen is also in the main camera frustum.",
+  "runtime": {
+    "url": "http://127.0.0.1:4173/?demo=1&weather=sun",
+    "branch": "codex/team-marcel-20261006-191732-604",
+    "commit": "3b109ecab9f7b50cd2dd2f92f0ea6bca7f393b4f"
+  },
+  "info": {
+    "state": "paused",
+    "distance": 90.42968680385138,
+    "kart": [
+      79.37587953411067,
+      39.0707958707899
+    ],
+    "camera": "kart-camera",
+    "feedRefresh": 0,
+    "feedWidth": 768,
+    "feedHeight": 432,
+    "feedMeshes": 2365,
+    "screenPosition": [
+      65.73664093017578,
+      9.199999809265137,
+      2.262038230895996
+    ],
+    "active": 579,
+    "quality": "Grafik Standard",
+    "effects": "Effekte voll",
+    "weather": "Wetter Sonne"
+  },
+  "row": {
+    "distance": 90.42968680385138,
+    "feedRefresh": 0,
+    "active": 579,
+    "draw": [
+      1492,
+      1493,
+      1494,
+      1494
+    ],
+    "rAF": [
+      16.700000000000728,
+      16.799999999999272,
+      16.80000000000291,
+      16.900000000001455
+    ],
+    "engine": [
+      14.100000023841858,
+      17.199999928474426,
+      19.09999990463257
+    ],
+    "render": [
+      5.899999976158142,
+      7.400000095367432
+    ],
+    "gpu": [
+      12.998656,
+      14.416896
+    ]
+  },
+  "errors": [],
+  "limits": [
+    "One RTX host; not an Intel UHD/weak-PC certification.",
+    "Previous direct pre-fix A/B at the same paused position: feed on P95 83.2/83.4ms and 2385 draws; off 16.8/16.8ms and 1494 draws."
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-06T19:45:03.610Z",
+  "method": "Visible isolated Chrome, same paused in-game scene/camera/location, 120 rAF samples per state after one-second warmup. Sound toggled through UI.",
+  "rows": [
+    {
+      "label": "audio-on-A",
+      "sound": "Ton an",
+      "engine": [
+        19.399999976158142,
+        23.700000047683716
+      ],
+      "render": [
+        6.700000047683716,
+        8.600000023841858
+      ],
+      "gpu": [
+        14.154752,
+        17.37728
+      ],
+      "raf": [
+        16.699999999982538,
+        33.39999999999418
+      ],
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856
+    },
+    {
+      "label": "audio-off",
+      "sound": "Ton aus",
+      "engine": [
+        19,
+        26.100000023841858
+      ],
+      "render": [
+        6.700000047683716,
+        9.699999928474426
+      ],
+      "gpu": [
+        13.309952,
+        18.651136
+      ],
+      "raf": [
+        16.70000000001164,
+        33.39999999999418
+      ],
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856
+    },
+    {
+      "label": "audio-on-B",
+      "sound": "Ton an",
+      "engine": [
+        18.300000071525574,
+        23
+      ],
+      "render": [
+        6.5,
+        8.5
+      ],
+      "gpu": [
+        13.114368,
+        16.182272
+      ],
+      "raf": [
+        16.70000000001164,
+        33.39999999999418
+      ],
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856
+    }
+  ],
+  "limits": [
+    "Single RTX host.",
+    "Other desktop processes cannot be attributed to this check; no unrelated process was stopped."
+  ]
+}

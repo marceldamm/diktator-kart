@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-06T19:44:04.858Z",
+  "method": "Visible isolated Chrome, RTX dev machine, same paused route/camera, Standard/full, 1600x1000, 150 rAF samples per weather state. Sun and rain switched via in-game setting; sun repeats bracket rain.",
+  "initial": {
+    "state": "paused",
+    "weather": "Wetter Sonne",
+    "effects": "Effekte voll"
+  },
+  "rows": [
+    {
+      "label": "sun-A",
+      "weather": "Wetter Sonne",
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856,
+      "active": 409,
+      "drawcalls": [
+        1169,
+        1169
+      ],
+      "particles": 422,
+      "frame": {
+        "raf": [
+          16.69999999999709,
+          33.30000000000291,
+          33.5,
+          33.5,
+          0
+        ],
+        "engine": [
+          17.700000047683716,
+          22.699999928474426,
+          23.699999928474426
+        ],
+        "render": [
+          6.5,
+          8.400000095367432
+        ],
+        "gpu": [
+          13.577216,
+          16.97792
+        ]
+      }
+    },
+    {
+      "label": "rain",
+      "weather": "Wetter Regen",
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856,
+      "active": 411,
+      "drawcalls": [
+        1174,
+        1174
+      ],
+      "particles": 2813,
+      "frame": {
+        "raf": [
+          16.69999999999709,
+          33.39999999999418,
+          33.40000000000873,
+          33.5,
+          0
+        ],
+        "engine": [
+          19.299999952316284,
+          24.200000047683716,
+          27.59999990463257
+        ],
+        "render": [
+          6.799999952316284,
+          8.600000023841858
+        ],
+        "gpu": [
+          14.097408,
+          17.091584
+        ]
+      }
+    },
+    {
+      "label": "sun-B",
+      "weather": "Wetter Zufall (Regen)",
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856,
+      "active": 411,
+      "drawcalls": [
+        1175,
+        1175
+      ],
+      "particles": 2831,
+      "frame": {
+        "raf": [
+          16.699999999982538,
+          33.39999999999418,
+          33.5,
+          33.5,
+          0
+        ],
+        "engine": [
+          19.199999928474426,
+          23.399999976158142,
+          24.600000023841858
+        ],
+        "render": [
+          6.600000023841858,
+          8.5
+        ],
+        "gpu": [
+          13.958144,
+          17.544192
+        ]
+      }
+    },
+    {
+      "label": "rain-repeat",
+      "weather": "Wetter Sonne",
+      "position": [
+        -59.06659794439823,
+        -123.35612023583795
+      ],
+      "distance": 545.0787850249856,
+      "active": 409,
+      "drawcalls": [
+        1170,
+        1170
+      ],
+      "particles": 429,
+      "frame": {
+        "raf": [
+          16.70000000001164,
+          33.30000000001746,
+          33.39999999999418,
+          33.39999999999418,
+          0
+        ],
+        "engine": [
+          17.399999976158142,
+          21.300000071525574,
+          23
+        ],
+        "render": [
+          6.5,
+          8.399999976158142
+        ],
+        "gpu": [
+          13.548544,
+          16.715776
+        ]
+      }
+    }
+  ],
+  "limits": [
+    "Single RTX host; no weak-PC approval.",
+    "Compositor frame pacing is inconsistent; Babylon CPU/GPU samples are also recorded."
+  ]
+}

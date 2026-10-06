@@ -1,0 +1,918 @@
+{
+  "date": "2026-10-06T19:37:02.092Z",
+  "method": "Visible isolated Chrome CDP, local RTX dev machine, six demo racers, 1600x1000 CSS pixels, fixed close-follow camera, sunlight forced, 180 requestAnimationFrame intervals per setting after 1.8s warmup. Same running session, controls changed through game UI; no production code changed.",
+  "rows": [
+    {
+      "label": "Grafik Standard/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 17.373175817019032,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 521,
+      "drawCalls": 1375,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 239,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 69,
+          "rate": 65
+        },
+        {
+          "name": "Fountain spray",
+          "active": 78,
+          "rate": 65
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 12,
+          "rate": 20.804600330846498
+        }
+      ],
+      "particleTotal": 398,
+      "postProcesses": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "bloom",
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.400000000001455,
+          133.40000000000146,
+          183.29999999999927,
+          200
+        ],
+        "engine": [
+          26,
+          129.10000002384186,
+          164.5
+        ],
+        "render": [
+          10.799999952316284,
+          43.699999928474426,
+          51.89999997615814
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 141.52920133747148
+    },
+    {
+      "label": "Grafik Standard/Effekte reduziert",
+      "weather": "Wetter Sonne",
+      "fps": 49.407114630326085,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 576,
+      "drawCalls": 943,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 252,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 17,
+          "rate": 15
+        },
+        {
+          "name": "Fountain spray",
+          "active": 17,
+          "rate": 15
+        },
+        {
+          "name": "Item hit paperwork",
+          "active": 14,
+          "rate": 0
+        },
+        {
+          "name": "Landing dust",
+          "active": 1,
+          "rate": 0
+        },
+        {
+          "name": "Tank transformation smoke",
+          "active": 8,
+          "rate": 0
+        }
+      ],
+      "particleTotal": 309,
+      "postProcesses": [
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          16.700000000004366,
+          100.09999999999854,
+          133.39999999999418,
+          233.40000000000146
+        ],
+        "engine": [
+          17,
+          99.10000002384186,
+          120.70000004768372
+        ],
+        "render": [
+          8.899999976158142,
+          32.699999928474426,
+          37.10000002384186
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 247.83996153993417
+    },
+    {
+      "label": "Grafik Standard/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 35.570310648385345,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 618,
+      "drawCalls": 1583,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 247,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 68,
+          "rate": 65
+        },
+        {
+          "name": "Fountain spray",
+          "active": 73,
+          "rate": 65
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 12,
+          "rate": 20.834504331395863
+        }
+      ],
+      "particleTotal": 400,
+      "postProcesses": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "bloom",
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.30000000000291,
+          33.5,
+          50,
+          50.200000000004366
+        ],
+        "engine": [
+          25,
+          31.800000071525574,
+          35
+        ],
+        "render": [
+          10.5,
+          14.700000047683716,
+          16.399999976158142
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 357.67001855815784
+    },
+    {
+      "label": "Grafik Basis/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 46.132554200677426,
+      "scale": 1.35,
+      "meshes": 2366,
+      "active": 443,
+      "drawCalls": 862,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 242,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 34,
+          "rate": 30
+        },
+        {
+          "name": "Fountain spray",
+          "active": 37,
+          "rate": 30
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 13,
+          "rate": 20.963063145927347
+        },
+        {
+          "name": "Landing dust",
+          "active": 16,
+          "rate": 0
+        },
+        {
+          "name": "Damage smoke 2",
+          "active": 8,
+          "rate": 9
+        }
+      ],
+      "particleTotal": 350,
+      "postProcesses": [
+        "imageProcessing",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "ImageProcessingPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          16.799999999995634,
+          33.400000000001455,
+          33.5,
+          33.5
+        ],
+        "engine": [
+          18.899999976158142,
+          23.600000023841858,
+          25.299999952316284
+        ],
+        "render": [
+          8,
+          10.300000071525574,
+          11.399999976158142
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 443.68081730364906
+    },
+    {
+      "label": "Grafik Standard/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 37.51406777317915,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 418,
+      "drawCalls": 1591,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 260,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 68,
+          "rate": 65
+        },
+        {
+          "name": "Fountain spray",
+          "active": 74,
+          "rate": 65
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 10,
+          "rate": 20.2609131446399
+        },
+        {
+          "name": "Damage smoke 2",
+          "active": 7,
+          "rate": 9
+        },
+        {
+          "name": "Damage smoke 3",
+          "active": 7,
+          "rate": 9
+        }
+      ],
+      "particleTotal": 426,
+      "postProcesses": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "bloom",
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.299999999995634,
+          33.400000000001455,
+          49.89999999999418,
+          50
+        ],
+        "engine": [
+          22.199999928474426,
+          26.700000047683716,
+          31.200000047683716
+        ],
+        "render": [
+          6.800000071525574,
+          8.700000047683716,
+          10.600000023841858
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 541.7819318866434
+    },
+    {
+      "label": "Grafik Hoch/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 15.729865772402016,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 545,
+      "drawCalls": 2455,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 241,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 75,
+          "rate": 65
+        },
+        {
+          "name": "Fountain spray",
+          "active": 69,
+          "rate": 65
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 20,
+          "rate": 21.00590943553471
+        },
+        {
+          "name": "Damage smoke 2",
+          "active": 10,
+          "rate": 9
+        },
+        {
+          "name": "Damage smoke 3",
+          "active": 10,
+          "rate": 9
+        }
+      ],
+      "particleTotal": 425,
+      "postProcesses": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "bloom",
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        },
+        {
+          "name": "Ambient occlusion",
+          "type": "SSAO2RenderingPipeline",
+          "post": [
+            "SSAOOriginalSceneColorEffect",
+            "SSAORenderEffect",
+            "SSAOBlurHRenderEffect",
+            "SSAOBlurVRenderEffect",
+            "SSAOCombineRenderEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.40000000000873,
+          133.5,
+          183.5,
+          216.70000000001164
+        ],
+        "engine": [
+          32.39999997615814,
+          128.29999995231628,
+          181.10000002384186
+        ],
+        "render": [
+          10.100000023841858,
+          38.89999997615814,
+          53.700000047683716
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 706.8945169485048
+    },
+    {
+      "label": "Grafik Hoch/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 31.420192708161576,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 493,
+      "drawCalls": 2255,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 247,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 71,
+          "rate": 65
+        },
+        {
+          "name": "Fountain spray",
+          "active": 70,
+          "rate": 65
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 13,
+          "rate": 20.796893435054084
+        },
+        {
+          "name": "Damage smoke 2",
+          "active": 8,
+          "rate": 9
+        },
+        {
+          "name": "Damage smoke 3",
+          "active": 10,
+          "rate": 9
+        },
+        {
+          "name": "Damage smoke 5",
+          "active": 8,
+          "rate": 9
+        }
+      ],
+      "particleTotal": 427,
+      "postProcesses": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "bloom",
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        },
+        {
+          "name": "Ambient occlusion",
+          "type": "SSAO2RenderingPipeline",
+          "post": [
+            "SSAOOriginalSceneColorEffect",
+            "SSAORenderEffect",
+            "SSAOBlurHRenderEffect",
+            "SSAOBlurVRenderEffect",
+            "SSAOCombineRenderEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.39999999999418,
+          116.80000000000291,
+          150.09999999999127,
+          500.1999999999971
+        ],
+        "engine": [
+          27.59999990463257,
+          123.5,
+          143
+        ],
+        "render": [
+          8.100000023841858,
+          33.60000002384186,
+          43.59999990463257
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 831.1365642256467
+    },
+    {
+      "label": "Grafik Hoch/Effekte reduziert",
+      "weather": "Wetter Sonne",
+      "fps": 38.29461322557191,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 470,
+      "drawCalls": 1708,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 258,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 16,
+          "rate": 15
+        },
+        {
+          "name": "Fountain spray",
+          "active": 14,
+          "rate": 15
+        },
+        {
+          "name": "Damage smoke 2",
+          "active": 4,
+          "rate": 3
+        },
+        {
+          "name": "Damage smoke 3",
+          "active": 2,
+          "rate": 3
+        },
+        {
+          "name": "Damage smoke 5",
+          "active": 3,
+          "rate": 3
+        }
+      ],
+      "particleTotal": 297,
+      "postProcesses": [
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        },
+        {
+          "name": "Ambient occlusion",
+          "type": "SSAO2RenderingPipeline",
+          "post": [
+            "SSAOOriginalSceneColorEffect",
+            "SSAORenderEffect",
+            "SSAOBlurHRenderEffect",
+            "SSAOBlurVRenderEffect",
+            "SSAOCombineRenderEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.29999999998836,
+          33.5,
+          33.5,
+          50.10000000000582
+        ],
+        "engine": [
+          21.899999976158142,
+          27.699999928474426,
+          29.799999952316284
+        ],
+        "render": [
+          7.299999952316284,
+          10,
+          11.200000047683716
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 929.6857429803579
+    },
+    {
+      "label": "Grafik Standard/Effekte voll",
+      "weather": "Wetter Sonne",
+      "fps": 37.63643206511438,
+      "scale": 1,
+      "meshes": 2366,
+      "active": 460,
+      "drawCalls": 1693,
+      "systems": [
+        {
+          "name": "Stadium petals",
+          "active": 253,
+          "rate": 22
+        },
+        {
+          "name": "Fountain spray",
+          "active": 72,
+          "rate": 65
+        },
+        {
+          "name": "Fountain spray",
+          "active": 75,
+          "rate": 65
+        },
+        {
+          "name": "Tire smoke and dust",
+          "active": 11,
+          "rate": 20.781563437672066
+        },
+        {
+          "name": "Damage smoke 2",
+          "active": 8,
+          "rate": 9
+        },
+        {
+          "name": "Damage smoke 3",
+          "active": 8,
+          "rate": 9
+        },
+        {
+          "name": "Damage smoke 5",
+          "active": 8,
+          "rate": 9
+        }
+      ],
+      "particleTotal": 435,
+      "postProcesses": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "pipelines": [
+        {
+          "name": "Presentation",
+          "type": "DefaultRenderingPipeline",
+          "post": [
+            "bloom",
+            "ImageProcessingPostProcessEffect",
+            "SharpenPostProcessEffect",
+            "FxaaPostProcessEffect"
+          ]
+        }
+      ],
+      "frame": {
+        "raf": [
+          33.30000000000291,
+          33.5,
+          50,
+          50.19999999999709
+        ],
+        "engine": [
+          24.199999928474426,
+          31.399999976158142,
+          33.5
+        ],
+        "render": [
+          8,
+          11.300000071525574,
+          12.299999952316284
+        ],
+        "activeEval": [
+          null,
+          null
+        ],
+        "targets": [
+          null,
+          null
+        ],
+        "particles": [
+          null,
+          null
+        ],
+        "gpu": [
+          null,
+          null
+        ]
+      },
+      "distance": 1045.7695831922272
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Single RTX host; does not establish low-end target performance.",
+    "rAF pacing may be compositor-limited; compare engine instrumentation alongside intervals.",
+    "Camera travels down the course, so close-time controls are used as repeated baselines."
+  ]
+}

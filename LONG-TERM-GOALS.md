@@ -60,6 +60,12 @@ Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssi
 
 ## So arbeiten wir damit
 
+### GitHub-Zusammenarbeit und Arbeits-Intranet – Marcel, 06.10.2026
+
+- [x] Im Diktator-Kart-Projekt klare Aufträge über Issues, passende Vorhaben über Milestones und das Teamboard, Änderungen über Pull Requests und automatische GitHub-Checks verfolgen. Die Einrichtung ist mit PR #1, die sichtbare Status-/Einstiegsaktualisierung mit PR #5 in `main` integriert.
+- [ ] Sarahs Zugang zum privaten Teamboard einrichten und den gemeinsamen Ablauf einmal praktisch erproben; Status und Kriterien stehen in [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2).
+- [ ] Für das Arbeits-Intranet erst das zuständige Firmen-Repository und die Unternehmensregeln erhalten; anschließend die dort erlaubten GitHub-Funktionen getrennt prüfen. Keine Arbeitsinhalte in das öffentliche Diktator-Kart-Repository kopieren.
+
 - Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
 - „Arbeitslisten abarbeiten“ beauftragt beide Listen: erst ausführbare kurzfristige Aufgaben, danach selbstständig bestätigte Langzeitziele in sinnvollen Paketen umsetzen. Nicht beim Vorschlagen stoppen. Blockierte Aufgaben erhalten und unabhängige Aufgaben fortsetzen; echte Entscheidungen/unbestätigte Vorschläge brauchen Klärung. Ohne diesen Umsetzungsauftrag zwei oder drei nächste Pakete vorschlagen. Budgetregel beachten.
@@ -85,6 +91,7 @@ Vorhanden: sechs Karts, Federung, Hop/Drift/Turbo, Kontakte und drei Kameras. Ne
 - [ ] Rückwärtsgeschwindigkeit als vorgemerkten Balancewunsch später prüfen.
 - [ ] Verbleibende GPU-/Bildzeitruckler getrennt von behobener Positionsquantisierung untersuchen; keine RTX-Messung als schwache-PC-Abnahme.
 - [ ] Modell-/Browserregressionen für gemeinsame Fahrregeln und verlässliche Pause/Neustarts erhalten.
+- [x] Der teure zweite Rennszenen-Renderpass für das Stadion-TV wurde auf Marcels Wunsch entfernt; das Display nutzt das vorhandene statische Stadionmotiv. Das größere Ziel flüssiger Laufzeit bleibt offen: Framezeit nach Fix und Intel-UHD-Abnahme stehen in [Issue #4](https://github.com/marceldamm/diktator-kart/issues/4) noch aus.
 
 ## M3 – Sichtbarer Qualitätssprung im fahrenden Spiel
 

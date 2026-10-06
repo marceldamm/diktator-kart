@@ -1,0 +1,225 @@
+{
+  "date": "2026-10-06T19:56:06.336Z",
+  "method": "Visible isolated Chrome CDP, RTX dev machine, fixed paused six-kart scene 90–110m from the broadcast wall (inside its 130m activation radius), forced sun, Standard/full, 1600x1000. Four 180-rAF windows, alternating the existing render-target refreshRate 3 (every third frame) and 0 while keeping camera, racers and position fixed. Runtime-only toggles; production source unchanged.",
+  "info": {
+    "state": "paused",
+    "distance": 92.27979502323478,
+    "weather": "Wetter Sonne",
+    "quality": "Grafik Standard",
+    "effects": "Effekte voll",
+    "feed": {
+      "name": "Staatsfernsehen feed",
+      "refresh": 3,
+      "size": {
+        "width": 768,
+        "height": 432
+      },
+      "meshes": 2365
+    }
+  },
+  "rows": [
+    {
+      "label": "feed-on-A",
+      "distance": 92.27979502323478,
+      "kart": [
+        79.24715357799973,
+        40.910610510617424
+      ],
+      "state": "paused",
+      "feedRefresh": 3,
+      "feedWidth": 768,
+      "feedHeight": 432,
+      "feedMeshes": 2365,
+      "active": 580,
+      "totalMeshes": 2366,
+      "particles": 388,
+      "frame": {
+        "raf": [
+          16.700000000000728,
+          83.19999999999709,
+          83.39999999999782,
+          83.5
+        ],
+        "engine": [
+          15,
+          75.60000002384186,
+          78.80000007152557
+        ],
+        "render": [
+          6.200000047683716,
+          25.700000047683716
+        ],
+        "targets": [
+          0,
+          0,
+          0
+        ],
+        "gpu": [
+          13.454336,
+          70.710272
+        ],
+        "draw": [
+          1494,
+          2385,
+          2385,
+          2385
+        ]
+      }
+    },
+    {
+      "label": "feed-off-A",
+      "distance": 92.27979502323478,
+      "kart": [
+        79.24715357799973,
+        40.910610510617424
+      ],
+      "state": "paused",
+      "feedRefresh": 0,
+      "feedWidth": 768,
+      "feedHeight": 432,
+      "feedMeshes": 2365,
+      "active": 580,
+      "totalMeshes": 2366,
+      "particles": 389,
+      "frame": {
+        "raf": [
+          16.69999999999709,
+          16.799999999999272,
+          16.80000000000291,
+          16.900000000001455
+        ],
+        "engine": [
+          13.800000071525574,
+          16.200000047683716,
+          17.100000023841858
+        ],
+        "render": [
+          5.700000047683716,
+          7
+        ],
+        "targets": [
+          0,
+          0,
+          0
+        ],
+        "gpu": [
+          13.239296,
+          14.27968
+        ],
+        "draw": [
+          1494,
+          1494,
+          1494,
+          1494
+        ]
+      }
+    },
+    {
+      "label": "feed-on-B",
+      "distance": 92.27979502323478,
+      "kart": [
+        79.24715357799973,
+        40.910610510617424
+      ],
+      "state": "paused",
+      "feedRefresh": 3,
+      "feedWidth": 768,
+      "feedHeight": 432,
+      "feedMeshes": 2365,
+      "active": 580,
+      "totalMeshes": 2366,
+      "particles": 391,
+      "frame": {
+        "raf": [
+          16.700000000004366,
+          83.40000000000146,
+          83.5,
+          100
+        ],
+        "engine": [
+          14.599999904632568,
+          78.60000002384186,
+          87.40000009536743
+        ],
+        "render": [
+          6.100000023841858,
+          26.399999976158142
+        ],
+        "targets": [
+          0,
+          0,
+          0
+        ],
+        "gpu": [
+          13.243392,
+          73.392128
+        ],
+        "draw": [
+          1494,
+          2385,
+          2385,
+          2385
+        ]
+      }
+    },
+    {
+      "label": "feed-off-B",
+      "distance": 92.27979502323478,
+      "kart": [
+        79.24715357799973,
+        40.910610510617424
+      ],
+      "state": "paused",
+      "feedRefresh": 0,
+      "feedWidth": 768,
+      "feedHeight": 432,
+      "feedMeshes": 2365,
+      "active": 580,
+      "totalMeshes": 2366,
+      "particles": 391,
+      "frame": {
+        "raf": [
+          16.69999999999709,
+          16.80000000000291,
+          16.900000000001455,
+          16.900000000001455
+        ],
+        "engine": [
+          14.099999904632568,
+          16.600000023841858,
+          18.300000071525574
+        ],
+        "render": [
+          5.899999976158142,
+          7.199999928474426
+        ],
+        "targets": [
+          0,
+          0,
+          0
+        ],
+        "gpu": [
+          13.150208,
+          14.519296
+        ],
+        "draw": [
+          1494,
+          1494,
+          1494,
+          1494
+        ]
+      }
+    }
+  ],
+  "limits": [
+    "One RTX development host; no Intel UHD certification.",
+    "Babylon query/render-target work can add irregular frame spikes; present toggles were restored to the normal in-range value.",
+    "This isolates the feed cost at one in-range point; transition/reload hitches may have additional causes."
+  ],
+  "runtime": {
+    "url": "http://127.0.0.1:4173/?demo=1&weather=sun",
+    "root": "D:\\Diktator-Kart",
+    "branch": "codex/team-marcel-20261006-191732-604",
+    "commit": "3b109ecab9f7b50cd2dd2f92f0ea6bca7f393b4f"
+  }
+}

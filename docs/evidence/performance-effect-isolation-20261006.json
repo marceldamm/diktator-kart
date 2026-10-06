@@ -1,0 +1,726 @@
+{
+  "date": "2026-10-06T19:40:58.090Z",
+  "method": "Visible isolated Chrome CDP; same paused in-game camera/location on RTX dev machine, six demo racers, 1600x1000 CSS pixels, High quality. 120 rAF samples per toggle after 1.4s warmup. One effect group disabled at a time in live runtime then restored; game source unchanged.",
+  "info": {
+    "state": "paused",
+    "phase": "race",
+    "quality": "Grafik Hoch",
+    "effects": "Effekte voll",
+    "camera": "kart-camera",
+    "pp": [
+      [
+        "highlights",
+        "ExtractHighlightsPostProcess"
+      ],
+      [
+        "horizontal blur",
+        "BlurPostProcess"
+      ],
+      [
+        "vertical blur",
+        "BlurPostProcess"
+      ],
+      [
+        "bloomMerge",
+        "BloomMergePostProcess"
+      ],
+      [
+        "imageProcessing",
+        "ImageProcessingPostProcess"
+      ],
+      [
+        "sharpen",
+        "SharpenPostProcess"
+      ],
+      [
+        "fxaa",
+        "FxaaPostProcess"
+      ],
+      [
+        "SSAOOriginalSceneColor",
+        "PassPostProcess"
+      ],
+      [
+        "ssao",
+        "PostProcess"
+      ],
+      [
+        "BlurH",
+        "PostProcess"
+      ],
+      [
+        "BlurV",
+        "PostProcess"
+      ],
+      [
+        "ssaoCombine",
+        "PostProcess"
+      ],
+      [
+        "Sun shafts",
+        "VolumetricLightScatteringPostProcess"
+      ]
+    ],
+    "pipelines": [
+      [
+        "Presentation",
+        "DefaultRenderingPipeline",
+        [
+          "bloom",
+          "ImageProcessingPostProcessEffect",
+          "SharpenPostProcessEffect",
+          "FxaaPostProcessEffect"
+        ]
+      ],
+      [
+        "Ambient occlusion",
+        "SSAO2RenderingPipeline",
+        [
+          "SSAOOriginalSceneColorEffect",
+          "SSAORenderEffect",
+          "SSAOBlurHRenderEffect",
+          "SSAOBlurVRenderEffect",
+          "SSAOCombineRenderEffect"
+        ]
+      ]
+    ],
+    "layers": [
+      "Restrained lamp and exhaust glow"
+    ],
+    "shadow": true
+  },
+  "rows": [
+    {
+      "label": "high-full-A",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 33.02509907616408,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 440,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          33.399999999965075,
+          50,
+          50.100000000034925,
+          66.80000000004657
+        ],
+        "engine": [
+          31.200000047683716,
+          48,
+          52.5
+        ],
+        "render": [
+          9.700000047683716,
+          15.900000095367432,
+          18.699999928474426
+        ]
+      },
+      "gpu": 22539264
+    },
+    {
+      "label": "glow-off",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 44.26084390987103,
+      "active": 448,
+      "drawcalls": 1659,
+      "particles": 437,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          16.70000000001164,
+          33.40000000002328,
+          33.40000000002328,
+          33.5
+        ],
+        "engine": [
+          20.600000023841858,
+          26.700000047683716,
+          29.299999952316284
+        ],
+        "render": [
+          7.300000071525574,
+          9.5,
+          10.200000047683716
+        ]
+      },
+      "gpu": 17911808
+    },
+    {
+      "label": "high-full-B",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 39.97335109926725,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 430,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          33.29999999998836,
+          33.5,
+          33.5,
+          50.09999999997672
+        ],
+        "engine": [
+          25.200000047683716,
+          32.60000002384186,
+          35.60000002384186
+        ],
+        "render": [
+          7.700000047683716,
+          10.700000047683716,
+          12
+        ]
+      },
+      "gpu": 19614720
+    },
+    {
+      "label": "bloom-off",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 39.978678039649836,
+      "active": 448,
+      "drawcalls": 2089,
+      "particles": 435,
+      "post": [
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.5,
+          33.5,
+          33.5
+        ],
+        "engine": [
+          24.100000023841858,
+          29.300000071525574,
+          30.100000023841858
+        ],
+        "render": [
+          7.299999952316284,
+          9.100000023841858,
+          9.399999976158142
+        ]
+      },
+      "gpu": 18643968
+    },
+    {
+      "label": "high-full-C",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 42.08163837986172,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 427,
+      "post": [
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts",
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "frame": {
+        "raf": [
+          16.70000000001164,
+          33.5,
+          33.5,
+          33.5
+        ],
+        "engine": [
+          22.200000047683716,
+          26.699999928474426,
+          29.100000023841858
+        ],
+        "render": [
+          6.799999952316284,
+          9.300000071525574,
+          9.900000095367432
+        ]
+      },
+      "gpu": 18393088
+    },
+    {
+      "label": "ssao-off",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 44.06580493845671,
+      "active": 448,
+      "drawcalls": 2088,
+      "particles": 442,
+      "post": [
+        "Sun shafts",
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.40000000002328,
+          33.40000000002328,
+          33.5
+        ],
+        "engine": [
+          22.300000071525574,
+          28,
+          30.199999928474426
+        ],
+        "render": [
+          6.600000023841858,
+          8.899999976158142,
+          10.199999928474426
+        ]
+      },
+      "gpu": 18499584
+    },
+    {
+      "label": "high-full-D",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 30.324471846589592,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 436,
+      "post": [
+        "Sun shafts",
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.59999999997672,
+          50,
+          166.59999999997672
+        ],
+        "engine": [
+          23,
+          36,
+          44.699999928474426
+        ],
+        "render": [
+          7.100000023841858,
+          10.100000023841858,
+          12.699999928474426
+        ]
+      },
+      "gpu": 34230272
+    },
+    {
+      "label": "shafts-off",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 41.28819157585421,
+      "active": 448,
+      "drawcalls": 2092,
+      "particles": 431,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.40000000002328,
+          33.5,
+          33.59999999997672
+        ],
+        "engine": [
+          23.299999952316284,
+          27.59999990463257,
+          31.5
+        ],
+        "render": [
+          7,
+          9.199999928474426,
+          9.599999904632568
+        ]
+      },
+      "gpu": 23242752
+    },
+    {
+      "label": "high-full-E",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 38.600102937160216,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 440,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.40000000002328,
+          33.5,
+          33.5
+        ],
+        "engine": [
+          23.399999976158142,
+          30.600000023841858,
+          34.800000071525574
+        ],
+        "render": [
+          7.100000023841858,
+          10.299999952316284,
+          11.5
+        ]
+      },
+      "gpu": 21015552
+    },
+    {
+      "label": "shadow-off",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 48.44178912047457,
+      "active": 448,
+      "drawcalls": 1744,
+      "particles": 424,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          16.70000000001164,
+          33.40000000002328,
+          33.40000000002328,
+          33.5
+        ],
+        "engine": [
+          19.800000071525574,
+          25.199999928474426,
+          26.600000023841858
+        ],
+        "render": [
+          6.600000023841858,
+          8.799999952316284,
+          9.800000071525574
+        ]
+      },
+      "gpu": 14547968
+    },
+    {
+      "label": "high-full-F",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 40.72213926708051,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 420,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          33.29999999998836,
+          33.5,
+          50,
+          50
+        ],
+        "engine": [
+          25.600000023841858,
+          36,
+          38.60000002384186
+        ],
+        "render": [
+          7.600000023841858,
+          12.099999904632568,
+          12.5
+        ]
+      },
+      "gpu": 18039808
+    },
+    {
+      "label": "particles-off",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 43.40277777478358,
+      "active": 448,
+      "drawcalls": 2087,
+      "particles": 189,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.40000000002328,
+          33.5,
+          50
+        ],
+        "engine": [
+          22.59999990463257,
+          29.5,
+          33
+        ],
+        "render": [
+          6.900000095367432,
+          9.300000071525574,
+          9.799999952316284
+        ]
+      },
+      "gpu": 26692608
+    },
+    {
+      "label": "high-full-G",
+      "state": "paused",
+      "position": [
+        200.10681806687984,
+        -42.85463219514377
+      ],
+      "distance": 1046.2464904050219,
+      "quality": "Grafik Hoch",
+      "effects": "Effekte voll",
+      "fps": 42.6196902983608,
+      "active": 448,
+      "drawcalls": 2093,
+      "particles": 374,
+      "post": [
+        "highlights",
+        "horizontal blur",
+        "vertical blur",
+        "bloomMerge",
+        "imageProcessing",
+        "sharpen",
+        "fxaa",
+        "SSAOOriginalSceneColor",
+        "ssao",
+        "BlurH",
+        "BlurV",
+        "ssaoCombine",
+        "Sun shafts"
+      ],
+      "frame": {
+        "raf": [
+          16.79999999998836,
+          33.5,
+          33.5,
+          33.600000000034925
+        ],
+        "engine": [
+          23.399999976158142,
+          29.300000071525574,
+          30.199999928474426
+        ],
+        "render": [
+          7.100000023841858,
+          9.399999976158142,
+          9.800000071525574
+        ]
+      },
+      "gpu": 19516416
+    }
+  ],
+  "limits": [
+    "Single RTX host; rAF pacing appears intermittently limited by compositor. Engine/render timing and draw-call counters are included.",
+    "Pause freezes race travel while the Babylon scene continues rendering.",
+    "Runtime-only effect toggles are diagnostic and are restored before exit."
+  ]
+}
