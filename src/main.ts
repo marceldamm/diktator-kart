@@ -16,6 +16,7 @@ import { interpolateKart } from './render-state';
 import { TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
+import { pickQuality } from './auto-quality';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -112,6 +113,8 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
+  private autoQuality=false;
   private padButtons=new Map<string,boolean>();
   private gamepadSeen=false;
   /** Action waiting for its new key in the options (null = not listening). */
@@ -160,6 +163,7 @@ class App {
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    try { this.autoQuality = localStorage.getItem('dk-quality') === null && !LAB_WORLD && !new URLSearchParams(location.search).has('demo'); } catch { /* storage optional */ }
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
@@ -215,7 +219,7 @@ class App {
     this.audio.setMusicVolume(Number(musicVolume.value)/100);
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
-    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = (this.quality + 1) % 3; this.applyQuality(); });
+    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.autoQuality = false; this.quality = (this.quality + 1) % 3; this.applyQuality(); });
     try { const asked = new URLSearchParams(location.search).get('weather') ?? localStorage.getItem('dk-weather-choice'); if (asked === 'sun' || asked === 'rain' || asked === 'snow' || asked === 'random') this.weatherChoice = asked; } catch { /* storage optional */ }
     document.querySelector('#weather-toggle')?.addEventListener('click', () => {
       const cycle = ['random', 'sun', 'rain', 'snow'] as const; this.weatherChoice = cycle[(cycle.indexOf(this.weatherChoice) + 1) % cycle.length];
@@ -769,6 +773,17 @@ class App {
       const menu=!!this.camera?.introMode||this.selecting||this.selectingTrack||this.racePhase==='finished';
       const found=pollGamepads(this.input,menu,(code)=>{window.dispatchEvent(new KeyboardEvent('keydown',{code,key:code,bubbles:true}));window.dispatchEvent(new KeyboardEvent('keyup',{code,key:code,bubbles:true}));},this.padButtons);
       if(found&&!this.gamepadSeen){this.gamepadSeen=true;this.itemMessage='Gamepad erkannt · Stick lenkt, RT Gas, A Drift, X Item';this.itemMessageUntil=this.items.time+3;}
+    }
+    if (this.autoQuality && this.state === 'running' && this.camera?.introMode) {
+      const level = pickQuality(this.frameTimes);
+      if (level !== null) {
+        this.autoQuality = false;
+        const median = [...this.frameTimes].sort((a, b) => a - b)[Math.floor(this.frameTimes.length / 2)];
+        if (level !== this.quality) { this.quality = level; this.applyQuality(); } else this.applyQuality();
+        this.lastAction = `Grafik automatisch: ${['Basis', 'Standard', 'Hoch'][level]} (Median ${median.toFixed(1)} ms)`;
+        const hint = document.querySelector<HTMLElement>('.menu-flavor'); if (hint) hint.dataset.autoQuality = this.lastAction;
+        console.info(`[Diktator Kart] ${this.lastAction} – in den Optionen änderbar`);
+      }
     }
     const frame = this.input.read();
     this.camera?.setLookBack(this.state === 'running' && !this.camera.introMode && this.input.isDown('lookBack'));

@@ -25,7 +25,7 @@ Status: **umgesetzt** (im Spiel und geprüft) · **teilweise** · **ungeprüft**
 | Professionelle Stadionsprecherin, Marsch | **teilweise** | Piper-Sprecherin, eigener Marsch | Hörabnahme; Ansagen für Grand-Prix-Wertung |
 | Figurenstimmen nur aus geklärten Aufnahmen | **blockiert** | Keine Aufnahmen mit geklärten Rechten | Rechteklärung durch Marcel |
 | Desktop/Laptop inkl. integrierter Grafik, stabile 60 FPS | **offen** | RTX-3070-Demo ca. 50–57 FPS im Rennen (Duce-Drom), Intel UHD ca. 14 FPS (Issue #4) | Kontrollierte M7-Messung beider Strecken |
-| Automatische Grafikabstimmung + manueller Regler | **teilweise** | Manueller Regler vorhanden, Automatik fehlt | Startwert aus Framezeit-Probe |
+| Automatische Grafikabstimmung + manueller Regler | **umgesetzt (Startwert)** | Ohne gespeicherte Wahl wählt der Median der ersten Menüsekunden Basis/Standard/Hoch (`src/auto-quality.ts`); RTX 3070: „Standard (Median 18,1 ms)“. Manueller Regler bleibt maßgeblich | Auf Intel UHD prüfen, ob „Basis“ greift |
 | Tastatur + Gamepad, Tasten neu belegbar | **teilweise** | Zehn Fahraktionen in den Optionen neu belegbar (lokal gespeichert, im Chrome geprüft, `docs/evidence/options-keymap-20261007.png`); Gamepad-Standardbelegung mit analoger Lenkung/Gas eingebaut, aber **ohne echtes Gamepad ungeprüft** | Test mit einem echten Xbox-/PlayStation-Controller |
 | Offline, lokale Einstellungen/Bestzeiten/Fortschritt | **umgesetzt** | localStorage, je Strecke | – |
 | Skalierbare UI, Untertitel, Kontraste, reduzierte Bewegung | **teilweise** | Reduzierte Bewegung, Kontraste; Untertitel fehlen | Untertitel für Ansagen |

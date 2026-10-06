@@ -26,7 +26,9 @@
 
 **Ansagen:** `art-source/build_voices.mjs` um fünf Zeilen ergänzt (Piper 2023.11.14-2, Modell de_DE-kerstin-low wie bisher; Texte eigene Satire). Laufzeit: `__DK.voices` = 43, im Duce-Drom-Rennen `announcer-1`, `announcer-go`, `announcer-rome` gespielt (vertrauenswürdiger CDP-Mausklick entsperrte Web Audio).
 
-**Nicht geprüft / offen:** menschliche Fahr-, Stil- und Hörprobe; echtes Gamepad; Speicherung von Bestzeit/Geist im echten Zeitfahren (Demo speichert absichtlich nicht); Intel UHD und kontrollierte Framezeit beider Strecken (Issue #4); Ton für die Balkonrede; Pull Request/Issue-Anlage (in dieser Umgebung kein GitHub-CLI/Connector – Branch ist gepusht, PR muss über GitHub geöffnet werden).
+**Grafik-Startwert:** `src/auto-quality.ts` + Test; nur ohne gespeicherte Wahl und nicht im Demo-/Labormodus. Chrome nach Löschen von `dk-quality`: „Grafik automatisch: Standard (Median 18.1 ms)“.
+
+**Nicht geprüft / offen:** menschliche Fahr-, Stil- und Hörprobe; echtes Gamepad; Grafik-Startwert auf Intel UHD; Speicherung von Bestzeit/Geist im echten Zeitfahren (Demo speichert absichtlich nicht); Intel UHD und kontrollierte Framezeit beider Strecken (Issue #4); Ton für die Balkonrede; Pull Request/Issue-Anlage (in dieser Umgebung kein GitHub-CLI/Connector – Branch ist gepusht, PR muss über GitHub geöffnet werden).
 
 ## 2026-10-06 – Strecke vor Rennstart unsichtbar und Laufzeitruckeln geprüft
 
