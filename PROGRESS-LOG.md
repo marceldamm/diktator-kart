@@ -32,6 +32,8 @@
 
 **Große Pose (Mussolini):** `abilities.ts` (`pose`, `pose-applause`, `poseRemaining`), Drosselung in `main.ts` für Spieler und Bots, Kopf hebt sich in `slice-scene.ts`, HUD-Karte. Test 1/1; Chrome: Q im freien Training löste beide Ereignisse aus, Abklingzeit 18 s.
 
+**Schluss-Regression (alle Pakete):** `npm test` 87/87, Build erfolgreich; kompletter Grand Prix erneut im sichtbaren Chrome (Belege `gp-*-final-20261007.png`): Stadionring P5, Duce-Drom P6 (Demo-Spieler), Gesamtsieger Mussolini 20 P, Gleichstand Castro/Kim 12:12 korrekt über das letzte Rennen aufgelöst, keine Seitenfehler. Beobachtung Balance: Mussolini gewann alle drei Demo-Grands-Prix (Stil nutzt Abkürzung, dazu das bestehende Slot-Grundtempo) – menschlich prüfen, ggf. Grundtempo vereinheitlichen.
+
 **Nicht geprüft / offen:** menschliche Fahr-, Stil- und Hörprobe; echtes Gamepad; Grafik-Startwert auf Intel UHD; Speicherung von Bestzeit/Geist im echten Zeitfahren (Demo speichert absichtlich nicht); Intel UHD und kontrollierte Framezeit beider Strecken (Issue #4); Ton für die Balkonrede; Pull Request/Issue-Anlage (in dieser Umgebung kein GitHub-CLI/Connector – Branch ist gepusht, PR muss über GitHub geöffnet werden).
 
 ## 2026-10-06 – Strecke vor Rennstart unsichtbar und Laufzeitruckeln geprüft
