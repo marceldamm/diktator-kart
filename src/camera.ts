@@ -6,6 +6,7 @@ import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
 import type { KartState } from './kart-model';
+import { elevationAt, trackLocate } from './track';
 
 const VIEWS = [
   { name: 'Verfolger nah', distance: 5.5, height: 2.1, fov: 0.9, follow: 9, look: 3.4, lookHeight: 1.05 },
@@ -118,11 +119,13 @@ export class KartCamera {
   togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
 
   update(state: KartState, dt: number, immediate = false, steering = 0): void {
+    // Smooth road elevation (Prachtallee crest) lifts every camera with the kart; small bumps stay in suspensionOffset.
+    const ground = elevationAt(trackLocate(state.x, state.z).s);
     if (this.photo||this.intro) {
       if(this.photo)this.photoAngle+=dt*.18;else this.introAngle=.68+Math.sin(performance.now()/14000)*.12;
       const a=state.heading+(this.photo?this.photoAngle:this.introAngle),distance=this.intro?5.7:4.5;
-      this.camera.position.set(state.x+Math.sin(a)*distance,(this.intro?2.2:1.8)+state.height,state.z+Math.cos(a)*distance);
-      this.camera.fov=this.intro?.73:.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height,state.z));this.chaseHeading=state.heading;return;
+      this.camera.position.set(state.x+Math.sin(a)*distance,(this.intro?2.2:1.8)+state.height+ground,state.z+Math.cos(a)*distance);
+      this.camera.fov=this.intro?.73:.75;this.camera.setTarget(new Vector3(state.x,1.1+state.height+ground,state.z));this.chaseHeading=state.heading;return;
     }
     const view = VIEWS[this.view];
     const forwardX = Math.sin(state.heading);
@@ -141,10 +144,10 @@ export class KartCamera {
     const speed = Math.abs(state.speed);
     const desired = firstPerson
       ? new Vector3(state.x - forwardX * (this.realCockpit ? .42 : .05),
-        (this.realCockpit ? 1.97 : 1.55) + this.tankBlend * .95 + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3),
+        (this.realCockpit ? 1.97 : 1.55) + this.tankBlend * .95 + state.height * (this.reducedMotion?.1:.9) + state.suspensionOffset * (this.reducedMotion?0:.3) + ground,
         state.z - forwardZ * (this.realCockpit ? .42 : .05))
       : new Vector3(state.x - chaseX * (view.distance + speed * .035) * this.zoom * (1 + this.tankBlend * .35),
-        (view.height + this.lookPitch * 3) * Math.sqrt(this.zoom) + state.height * (this.reducedMotion?.05:.4) + state.suspensionOffset * (this.reducedMotion?0:.25),
+        (view.height + this.lookPitch * 3) * Math.sqrt(this.zoom) + state.height * (this.reducedMotion?.05:.4) + state.suspensionOffset * (this.reducedMotion?0:.25) + ground,
         state.z - chaseZ * (view.distance + speed * .035) * this.zoom * (1 + this.tankBlend * .35));
     // Short camera jolt on hard impacts and item hits; calm camera keeps it still.
     if (state.impactRemaining > this.lastImpact + .05 && !this.reducedMotion) this.shake = Math.min(.22, .08 + Math.abs(state.impactVelocityX) * .02 + Math.abs(state.impactVelocityZ) * .02 + (state.impactKind === 'item' ? .1 : 0));
@@ -163,7 +166,7 @@ export class KartCamera {
     this.camera.setTarget(firstPerson
       ? new Vector3(this.camera.position.x + forwardX * 8, this.camera.position.y - (this.realCockpit ? 1.7 : .14),
         this.camera.position.z + forwardZ * 8)
-      : new Vector3(state.x + chaseX * view.look, view.lookHeight + state.height * 0.5, state.z + chaseZ * view.look));
+      : new Vector3(state.x + chaseX * view.look, view.lookHeight + state.height * 0.5 + ground, state.z + chaseZ * view.look));
     if (firstPerson && (this.lookBack || Math.abs(this.lookYaw) > .01 || Math.abs(this.lookPitch) > .01)) {
       const yaw = this.lookBack ? state.heading + Math.PI : state.heading + this.lookYaw;
       this.camera.setTarget(new Vector3(this.camera.position.x + Math.sin(yaw) * 8, this.camera.position.y + Math.tan(-.15-this.lookPitch) * 8, this.camera.position.z + Math.cos(yaw) * 8));

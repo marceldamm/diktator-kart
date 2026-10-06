@@ -26,7 +26,7 @@ import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
 import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
-import { TRACK, drivingSurfaceAt, trackLocate, trackPoint } from './track';
+import { TRACK, drivingSurfaceAt, elevationAt, trackLocate, trackPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
 import { addCityWorld } from './city-world';
 import { addTrackWorld } from './track-world';
@@ -258,6 +258,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const node of limousineWheelStyles) node?.setEnabled(cast.body==='limousine');
           for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
           for (const [style,node] of faces) node?.setEnabled(style === cast.faceStyle);
+          for (const mesh of root.getChildMeshes()) if (/Gold cuff|Trouser stripe/.test(mesh.name)) mesh.setEnabled(!cast.plainSuit);
           for (const r of recolourable) { const colour=cast[r.kind]; r.mesh.setEnabled(!!colour); if (colour) r.material.albedoColor=Color3.FromHexString(colour).toLinearSpace(); }
           v.paintColour = Color3.FromHexString(cast.paint).toLinearSpace(); v.soot = -1;
           rememberKimPaint();
@@ -310,7 +311,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     puff.minSize = .35; puff.maxSize = .9; puff.minLifeTime = .35; puff.maxLifeTime = .7; puff.emitRate = 0; puff.blendMode = ParticleSystem.BLENDMODE_STANDARD;
     puff.direction1 = new Vector3(-2.2, .2, -2.2); puff.direction2 = new Vector3(2.2, .9, 2.2); puff.minEmitPower = 1; puff.maxEmitPower = 1.8;
     puff.color1 = new Color4(.62, .57, .48, .35); puff.color2 = new Color4(.72, .69, .6, .28); puff.colorDead = new Color4(.7, .66, .58, 0); puff.start();
-    const burst = (system: ParticleSystem, s: KartState, count: number) => { system.emitter = new Vector3(s.x, .5 + s.height, s.z); system.manualEmitCount = count; };
+    const burst = (system: ParticleSystem, s: KartState, count: number) => { system.emitter = new Vector3(s.x, .5 + s.height + elevationAt(trackLocate(s.x, s.z).s), s.z); system.manualEmitCount = count; };
     const confetti = createConfetti(scene);
     // Finish fireworks over the main stand: additive bursts in gold, red, white and green (capped pool).
     const fireworks = new ParticleSystem('Finish fireworks', 1200, scene); fireworks.particleTexture = particleTexture(scene);
@@ -517,6 +518,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const tv = new TransformNode('Staatsfernsehen wall', scene); tv.position.set(wallAt.x, 0, wallAt.z); tv.rotation.y = wallAt.heading - .45;
     const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = feed; screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.Black();
     const screen = MeshBuilder.CreatePlane('Staatsfernsehen picture', { width: 9.6, height: 5.4 }, scene); screen.parent = tv; screen.position.y = 9.2; screen.material = screenMaterial;
+    // The wall camera must not draw its own picture: sampling the feed while rendering into it is a WebGL feedback loop.
+    feed.renderList = null; feed.renderListPredicate = (mesh) => mesh !== screen;
     const frameMaterial = new PBRMaterial('Staatsfernsehen gilded frame', scene); frameMaterial.albedoColor = Color3.FromHexString('#b98a3e'); frameMaterial.metallic = .9; frameMaterial.roughness = .3;
     const frame = MeshBuilder.CreateBox('Staatsfernsehen frame', { width: 10.6, height: 7.6, depth: .5 }, scene); frame.parent = tv; frame.position.set(0, 8.6, .3); frame.material = frameMaterial;
     for (const x of [-3.6, 3.6]) { const leg = MeshBuilder.CreateBox('Staatsfernsehen pylon', { width: .7, height: 5, depth: .7 }, scene); leg.parent = tv; leg.position.set(x, 2.5, .3); leg.material = frameMaterial; shadow.addShadowCaster(leg); }
@@ -720,7 +723,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         { const k = [state, ...others][following] ?? state; shotTimer += dt; if (shotTimer > 5.5) { shotTimer = 0; shot = (shot + 1) % 3; }
           const side = shot === 0 ? 1 : -1, ahead = shot === 2 ? 2 : 9, up = shot === 1 ? 7 : 1.6, out = shot === 1 ? 3 : 5.5;
           const want = new Vector3(k.x + Math.sin(k.heading) * ahead + Math.cos(k.heading) * out * side, up, k.z + Math.cos(k.heading) * ahead - Math.sin(k.heading) * out * side);
-          tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height, k.z)); }
+          tvCamera.position = Vector3.Lerp(tvCamera.position, want, shotTimer < .05 ? 1 : 1 - Math.exp(-4 * dt)); tvCamera.setTarget(new Vector3(k.x, 1 + k.height + elevationAt(trackLocate(k.x, k.z).s), k.z)); }
         skids.update([state, ...others]);
         lastStates = [state, ...others];
         for (const [i, k] of lastStates.entries()) {
@@ -729,7 +732,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             const surface = drivingSurfaceAt(k.x,k.z), rate = looseSurfaceDustRate(surface,k.grounded,k.speed,reducedEffects);
             loose.emitRate = snowing ? 0 : rate;
             if (rate > 0) {
-              loose.emitter = new Vector3(k.x - Math.sin(k.heading) * .95, .1 + k.height, k.z - Math.cos(k.heading) * .95);
+              loose.emitter = new Vector3(k.x - Math.sin(k.heading) * .95, .1 + k.height + elevationAt(trackLocate(k.x, k.z).s), k.z - Math.cos(k.heading) * .95);
               const tint = surface === 'grass' ? [new Color4(.34,.43,.24,.32),new Color4(.48,.53,.33,.24),new Color4(.4,.47,.29,0)] : [new Color4(.48,.4,.29,.4),new Color4(.64,.55,.41,.32),new Color4(.56,.47,.35,0)];
               loose.color1=tint[0]; loose.color2=tint[1]; loose.colorDead=tint[2];
               loose.direction1.set(-Math.sin(k.heading)*1.5-.35,.2,-Math.cos(k.heading)*1.5-.35);

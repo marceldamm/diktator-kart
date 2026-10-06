@@ -860,7 +860,8 @@ class App {
             : `Drift lädt ${Math.round(this.kart.driftCharge / KART_TUNING.driftTiers[0] * 100)} %`
           : this.kart.height > 0 ? 'Hop' : 'Bereit';
       const maximumContact = Math.max(...this.kart.wheelGroundHeights);
-      const surface = drivingSurfaceAt(this.kart.x,this.kart.z);
+      // The lab test area has no circuit surfaces; only the main track maps gravel and grass.
+      const surface = LAB_WORLD ? 'cobble' : drivingSurfaceAt(this.kart.x,this.kart.z);
       surfaceDisplay.textContent = surface === 'gravel' ? 'Schotter · loser Untergrund' : surface === 'grass' ? 'Gras · weniger Grip' : this.kart.grounded && maximumContact > 0.02
         ? `Bodenwelle · Radkontakt ${Math.round(maximumContact * 100)} cm`
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
@@ -869,7 +870,8 @@ class App {
     if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) {
       const stand = trackPoint(TRACK.start + 20), nearness = Math.max(0, 1 - Math.hypot(this.kart.x - stand.x, this.kart.z - stand.z) / 70);
-      this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness);
+      const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);
+      this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness, rollSurface);
     }
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {

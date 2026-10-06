@@ -12,7 +12,7 @@ import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTextur
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
 import { Color4 } from '@babylonjs/core/Maths/math.color';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackLocate, shortcutLocate, SHORTCUT_LENGTH } from './track';
+import { TRACK, trackPoint, trackLocate, shortcutLocate, SHORTCUT_LENGTH, elevationAt } from './track';
 import { GROUND, HAZARDS, LANDMARKS, RIVER } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import { paintEmblem } from './track-world';
@@ -228,7 +228,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const p = trackPoint(s, side * (W + 4.6));
     const a = shortcutLocate(p.x, p.z); if (a.u > -6 && a.u < SHORTCUT_LENGTH + 6 && Math.abs(a.lane) < 8) continue;
     if (reserved.some((r) => Math.hypot(r.x - p.x, r.z - p.z) < r.r)) continue;
-    placements.push({ m, x: p.x, z: p.z, yaw: facing(p.x, p.z) + (m === 'kit-flag' ? Math.PI / 2 : 0) });
+    placements.push({ m, x: p.x, z: p.z, y: elevationAt(s) + .14, yaw: facing(p.x, p.z) + (m === 'kit-flag' ? Math.PI / 2 : 0) });
   }
   // Second line and distant city: taller blocks fill every free plot so no street ends in a void.
   for (let x = GROUND.west + 30; x < GROUND.east - 30; x += 30) for (let z = GROUND.south + 30; z < GROUND.north - 30; z += 30) {

@@ -113,6 +113,8 @@ export const GRASS_VERGES: readonly (readonly [number, number, number, number])[
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
 export const HARBOUR = { from: 236 * S, to: 262 * S, side: 1, basin: 9 } as const;
 /** Open-edge hazards: harbour water (west bend) and a surreal satirical furnace pit (north-east bend). */
+/** Prachtallee crest (Redesign 06.10.2026): the avenue rises 2.4 m and hides the column until the top. */
+export const CREST = { from: 1010, to: 1094, height: 2.4 } as const;
 /** Spree quay on the outside of the east-extension sweep (absolute progress metres, layout 06.10.2026). */
 export const SPREE_QUAY = { from: 893, to: 940, side: 1, basin: 10 } as const;
 export const HAZARDS = [{ ...HARBOUR, kind: 'water' }, { ...SPREE_QUAY, kind: 'water' }, { from: 118 * S, to: 138 * S, side: 1, basin: 6, kind: 'lava' }, { from: 272 * S, to: 290 * S, side: 1, basin: 7, kind: 'cliff' }] as const;

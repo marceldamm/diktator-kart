@@ -10,11 +10,13 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
+import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
+import { CREST, GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 import { canalFoamBands } from './environment-effects';
+
+const trackLocateS = (x: number, z: number) => trackLocate(x, z).s;
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
 export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
@@ -51,7 +53,7 @@ function sweep(scene: Scene, name: string, profile: [number, number][], material
     const s = from + (to - from) * r / rings;
     profile.forEach(([lane, height], j) => {
       const p = (options.at ?? trackPoint)(s, lane);
-      positions.push(p.x, height + (follow ? trackHeightAt(p.x, p.z) : 0), p.z);
+      positions.push(p.x, height + (follow ? trackHeightAt(p.x, p.z) : options.at ? 0 : elevationAt(s)), p.z);
       uvs.push(s / uScale, along[j] / vScale);
       if (options.color) { const [cr, cg, cb] = options.color(s, lane); colors.push(cr, cg, cb, 1); }
     });
@@ -225,6 +227,26 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     for (const [from, to] of side < 0 ? without(0, TRACK.length, promenadeGaps) : without(0, TRACK.length, HARBOUR_GAP)) {
       sweep(scene, `Promenade ${side}`, lanes, paving, { uScale: 3, vScale: 3, step: 1.2, from, to });
       sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2, from, to });
+    }
+  }
+  // Prachtallee crest: ashlar retaining walls from the raised promenade down to the street, with a stone parapet.
+  {
+    const wallStone = pbr(scene, 'Crest retaining ashlar', '#cbb894', 0, .85);
+    const maps = surfaceTextures(scene, 'Crest ashlar', 'stone'); wallStone.albedoTexture = maps.color; wallStone.bumpTexture = maps.normal;
+    const outer = W + 1.45 + LANDMARKS.promenade;
+    for (const side of [-1, 1]) {
+      const positions: number[] = [], indices: number[] = [], uvs: number[] = [];
+      const steps = Math.round((CREST.to - CREST.from) / 1.5);
+      for (let k = 0; k <= steps; k++) {
+        const s = CREST.from + (CREST.to - CREST.from) * k / steps, p = trackPoint(s, side * (outer + .3)), top = elevationAt(s) + .14;
+        positions.push(p.x, -.02, p.z, p.x, top, p.z); uvs.push(s / 2, 0, s / 2, top / 2);
+        if (k < steps) { const i = k * 2; indices.push(...(side > 0 ? [i, i + 2, i + 1, i + 1, i + 2, i + 3] : [i, i + 1, i + 2, i + 1, i + 3, i + 2])); }
+      }
+      const wall = new Mesh(`Crest retaining wall ${side}`, scene), data = new VertexData(), normals: number[] = [];
+      VertexData.ComputeNormals(positions, indices, normals); data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs;
+      data.applyToMesh(wall); wall.material = wallStone; wall.receiveShadows = true; wall.isPickable = false; wall.freezeWorldMatrix(); shadow.addShadowCaster(wall);
+      const parapet = side < 0 ? [[-outer - .3, .1], [-outer - .3, 1.0], [-outer + .15, 1.0], [-outer + .15, .14]] : [[outer - .15, .14], [outer - .15, 1.0], [outer + .3, 1.0], [outer + .3, .1]];
+      shadow.addShadowCaster(sweep(scene, `Crest parapet ${side}`, parapet as [number, number][], wallStone, { uScale: 2, vScale: 1, step: 1.5, from: CREST.from + 2, to: CREST.to - 2 }));
     }
   }
   const boostPads: Mesh[] = [], hazardGlow: Mesh[] = [];
@@ -451,10 +473,10 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     if (Math.abs(s - TRACK.start) < 6) continue;
     const at = s + (side > 0 ? spacing / 2 : 0), p = trackPoint(at, side * (W + 2.6));
     // Local -x arm reaches over the barrier toward the road.
-    const m = Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading + (side < 0 ? Math.PI : 0), 0), new Vector3(p.x, .14, p.z));
+    const m = Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading + (side < 0 ? Math.PI : 0), 0), new Vector3(p.x, .14 + elevationAt(at), p.z));
     lampMatrices.push(m);
     const hang = trackPoint(at, side * (W + 1.62));
-    bannerBase.push({ s, side, m: Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(hang.x, 3.62, hang.z)), phase: s * .37 + side });
+    bannerBase.push({ s, side, m: Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(hang.x, 3.62 + elevationAt(at), hang.z)), phase: s * .37 + side });
   }
   for (const mesh of [post, cap, globe]) { mesh.thinInstanceSetBuffer('matrix', new Float32Array(lampMatrices.flatMap((m) => Array.from(m.asArray()))), 16, true); mesh.isPickable = false; mesh.receiveShadows = true; }
   shadow.addShadowCaster(post);
@@ -487,7 +509,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   for (let s = 112 * MAP_SCALE; s <= 205 * MAP_SCALE; s += 13) {
     const p = trackPoint(s, W + 4.2);
     mastMatrices.push(...Matrix.Translation(p.x, 4.75, p.z).asArray());
-    flagMatrices.push(...Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(p.x, 8.2, p.z)).asArray());
+    flagMatrices.push(...Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(p.x, 8.2 + elevationAt(trackLocateS(p.x, p.z)), p.z)).asArray());
   }
   mast.thinInstanceSetBuffer('matrix', new Float32Array(mastMatrices), 16, true);
   flag.thinInstanceSetBuffer('matrix', new Float32Array(flagMatrices), 16, true);

@@ -51,7 +51,7 @@ GOLD = mat('gilded brass', hexrgb('#d4a64e'), .95, .28)
 CLOTH = mat('cloth', hexrgb('#ffffff'), 0, .85)            # stripes and colours via vertex colour
 BANNER = mat('banner cloth', hexrgb('#ffffff'), 0, .8)     # runtime emblem texture, UV fit
 WOOD = mat('wood', hexrgb('#7a5235'), 0, .7)
-LEAF = mat('foliage', hexrgb('#5f7a3c'), 0, .9)
+LEAF = mat('foliage', hexrgb('#71904a'), 0, .9)
 BARK = mat('bark', hexrgb('#5a4637'), 0, .95)
 LAMP = mat('lamp glass', hexrgb('#ffe2a6'), 0, .3, emit=hexrgb('#ffcf7a'))
 WATER = mat('fountain water', hexrgb('#7fa9b0'), .1, .08)
@@ -688,7 +688,8 @@ def props():
     for k in range(16):
         t = k / 16 * math.pi * 2; rr = rnd.uniform(.4, 2.3); zz = rnd.uniform(4.4, 7.6)
         r = rnd.uniform(1.0, 1.7) * (1.15 - (zz - 4.4) / 9)
-        M.sphere(LEAF, math.cos(t * 2.3) * rr, math.sin(t * 2.3) * rr, zz, r, r, r * .85, 9, 6, (.82 + rnd.uniform(-.08, .08), .95, .74 + rnd.uniform(-.06, .06)), jitter=.16)
+        shade = .62 + .38 * (zz - 4.4) / 3.2 + .08 * rr / 2.3   # inner/lower clusters darker, sunlit crown lighter
+        M.sphere(LEAF, math.cos(t * 2.3) * rr, math.sin(t * 2.3) * rr, zz, r, r, r * .85, 9, 6, (shade * (.86 + rnd.uniform(-.08, .08)), shade, shade * (.7 + rnd.uniform(-.06, .06))), jitter=.22)
     mods.append(M)
     M = Module('kit-cypress', grime=False)
     M.cyl(BARK, 0, 0, 0, .8, .18, .14, 6)

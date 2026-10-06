@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
+import { CREST, BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, sampleTrack } from './track-layout.ts';
 
 const built = sampleTrack();
 const SAMPLES = built.samples;
@@ -162,8 +162,19 @@ function shortcutCurvatureAhead(from: number, distance: number): { curvature: nu
   return { curvature: best, sign };
 }
 
+/** Smooth road elevation along the circuit (cosine crest on the Prachtallee); 0 elsewhere. */
+export function elevationAt(s: number): number {
+  const t = (wrap(s) - CREST.from) / (CREST.to - CREST.from);
+  return t <= 0 || t >= 1 ? 0 : CREST.height * (.5 - .5 * Math.cos(t * Math.PI * 2));
+}
+
 export function trackHeightAt(x: number, z: number): number {
-  const { s, lane } = trackLocate(x, z), delta = Math.abs(signedGap(s - BUMP_PROGRESS));
+  const { s, lane } = trackLocate(x, z);
+  return (Math.abs(lane) <= TRACK.halfWidth + 7 ? elevationAt(s) : 0) + localHeightAt(s, lane);
+}
+
+function localHeightAt(s: number, lane: number): number {
+  const delta = Math.abs(signedGap(s - BUMP_PROGRESS));
   // Take-off ramp across the whole road before the canal.
   for (const lip of RAMP_LIPS) if (s >= lip - RAMP_LENGTH && s <= lip && Math.abs(lane) <= TRACK.halfWidth + 1) return RAMP_HEIGHT * (s - (lip - RAMP_LENGTH)) / RAMP_LENGTH;
   // Painted kerbs are real rumble strips: a ridged 5 cm profile between the road edge and the wall.

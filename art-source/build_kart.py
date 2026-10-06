@@ -486,9 +486,12 @@ for identity in ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro']:
         if identity == 'hitler':
             sockets = bump(abs(x), z, .095, .14, .05, .04); hollow = bump(abs(x), z, .13, -.04, .05, .06)
             jaw = bump(abs(x), z, .17, -.12, .06, .08)
-            x *= 1 - .1 * lower - .05 * jaw
-            y += .012 * bump(x, z, 0, -.13, .08, .08) - .014 * sockets - .012 * hollow + .01 * bump(x, z, 0, .08, .03, .09)
-            z -= .016 * lower
+            temple = bump(abs(x), z, .2, .16, .045, .05); cheekbone = bump(abs(x), z, .13, .075, .04, .03)
+            fold = bump(abs(x), z, .085, -.045, .018, .055); corner = bump(abs(x), z, .062, -.095, .02, .018)
+            x *= 1 - .1 * lower - .05 * jaw - .035 * temple
+            y += (.012 * bump(x, z, 0, -.13, .08, .08) - .014 * sockets - .012 * hollow + .01 * bump(x, z, 0, .08, .03, .09)
+                  + .007 * cheekbone - .009 * fold - .004 * corner)
+            z -= .016 * lower + .006 * corner
         elif identity == 'stalin':
             # Shape the lower face as one continuous skull surface: broad cheek planes,
             # readable masseter corners, a tucked cheek hollow and a flatter chin.
@@ -896,6 +899,9 @@ for sd in [-1, 1]:
     front_patch('Hip pocket flap', [(sd * .12, 1.06), (sd * .26, 1.06), (sd * .26, 1.02), (sd * .12, 1.02)], uniform, jacket, .03)
     for z in (1.16, 1.06):
         ellipsoid('Plain jacket button', torso_front(sd * .09, z, .035), (.016, .01, .016), plain_button, jacket, 8)
+# Shirt collar and jacket collar close the neck-to-torso transition (head scale 0.7 at runtime).
+torus('White shirt collar', (0, -.425, 1.565), .118, .022, shirt, jacket, 'Z')
+torus('Jacket collar roll', (0, -.43, 1.545), .145, .03, uniform, jacket, 'Z')
 tube('Jacket front edge', [torso_front(.0, 1.2, .032), torso_front(-.02, 1.05, .032), torso_front(-.03, .92, .032)], .006, tie_silk, jacket)
 # Compact toothbrush moustache (cast-hitler-tache): one narrow, tall, square-cut block no wider than the nose.
 tache = cast('hitler-tache')
@@ -905,10 +911,17 @@ for k in range(7): box('Moustache bristle ridge', (-.036 + k * .012, .364, -.026
 hitler_nose = cast('hitler-nose')
 nose('Hitler straight nose', .155, .042, .112, hitler_nose, .004)
 # Heavier upper-lid fold and straight brows for a deep-set, intense gaze.
+# Very short, clean back and sides with a soft hairline above the ears (no stepped ear cut-outs).
+hair_shell('Hitler short back and sides', cast('hitler-sides'), lambda x, y, z: z > .05 and y < .13, .008)
+hitler_iris = mat('Hitler steel-blue iris', (.2, .3, .42), 0, .35)
 brows = cast('hitler-brows')
 for sd in [-1, 1]:
     strand('Straight heavy brow', [(sd * .045, .27, .2), (sd * .09, .272, .205), (sd * .14, .255, .198)], [.012, .015, .01], .012, hair, brows)
-    tube('Hooded upper lid', [(sd * .05, .262, .158), (sd * .095, .27, .166), (sd * .138, .258, .155)], .01, skin, brows)
+    tube('Hooded upper lid', [(sd * .05, .262, .156), (sd * .095, .272, .163), (sd * .138, .258, .153)], .013, skin, brows)
+    tube('Lower lid', [(sd * .054, .262, .124), (sd * .095, .273, .118), (sd * .136, .259, .126)], .009, skin, brows)
+    ellipsoid('Steel-blue iris', (sd * .095, .273, .137), (.0265, .009, .0265), hitler_iris, brows, 14)
+    ellipsoid('Iris pupil', (sd * .095, .281, .137), (.011, .004, .012), leather, brows, 10)
+    ellipsoid('Eye highlight', (sd * .088, .284, .145), (.004, .002, .004), eye_white, brows, 6)
 
 apply_all()
 save('hero-kart')

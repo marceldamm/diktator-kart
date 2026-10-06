@@ -133,7 +133,7 @@ try {
   }
   await delay(1200);
   const charged = await read();
-  assert.match(charged.mode, /Drift geladen/);
+  assert.match(charged.mode, /Drift (geladen|Stufe)/);
   if (process.env.UPDATE_EVIDENCE === '1') {
     const driftScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
     await writeFile('docs/evidence/m2b-drift-chrome.png', Buffer.from(driftScreenshot.data, 'base64'));
@@ -195,7 +195,7 @@ try {
   await delay(1400);
   const driverDrift = await read();
   assert.equal(driverDrift.camera, 'Fahrerperspektive');
-  assert.match(driverDrift.mode, /Drift geladen/);
+  assert.match(driverDrift.mode, /Drift (geladen|Stufe)/);
   const driverDriftScreenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   await writeFile('docs/evidence/m2d-fahrerperspektive-drift-chrome.png', Buffer.from(driverDriftScreenshot.data, 'base64'));
   await key('keyUp', ' ', 'Space', 32);

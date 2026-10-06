@@ -10,6 +10,7 @@ import type {ShadowGenerator} from '@babylonjs/core/Lights/Shadows/shadowGenerat
 import type {ItemWorld,ItemKind} from './items';
 import type {KartState} from './kart-model';
 import {softParticleTexture} from './effects';
+import {trackHeightAt} from './track';
 import {PBRMaterial} from '@babylonjs/core/Materials/PBR/pbrMaterial';
 import type {Mesh} from '@babylonjs/core/Meshes/mesh';
 import type {ProjectileStyle} from './cast';
@@ -125,15 +126,15 @@ export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,s
       const look:Look=o.kind==='trap'?'neutral':o.kind==='censor'?'censor':styleOf(o.owner);
       const p=pools.find(p=>p.id===o.id)??pools.find(p=>p.id===-1&&p.kind===o.kind&&p.look===look)??pools.find(p=>p.id===-1&&p.kind===o.kind&&p.look==='neutral');if(!p)continue;
       const grounded=p.dog||p.look==='tractor';
-      p.id=o.id;p.root.setEnabled(true);p.root.position.set(o.x,grounded?.045+Math.abs(Math.sin(world.time*15+o.id))*(p.dog?.07:.035):o.kind==='trap'?.03:.95+Math.sin(world.time*13+o.id)*.06,o.z);p.root.rotation.y=o.heading;
+      p.id=o.id;p.root.setEnabled(true);p.root.position.set(o.x,trackHeightAt(o.x,o.z)+(grounded?.045+Math.abs(Math.sin(world.time*15+o.id))*(p.dog?.07:.035):o.kind==='trap'?.03:.95+Math.sin(world.time*13+o.id)*.06),o.z);p.root.rotation.y=o.heading;
       p.root.rotation.z=p.look==='rocket'?world.time*6:p.look==='megaphone'?Math.sin(world.time*9+o.id)*.2:0;
       if(p.look==='briefcase'){const lid=p.root.getChildMeshes()[1];if(lid)lid.rotation.x=-.2-.9*Math.abs(Math.sin(world.time*7+o.id));}
       if(p.look==='book')p.root.getChildMeshes().forEach((m,k)=>{if(k<2)m.rotation.z=(k?-1:1)*(.25+.35*Math.abs(Math.sin(world.time*11+o.id)));});
       if(p.dog){p.legs.forEach((leg,i)=>leg.rotation.x=Math.sin(world.time*15+o.id+(i===0||i===3?0:Math.PI))*.58);if(p.tail)p.tail.rotation.y=Math.sin(world.time*9)*.22;}
       p.root.scaling.setAll(o.remaining<.5?Math.max(.05,o.remaining*2):Math.min(1,.6+o.age*5));
     }
-    world.boxes.forEach((box,i)=>{const root=boxes[i];root.setEnabled(box.readyIn===0);root.position.set(box.x,1.08+Math.sin(world.time*2+i)*.16,box.z);root.rotation.y=world.time*.7+i;});
-    rings.forEach((ring,i)=>{if(!karts[i]){ring.setEnabled(false);return;}ring.setEnabled(world.immune[i]>0);ring.position.set(karts[i].x,.12+karts[i].height,karts[i].z);ring.visibility=.5+.5*Math.sin(world.time*20);});
+    world.boxes.forEach((box,i)=>{const root=boxes[i];root.setEnabled(box.readyIn===0);root.position.set(box.x,trackHeightAt(box.x,box.z)+1.08+Math.sin(world.time*2+i)*.16,box.z);root.rotation.y=world.time*.7+i;});
+    rings.forEach((ring,i)=>{if(!karts[i]){ring.setEnabled(false);return;}ring.setEnabled(world.immune[i]>0);ring.position.set(karts[i].x,.12+karts[i].height+trackHeightAt(karts[i].x,karts[i].z),karts[i].z);ring.visibility=.5+.5*Math.sin(world.time*20);});
     for(const event of world.events)if(event.kart===0){paper.emitter=new Vector3(karts[0].x,1,karts[0].z);paper.manualEmitCount=event.kind==='hit'?35:12;}
     for(const event of world.events)if(event.kind==='hit'&&event.item!=='trap'&&(event.owner===0||event.kart===0)){
       const kart=karts[event.kart];dogPuff.emitter=new Vector3(kart.x,.5+kart.height,kart.z);dogPuff.manualEmitCount=32;

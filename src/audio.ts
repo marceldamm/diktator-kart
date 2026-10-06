@@ -9,6 +9,10 @@ export class KartAudio {
   private engine?: AudioBufferSourceNode;
   private engineGain?: GainNode;
   private tireGain?: GainNode;
+  /** Surface rolling loops (art-source/build_surface_audio.mjs) and the water splash; optional extras. */
+  private rolls = new Map<string, { source: AudioBufferSourceNode; gain: GainNode }>();
+  private splash?: AudioBuffer;
+  private lastSurface = 'cobble';
   private scrapeGain?: GainNode;
   private crowdGain?: GainNode;
   private master?: GainNode;
@@ -65,6 +69,14 @@ export class KartAudio {
         if (kind === 'engine') { this.engine = source; this.engineGain = gain; } else if (kind === 'tire') this.tireGain = gain;
         else if (kind === 'scrape') this.scrapeGain = gain; else this.crowdGain = gain;
       }
+      void Promise.all(['roll-cobble', 'roll-gravel', 'roll-grass', 'splash'].map(async (n) => { try { return [n, await load(n)] as const; } catch { return [n, undefined] as const; } })).then((loaded) => {
+        for (const [n, buffer] of loaded) {
+          if (!buffer || !this.master) continue;
+          if (n === 'splash') { this.splash = buffer; continue; }
+          const source = context.createBufferSource(), gain = context.createGain(); source.buffer = buffer; source.loop = true; gain.gain.value = 0;
+          source.connect(gain); gain.connect(this.master); source.start(); this.rolls.set(n.slice(5), { source, gain });
+        }
+      });
       // Parade tank sounds are optional extras: the race works without them.
       void Promise.all(['tank-transform','tank-crush','tank-engine','thunder','rain'].map(async (n) => { try { this.tankCues.set(n, await load(n)); } catch { /* optional */ } })).then(() => {
         const engine = this.tankCues.get('tank-engine'); if (!engine || !this.master) return;
@@ -144,7 +156,7 @@ export class KartAudio {
   ability(kind:'transform'|'revert'|'crush'):void { this.play(this.tankCues.get(kind==='crush'?'tank-crush':'tank-transform'),kind==='crush'?.75:.7,kind==='revert'?1.25:1); }
   dispose():void {this.music.pause();this.music.src='';void this.context?.close();this.context=undefined;}
   /** crowdNearness 0..1: how close the player is to the grandstands. */
-  update(state: KartState, running: boolean, crowdNearness = 0): void {
+  update(state: KartState, running: boolean, crowdNearness = 0, surface: 'cobble' | 'gravel' | 'grass' | 'water' = 'cobble'): void {
     const dt = 1 / 60;
     this.duck = Math.max(0, this.duck - dt); this.crowdSwell = Math.max(0, this.crowdSwell - dt * .45);
     this.music.volume = (running ? this.musicVolume : this.musicVolume*.46) * (this.duck > 0 ? .45 : 1);
@@ -160,6 +172,14 @@ export class KartAudio {
     this.engine.playbackRate.setTargetAtTime(Math.max(.5, rate), t, this.shiftDip > 0 ? .02 : .06);
     this.engineGain.gain.setTargetAtTime(running ? (.13 + Math.min(1, band) * .07 + gear * .012) * (this.shiftDip > 0 ? .7 : 1) : 0, t, .08);
     this.tireGain.gain.setTargetAtTime(running && state.drifting ? .28 : 0, t, .08);
+    // Rolling noise follows the surface under the wheels; pitch and level rise with speed.
+    const rolling = running && state.grounded && speed > .6 ? Math.min(1, speed / 14) : 0;
+    for (const [kind, roll] of this.rolls) {
+      const level = kind === surface ? (kind === 'cobble' ? .15 : kind === 'gravel' ? .22 : .13) * rolling : 0;
+      roll.gain.gain.setTargetAtTime(level, t, .12); roll.source.playbackRate.setTargetAtTime(.62 + Math.min(1.1, speed / 20), t, .1);
+    }
+    if (running && surface === 'water' && this.lastSurface !== 'water') this.play(this.splash, .7, .9 + Math.random() * .2);
+    this.lastSurface = surface;
     this.scrapeGain?.gain.setTargetAtTime(running && state.scrapeRemaining > 0 && state.scrapeKind === 'wall' && speed > 2 ? .16 + Math.min(.2, speed * .012) : 0, t, .04);
     // Kart-to-kart bumps: a soft body thud instead of the metal scrape.
     const bump = state.scrapeKind === 'kart' && state.scrapeRemaining > .2;
