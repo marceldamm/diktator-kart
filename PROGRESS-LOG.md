@@ -1021,3 +1021,13 @@ Betroffen: `src/abilities.ts`, `src/main.ts`, `src/slice-scene.ts`, `src/scene.t
 **Prüfgrenzen/Offen:** `git diff --check` wird als statische Dokuprüfung ausgeführt; lokale Build-/Testbefehle wurden nicht zusätzlich gestartet. Der GitHub-Workflow kann erst nach PR-Ausführung tatsächlich grün oder rot bestätigt werden. `validate / tests-and-build` muss separat in Branchregeln als Pflichtcheck gesetzt werden. Copilot Cloud Agent ist auf dem angemeldeten Konto nicht freigeschaltet; weder Issue noch PR wurde extern erstellt. Der Arbeits-Intranetbereich braucht eine getrennte Firmenprüfung.
 
 Der Commit `173212e` wurde auf den persönlichen Branch gepusht. Eine PR-Vorschau nach `main` ist im angemeldeten Browser mit Titel `Add GitHub issue intake and automated PR checks` und dokumentierter Prüfgrenze ausgefüllt, aber nicht abgesendet. Die PR-Erstellung bleibt der einzige unmittelbare externe UI-Schritt vor dem GitHub Actions-Lauf.
+
+### 2026-10-06 – GitHub-Pilot zusammengeführt und nächste Arbeit nachverfolgbar
+
+**Verifizierter GitHub-Stand:** PR #1 (`Add GitHub issue intake and automated PR checks`) ist in `main` zusammengeführt; Merge-Commit `b21e192`. Der erforderliche `validate / tests-and-build`-Check war erfolgreich. Issue #3 wurde durch den PR geschlossen. Das private Project `Diktator Kart – Teamarbeit` nimmt neue offene Issues automatisch auf.
+
+**Nächster Arbeitspunkt:** Issue #4 (`Stadion-TV-Variante klären und abnehmen`) wurde erstellt, dem neuen Milestone `Redesign-Performance-Abnahme` zugeordnet und automatisch im Backlog des privaten Project-Boards sichtbar. Die Beschreibung dokumentiert, dass der gespeicherte Frustum-Fix und ein zusätzlicher, uncommittierter statischer-TV-Entwurf voneinander abweichen. Der Entwurf wurde nicht committet oder veröffentlicht. Ein Code-PR bleibt aus, bis die gewünschte Variante geklärt und die vier Hauptdateien synchronisiert sind.
+
+**Pilot noch offen:** Issue #2 zeigt vier von sechs erledigte Kriterien. Sarahs Zugang zum privaten Board und der gemeinsame Test stehen aus. Copilot Cloud Agent bleibt laut angemeldetem Konto nicht verfügbar; der lokale Codex-Workflow verwendet Issues, PRs, Actions und das Project-Board trotzdem.
+
+**Arbeits-Intranet:** Noch kein Firmen-Repository oder keine Unternehmensrichtlinie angegeben. Die Einrichtung bleibt getrennt vom öffentlichen Spiel-Repository.
