@@ -14,8 +14,13 @@ const BASE_CONTROL_POINTS: readonly (readonly [number, number])[] = [
   [-56, 0], [-57, -24], [-56, -48],                   // western boulevard, through the gate
   [-52, -68], [-42, -82], [-26, -84], [-15, -72],     // fountain hairpin
   [-13, -52], [-9, -37], [1, -28], [14, -29],         // ministry turn
-  [22, -42], [26, -62], [33, -80], [45, -91],          // archive dip
-  [57, -85],                                          // left onto the grandstand straight
+  [22, -42], [26, -62], [33, -80],                    // archive dip
+  // East extension (Redesign 06.10.2026): Spree quay, avenue, column hairpin, Tiergarten esses, finish bend.
+  [44, -96], [62, -108], [88, -114], [114, -108],     // Spree-Kai sweep, open river on the right
+  [132, -92], [140, -66], [138, -36],                 // river bend into the Prachtallee
+  [128, -12], [110, -2], [94, -10],                   // hairpin around the Säule der Eitelkeit
+  [90, -30], [100, -48], [92, -66],                   // Tiergarten esses
+  [78, -84], [64, -88], [57, -78],                    // finish bend onto the grandstand straight
 ];
 export const TRACK_CONTROL_POINTS: readonly (readonly [number, number])[] = BASE_CONTROL_POINTS.map(([x, z]) => [x * S, z * S] as const);
 
@@ -97,7 +102,7 @@ export const CANAL_FROM = 85 * S, CANAL_LENGTH = 9, RAMP_LENGTH = 9, RAMP_HEIGHT
 export const RAMP_LIPS = [CANAL_FROM, 330 * S] as const;
 
 /** Glowing boost pads [progress start, lane centre]; 6 m long, 3 m wide, same effect for everyone. */
-export const BOOST_PADS: readonly (readonly [number, number])[] = [[62 * S, -2], [176 * S, 2], [292 * S, 0], [CANAL_FROM - 22, 0]];
+export const BOOST_PADS: readonly (readonly [number, number])[] = [[62 * S, -2], [176 * S, 2], [292 * S, 0], [CANAL_FROM - 22, 0], [1050, 0], [1192, 1.5]];
 
 /** Abstract 'Staatliches Übungsgelände': marked shell craters [progress, lane, radius] on the straight before the gate; avoidable. */
 export const CRATERS: readonly (readonly [number, number, number])[] = [[298 * S, -3, 1.7], [305 * S, 2.6, 1.9], [312 * S, -.6, 1.6]];
@@ -108,13 +113,17 @@ export const GRASS_VERGES: readonly (readonly [number, number, number, number])[
 /** Open quay on the outside of the west bend: no barrier, a harbour basin behind it (falling in costs a salvage). */
 export const HARBOUR = { from: 236 * S, to: 262 * S, side: 1, basin: 9 } as const;
 /** Open-edge hazards: harbour water (west bend) and a surreal satirical furnace pit (north-east bend). */
-export const HAZARDS = [{ ...HARBOUR, kind: 'water' }, { from: 118 * S, to: 138 * S, side: 1, basin: 6, kind: 'lava' }, { from: 272 * S, to: 290 * S, side: 1, basin: 7, kind: 'cliff' }] as const;
+/** Spree quay on the outside of the east-extension sweep (absolute progress metres, layout 06.10.2026). */
+export const SPREE_QUAY = { from: 893, to: 940, side: 1, basin: 10 } as const;
+export const HAZARDS = [{ ...HARBOUR, kind: 'water' }, { ...SPREE_QUAY, kind: 'water' }, { from: 118 * S, to: 138 * S, side: 1, basin: 6, kind: 'lava' }, { from: 272 * S, to: 290 * S, side: 1, basin: 7, kind: 'cliff' }] as const;
 
 export const LANDMARKS = {
   palace: [0, 132 * S] as const,
   fountains: [[-33 * S, -63 * S], [8 * S, 20 * S]] as const,
   /** Large park trees (Poly Haven CC0 model), kept well clear of the promenades. */
   trees: ([[24, 40], [-14, 60], [28, 2], [-6, 40], [-20, 20], [30, -16]] as const).map(([x, z]) => [x * S, z * S] as const),
+  /** Säule der Eitelkeit: gilded column inside the east hairpin; a far landmark from the Prachtallee. */
+  column: [111 * S, -22 * S] as const,
   /** Progress of the boulevard gate the circuit drives through. */
   gateProgress: 318 * S,
   /** Lawn islands [x0, z0, x1, z1] inside the circuit; the rest of the city floor is paved. */
@@ -122,3 +131,7 @@ export const LANDMARKS = {
   /** Width of the promenade strip behind each barrier, in metres. */
   promenade: 5,
 };
+
+/** River Spree south of the east sweep: north/south bank z and the x extent (game units). */
+export const RIVER = { north: -190, south: -262, west: -460, east: 580, level: -1.15 } as const;
+export const GROUND = { west: -460, east: 580, north: 470, south: -660 } as const;

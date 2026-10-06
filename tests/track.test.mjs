@@ -59,7 +59,7 @@ test('air trick supplies one shared body and wheel roll over the jump duration',
 test('five bots complete three laps using the shared kart controller without teleportation',()=>{
   let states=Array.from({length:5},(_,i)=>gridKart(i+1));
   const races=states.map(createRaceProgress);
-  for(let step=0;step<60*270;step++){ // 1.5x map
+  for(let step=0;step<60*270*TRACK.length/891;step++){ // time budget scales with lap length (891 m base)
     states=states.map((s,i)=>advanceKart(s,botInput(s,i+1,states),1/60,projectTrack));
     states=resolveKartContacts(states,projectTrack);
     states.forEach((s,i)=>{advanceRace(races[i],s,step/60);assert.ok(Number.isFinite(s.x+s.z+s.speed));});
@@ -67,7 +67,7 @@ test('five bots complete three laps using the shared kart controller without tel
   assert.ok(races.every(r=>r.finished),JSON.stringify(races));
 });
 test('bot drifters release before cutting into the inside barrier on three curves',()=>{
-  const curves=[{s:823.63,sign:-1},{s:333.52,sign:-1},{s:679.78,sign:1}];
+  const curves=[{s:1210,sign:-1},{s:333.52,sign:-1},{s:679.78,sign:1}];
   for(const curve of curves)for(const speed of [9,12,15]){
     const p=trackPoint(curve.s-10,0);let state={...gridKart(0),...p,travelHeading:p.heading,speed};
     let maxInside=-Infinity,driftSeconds=0;
@@ -83,7 +83,7 @@ test('bot drifters release before cutting into the inside barrier on three curve
 });
 test('designated bot takes the backyard alley and finishes without losing mapped progress',()=>{
   let state=gridKart(3),sawAlley=false;const race=createRaceProgress(state);
-  for(let step=0;step<60*270;step++){
+  for(let step=0;step<60*270*TRACK.length/891;step++){
     state=advanceKart(state,botInput(state,3,[state]),1/60,projectTrack);
     sawAlley ||= inShortcut(state.x,state.z);
     advanceRace(race,state,step/60);

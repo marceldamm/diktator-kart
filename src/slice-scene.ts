@@ -1,6 +1,6 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { Scene } from '@babylonjs/core/scene';
-import { LoadAssetContainerAsync, ImportMeshAsync } from '@babylonjs/core/Loading/sceneLoader';
+import { LoadAssetContainerAsync } from '@babylonjs/core/Loading/sceneLoader';
 import '@babylonjs/loaders/glTF';
 import { Matrix, Vector3, Quaternion } from '@babylonjs/core/Maths/math.vector';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
@@ -28,6 +28,7 @@ import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProces
 import type { Camera } from '@babylonjs/core/Cameras/camera';
 import { TRACK, drivingSurfaceAt, trackLocate, trackPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, MAP_SCALE } from './track-layout';
+import { addCityWorld } from './city-world';
 import { addTrackWorld } from './track-world';
 import { shouldRefreshBroadcastFeed } from './broadcast-feed';
 import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
@@ -91,18 +92,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     skyTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
     skyMaterial.emissiveTexture = skyTexture;
     skyMaterial.emissiveColor = Color3.Black(); skyMaterial.backFaceCulling = false; skyMaterial.fogEnabled = false; sky.material = skyMaterial; sky.infiniteDistance = true;
-    const world = await ImportMeshAsync('/assets/models/stadium-world.glb', scene);
+    // Redesign 06.10.2026: modular city kit placed along the circuit (src/city-world.ts) replaces stadium-world.glb.
+    const city = await addCityWorld(scene, shadow);
     report?.('world');
-    const worldOrientation = new TransformNode('Blender world orientation', scene); worldOrientation.rotation.y = Math.PI;
-    world.meshes.filter((m) => !m.parent).forEach((m) => m.parent = worldOrientation);
     const stoneMaps = surfaceTextures(scene, 'Limestone', 'stone'), leafMaps = surfaceTextures(scene, 'Cypress', 'leaf'), fabricMaps = surfaceTextures(scene, 'Cloth', 'fabric'), skinMaps = surfaceTextures(scene, 'Driver skin', 'skin');
-    for (const mesh of world.meshes) if (mesh.material instanceof PBRMaterial) {
-      const m = mesh.material;
-      if (/stone|limestone|render/.test(m.name)) { m.albedoTexture = stoneMaps.color; m.bumpTexture = stoneMaps.normal; }
-      if (/foliage/.test(m.name)) { m.albedoTexture = leafMaps.color; m.bumpTexture = leafMaps.normal; }
-      if (/cloth|Spectator/.test(m.name)) { m.albedoTexture = fabricMaps.color; m.bumpTexture = fabricMaps.normal; }
-    }
-    for (const mesh of world.meshes) { mesh.receiveShadows = true; mesh.isPickable = false; if (mesh.getTotalVertices() > 0) shadow.addShadowCaster(mesh); }
+    void stoneMaps; void leafMaps;
     const trackWorld = addTrackWorld(scene, shadow);
     // Fountain spray with a hard particle cap.
     for (const [fx, fz] of LANDMARKS.fountains) {
@@ -147,6 +141,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     };
     glow.addExcludedMesh(sky);
     for(const mesh of trackWorld.glowMeshes) markGlow(mesh);
+    for(const mesh of city.glowMeshes) markGlow(mesh);
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
     report?.('karts');
     const visuals = Array.from({ length: loadKartCount + 1 }, (_, index) => {
@@ -537,7 +532,6 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     };
     paintCaption('STAATSFERNSEHEN · Übertragung genehmigt');
     const itemShadowMeshes=(shadow.getShadowMap()?.renderList??[]).filter(mesh=>!staticShadowMeshes.includes(mesh));
-    for(const mesh of world.meshes){mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     const api: TestScene = {
       scene,
       presentItems,
@@ -677,7 +671,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (feed.refreshRate !== feedRefreshRate) feed.refreshRate = feedRefreshRate;
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         if (sunDisc.isEnabled() && gameCamera) { const c = gameCamera.position; sunDisc.position.set(c.x - sunDirection.x * 380, c.y - sunDirection.y * 380, c.z - sunDirection.z * 380); sunDiscMaterial.alpha = 1 - Math.min(1, timeOfDay * 1.6); sunDisc.isVisible = timeOfDay < .6 && !raining && !snowing; }
-        trackWorld.animate(time);
+        trackWorld.animate(time); city.animate(time);
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;
           if (u >= 1) { zeppelinTime = -1; zeppelin.setEnabled(false); } }

@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
+import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 import { canalFoamBands } from './environment-effects';
@@ -139,9 +139,13 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const square = pbr(scene, 'City square paving', '#b9ab8f', 0, 1);
   square.albedoTexture = new Texture('/assets/textures/herringbone-diff.jpg', scene);
   square.bumpTexture = new Texture('/assets/textures/herringbone-nor_gl.jpg', scene);
-  for (const t of [square.albedoTexture, square.bumpTexture] as Texture[]) { t.uScale = t.vScale = 130; t.anisotropicFilteringLevel = 8; }
-  const ground = MeshBuilder.CreateGround('Park and city terrain', { width: 520, height: 520 }, scene);
-  ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
+  for (const t of [square.albedoTexture, square.bumpTexture] as Texture[]) { t.uScale = (GROUND.east - GROUND.west) / 4; t.vScale = (GROUND.north - RIVER.north) / 4; t.anisotropicFilteringLevel = 8; }
+  // Redesign 06.10.2026: the larger city floor leaves a gap for the River Spree (src/city-world.ts).
+  for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) {
+    const ground = MeshBuilder.CreateGround('Park and city terrain', { width: GROUND.east - GROUND.west, height: z1 - z0 }, scene);
+    ground.position.set((GROUND.east + GROUND.west) / 2, 0, (z0 + z1) / 2);
+    ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
+  }
   const lawn = pbr(scene, 'Park lawn', '#4d5f3a', 0, .95);
   const lawnMaps = surfaceTextures(scene, 'Lawn', 'grass'); lawn.albedoTexture = lawnMaps.color; lawn.bumpTexture = lawnMaps.normal;
   lawnMaps.color.uScale = lawnMaps.color.vScale = 18; lawnMaps.normal.uScale = lawnMaps.normal.vScale = 18;
