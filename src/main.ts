@@ -416,7 +416,7 @@ class App {
     try{localStorage.setItem('dk-reduced-motion',this.reducedMotion?'1':'0');}catch{}
   }
   private openMenu():void {
-    this.mouse.release();
+    this.mouse.release();this.endCeremony();
     if(LAB_WORLD||this.state==='loading'||!this.camera)return;
     if(this.camera.introMode)return;
     if(this.camera.photoMode)this.camera.togglePhoto();document.body.classList.remove('photo-mode');
@@ -444,6 +444,8 @@ class App {
   private startGrandPrix(): void {
     if (LAB_WORLD || this.state === 'loading') return;
     this.mode = 'gp'; this.gp = createGrandPrix(GP_TRACKS);
+    // Test aid: ?gp-round=N starts at round N (earlier rounds score nothing); used to check the final ceremony quickly.
+    { const round = Number(new URLSearchParams(location.search).get('gp-round')); if (Number.isInteger(round) && round > 1 && round <= this.gp.tracks.length) { for (let r = 0; r < round - 1; r++) this.gp.results.push({ track: this.gp.tracks[r], order: [], points: [], time: 0 }); this.gp.round = round - 1; } }
     this.closeTrackSelection(); this.openSelection();
   }
   /** Loads the GP round's circuit if needed, then starts the race. */
@@ -579,7 +581,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.endCeremony();
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -725,6 +727,25 @@ class App {
     let i = samples.findIndex((p) => p[4] >= d); if (i < 0) i = samples.length - 1;
     return this.raceTime - i / 20;
   }
+  /** Podium after the final Grand-Prix race: top three karts on the blocks, slow camera orbit, confetti. */
+  private startCeremony(slots: number[]): void {
+    const at = trackPoint(TRACK.start + 22, 0), y = trackHeightAt(at.x, at.z);
+    const spot = { x: at.x, y, z: at.z, heading: at.heading + Math.PI };
+    this.testScene?.ceremony?.(spot);
+    const offsets = [[0, 1.5], [-3, 1.0], [3, .7]] as const;
+    const all = [this.kart, ...this.loadKarts];
+    slots.forEach((slot, place) => {
+      if (slot < 0 || !all[slot]) return;
+      const [lane, h] = offsets[place], c = Math.cos(spot.heading), s = Math.sin(spot.heading);
+      all[slot] = { ...all[slot], x: spot.x + c * lane, z: spot.z - s * lane, heading: spot.heading + Math.PI, travelHeading: spot.heading + Math.PI, speed: 0, height: h, grounded: true };
+    });
+    // Everyone else lines up behind the podium so the three steps stay clear.
+    all.forEach((k, slot) => { if (!slots.includes(slot)) { const p = trackPoint(TRACK.start - 6 - slot * 3.5, slot % 2 ? 4 : -4); all[slot] = { ...k, x: p.x, z: p.z, heading: p.heading, speed: 0 }; } });
+    this.kart = all[0]; this.loadKarts = all.slice(1); this.resetRenderState();
+    this.camera?.setCeremony(spot); document.body.classList.add('ceremony');
+    this.testScene?.celebrate?.('finish'); this.audio.cheer(1.4);
+  }
+  private endCeremony(): void { this.testScene?.ceremony?.(null); this.camera?.setCeremony(null); document.body.classList.remove('ceremony'); }
   private showGpIntro(): void {
     const intro = document.querySelector<HTMLElement>('#gp-intro')!;
     const lines: Record<TrackId, [string, string]> = {
@@ -763,9 +784,10 @@ class App {
     if (last) {
       const champion = rows[0].driver, won = champion === me;
       document.querySelector('#finish-title')!.textContent = won ? 'Grand-Prix-Sieg · amtlich bestätigt' : `Grand Prix an ${CAST[champion].name}`;
-      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}`;
+      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.filter((r) => r.order.length).map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}`;
       const podium = document.querySelector<HTMLImageElement>('#finish-portrait');
       if (podium) { const shot = this.portraits?.[champion]; podium.hidden = !shot; if (shot) { podium.src = shot; podium.alt = `Grand-Prix-Sieger ${CAST[champion].name}`; } }
+      this.startCeremony(rows.slice(0, 3).map((row) => this.order.indexOf(row.driver)));
       retry.innerHTML = 'Neuer Grand Prix <span>↵</span>';
       this.finishAction = () => { this.gp = createGrandPrix(GP_TRACKS); this.startGpRound(); };
     } else {

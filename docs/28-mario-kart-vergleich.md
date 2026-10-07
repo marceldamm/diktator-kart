@@ -12,16 +12,16 @@
 | Cups aus mehreren Strecken mit Punkten | ja | ein Rennen | Grand Prix über zwei Strecken mit Punkten, Zwischenwertung, Siegerehrung | umgesetzt 06./07.10. |
 | Zeitfahren mit Geist | ja | ein globaler Geist | Geist, Bestzeit, beste Runde je Strecke, Abstand im HUD | umgesetzt (Speichern im echten Lauf: siehe Log) |
 | Charakter-Eigenheiten | Gewichtsklassen | Fähigkeiten für Hitler, Kim, Mussolini, Castro; Rivalenstile | Stalin/Mao offen (Satire-Entscheidung nötig) | teilweise |
-| Fahrzeug-/Reifenwahl | Karosserie, Reifen, Gleiter | feste Karts | Reifen-Sets frei kombinierbar (Fragebogen) | offen |
+| Fahrzeug-/Reifenwahl | Karosserie, Reifen, Gleiter | feste Karts | Sechs Radsätze frei kombinierbar (Fragebogen) | **umgesetzt 07.10.** |
 | Schlussrunden-Musik | schneller | gleich | Marsch wird in der letzten Runde schneller | **umgesetzt 07.10.** |
 | Spiegel-/Rückwärtsmodus | Spiegelmodus | nein | „Gegenrichtung per Erlass“: Strecke rückwärts, Rampen/Abkürzung werden gespiegelt | Vorschlag (mittel) |
-| Siegerehrung in 3D | Pokal-Szene | Siegerkarte mit Porträt | Podest neben der Ziellinie, Top 3 auf Sockeln, Konfetti | Vorschlag (mittel) |
+| Siegerehrung in 3D | Pokal-Szene | Siegerkarte mit Porträt | Podest hinter der Ziellinie, Top 3 auf Sockeln, Kamerafahrt, Konfetti | **umgesetzt 07.10.** |
 | Schlachtmodus | Ballons | nein | „Ordensjagd“: in der Arena Orden der anderen abschießen | Vorschlag (groß) |
 | Mehrspieler/Splitscreen | ja | nein | bewusst später (Fragebogen) | später |
 | Gleiter, Unterwasser, Antigravitation | ja | nein | Thematisch passend wäre ein „Paradeballon“-Abschnitt; erst nach drittem Kurs | Idee |
 | Streckenereignisse | Hindernisse/NPCs | Zeppelin, Balkonrede | je Strecke ein lesbares Ereignis | vorhanden |
 | Zugänglichkeit: Lenk-/Gas-Hilfe | Smart Steering | Auto-Gas, Lenkhilfe | – | vorhanden |
 | Gamepad, Tastenbelegung | ja | Tastatur | Gamepad + neu belegbare Tasten | umgesetzt (echtes Gamepad ungeprüft) |
-| Anzahl Strecken | 32+ | 2 | nächste aus Sarahs Liste: Havanna-Revolutionsring | offen |
+| Anzahl Strecken | 32+ | 2 | Havanna-Revolutionsring als dritte Strecke | **umgesetzt 07.10.**; nächste: Pjöngjang, Peking, Moskau |
 
-**Empfohlene nächste große Pakete:** (1) dritte Strecke Havanna, (2) Reifenwahl, (3) 3D-Siegerpodest, (4) Gegenrichtung, (5) Ordensjagd als Schlachtmodus.
+**Empfohlene nächste große Pakete:** (1) Gegenrichtung, (2) Ordensjagd als Schlachtmodus, (3) vierte Strecke (Genossen-Gerade, Moskau), (4) realistischere Porträts mit lizenzfreier Basismesh.

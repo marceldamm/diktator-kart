@@ -499,6 +499,20 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     let zeppelinTime = -1;
+    // Grand-Prix podium (07.10.2026): three stepped blocks with gold/silver/bronze fronts, placed on the road after the finish line.
+    const podium = new TransformNode('Grand Prix podium', scene); podium.setEnabled(false);
+    {
+      const stone = new PBRMaterial('Podium stone', scene); stone.albedoColor = Color3.FromHexString('#e9e2d2'); stone.roughness = .7;
+      [[0, 1.5, '#d9a640', '1'], [-3, 1.0, '#b9bcc2', '2'], [3, .7, '#b0703c', '3']].forEach(([x, h, colour, label]) => {
+        const block = MeshBuilder.CreateBox(`Podium ${label}`, { width: 2.8, height: h as number, depth: 2.6 }, scene); block.parent = podium; block.position.set(x as number, (h as number) / 2, 0); block.material = stone; block.receiveShadows = true;
+        const plate = new DynamicTexture(`Podium plate ${label}`, { width: 128, height: 128 }, scene, true);
+        { const c = plate.getContext() as CanvasRenderingContext2D; c.fillStyle = colour as string; c.fillRect(0, 0, 128, 128); c.fillStyle = '#1b1610'; c.font = 'bold 86px Georgia'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(label as string, 64, 70); plate.update(); }
+        const front = MeshBuilder.CreatePlane(`Podium front ${label}`, { width: 1.2, height: Math.min(1.1, (h as number) * .8) }, scene); front.parent = podium;
+        const fm = new PBRMaterial(`Podium front ${label}`, scene); fm.albedoTexture = plate; fm.metallic = .6; fm.roughness = .35; front.material = fm;
+        front.position.set(x as number, (h as number) / 2, -1.31); front.rotation.y = 0;
+        shadow.addShadowCaster(block);
+      });
+    }
     // Orden (medals): gilded discs on a short oxblood ribbon, thin-instanced, spinning slowly above the road.
     const medalGold = new PBRMaterial('Medal gold', scene); medalGold.albedoColor = Color3.FromHexString('#d9a640'); medalGold.metallic = .9; medalGold.roughness = .25; medalGold.emissiveColor = new Color3(.18, .12, .02);
     const medalRibbon = new PBRMaterial('Medal ribbon', scene); medalRibbon.albedoColor = Color3.FromHexString('#8e2230'); medalRibbon.roughness = .6;
@@ -561,6 +575,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       scene,
       presentItems,
       setTires(slot, set) { visuals[slot]?.setTires(set); },
+      ceremony(on) { podium.setEnabled(!!on); if (on) { podium.position.set(on.x, on.y, on.z); podium.rotation.y = on.heading; } },
       presentMedals(list) {
         if (medalBuffer.length !== list.length * 16) { medalBuffer = new Float32Array(list.length * 16); for (const mesh of [medalDisc, medalBand]) mesh.thinInstanceSetBuffer('matrix', medalBuffer, 16, false); }
         const t = performance.now() / 1000, m = new Matrix();

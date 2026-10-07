@@ -20,6 +20,8 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] **Zeitfahren im echten Lauf geprüft** (Auto-Gas + Lenkhilfe, kein Demo): Bestzeit 221,28 s, beste Runde 72,77 s und Geist gespeichert; zweiter gleich schneller Lauf überschrieb nichts, HUD zeigte „GEIST −0,0 s“.
 - [x] **Reifenwahl (Fragebogen):** sechs eigene Radsätze, einer je Fahrer, auf jedem Kart frei wählbar (Fahrerwahl ◀ ▶, `dk-tires`); Bots behalten ihre eigenen. Test + Chrome-Umschaltung bestanden.
 - [x] Grand Prix über drei Strecken komplett im Chrome (Demo-Autopilot): Stadionring → Duce-Drom → Havanna, Gesamtwertung korrekt, ca. 14 min Fahrzeit (`gp-*-gp3-20261007.png`).
+- [x] **3D-Siegerpodest** nach dem letzten Grand-Prix-Rennen: Top 3 auf Gold/Silber/Bronze-Sockeln hinter der Ziellinie, Kamerafahrt, Konfetti; Ergebniskarte rückt zur Seite (`gp-ceremony-20261007.png`).
+- [x] **Gleiches Grundtempo für alle Bots** (vorher je Startplatz +0/+0,5/+1,0 m/s, ein versteckter Vorteil): Unterschiede kommen nur noch aus den sichtbaren Rivalenstilen. Nebenwirkung: Mussolini gewinnt nicht mehr automatisch (Testlauf: Mao Sieger in Havanna).
 - [ ] Menschliche Fahr-, Stil- und Hörprobe aller drei Strecken; Karosserien im nächsten Pass.
 
 ## Claude-Masterauftrag: zweite Strecke, Live-Rangliste, Grand Prix – 06./07.10.2026 (Marcel)

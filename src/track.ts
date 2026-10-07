@@ -346,7 +346,8 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const desired = Math.atan2(target.x - state.x, target.z - state.z);
   const error = Math.atan2(Math.sin(desired - state.heading), Math.cos(desired - state.heading));
   const steering = Math.max(-1, Math.min(1, error * 2.3));
-  const pace = 13.4 + (index % 3) * .5 + botSkill;
+  // Same base pace for every rival (07.10.2026): differences come only from visible style choices, not hidden speed.
+  const pace = 13.9 + botSkill;
   const cornerSpeed = radius >= 11 ? pace : Math.max(8.5, radius * 1.05 + 2.5 + botSkill * .5);
   let desiredSpeed = Math.min(pace, cornerSpeed) - Math.abs(error) * 2.5;
   // Only lift when the chosen passing line itself is blocked right ahead.

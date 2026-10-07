@@ -298,3 +298,9 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 /* Tyre-set choice in the driver selection. */
 .tire-choice { display:flex;align-items:center;gap:8px;margin-top:6px; }
 .tire-choice button { min-width:28px;padding:2px 8px;font-size:11px; }
+
+/* Grand-Prix ceremony: the result card moves aside so the 3D podium stays visible. */
+.ceremony #finish-card { left:auto;right:24px;top:50%;transform:translateY(-50%);width:min(430px,42vw);padding:22px; }
+.ceremony #finish-results { display:none; }
+.ceremony .ranking { display:none !important; }
+@media (max-width:760px) { .ceremony #finish-card { right:8px;width:calc(100vw - 16px);top:auto;bottom:8px;transform:none;max-height:55vh; } }

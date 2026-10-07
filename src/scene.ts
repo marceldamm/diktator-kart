@@ -24,6 +24,8 @@ export interface TestScene {
   /** Orden (medals) along the circuit; hidden while respawning. */
   /** Fits one tyre set (cast.ts TIRE_SETS) to the kart in this slot. */
   setTires?(slot: number, set: string): void;
+  /** Grand-Prix ceremony podium at a road position (null hides it). */
+  ceremony?(at: { x: number; y: number; z: number; heading: number } | null): void;
   presentMedals?(medals: { x: number; z: number; s: number; readyIn: number }[]): void;
   /** Builds the post-processing chain for the active gameplay camera. */
   attachCamera?(camera: Camera): void;
