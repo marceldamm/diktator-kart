@@ -13,7 +13,7 @@ import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
-import { TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
+import { RAMP_LENGTH, RAMP_LIPS, TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
 import { pickQuality } from './auto-quality';
@@ -116,6 +116,9 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  /** Ramp trick (Marcel, 07.10.): Space held near the ramp and released on it or in the air queues the trick. */
+  private rampHold=false;
+  private rampTrickQueued=false;
   /** Set once the player picked the opening track of the current Grand Prix. */
   private gpTrackChosen=false;
   /** Player's tyre set: 'auto' = the driver's own design, otherwise any set id from TIRE_SETS. */
@@ -1108,9 +1111,15 @@ class App {
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Ramp: launch from the lip into a flight that scales with speed; a clean landing earns a short boost.
           { const allKarts=[this.kart,...this.loadKarts];
+            { const s=trackProgressOf(this.kart),inZone=RAMP_LIPS.some((lip)=>s>lip-RAMP_LENGTH-12&&s<lip+1.5),jumping=(this.kart.jumpRemaining??0)>0,space=this.input.isDown('hopDrift');
+              if(space&&(inZone||jumping))this.rampHold=true;
+              else if(this.rampHold&&!space){this.rampHold=false;if(inZone||jumping)this.rampTrickQueued=true;}
+              if(!inZone&&!jumping&&!space){this.rampHold=false;this.rampTrickQueued=false;} }
             allKarts.forEach((k,i)=>{
-              if((k.jumpRemaining??0)===0&&k.hopRemaining===0&&k.speed>3&&atRampLip(k.x,k.z)){const v=k.speed;allKarts[i]={...k,jumpRemaining:.45+v*.034,jumpDuration:.45+v*.034,jumpStart:1,jumpPeak:.7+v*.05,drifting:false,driftCharge:0};if(i===0)this.audio.cue('start');}
+              // A hop on the ramp no longer cancels the launch: the lip always takes the kart into the air.
+              if((k.jumpRemaining??0)===0&&k.speed>3&&atRampLip(k.x,k.z)&&k.height<1.2){const v=k.speed;allKarts[i]={...k,hopRemaining:0,jumpRemaining:.45+v*.034,jumpDuration:.45+v*.034,jumpStart:1,jumpPeak:.7+v*.05,drifting:false,driftCharge:0};if(i===0)this.audio.cue('start');}
               // Trick: Space in the air (player) or a confident bot spins the kart for a bigger landing boost.
+              if(i===0&&this.rampTrickQueued&&(allKarts[0].jumpRemaining??0)>.05&&!allKarts[0].trick){allKarts[0]={...allKarts[0],trick:true};this.rampTrickQueued=false;}
               if((k.jumpRemaining??0)>.15&&!k.trick&&((i===0&&frame.pressed.has('hopDrift'))||(i>0&&(k.jumpRemaining??0)<(k.jumpDuration??1)-.2&&i%2===1)))allKarts[i]={...allKarts[i],trick:true};
               if(k.landedClean){const trick=!!k.trick;allKarts[i]={...k,trick:false,landedClean:false,turboRemaining:Math.max(k.turboRemaining,trick?1.1:.7),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+(trick?3.6:2.5))};if(i===0){this.itemMessage=trick?'Trick gestanden · Großer Schub!':'Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(trick?1:.6);}}
               else if(k.trick&&(k.jumpRemaining??0)===0)allKarts[i]={...allKarts[i],trick:false};
