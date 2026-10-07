@@ -22,6 +22,8 @@ export interface TestScene {
   setQuality?(level: number, reducedEffects: boolean): void;
   presentItems?(world:ItemWorld,karts:KartState[]):void;
   /** Orden (medals) along the circuit; hidden while respawning. */
+  /** Fits one tyre set (cast.ts TIRE_SETS) to the kart in this slot. */
+  setTires?(slot: number, set: string): void;
   presentMedals?(medals: { x: number; z: number; s: number; readyIn: number }[]): void;
   /** Builds the post-processing chain for the active gameplay camera. */
   attachCamera?(camera: Camera): void;

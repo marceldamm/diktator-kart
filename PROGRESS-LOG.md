@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-07 (Folgelauf) – Duce-Drom-Thema, Havanna, Orden, Eilerlass, Gesichter
+
+- Neue Kit-Module: `art-source/rome_monuments.py` (Athlet, Marmorterrasse, Würfelpalast, Kolossalkopf, drei Travertinblöcke, Kolonnade) und `art-source/havana_modules.py` (drei Kolonialhäuser, zwei Palmen, drei Straßenkreuzer, Leuchtturmfestung, Bart-Ministerium, Tribüne); keine neuen Materialien (Kit-Test ≤ 24). `city-kit.glb` jetzt 10 554 032 Byte (vorher 7 970 904).
+- Duce-Drom: Thema-Zweige in `track-world.ts`/`city-world.ts` (Travertin-Straßentextur, Randsteine, Brüstung, Banner, Marmorterrassen + Athleten auf jeder zweiten Terrasse, Helden mit `__DK_CITY.heroFailures` geprüft = leer).
+- Havanna: Definition in `track-layout.ts`, Themen-Zweige, Malecón-Welle (`trackEvent('wave')`, Tempo-/Gripabzug 95–330 m für alle, 14 s), zwei Ansagen (Piper/Kerstin). Tests `tests/havanna.test.mjs` 3/3 (Fortschritt, Barrieren, Kai zur Seeseite, Hügel/Rampe, Rasenabstand, fünf Bots drei Runden, Abkürzung).
+- Orden: `src/medals.ts`, `topSpeedBonus` im normalen Tempolimit von `advanceKart` (einzige Kernänderung), HUD-Zähler, Verlust bei Treffer; Tests 2/2; Chrome: 2 Orden nach 45 s.
+- Eilerlass: neues Item `boost`, Wahrscheinlichkeit 8–25 % nach Platz, Selbst-Turbo 1,4 s; Test 1/1.
+- Gesichter: `build_kart.py` (Schädel, Augenhöhlen, Wangenknochen, Lichtreflex, Haut/Lippen), `DRIVER_HEAD_SCALE` 0,75/0,74/0,74; Hero-Kart-GLB 6 418 620 Byte.
+- Zeitfahren echt geprüft (siehe CURRENT-WORKLIST). `npm test` 93/93.
+
 ## 2026-10-07 – Claude-Masterauftrag: Duce-Drom, Live-Rangliste, Grand Prix, Zeitfahren je Strecke, Rivalenstile
 
 **Ausgangslage:** Branch `codex/team-marcel-20261006-214551-132` vom aktuellen `origin/main` `110fa15` (sauber, keine fremden ungesicherten Änderungen). Ist-Abgleich im Code: eine spielbare Strecke als Modul-Singleton (`track.ts` baute die Mittellinie beim Import), Grand Prix = ein einzelnes Rennen, Zeitfahren mit einem globalen Geist-/Bestzeit-Slot, Platz nur als Zahl im HUD, Bots mit Slot-basierten Linien.

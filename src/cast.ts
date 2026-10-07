@@ -69,3 +69,13 @@ export const CAST_PARTS = ['peaked', 'naval', 'fur', 'crown', 'beret', 'octagona
 export function rosterOrder(chosen: number): number[] {
   return [chosen, ...CAST.map((_, i) => i).filter((i) => i !== chosen)];
 }
+
+/** Tyre sets (07.10.2026): each caricature's own wheel design; any set fits any kart (chosen in the driver selection). */
+export const TIRE_SETS = [
+  { id: 'parade', name: 'Paradeweißwand', owner: 'Hitler' }, { id: 'limousine', name: 'Staatsradkappe', owner: 'Stalin' },
+  { id: 'corsa', name: 'Corsa-Speiche', owner: 'Mussolini' }, { id: 'volk', name: 'Volksstahlscheibe', owner: 'Mao' },
+  { id: 'rakete', name: 'Raketennabe', owner: 'Kim Jong-un' }, { id: 'gelaende', name: 'Guerilla-Stollen', owner: 'Castro' },
+] as const;
+export type TireSetId = typeof TIRE_SETS[number]['id'];
+/** Default tyre set per roster index (CAST order). */
+export const DEFAULT_TIRES: readonly TireSetId[] = ['parade', 'limousine', 'corsa', 'volk', 'rakete', 'gelaende'];

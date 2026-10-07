@@ -39,3 +39,7 @@ Neue editierbare Blender-Module in `art-source/rome_kit_modules.py` (gebaut übe
 ## Offen
 
 Menschliche Fahr- und Stilabnahme, Messung auf Intel UHD, eigener Ton für die Balkonrede (derzeit Jubel), eigene Bodentextur jenseits des gemeinsamen Kopfsteinpflasters.
+
+## Themenpass 07.10.2026 (Marcels Rückmeldung „mehr themenbasiert“)
+
+Der Duce-Drom ist jetzt die selbstgebaute Rennbahn eines eitlen Diktators: Travertinplatten statt Berliner Kopfsteinpflaster, ein Marmorstadion mit Zuschauerterrassen an Start/Ziel und rund um die Meta-Kehre, auf den Terrassen identische übergroße Athleten (alle mit demselben kahlen Kopf und Kinn), ein Würfel-Arkadenpalast mit Pathos-Inschrift („Ein Volk von Poseuren · Balkonrednern · Bauherren · Beifallspflichtigen“ – freie Satire, kein Originalzitat), eine Bürofassade mit Kolossalkopf, rationalistische Travertinblöcke und Kolonnaden an der Prunkstraße, schwarz-weiße Randsteine und Travertinbrüstungen mit Bronzeband, Banner „MEHR MARMOR BITTE“. Quellen: `art-source/rome_monuments.py`; Belege `docs/evidence/rome2-*-20261007.png`. Die Route blieb gleich, weil sie bereits eine eigene Streckenführung ist (siehe Tabelle oben).

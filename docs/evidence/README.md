@@ -10,6 +10,10 @@
 
 Der Prozess für Selbstprüfung gegen Detaildrift und für das Beobachten eigener Browser-/Buildlast steht in [docs/21-team-workflow.md](../21-team-workflow.md).
 
+## 07.10.2026 (Folgelauf) – Themen, Havanna, Gesichter (Claude)
+
+Gleiche Bedingungen wie unten (eigenes sichtbares Chrome, CDP 9231, 1600×1000). `rome2-*`: neuer Duce-Drom (Fotomodus, Kart per Diagnose versetzt). `hav-*`: Havanna-Ansichten. `medals-duce-drom-*`: Orden im Rennen. `drivers-before/after/compare-*`: Fahrerwahl vor/nach dem Gesichtspass. `timetrial-ghost-*`: echtes Zeitfahren mit Geist. `gp-*-gp3-*`: Grand Prix über drei Strecken.
+
 ## 07.10.2026 – Duce-Drom, Live-Rangliste, Grand Prix (Claude)
 
 Sichtbares, eigens gestartetes Chrome-Fenster (CDP 9231, 1600×1000, RTX-3070-Laptop von Marcel), Vite-Dev-Server `http://127.0.0.1:4173/`, Branch `codex/team-marcel-20261006-214551-132` auf Basis `110fa15` mit den ungesicherten Änderungen dieses Laufs. `demo=1` lässt den Spielerkart vom gemeinsamen Bot-Regler fahren (keine menschliche Fahrprobe); Wetter Sonne.

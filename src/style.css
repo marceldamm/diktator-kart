@@ -294,3 +294,7 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 #medal-count { margin:0 0 .2rem;font-size:11px;letter-spacing:.04em;color:#e2b65c;white-space:nowrap; }
 #medal-count.full { color:#ffd98a;text-shadow:0 0 8px #e7c06a88; }
 #medal-count[hidden] { display:none; }
+
+/* Tyre-set choice in the driver selection. */
+.tire-choice { display:flex;align-items:center;gap:8px;margin-top:6px; }
+.tire-choice button { min-width:28px;padding:2px 8px;font-size:11px; }

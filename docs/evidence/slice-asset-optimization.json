@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T06:33:45.933Z",
+  "date": "2026-10-07T06:58:21.333Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -18,14 +18,14 @@
       "runtimeBytes": 16232868
     },
     {
-      "name": "hero-kart",
-      "originalBytes": 8794644,
-      "runtimeBytes": 6418620
-    },
-    {
       "name": "city-kit",
       "originalBytes": 13262264,
       "runtimeBytes": 10554032
+    },
+    {
+      "name": "hero-kart",
+      "originalBytes": 10526576,
+      "runtimeBytes": 7026128
     }
   ]
 }

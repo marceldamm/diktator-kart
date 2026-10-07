@@ -9,6 +9,19 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Claude-Folgeauftrag: Themen-Strecken, Mario-Kart-Lücken, Modelle – 07.10.2026 (Marcel)
+
+**Quelle:** Marcels Nachricht vom 07.10.2026 früh („Duce-Drom muss themenbasierter sein … mit Mario Kart vergleichen … an Fahrermodelle, Gesichter, Fahrzeuge … bis 95 % des Limits, danach auf main“). Stalin-/Mao-Fähigkeiten bleiben bis zu einer Satire-Entscheidung ausgelassen.
+
+- [x] **Duce-Drom thematisch neu** ([docs/26](docs/26-duce-drom.md)): Travertinplatten statt Kopfsteinpflaster, Marmorstadion mit Publikum und identischen Kult-Athleten (gleicher kahler Kopf, gleiches Kinn) um Start und Meta-Kehre, Würfel-Arkadenpalast mit Pathos-Inschrift, Kolossalkopf-Fassade, rationalistische Travertinblöcke und Kolonnaden, schwarz-weiße Randsteine, Travertin-Brüstungen, Banner „MEHR MARMOR BITTE“. Route unverändert (bereits eigene Streckenführung).
+- [x] **Dritte Strecke Havanna-Revolutionsring** ([docs/29](docs/29-havanna-revolutionsring.md)): Malecón am offenen Meer, Prado, Kapitol-Kreisel, Altstadt mit Zigarrenfabrik-Abkürzung, Redner-Hügel mit Sprung; elf neue Blender-Module; Malecón-Welle als Ereignis. Grand Prix jetzt über drei Strecken.
+- [x] **Mario-Kart-Vergleich** ([docs/28](docs/28-mario-kart-vergleich.md)) und daraus: **Orden** (Sammelobjekte, bis zehn, je etwas mehr Höchsttempo, drei fallen bei Treffer ab), **Eilerlass** (Selbst-Boost-Item, hinten häufiger), schnellerer Marsch in der letzten Runde.
+- [x] **Fahrergesichter:** erwachsenere Schädelform (schmaler, flachere Gesichtsebene, volleres Hinterhaupt), tiefere Augenhöhlen, Wangenknochen, Lichtreflex in den Augen, natürlichere Haut und Lippen, kleinerer gemeinsamer Kopfmaßstab. Vergleich: `docs/evidence/drivers-compare-20261007.png`. Realistische Porträts bleiben ein offenes Ziel.
+- [x] **Zeitfahren im echten Lauf geprüft** (Auto-Gas + Lenkhilfe, kein Demo): Bestzeit 221,28 s, beste Runde 72,77 s und Geist gespeichert; zweiter gleich schneller Lauf überschrieb nichts, HUD zeigte „GEIST −0,0 s“.
+- [x] **Reifenwahl (Fragebogen):** sechs eigene Radsätze, einer je Fahrer, auf jedem Kart frei wählbar (Fahrerwahl ◀ ▶, `dk-tires`); Bots behalten ihre eigenen. Test + Chrome-Umschaltung bestanden.
+- [x] Grand Prix über drei Strecken komplett im Chrome (Demo-Autopilot): Stadionring → Duce-Drom → Havanna, Gesamtwertung korrekt, ca. 14 min Fahrzeit (`gp-*-gp3-20261007.png`).
+- [ ] Menschliche Fahr-, Stil- und Hörprobe aller drei Strecken; Karosserien im nächsten Pass.
+
 ## Claude-Masterauftrag: zweite Strecke, Live-Rangliste, Grand Prix – 06./07.10.2026 (Marcel)
 
 **Quelle:** Marcels Masterauftrag „Diktator Kart als vollständiges Rennspiel weiterentwickeln“ (Projekt-Thread, 06.10.2026). Reihenfolge laut Auftrag: Ist-Abgleich → zweite Strecke → Live-Rangliste → Grand-Prix-Wertung → Zeitfahren/Geist → weitere Fragebogen-Ziele.

@@ -6,7 +6,7 @@ import { createTestScene, type TestScene } from './scene';
 import './style.css';
 import { BOT_STYLES, botStyleOf, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
-import { CAST, rosterOrder } from './cast';
+import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
@@ -116,6 +116,8 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  /** Player's tyre set: 'auto' = the driver's own design, otherwise any set id from TIRE_SETS. */
+  private tireChoice:string='auto';
   /** Malecón wave (Havanna, lap 2): the flooded seafront stretch slows everyone alike until this race time. */
   private waveUntil=0;
   private medals:MedalWorld={medals:[],counts:[],events:[]};
@@ -180,6 +182,7 @@ class App {
       this.selectedTrackId=TRACK.id;
       this.drawTrackCards();
     }
+    try{const t=localStorage.getItem('dk-tires');if(t&&(t==='auto'||TIRE_SETS.some(s=>s.id===t)))this.tireChoice=t;}catch{}
     try{const saved=Number(localStorage.getItem('dk-driver'));if(Number.isInteger(saved)&&saved>=0&&saved<CAST.length)this.chosen=saved;}catch{}
     this.order=rosterOrder(this.chosen);
     try{this.autoGas=localStorage.getItem('dk-auto-gas')==='1';this.steerAssist=localStorage.getItem('dk-steer-assist')==='1';}catch{}
@@ -367,6 +370,7 @@ class App {
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
       this.testScene.setRoster?.(this.order);
+      this.applyTires();
       this.applyQuality();
       if (this.testScene) this.testScene.onLightning = () => this.audio.thunder();
       if (this.testScene) this.testScene.onFirework = () => this.audio.itemEvent('launch');
@@ -516,7 +520,7 @@ class App {
     if (this.mode === 'gp' && this.gp) this.startGpRound(); else void this.beginRace();
   }
   private pick(index: number): void {
-    this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order);
+    this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order); this.applyTires();
     this.renderSelection(); this.audio.voice(`${CAST[index].voice}-horn`, { channel: 'driver', rate: CAST[index].voiceRate, volume: .8 });
   }
   private renderSelection(): void {
@@ -539,7 +543,13 @@ class App {
     const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit (Q):</em> '; ability.append(m.abilityIdea + ' · ');
     const item = document.createElement('em'); item.textContent = 'Wurfobjekt:'; ability.append(item, ` ${m.projectileIcon} ${m.projectileName}`);
     const rival = document.createElement('div'); rival.innerHTML = '<em>Als Rivale:</em> '; rival.append(BOT_STYLES[this.chosen]?.label ?? '');
-    detail.append(title, line, ability, rival);
+    const tires = document.createElement('div'); tires.className = 'tire-choice';
+    const set = TIRE_SETS.find((t) => t.id === this.playerTires())!;
+    const prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '◀'; prev.addEventListener('click', () => this.cycleTires(-1));
+    const next = document.createElement('button'); next.type = 'button'; next.textContent = '▶'; next.addEventListener('click', () => this.cycleTires(1));
+    const label = document.createElement('span'); label.innerHTML = '<em>Reifen:</em> '; label.append(`${set.name} (${set.owner})${this.tireChoice === 'auto' ? ' · eigene' : ''}`);
+    tires.append(prev, label, next);
+    detail.append(title, line, ability, rival, tires);
   }
 
   private async beginRace(): Promise<void> {
@@ -680,6 +690,15 @@ class App {
     this.lastRank = rank;
   }
 
+  /** Player tyre set (driver's own or any other); bots keep their own designs. */
+  private playerTires(): string { return this.tireChoice === 'auto' ? DEFAULT_TIRES[this.chosen] : this.tireChoice; }
+  private applyTires(): void { this.testScene?.setTires?.(0, this.playerTires()); }
+  private cycleTires(step: number): void {
+    const ids = ['auto', ...TIRE_SETS.map((s) => s.id)];
+    this.tireChoice = ids[(ids.indexOf(this.tireChoice) + step + ids.length) % ids.length];
+    try { localStorage.setItem('dk-tires', this.tireChoice); } catch { /* optional */ }
+    this.applyTires(); this.renderSelection();
+  }
   /** Options: rebinding list for the main driving actions (keys saved locally). */
   private renderKeymap(): void {
     const root = document.querySelector<HTMLElement>('#keymap'); if (!root) return;

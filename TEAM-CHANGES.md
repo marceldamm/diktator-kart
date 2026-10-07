@@ -1,5 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
+- **07.10.2026 – Drei Strecken, Orden und Eilerlass, neue Gesichter (Marcel-Auftrag, Claude):** Der Duce-Drom ist thematisch neu gestaltet (Marmorstadion, Kult-Athleten, Würfelpalast, Kolossalkopf, Travertin). Neu spielbar: Sarahs „Havanna-Revolutionsring“ (Ausarbeitung Claude). Der Grand Prix fährt alle drei Strecken. Neu nach Mario-Kart-Vergleich: Orden als Sammelobjekte und das Item Eilerlass. Fahrergesichter wirken erwachsener. Die übrigen drei Strecken bleiben in Planung.
+
 - **07.10.2026 – Zweite Strecke, Live-Rangliste und Grand-Prix-Meisterschaft (Marcel-Auftrag, Claude):** Sarahs „Duce-Drom (Rom)“ ist als zweite Strecke spielbar (Route und Details sind Claudes Ausarbeitung, [docs/26-duce-drom.md](docs/26-duce-drom.md)). Das Hauptmenü bietet Grand Prix (Stadionring → Duce-Drom mit Punkten 10/7/5/3/2/1, Zwischen- und Gesamtwertung), Einzelrennen und Zeitfahren mit Streckenauswahl. Rechts im Rennen zeigt eine Live-Rangliste alle sechs Fahrer aus der echten Rennrangfolge. Bestzeit, beste Runde und Geist gelten je Strecke; bisherige Stadionring-Bestzeiten bleiben erhalten. Die anderen vier Strecken bleiben in Planung.
 
 - **06.10.2026 – Öffentliche Pilotdokumentation bereinigt (Marcel):** Account-Zuordnung und Rollenangaben zum privaten Project wurden aus Issue #2, den Statuskommentaren, PR #8 und den öffentlichen Teamtexten entfernt. Die echten GitHub-Berechtigungen wurden dabei nicht geändert; der gemeinsame Praxistest bleibt offen.

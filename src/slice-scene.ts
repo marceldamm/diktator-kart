@@ -41,7 +41,7 @@ import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineIns
 import '@babylonjs/core/Engines/Extensions/engine.query';
 import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
-import { CAST, CAST_PARTS, DRIVER_HEAD_SCALE, type CastMember } from './cast';
+import { CAST, CAST_PARTS, DEFAULT_TIRES, DRIVER_HEAD_SCALE, TIRE_SETS, type CastMember } from './cast';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import { CreateScreenshotUsingRenderTargetAsync } from '@babylonjs/core/Misc/screenshotTools';
 import type { LoadingReporter } from './loading-progress';
@@ -155,7 +155,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const head=nodes.find(n=>n.name===`kart${index}/headPose`) as TransformNode;
       const kits = ['radio','spare','luggage','fin','parade'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/variant-${kind}`)] as const);
       const bodies = ['roadster','limousine','racer','rounded','rocket','jeep','grandprix'].map(kind=>[kind,nodes.find(n=>n.name===`kart${index}/body-${kind}`)] as const);
-      const limousineWheelStyles = Array.from({length:4},(_,i)=>nodes.find(n=>n.name===`kart${index}/wheelStyle-limousine-${i}`));
+      const wheelStyles = TIRE_SETS.map((set) => [set.id, Array.from({ length: 4 }, (_, i) => nodes.find((n) => n.name === `kart${index}/wheelStyle-${set.id}-${i}`))] as const);
       const parts = CAST_PARTS.map(part=>[part,nodes.find((n) => n.name === `kart${index}/cast-${part}`)] as const);
       const faces = ['hitler','stalin','mussolini','mao','kim','castro'].map(style=>[style,nodes.find((n)=>n.name===`kart${index}/cast-face-${style}`)] as const);
       const kimCarPolish=new TransformNode(`Kim triumph parade details ${index}`,scene);kimCarPolish.parent=orientation;kimCarPolish.setEnabled(false);
@@ -247,13 +247,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for(const [material,base] of kimPaintBase){if(active){material.albedoColor=Color3.Lerp(base.color,Color3.FromHexString('#d2ac57'),.58);material.metallic=Math.max(base.metallic,.68);material.roughness=Math.min(base.roughness,.28);material.emissiveColor=new Color3(.045,.025,.004);}else{material.albedoColor.copyFrom(base.color);material.metallic=base.metallic;material.roughness=base.roughness;material.emissiveColor.copyFrom(base.emissive);}}
         }, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
         paintColour: Color3.Black(), soot: -1, wreckAge: -1,
+        /** Shows exactly one tyre set on all four wheels. */
+        setTires(set: string) { for (const [id, list] of wheelStyles) for (const node of list) node?.setEnabled(id === set); },
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
         /** Dresses this kart as one roster member: kit, caricature parts and colours. */
         dress(cast: CastMember) {
           head.scaling.set(...(cast.headScale ?? DRIVER_HEAD_SCALE));
           for (const [kind,node] of kits) node?.setEnabled(kind===cast.kit);
           for (const [kind,node] of bodies) node?.setEnabled(kind===cast.body);
-          for (const node of limousineWheelStyles) node?.setEnabled(cast.body==='limousine');
+          v.setTires(DEFAULT_TIRES[CAST.indexOf(cast)] ?? 'parade');
           for (const [part,node] of parts) node?.setEnabled(part === cast.hat || cast.face.includes(part));
           for (const [style,node] of faces) node?.setEnabled(style === cast.faceStyle);
           for (const mesh of root.getChildMeshes()) if (/Gold cuff|Trouser stripe/.test(mesh.name)) mesh.setEnabled(!cast.plainSuit);
@@ -558,6 +560,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const api: TestScene = {
       scene,
       presentItems,
+      setTires(slot, set) { visuals[slot]?.setTires(set); },
       presentMedals(list) {
         if (medalBuffer.length !== list.length * 16) { medalBuffer = new Float32Array(list.length * 16); for (const mesh of [medalDisc, medalBand]) mesh.thinInstanceSetBuffer('matrix', medalBuffer, 16, false); }
         const t = performance.now() / 1000, m = new Matrix();

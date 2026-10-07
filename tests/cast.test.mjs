@@ -90,3 +90,13 @@ test('seat upholstery details stay flat and non-metallic instead of reading as l
   const depth = (position.max[2] - position.min[2]) * seamNode.scale[2] / (position.normalized ? 32767 : 1);
   assert.ok(depth < .01, `upholstery thread stays under 1 cm thick (got ${depth.toFixed(4)} m)`);
 });
+
+test('every tyre set exists on all four wheels and each driver owns one by default', async () => {
+  const { TIRE_SETS, DEFAULT_TIRES } = await import('../src/cast.ts');
+  const { readFileSync } = await import('node:fs');
+  const buf = readFileSync(new URL('../public/assets/models/hero-kart.glb', import.meta.url));
+  const json = JSON.parse(buf.subarray(20, 20 + buf.readUInt32LE(12)).toString('utf8'));
+  const names = new Set(json.nodes.map((n) => n.name));
+  for (const set of TIRE_SETS) for (let i = 0; i < 4; i++) assert.ok(names.has(`wheelStyle-${set.id}-${i}`), `${set.id} wheel ${i}`);
+  assert.equal(new Set(DEFAULT_TIRES).size, 6);
+});

@@ -111,6 +111,7 @@ lips = mat('Lip rouge', (.33, .17, .14), 0, .62)
 lens = mat('Sunglass lens', (.02, .025, .03), .6, .08)
 medal_red = mat('Medal ribbon', (.6, .05, .08), 0, .6)
 iris = mat('Eye iris', (.3, .19, .1), 0, .32)
+OLIVE = mat('Olive wheel enamel', (.2, .24, .13), .15, .55)
 
 kart = empty('hero-kart')
 
@@ -343,6 +344,41 @@ for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .36
                 (sd * (w * .48 + .027), r * .31 * math.sin(a + .08), r * .31 * math.cos(a + .08)),
                 .008, trim, limo_wheel_style)
         cyl('Limousine domed hub badge', (sd * (w * .48 + .04), 0, 0), r * .085, .032, chrome, limo_wheel_style, 'X', verts=24)
+    # Tyre sets (07.10.2026, Marcel's questionnaire): every driver has an own tyre/wheel design and any set can be
+    # fitted to any kart. Each set is an overlay group on the shared tyre; the runtime enables exactly one.
+    olive_enamel = OLIVE
+    styles = {name: empty('wheelStyle-' + name + '-' + str(i), parent=spin) for name in ('parade', 'corsa', 'volk', 'rakete', 'gelaende')}
+    for sd in [-1, 1]:
+        side_x = sd * (w * .48 + .012)
+        # parade: broad whitewall band and a polished three-eared spinner
+        torus('Parade whitewall', (sd * w * .49, 0, 0), r * .74, .045, ivory, styles['parade'], 'X')
+        cyl('Parade spinner hub', (side_x, 0, 0), r * .16, .05, chrome, styles['parade'], 'X', verts=24)
+        for k in range(3):
+            a = k * 2 * math.pi / 3
+            rod('Parade spinner ear', (side_x + sd * .03, 0, 0), (side_x + sd * .03, r * .3 * math.sin(a), r * .3 * math.cos(a)), .018, chrome, styles['parade'])
+        # corsa: dense wire spokes, a red rim band and a knock-off cap
+        torus('Corsa red rim band', (sd * w * .47, 0, 0), r * .57, .018, medal_red, styles['corsa'], 'X')
+        for k in range(28):
+            a = k * math.pi / 14
+            rod('Corsa wire spoke', (sd * w * .3, r * .08 * math.sin(a), r * .08 * math.cos(a)), (sd * w * .46, r * .56 * math.sin(a + .3), r * .56 * math.cos(a + .3)), .0045, chrome, styles['corsa'])
+        cyl('Corsa knock-off cap', (side_x, 0, 0), r * .1, .06, gold, styles['corsa'], 'X', verts=12)
+        # volk: plain pressed-steel disc with round lightening holes (olive enamel)
+        cyl('Volk steel disc', (sd * w * .47, 0, 0), r * .56, .02, olive_enamel, styles['volk'], 'X', verts=28)
+        for k in range(5):
+            a = k * 2 * math.pi / 5
+            cyl('Volk disc hole', (sd * (w * .47 + .012), r * .34 * math.sin(a), r * .34 * math.cos(a)), r * .08, .012, rubber, styles['volk'], 'X', verts=12)
+        # rakete: gilded rim ring and a pointed nose-cone hub
+        torus('Rakete gilded rim', (sd * w * .48, 0, 0), r * .6, .03, gold, styles['rakete'], 'X')
+        for k in range(6):
+            a = k * math.pi / 3
+            rod('Rakete fin spoke', (sd * w * .46, r * .12 * math.sin(a), r * .12 * math.cos(a)), (sd * w * .47, r * .55 * math.sin(a), r * .55 * math.cos(a)), .022, gold, styles['rakete'])
+        lathe('Rakete nose cone hub', [(r * .16, sd * w * .48), (r * .1, sd * (w * .48 + .06)), (0.004, sd * (w * .48 + .11))], chrome, styles['rakete'], 16)
+        # gelaende: chunky knobby tread blocks and an olive drab disc for the field car
+        cyl('Gelaende olive disc', (sd * w * .47, 0, 0), r * .55, .02, olive_enamel, styles['gelaende'], 'X', verts=20)
+        for k in range(16):
+            a = k * math.pi / 8
+            knob = box('Gelaende tread block', (sd * w * .26, (r + .025) * math.sin(a), (r + .025) * math.cos(a)), (w * .3, .085, .05), rubber, .01, styles['gelaende'])
+            knob.rotation_euler[0] = -a
 
 # --- Steering ------------------------------------------------------------------------------------
 steering = empty('steeringWheel', (0, .2, 1.2), kart)
