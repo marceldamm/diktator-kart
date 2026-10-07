@@ -9,7 +9,7 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
-## Sarah-Auftrag: Ewige-Führer-Allee (Pjöngjang) – spielbare Strecke
+## Sarah-Auftrag: Ewige-Führer-Allee (Pjöngjang) – spielbare Strecke ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14))
 
 **Status: Technisch spielbar, menschliche Abnahme offen.** Sarah beauftragte am 07.10.2026 die spielbare Umsetzung mit Pjöngjang-inspirierter Monumentalstadt, Führerstatuen, satirischer Propaganda, überzogener Militärparade und einer kürzeren Unterführung mit Booststreifen.
 
