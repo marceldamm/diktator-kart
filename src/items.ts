@@ -10,6 +10,7 @@ export interface ItemBox { id:number; x:number; z:number; readyIn:number }
 export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; direction?:ItemDirection; bounces?:number }
 export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'; kart:number; item:ItemKind; owner?:number }
 export interface ItemWorld { /** Karts holding their item behind them as a shield this step (set by the caller). */ shield?:boolean[];
+  /** Owners whose straight projectile seeks targets on its own (Hitler's shepherd, 07.10.2026). */ seekers?:boolean[];
   slots:(ItemKind|null)[];heldFor:number[];immune:number[];censorRemaining:number[];censorBannerRemaining:number[];objects:ItemObject[];boxes:ItemBox[];
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
@@ -79,6 +80,12 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
   for(const o of world.objects) {
     const ax=o.x,az=o.z;o.age+=dt;o.remaining-=dt;
     if(o.kind!=='trap') {
+      // A seeking dog runs the course and locks on to the first rival that appears ahead of it.
+      if(o.target===null&&o.kind==='direct'&&world.seekers?.[o.owner]&&o.age>.25){
+        const fx=Math.sin(o.heading),fz=Math.cos(o.heading);let best=-1,bestD=36;
+        karts.forEach((k,i)=>{if(i===o.owner)return;const dx=k.x-o.x,dz=k.z-o.z,d=Math.hypot(dx,dz);if(d<bestD&&(dx*fx+dz*fz)/Math.max(d,.01)>.45){best=i;bestD=d;}});
+        if(best>=0)o.target=best;
+      }
       if(o.target!==null) {
         const target=karts[o.target];
         // Follow the course until close, then close in directly: no shortcuts through the park.
