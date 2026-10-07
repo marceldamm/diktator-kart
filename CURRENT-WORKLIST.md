@@ -17,16 +17,16 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] F2 Grand Prix: nach der Fahrerwahl wieder Sarahs Streckenauswahl (gewählte Strecke = erstes Rennen, danach die übrigen). **Umgesetzt:** Grand Prix: nach der Fahrerwahl öffnet die Streckenauswahl; die gewählte Strecke eröffnet den Cup, die übrigen folgen.
 - [x] F3 Rampe: Leertaste halten und auf/vor der Rampe loslassen löst Sprungtrick + Boost aus; Hüpfen auf der Rampe darf den Absprung nicht verhindern. **Umgesetzt:** Rampe: Leertaste nahe der Rampe halten und loslassen (auf der Rampe oder im Flug) löst den Trick aus; Hüpfen verhindert den Absprung nicht mehr.
 - [x] F4 Drift: Leertaste halten = Driftbereitschaft; Drift erst mit Lenkung, Richtung folgt der Lenkung fließend (Schlangenlinie), Loslassen beendet Drift (Turbo nach Ladung). **Umgesetzt:** Drift folgt der Lenkung: volles Gegenlenken wechselt die Seite (Ladung bleibt zu 70 %), 0,35 s geradeaus beendet die Rutschpartie ohne Turbo, Loslassen zahlt wie bisher aus. Tests angepasst.
-- [ ] F5 Bergung: neues, thematisches Bergungsobjekt statt Haken/Magnet.
+- [x] F5 Bergung: neues, thematisches Bergungsobjekt statt Haken/Magnet. **Umgesetzt:** Rettung durch einen kleinen roten Bergungs-Zeppelin mit vergoldetem Paragraphen-Haken; der gelbe Kran am Kai ist durch ein Bergungsamt-Häuschen mit Ankermast ersetzt.
 - [x] F6 Gesichter: die „Barteln“ neben der Nase (Nasolabialrohre) entfernen, weiter Richtung erkennbar statt lustig. **Umgesetzt:** Nasolabial-Röhren entfernt, Kart neu gebaut.
 - [x] F7 Lenkung etwas weicher (nicht zu weich); Drift-Grundgefühl bleibt. **Umgesetzt:** Lenkung weicher: Lenkrate 9→7, Gierreaktion 11→9.
 - [x] F8 Orden: spürbarer Effekt (10 Orden = dauerhaft merklich schneller), sichtbares Feedback; Verlust auch bei Absturz/Wasser/Totalschaden. **Umgesetzt:** Orden: +0,13 m/s je Orden (10 = +4,7 km/h), HUD zeigt den Bonus, Konfetti beim Einsammeln; Verlust 3 bei Absturz/Krater, 5 bei Totalschaden.
-- [ ] F9 Panzer (Hitler): Überfahrene nehmen Schaden, werden sichtbar plattgedrückt; mehrfach überfahren = kaputt.
-- [ ] F10 Gebäuderückseiten an sichtbaren Stellen gestalten (Fenster/Gliederung statt leerer Wand).
+- [x] F9 Panzer (Hitler): Überfahrene nehmen Schaden, werden sichtbar plattgedrückt; mehrfach überfahren = kaputt. **Umgesetzt:** Panzer: Überrollte werden 2,4 s plattgedrückt (sichtbar) und verlieren 22 % Karosserie; mehrfaches Überrollen führt zum Totalschaden.
+- [x] F10 Gebäuderückseiten an sichtbaren Stellen gestalten (Fenster/Gliederung statt leerer Wand). **Umgesetzt:** Rückseiten von Gründerzeit-, Insula-, Kolonial- und Travertinhäusern mit Fenstern, Sockel und Gesimsbändern.
 - [x] F11 Pfeile auf Schubfeldern und Rampen zeigen in Fahrtrichtung. **Umgesetzt:** Pfeile auf Schubfeldern und Rampen zeigen in Fahrtrichtung.
 - [x] F12 Stadion-Monitor: Bild steht auf dem Kopf. **Umgesetzt:** Monitorbild aufrecht.
-- [ ] F13 Hitlers Hund: sucht Ziele (folgt Strecke, prallt ab, stürzt sich auf Gegner vor ihm), explodiert beim Treffer, Fahrzeugschaden.
-- [ ] F14 Ziel: Meldung sofort beim Überfahren der Ziellinie; Rennen läuft weiter (Spieler-Kart fährt per KI), Gegner fahren ins Ziel, Zeiten und Punkte werden erst dann endgültig.
+- [x] F13 Hitlers Hund: sucht Ziele (folgt Strecke, prallt ab, stürzt sich auf Gegner vor ihm), explodiert beim Treffer, Fahrzeugschaden. **Umgesetzt:** Schäferhund sucht nach 0,25 s selbst ein Ziel vor sich (36 m, Sichtkegel), folgt der Strecke, prallt ab und explodiert beim Treffer (+12 % Schaden, Detonation).
+- [x] F14 Ziel: Meldung sofort beim Überfahren der Ziellinie; Rennen läuft weiter (Spieler-Kart fährt per KI), Gegner fahren ins Ziel, Zeiten und Punkte werden erst dann endgültig. **Umgesetzt:** Ziel zählt ab der Fahrzeugnase; Zielkarte sofort; das Rennen läuft weiter (eigener Kart per KI), Zeiten/Punkte werden endgültig, sobald alle im Ziel sind (max. 60 s, „Rest überspringen“). Im Chrome geprüft.
 
 ## Claude-Folgeauftrag: Themen-Strecken, Mario-Kart-Lücken, Modelle – 07.10.2026 (Marcel)
 

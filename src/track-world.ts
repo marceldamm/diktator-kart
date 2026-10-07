@@ -404,13 +404,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     }
     const craneSteel = pbr(scene, 'Salvage crane yellow', '#d9a21f', .5, .45);
     const mid = trackPoint((from + to) / 2, outer + 2), hookAt = trackPoint((from + to) / 2, W + 4);
-    const mast = MeshBuilder.CreateBox('Salvage crane mast', { width: .7, height: 11, depth: .7 }, scene); mast.position.set(mid.x, 5.5, mid.z); mast.material = craneSteel;
-    const dx = hookAt.x - mid.x, dz = hookAt.z - mid.z, len = Math.hypot(dx, dz) + 2;
-    const boom = MeshBuilder.CreateBox('Salvage crane boom', { width: .45, height: .45, depth: len }, scene); boom.material = craneSteel;
-    boom.position.set(mid.x + dx / 2, 10.8, mid.z + dz / 2); boom.rotation.y = Math.atan2(dx, dz);
+    // The rescue itself comes from the salvage blimp (slice-scene); on the quay stands the office that sends it (07.10.2026).
+    const dx = hookAt.x - mid.x, dz = hookAt.z - mid.z;
+    const mast = MeshBuilder.CreateBox('Salvage office booth', { width: 2.6, height: 2.6, depth: 2.2 }, scene); mast.position.set(mid.x, 1.3, mid.z); mast.material = kerbStone; mast.rotation.y = Math.atan2(dx, dz);
+    const boom = MeshBuilder.CreateCylinder('Salvage office mooring mast', { diameterTop: .12, diameterBottom: .22, height: 7.5, tessellation: 8 }, scene); boom.material = craneSteel;
+    boom.position.set(mid.x, 6.4, mid.z);
     const plateTexture = canvasTexture(scene, 'Salvage office plate', 512, 128, (c) => { c.fillStyle = '#7a1820'; c.fillRect(0, 0, 512, 128); c.fillStyle = '#f3e3b8'; c.font = 'bold 40px Georgia'; c.textAlign = 'center'; c.fillText('STAATLICHES BERGUNGSAMT', 256, 80); });
     const plateMaterial = pbr(scene, 'Salvage office plate', '#ffffff', 0, .6); plateMaterial.albedoTexture = plateTexture;
-    const plate = MeshBuilder.CreatePlane('Salvage office plate', { width: 4, height: 1 }, scene); plate.material = plateMaterial; plate.position.set(mid.x, 6, mid.z); plate.rotation.y = Math.atan2(dx, dz) + Math.PI; plate.isPickable = false;
+    const plate = MeshBuilder.CreatePlane('Salvage office plate', { width: 4, height: 1 }, scene); plate.material = plateMaterial; plate.position.set(mid.x, 3.2, mid.z); plate.rotation.y = Math.atan2(dx, dz) + Math.PI; plate.isPickable = false;
     for (const m of [mast, boom]) { m.isPickable = false; shadow.addShadowCaster(m); }
   }
   // Backyard alley: loose gravel between clipped hedges, distinct from the cobbled racing ribbon.

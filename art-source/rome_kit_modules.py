@@ -104,6 +104,7 @@ def insula(name, width, axes, floors, loggia=False, arcade=True, depth=13.0, shu
         M.box(LIME, dx - .1, dx + .1, -.55, -.08, top - .3, top - .05, .9)
     hip_roof(M, -width / 2, width / 2, top + .5, depth)
     chimney(M, width / 4, depth * .6, top + 1.4, 1.6)
+    rear_facade(M, width, depth, gf, floors, fh)
     return M
 
 

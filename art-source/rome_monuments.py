@@ -146,6 +146,7 @@ def rational_block(name, w=18.0, d=14.0, floors=5, portico=True, seed=2):
     if random.Random(seed).random() < .6:  # rooftop mast with a blank oxblood cloth
         M.cyl(IRON, w / 2 - 1.5, 1.0, h + .45, h + 7, .07, .05, 6)
         M.box(CLOTH, w / 2 - 1.5, w / 2 + .9, .97, 1.03, h + 5.4, h + 6.9, OXBLOOD)
+    rear_facade(M, w, d, gf, floors, fh)
     return M
 
 
