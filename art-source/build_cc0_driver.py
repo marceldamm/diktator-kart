@@ -34,7 +34,7 @@ def aim(name, direction):
     pb.matrix = r
 # Character faces -Y in the pack. Thighs forward and a little up, calves down to the pedals, feet flat.
 for sd in ('l', 'r'):
-    aim(f'thigh_{sd}', (0, -1, .12)); aim(f'calf_{sd}', (0, -.45, -1)); aim(f'foot_{sd}', (0, -1, -.2))
+    aim(f'thigh_{sd}', (0, -1, -.08)); aim(f'calf_{sd}', (0, -.3, -1)); aim(f'foot_{sd}', (0, -1, -.2))
     s = 1 if sd == 'l' else -1
     aim(f'upperarm_{sd}', (s * .18, -.75, -.6)); aim(f'lowerarm_{sd}', (s * -.12, -1, .18)); aim(f'hand_{sd}', (s * -.1, -1, .05))
 aim('spine_03', (0, -.03, 1)); aim('neck_01', (0, -.02, 1)); aim('Head', (0, -.04, 1))

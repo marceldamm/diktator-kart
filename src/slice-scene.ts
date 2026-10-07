@@ -583,7 +583,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const pilot = await LoadAssetContainerAsync('/assets/models/cc0-driver-hitler.glb', scene);
       scene.onDisposeObservable.add(() => pilot.dispose());
       const inst = pilot.instantiateModelsToScene((n) => `pilot/${n}`, false);
-      for (const m of visuals[0].driver.getChildMeshes(false)) m.setEnabled(false);
+      const v0 = visuals[0];
+      for (const node of [v0.driver, v0.head, ...v0.arms.filter((x): x is TransformNode => !!x)]) for (const m of node.getChildMeshes(false)) m.setEnabled(false);
+      // Keep them hidden even when dress()/setPlayerVisible toggle the procedural figure.
+      scene.onBeforeRenderObservable.add(() => { for (const node of [v0.head, ...v0.arms.filter((x): x is TransformNode => !!x)]) for (const m of node.getChildMeshes(false)) if (m.isEnabled()) m.setEnabled(false); });
       for (const r of inst.rootNodes) { r.parent = visuals[0].orientation; for (const m of r.getChildMeshes(false)) { m.receiveShadows = true; shadow.addShadowCaster(m); } }
     }
     report?.('items');
