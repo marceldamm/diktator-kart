@@ -5,7 +5,7 @@ import type { TrackId } from './track-layout';
  * Points come only from the race system's own finishing order (rankRace at the player's finish);
  * the satirical announcements may comment on it but never change it.
  */
-export const GP_TRACKS: readonly TrackId[] = ['stadionring', 'duce-drom', 'havanna'];
+export const GP_TRACKS: readonly TrackId[] = ['stadionring', 'duce-drom', 'havanna', 'pyongyang'];
 /** Points for places 1–6. */
 export const GP_POINTS = [10, 7, 5, 3, 2, 1] as const;
 

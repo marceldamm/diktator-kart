@@ -645,6 +645,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const api: TestScene = {
       scene,
       presentItems,
+      breakStartFence() { trackWorld.breakStartFence(); },
       setTires(slot, set) { visuals[slot]?.setTires(set); },
       ceremony(on) { podium.setEnabled(!!on); if (on) { podium.position.set(on.x, on.y, on.z); podium.rotation.y = on.heading; } },
       presentMedals(list) {

@@ -8,12 +8,13 @@ import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { VertexBuffer } from '@babylonjs/core/Buffers/buffer';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial';
+import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
 import { Color4 } from '@babylonjs/core/Maths/math.color';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackLocate, shortcutLocate, SHORTCUT_LENGTH, elevationAt } from './track';
-import { GROUND, HAZARDS, LANDMARKS, RIVER, TRACK_INFO } from './track-layout';
+import { TRACK, trackPoint, trackLocate, shortcutLocate, shortcutPoint, trackCrossingsAtZ, SHORTCUT_LENGTH, elevationAt } from './track';
+import { GROUND, HAZARDS, LANDMARKS, RIVER, SHORTCUT, TRACK_INFO } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import { paintEmblem } from './track-world';
 
@@ -62,12 +63,14 @@ const BERLIN_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c
 const ROME_TINTS = ['#e2a85e', '#cf7d4b', '#e8bd7c', '#bd6a42', '#ecd3a2', '#d9925c', '#cfa77c', '#f1dcb2', '#c9885c'];
 /** Faded Caribbean pastels for Havana's colonial arcades. */
 const HAVANA_TINTS = ['#86c9c1', '#e7a7b2', '#efd27e', '#a3c5e4', '#bfe0b2', '#f2b98e', '#ece3cf', '#c9abd9', '#9ed1d8'];
+/** Cold granite, weathered concrete and restrained red accents for Pyongyang's monumental axis. */
+const PYONGYANG_TINTS = ['#b9bfbc', '#a8b0ae', '#d0d0c8', '#929c9d', '#c4c3ba', '#a9ada6', '#d8d2c6'];
 
 function rng(seed: number) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
 export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promise<CityWorld> {
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana';
-  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang';
+  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : pyongyang ? PYONGYANG_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
   /** Pale travertine tones for the rationalist blocks of the Duce-Drom. */
   const TRAVERTINE = ['#f1ebdd', '#e8dfcc', '#f5f1e6', '#e2d8c2'].map((h) => Color3.FromHexString(h).toLinearSpace());
   const kit = await LoadAssetContainerAsync('/assets/models/city-kit.glb', scene);
@@ -109,6 +112,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const c = signs.getContext() as CanvasRenderingContext2D;
     const names = havana ? ['ZIGARREN VOLKSEIGEN', 'RUM & REDE', 'ERSATZTEILE (1958)', 'BÄRTE NACH NORM', 'REDEZEIT-VERLÄNGERUNG', 'EIS DER REVOLUTION', 'MIKROFON-REPARATUR', 'ZUCKERQUOTE 104 %']
       : rome ? ['CAFFÈ DEL BALCONE', 'MARMOR & PATHOS', 'GELATO GENEHMIGT', 'BÜSTEN NACH MASS', 'TRIUMPHBOGEN-VERLEIH', 'APPLAUS-AGENTUR', 'SCHÄRPEN & ORDEN', 'TOGA-REINIGUNG']
+      : pyongyang ? ['PLANERFÜLLUNG (FAST)', 'APPLAUS IM TAKT', 'JUBELBEDARF OST', 'PARADENORM 08/15', 'LAUTSPRECHER & PLAN', 'EWIGER BAUBEDARF', 'SIEG MELDEPFLICHTIG', 'STATISTIK NACH MASS']
       : ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
     names.forEach((name, k) => {
       const y = k * 64;
@@ -123,12 +127,12 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   {
     const c = inscription.getContext() as CanvasRenderingContext2D;
     c.fillStyle = '#e6dcc4'; c.fillRect(0, 0, 1024, 256); c.fillStyle = '#9a7a3e'; c.textAlign = 'center'; c.textBaseline = 'middle';
-    // Top half: triumphal arch attic. Bottom half: the square palace band (a pompous pastiche, not a real inscription).
-    c.font = 'bold 50px Georgia'; c.fillText('SENATVS POPVLVSQVE', 512, 52); c.fillText('APPLAVDENS', 512, 112);
-    c.font = 'italic 18px Georgia'; c.fillText('Beifall amtlich angeordnet · Vorfahrt dem Sieger von morgen', 512, 150);
+    // Every inscription is an original satirical pastiche, never a historical slogan.
+    c.font = 'bold 50px Georgia'; c.fillText(pyongyang ? 'PLANMÄSSIGER FORTSCHRITT' : 'SENATVS POPVLVSQVE', 512, 52); c.fillText(pyongyang ? 'NACH MELDUNG' : 'APPLAUDENS', 512, 112);
+    c.font = 'italic 18px Georgia'; c.fillText(pyongyang ? 'Abweichung entdeckt · bitte statistisch ausgleichen' : 'Beifall amtlich angeordnet · Vorfahrt dem Sieger von morgen', 512, 150);
     c.fillStyle = '#efe6d2'; c.fillRect(0, 256, 1024, 256); c.fillStyle = '#7d6a4a';
-    c.font = 'bold 34px Georgia'; c.fillText('EIN VOLK VON POSEUREN · BALKONREDNERN', 512, 330); c.fillText('BAUHERREN · BEIFALLSPFLICHTIGEN', 512, 380);
-    c.font = 'italic 20px Georgia'; c.fillText('Gestiftet vom Stifter persönlich', 512, 440);
+    c.font = 'bold 34px Georgia'; c.fillText(pyongyang ? 'EWIGER PLAN · EWIGE BAUSTELLE' : 'EIN VOLK VON POSEUREN · BALKONREDNERN', 512, 330); c.fillText(pyongyang ? 'APPLAUS BITTE GLEICHMÄSSIG' : 'BAUHERREN · BEIFALLSPFLICHTIGEN', 512, 380);
+    c.font = 'italic 20px Georgia'; c.fillText(pyongyang ? 'Erfolg wird nachgereicht' : 'Gestiftet vom Stifter persönlich', 512, 440);
     inscription.update();
   }
   const glowMeshes: Mesh[] = [];
@@ -165,11 +169,11 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (Math.abs(s - LANDMARKS.gateProgress) < 14) n = Math.max(n, 18.5);
     return n;
   };
-  const clearOfCircuit = (x: number, z: number, extra = 0) => {
+  const clearOfCircuit = (x: number, z: number, extra = 0, skipMainRoute = false) => {
     const { s, lane } = trackLocate(x, z);
-    if (Math.abs(lane) < need(s, Math.sign(lane) || 1) + extra) return false;
+    if (!skipMainRoute && Math.abs(lane) < need(s, Math.sign(lane) || 1) + extra) return false;
     const a = shortcutLocate(x, z);
-    if (a.u > -4 && a.u < SHORTCUT_LENGTH + 4 && Math.abs(a.lane) < 3 + 6 + extra) return false;
+    if (a.u > -4 && a.u < SHORTCUT_LENGTH + 4 && Math.abs(a.lane) < SHORTCUT.halfWidth + 6 + extra) return false;
     return true;
   };
   const corners = (p: Placement, f: Footprint, step = 2.2) => {
@@ -187,7 +191,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
       if (!opts.riverOk && inRiver(x, z)) return false;
       if (!opts.lawnOk && inLawn(x, z)) return false;
       if (reserved.some((r) => Math.hypot(r.x - x, r.z - z) < r.r)) return false;
-      if (!opts.skipCircuit && !clearOfCircuit(x, z, opts.extra ?? 0)) return false;
+      if (!clearOfCircuit(x, z, opts.extra ?? 0, opts.skipCircuit)) return false;
     }
     for (const [x, z] of corners(p, f, 1.4)) { const cell = cellOf(x, z); if (cell >= 0) occupied[cell] = 1; }
     placements.push(p); return true;
@@ -198,8 +202,11 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
 
   // --- Hero buildings and fixed civic pieces ---------------------------------------------------------
   const gateAt = trackPoint(LANDMARKS.gateProgress, 0), finishAt = trackPoint(TRACK.start, 0);
-  placements.push({ m: rome ? 'kit-arch' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
-  placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
+  if (pyongyang) placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
+  else {
+    placements.push({ m: rome ? 'kit-arch' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
+    placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
+  }
   if (LANDMARKS.palace) tryPlace({ m: 'kit-palace', x: LANDMARKS.palace[0], z: LANDMARKS.palace[1], yaw: 0 }, { lawnOk: true });
   tryPlace({ m: rome ? 'kit-obelisk' : 'kit-column', x: LANDMARKS.column[0], z: LANDMARKS.column[1], yaw: 0 }, { lawnOk: true });
   for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; tryPlace({ m: rome ? 'kit-cypress' : 'kit-urn', x: LANDMARKS.column[0] + Math.cos(a) * 12.5, z: LANDMARKS.column[1] + Math.sin(a) * 12.5, yaw: -a }, { lawnOk: true }); }
@@ -215,11 +222,30 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const cathedral = TRACK_INFO.dressing.cathedral;
   if (cathedral) tryPlace({ m: 'kit-cathedral', x: cathedral.x, z: cathedral.z, yaw: cathedral.yaw }, { riverOk: false });
   for (const x of TRACK_INFO.dressing.bridges) placements.push({ m: 'kit-bridge', x, z: (RIVER.north + RIVER.south) / 2, yaw: Math.PI / 2, sx: 1.16 * Math.abs(RIVER.north - RIVER.south) / 72 });
-  // Quay walls along both banks (front toward the water).
-  for (let x = RIVER.west + 5; x < RIVER.east; x += 10) {
-    placements.push({ m: 'kit-quay', x, z: Math.max(RIVER.north, RIVER.south), yaw: 0 }, { m: 'kit-quay', x, z: Math.min(RIVER.north, RIVER.south), yaw: Math.PI });
+  // Quay railings stop on both sides of road crossings; the parallel south-bank rail stays continuous.
+  const northBank = Math.max(RIVER.north, RIVER.south), southBank = Math.min(RIVER.north, RIVER.south);
+  const northBankGaps = pyongyang ? trackCrossingsAtZ(northBank, 4) : [];
+  const crossesGap = (x: number, gaps: [number, number][]) => gaps.some(([left, right]) => x + 5 > left && x - 5 < right);
+  const northBankPylonStops: { left: number; x: number }[] = [];
+  if (pyongyang) for (const [left] of northBankGaps) {
+    let stopX = -Infinity;
+    for (const [from, to] of [[12, SHORTCUT_LENGTH * .2 - 8], [SHORTCUT_LENGTH * .8 + 8, SHORTCUT_LENGTH - 12]]) {
+      for (let u = from; u <= to; u += 12) for (const side of [-1, 1]) {
+        const p = shortcutPoint(u, side * (SHORTCUT.halfWidth + .75));
+        if (Math.abs(p.z - northBank) < 6 && p.x < left) stopX = Math.max(stopX, p.x);
+      }
+    }
+    if (Number.isFinite(stopX)) northBankPylonStops.push({ left, x: stopX });
   }
-  for (let x = RIVER.west; x < RIVER.east; x += 2) { for (const z of [RIVER.north, RIVER.south]) { const c = cellOf(x, z); if (c >= 0) occupied[c] = 1; } }
+  for (let x = RIVER.west + 5; x < RIVER.east; x += 10) {
+    const extendsPastPylon = northBankPylonStops.some((stop) => x < stop.left && x + 5.05 > stop.x);
+    if (!crossesGap(x, northBankGaps) && !extendsPastPylon) placements.push({ m: 'kit-quay', x, z: northBank, yaw: 0 });
+    placements.push({ m: 'kit-quay', x, z: southBank, yaw: Math.PI });
+  }
+  for (let x = RIVER.west; x < RIVER.east; x += 2) {
+    if (!crossesGap(x, northBankGaps)) { const c = cellOf(x, northBank); if (c >= 0) occupied[c] = 1; }
+    const c = cellOf(x, southBank); if (c >= 0) occupied[c] = 1;
+  }
 
   // --- Districts along the circuit -------------------------------------------------------------------
   type District = { from: number; to: number; left: string; right: string };
@@ -230,6 +256,10 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   } : rome ? {
     insula: ['kit-rational-a', 'kit-insula-a', 'kit-rational-b', 'kit-insula-c', 'kit-rational-c', 'kit-insula-b'],
     avenue: ['kit-rational-b', 'kit-colonnade', 'kit-rational-a', 'kit-colonnade'],
+  } : pyongyang ? {
+    city: ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-house-d'],
+    riverfront: ['kit-sky-a', 'kit-house-d', 'kit-sky-b'],
+    avenue: ['kit-sky-b', 'kit-sky-a', 'kit-sky-c', 'kit-sky-b'],
   } : {
     city: ['kit-house-a', 'kit-house-b', 'kit-house-c', 'kit-house-a', 'kit-house-d', 'kit-house-b'],
     boulevard: ['kit-house-d', 'kit-house-a', 'kit-house-d', 'kit-house-b'],
@@ -275,7 +305,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
       }
     }
     // Trees: avenue lindens, park groves and the quay promenade.
-    if (kind === 'park' || kind === 'avenue' || kind === 'quay' || kind === 'plaza') {
+    if (kind === 'park' || kind === 'avenue' || kind === 'quay' || (kind === 'plaza' && !pyongyang)) {
       for (let s = d.from; s < d.to; s += kind === 'park' ? 4.5 : 11) {
         const rows = kind === 'park' ? [PROMENADE + 3 + random() * 4, PROMENADE + 9 + random() * 8, PROMENADE + 18 + random() * 12] : [PROMENADE + 2.6];
         for (const lane of rows) {
@@ -298,7 +328,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   }
   // Promenade furniture between the existing lamps (lamps every 24 m at lane W+2.6).
   // Havana: the cruisers of 1958 are parked along the kerb for good (no spare parts).
-  const furniture = havana ? ['kit-oldtimer-a', 'kit-bench', 'kit-oldtimer-b', 'kit-kiosk', 'kit-oldtimer-c', 'kit-bench'] : ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
+  const furniture = havana ? ['kit-oldtimer-a', 'kit-bench', 'kit-oldtimer-b', 'kit-kiosk', 'kit-oldtimer-c', 'kit-bench'] : pyongyang ? ['kit-flag', 'kit-kiosk', 'kit-flag', 'kit-bench', 'kit-flag'] : ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
   let fk = 0;
   for (let s = 14; s < TRACK.length - 8; s += 12) for (const side of [-1, 1]) {
     if (HAZARDS.some((h) => side === h.side && s >= h.from - 6 && s <= h.to + 6)) continue;
@@ -316,7 +346,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const px = x + (random() - .5) * 10, pz = z + (random() - .5) * 10;
     const { lane } = trackLocate(px, pz);
     if (Math.abs(lane) < 34) continue;
-    const m = pick(havana ? ['kit-colonial-b', 'kit-colonial-a', 'kit-colonial-b', 'kit-colonial-c'] : rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
+    const m = pick(havana ? ['kit-colonial-b', 'kit-colonial-a', 'kit-colonial-b', 'kit-colonial-c'] : rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : pyongyang ? ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-house-d'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
     const towardCentre = Math.atan2(-(60 - px), -(-20 - pz));
     const yaw = Math.abs(lane) < 70 ? facing(px, pz) : Math.round(towardCentre / (Math.PI / 2)) * Math.PI / 2;
     tryPlace({ m, x: px, z: pz, yaw, tint: m.startsWith('kit-rational') ? pick(TRAVERTINE) : tint() }, { extra: 18, skipCircuit: Math.abs(lane) > 70 });
@@ -381,6 +411,135 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   }
   for (const list of parts.values()) for (const mesh of list) mesh.dispose(false, false);
 
+  if (pyongyang) {
+    const stone = new PBRMaterial('Pyongyang monument granite', scene); stone.albedoColor = Color3.FromHexString('#aeb2ad').toLinearSpace(); stone.roughness = .88;
+    const statueMetal = new PBRMaterial('Weathered leader statue bronze', scene); statueMetal.albedoColor = Color3.FromHexString('#7b7566').toLinearSpace(); statueMetal.metallic = .48; statueMetal.roughness = .56;
+    const paradeOlive = new PBRMaterial('Parade vehicle olive enamel', scene); paradeOlive.albedoColor = Color3.FromHexString('#656b5b').toLinearSpace(); paradeOlive.metallic = .22; paradeOlive.roughness = .62;
+    const red = new PBRMaterial('Propaganda panel red', scene); red.albedoColor = Color3.FromHexString('#8d202b').toLinearSpace(); red.roughness = .72;
+    const gold = new PBRMaterial('Parade lettering brass', scene); gold.albedoColor = Color3.FromHexString('#d0ae6a').toLinearSpace(); gold.metallic = .42; gold.roughness = .45;
+    const decorate = (mesh: Mesh, casts = true) => { mesh.isPickable = false; mesh.receiveShadows = true; meshes.push(mesh); if (casts) shadow.addShadowCaster(mesh); return mesh; };
+    const centre = shortcutPoint(SHORTCUT_LENGTH * .5), along = (side: number, forward: number) => ({
+      x: centre.x + Math.cos(centre.heading) * side + Math.sin(centre.heading) * forward,
+      z: centre.z - Math.sin(centre.heading) * side + Math.cos(centre.heading) * forward,
+    });
+    const localBox = (name: string, width: number, height: number, depth: number, side: number, y: number, forward: number, material: PBRMaterial, yaw = centre.heading) => {
+      const p = along(side, forward), mesh = MeshBuilder.CreateBox(name, { width, height, depth }, scene);
+      mesh.position.set(p.x, y, p.z); mesh.rotation.y = yaw; mesh.material = material; return decorate(mesh);
+    };
+    const gatePosition = (lane: number, forward = 0) => ({
+      x: gateAt.x + Math.cos(gateAt.heading) * lane + Math.sin(gateAt.heading) * forward,
+      z: gateAt.z - Math.sin(gateAt.heading) * lane + Math.cos(gateAt.heading) * forward,
+    });
+    for (const lane of [-13.55, 13.55]) {
+      const p = gatePosition(lane), pier = MeshBuilder.CreateBox('Monument gate limestone pier', { width: 7.9, height: 15.5, depth: 8 }, scene);
+      pier.position.set(p.x, 7.75, p.z); pier.rotation.y = gateAt.heading; pier.material = stone; decorate(pier);
+    }
+    const gateLintel = MeshBuilder.CreateBox('Monument gate continuous gray lintel', { width: 35.6, height: 4.2, depth: 8.8 }, scene);
+    gateLintel.position.set(gateAt.x, 17.6, gateAt.z); gateLintel.rotation.y = gateAt.heading; gateLintel.material = stone; decorate(gateLintel);
+    const gateAttic = MeshBuilder.CreateBox('Monument gate upper crown', { width: 30, height: 1.1, depth: 6 }, scene);
+    gateAttic.position.set(gateAt.x, 20.25, gateAt.z); gateAttic.rotation.y = gateAt.heading; gateAttic.material = stone; decorate(gateAttic);
+    const leaderBase = MeshBuilder.CreateBox('Ewiger Führer statue pedestal', { width: 5.6, height: 1.2, depth: 5.6 }, scene);
+    leaderBase.position.set(gateAt.x, 21.4, gateAt.z); leaderBase.rotation.y = gateAt.heading; leaderBase.material = stone; decorate(leaderBase);
+    const leaderCoat = MeshBuilder.CreateCylinder('Ewiger Führer monument statue coat', { diameterTop: 3.3, diameterBottom: 4.6, height: 4.4, tessellation: 10 }, scene);
+    leaderCoat.position.set(gateAt.x, 24.2, gateAt.z); leaderCoat.material = statueMetal; decorate(leaderCoat);
+    const leaderHead = MeshBuilder.CreateSphere('Ewiger Führer monument statue head', { diameterX: 2.3, diameterY: 2.2, diameterZ: 2.3, segments: 8 }, scene);
+    leaderHead.position.set(gateAt.x, 27.5, gateAt.z); leaderHead.material = statueMetal; decorate(leaderHead);
+    const leaderHair = MeshBuilder.CreateSphere('Ewiger Führer monument statue hair', { diameterX: 2.35, diameterY: .9, diameterZ: 2.35, segments: 8 }, scene);
+    leaderHair.position.set(gateAt.x, 28.3, gateAt.z); leaderHair.material = statueMetal; decorate(leaderHair);
+    for (const side of [-1, 1]) {
+      const p = gatePosition(side * 2.25), arm = MeshBuilder.CreateCylinder('Ewiger Führer monument statue arm', { diameter: .9, height: 3.8, tessellation: 8 }, scene);
+      arm.position.set(p.x, 24.45, p.z); arm.rotation.y = gateAt.heading; arm.material = statueMetal; decorate(arm);
+    }
+    const titleTexture = new DynamicTexture('Ewiger Führer monument title', { width: 512, height: 128 }, scene, false);
+    { const c = titleTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#8d202b'; c.fillRect(0, 0, 512, 128); c.strokeStyle = '#d0ae6a'; c.lineWidth = 8; c.strokeRect(8, 8, 496, 112); c.fillStyle = '#f1e4c6'; c.font = 'bold 40px Georgia'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('EWIGER FÜHRER', 256, 64); titleTexture.update(); }
+    const titleMaterial = new StandardMaterial('Ewiger Führer monument title material', scene); titleMaterial.diffuseTexture = titleTexture; titleMaterial.emissiveColor = new Color3(.08, .025, .02); titleMaterial.specularColor = Color3.Black();
+    const titleAt = gatePosition(0, -4.45), title = MeshBuilder.CreatePlane('Ewiger Führer monument title plaque', { width: 6.2, height: 1.55, sideOrientation: Mesh.DOUBLESIDE }, scene);
+    title.position.set(titleAt.x, 17.6, titleAt.z); title.rotation.y = gateAt.heading; title.material = titleMaterial; title.isPickable = false; meshes.push(title);
+    for (const progress of [...new Set((TRACK_INFO.obstacles ?? []).map((obstacle) => obstacle.s))]) {
+      const bridge = trackPoint(progress), height = elevationAt(progress);
+      for (const obstacle of TRACK_INFO.obstacles ?? []) {
+        if (obstacle.s !== progress) continue;
+        const postAt = trackPoint(obstacle.s, obstacle.lane), foot = MeshBuilder.CreateCylinder('Collidable parade bridge pier', { diameter: 1, height: 5.8, tessellation: 10 }, scene);
+        foot.position.set(postAt.x, height + 2.9, postAt.z); foot.material = stone; decorate(foot);
+        const cap = MeshBuilder.CreateBox('Parade bridge pier brass cap', { width: 1.18, height: .28, depth: 1.18 }, scene);
+        cap.position.set(postAt.x, height + 5.75, postAt.z); cap.material = gold; decorate(cap);
+      }
+      for (const side of [-1, 1]) {
+        const wing = trackPoint(progress, side * 4.2);
+        const span = MeshBuilder.CreateBox('Parade bridge decorative side wing', { width: 4.2, height: 1.4, depth: 1.5 }, scene);
+        span.position.set(wing.x, height + 7, wing.z); span.rotation.y = bridge.heading; span.material = stone; decorate(span);
+        const fascia = MeshBuilder.CreateBox('Parade bridge red fascia wing', { width: 4.2, height: .42, depth: .18 }, scene);
+        fascia.position.set(wing.x, height + 6.55, wing.z); fascia.rotation.y = bridge.heading; fascia.material = red; decorate(fascia);
+      }
+      const centreSpan = trackPoint(progress), lintel = MeshBuilder.CreateBox('Parade bridge continuous center lintel', { width: 4.2, height: 1.4, depth: 1.5 }, scene);
+      lintel.position.set(centreSpan.x, height + 7, centreSpan.z); lintel.rotation.y = bridge.heading; lintel.material = stone; decorate(lintel);
+      const lintelFascia = MeshBuilder.CreateBox('Parade bridge continuous center fascia', { width: 4.2, height: .42, depth: .18 }, scene);
+      lintelFascia.position.set(centreSpan.x, height + 6.55, centreSpan.z); lintelFascia.rotation.y = bridge.heading; lintelFascia.material = red; decorate(lintelFascia);
+    }
+    const plaqueTexture = new DynamicTexture('Leader monument satirical plaques', { width: 512, height: 128 }, scene, false);
+    {
+      const c = plaqueTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#76202a'; c.fillRect(0, 0, 512, 128);
+      c.strokeStyle = '#d3b36d'; c.lineWidth = 7; c.strokeRect(8, 8, 496, 112); c.fillStyle = '#f0dfb4'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = 'bold 32px Georgia';
+      c.fillText('EWIGER FÜHRER · GARANTIE OHNE ENDE', 256, 64); plaqueTexture.update();
+    }
+    const plaque = new StandardMaterial('Leader monument plaque', scene); plaque.diffuseTexture = plaqueTexture; plaque.emissiveColor = new Color3(.12, .08, .06); plaque.specularColor = Color3.Black();
+    const statue = (side: number, forward: number, label: number) => {
+      const p = along(side, forward), prefix = `Leader statue ${label}`;
+      const base = MeshBuilder.CreateCylinder(`${prefix} base`, { diameter: 15, height: 1.2, tessellation: 12 }, scene); base.position.set(p.x, .6, p.z); base.material = stone; decorate(base);
+      const pedestal = MeshBuilder.CreateBox(`${prefix} pedestal`, { width: 8.5, height: 4.4, depth: 8.5 }, scene); pedestal.position.set(p.x, 3.4, p.z); pedestal.material = stone; decorate(pedestal);
+      const robe = MeshBuilder.CreateCylinder(`${prefix} coat`, { diameterTop: 3.6, diameterBottom: 5.4, height: 6.5, tessellation: 10 }, scene); robe.position.set(p.x, 8.85, p.z); robe.material = statueMetal; decorate(robe);
+      const head = MeshBuilder.CreateSphere(`${prefix} head`, { diameterX: 2.8, diameterY: 3.2, diameterZ: 2.8, segments: 8 }, scene); head.position.set(p.x, 13.7, p.z); head.material = statueMetal; decorate(head);
+      for (const armSide of [-1, 1]) {
+        const arm = MeshBuilder.CreateCylinder(`${prefix} arm`, { diameterTop: .8, diameterBottom: 1.05, height: 5.6, tessellation: 8 }, scene);
+        arm.position.set(p.x + armSide * 2.5, 9.2, p.z); arm.rotation.z = armSide * -.12; arm.material = statueMetal; decorate(arm);
+      }
+      const sign = MeshBuilder.CreatePlane(`${prefix} plaque`, { width: 7, height: 1.35, sideOrientation: Mesh.DOUBLESIDE }, scene);
+      sign.position.set(p.x, 4.2, p.z - 4.31); sign.material = plaque; sign.isPickable = false; meshes.push(sign);
+    };
+    // The oversized paired monuments face the parade axis; the joke is their endless warranty plaque.
+    statue(-23, -18, 1); statue(23, 18, 2);
+
+    const deck = MeshBuilder.CreateBox('Parade platform over underpass', { width: 21, height: .7, depth: 100 }, scene);
+    deck.position.set(centre.x, .05, centre.z); deck.rotation.y = centre.heading; deck.material = stone; decorate(deck);
+    for (const side of [-1, 1]) {
+      localBox('Parade platform red fascia', 1.1, .9, 100, side * 10.5, -.05, 0, red);
+      for (let forward = -42; forward <= 42; forward += 14) localBox('Parade platform brass panel', .12, .36, 6, side * 10.5, .2, forward, gold);
+    }
+    const tank = (forward: number) => {
+      localBox('Display tank lower hull', 3.5, 1.05, 5.8, 0, 1.0, forward, paradeOlive);
+      for (const side of [-1, 1]) localBox('Display tank track', .72, 1.15, 6.3, side * 1.72, .72, forward, statueMetal);
+      localBox('Display tank upper hull', 2.75, .9, 3.7, 0, 1.9, forward - .2, paradeOlive);
+      const position = along(0, forward + .45), turret = MeshBuilder.CreateCylinder('Display tank turret', { diameterTop: 2.2, diameterBottom: 2.65, height: .78, tessellation: 10 }, scene);
+      turret.position.set(position.x, 2.68, position.z); turret.rotation.y = centre.heading; turret.material = paradeOlive; decorate(turret);
+      const barrelAt = along(0, forward + 2.35), barrel = MeshBuilder.CreateCylinder('Display tank inert barrel', { diameter: .34, height: 3.1, tessellation: 8 }, scene);
+      barrel.position.set(barrelAt.x, 2.7, barrelAt.z); barrel.rotation.set(Math.PI / 2, centre.heading, 0); barrel.material = statueMetal; decorate(barrel);
+    };
+    tank(-29); tank(-8); tank(13);
+    localBox('Display transporter cab', 3.4, 2.2, 3.7, 0, 1.55, 34, paradeOlive);
+    localBox('Display transporter trailer', 4, 1.35, 11.5, 0, 1.0, 41, statueMetal);
+    const rocketBase = along(0, 40), rocket = MeshBuilder.CreateCylinder('Inert parade rocket display', { diameterTop: .72, diameterBottom: 1.25, height: 9.4, tessellation: 10 }, scene);
+    rocket.position.set(rocketBase.x, 6.0, rocketBase.z); rocket.rotation.z = -.08; rocket.material = paradeOlive; decorate(rocket);
+    const rocketNose = MeshBuilder.CreateCylinder('Inert display rocket nose', { diameterTop: 0, diameterBottom: .74, height: 2.4, tessellation: 10 }, scene);
+    rocketNose.position.set(rocketBase.x, 11.7, rocketBase.z); rocketNose.rotation.z = -.08; rocketNose.material = red; decorate(rocketNose);
+
+    const slogan = new DynamicTexture('Pyongyang parade satirical banner', { width: 1024, height: 256 }, scene, true);
+    {
+      const c = slogan.getContext() as CanvasRenderingContext2D; c.fillStyle = '#7e1b26'; c.fillRect(0, 0, 1024, 256);
+      c.strokeStyle = '#d8bc77'; c.lineWidth = 10; c.strokeRect(12, 12, 1000, 232); c.fillStyle = '#f1e4c6'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.font = 'bold 48px Georgia'; c.fillText('PARADENACHWEIS: 100 %', 512, 85); c.font = 'italic 30px Georgia'; c.fillText('Abweichungen werden feierlich nachgemeldet', 512, 166); slogan.update();
+    }
+    const banner = new StandardMaterial('Pyongyang parade satire sign', scene); banner.diffuseTexture = slogan; banner.emissiveColor = new Color3(.08, .025, .02); banner.specularColor = Color3.Black();
+    const board = MeshBuilder.CreatePlane('Parade satire sign', { width: 25, height: 6, sideOrientation: Mesh.DOUBLESIDE }, scene);
+    const boardAt = along(0, -49); board.position.set(boardAt.x, 7.4, boardAt.z); board.rotation.y = centre.heading; board.material = banner; board.isPickable = false; meshes.push(board);
+
+    // A simplified torch tower and stepped hotel silhouette anchor the distant skyline.
+    const towerAt = along(76, 18), tower = MeshBuilder.CreateCylinder('Juche torch tower stylized', { diameterTop: 1.8, diameterBottom: 5.2, height: 44, tessellation: 10 }, scene);
+    tower.position.set(towerAt.x, 22, towerAt.z); tower.material = stone; decorate(tower);
+    const towerTorch = MeshBuilder.CreateSphere('Juche torch abstract flame', { diameter: 7, segments: 8 }, scene); towerTorch.position.set(towerAt.x, 45, towerAt.z); towerTorch.material = red; decorate(towerTorch);
+    const hotelAt = along(-82, 30), hotel = MeshBuilder.CreateCylinder('Triangular hotel silhouette', { diameterTop: 0, diameterBottom: 42, height: 52, tessellation: 4 }, scene);
+    hotel.position.set(hotelAt.x, 26, hotelAt.z); hotel.rotation.y = Math.PI / 4; hotel.material = stone; decorate(hotel);
+  }
+
   // --- River Spree --------------------------------------------------------------------------------------
   const ripple = new DynamicTexture('River ripples', { width: 256, height: 256 }, scene, true);
   {
@@ -399,8 +558,16 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const bed = MeshBuilder.CreateGround('River bed', { width: RIVER.east - RIVER.west, height: RIVER.north - RIVER.south }, scene);
   bed.position.set(river.position.x, -3, river.position.z); bed.material = bedMaterial; bed.isPickable = false;
   for (const z of [RIVER.north, RIVER.south]) {
-    const bank = MeshBuilder.CreateBox('River embankment wall', { width: RIVER.east - RIVER.west, height: 2.6, depth: .6 }, scene);
-    bank.position.set(river.position.x, -1.5, z + (z === RIVER.north ? .3 : -.3)); bank.material = bedMaterial; bank.isPickable = false;
+    const gaps = pyongyang && z === northBank ? trackCrossingsAtZ(z, 4) : [];
+    let from = GROUND.west;
+    for (const [left, right] of [...gaps, [GROUND.east, GROUND.east]]) {
+      const to = Math.max(from, Math.min(GROUND.east, left));
+      if (to - from > .2) {
+        const bank = MeshBuilder.CreateBox('River embankment wall', { width: to - from, height: 2.6, depth: .6 }, scene);
+        bank.position.set((from + to) / 2, -1.5, z + (z === northBank ? .3 : -.3)); bank.material = bedMaterial; bank.isPickable = false;
+      }
+      from = Math.max(from, Math.min(GROUND.east, right));
+    }
   }
   meshes.push(river, bed);
   // Red and gold paper petals drifting over the grandstand straight (loading-art mood), hard-capped and cheap.

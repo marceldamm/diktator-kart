@@ -6,7 +6,7 @@ import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
 import type { KartState } from './kart-model';
-import { elevationAt, trackLocate } from './track';
+import { trackHeightAt } from './track';
 
 const VIEWS = [
   { name: 'Verfolger nah', distance: 5.5, height: 2.1, fov: 0.9, follow: 9, look: 3.4, lookHeight: 1.05 },
@@ -128,8 +128,8 @@ export class KartCamera {
       this.camera.setTarget(new Vector3(c.x, c.y + 1.4, c.z));
       return;
     }
-    // Smooth road elevation (Prachtallee crest) lifts every camera with the kart; small bumps stay in suspensionOffset.
-    const ground = elevationAt(trackLocate(state.x, state.z).s);
+    // Follow the active road surface, including shortcut tunnels and their ramps.
+    const ground = trackHeightAt(state.x, state.z);
     if (this.photo||this.intro) {
       if(this.photo)this.photoAngle+=dt*.18;else this.introAngle=.68+Math.sin(performance.now()/14000)*.12;
       const a=state.heading+(this.photo?this.photoAngle:this.introAngle),distance=this.intro?5.7:4.5;

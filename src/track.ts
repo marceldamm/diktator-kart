@@ -50,6 +50,28 @@ export function trackPoint(progress: number, lane = 0): { x: number; z: number; 
   return { x: x + Math.cos(heading) * lane, z: z - Math.sin(heading) * lane, heading };
 }
 
+/** X intervals where the main road crosses a world-space horizontal boundary at z. */
+export function trackCrossingsAtZ(z: number, clearance = 2): [number, number][] {
+  const crossings: [number, number][] = [];
+  for (let i = 0; i < SAMPLES.length; i++) {
+    const a = SAMPLES[i], b = SAMPLES[(i + 1) % SAMPLES.length], dz = b.z - a.z;
+    if (Math.abs(dz) < 1e-5 || (a.z - z) * (b.z - z) > 0) continue;
+    const t = (z - a.z) / dz;
+    if (t < 0 || t > 1) continue;
+    const x = a.x + (b.x - a.x) * t, turn = Math.atan2(Math.sin(b.heading - a.heading), Math.cos(b.heading - a.heading));
+    const heading = a.heading + turn * t, halfGap = TRACK_HALF_WIDTH * Math.abs(Math.cos(heading)) + clearance;
+    crossings.push([x - halfGap, x + halfGap]);
+  }
+  crossings.sort((a, b) => a[0] - b[0]);
+  const merged: [number, number][] = [];
+  for (const gap of crossings) {
+    const previous = merged.at(-1);
+    if (previous && gap[0] <= previous[1] + .1) previous[1] = Math.max(previous[1], gap[1]);
+    else merged.push([...gap]);
+  }
+  return merged;
+}
+
 /** Nearest centreline progress and signed lateral offset for any world position. */
 export function trackLocate(x: number, z: number): { s: number; lane: number } {
   const cx = Math.floor(x / CELL), cz = Math.floor(z / CELL);
@@ -137,7 +159,7 @@ export type DrivingSurface = 'cobble' | 'gravel' | 'grass';
 
 /** Surface under the kart: the racing ribbon stays cobble, the alley is gravel, park edges are grass. */
 export function drivingSurfaceAt(x: number, z: number): DrivingSurface {
-  if (inShortcut(x, z)) return 'gravel';
+  if (inShortcut(x, z)) return TRACK_INFO.theme === 'pyongyang' ? 'cobble' : 'gravel';
   const { s, lane } = trackLocate(x, z);
   if (GRASS_VERGES.some(([from,to,minLane,maxLane]) => s >= from && s <= to && lane >= minLane && lane <= maxLane)) return 'grass';
   if (Math.abs(lane) > TRACK.halfWidth + .65 && LANDMARKS.lawns.some(([x0, z0, x1, z1]) => x >= x0 && x <= x1 && z >= z0 && z <= z1)) return 'grass';
@@ -190,17 +212,28 @@ export function elevationAt(s: number): number {
 }
 
 export function trackHeightAt(x: number, z: number): number {
+  if (inShortcut(x, z)) return shortcutElevationAt(shortcutLocate(x, z).u);
   const { s, lane } = trackLocate(x, z);
   return (Math.abs(lane) <= TRACK.halfWidth + 7 ? elevationAt(s) : 0) + localHeightAt(s, lane);
 }
 
+/** Ground height along the shortcut's own normalised profile; enables a genuinely lower underpass. */
+export function shortcutElevationAt(u: number): number {
+  const profile = SHORTCUT.elevation, t = SHORTCUT_LENGTH > 0 ? Math.max(0, Math.min(1, u / SHORTCUT_LENGTH)) : 0;
+  for (let i = 0; i < profile.length - 1; i++) {
+    const [a, ha] = profile[i], [b, hb] = profile[i + 1];
+    if (t >= a && t <= b) { const f = (t - a) / (b - a || 1); return ha + (hb - ha) * (.5 - .5 * Math.cos(f * Math.PI)); }
+  }
+  return profile.at(-1)?.[1] ?? 0;
+}
+
 function localHeightAt(s: number, lane: number): number {
-  const delta = Math.abs(signedGap(s - BUMP_PROGRESS));
+  const delta = BUMP_PROGRESS < 0 ? Infinity : Math.abs(signedGap(s - BUMP_PROGRESS));
   // Take-off ramp across the whole road before the canal.
   for (const lip of RAMP_LIPS) if (s >= lip - RAMP_LENGTH && s <= lip && Math.abs(lane) <= TRACK.halfWidth + 1) return RAMP_HEIGHT * (s - (lip - RAMP_LENGTH)) / RAMP_LENGTH;
   // Painted kerbs are real rumble strips: a ridged 5 cm profile between the road edge and the wall.
   const kerb = Math.abs(lane) > TRACK.halfWidth && Math.abs(lane) < TRACK.wall ? .035 + .02 * Math.abs(Math.sin(s * Math.PI / 1.2)) : 0;
-  return Math.max(kerb, delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0);
+  return Math.max(kerb, BUMP_PROGRESS >= 0 && delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0);
 }
 
 const hazardRange = (s: number, lane: number) => HAZARDS.find((h) => s >= h.from && s <= h.to && Math.sign(lane) === h.side);
@@ -232,6 +265,14 @@ export function shouldStartCraterFall(x: number, z: number, grounded: boolean, s
 
 /** Index of the boost pad under a kart, or -1. */
 export function boostPadAt(x: number, z: number): number {
+  if (inShortcut(x, z)) {
+    const { u, lane } = shortcutLocate(x, z);
+    const pad = SHORTCUT.boostPads.findIndex(([start, centre]) => {
+      const from = start * SHORTCUT_LENGTH;
+      return u >= from && u <= from + 6 && Math.abs(lane - centre) <= 1.5;
+    });
+    return pad >= 0 ? BOOST_PADS.length + pad : -1;
+  }
   const { s, lane } = trackLocate(x, z);
   return BOOST_PADS.findIndex(([from, centre]) => s >= from && s <= from + 6 && Math.abs(lane - centre) <= 1.5);
 }
@@ -245,6 +286,14 @@ export const inHarbour = (x: number, z: number) => hazardAt(x, z) !== null;
 
 export const projectTrack: WorldProjection = (x, z) => {
   const { s, lane } = trackLocate(x, z);
+  for (const obstacle of TRACK_INFO.obstacles ?? []) {
+    const centre = trackPoint(obstacle.s, obstacle.lane), dx = x - centre.x, dz = z - centre.z, distance = Math.hypot(dx, dz);
+    const clearance = obstacle.radius + KART_TUNING.collisionRadius;
+    if (distance >= clearance) continue;
+    const sign = Math.sign(obstacle.lane) || 1, normalX = distance > 1e-6 ? dx / distance : sign * Math.cos(centre.heading);
+    const normalZ = distance > 1e-6 ? dz / distance : -sign * Math.sin(centre.heading);
+    return { x: centre.x + normalX * clearance, z: centre.z + normalZ * clearance, normalX, normalZ, kind: 'obstacle' };
+  }
   const safe = TRACK.wall - KART_SIDE;
   if (Math.abs(lane) <= safe + 1e-7) return { x, z, normalX: 0, normalZ: 0, kind: null };
   // No barrier along the quay: the kart rolls on until the basin's far wall.

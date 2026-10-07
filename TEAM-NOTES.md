@@ -139,7 +139,9 @@ Hier hält die KI diktierte Nachrichten fest: **Datum · von · an · Nachricht 
 
 **Von:** Sarah. **An:** Marcel. **Status:**
 
-Ich habe vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Der Stadionring bleibt als einzige Strecke spielbar. Die fünf Planungsstrecken zeigen jetzt auch ihre Orte: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Außerdem wurde der Fehler behoben, durch den die Strecke während der Fahrerporträt-Aufnahmen kurz vor dem Start verschwand. Das Ruckeln auf Intel UHD ist weiterhin offen und wird nicht durch eine unbelegte Grafikabsenkung kaschiert.
+Ich habe vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Damals blieb der Stadionring die einzige spielbare Strecke. Die fünf Planungsstrecken zeigten auch ihre Orte: Ewige-Führer-Allee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Außerdem wurde der Fehler behoben, durch den die Strecke während der Fahrerporträt-Aufnahmen kurz vor dem Start verschwand. Das Ruckeln auf Intel UHD ist weiterhin offen und wird nicht durch eine unbelegte Grafikabsenkung kaschiert.
+
+**Nachtrag 07.10.2026:** Die Ewige-Führer-Allee in Pjöngjang ist inzwischen als vierte Strecke spielbar; der Drei-Strecken-Planungsstand oben in dieser Nachricht ist historisch.
 
 ### 04.10.2026 – Nachricht von Marcel an Sarah: unser gemeinsamer Neustart
 
