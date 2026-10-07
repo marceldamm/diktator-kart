@@ -9,6 +9,24 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Projektstart – 07.10.2026 (Codex für Marcel)
+
+**Aktuell:** Projektstart abgeschlossen; aktueller GitHub-main `90cc6d0` ist ohne Konflikte auf dem persönlichen Arbeitsbranch `codex/team-marcel-20261007-183328-214` vorbereitet. Anschließend bestätigter Modellauftrag von Marcel, siehe unten.
+
+**Nächster Schritt:** Menschliche Fahr-, Stil- und Hörprobe der drei Strecken und der heutigen Feedbackkorrekturen. Für ein anschließendes Modellpaket sind die mitlenkenden Hände der neuen CC0-Fahrer und erwachsenere Gesichtsanatomie offene Punkte. Intel-UHD-Abnahme (Issue #4) und gemeinsamer Team-Praxistest (Issue #2) bleiben offen.
+
+## CC0-Fahrer weiter ausarbeiten – 07.10.2026 (Marcel, Codex)
+
+**Auftrag:** [Issue #13](https://github.com/marceldamm/diktator-kart/issues/13). Zuerst Hitlers neues CC0-Gesicht anhand historischer Bildreferenzen individualisieren: Alter, Haut, Wangen, Nase, Augen/Brauen, Kinn und Ohren. Marcels Realismusziel gilt unverändert; kein jugendlicher generischer Kopf als Endergebnis.
+
+**Aktuell:** Erster Gesichtspass lokal umgesetzt: vollere Wangen/Unterkiefer, längere Nase, engere Lider, ruhigere Brauen, flachere Schädel-/Haarform und dezente Hautvariation. Reproduzierbare Blender-Einzelbilder plus tatsächliches Grand-Prix-Kart eingerichtet. Marcels kurzzeitiger Blender-Vordergrundwunsch ist zurückgenommen; bevorzugt Hintergrundrenderings im Chat. Vergleich: [Front](docs/evidence/hitler-face-20261007/comparison-front.jpg). Historische Ähnlichkeit noch nicht abgenommen; der stilisierte CC0-Ursprung bleibt sichtbar.
+
+**Bestätigte Folgepunkte:** erkennbare Kleidung statt körpernaher Schlafanzugform, Schuhe/Füße, sichtbare Gas-/Bremspedale und passende Bein-/Sitzhaltung im Kart, Hände am mitlenkenden Lenkrad. Zuerst Gesicht, anschließend diese Kontakte/Kleidung in weiteren prüfbaren Paketen. Die übrigen Fahrer bleiben beim ersten Gesichtspass erhalten.
+
+**Abnahme:** gleiche Blender-Kameras/Licht vor und nach dem Pass, editierbare Quelle/Runtime-GLB, Export-/Buildprüfung und gezielte Spielkontrolle. Historische Ähnlichkeit und Stil brauchen Marcels Urteil; keine fotogenaue Abnahme behaupten.
+
+**Nächster Schritt:** Gesicht anhand des Front-/Profilvergleichs weiter beurteilen, dann Kleidung/Schuhe und echte Sitz-/Hand-/Fußkontakte ausarbeiten. Die aktuelle sichtbare Spielprobe zeigt die Kontaktprobleme weiterhin. Die sechs Fahrerwahlporträts waren im Prüflauf leer; als separaten Integrationsbefund prüfen, nicht durch diesen Gesichtspass als behoben melden.
+
 ## Marcels Spieltest-Feedback – 07.10.2026 abends (Aufgabenliste)
 
 **Quelle:** Marcels Durchspiel-Feedback im Projekt-Thread (07.10.2026, 16:33 UTC). Status wird hier fortgeschrieben.

@@ -10,6 +10,8 @@ Run: blender --background --python art-source/build_cc0_driver.py -- <id|all>
 import bpy, bmesh, os, sys, math, shutil
 import numpy as np
 from mathutils import Vector
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from hitler_face import refine_hitler_face
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACK = os.path.join(ROOT, '.tools', 'packs', 'ubc', 'Universal Base Characters[Standard]')
@@ -244,9 +246,11 @@ def make(id):
     for o in [o for o in bpy.data.objects if o.type == 'MESH']:
         mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
     root.rotation_euler[2] = math.pi; root.scale = (SCALE,) * 3; root.location = (0, SEAT[0], SEAT[1])
+    if id == 'hitler': refine_hitler_face(root)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.blend'))
     out = os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.glb')
-    bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True)
+    face_export = dict(export_vertex_color='NAME', export_vertex_color_name='Face age tint', export_all_vertex_colors=False) if id == 'hitler' else {}
+    bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True, **face_export)
     shutil.copy(out, os.path.join(ROOT, 'public', 'assets', 'models', f'cc0-driver-{id}.glb'))
     print('CC0_DRIVER_DONE', id)
 

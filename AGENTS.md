@@ -62,6 +62,8 @@ Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentw
 
 ## Proaktive Arbeitsweise der KI
 
+**Blender-Modellprüfung (Marcel, 07.10.2026, korrigierter Wunsch):** Modelländerungen bevorzugt im Hintergrund mit festen Front-, Dreiviertel-, Profil- und bei Bedarf Fahrer/Kart-Kontaktbildern prüfen und die einzelnen Bilder im Chat zeigen. Blender nicht automatisch im Vordergrund öffnen; Marcel hat diesen kurzzeitig gewünschten Ablauf ausdrücklich zurückgenommen. Fahrer und tatsächliches Fahrzeug für Kontaktbelege passend getrennt auswählen. Blender-Bilder sind Assetbelege; eine gezielte sichtbare Chrome-Prüfung bleibt für Runtime-Materialien, Animation und Integration nötig.
+
 **Sichtbare Browserprüfung:** Wenn das Spiel in Google Chrome gestartet oder automatisiert geprüft wird, muss das Chrome-Fenster für Marcel/Sarah sichtbar bleiben, damit sie den geprüften Spielstand beobachten können. Keine Headless-Ausführung und kein verstecktes/minimiertes Testfenster. Ein eigenes CDP-Testprofil darf in einem separaten, sichtbaren Chrome-Fenster laufen. Nach der Prüfung den Spiel-Renderloop pausieren und ausschließlich die eigens gestartete Testinstanz schließen; normale Nutzerfenster nicht beenden. Prüfbilder und den tatsächlich sichtbaren Zustand dokumentieren.
 
 Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:

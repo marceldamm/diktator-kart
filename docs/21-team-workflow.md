@@ -1,5 +1,9 @@
 # Gemeinsamer Arbeitsablauf fuer Marcel und Sarah
 
+## Blender-Modellprüfung mit Einzelbildern – 07.10.2026 (Marcel, korrigiert)
+
+Feste Front-, Dreiviertel-, Profil- und bei Bedarf Sitzansichten unter gleichem Licht als Blender-Hintergrundrenderings erstellen und einzeln im Chat zeigen. Für Anatomie/Sitzkontakte den aktuellen Fahrer und das tatsächliche Runtime-Kart gemeinsam laden und übrige Varianten korrekt ausblenden. Blender nicht automatisch im Vordergrund öffnen: Marcel nahm den kurzzeitigen Vordergrundwunsch nach der überlagerten Editoransicht ausdrücklich zurück. Blender-Renderings als Assetbeleg kennzeichnen; eine gezielte sichtbare Chrome-Prüfung belegt anschließend Babylon-Materialien, Animation und Runtime-Integration. Eigene Prüfprozesse zuordnen; Nutzerfenster erhalten.
+
 > **Dokumentvorrang (04.10.2026):** Diese Fachdatei erläutert Details und kann datierte frühere Zwischenstände oder Ideen enthalten. Für den aktuellen Auftrag und Status gelten die vier [Hauptdateien](../CURRENT-WORKLIST.md): [Aktuelle Arbeit](../CURRENT-WORKLIST.md), [Langzeitziele](../LONG-TERM-GOALS.md), [bestätigte Teamänderungen](../TEAM-CHANGES.md) und [Notizen/Anleitung](../TEAM-NOTES.md). Bei einem Widerspruch gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; Status und Fachtext sind daran anzupassen. Frühere Ideen/Begründungen/Prüfergebnisse bleiben erhalten und werden als historisch, offen oder überholt markiert, nicht gelöscht. Technische Belege des damaligen Stands stehen im [Fortschrittslog](../PROGRESS-LOG.md).
 
 

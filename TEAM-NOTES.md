@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 07.10.2026 – Marcel: Blender-Prüfung mit Einzelbildern
+
+**Aktueller bestätigter Wunsch:** Wieder Hintergrundprüfung in Blender mit getrennten Einzelbildern im Chat verwenden; Blender nicht automatisch im Vordergrund öffnen. Marcel nahm seinen kurzzeitigen Sichtbarkeitswunsch ausdrücklich zurück, nachdem die Editoransicht überlagerte Varianten zeigte. Feste Front-/Dreiviertel-/Profilbilder und korrekt ausgewählte Fahrer/Kart-Kontaktbilder bleiben der effektive Ablauf. Gezielte sichtbare Spielprüfung bleibt separat. Herkunft: Marcels Korrektur im Codex-Chat; Issue #13 und PROGRESS-LOG.md. Keine Teamnachricht versandt.
+
 > **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Anleitung, persönliche Notizen und Teamnachrichten. Notizen/Vorschläge sind keine Zustimmung oder Umsetzung. Erledigte Notizen erhalten einen Ergebnisverweis statt kommentarlos gelöscht zu werden. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
 
 
