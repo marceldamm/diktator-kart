@@ -53,7 +53,7 @@ test('boundary impact briefly rebounds, cancels drift/turbo and recovers', () =>
   assert.equal(initialKartState().impactRemaining, 0);
 });
 
-test('marked side obstacle stops a directed kart without blocking the straight lane', () => {
+test('marked side obstacle triggers a visible evasive recoil without blocking the straight lane', () => {
   const straight = run(initialKartState(), { throttle: 1, steering: 0 }, 2);
   assert.equal(straight.impactKind, null);
   let state = run(initialKartState(), { throttle: 1, steering: 0 }, 0.5); // steering has inertia since quality level 2d
@@ -61,7 +61,8 @@ test('marked side obstacle stops a directed kart without blocking the straight l
     state = advanceKart(state, { throttle: 1, steering: 1 }, step);
   }
   assert.equal(state.impactKind, 'obstacle');
-  assert.equal(state.speed, 0);
+  assert.ok(state.speed < 0, 'the obstacle knocks the kart backward');
+  assert.ok(Math.abs(state.bodyRoll) > 0, 'the kart dodges away from the impact');
   assert.ok(state.impactVelocityX < 0);
   const obstacle = TEST_OBSTACLES[0];
   assert.ok(state.x < obstacle.x - obstacle.halfWidth);

@@ -309,10 +309,19 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     // Steep barrier hit: the normal part rebounds, the tangential part survives with friction;
     // a straight head-on hit (glance > ~0.92) still ends the forward run, oblique ones keep sliding along the wall.
     const tangentKeep = kind === 'boundary' && speed > 0 ? (glance > .92 ? 0 : Math.max(.3, Math.sqrt(Math.max(0, 1 - glance * glance)) * .85)) : 0;
+    let obstacleDodge = 0;
     if (Math.abs(speed) > 1 && impactRemaining === 0) {
-      const rebound = Math.min(KART_TUNING.impactReboundCap * 1.6, Math.abs(speed) * (kind === 'boundary' ? .32 : .15) + 0.3);
-      impactVelocityX = wallX * rebound;
-      impactVelocityZ = wallZ * rebound;
+      const rebound = Math.min(KART_TUNING.impactReboundCap * 1.6, Math.abs(speed) * (kind === 'boundary' ? .32 : kind === 'obstacle' ? .4 : .15) + 0.3);
+      if (kind === 'obstacle') {
+        obstacleDodge = Math.sign(wallX * Math.cos(travelHeading) - wallZ * Math.sin(travelHeading)) || 1;
+        const sideX = Math.cos(travelHeading) * obstacleDodge, sideZ = -Math.sin(travelHeading) * obstacleDodge;
+        impactVelocityX = wallX * rebound + sideX * rebound * .45;
+        impactVelocityZ = wallZ * rebound + sideZ * rebound * .45;
+        heading += obstacleDodge * .28; travelHeading += obstacleDodge * .2;
+      } else {
+        impactVelocityX = wallX * rebound;
+        impactVelocityZ = wallZ * rebound;
+      }
       impactRemaining = KART_TUNING.impactDuration;
     }
     if (tangentKeep > 0) {
@@ -321,7 +330,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
       // Turn the nose along the wall so the next frame does not hit it again (no 'sticking').
       heading += Math.atan2(Math.sin(travelHeading - heading), Math.cos(travelHeading - heading)) * .6;
     }
-    speed *= tangentKeep;
+    speed = kind === 'obstacle' ? -Math.min(4, Math.abs(speed) * .22) : speed * tangentKeep;
     turboRemaining = 0;
     drifting = false;
     driftCharge = 0;
@@ -344,7 +353,10 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const rightGround = (wheelGroundHeights[1] + wheelGroundHeights[3]) / 2;
   const tiltBlend = Math.min(1, KART_TUNING.bodyTiltFollow * dt);
   const bodyPitch = state.bodyPitch + ((grounded ? Math.atan2(frontGround - rearGround, 1.36) : 0) - state.bodyPitch) * tiltBlend;
-  const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) : 0) - state.bodyRoll) * tiltBlend;
+  const obstacleDodgeRoll = impactKind === 'obstacle' && impactRemaining > 0
+    ? Math.sign(impactVelocityX * Math.cos(heading) - impactVelocityZ * Math.sin(heading)) * .42 * Math.min(1, impactRemaining / KART_TUNING.impactDuration)
+    : 0;
+  const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) + obstacleDodgeRoll : obstacleDodgeRoll) - state.bodyRoll) * tiltBlend;
   return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, trick: state.trick, drifting, driftDirection, driftCharge, driftStraight: straight, driftAgainst: against, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,

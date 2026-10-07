@@ -18,6 +18,8 @@ import type { LoadingReporter } from './loading-progress';
 export interface TestScene {
   scene: Scene;
   present(state: KartState, loadKarts: KartState[]): void;
+  /** Breaks the one-shot Pyongyang start fence and leaves its fragments on the road. */
+  breakStartFence?(): void;
   setPlayerVisible(visible: boolean): void;
   setQuality?(level: number, reducedEffects: boolean): void;
   presentItems?(world:ItemWorld,karts:KartState[]):void;

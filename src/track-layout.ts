@@ -2,8 +2,8 @@
  * Circuit definitions. Game coordinates: x east, z north (Blender X / Y). Heading 0 drives toward +z;
  * positive lane offsets lie on the driver's right.
  *
- * Two playable circuits (07.10.2026): the original "Stadionring" (Berlin) and Sarah's "Duce-Drom" (Rome),
- * whose concrete route, landmarks and satire details are Claude's own elaboration of Sarah's name/place.
+ * Playable circuits (07.10.2026): the original "Stadionring" (Berlin), Sarah's "Duce-Drom" (Rome),
+ * "Havanna-Revolutionsring" (Havana), and "Ewige-Führer-Allee" (Pyongyang).
  * The active circuit is chosen with `setTrackLayout` (called through `selectTrack` in track.ts); all layout
  * exports below are live ES-module bindings that switch with it, so the simulation, world builders, bots,
  * minimap and items always read the circuit that is currently loaded.
@@ -12,21 +12,29 @@
 export const MAP_SCALE = 1.5;
 const S = MAP_SCALE;
 
-export type TrackId = 'stadionring' | 'duce-drom' | 'havanna';
+export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang';
 export type HazardKind = 'water' | 'lava' | 'cliff';
 export interface Hazard { from: number; to: number; side: 1 | -1; basin: number; kind: HazardKind }
 /** City district along the circuit: what lines each side between two progress values. */
 export interface District { from: number; to: number; left: string; right: string }
 /** A hero module placed relative to the centreline (lane > 0 = right) facing the road, or at fixed x/z. */
 export interface HeroPlacement { m: string; s?: number; lane?: number; x?: number; z?: number; yaw?: number; spanRoad?: boolean }
+/** Fixed roadside collision post, positioned in progress/lane space and rendered by the world builder. */
+export interface TrackObstacle { s: number; lane: number; radius: number }
 
 export interface TrackDefinition {
-  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana';
+  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang';
   /** Short German line for the track card and the loading caption. */
   tagline: string;
   controlPoints: readonly (readonly [number, number])[];
   halfWidth: number; start: number; bump: number;
-  shortcut: { from: number; to: number; halfWidth: number; speedCap: number; points: readonly (readonly [number, number])[] };
+  shortcut: {
+    from: number; to: number; halfWidth: number; speedCap: number; points: readonly (readonly [number, number])[];
+    /** Normalised [shortcut progress, metres] profile, independent of the main-road elevation. */
+    elevation: readonly (readonly [number, number])[];
+    /** [normalised start progress, lane centre] for 6 m shortcut boost strips. */
+    boostPads: readonly (readonly [number, number])[];
+  };
   canal: { from: number; length: number };
   rampLips: readonly number[];
   boostPads: readonly (readonly [number, number])[];
@@ -35,6 +43,7 @@ export interface TrackDefinition {
   /** Road elevation keyframes [progress, metres]; cosine eased, 0 outside the listed spans. */
   elevation: readonly (readonly [number, number])[];
   hazards: readonly Hazard[];
+  obstacles?: readonly TrackObstacle[];
   itemBoxes: readonly number[];
   landmarks: {
     palace: readonly [number, number] | null; fountains: readonly (readonly [number, number])[]; trees: readonly (readonly [number, number])[];
@@ -47,6 +56,8 @@ export interface TrackDefinition {
     boardRanges: [number, number][]; flagRange: [number, number]; pennants: number[]; screenProgress: number;
     districts: District[]; heroes: HeroPlacement[]; bridges: number[]; cathedral: { x: number; z: number; yaw: number } | null;
     petals: [number, number];
+    /** Optional one-shot visual start fence, broken by the first kart in lap one. */
+    breakableFence?: number;
   };
 }
 
@@ -70,7 +81,7 @@ const STADIONRING: TrackDefinition = {
   ] as const).map(([x, z]) => [x * S, z * S] as const),
   halfWidth: 6, start: 30 * S, bump: 345 * S,
   /** Backyard shortcut through the fountain hairpin; narrow, rough cobbles cap the speed unless a mini-turbo is active. */
-  shortcut: { from: 343 * S, to: 452 * S, halfWidth: 3, speedCap: 10.5, points: [[-46 * S, -44 * S], [-34 * S, -44.5 * S], [-22 * S, -47.5 * S]] },
+  shortcut: { from: 343 * S, to: 452 * S, halfWidth: 3, speedCap: 10.5, points: [[-46 * S, -44 * S], [-34 * S, -44.5 * S], [-22 * S, -47.5 * S]], elevation: [[0, 0], [1, 0]], boostPads: [] },
   /** Canal across the grandstand straight in front of the stands: jump it from the ramp, or fall in and get salvaged. */
   canal: { from: 85 * S, length: 9 },
   rampLips: [85 * S, 330 * S],
@@ -128,7 +139,7 @@ const DUCE_DROM: TrackDefinition = {
   ] as const).map(([x, z]) => [x * R, z * R] as const),
   halfWidth: 6, start: 52, bump: 1120,
   /** Stallgasse: gravel lane of the old circus stables, straight through the Meta-Kehre. */
-  shortcut: { from: 270, to: 452, halfWidth: 3, speedCap: 10.5, points: [[118 * R, -92 * R], [131 * R, -64 * R]] },
+  shortcut: { from: 270, to: 452, halfWidth: 3, speedCap: 10.5, points: [[118 * R, -92 * R], [131 * R, -64 * R]], elevation: [[0, 0], [1, 0]], boostPads: [] },
   canal: { from: -1000, length: 0 },
   rampLips: [646],
   boostPads: [[112, 0], [612, 0], [860, -2.5], [1092, 0]],
@@ -178,7 +189,7 @@ const HAVANNA: TrackDefinition = {
   ] as const).map(([x, z]) => [x * HV, z * HV] as const),
   halfWidth: 6, start: 40, bump: 1240,
   /** Zigarrenfabrik: gravel passage through the factory yard, straight across the old-town dip. */
-  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 10.5, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]] },
+  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 10.5, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [] },
   canal: { from: -1000, length: 0 },
   rampLips: [1146],
   boostPads: [[100, 0], [500, 0], [800, 0], [1120, 0], [1300, 1.5]],
@@ -209,8 +220,53 @@ const HAVANNA: TrackDefinition = {
   },
 };
 
-export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA };
-export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna';
+const PY = 1.05;
+const EWIGE_FUEHRER_ALLEE: TrackDefinition = {
+  id: 'pyongyang', name: 'Ewige-Führer-Allee', city: 'Pjöngjang', theme: 'pyongyang',
+  tagline: 'Taedong-Ufer, Monumentalplatz, Parade und Unterführungs-Abkürzung',
+  controlPoints: ([
+    [-230, -90], [-215, -145], [-165, -190], [-90, -215], [0, -222], [90, -218],
+    [165, -190], [215, -145], [238, -88], [245, -20], [238, 55], [212, 120],
+    [165, 170], [95, 205], [15, 218], [-65, 210], [-135, 178], [-190, 132],
+    [-225, 75], [-240, 10], [-235, -50],
+  ] as const).map(([x, z]) => [x * PY, z * PY] as const),
+  halfWidth: 6, start: 30, bump: -1,
+  /** Underpass through the parade plaza: a lower concrete cut with two painted boost strips. */
+  shortcut: {
+    from: 460, to: 1320, halfWidth: 6, speedCap: 10.5,
+    points: [[178 * PY, -177 * PY], [205 * PY, -128 * PY], [190 * PY, -74 * PY], [142 * PY, -25 * PY], [78 * PY, 31 * PY], [0, 87 * PY], [-78 * PY, 136 * PY], [-145 * PY, 159 * PY], [-178 * PY, 140 * PY]],
+    elevation: [[0, 0], [.18, 0], [.28, -3.6], [.72, -3.6], [.82, 0], [1, 0]], boostPads: [[.32, 0], [.65, 0]],
+  },
+  canal: { from: -1000, length: 0 },
+  rampLips: [],
+  boostPads: [[70, 0], [262, 0], [906, 0], [1148, 1.5]],
+  craters: [], grassVerges: [],
+  elevation: [],
+  hazards: [{ from: 34, to: 205, side: 1, basin: 18, kind: 'water' }],
+  itemBoxes: [130, 310, 905, 1190],
+  landmarks: {
+    palace: null, fountains: [], trees: [[-75, 36], [82, 92], [-118, -35]].map(([x, z]) => [x * PY, z * PY]),
+    column: [0, 48 * PY], gateProgress: 965, lawns: [], promenade: 5,
+  },
+  river: { north: -151, south: -240, west: -470, east: 480, level: -1.15 },
+  ground: { west: -470, east: 480, north: 310, south: -310 },
+  dressing: {
+    boardRanges: [[16, 124], [270, 360], [930, 1020]], flagRange: [900, 1080], pennants: [24, 105, 300, 925, 1070], screenProgress: 348,
+    districts: [
+      { from: 0, to: 225, left: 'avenue', right: 'quay' }, { from: 225, to: 380, left: 'avenue', right: 'plaza' },
+      { from: 380, to: 720, left: 'plaza', right: 'stands' }, { from: 720, to: 920, left: 'city', right: 'park' },
+      { from: 920, to: 1110, left: 'stands', right: 'stands' }, { from: 1110, to: 99999, left: 'riverfront', right: 'avenue' },
+    ],
+    heroes: [], bridges: [-360, 360], cathedral: null, petals: [900, 1070], breakableFence: 88,
+  },
+  obstacles: [
+    { s: 640, lane: -5.65, radius: .35 }, { s: 640, lane: 5.65, radius: .35 },
+    { s: 760, lane: -5.65, radius: .35 }, { s: 760, lane: 5.65, radius: .35 },
+  ],
+};
+
+export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE };
+export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang';
 
 export interface TrackSample { x: number; z: number; heading: number; s: number; curvature: number }
 

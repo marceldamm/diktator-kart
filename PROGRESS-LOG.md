@@ -1,5 +1,11 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-08 – Teamstand f842e00 integriert
+
+**Abgleich:** Während des Abschlusses wurde `origin/main` auf `f842e00` (PR #15, Pjöngjang-Strecke) aktualisiert. Die gemeinsame Worklist, der Fortschrittslog und der Änderungsverlauf enthielten parallel lokale CC0-Fahrer- und Sarah-Streckenänderungen; beide Seiten wurden zusammengeführt. `LONG-TERM-GOALS.md` und `TEAM-NOTES.md` wurden automatisch integriert. Die neue Strecke, Tests und Dokumente aus `main` bleiben unverändert erhalten; R28-Änderung und CC0-Belege bleiben ebenfalls erhalten.
+
+**Prüfstatus:** Die Konfliktauflösung ist dokumentiert und wird in einem Merge-Commit gesichert. Die Abschlussworkflow-Tests/Build müssen nach dieser Integration erneut laufen; Branch-Push und PR sind bis dahin offen. Es wurde kein direkter Push nach `main` ausgeführt.
+
 ## 2026-10-07 – Erster CC0-Hitler-Gesichtspass und Blender-Bildprüfung (Codex)
 
 **Auftrag/Herkunft:** Marcel möchte die von Claude geladenen Quaternius-Fahrer individualisieren, zuerst Hitlers Gesicht historisch anhand von Bildern. Kleidung, Schuhe, anatomische Sitz-/Pedal-/Handkontakte sind bestätigte Folgepunkte. [Issue #13](https://github.com/marceldamm/diktator-kart/issues/13) erstellt; bleibt für weitere Ähnlichkeits-/Kontaktabnahme offen. Vor Änderungen Gitstatus/letzten Commit geprüft, origin erneut abgerufen: gemeinsame Basis `90cc6d0`, keine entfernten Änderungen. Die zwei vorhandenen lokalen Start-Dokuänderungen stammten aus diesem Chat und blieben erhalten.
@@ -23,6 +29,37 @@
 **Arbeitsgrundlage:** Vier Hauptdateien und Einstiegs-/Produktionsdokumente gesichtet. Alle vier Dateitabs wurden über open_in_codex angefordert; App meldete jeweils `queued`, tatsächliche Anzeige nicht bestätigt. CURRENT-WORKLIST.md erhielt den aktuellen Startstatus und nächsten Schritt; keine Spielquellen oder Assets geändert.
 
 **Grenzen/Nächstes:** Keine neue Laufzeit-, Test- oder Buildprüfung beim unveränderten Startstand; ältere Belege nicht als neue Abnahme ausgegeben. Offene Claude-Notiz an Marcel/Sarah: Strecken, Hitlers Nahansicht und Motor selbst prüfen. Menschliche Fahr-/Stil-/Hörprobe, mitlenkende Hände der neuen CC0-Fahrer, Gesichtsalter, Intel-UHD-Abnahme und Team-Praxistest bleiben offen. Start allein beauftragt keine weitere autonome Entwicklung. Diese beiden Dokumentationsänderungen sind lokal und noch nicht committet.
+## 2026-10-07 – Ewige-Führer-Allee: Spielbarkeit, Kollisionen und Startgatter
+
+**Umgesetzt:** Die vierte Strecke `pyongyang` ist für Einzelrennen, Zeitfahren und Grand Prix registriert. Die 1.578-m-Rundroute verwendet eine ebene, einheitlich getönte Granitfahrbahn. Ihre 12-m-Unterführung führt von s=460 bis s=1.320 über eine etwa 647-m-Nebenroute (rund 213 m kürzer), mit zwei Booststreifen, abgesenktem Boden bis −3,6 m, Seitenwänden und Überdeckung im Paradeplatz. Die Plaza-Bodenöffnung folgt dem Tunnel, Skyline-Gebäude werden aus dem Tunnelkorridor ausgeschlossen.
+
+**Streckenleben und Reaktionen:** Monumente und Militärparade sind statische Satirekulisse; Raketentransporter und Rakete sind inaktive Ausstellungsstücke. Vier seitliche Pfeiler lassen die Mittellinie frei. Pfeilerkontakt löst seitlichen Dodge-Roll und Rückstoß aus. Ein nicht kollidierendes Startgatter bei s=88 m zerbricht einmalig beim ersten Kart in Runde 1; 16 vorbereitete Fragmente springen auseinander und bleiben bis zum Szenenneustart als nicht kollidierende Trümmer liegen.
+
+**Deko-Querungen (Nachtrag):** Das weiß-graue Nordufergeländer wird an beiden Straßenkreuzungen unterbrochen; das parallele Südufergeländer bleibt durchgehend. Nach Sarahs Korrektur überspannen Start- und Monumenttor die Strecke wieder mit durchgehenden, hoch liegenden Querbalken. Bereits entfernte Paradebrücken bleiben entfernt. Der rote Bruchzaun ist ein separates Objekt und unverändert.
+
+**Monumenttor (Nachtrag):** Der allegorische Wagenaufsatz des Kit-Gates entsprach nicht Sarahs Wunsch. Für Pjöngjang wird stattdessen ein eigenes graues Volltor mit bronzener Statue des Ewigen Führers und beschrifteter Plakette aufgebaut; das originale Start-Zielgantry bleibt erhalten. Blender war auf dem Rechner nicht verfügbar, daher ist das Tor direkt im Babylon-Laufzeitcode umgesetzt.
+
+**Tunnelzufahrt (Nachtrag):** Auf Sarahs Wunsch ist auch das Dach von 12–88 % auf 20–80 % gekürzt und endet jetzt bündig mit Seitenwänden und Leitstreifen (rund 388 m). Beide Zugänge sind damit je rund 129 m vollständig offen.
+
+**Rand und Boden (Nachtrag):** Nach Sarahs Korrektur stehen 40 orange-helle, nicht kollidierende Pylonen nur an den beiden wandfreien Shortcut-Zufahrten (12-m-Abstand); die Hauptrunde bleibt pylonenfrei. Der Plaza-Boden lässt Rasterzellen aus, sobald Tunnelkorridor im Zellmittelpunkt oder an einer Ecke liegt, um diagonale Pflasterdreiecke am Tunnelrand zu vermeiden.
+
+**Belag (Nachtrag):** Sarah wünschte denselben Boden im Tunnel wie auf der übrigen Strecke. Die Pyongyang-Unterführung nutzt jetzt dasselbe `road`-PBR-Material inklusive Granittextur und wird nicht zusätzlich abgedunkelt; die Backyard-Abkürzungen anderer Strecken behalten ihren Kiesbelag.
+
+**Nordufergeländer (Nachtrag):** An der sichtbaren Shortcut-Zufahrt wird zusätzlich das letzte 10-m-Quaimodul vor dem ersten Pylon ausgelassen. Das Geländer endet damit knapp vor dem Marker; die andere Norduferquerung und das Südufer werden nicht verändert.
+
+**Paradespannen (Nachtrag):** Die zwei grauen Spannen bei s=640 und s=760 hatten wegen ihrer seitlichen Flügel je eine Mittelöffnung. Passende graue Mittelträger und rote Blenden schließen beide; die Hindernisse und ihre Fahrspur bleiben unverändert.
+
+**Prüfung:** Gezielte Pyongyang-Regressionen decken Rundkurs/Barrieren, ebene Hauptroute, Tunnelhöhe/Boosts, Lenkung am Einstieg, Pfeiler-Dodge/Rückstoß, Botziele über drei Runden und Startgatterplatzierung ab. Die abschließende Fullsuite besteht mit `npm test` 104/104; `npm run typecheck` und `npm run build` bestanden (bekannte Warnung zum 2,119-MB-Hauptchunk). Sichtbarer Demo-GP bestätigte Streckenauswahl, Rennen und ersten Gatterbruch: `startFenceBroken=true`, 0 feste Gatterteile und 16 aktive Fragmente.
+
+**Grenzen:** Kein kompletter sichtbarer GP-Zieleinlauf und keine menschliche Fahr-/Stil-/Hörabnahme. Die Tunnelinnenansicht nach der letzten Boden-/Gebäudekorrektur ist nicht als Bildbeleg gesichert; Sichtprüfung von Untergrund-/Wandanschluss, Trümmerlesbarkeit und Pfeilerwirkung bleibt offen. Intel-UHD ungeprüft.
+
+## 2026-10-07 – Langzeitstatus an aktuelle Worklist angeglichen
+
+**Abgleich:** Die Worklist belegt drei spielbare Strecken, einen Grand Prix über Stadionring → Duce-Drom → Havanna und ein umgesetztes 3D-Siegerpodest. Die Langzeitliste hatte noch den Zwei-Strecken-Stand und führte Duce-Drom sowie Havanna fälschlich als nicht spielbar.
+
+**Aktualisiert:** `LONG-TERM-GOALS.md` beschreibt nun den Drei-Strecken-Stand, das Podest und den aktuellen nächsten Schritt (menschliche Fahr-, Stil- und Hörprobe; danach Karosseriepass). In M8 sind nur noch Ewige-Führer-Allee, Kulturrevolutions-Schleife und Genossen-Gerade als geplante Strecken geführt.
+
+**Offen gelassen:** Die menschliche Abnahme, Intel-UHD-Messungen, echtes Gamepad, weitere Ergebnis-/Revanchearbeit und die verbindende Strecke sind nicht als erledigt markiert. Keine Laufzeitprüfung oder Spieländerung in diesem Dokumentationspaket durchgeführt.
 
 ## 2026-10-07 (Folgelauf) – Duce-Drom-Thema, Havanna, Orden, Eilerlass, Gesichter
 
@@ -84,7 +121,7 @@
 
 ## 2026-10-06 – Streckenauswahl ergänzt (Sarah-Auftrag)
 
-**Umgesetzt:** Vor Grand Prix, Zeitfahren und erneutem Rennstart erscheint eine Streckenauswahl. Nur `stadionring` ist auswählbar; die vorhandene Babylon-Strecke bleibt damit unverändert die Laufzeitstrecke. Die fünf Planungstitel erscheinen deaktiviert und ausdrücklich als „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Nach Bestätigung folgt weiterhin die bestehende Fahrerwahl und danach der Rennstart. Revanche umgeht die Auswahl wie bisher.
+**Umgesetzt:** Vor Grand Prix, Zeitfahren und erneutem Rennstart erscheint eine Streckenauswahl. Nur `stadionring` ist auswählbar; die vorhandene Babylon-Strecke bleibt damit unverändert die Laufzeitstrecke. Die fünf Planungstitel erscheinen deaktiviert und ausdrücklich als „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Allee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Nach Bestätigung folgt weiterhin die bestehende Fahrerwahl und danach der Rennstart. Revanche umgeht die Auswahl wie bisher.
 
 **Prüfung:** `npm run typecheck`, `npm test` (74/74), geänderte CDP-/Browser-Testskripte mit `node --check` und `npm run build` bestanden. Der gemeinsame CDP-Rennstart prüft die sechs Namen, genau fünf deaktivierte Einträge und den Übergang zu Fahrerwahl/Rennen. Die spätere sichtbare Browserprüfung ist unter „Strecke vor Rennstart unsichtbar“ dokumentiert. Build zeigt die bekannte Warnung zum großen Hauptchunk.
 

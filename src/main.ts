@@ -109,7 +109,7 @@ class App {
   private itemHeld=false;
   private queuedItemUse=false;
   private itemDirection:'forward'|'backward'='forward';
-  /** 'gp' = two-race Grand Prix with five bots; 'single' = one race on the chosen track; 'timetrial' = solo three laps against your saved ghost. */
+  /** 'gp' = championship over every playable circuit with five bots; 'single' = one chosen track; 'timetrial' = solo three laps against your saved ghost. */
   private mode:'gp'|'single'|'timetrial'='gp';
   /** Running championship (null outside a Grand Prix). */
   private gp:GrandPrix|null=null;
@@ -143,6 +143,7 @@ class App {
   private inCrater:boolean[]=[];
   /** Countdown value when the player first pressed throttle (start boost timing); null = not yet. */
   private startPress:number|null=null;
+  private startFenceBroken=false;
   private queuedSpecial=false;
   private rain=false;
   /** Options choice; 'random' rolls sun, rain or snow every time the track loads. */
@@ -178,7 +179,7 @@ class App {
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.autoQuality = localStorage.getItem('dk-quality') === null && !LAB_WORLD && !new URLSearchParams(location.search).has('demo'); } catch { /* storage optional */ }
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
@@ -593,7 +594,7 @@ class App {
     this.queuedItemUse=false;this.itemHeld=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
-    this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
+    this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.startFenceBroken = false; this.testScene.resetEffects?.();
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
@@ -797,6 +798,7 @@ class App {
       stadionring: ['Das Komitee hat den Sieger bereits beglückwünscht.', 'Gefahren wird trotzdem – aus Gründen der Tradition.'],
       'duce-drom': ['Der Balkon erwartet Applaus in alphabetischer Reihenfolge.', 'Die Züge sind pünktlich. Behauptet zumindest das Programmheft.'],
       havanna: ['Die Eröffnungsrede läuft seit gestern. Bitte leise starten.', 'Ersatzteile sind bestellt – seit 1958.'],
+      pyongyang: ['Die Parade fährt im Gleichschritt. Die Stoppuhr widerspricht.', 'Hundert Prozent Zustimmung – laut Lautsprecher.'],
     };
     const [title, detail] = lines[TRACK.id];
     document.querySelector('#gp-intro-kicker')!.textContent = this.mode === 'gp' && this.gp ? `GROSSER PREIS DER EITELKEIT · RENNEN ${this.gp.round + 1}/${this.gp.tracks.length} · ${TRACK_INFO.city.toUpperCase()}` : this.mode === 'timetrial' ? `ZEITFAHREN · ${TRACK.name.toUpperCase()}` : `EINZELRENNEN · ${TRACK.name.toUpperCase()} · ${TRACK_INFO.city.toUpperCase()}`;
@@ -1081,6 +1083,11 @@ class App {
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          const fenceProgress = TRACK_INFO.dressing.breakableFence;
+          if (!this.startFenceBroken && this.racePhase === 'race' && fenceProgress !== undefined && [this.kart, ...this.loadKarts].some((kart, i) => this.progress[i].distance < TRACK.length && trackProgressAt(kart.x, kart.z) >= fenceProgress)) {
+            this.startFenceBroken = true; this.testScene?.breakStartFence?.();
+            this.itemMessage = 'Startzaun durchbrochen · Trümmer am Straßenrand'; this.itemMessageUntil = this.items.time + 3;
+          }
           if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore){
             const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
