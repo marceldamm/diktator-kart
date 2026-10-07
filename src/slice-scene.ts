@@ -589,6 +589,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const m of v0.root.getChildMeshes(false)) if (/driverPose|headPose|armPose|cast-|scarfFlap|gripHand|White glove|Uniform racing suit|Cape cloth|Hat cloth|Hair and leather/.test(m.name)) oldDriver.add(m);
       const hideOld = () => { for (const m of oldDriver) if (m.isEnabled()) m.setEnabled(false); };
       hideOld(); scene.onBeforeRenderObservable.add(hideOld);
+      // The CC0 body has realistic arm lengths; bring the wheel 10 cm towards the chest so the hands reach the rim.
+      v0.steering.position.z += .1;
+      // Cockpit camera: the eye sits inside the pilot's head, so head, hair and face parts are hidden while the camera is that close.
+      const pilotHead = inst.rootNodes.flatMap((r) => r.getChildMeshes(false)).filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar/.test(m.name));
+      const headMesh = pilotHead.find((m) => /Pilot head/.test(m.name));
+      if (headMesh) scene.onBeforeRenderObservable.add(() => {
+        const cam = scene.activeCamera; if (!cam) return;
+        const b = headMesh.getBoundingInfo().boundingSphere;
+        const inside = Vector3.Distance(cam.globalPosition, b.centerWorld) < b.radiusWorld * 2.2;
+        for (const m of pilotHead) if (m.isEnabled() === inside) m.setEnabled(!inside);
+      });
       for (const r of inst.rootNodes) { r.parent = visuals[0].orientation; for (const m of r.getChildMeshes(false)) { m.receiveShadows = true; shadow.addShadowCaster(m); } }
     }
     report?.('items');
