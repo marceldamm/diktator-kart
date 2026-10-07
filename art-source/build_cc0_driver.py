@@ -151,18 +151,25 @@ def make(id):
 
     # --- Skin: the pack's light texture, toned towards a pale European skin per driver --------------------
     light = bpy.data.images.load(os.path.join(PACK, 'Base Characters', 'Textures', 'T_Superhero_Male_Ligh.png'))
+    # The active skin map is loaded after the source-image packing loop above;
+    # keep it under the same 1024 px runtime limit before exporting the GLB.
+    if light.size[0] > 1024: light.scale(1024, 1024)
     for m in body.data.materials:
         if m and m.use_nodes:
             for n in m.node_tree.nodes:
                 if n.type == 'TEX_IMAGE' and n.image and 'Dark' in n.image.name: n.image = light
     px = np.empty(len(light.pixels), dtype=np.float32); light.pixels.foreach_get(px); px = px.reshape(-1, 4)
     px[:, :3] = px[:, :3] * (1 - spec['pale']) + np.array([.86, .66, .56], dtype=np.float32) * spec['pale']
-    light.pixels.foreach_set(px.ravel()); light.update()
+    light.pixels.foreach_set(px.ravel()); light.update(); light.pack()
 
-    hair_mat = solid('Pilot hair', spec['hair_rgb'], .58)
+    # The reference's short dark hair is matte; the shared pack material's
+    # glossy highlights made this driver read grey in the fixed studio render.
+    hair_rgb = tuple(c * .50 for c in spec['hair_rgb']) if id == 'hitler' else spec['hair_rgb']
+    hair_mat = solid('Pilot hair', hair_rgb, .92 if id == 'hitler' else .58)
     if id == 'hitler':
-        hair_mat.node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value = .82
-    brow_mat = solid('Pilot eyebrows', tuple(c * .72 for c in spec['hair_rgb']), .82)
+        hair_mat.node_tree.nodes['Principled BSDF'].inputs['Specular IOR Level'].default_value = .2
+    brow_tone = .82 if id == 'hitler' else .72
+    brow_mat = solid('Pilot eyebrows', tuple(c * brow_tone for c in spec['hair_rgb']), .82)
     for h in hair: h.data.materials.clear(); h.data.materials.append(hair_mat)
     for b in brows: b.data.materials.clear(); b.data.materials.append(brow_mat)
 

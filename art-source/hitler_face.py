@@ -16,18 +16,28 @@ def refine_hitler_face(root):
         side = 1 if x >= 0 else -1
         front = max(0, min(1, (y + .46) / .065))
         # The first pass pushed the cheeks too far outward. Keep adult fullness
-        # mostly in depth, with only a restrained increase to the silhouette.
+        # mostly in depth, with a restrained silhouette increase (R63 test).
         cheek = g(abs(x), .050, .024) * g(z, 1.916, .032) * front
         jaw = g(abs(x), .051, .023) * g(z, 1.866, .032) * front
         chin = g(x, 0, .038) * g(z, 1.845, .021) * front
-        # Keep the bridge narrow, but give the lower tip and alae a softer,
-        # broader transition; the previous point-like tip looked too stylized.
-        nose = g(x, 0, .019) * g(z, 1.939, .029) * front
+        # R30 test: retain a modestly fuller jaw and rounder nasal tip; a broad
+        # cheek push made the mouth read too cheerful in the R29 overlay.
+        # R40: the comparison plate shows the imported nose still too broad
+        # through the tip/alar. Narrow it slightly without changing projection.
+        # R47: the overlay/profile still show a round, wide tip; reduce its
+        # breadth and forward push without shortening the bridge.
+        nose = g(x, 0, .023) * g(z, 1.939, .029) * front
+        tip_flat = g(x, 0, .008) * g(z, 1.925, .006) * front
         bridge = g(abs(x), .012, .010) * g(z, 1.947, .023) * front
-        alar = g(abs(x), .019, .011) * g(z, 1.920, .011) * front
+        alar = g(abs(x), .023, .012) * g(z, 1.920, .011) * front
         orbital = g(abs(x), .038, .022) * g(z, 1.960, .011) * front
+        eye_band = g(abs(x), .038, .045) * g(z, 1.957, .022) * front
         upperlid = g(abs(x), .037, .020) * g(z, 1.977, .010) * front
         lowerlid = g(abs(x), .040, .021) * g(z, 1.944, .008) * front
+        mouth_corner = g(abs(x), .037, .012) * g(z, 1.884, .012) * front
+        # R42: the photo's closed mouth occupies less of the lower face. Pull
+        # only the outer lip corners inward, leaving the centre and philtrum.
+        mouth_width = g(abs(x), .035, .014) * g(z, 1.885, .009) * front
         forehead = g(x, 0, .020) * g(z, 2.003, .024) * front
         # Keep wrinkles as very low-contrast surface variation; the first
         # narrow mesh grooves read as a smile crease at game scale.
@@ -38,11 +48,19 @@ def refine_hitler_face(root):
         forehead1 = g(z, 2.006, .0025) * g(x, 0, .048) * front
         forehead2 = g(z, 1.998, .0022) * g(x, 0, .055) * front
         ear = g(abs(x), .091, .014) * g(z, 1.945, .024)
-        dx = side * (.010*cheek + .004*jaw + .003*chin + .0015*alar + .002*ear - .005*bridge)
-        dy = .002*cheek + .0015*jaw - .001*chin + .017*nose + .0045*alar
+        # R54: the aligned portrait tapers more through the lower cheek than
+        # this CC0 head; reduce the small outward jaw/chin push.
+        # R58/R59 compressed the mouth too much. R60 tests only a slight
+        # corner pull and drop to keep the closed expression nearly level.
+        dx = side * (.0135*cheek + .004*jaw + .0015*chin + .0018*alar + .002*ear - .003*bridge) - x*.07*mouth_width
+        # R56 moved the narrowed nose forward/down; R67 tests another 2 mm
+        # against the profile while retaining the rest of the R66 face.
+        dy = .002*cheek + .0015*jaw - .001*chin + .012*nose + .007*alar - .003*tip_flat
         dy += -.005*orbital + .006*upperlid + .005*lowerlid + .003*forehead
-        dy -= .001*frown + .0007*fold + .0005*browline
-        dz = -.014*nose - .0015*upperlid + .002*lowerlid - .002*chin - .002*ear
+        # R38 test: strengthen the glabella and forehead furrows slightly;
+        # keep them shallow enough to read as skin creases at kart scale.
+        dy -= .0015*frown + .001*fold + .0008*browline
+        dz = -.018*nose - .0015*upperlid + .002*lowerlid - .002*chin - .002*ear - .0038*mouth_corner + .006*eye_band
         return Vector((dx, dy, dz)), (frown, fold, lowerlid, cheek, forehead1, forehead2)
     for v in head.data.vertices:
         p = head.matrix_world @ v.co
@@ -60,24 +78,37 @@ def refine_hitler_face(root):
                 p = ob.matrix_world @ v.co
                 if ob.name.startswith('Eyes'):
                     # The reference has a heavier upper lid and a less open stare.
-                    p.z = 1.956 + (p.z-1.956)*.36
+                    eye_center = .038 if p.x >= 0 else -.038
+                    # R43: shorten each eye subtly at both canthi; the front
+                    # overlay shows the stock eyes extend farther sideways.
+                    p.x = eye_center + (p.x - eye_center) * .94
+                    # R48's extra compression made the eyes too narrow; retain
+                    # R47's broader vertical opening, which matches the photo better.
+                    p.z = 1.956 + (p.z-1.956)*.24
+                    p.z += .004
                     p.y -= .003
                 else:
                     # Narrow the stock heavy bars, lower their inner tips and
                     # lift the outer third into a restrained historical arch.
-                    p.z = 1.977 + (p.z-1.977)*.30
-                    p.z += -.006 * (1 - min(1, abs(p.x)/.07))
-                    p.z += .004 * min(1, abs(p.x)/.07)
+                    # R51: keep R50's moderate width and taper the outer third,
+                    # following the finer brow tail in the reference.
+                    taper = min(1, abs(p.x)/.07)
+                    p.z = 1.977 + (p.z-1.977)*(.42 - .10*taper)
+                    # R41 test: reduce the pronounced outer arch; the photo's
+                    # brows sit lower and read straighter over the hooded eyes.
+                    # R66 test: the R51 tails still lift too high relative to
+                    # the archive portrait; lower and flatten the brow line.
+                    p.z += -.003 * (1 - taper)
+                    p.z += -.001 * taper
+                    p.z += .001
                     p.y += .008
                 v.co = inv @ p
         if ob.name.startswith('Hair_SimpleParted'):
             for v in ob.data.vertices:
                 p = ob.matrix_world @ v.co
                 # The pack's tall quiff reads much younger than the flat,
-                # combed 1938 reference. Flatten only the crown above the
-                # hairline; keep its temple fit and lower edge unchanged.
-                # R16's uniform flattening exposed the temples. Flatten only the
-                # centre part and leave the hairline at both sides intact.
+                # combed 1938 reference. Flatten only the centre part and leave
+                # the hairline/temples intact; broader reductions expose scalp.
                 crown = math.exp(-.5*(p.x/.055)**2)
                 p.z = 2.0 + (p.z-2.0)*(.78-.15*crown)
                 v.co = inv @ p
@@ -88,8 +119,10 @@ def refine_hitler_face(root):
                 # disappearing at game scale. Recover width and especially
                 # height while retaining a clear gap below the nose.
                 p.y += .008
-                p.z = 1.889 + (p.z-1.889)*1.65
-                p.x *= 1.12
+                # R55: the narrow moustache falls below photo readability in
+                # the fixed render, so add a restrained height/width increase.
+                p.z = 1.889 + (p.z-1.889)*1.85
+                p.x *= 1.16
                 v.co = inv @ p
         ob.data.update()
 
@@ -132,9 +165,9 @@ def refine_hitler_face(root):
     eye_z = sum((eyes.matrix_world @ v.co).z for v in eyes.data.vertices) / len(eyes.data.vertices)
     inverse = head.matrix_world.inverted()
     direction = (inverse.to_3x3() @ Vector((0, -1, 0))).normalized()
-    wrinkle = bpy.data.materials.new('Subtle facial creases'); wrinkle.diffuse_color = (.38, .28, .22, 1); wrinkle.use_nodes = True
+    wrinkle = bpy.data.materials.new('Subtle facial creases'); wrinkle.diffuse_color = (.43, .34, .29, 1); wrinkle.use_nodes = True
     wrinkle_shader = wrinkle.node_tree.nodes.get('Principled BSDF')
-    wrinkle_shader.inputs['Base Color'].default_value = (.38, .28, .22, 1)
+    wrinkle_shader.inputs['Base Color'].default_value = (.43, .34, .29, 1)
     wrinkle_shader.inputs['Roughness'].default_value = 1.0
     wrinkle_shader.inputs['Specular IOR Level'].default_value = 0.0
     paths = [
@@ -144,10 +177,19 @@ def refine_hitler_face(root):
         [(-.028, eye_z+.060), (-.014, eye_z+.062), (0, eye_z+.061), (.014, eye_z+.062), (.028, eye_z+.060)],
         [(-.032, eye_z-.010), (-.040, eye_z-.014), (-.049, eye_z-.012)],
         [(.032, eye_z-.010), (.040, eye_z-.014), (.049, eye_z-.012)],
+        # R52: subtle nasolabial folds from the nose wings toward the mouth.
+        [(-.024, eye_z-.035), (-.029, eye_z-.047), (-.033, eye_z-.061)],
+        [(.024, eye_z-.035), (.029, eye_z-.047), (.033, eye_z-.061)],
     ]
     for path_index, path in enumerate(paths):
         curve = bpy.data.curves.new(f'Face crease {path_index+1}', 'CURVE'); curve.dimensions = '3D'; curve.resolution_u = 8
-        curve.bevel_depth = .00022; curve.bevel_resolution = 2
+        # R44 softens the line color and tapers its ends so the relief reads
+        # as a crease in skin rather than a uniform drawn-on groove.
+        nasolabial = path_index >= 6
+        # R65 tests a further restrained visibility increase; R52 was too
+        # strong, so keep these shallow, skin-coloured lines below 0.6 mm.
+        curve.bevel_depth = .00034 if nasolabial else .00052
+        curve.bevel_resolution = 2
         spline = curve.splines.new('BEZIER'); spline.bezier_points.add(len(path)-1)
         hits = 0
         for index, (x, z) in enumerate(path):
@@ -156,14 +198,18 @@ def refine_hitler_face(root):
             if not hit: continue
             point = head.matrix_world @ location
             normal_world = (head.matrix_world.to_3x3() @ normal).normalized()
-            point += normal_world * .0009
+            point += normal_world * (.0004 if nasolabial else .0009)
             bezier = spline.bezier_points[index]; bezier.co = point
             bezier.handle_left_type = 'AUTO'; bezier.handle_right_type = 'AUTO'; hits += 1
+            if nasolabial:
+                bezier.radius = .18 if index in (0, len(path)-1) else .55
+            else:
+                bezier.radius = .32 if index in (0, len(path)-1) else .82
         if hits < 2:
             bpy.data.curves.remove(curve); continue
         line = bpy.data.objects.new(f'Pilot face crease {path_index+1}', curve); bpy.context.collection.objects.link(line); curve.materials.append(wrinkle)
         world = line.matrix_world.copy(); line.parent = root; line.matrix_world = world
         bpy.ops.object.select_all(action='DESELECT'); line.select_set(True); bpy.context.view_layer.objects.active = line
         bpy.ops.object.convert(target='MESH')
-    head['review_status'] = 'R28: R26 face/hair with slightly broader nasal tip and alae; R27 top-hair trim rejected after bald rear patch; likeness pending'
-    print('HITLER_FACE_REFINED_R28', len(head.data.vertices))
+    head['review_status'] = 'R67 local candidate: R66 with 2 mm more nasal projection/drop for the side profile; R57/R61 crown flattening was rejected due exposed scalp'
+    print('HITLER_FACE_REFINED_R67_CANDIDATE', len(head.data.vertices))
