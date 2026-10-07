@@ -482,8 +482,20 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const papers = Array.from({ length: 5 }, (_, i) => { const m = MeshBuilder.CreatePlane(`Newspaper ${i}`, { width: .6, height: .42 }, scene); m.material = paperMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vz: 0, spin: 0 }; });
     // Loose parts after a wreck: lie on the road for a while, then shrink away.
     const debrisMaterial = new StandardMaterial('Wreck debris', scene); debrisMaterial.diffuseColor = new Color3(.12, .11, .1); debrisMaterial.specularColor = new Color3(.2, .2, .2);
-    const debris = Array.from({ length: 12 }, (_, i) => { const m = i % 3 === 0 ? MeshBuilder.CreateCylinder(`Debris hubcap ${i}`, { diameter: .32, height: .06, tessellation: 12 }, scene) : MeshBuilder.CreateBox(`Debris plate ${i}`, { width: .4, height: .05, depth: .28 }, scene);
-      m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
+    // Wreck debris: real car parts from Kenney's Car Kit (CC0, see CREDITS.md) instead of plain boxes (07.10.2026).
+    const debrisKit = await LoadAssetContainerAsync('/assets/models/cc0-debris.glb', scene);
+    scene.onDisposeObservable.add(() => debrisKit.dispose());
+    const debrisParts = ['debris-bumper', 'debris-door', 'debris-tire', 'debris-door-window', 'debris-spoiler-a', 'debris-plate-a', 'debris-drivetrain'];
+    void debrisMaterial;
+    const debris = Array.from({ length: 12 }, (_, i) => {
+      const holder = new TransformNode(`Debris ${i}`, scene);
+      const part = debrisParts[i % debrisParts.length];
+      const inst = debrisKit.instantiateModelsToScene((n) => `debris ${i}/${n}`, false);
+      for (const node of inst.rootNodes.flatMap((r) => r.getChildren())) node.setEnabled(node.name === `debris ${i}/${part}`);
+      for (const node of inst.rootNodes.flatMap((r) => r.getChildren())) if (node.name === `debris ${i}/${part}`) (node as TransformNode).position?.setAll(0);
+      for (const r of inst.rootNodes) r.parent = holder;
+      holder.getChildMeshes().forEach((m) => { m.isPickable = false; shadow.addShadowCaster(m); });
+      holder.setEnabled(false); return { mesh: holder, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
     let salvageNow: number[] = []; let botsShownForGhost = false; const salvageDepth: number[] = [];
     // Propaganda zeppelin: announced lap-2 flyover with a slogan banner (purely decorative).
@@ -566,6 +578,49 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       return { blimp, hook };
     });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
+    // CC0 drivers (07.10.2026, Marcel's method switch): Quaternius-based bodies from art-source/build_cc0_driver.py
+    // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
+    if (new URLSearchParams(location.search).get('pilot') !== '0') {
+      const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
+      const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(`/assets/models/cc0-driver-${id}.glb`, scene)] as const)));
+      scene.onDisposeObservable.add(() => { for (const c of models.values()) c.dispose(); });
+      const seats = visuals.map((v, index) => {
+        // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
+        const old = new Set<AbstractMesh>([v.driver, v.head, ...v.arms.filter((x): x is TransformNode => !!x)].flatMap((n) => n.getChildMeshes(false)));
+        for (const m of v.root.getChildMeshes(false)) if (/driverPose|headPose|armPose|cast-|scarfFlap|gripHand|White glove|Uniform racing suit|Cape cloth|Hat cloth|Hair and leather/.test(m.name)) old.add(m);
+        // Realistic arm lengths: the wheel comes 10 cm towards the chest so the hands reach the rim.
+        v.steering.position.z += .1;
+        // The holder follows the old driver node: lean in corners, rise into the tank hatch, ejection after a wreck.
+        const holder = new TransformNode(`cc0Driver-${index}`, scene); holder.parent = v.orientation;
+        const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined };
+        const sit = (cast: CastMember) => {
+          if (seat.style === cast.faceStyle) return;
+          for (const m of seat.meshes) { shadow.removeShadowCaster(m); }
+          for (const n of holder.getChildren()) n.dispose();
+          const inst = models.get(cast.faceStyle)!.instantiateModelsToScene((n) => `cc0-${index}/${n}`, false);
+          for (const r of inst.rootNodes) r.parent = holder;
+          seat.meshes = inst.rootNodes.flatMap((r) => r.getChildMeshes(false));
+          for (const m of seat.meshes) { m.receiveShadows = true; shadow.addShadowCaster(m); }
+          seat.head = seat.meshes.filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar|mole|top hair|cap|cigar/.test(m.name));
+          seat.skull = seat.head.find((m) => /Pilot head/.test(m.name)); seat.style = cast.faceStyle;
+        };
+        const dress = v.dress; v.dress = (cast: CastMember) => { dress(cast); sit(cast); };
+        sit(CAST[(roster[index] ?? index) % CAST.length]);
+        return seat;
+      });
+      scene.onBeforeRenderObservable.add(() => {
+        const cam = scene.activeCamera;
+        seats.forEach((seat, i) => {
+          for (const m of seat.old) if (m.isEnabled()) m.setEnabled(false);
+          const d = visuals[i].driver; seat.holder.position.y = d.position.y; seat.holder.rotation.x = d.rotation.x; seat.holder.rotation.z = d.rotation.z;
+          // Cockpit camera: the eye sits inside the head, so head, hair and face parts hide while the camera is that close.
+          if (!cam || !seat.skull) return;
+          const b = seat.skull.getBoundingInfo().boundingSphere;
+          const inside = Vector3.Distance(cam.globalPosition, b.centerWorld) < b.radiusWorld * 2.2;
+          for (const m of seat.head) if (m.isEnabled() === inside) m.setEnabled(!inside);
+        });
+      });
+    }
     report?.('items');
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
     const wallAt = trackPoint(TRACK_INFO.dressing.screenProgress, -(TRACK.halfWidth + 11));
