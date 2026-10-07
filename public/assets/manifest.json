@@ -41,6 +41,7 @@
     "audio/tank-engine.wav",
     "audio/rain.wav",
     "audio/thunder.wav",
-    "models/cc0-debris.glb"
+    "models/cc0-debris.glb",
+    "models/cc0-driver-hitler.glb"
   ]
 }

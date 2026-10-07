@@ -578,6 +578,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       return { blimp, hook };
     });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
+    // CC0 driver pilot (07.10.2026): ?pilot=1 seats the Quaternius-based Hitler (art-source/build_cc0_driver.py) in kart 0.
+    if (new URLSearchParams(location.search).get('pilot') === '1' && visuals[0]) {
+      const pilot = await LoadAssetContainerAsync('/assets/models/cc0-driver-hitler.glb', scene);
+      scene.onDisposeObservable.add(() => pilot.dispose());
+      const inst = pilot.instantiateModelsToScene((n) => `pilot/${n}`, false);
+      for (const m of visuals[0].driver.getChildMeshes(false)) m.setEnabled(false);
+      for (const r of inst.rootNodes) { r.parent = visuals[0].orientation; for (const m of r.getChildMeshes(false)) { m.receiveShadows = true; shadow.addShadowCaster(m); } }
+    }
     report?.('items');
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
     const wallAt = trackPoint(TRACK_INFO.dressing.screenProgress, -(TRACK.halfWidth + 11));

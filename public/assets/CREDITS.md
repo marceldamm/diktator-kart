@@ -55,3 +55,5 @@ Sprachupdate: eigene freundliche kurze Sprechertexte und sechs eigene Parodie-Sp
 - `audio/roll-cobble.wav`, `roll-gravel.wav`, `roll-grass.wav`, `splash.wav`: originale Synthese aus `art-source/build_surface_audio.mjs`, keine Samples.
 
 | `models/cc0-debris.glb`, `art-source/cc0-debris.blend` | Kenney, Car Kit 3.1 (debris-bumper, debris-door, debris-door-window, debris-tire, debris-spoiler-a, debris-plate-a, debris-drivetrain), https://kenney.nl/assets/car-kit . Lizenz CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), laut beiliegender License.txt; Nennung freiwillig, Änderungen erlaubt. Über `art-source/import_cc0_pack.py` zusammengeführt, als Totalschaden-Trümmer verwendet (07.10.2026). |
+
+| `models/cc0-driver-hitler.glb`, `art-source/cc0-driver-hitler.blend` (Probestück, nur mit `?pilot=1`) | Quaternius, Universal Base Characters (Standard/Free), Superhero_Male_FullBody + Hair_SimpleParted, https://quaternius.itch.io/universal-base-characters . Lizenz CC0 1.0 laut beiliegender License_Standard.txt. Mit `art-source/build_cc0_driver.py` in Sitzpose gebracht, Anzughülle, Haarfarbe und Bart ergänzt (07.10.2026). |
