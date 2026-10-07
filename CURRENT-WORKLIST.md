@@ -9,6 +9,16 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Sarah-Auftrag: Ewige-Führer-Allee (Pjöngjang) – spielbare Strecke ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14))
+
+**Status: Technisch spielbar, menschliche Abnahme offen.** Sarah beauftragte am 07.10.2026 die spielbare Umsetzung mit Pjöngjang-inspirierter Monumentalstadt, Führerstatuen, satirischer Propaganda, überzogener Militärparade und einer kürzeren Unterführung mit Booststreifen.
+
+**Umgesetzt:** 1.578-m-Rundkurs, auswählbar in Einzelrennen, Zeitfahren und Grand Prix. Ebene, farblich einheitliche Granitfahrbahn; Pjöngjang-Fassaden, Statuen und inaktive Paradefahrzeuge. Die Unterführung spart rund 210 m, ist 12 m breit, auf −3,6 m abgesenkt und besitzt zwei Booststreifen. Ihre Fahrbahn verwendet jetzt dasselbe Granitmaterial wie die Hauptroute. Dach, Seitenwände und Leitstreifen umfassen deckungsgleich die mittleren 20–80 % der Nebenroute (rund 388 m); beide Zugänge bleiben je rund 129 m vollständig offen, damit die Alternativroute sichtbar ist. Das Pflastergelände wird an Tunnelzellen und Randzellen ausgespart, damit keine Materialdreiecke auf die Tunnelstraße ragen. 40 orange-helle Pylonen markieren ausschließlich die beiden wandfreien Shortcut-Zufahrten im 12-m-Abstand; die Hauptrunde bleibt pylonenfrei. Das weiße Nordufergeländer endet an der sichtbaren Shortcut-Zufahrt am ersten Pylon; die zweite Straßenquerung und das parallele Südufer bleiben unverändert. Die beiden Paradespannen an den Seitenpfeilern besitzen nun durchgehende graue Mittelträger ohne Lücke. Stadtgebäude werden aus dem Tunnelkorridor herausgehalten. Start-Zielbogen und Monumenttor überspannen die Fahrbahn ohne mittige Lücke. Das graue Monumenttor trägt eine bronzene Statue des Ewigen Führers auf einem Sockel. Vier Seitenpfeiler lösen bei Kollision einen seitlichen Dodge und Rückstoß aus. Das separate dekorative Startgatter bei s=88 m bricht einmalig beim ersten Kart in Runde 1; 16 nicht kollidierende Trümmerteile bleiben liegen. Keine Waffenwirkung oder Originalparolen.
+
+**Verifiziert:** Streckenregressionen einschließlich Bots über drei Runden; Tunnelanfahrt und Lenkung beidseitig; Pfeilerkollision/Dodge; ebene Fahrbahn. Sichtbarer Demo-GP: Pyongyang auswählbar und Rennszene geladen; Startgatter löste aus, feste Teile verschwanden und 16 Fragmente wurden aktiv. `npm test` 104/104, `npm run typecheck` und `npm run build` erfolgreich (bekannte Chunkgrößenwarnung). Ein kompletter sichtbarer GP-Zieleinlauf und menschliche Fahr-/Stil-/Sichtabnahme sind nicht belegt.
+
+**Nächster Schritt:** Menschliche Fahr- und Sichtprobe aller vier Strecken, insbesondere Tunnelboden/-wände, Trümmerlesbarkeit und Pfeiler-Dodge. Audio- und Intel-UHD-Abnahmen bleiben separat offen.
+
 ## Marcels Spieltest-Feedback – 07.10.2026 abends (Aufgabenliste)
 
 **Quelle:** Marcels Durchspiel-Feedback im Projekt-Thread (07.10.2026, 16:33 UTC). Status wird hier fortgeschrieben.
@@ -86,7 +96,7 @@ Der kontrollierte frühere Feed-A/B maß an der Startzone P95 rAF 83,2–83,4 ms
 ## Streckenauswahl – 06.10.2026 (Sarah-Auftrag)
 
 - [x] Vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Damals war der Stadionring die einzige spielbare Strecke; seit 07.10.2026 ist zusätzlich der Duce-Drom spielbar (siehe oben), der Grand Prix fährt beide Strecken nacheinander.
-- [x] Fünf weitere Plätze zeigten „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Stand 07.10.2026: Duce-Drom spielbar, die übrigen vier bleiben in Planung.
+- [x] Fünf weitere Plätze zeigten „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Allee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Stand 07.10.2026: Duce-Drom spielbar, die übrigen vier bleiben in Planung.
 - [x] Sichtbarkeitsfehler beim Fahrerwahl-Übergang behoben: Die sechs asynchron gerenderten Porträts blendeten zuvor die Hauptstrecke aus, während der normale Renderloop den Zwischenzustand zeichnete. Während der Offscreen-Aufnahmen bleibt jetzt das letzte vollständige Streckenbild stehen; der Startbutton wird erst nach Wiederherstellung der Szene freigegeben.
 - [x] Sichtbare Laufzeitprüfung: Strecke im Auswahlbild sichtbar; nach Porträtabschluss alle 271/271 aktivierten Stadt-Meshes im Countdown sichtbar. Die automatisierten Browsertest-Helfer decken den Track-zu-Fahrer-zu-Rennen-Ablauf ab.
 - [ ] Laufzeitruckeln auf Intel UHD bleibt offen: WebGL2 bei 1186×888, Standard, ca. 14 FPS, P50 40,5 ms/P95 150,8 ms im 300-Frame-Fenster. Samplerformat-WebGL-Warnungen erscheinen weiter; gezielte M7-Ursachenmessung ist erforderlich. Grafikqualität nicht ohne kontrolliertes A/B senken.

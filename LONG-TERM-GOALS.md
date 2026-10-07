@@ -167,7 +167,7 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 
 ## M6 – Vollständiger Singleplayer
 
-- **07.10.2026 (Claude, Marcel-Auftrag):** Zweite spielbare Strecke Duce-Drom (Rom), zweistufiger Grand Prix mit Punkten/Zwischen-/Gesamtwertung und Siegerehrung, Einzelrennen, Zeitfahren je Strecke mit Geist und bester Runde, Live-Rangliste rechts und Rivalenstile sind umgesetzt und im sichtbaren Chrome geprüft (Demo-Autopilot, keine menschliche Fahrprobe). Gesamtabgleich aller Fragebogen-Ziele mit Status und nächster Reihenfolge: [docs/27-questionnaire-status.md](docs/27-questionnaire-status.md). Nächstes Langzeitpaket: M7-Messung beider Strecken, Gamepad/Tastenbelegung, Fähigkeiten der übrigen vier Fahrer, dritte Strecke aus Sarahs Liste.
+- **07.10.2026 (fortgeschrieben):** Vier Strecken sind spielbar: Stadionring, Duce-Drom, Havanna und Sarahs Ewige-Führer-Allee in Pjöngjang. Der Grand Prix führt über alle vier. Punktewertung, Zwischen-/Gesamtwertung, streckenbezogenes Zeitfahren, Live-Rangliste, Rivalenstile und 3D-Siegerpodest sind umgesetzt. Die Ewige-Führer-Allee hat einen ebenen Hauptring, eine abgesenkte Boost-Unterführung, Parade/Statuen und ein einmalig brechendes Startgatter. Gezielte Physik-/Bottests sowie ein sichtbarer automatisierter Startlauf bestanden; menschliche Fahr-/Stil-/Sicht- und Hörabnahme sind damit nicht ersetzt. **Nächster Schritt:** menschliche Fahr- und Sichtprobe aller vier Strecken; danach Karosseriepass. Intel-UHD-Messungen und echtes Gamepad bleiben offen. Gesamtabgleich: [docs/27-questionnaire-status.md](docs/27-questionnaire-status.md).
 
 - [ ] Fahrer-/Kartwahl, Menü, HUD, Optionen, Tutorial und Startablauf auf einen gemeinsamen Qualitätsstand bringen. **04.10.: Fahrerwahl mit Live-Porträts vorhanden; Siegerkarte mit Porträts und Ziel-Feuerwerk.**
 - **Teilfortschritt 05.10.:** Das Ein-Item-HUD zeigt Symbol, Itemname, „IM SLOT“/„LEER“, barrierefreien Status und Buttonzustand; Tastatur, Maus und Touch teilen den Schild-Halte-/Loslass-Wurfpfad. Schnelle Taps zwischen Simulationsframes und Pointer-Abbruch sind regressionsgeprüft. Der Karosseriezustand ist als ARIA-Meter mit aktuellem Prozentwert ausgezeichnet. Die interaktive Aufnahme → Anzeige → Wurf-Abnahme im laufenden Browser bleibt offen. Keine Mehrfachslots ohne neue Umfangsentscheidung.
@@ -188,7 +188,7 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 **Folgeschritt:** Den aktualisierten Welt-Export mit GLB-/Build-Prüfungen und frischem Babylon-Rennen abnehmen. Danach Regenrinnen, Schilder und Ladenpflanzkästen in Babylon-Nahansicht prüfen. M7 braucht ein gleich gehaltenes A/B im bewegten Rennen, bevor Glow-/Postprocess-Verhalten geändert wird.
 - [ ] Verständliche deutsche Bedienung und Statusmeldungen; Diagnose bleibt optional, keine technischen Interna als normaler Spielerablauf.
 - [ ] Alle sechs Fahrer und erste historische Strecke mit Material-/Animations-/Audioqualität fertigstellen.
-- [ ] Siegerehrung, Ergebnis-/Rennbericht und Revanche ausarbeiten. **07.10.: Grand-Prix-Gesamtwertung mit Siegerporträt, Zwischenwertung, „Nächstes Rennen“/„Neuer Grand Prix“ umgesetzt; aufwendigere Siegerehrung (Podest in 3D) offen.**
+- [ ] Ergebnis-/Rennbericht und Revanche weiter ausarbeiten. **07.10.:** Zwischen- und Gesamtwertung, Siegerporträt sowie „Nächstes Rennen“/„Neuer Grand Prix“ sind umgesetzt; das 3D-Siegerpodest mit Kamerafahrt und Konfetti ist ebenfalls fertig. Weitere Ergebnisdetails und die menschliche Abnahme bleiben offen.
 - [ ] Lokale Einstellungen, Kameraruhe, reduzierte Effekte, Ton/Musik und Lade-/Fehlerzustände zuverlässig erhalten.
 - [ ] Wiederholbare Rennen und Kaltstarts; gemeinsame Inhalts-/Stil-/Hörabnahme dokumentieren.
 
@@ -209,7 +209,7 @@ Details: [06](docs/06-multiplayer.md), [09](docs/09-roadmap.md).
 
 - [ ] Nach stabilem Singleplayer private Online-Lobbys per Einladung und Crossplay auf getrennten Geräten entwickeln.
 - [ ] Kostenlos tragfähigen Betrieb, Synchronisierung, Reconnect, faire Regeln und Schutz vor Manipulation prüfen.
-- [ ] Sechs Themenstrecken plus verbindende Strecke als langfristigen Umfang schrittweise priorisieren; keine pauschale Pflicht vor Multiplayer. Derzeitige fünf Planungstitel mit Orten: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Sie sind in der Streckenauswahl sichtbar, aber nicht spielbar.
+- [ ] Sechs Themenstrecken plus verbindende Strecke als langfristigen Umfang schrittweise priorisieren; keine pauschale Pflicht vor Multiplayer. **Stand 07.10.:** Stadionring, Duce-Drom (Rom), Havanna-Revolutionsring (Havanna) und Ewige-Führer-Allee (Pjöngjang) sind spielbar. Kulturrevolutions-Schleife (Peking) und Genossen-Gerade (Moskau) bleiben geplant; die verbindende Strecke ebenfalls.
 - [ ] Weitere historische Fahrer aus dem Zwölf-Figuren-Katalog erst nach Besetzungs-/Produktionspriorisierung.
 - [ ] Geist/Ghost, Orden/Achievements und ausgebauter Fotomodus als spätere Vorschläge bewerten.
 - [ ] Öffentliche kostenlose Veröffentlichung erst nach Geräte-, Inhalts-, Rechte- und Qualitätsprüfung vorbereiten.

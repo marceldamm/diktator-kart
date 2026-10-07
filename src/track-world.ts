@@ -10,7 +10,7 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
+import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, shortcutElevationAt, SHORTCUT_LENGTH } from './track';
 import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, TRACK_INFO, raisedSpans } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
@@ -19,7 +19,7 @@ import { canalFoamBands } from './environment-effects';
 const trackLocateS = (x: number, z: number) => trackLocate(x, z).s;
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
-export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
+export interface TrackWorld { animate(time: number): void; breakStartFence(): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
 const W = TRACK.halfWidth;
 
@@ -40,7 +40,7 @@ function canvasTexture(scene: Scene, name: string, width: number, height: number
  * u runs along the track in metres / uScale, v along the profile in metres / vScale.
  */
 function sweep(scene: Scene, name: string, profile: [number, number][], material: PBRMaterial | StandardMaterial,
-  options: { uScale: number; vScale?: number; step?: number; from?: number; to?: number; follow?: boolean; color?: (s: number, lane: number) => [number, number, number]; at?: (s: number, lane: number) => { x: number; z: number } }): Mesh {
+  options: { uScale: number; vScale?: number; step?: number; from?: number; to?: number; follow?: boolean; color?: (s: number, lane: number) => [number, number, number]; at?: (s: number, lane: number) => { x: number; z: number }; heightAt?: (s: number) => number }): Mesh {
   const { uScale, vScale = 1, step = 1, from = 0, to = TRACK.length, follow = false } = options;
   const positions: number[] = [], uvs: number[] = [], indices: number[] = [], colors: number[] = [];
   const along: number[] = [0];
@@ -50,7 +50,7 @@ function sweep(scene: Scene, name: string, profile: [number, number][], material
     const s = from + (to - from) * r / rings;
     profile.forEach(([lane, height], j) => {
       const p = (options.at ?? trackPoint)(s, lane);
-      positions.push(p.x, height + (follow ? trackHeightAt(p.x, p.z) : options.at ? 0 : elevationAt(s)), p.z);
+      positions.push(p.x, height + (follow ? trackHeightAt(p.x, p.z) : options.heightAt ? options.heightAt(s) : options.at ? 0 : elevationAt(s)), p.z);
       uvs.push(s / uScale, along[j] / vScale);
       if (options.color) { const [cr, cg, cb] = options.color(s, lane); colors.push(cr, cg, cb, 1); }
     });
@@ -106,11 +106,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
   const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
   const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana';
-  if (!rome) addPeriodDetails(scene,shadow);
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang';
+  type FenceDebris = { mesh: Mesh; origin: Vector3; heading: number; vx: number; vy: number; vz: number; spin: number };
+  const startFenceParts: Mesh[] = [], startFenceDebris: FenceDebris[] = [];
+  let startFenceBroken = false, startFenceClock = 0, startFenceBreakTime = 0;
+  if (TRACK_INFO.theme === 'berlin') addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
-  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : 'Cobblestone boulevard', '#d8d2c2', 0, 1);
+  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : pyongyang ? 'Pyongyang granite boulevard' : 'Cobblestone boulevard', pyongyang ? '#c3c5c2' : '#d8d2c2', 0, 1);
   if (havana) {
     // Havana: sun-bleached, patched asphalt with tar seams (procedural, original).
     let seed = 1959; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
@@ -147,6 +150,23 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     });
     road.bumpTexture.level = .6; road.roughness = .78;
     for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  } else if (pyongyang) {
+    road.albedoTexture = canvasTexture(scene, 'Pyongyang granite slabs', 512, 512, (c) => {
+      c.fillStyle = '#858984'; c.fillRect(0, 0, 512, 512);
+      for (let y = 0; y < 512; y += 128) {
+        const offset = (y / 128) % 2 ? 128 : 0;
+        for (let x = -128 + offset; x < 512; x += 256) {
+          c.fillStyle = '#858984'; c.fillRect(x + 2, y + 2, 252, 124);
+          c.strokeStyle = 'rgba(43,48,46,.42)'; c.lineWidth = 2; c.strokeRect(x + 2, y + 2, 252, 124);
+        }
+      }
+    });
+    road.bumpTexture = canvasTexture(scene, 'Pyongyang granite joints', 512, 512, (c) => {
+      c.fillStyle = '#8080ff'; c.fillRect(0, 0, 512, 512); c.strokeStyle = '#6666ef'; c.lineWidth = 5;
+      for (let y = 0; y <= 512; y += 128) { const offset = (y / 128) % 2 ? 128 : 0; c.beginPath(); c.moveTo(0, y); c.lineTo(512, y); c.stroke(); for (let x = offset; x <= 512; x += 256) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 128); c.stroke(); } }
+    });
+    road.bumpTexture.level = .45; road.roughness = .9;
+    for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
   } else {
   road.albedoTexture = new Texture('/assets/textures/cobble-color.jpg', scene);
   road.bumpTexture = new Texture('/assets/textures/cobble-normal.jpg', scene);
@@ -171,21 +191,53 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   waterRipple.uScale = 10; waterRipple.vScale = 1.8;
   const roadLanes: [number, number][] = [-W, -W * .6, -W * .25, 0, W * .25, W * .6, W].map((lane) => [lane, .02]);
   sweep(scene, 'Racing surface', roadLanes, road, { uScale: rome ? 6 : havana ? 8 : 2, vScale: rome ? 6 : havana ? 8 : 2, step: .75, follow: true, color: (s, lane) => {
+    if (pyongyang) return [1, 1, 1];
     const wear = Math.exp(-((lane - Math.sin(s * .021) * 1.6) ** 2) / 5) * .16;
     const tone = .93 + Math.sin(s * .047) * .05 + Math.sin(s * .13 + lane) * .025 - wear;
     return [tone, tone * .985, tone * .96];
   } });
 
   // City ground: a paved square everywhere; lawn only on the bounded park islands.
-  const square = pbr(scene, 'City square paving', '#b9ab8f', 0, 1);
+  const square = pbr(scene, 'City square paving', pyongyang ? '#a9aaa5' : '#b9ab8f', 0, 1);
   square.albedoTexture = new Texture('/assets/textures/herringbone-diff.jpg', scene);
   square.bumpTexture = new Texture('/assets/textures/herringbone-nor_gl.jpg', scene);
   for (const t of [square.albedoTexture, square.bumpTexture] as Texture[]) { t.uScale = (GROUND.east - GROUND.west) / 4; t.vScale = (GROUND.north - RIVER.north) / 4; t.anisotropicFilteringLevel = 8; }
   // Redesign 06.10.2026: the larger city floor leaves a gap for the River Spree (src/city-world.ts).
-  for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) {
-    const ground = MeshBuilder.CreateGround('Park and city terrain', { width: GROUND.east - GROUND.west, height: z1 - z0 }, scene);
-    ground.position.set((GROUND.east + GROUND.west) / 2, 0, (z0 + z1) / 2);
+  const groundPatch = (west: number, east: number, south: number, north: number) => {
+    if (east - west < .2 || north - south < .2) return;
+    const ground = MeshBuilder.CreateGround('Park and city terrain', { width: east - west, height: north - south }, scene);
+    ground.position.set((east + west) / 2, 0, (north + south) / 2);
     ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
+  };
+  if (!pyongyang) {
+    for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) groundPatch(GROUND.west, GROUND.east, z0, z1);
+  } else {
+    const cut = { west: -214, east: 244, south: -238, north: 196 }, step = 2.5;
+    for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) {
+      const south = Math.max(z0, cut.south), north = Math.min(z1, cut.north);
+      if (north <= south) { groundPatch(GROUND.west, GROUND.east, z0, z1); continue; }
+      groundPatch(GROUND.west, cut.west, z0, z1); groundPatch(cut.east, GROUND.east, z0, z1);
+      groundPatch(cut.west, cut.east, z0, south); groundPatch(cut.west, cut.east, north, z1);
+      const nx = Math.ceil((cut.east - cut.west) / step), nz = Math.ceil((north - south) / step), positions: number[] = [], uvs: number[] = [], indices: number[] = [];
+      const insideTunnelCut = (x: number, z: number) => {
+        const tunnel = shortcutLocate(x, z);
+        return tunnel.u > SHORTCUT_LENGTH * .1 && tunnel.u < SHORTCUT_LENGTH * .9 && Math.abs(tunnel.lane) < SHORTCUT.halfWidth + 2.5;
+      };
+      for (let z = 0; z <= nz; z++) for (let x = 0; x <= nx; x++) {
+        const px = cut.west + (cut.east - cut.west) * x / nx, pz = south + (north - south) * z / nz;
+        positions.push(px, 0, pz); uvs.push(x / nx, z / nz);
+      }
+      for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+        const px = cut.west + (x + .5) * (cut.east - cut.west) / nx, pz = south + (z + .5) * (north - south) / nz;
+        const x0 = cut.west + (cut.east - cut.west) * x / nx, x1 = cut.west + (cut.east - cut.west) * (x + 1) / nx;
+        const z0 = south + (north - south) * z / nz, z1 = south + (north - south) * (z + 1) / nz;
+        if (insideTunnelCut(px, pz) || insideTunnelCut(x0, z0) || insideTunnelCut(x1, z0) || insideTunnelCut(x0, z1) || insideTunnelCut(x1, z1)) continue;
+        const a = z * (nx + 1) + x, b = a + nx + 1; indices.push(a, b, a + 1, a + 1, b, b + 1);
+      }
+      const ground = new Mesh('Parade plaza ground around underpass', scene), data = new VertexData(), normals: number[] = [];
+      VertexData.ComputeNormals(positions, indices, normals); data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs; data.applyToMesh(ground);
+      ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
+    }
   }
   const lawn = pbr(scene, 'Park lawn', '#4d5f3a', 0, .95);
   const lawnMaps = surfaceTextures(scene, 'Lawn', 'grass'); lawn.albedoTexture = lawnMaps.color; lawn.bumpTexture = lawnMaps.normal;
@@ -199,11 +251,30 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   // Painted kerbs and the start line.
   const kerbTexture = canvasTexture(scene, 'Kerb stripes', 256, 32, (c) => {
-    c.fillStyle = rome ? '#ece6d8' : '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = havana ? '#2e8f8a' : rome ? '#1c1c1e' : '#b3262b'; c.fillRect(0, 0, 128, 32);
+    c.fillStyle = rome ? '#ece6d8' : pyongyang ? '#ddd9cf' : '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = havana ? '#2e8f8a' : rome ? '#1c1c1e' : pyongyang ? '#8b202b' : '#b3262b'; c.fillRect(0, 0, 128, 32);
     c.fillStyle = '#0003'; c.fillRect(0, 28, 256, 4);
   });
   const kerb = pbr(scene, 'Painted kerb', '#ffffff', 0, .55); kerb.albedoTexture = kerbTexture;
   for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(0, TRACK.length, edgeGaps) : [[0, TRACK.length]]) sweep(scene, `Kerb ${side}`, side < 0 ? [[-W - .95, .08], [-W - .1, .05], [-W, .025]] : [[W, .025], [W + .1, .05], [W + .95, .08]], kerb, { uScale: 2.4, step: .6, from, to });
+  if (pyongyang) {
+    const pylonTexture = canvasTexture(scene, 'Shortcut approach pylon bands', 128, 128, (c) => {
+      c.fillStyle = '#d8732b'; c.fillRect(0, 0, 128, 128);
+      c.fillStyle = '#f2e8d7'; c.fillRect(0, 39, 128, 24);
+      c.fillStyle = '#35403e'; c.fillRect(0, 105, 128, 23);
+    });
+    const pylonMaterial = pbr(scene, 'Shortcut approach pylon enamel', '#ffffff', .02, .62); pylonMaterial.albedoTexture = pylonTexture;
+    const pylon = MeshBuilder.CreateCylinder('Shortcut approach boundary pylon', { diameterTop: .08, diameterBottom: .52, height: .9, tessellation: 8 }, scene);
+    pylon.material = pylonMaterial; pylon.isPickable = false;
+    const matrices: Matrix[] = [];
+    const wallFrom = SHORTCUT_LENGTH * .2, wallTo = SHORTCUT_LENGTH * .8;
+    const wallFreeApproaches: [number, number][] = [[12, wallFrom - 8], [wallTo + 8, SHORTCUT_LENGTH - 12]];
+    for (const [from, to] of wallFreeApproaches) for (let u = from; u <= to; u += 12) for (const side of [-1, 1]) {
+      const point = shortcutPoint(u, side * (SHORTCUT.halfWidth + .75));
+      matrices.push(Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, point.heading, 0), new Vector3(point.x, shortcutElevationAt(u) + .45, point.z)));
+    }
+    pylon.thinInstanceSetBuffer('matrix', new Float32Array(matrices.flatMap((matrix) => Array.from(matrix.asArray()))), 16, true);
+    shadow.addShadowCaster(pylon);
+  }
   const checker = canvasTexture(scene, 'Start checker', 256, 64, (c) => {
     for (let x = 0; x < 16; x++) for (let y = 0; y < 4; y++) { c.fillStyle = (x + y) % 2 ? '#111618' : '#f3eee0'; c.fillRect(x * 16, y * 16, 16, 16); }
   });
@@ -212,6 +283,31 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   start.material = startMaterial;
   const lineUv = start.getVerticesData('uv')!; for (let i = 0; i < lineUv.length; i += 2) { const u = lineUv[i]; lineUv[i] = lineUv[i + 1] * 2.5; lineUv[i + 1] = u - (TRACK.start - .5); }
   start.setVerticesData('uv', lineUv);
+
+  if (TRACK_INFO.dressing.breakableFence !== undefined) {
+    const fenceProgress = TRACK_INFO.dressing.breakableFence;
+    const boards = [pbr(scene, 'Start fence muted red enamel', '#8e2630', .12, .58), pbr(scene, 'Start fence worn ivory paint', '#d5cbb8', .04, .72)];
+    const addPart = (name: string, width: number, height: number, depth: number, lane: number, y: number, index: number) => {
+      const p = trackPoint(fenceProgress, lane), material = boards[index % boards.length];
+      const mesh = MeshBuilder.CreateBox(name, { width, height, depth }, scene);
+      mesh.position.set(p.x, y, p.z); mesh.rotation.y = p.heading; mesh.material = material; mesh.isPickable = false;
+      startFenceParts.push(mesh); shadow.addShadowCaster(mesh);
+      const debris = MeshBuilder.CreateBox(`${name} broken fragment`, { width: width * .9, height: Math.max(.12, height * .32), depth }, scene);
+      debris.position.copyFrom(mesh.position); debris.rotation.y = p.heading; debris.material = material; debris.isPickable = false; debris.setEnabled(false);
+      const direction = index % 2 ? 1 : -1;
+      startFenceDebris.push({ mesh: debris, origin: mesh.position.clone(), heading: p.heading,
+        vx: Math.cos(p.heading) * direction * (1.8 + index % 3 * .4), vy: 1.2 + index % 3 * .25,
+        vz: -Math.sin(p.heading) * direction * (1.8 + index % 3 * .4), spin: direction * 2.2 });
+    };
+    for (let i = 0; i < 8; i++) addPart('Pyongyang ceremonial start fence slat', 1.38, 1.25, .18, -4.83 + i * 1.38, .72, i);
+    for (let i = 0; i < 4; i++) for (const y of [.2, 1.25]) addPart('Pyongyang ceremonial start fence rail', 3, .16, .2, -4.5 + i * 3, y, i + (y > 1 ? 4 : 0));
+  }
+  const breakStartFence = () => {
+    if (startFenceBroken || !startFenceParts.length) return;
+    startFenceBroken = true; startFenceBreakTime = startFenceClock;
+    for (const part of startFenceParts) part.setEnabled(false);
+    for (const part of startFenceDebris) { part.mesh.position.copyFrom(part.origin); part.mesh.rotation.set(0, part.heading, 0); part.mesh.setEnabled(true); }
+  };
 
   // Barrier walls: striped racing barrier, or slogan boards along the two long straights.
   const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, havana ? (c) => {
@@ -232,11 +328,11 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {
-      const x = i * 512; c.fillStyle = i % 2 ? '#123b3c' : '#6d1b23'; c.fillRect(x + 4, 6, 504, 140);
+      const x = i * 512; c.fillStyle = pyongyang ? (i % 2 ? '#26383a' : '#741e29') : i % 2 ? '#123b3c' : '#6d1b23'; c.fillRect(x + 4, 6, 504, 140);
       c.strokeStyle = '#d7b46a'; c.lineWidth = 5; c.strokeRect(x + 14, 16, 484, 120);
       paintEmblem(c, x + 62, 76, 40);
       c.fillStyle = '#f2dfae'; c.font = `bold ${text.length > 18 ? 30 : 38}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(text, x + 290, 78);
@@ -366,12 +462,18 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const signMaterial = pbr(scene, 'Training ground sign', '#ffffff', 0, .6); signMaterial.albedoTexture = sign;
     if (CRATERS.length) { const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
     board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; } }
+  const alleyAt = (u: number, lane: number) => shortcutPoint(u, lane);
   { // Boost pads: glowing chevrons painted on the cobbles.
     // Texture u runs along the track (sweep), so the chevrons point toward +x = the driving direction.
     const chevrons = canvasTexture(scene, 'Boost chevrons', 256, 128, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 256, 128); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
       for (let x = 30; x < 256; x += 64) { c.beginPath(); c.moveTo(x, 14); c.lineTo(x + 34, 64); c.lineTo(x, 114); c.stroke(); } });
     const padMaterial = new StandardMaterial('Boost pad', scene); padMaterial.diffuseTexture = chevrons; padMaterial.emissiveTexture = chevrons; padMaterial.emissiveColor = new Color3(1, .8, .4); padMaterial.specularColor = Color3.Black();
     for (const [from, centre] of BOOST_PADS) { const pad = sweep(scene, 'Boost pad', [[centre - 1.5, .05], [centre + 1.5, .05]], padMaterial, { uScale: 1, vScale: 1, step: .5, from, to: from + 6 }); boostPads.push(pad); }
+    if (pyongyang) for (const [start, centre] of SHORTCUT.boostPads) {
+      const from = start * SHORTCUT_LENGTH;
+      boostPads.push(sweep(scene, 'Underpass boost strip', [[centre - 1.5, .065], [centre + 1.5, .065]], padMaterial,
+        { uScale: 1, vScale: 1, step: .5, from, to: from + 6, at: alleyAt, heightAt: shortcutElevationAt }));
+    }
   }
   for (const zone of HAZARDS) { // Open-edge hazard: water basin or furnace pit, quay walls, warning edge, signs and the salvage crane.
     const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava', cliff = zone.kind === 'cliff';
@@ -395,7 +497,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
     const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
-      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : havana ? 'MALECÓN' : rome ? 'TIBER' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : havana ? 'MALECÓN' : rome ? 'TIBER' : pyongyang ? 'TAEDONG' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
     const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
     for (const at of [from - 4, to + 4]) {
       const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
@@ -423,21 +525,41 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   });
   gravelTexture.uScale = gravelTexture.vScale = 2;
   const gravel = pbr(scene, 'Loose alley gravel', '#a18c68', 0, 1); gravel.albedoTexture = gravelTexture;
-  const alleyAt = (u: number, lane: number) => shortcutPoint(u, lane);
-  sweep(scene, 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], gravel, { uScale: 2, vScale: 2, step: .5, to: SHORTCUT_LENGTH, at: alleyAt,
-    color: (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
-  const hedgeMaterial = pbr(scene, 'Clipped alley hedge', '#ffffff', 0, .95);
-  const hedgeMaps = surfaceTextures(scene, 'Hedge', 'leaf'); hedgeMaps.color.hasAlpha = false; hedgeMaterial.albedoTexture = hedgeMaps.color; hedgeMaterial.bumpTexture = hedgeMaps.normal; hedgeMaterial.albedoColor = Color3.FromHexString('#5e8a4c');
-  for (const side of [-1, 1]) {
-    const a = SHORTCUT.halfWidth + .45, b = a + .7;
-    const hedge = sweep(scene, `Alley hedge ${side}`, side < 0 ? [[-b, 0], [-b, 1.05], [-a, 1.05], [-a, 0]] : [[a, 0], [a, 1.05], [b, 1.05], [b, 0]], hedgeMaterial,
-      { uScale: 1.5, vScale: 1.5, step: .8, from: 9, to: SHORTCUT_LENGTH - 9, at: alleyAt });
-    shadow.addShadowCaster(hedge);
+  sweep(scene, pyongyang ? 'Lowered parade underpass road' : 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], pyongyang ? road : gravel,
+    { uScale: 2, vScale: 2, step: .5, to: SHORTCUT_LENGTH, at: alleyAt, heightAt: pyongyang ? shortcutElevationAt : undefined,
+      color: pyongyang ? undefined : (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
+  if (pyongyang) {
+    const concrete = pbr(scene, 'Underpass reinforced concrete', '#777d79', 0, .9);
+    concrete.backFaceCulling = false;
+    const roofFrom = SHORTCUT_LENGTH * .2, roofTo = SHORTCUT_LENGTH * .8;
+    for (const side of [-1, 1]) {
+      const wallLane = SHORTCUT.halfWidth + .9;
+      const wall = sweep(scene, `Underpass retaining wall ${side}`, side < 0 ? [[-wallLane, 0], [-wallLane, 3.2]] : [[wallLane, 0], [wallLane, 3.2]], concrete,
+        { uScale: 2, vScale: 2, step: .8, from: roofFrom, to: roofTo, at: alleyAt, heightAt: shortcutElevationAt });
+      shadow.addShadowCaster(wall);
+      sweep(scene, `Underpass red guide stripe ${side}`, side < 0 ? [[-wallLane - .02, 2.45], [-wallLane - .02, 2.62]] : [[wallLane + .02, 2.45], [wallLane + .02, 2.62]], kerb, { uScale: 1, step: 1, from: roofFrom + 3, to: roofTo - 3, at: alleyAt, heightAt: shortcutElevationAt });
+    }
+    const roof = sweep(scene, 'Parade bridge underside over underpass', [[-SHORTCUT.halfWidth - .9, 3.2], [SHORTCUT.halfWidth + .9, 3.2]], concrete, { uScale: 3, vScale: 3, step: .8, from: roofFrom, to: roofTo, at: alleyAt, heightAt: shortcutElevationAt });
+    shadow.addShadowCaster(roof);
+    const lamp = new StandardMaterial('Underpass guide lights', scene); lamp.emissiveColor = new Color3(.62, .76, .72); lamp.disableLighting = true;
+    for (let u = roofFrom + 12; u < roofTo; u += 24) {
+      const p = shortcutPoint(u), light = MeshBuilder.CreateBox('Underpass ceiling light', { width: 1.4, height: .08, depth: .35 }, scene);
+      light.position.set(p.x, shortcutElevationAt(u) + 3.08, p.z); light.rotation.y = p.heading; light.material = lamp; light.isPickable = false;
+    }
+  } else {
+    const hedgeMaterial = pbr(scene, 'Clipped alley hedge', '#ffffff', 0, .95);
+    const hedgeMaps = surfaceTextures(scene, 'Hedge', 'leaf'); hedgeMaps.color.hasAlpha = false; hedgeMaterial.albedoTexture = hedgeMaps.color; hedgeMaterial.bumpTexture = hedgeMaps.normal; hedgeMaterial.albedoColor = Color3.FromHexString('#5e8a4c');
+    for (const side of [-1, 1]) {
+      const a = SHORTCUT.halfWidth + .45, b = a + .7;
+      const hedge = sweep(scene, `Alley hedge ${side}`, side < 0 ? [[-b, 0], [-b, 1.05], [-a, 1.05], [-a, 0]] : [[a, 0], [a, 1.05], [b, 1.05], [b, 0]], hedgeMaterial,
+        { uScale: 1.5, vScale: 1.5, step: .8, from: 9, to: SHORTCUT_LENGTH - 9, at: alleyAt });
+      shadow.addShadowCaster(hedge);
+    }
   }
   const signTexture = canvasTexture(scene, 'Shortcut sign', 512, 256, (c) => {
-    c.fillStyle = '#efe4c8'; c.fillRect(0, 0, 512, 256); c.strokeStyle = '#6d1b23'; c.lineWidth = 14; c.strokeRect(10, 10, 492, 236);
-    c.fillStyle = '#6d1b23'; c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ABKÜRZUNG', 256, 96);
-    c.font = '30px Georgia'; c.fillText('nur mit Sondergenehmigung', 256, 150); c.font = 'italic 24px Georgia'; c.fillText('Formular 08/15-B · Kopfsteinpflaster', 256, 200);
+    c.fillStyle = pyongyang ? '#ddd8c9' : '#efe4c8'; c.fillRect(0, 0, 512, 256); c.strokeStyle = '#6d1b23'; c.lineWidth = 14; c.strokeRect(10, 10, 492, 236);
+    c.fillStyle = '#6d1b23'; c.font = 'bold 48px Georgia'; c.textAlign = 'center'; c.fillText(pyongyang ? 'PARADE-UNTERFAHRT' : 'ABKÜRZUNG', 256, 96);
+    c.font = '30px Georgia'; c.fillText(pyongyang ? 'ZWEI SONDER-SCHÜBE' : 'nur mit Sondergenehmigung', 256, 150); c.font = 'italic 24px Georgia'; c.fillText(pyongyang ? 'Gleichschritt endet hier' : 'Formular 08/15-B · Kopfsteinpflaster', 256, 200);
   });
   const signMaterial = pbr(scene, 'Shortcut sign board', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
   for (const [u, side] of [[5, 1], [SHORTCUT_LENGTH - 5, -1]] as const) {
@@ -624,6 +746,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       else this.setWet(false);
     },
     animate(time) {
+      startFenceClock = time;
+      if (startFenceBroken) for (const part of startFenceDebris) {
+        const elapsed = Math.max(0, time - startFenceBreakTime), flight = Math.min(elapsed, .62);
+        const x = part.origin.x + part.vx * flight, z = part.origin.z + part.vz * flight;
+        const y = Math.max(.11, part.origin.y + part.vy * flight - 4.9 * flight * flight);
+        part.mesh.position.set(x, y, z);
+        part.mesh.rotation.set(flight < .62 ? part.spin * flight : Math.PI / 2, part.heading + part.spin * flight, flight < .62 ? -part.spin * .65 * flight : 0);
+      }
       updateBanners(time); waveFlag(time); pennants.position.y = Math.sin(time * 1.3) * .04;
       waterRipple.uOffset = (time * .035) % 1; waterRipple.vOffset = (time * .009) % 1;
       for (const shadow of cloudShadows) {
@@ -633,5 +763,6 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
         const p = trackPoint(progress); shadow.mesh.position.set(p.x, trackHeightAt(p.x, p.z) + .075, p.z); shadow.mesh.rotation.y = p.heading;
       }
     },
+    breakStartFence,
   };
 }

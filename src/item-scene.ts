@@ -14,6 +14,7 @@ import {trackHeightAt} from './track';
 import {PBRMaterial} from '@babylonjs/core/Materials/PBR/pbrMaterial';
 import type {Mesh} from '@babylonjs/core/Meshes/mesh';
 import type {ProjectileStyle} from './cast';
+import {ITEM_BOX_PROGRESS} from './items';
 
 /** Small runtime-built character projectiles (original simple geometry, no insignia). Forward is +Z. */
 function buildProjectile(scene:Scene,style:Exclude<ProjectileStyle,'dog'>,name:string):TransformNode{
@@ -104,7 +105,7 @@ export async function addItems(scene:Scene,shadow:ShadowGenerator,count:number,s
     for(const mesh of root.getChildMeshes()){mesh.isPickable=false;mesh.receiveShadows=true;shadow.addShadowCaster(mesh);}
     root.setEnabled(false);pools.push({kind,id:-1,look:'dog',dog:true,root,legs,tail});
   }
-  const boxes=Array.from({length:9},(_,i)=>copy('pickup',`dispatch box ${i}`));
+  const boxes=Array.from({length:ITEM_BOX_PROGRESS.length*3},(_,i)=>copy('pickup',`dispatch box ${i}`));
   const ringMaterial=new StandardMaterial('Brief hit protection',scene);ringMaterial.diffuseColor=Color3.FromHexString('#e2c88f');ringMaterial.emissiveColor=Color3.FromHexString('#a18a50');ringMaterial.disableLighting=true;
   const rings=Array.from({length:count},(_,i)=>{const m=MeshBuilder.CreateTorus(`Hit protection ${i}`,{diameter:3.2,thickness:.045,tessellation:32},scene);m.material=ringMaterial;m.setEnabled(false);return m;});
   const paper=new ParticleSystem('Postal paper and stamp dust',100,scene);paper.particleTexture=scene.particleSystems[0]?.particleTexture;
