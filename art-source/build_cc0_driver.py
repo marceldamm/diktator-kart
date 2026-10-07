@@ -48,6 +48,9 @@ for o in meshes:
         if mod.type == 'ARMATURE': bpy.ops.object.modifier_apply(modifier=mod.name)
 for o in meshes:
     mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+bpy.context.view_layer.update()
+neck_at = arm.matrix_world @ arm.pose.bones['neck_01'].head
+chest_at = arm.matrix_world @ arm.pose.bones['spine_03'].head
 bpy.data.objects.remove(arm)
 
 # --- Suit shell: body copy without head/neck and hands, pushed out a little, wool material ----------------
@@ -80,6 +83,23 @@ tip = min((p for p in face if 1.6 < p.z < 1.72 and abs(p.x) < .03), key=lambda p
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0, tip.y + .012, tip.z - .038))
 tache = bpy.context.active_object; tache.name = 'Pilot moustache'; tache.scale = (.042, .012, .016)
 bpy.ops.object.transform_apply(scale=True); tache.data.materials.append(tache_mat)
+
+# --- Shirt collar, tie and lapels (civilian suit of the 1930s; no insignia) ------------------------------
+def solid(name, rgb, rough=.6):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    b = m.node_tree.nodes['Principled BSDF']; b.inputs['Base Color'].default_value = (*rgb, 1); b.inputs['Roughness'].default_value = rough
+    return m
+shirt, tie_mat = solid('Pilot shirt', (.78, .76, .7)), solid('Pilot tie', (.05, .03, .025), .5)
+bpy.ops.mesh.primitive_torus_add(major_radius=.068, minor_radius=.018, location=(neck_at.x, neck_at.y - .005, neck_at.z - .015))
+collar = bpy.context.active_object; collar.name = 'Pilot shirt collar'; collar.scale = (1.08, .95, 1.4); collar.data.materials.append(shirt)
+front = neck_at.y - .1
+bpy.ops.mesh.primitive_cube_add(size=1, location=(0, front + .015, (neck_at.z + chest_at.z) / 2 - .03))
+tie = bpy.context.active_object; tie.name = 'Pilot tie'; tie.scale = (.045, .012, max(.12, neck_at.z - chest_at.z)); tie.data.materials.append(tie_mat)
+for sd in (-1, 1):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(sd * .07, front + .02, (neck_at.z + chest_at.z) / 2 - .05))
+    lapel = bpy.context.active_object; lapel.name = 'Pilot lapel'; lapel.scale = (.06, .012, .2); lapel.rotation_euler[1] = sd * .35; lapel.data.materials.append(suit_mat)
+for o in [o for o in bpy.data.objects if o.name.startswith(('Pilot shirt collar', 'Pilot tie', 'Pilot lapel'))]:
+    bpy.context.view_layer.objects.active = o; o.select_set(True); bpy.ops.object.transform_apply(scale=True, rotation=True); o.select_set(False)
 
 # --- Into the kart frame: face +Y, pelvis over the seat cushion ----------------------------------------
 root = bpy.data.objects.new('cc0-driver-hitler', None); bpy.context.collection.objects.link(root)
