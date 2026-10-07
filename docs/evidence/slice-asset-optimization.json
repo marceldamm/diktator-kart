@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-06T22:45:14.236Z",
+  "date": "2026-10-07T06:01:01.944Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -24,8 +24,8 @@
     },
     {
       "name": "city-kit",
-      "originalBytes": 9955608,
-      "runtimeBytes": 8000092
+      "originalBytes": 11661864,
+      "runtimeBytes": 9331992
     }
   ]
 }

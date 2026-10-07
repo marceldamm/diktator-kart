@@ -110,7 +110,28 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   if (!rome) addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
-  const road = pbr(scene, 'Cobblestone boulevard', '#d8d2c2', 0, 1);
+  const road = pbr(scene, rome ? 'Travertine parade slabs' : 'Cobblestone boulevard', '#d8d2c2', 0, 1);
+  if (rome) {
+    // Duce-Drom: large honed travertine slabs in a running bond with dark joints (procedural, original).
+    let seed = 1922; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    const slabs: [number, number, number, number, number][] = [];
+    for (let row = 0; row < 4; row++) for (let col = -1; col < 3; col++) slabs.push([col * 256 + (row % 2) * 128, row * 128, 256, 128, rnd()]);
+    road.albedoTexture = canvasTexture(scene, 'Travertine slab colour', 512, 512, (c) => {
+      c.fillStyle = '#8f8574'; c.fillRect(0, 0, 512, 512);
+      for (const [x, y, w, h, t] of slabs) {
+        const tone = 206 + Math.round(t * 26), g = c.createLinearGradient(x, y, x + w, y + h);
+        g.addColorStop(0, `rgb(${tone},${tone - 8},${tone - 26})`); g.addColorStop(1, `rgb(${tone - 14},${tone - 22},${tone - 40})`);
+        c.fillStyle = g; c.fillRect(x + 2, y + 2, w - 4, h - 4);
+        for (let k = 0; k < 40; k++) { c.fillStyle = `rgba(120,96,64,${.06 + rnd() * .08})`; c.fillRect(x + 4 + rnd() * (w - 12), y + 4 + rnd() * (h - 12), 2 + rnd() * 18, 1 + rnd() * 2); }
+      }
+    });
+    road.bumpTexture = canvasTexture(scene, 'Travertine slab joints', 512, 512, (c) => {
+      c.fillStyle = '#8080ff'; c.fillRect(0, 0, 512, 512);
+      for (const [x, y, w, h] of slabs) { c.strokeStyle = '#6a6aff'; c.lineWidth = 4; c.strokeRect(x, y, w, h); c.strokeStyle = '#a0a0ff'; c.lineWidth = 2; c.strokeRect(x + 4, y + 4, w - 8, h - 8); }
+    });
+    road.bumpTexture.level = .6; road.roughness = .78;
+    for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  } else {
   road.albedoTexture = new Texture('/assets/textures/cobble-color.jpg', scene);
   road.bumpTexture = new Texture('/assets/textures/cobble-normal.jpg', scene);
   road.metallicTexture = new Texture('/assets/textures/cobble-arm.jpg', scene);
@@ -118,6 +139,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   road.useMetallnessFromMetallicTextureBlue = true; road.useAmbientOcclusionFromMetallicTextureRed = true;
   road.invertNormalMapX = true; road.bumpTexture.level = .8;
   for (const t of [road.albedoTexture, road.bumpTexture, road.metallicTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  }
   const waterRipple = canvasTexture(scene, 'Soft flowing water normals', 256, 128, (c) => {
     c.fillStyle = '#8080ff'; c.fillRect(0, 0, 256, 128);
     for (let row = 0; row < 13; row++) {
@@ -132,7 +154,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   });
   waterRipple.uScale = 10; waterRipple.vScale = 1.8;
   const roadLanes: [number, number][] = [-W, -W * .6, -W * .25, 0, W * .25, W * .6, W].map((lane) => [lane, .02]);
-  sweep(scene, 'Racing surface', roadLanes, road, { uScale: 2, vScale: 2, step: .75, follow: true, color: (s, lane) => {
+  sweep(scene, 'Racing surface', roadLanes, road, { uScale: rome ? 6 : 2, vScale: rome ? 6 : 2, step: .75, follow: true, color: (s, lane) => {
     const wear = Math.exp(-((lane - Math.sin(s * .021) * 1.6) ** 2) / 5) * .16;
     const tone = .93 + Math.sin(s * .047) * .05 + Math.sin(s * .13 + lane) * .025 - wear;
     return [tone, tone * .985, tone * .96];
@@ -161,7 +183,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   // Painted kerbs and the start line.
   const kerbTexture = canvasTexture(scene, 'Kerb stripes', 256, 32, (c) => {
-    c.fillStyle = '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = '#b3262b'; c.fillRect(0, 0, 128, 32);
+    c.fillStyle = rome ? '#ece6d8' : '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = rome ? '#1c1c1e' : '#b3262b'; c.fillRect(0, 0, 128, 32);
     c.fillStyle = '#0003'; c.fillRect(0, 28, 256, 4);
   });
   const kerb = pbr(scene, 'Painted kerb', '#ffffff', 0, .55); kerb.albedoTexture = kerbTexture;
@@ -176,7 +198,13 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   start.setVerticesData('uv', lineUv);
 
   // Barrier walls: striped racing barrier, or slogan boards along the two long straights.
-  const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, (c) => {
+  const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, rome ? (c) => {
+    // Travertine parapet blocks with a bronze band (Duce-Drom).
+    c.fillStyle = '#e4dccb'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#c9bea7';
+    for (let x = 0; x < 512; x += 128) c.fillRect(x, 0, 3, 150);
+    c.fillStyle = '#8a6a3a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
+    c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42);
+  } : (c) => {
     c.fillStyle = '#efe4c8'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#a3242a'; c.fillRect(0, 0, 256, 150);
     c.fillStyle = '#efe4c8'; c.fillRect(256, 0, 256, 150);
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
@@ -461,7 +489,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = g; c.fillRect(0, 0, 256, 700);
     c.fillStyle = '#d4a650'; c.fillRect(0, 0, 256, 22); c.fillRect(18, 40, 8, 600); c.fillRect(230, 40, 8, 600);
     paintEmblem(c, 128, 250, 78);
-    c.font = 'bold 30px Georgia'; c.textAlign = 'center'; c.fillStyle = '#e9c77a'; c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510);
+    c.font = 'bold 30px Georgia'; c.textAlign = 'center'; c.fillStyle = '#e9c77a';
+    if (rome) { c.fillText('MEHR', 128, 430); c.fillText('MARMOR', 128, 470); c.fillText('BITTE', 128, 510); } else { c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510); }
     c.beginPath(); c.moveTo(0, 690); c.lineTo(128, 768); c.lineTo(256, 690); c.closePath(); c.fillStyle = '#8b1e26'; c.fill();
     c.fillStyle = '#d4a650'; c.fillRect(0, 682, 256, 10);
   }, true);

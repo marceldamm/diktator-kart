@@ -146,13 +146,16 @@ const DUCE_DROM: TrackDefinition = {
   dressing: {
     boardRanges: [[6, 250], [1060, 1150]], flagRange: [282, 392], pennants: [20, 120, 205, 1075, 1125], screenProgress: 99,
     districts: [
-      { from: 0, to: 262, left: 'stands', right: 'stands' }, { from: 262, to: 455, left: 'ruins', right: 'insula' },
+      { from: 0, to: 262, left: 'stands', right: 'stands' }, { from: 262, to: 455, left: 'ruins', right: 'stands' },
       { from: 455, to: 600, left: 'pines', right: 'pines' }, { from: 600, to: 748, left: 'insula', right: 'pines' },
       { from: 748, to: 838, left: 'insula', right: 'quay' }, { from: 838, to: 1000, left: 'ruins', right: 'insula' },
       { from: 1000, to: 1180, left: 'avenue', right: 'avenue' }, { from: 1180, to: 99999, left: 'stands', right: 'stands' },
     ],
     heroes: [
       { m: 'kit-balcony-palace', s: 985, lane: 22 },
+      { m: 'kit-quadrato', x: 175, z: -235 }, { m: 'kit-colossal-head', s: 1112, lane: -25 },
+      // A parade of identical athletes on the infield lawn, all facing the Circus straight.
+      ...[-120, -75, -30, 15, 60].map((x) => ({ m: 'kit-athlete', x, z: -86, yaw: Math.PI })),
       { m: 'kit-aqueduct', x: -20, z: 30, yaw: .5 }, { m: 'kit-aqueduct', x: 2, z: 42, yaw: .5 }, { m: 'kit-aqueduct', x: 24, z: 54, yaw: .5 },
       { m: 'kit-fountain', x: -120, z: 70 }, { m: 'kit-ruin', x: -120, z: 20, yaw: 1.2 }, { m: 'kit-ruin', x: -60, z: -60, yaw: -.4 },
     ],

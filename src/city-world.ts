@@ -47,6 +47,11 @@ const DIMS: Record<string, Footprint> = {
   'kit-obelisk': { u0: -3.4, u1: 3.4, v0: -3.4, v1: 3.4 }, 'kit-pine': { u0: -1.5, u1: 1.5, v0: -1.5, v1: 1.5 },
   'kit-pine-b': { u0: -1.5, u1: 1.5, v0: -1.5, v1: 1.5 }, 'kit-aqueduct': { u0: -12.3, u1: 12.3, v0: -1.6, v1: 1.6 },
   'kit-ruin': { u0: -6.6, u1: 6.6, v0: -5, v1: 4.4 },
+  // Duce-Drom monuments (art-source/rome_monuments.py)
+  'kit-athlete': { u0: -1.2, u1: 1.2, v0: -1.2, v1: 1.2 }, 'kit-marble-terrace': { u0: -11, u1: 11, v0: -.5, v1: 8.6 },
+  'kit-quadrato': { u0: -20, u1: 20, v0: -4.5, v1: 34.5 }, 'kit-colossal-head': { u0: -11.2, u1: 11.2, v0: -6.5, v1: 12 },
+  'kit-rational-a': { u0: -9.2, u1: 9.2, v0: -2.9, v1: 14 }, 'kit-rational-b': { u0: -13.2, u1: 13.2, v0: -2.9, v1: 15 },
+  'kit-rational-c': { u0: -6.2, u1: 6.2, v0: -.3, v1: 12 }, 'kit-colonnade': { u0: -13.2, u1: 13.2, v0: -.7, v1: 3.6 },
 };
 const BERLIN_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c7c9a6', '#d49d7c', '#e8d3b0'];
 /** Roman ochre, sienna, terracotta and pale travertine plasters. */
@@ -57,6 +62,8 @@ function rng(seed: number) { return () => { seed = (seed * 1664525 + 1013904223)
 export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promise<CityWorld> {
   const rome = TRACK_INFO.theme === 'rome';
   const PLASTER_TINTS = (rome ? ROME_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
+  /** Pale travertine tones for the rationalist blocks of the Duce-Drom. */
+  const TRAVERTINE = ['#f1ebdd', '#e8dfcc', '#f5f1e6', '#e2d8c2'].map((h) => Color3.FromHexString(h).toLinearSpace());
   const kit = await LoadAssetContainerAsync('/assets/models/city-kit.glb', scene);
   kit.addAllToScene();
   scene.onDisposeObservable.add(() => kit.dispose());
@@ -105,12 +112,16 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     signs.update();
   }
   // Arch attic inscription (Roman theme): an original satirical dedication, not a historical text.
-  const inscription = new DynamicTexture('Kit inscription', { width: 1024, height: 256 }, scene, true);
+  const inscription = new DynamicTexture('Kit inscription', { width: 1024, height: 512 }, scene, true);
   {
     const c = inscription.getContext() as CanvasRenderingContext2D;
     c.fillStyle = '#e6dcc4'; c.fillRect(0, 0, 1024, 256); c.fillStyle = '#9a7a3e'; c.textAlign = 'center'; c.textBaseline = 'middle';
-    c.font = 'bold 74px Georgia'; c.fillText('SENATVS POPVLVSQVE', 512, 78); c.fillText('APPLAVDENS', 512, 168);
-    c.font = 'italic 26px Georgia'; c.fillText('Beifall amtlich angeordnet · Vorfahrt dem Sieger von morgen', 512, 230);
+    // Top half: triumphal arch attic. Bottom half: the square palace band (a pompous pastiche, not a real inscription).
+    c.font = 'bold 50px Georgia'; c.fillText('SENATVS POPVLVSQVE', 512, 52); c.fillText('APPLAVDENS', 512, 112);
+    c.font = 'italic 18px Georgia'; c.fillText('Beifall amtlich angeordnet · Vorfahrt dem Sieger von morgen', 512, 150);
+    c.fillStyle = '#efe6d2'; c.fillRect(0, 256, 1024, 256); c.fillStyle = '#7d6a4a';
+    c.font = 'bold 34px Georgia'; c.fillText('EIN VOLK VON POSEUREN · BALKONREDNERN', 512, 330); c.fillText('BAUHERREN · BEIFALLSPFLICHTIGEN', 512, 380);
+    c.font = 'italic 20px Georgia'; c.fillText('Gestiftet vom Stifter persönlich', 512, 440);
     inscription.update();
   }
   const glowMeshes: Mesh[] = [];
@@ -185,10 +196,15 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   if (LANDMARKS.palace) tryPlace({ m: 'kit-palace', x: LANDMARKS.palace[0], z: LANDMARKS.palace[1], yaw: 0 }, { lawnOk: true });
   tryPlace({ m: rome ? 'kit-obelisk' : 'kit-column', x: LANDMARKS.column[0], z: LANDMARKS.column[1], yaw: 0 }, { lawnOk: true });
   for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; tryPlace({ m: rome ? 'kit-cypress' : 'kit-urn', x: LANDMARKS.column[0] + Math.cos(a) * 12.5, z: LANDMARKS.column[1] + Math.sin(a) * 12.5, yaw: -a }, { lawnOk: true }); }
+  const heroFailures: string[] = [];
   for (const h of TRACK_INFO.dressing.heroes) {
-    if (h.s !== undefined) { const p = trackPoint(h.s, h.lane ?? 0); tryPlace({ m: h.m, x: p.x, z: p.z, yaw: h.yaw ?? facing(p.x, p.z) }, { lawnOk: true }); }
-    else tryPlace({ m: h.m, x: h.x ?? 0, z: h.z ?? 0, yaw: h.yaw ?? 0 }, { lawnOk: true });
+    let ok: boolean;
+    if (h.s !== undefined) { const p = trackPoint(h.s, h.lane ?? 0); ok = tryPlace({ m: h.m, x: p.x, z: p.z, yaw: h.yaw ?? facing(p.x, p.z) }, { lawnOk: true }); }
+    else ok = tryPlace({ m: h.m, x: h.x ?? 0, z: h.z ?? 0, yaw: h.yaw ?? facing(h.x ?? 0, h.z ?? 0) }, { lawnOk: true });
+    if (!ok) heroFailures.push(h.m);
   }
+  // Diagnostics only: lets browser checks confirm that every hero landmark found a free plot.
+  (globalThis as { __DK_CITY?: unknown }).__DK_CITY = { heroFailures };
   const cathedral = TRACK_INFO.dressing.cathedral;
   if (cathedral) tryPlace({ m: 'kit-cathedral', x: cathedral.x, z: cathedral.z, yaw: cathedral.yaw }, { riverOk: false });
   for (const x of TRACK_INFO.dressing.bridges) placements.push({ m: 'kit-bridge', x, z: (RIVER.north + RIVER.south) / 2, yaw: Math.PI / 2, sx: 1.16 * Math.abs(RIVER.north - RIVER.south) / 72 });
@@ -202,8 +218,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   type District = { from: number; to: number; left: string; right: string };
   const districts: District[] = TRACK_INFO.dressing.districts.map((d) => ({ ...d, to: Math.min(d.to, TRACK.length - 1) }));
   const families: Record<string, string[]> = rome ? {
-    insula: ['kit-insula-a', 'kit-insula-b', 'kit-insula-c', 'kit-insula-a', 'kit-insula-b'],
-    avenue: ['kit-insula-c', 'kit-insula-a', 'kit-insula-c'],
+    insula: ['kit-rational-a', 'kit-insula-a', 'kit-rational-b', 'kit-insula-c', 'kit-rational-c', 'kit-insula-b'],
+    avenue: ['kit-rational-b', 'kit-colonnade', 'kit-rational-a', 'kit-colonnade'],
   } : {
     city: ['kit-house-a', 'kit-house-b', 'kit-house-c', 'kit-house-a', 'kit-house-d', 'kit-house-b'],
     boulevard: ['kit-house-d', 'kit-house-a', 'kit-house-d', 'kit-house-b'],
@@ -218,14 +234,18 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (kind === 'stands') {
       for (let s = d.from; s < d.to; s += 1) {
         const p = trackPoint(s, side * (PROMENADE + 2.4)), yaw = facing(p.x, p.z);
-        if (tryPlace({ m: 'kit-grandstand', x: p.x, z: p.z, yaw, s }, { lawnOk: true })) s += 23;
+        if (tryPlace({ m: rome ? 'kit-marble-terrace' : 'kit-grandstand', x: p.x, z: p.z, yaw, s }, { lawnOk: true })) {
+          // Duce-Drom: identical oversized athletes on every other terrace parapet (same bald head, same pose).
+          if (rome && Math.round(s) % 2 === 0) { const q = trackPoint(s, side * (PROMENADE + 2.4 + 8.2)); placements.push({ m: 'kit-athlete', x: q.x, z: q.z, y: 6.42, yaw }); }
+          s += rome ? 21 : 23;
+        }
       }
     } else if (families[kind]) {
       for (let s = d.from; s < d.to; s += 1.5) {
         const m = pick(families[kind]);
         const lane = side * (PROMENADE + 2.6 + (kind === 'avenue' ? 3 : random() * .8));
         const p = trackPoint(s, lane);
-        if (tryPlace({ m, x: p.x, z: p.z, yaw: facing(p.x, p.z), tint: tint(), s })) s += (DIMS[m].u1 - DIMS[m].u0) * .55;
+        if (tryPlace({ m, x: p.x, z: p.z, yaw: facing(p.x, p.z), tint: m.startsWith('kit-rational') ? pick(TRAVERTINE) : tint(), s })) s += (DIMS[m].u1 - DIMS[m].u0) * .55;
       }
     }
     // Roman hill gardens and forum ruins: umbrella pines, cypresses, columns and statues.
@@ -285,10 +305,10 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const px = x + (random() - .5) * 10, pz = z + (random() - .5) * 10;
     const { lane } = trackLocate(px, pz);
     if (Math.abs(lane) < 34) continue;
-    const m = pick(rome ? ['kit-insula-c', 'kit-insula-a', 'kit-insula-c', 'kit-insula-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
+    const m = pick(rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
     const towardCentre = Math.atan2(-(60 - px), -(-20 - pz));
     const yaw = Math.abs(lane) < 70 ? facing(px, pz) : Math.round(towardCentre / (Math.PI / 2)) * Math.PI / 2;
-    tryPlace({ m, x: px, z: pz, yaw, tint: tint() }, { extra: 18, skipCircuit: Math.abs(lane) > 70 });
+    tryPlace({ m, x: px, z: pz, yaw, tint: m.startsWith('kit-rational') ? pick(TRAVERTINE) : tint() }, { extra: 18, skipCircuit: Math.abs(lane) > 70 });
   }
 
   // --- Static batching ---------------------------------------------------------------------------------

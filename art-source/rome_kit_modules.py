@@ -191,7 +191,7 @@ def triumphal_arch():
     M.box(LIME, x0 + 1, x1 - 1, -4.3, 4.3, ztop + .8, ztop + 7.0, .97)
     for yy in (-4.32, 4.3):
         v = [(-12, yy, ztop + 1.6), (12, yy, ztop + 1.6), (12, yy, ztop + 6.0), (-12, yy, ztop + 6.0)]
-        M.add(INSCRIPTION, v, [(0, 1, 2, 3)] if yy < 0 else [(3, 2, 1, 0)], 1.0, uvfit=True)
+        M.add(INSCRIPTION, v, [(0, 1, 2, 3)] if yy < 0 else [(3, 2, 1, 0)], 1.0, uvfit=(0, 1, .5, 1))
         M.box(GOLD, -12.3, 12.3, yy - .06 if yy < 0 else yy, yy if yy < 0 else yy + .06, ztop + 1.4, ztop + 1.55)
     M.box(LIME, x0 + .6, x1 - .6, -4.6, 4.6, ztop + 7.0, ztop + 7.6, .95)
     statue(M, 0, 0, ztop + 7.6, 2.6)

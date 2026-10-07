@@ -827,6 +827,8 @@ modules = [
 # Second circuit (Duce-Drom, Rome): Roman modules share this kit and its materials.
 exec(open(os.path.join(ROOT, 'art-source', 'rome_kit_modules.py'), encoding='utf-8').read())
 modules += rome_modules()
+exec(open(os.path.join(ROOT, 'art-source', 'rome_monuments.py'), encoding='utf-8').read())
+modules += monument_modules()
 x = 0
 for M in modules:
     to_blender(M, x); x += 120
