@@ -1,4 +1,6 @@
 export interface KartState {
+  /** Extra top speed from pinned-on medals (src/medals.ts); 0 or absent for everyone without medals. */
+  topSpeedBonus?: number;
   x: number;
   z: number;
   heading: number;
@@ -88,10 +90,10 @@ export const KART_TUNING = {
   driftMaxSlip: 0.42,
   normalHeadingFollow: 5.5,
   /** Steering wheel travel rate (1/s) and yaw response rate (1/s): less direct, more car-like. */
-  steerRate: 9,
+  steerRate: 7,
   /** Faster self-centring when the key is released or reversed (Marcel: steering felt too soft). */
   steerReturnRate: 18,
-  yawResponse: 11,
+  yawResponse: 9,
   turboDuration: 1.2,
   turboSpeedBonus: 4,
   turboAcceleration: 4,
@@ -195,7 +197,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
 
   if (drive > 0) {
     // A tank is heavy but not slow; a kart just pushed aside by one is briefly throttled.
-    const cap = turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : (state.slowRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .62 : (state.tankRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .94 : KART_TUNING.maxForwardSpeed;
+    const cap = turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : (state.slowRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .62 : (state.tankRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .94 : KART_TUNING.maxForwardSpeed + (state.topSpeedBonus ?? 0);
     speed = speed < 0
       ? Math.min(0, speed + KART_TUNING.braking * drive * dt)
       : speed > cap

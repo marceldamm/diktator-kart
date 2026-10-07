@@ -167,6 +167,8 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 
 ## M6 – Vollständiger Singleplayer
 
+- **07.10.2026 (Claude, Marcel-Auftrag):** Zweite spielbare Strecke Duce-Drom (Rom), zweistufiger Grand Prix mit Punkten/Zwischen-/Gesamtwertung und Siegerehrung, Einzelrennen, Zeitfahren je Strecke mit Geist und bester Runde, Live-Rangliste rechts und Rivalenstile sind umgesetzt und im sichtbaren Chrome geprüft (Demo-Autopilot, keine menschliche Fahrprobe). Gesamtabgleich aller Fragebogen-Ziele mit Status und nächster Reihenfolge: [docs/27-questionnaire-status.md](docs/27-questionnaire-status.md). Nächstes Langzeitpaket: M7-Messung beider Strecken, Gamepad/Tastenbelegung, Fähigkeiten der übrigen vier Fahrer, dritte Strecke aus Sarahs Liste.
+
 - [ ] Fahrer-/Kartwahl, Menü, HUD, Optionen, Tutorial und Startablauf auf einen gemeinsamen Qualitätsstand bringen. **04.10.: Fahrerwahl mit Live-Porträts vorhanden; Siegerkarte mit Porträts und Ziel-Feuerwerk.**
 - **Teilfortschritt 05.10.:** Das Ein-Item-HUD zeigt Symbol, Itemname, „IM SLOT“/„LEER“, barrierefreien Status und Buttonzustand; Tastatur, Maus und Touch teilen den Schild-Halte-/Loslass-Wurfpfad. Schnelle Taps zwischen Simulationsframes und Pointer-Abbruch sind regressionsgeprüft. Der Karosseriezustand ist als ARIA-Meter mit aktuellem Prozentwert ausgezeichnet. Die interaktive Aufnahme → Anzeige → Wurf-Abnahme im laufenden Browser bleibt offen. Keine Mehrfachslots ohne neue Umfangsentscheidung.
 - **M6-Item-Abnahme erledigt (05.10.2026):** Im echten Grand Prix nahm der Spieler ein Traktor-Item auf; das HUD zeigte Symbol, Namen, „IM SLOT“ und aktiven Wurfbutton. Buttonklick und separater `E`-Tastendruck warfen das Item; Slot wurde leer, Status meldete „Fünfjahresplan-Traktor unterwegs“. Mehrfachinventar bleibt außerhalb des bestätigten Umfangs. E-/Touch-Schild-Halten, Rückwärtswurf und menschliche Balance bleiben offen.
@@ -186,7 +188,7 @@ Details: [07](docs/07-gameplay-systems.md), [13](docs/13-world-and-content-bound
 **Folgeschritt:** Den aktualisierten Welt-Export mit GLB-/Build-Prüfungen und frischem Babylon-Rennen abnehmen. Danach Regenrinnen, Schilder und Ladenpflanzkästen in Babylon-Nahansicht prüfen. M7 braucht ein gleich gehaltenes A/B im bewegten Rennen, bevor Glow-/Postprocess-Verhalten geändert wird.
 - [ ] Verständliche deutsche Bedienung und Statusmeldungen; Diagnose bleibt optional, keine technischen Interna als normaler Spielerablauf.
 - [ ] Alle sechs Fahrer und erste historische Strecke mit Material-/Animations-/Audioqualität fertigstellen.
-- [ ] Siegerehrung, Ergebnis-/Rennbericht und Revanche ausarbeiten.
+- [ ] Siegerehrung, Ergebnis-/Rennbericht und Revanche ausarbeiten. **07.10.: Grand-Prix-Gesamtwertung mit Siegerporträt, Zwischenwertung, „Nächstes Rennen“/„Neuer Grand Prix“ umgesetzt; aufwendigere Siegerehrung (Podest in 3D) offen.**
 - [ ] Lokale Einstellungen, Kameraruhe, reduzierte Effekte, Ton/Musik und Lade-/Fehlerzustände zuverlässig erhalten.
 - [ ] Wiederholbare Rennen und Kaltstarts; gemeinsame Inhalts-/Stil-/Hörabnahme dokumentieren.
 

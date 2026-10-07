@@ -1,18 +1,23 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
-import { attachKeyboard, attachPointerHold, attachTouch, InputHub,type Action } from './input';
+import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, exportBindings, importBindings, keyLabel, pollGamepads, primaryKey, rebind, resetBindings, type Action } from './input';
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
-import { CAST, rosterOrder } from './cast';
-import {createItems,stepItems,botUsesItem,ITEM_NAMES,type ItemWorld} from './items';
+import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
+import {createItems,stepItems,botUsesItem,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
+import { TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
+import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
+import { RankingBoard } from './ranking-hud';
+import { pickQuality } from './auto-quality';
+import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -49,6 +54,8 @@ function initialLoadKarts(): KartState[] {
       heading, travelHeading: heading, speed: 8 };
   });
 }
+
+const trackProgressOf = (k: { x: number; z: number }) => trackProgressAt(k.x, k.z);
 
 class App {
   private engine: Engine | undefined;
@@ -102,9 +109,29 @@ class App {
   private itemHeld=false;
   private queuedItemUse=false;
   private itemDirection:'forward'|'backward'='forward';
-  /** 'gp' = Grand Prix with five bots; 'timetrial' = solo three laps against your saved ghost. */
-  private mode:'gp'|'timetrial'='gp';
-  private ghostRun:{time:number;driver:number;samples:number[][]}|null=null;
+  /** 'gp' = two-race Grand Prix with five bots; 'single' = one race on the chosen track; 'timetrial' = solo three laps against your saved ghost. */
+  private mode:'gp'|'single'|'timetrial'='gp';
+  /** Running championship (null outside a Grand Prix). */
+  private gp:GrandPrix|null=null;
+  private finishAction:()=>void=()=>void this.beginRace();
+  private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
+  private gpIntroUntil=0;
+  /** Set once the player picked the opening track of the current Grand Prix. */
+  private gpTrackChosen=false;
+  /** Player's tyre set: 'auto' = the driver's own design, otherwise any set id from TIRE_SETS. */
+  private tireChoice:string='auto';
+  /** Malecón wave (Havanna, lap 2): the flooded seafront stretch slows everyone alike until this race time. */
+  private waveUntil=0;
+  private medals:MedalWorld={medals:[],counts:[],events:[]};
+  /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
+  private autoQuality=false;
+  private padButtons=new Map<string,boolean>();
+  private gamepadSeen=false;
+  /** Action waiting for its new key in the options (null = not listening). */
+  private rebinding:Action|null=null;
+  /** Best lap of the current run; reset on every start, saved per track on a complete run only. */
+  private ghostDelta:number|null=null;
+  private ghostRun:{time:number;driver:number;samples:number[][];track?:string}|null=null;
   private ghostRecord:number[][]=[];
   private steerAssist=false;
   private inCrater:boolean[]=[];
@@ -117,7 +144,7 @@ class App {
   private weather:'sun'|'rain'|'snow'='sun';
   /** Rolled per Grand Prix: half the races run from day through dusk into night over the three laps. */
   private dayToNight=false;
-  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0};
+  private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
   private itemMessage='';
   private itemMessageUntil=0;
   private abilityAnnouncementUntil=0;
@@ -136,7 +163,7 @@ class App {
   private leadCooldown=0;
   private chosen=0;
   private order=rosterOrder(0);
-  private selectedTrackId='stadionring';
+  private selectedTrackId:TrackId='stadionring';
   private selectingTrack=false;
   private selecting=false;
   private portraitCaptureInProgress=false;
@@ -146,9 +173,18 @@ class App {
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    try { this.autoQuality = localStorage.getItem('dk-quality') === null && !LAB_WORLD && !new URLSearchParams(location.search).has('demo'); } catch { /* storage optional */ }
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
     try{if(localStorage.getItem('dk-audio')==='0')this.audio.setEnabled(false);}catch{}
+    { // Last chosen circuit (or ?track=duce-drom) is loaded first.
+      let wanted:unknown=new URLSearchParams(location.search).get('track');
+      try{if(!isTrackId(wanted))wanted=localStorage.getItem('dk-track');}catch{}
+      if(isTrackId(wanted))selectTrack(wanted);
+      this.selectedTrackId=TRACK.id;
+      this.drawTrackCards();
+    }
+    try{const t=localStorage.getItem('dk-tires');if(t&&(t==='auto'||TIRE_SETS.some(s=>s.id===t)))this.tireChoice=t;}catch{}
     try{const saved=Number(localStorage.getItem('dk-driver'));if(Number.isInteger(saved)&&saved>=0&&saved<CAST.length)this.chosen=saved;}catch{}
     this.order=rosterOrder(this.chosen);
     try{this.autoGas=localStorage.getItem('dk-auto-gas')==='1';this.steerAssist=localStorage.getItem('dk-steer-assist')==='1';}catch{}
@@ -160,10 +196,19 @@ class App {
     const botLabel=()=>{setBotSkill(this.botLevel);document.querySelector('#bots-toggle')!.textContent=`Gegner ${['leicht','mittel','schwer'][this.botLevel]}`;};
     document.querySelector('#bots-toggle')?.addEventListener('click',()=>{this.botLevel=((this.botLevel+1)%3) as 0|1|2;try{localStorage.setItem('dk-bot-level',String(this.botLevel));}catch{}botLabel();});
     botLabel();
+    try{importBindings(JSON.parse(localStorage.getItem('dk-keys-v1')??'null'));}catch{}
+    this.renderKeymap();
+    window.addEventListener('keydown',(event)=>{
+      if(!this.rebinding)return;
+      event.preventDefault();event.stopImmediatePropagation();
+      if(event.code!=='Escape'&&!rebind(this.rebinding,event.code)){this.lastAction='Taste reserviert';}
+      this.rebinding=null;try{localStorage.setItem('dk-keys-v1',JSON.stringify(exportBindings()));}catch{}
+      this.renderKeymap();
+    },true);
     document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection());
     document.querySelector('#track-go')?.addEventListener('click',()=>this.confirmTrackSelection());
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>card.addEventListener('click',()=>{
-      this.selectedTrackId=card.dataset.trackId??'stadionring';this.renderTrackSelection();
+      const id=card.dataset.trackId;if(isTrackId(id)){if(id===this.selectedTrackId)this.confirmTrackSelection();else{this.selectedTrackId=id;this.renderTrackSelection();}}
     }));
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
@@ -185,7 +230,7 @@ class App {
     this.audio.setMusicVolume(Number(musicVolume.value)/100);
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
-    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.quality = (this.quality + 1) % 3; this.applyQuality(); });
+    document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.autoQuality = false; this.quality = (this.quality + 1) % 3; this.applyQuality(); });
     try { const asked = new URLSearchParams(location.search).get('weather') ?? localStorage.getItem('dk-weather-choice'); if (asked === 'sun' || asked === 'rain' || asked === 'snow' || asked === 'random') this.weatherChoice = asked; } catch { /* storage optional */ }
     document.querySelector('#weather-toggle')?.addEventListener('click', () => {
       const cycle = ['random', 'sun', 'rain', 'snow'] as const; this.weatherChoice = cycle[(cycle.indexOf(this.weatherChoice) + 1) % cycle.length];
@@ -194,11 +239,12 @@ class App {
     });
     document.querySelector('#effects-toggle')?.addEventListener('click', () => { this.reducedEffects = !this.reducedEffects; this.applyQuality(); });
     document.querySelector('#race-start')?.addEventListener('click', () => void this.startRace());
-    document.querySelector('#menu-race')?.addEventListener('click',()=>{this.mode='gp';void this.startRace();});
-    document.querySelector('#menu-timetrial')?.addEventListener('click',()=>{this.mode='timetrial';void this.startRace();});
+    document.querySelector('#menu-race')?.addEventListener('click',()=>this.startGrandPrix());
+    document.querySelector('#menu-single')?.addEventListener('click',()=>{this.mode='single';this.gp=null;this.openTrackSelection();});
+    document.querySelector('#menu-timetrial')?.addEventListener('click',()=>{this.mode='timetrial';this.gp=null;this.openTrackSelection();});
     document.querySelector('#menu-practice')?.addEventListener('click',()=>{if(this.mode==='timetrial'){this.mode='gp';void this.restart();return;}this.closeMenu();void this.audio.unlock().then(()=>setTimeout(()=>this.welcome(),400));});
     document.querySelector('#menu-button')?.addEventListener('click',()=>this.openMenu());
-    document.querySelector('#finish-retry')?.addEventListener('click',()=>void this.beginRace());
+    document.querySelector('#finish-retry')?.addEventListener('click',()=>this.finishAction());
     document.querySelector('#finish-menu')?.addEventListener('click',()=>this.openMenu());
     document.querySelector<HTMLButtonElement>('#item-use')?.addEventListener('click',(event)=>{if(event.detail===0)this.queuedItemUse=true;});
     document.querySelector('#sound-toggle')?.addEventListener('click', () => {
@@ -210,6 +256,7 @@ class App {
       if (!LAB_WORLD) void this.audio.unlock();
       // T: instant race restart with the same driver (no selection, no scene reload).
       if (event.code === 'KeyT' && !this.selecting && this.state !== 'loading' && this.racePhase !== 'practice') { void this.beginRace(); return; }
+      if (event.code === 'Enter' && this.racePhase === 'finished' && !this.selecting && !this.selectingTrack && !document.body.classList.contains('menu-open')) { event.preventDefault(); this.finishAction(); return; }
       if (event.code === 'Enter' && this.racePhase !== 'countdown') void this.startRace();
     });
     pauseButton.addEventListener('click', () => this.togglePause());
@@ -271,14 +318,15 @@ class App {
     return `Framefenster: ${values.length}/300 · P50 ${at(0.5)} ms · P95 ${at(0.95)} ms · P99 ${at(0.99)} ms\n>25 ms: ${values.filter((value) => value > 25).length} · >33 ms: ${values.filter((value) => value > 33).length}`;
   }
 
-  private async restart(): Promise<void> {
+  private async restart(after?: () => void): Promise<void> {
     const generation = ++this.generation;
     this.portraitCaptureInProgress=false;
     const driverGo=document.querySelector<HTMLButtonElement>('#driver-go');
     if(driverGo){driverGo.disabled=false;driverGo.innerHTML='Rennen starten <span>↵</span>';}
     this.mouse.release();
     const loading = new LoadingProgress(!LAB_WORLD);
-    const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail }));
+    const loadingText = { heading: `${TRACK_INFO.name} wird vorbereitet`, footnote: `${TRACK_INFO.city} · ${TRACK_INFO.name} · ${this.gp ? `Grand Prix · Rennen ${this.gp.round + 1}/${this.gp.tracks.length}` : 'Diktator Kart'}` };
+    const notify = (detail: ReturnType<LoadingProgress['initial']>) => window.dispatchEvent(new CustomEvent('dk:load-progress', { detail: { ...detail, ...loadingText } }));
     const report = (phase: LoadingPhase) => { if (generation === this.generation) notify(loading.complete(phase)); };
     this.show('loading', 'Asset-Manifest und Szene werden geladen.');
     notify(loading.initial());
@@ -294,14 +342,15 @@ class App {
     this.queuedHopPress = false;
     document.body.classList.remove('photo-mode');
     document.body.classList.remove('menu-open');
-    document.body.classList.remove('select-open');this.selecting=false;this.portraits=undefined;
+    // Driver portraits do not depend on the circuit: keep them across track loads.
+    document.body.classList.remove('select-open');this.selecting=false;
     this.racePhase = 'practice'; this.raceTime = 0; this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.lapTimes=[];this.lapNoticeUntil=0;
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0};
-    this.queuedItemUse=false;this.itemDirection='forward';
+    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
+    this.queuedItemUse=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -323,6 +372,7 @@ class App {
       if (generation !== this.generation) { created.scene.dispose(); return; }
       this.testScene = created;
       this.testScene.setRoster?.(this.order);
+      this.applyTires();
       this.applyQuality();
       if (this.testScene) this.testScene.onLightning = () => this.audio.thunder();
       if (this.testScene) this.testScene.onFirework = () => this.audio.itemEvent('launch');
@@ -339,7 +389,7 @@ class App {
       this.testScene.scene.render();
       report('ready');
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
-      if(!LAB_WORLD&&!DEMO)this.openMenu();
+      if(after)after();else if(!LAB_WORLD&&!DEMO)this.openMenu();
     } catch (error) {
       if (generation === this.generation) this.show('error', error instanceof Error ? error.message : String(error));
     }
@@ -368,7 +418,7 @@ class App {
     try{localStorage.setItem('dk-reduced-motion',this.reducedMotion?'1':'0');}catch{}
   }
   private openMenu():void {
-    this.mouse.release();
+    this.mouse.release();this.endCeremony();
     if(LAB_WORLD||this.state==='loading'||!this.camera)return;
     if(this.camera.introMode)return;
     if(this.camera.photoMode)this.camera.togglePhoto();document.body.classList.remove('photo-mode');
@@ -385,26 +435,71 @@ class App {
     if(this.racePhase==='finished')document.querySelector('#finish-card')?.removeAttribute('hidden');
   }
 
-  /** Every new Grand Prix starts with the driver selection; Revanche keeps the current driver. */
+  /** Enter / the panel button: confirm the open selection, or start the current mode's selection flow. */
   private async startRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
     if (this.selectingTrack) { this.confirmTrackSelection(); return; }
     if (this.selecting) { this.confirmSelection(); return; }
-    this.openTrackSelection();
+    if (this.mode === 'gp') this.startGrandPrix(); else this.openTrackSelection();
+  }
+  /** A new Grand Prix: all playable circuits in a fixed order, points per finish, driver chosen once. */
+  private startGrandPrix(): void {
+    if (LAB_WORLD || this.state === 'loading') return;
+    this.mode = 'gp'; this.gp = createGrandPrix(GP_TRACKS); this.gpTrackChosen = false;
+    // Test aid: ?gp-round=N starts at round N (earlier rounds score nothing); used to check the final ceremony quickly.
+    { const round = Number(new URLSearchParams(location.search).get('gp-round')); if (Number.isInteger(round) && round > 1 && round <= this.gp.tracks.length) { for (let r = 0; r < round - 1; r++) this.gp.results.push({ track: this.gp.tracks[r], order: [], points: [], time: 0 }); this.gp.round = round - 1; } }
+    this.closeTrackSelection(); this.openSelection();
+  }
+  /** Loads the GP round's circuit if needed, then starts the race. */
+  private startGpRound(): void {
+    if (!this.gp) return;
+    const id = this.gp.tracks[this.gp.round];
+    if (TRACK.id !== id) void this.loadTrack(id, () => void this.beginRace());
+    else void this.beginRace();
+  }
+  /** Rebuilds the scene for another circuit and continues with `then` once it renders. */
+  private async loadTrack(id: TrackId, then: () => void): Promise<void> {
+    selectTrack(id); this.selectedTrackId = id;
+    try { localStorage.setItem('dk-track', id); } catch { /* storage optional */ }
+    this.drawTrackCards();
+    await this.restart(then);
+  }
+  /** Small route outlines on the playable track cards (same centreline data as the race). */
+  private drawTrackCards(): void {
+    document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card) => {
+      const id = card.dataset.trackId; if (!isTrackId(id)) return;
+      const holder = card.querySelector<HTMLElement>('.track-map'); if (!holder || holder.querySelector('canvas')) return;
+      const canvas = document.createElement('canvas'); canvas.width = 260; canvas.height = 120; const c = canvas.getContext('2d'); if (!c) return;
+      const pts = sampleTrack(TRACKS[id].controlPoints, 4).samples, xs = pts.map((p) => p.x), zs = pts.map((p) => p.z);
+      const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs), k = Math.min(220 / (maxX - minX), 92 / (maxZ - minZ));
+      const at = (p: { x: number; z: number }) => [130 + (p.x - (minX + maxX) / 2) * k, 58 - (p.z - (minZ + maxZ) / 2) * k] as const;
+      c.lineJoin = 'round';
+      for (const [w, col] of [[9, '#0b1a1ecc'], [4, '#e2c27f']] as const) { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); pts.forEach((p, i) => { const [x, y] = at(p); if (i) c.lineTo(x, y); else c.moveTo(x, y); }); c.closePath(); c.stroke(); }
+      const start = pts[Math.round(TRACKS[id].start / 4) % pts.length]; const [sx, sy] = at(start); c.fillStyle = '#f3eee0'; c.beginPath(); c.arc(sx, sy, 4, 0, Math.PI * 2); c.fill();
+      canvas.style.cssText = 'position:absolute;inset:6px 8px auto 8px;width:calc(100% - 16px);height:auto;opacity:.92';
+      holder.append(canvas);
+    });
   }
   private openTrackSelection(): void {
     if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
     if (!this.camera?.introMode) this.openMenu();
     this.selectingTrack = true; document.body.classList.add('track-select-open');
+    const go = document.querySelector('#track-go'); if (go) go.innerHTML = this.mode === 'gp' && this.gp && !this.gpTrackChosen ? 'Grand Prix starten <span>↵</span>' : 'Fahrer wählen <span>↵</span>';
     this.renderTrackSelection();
   }
   private closeTrackSelection(): void {
     this.selectingTrack = false; document.body.classList.remove('track-select-open');
   }
   private confirmTrackSelection(): void {
-    if (this.selectedTrackId !== 'stadionring') return;
+    if (!isTrackId(this.selectedTrackId)) return;
     this.closeTrackSelection();
-    this.openSelection();
+    if (this.mode === 'gp' && this.gp && !this.gpTrackChosen) {
+      const first = this.selectedTrackId;
+      this.gp.tracks = [first, ...GP_TRACKS.filter((t) => t !== first)]; this.gpTrackChosen = true;
+      this.closeMenu(); this.startGpRound(); return;
+    }
+    if (TRACK.id !== this.selectedTrackId) void this.loadTrack(this.selectedTrackId, () => this.openSelection());
+    else this.openSelection();
   }
   private renderTrackSelection(): void {
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>{
@@ -416,6 +511,7 @@ class App {
     if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
     if (!this.camera?.introMode) this.openMenu();
     this.selecting = true; document.body.classList.add('select-open');
+    document.querySelector('#driver-kicker')!.textContent = this.mode === 'gp' && this.gp ? `FAHRERWAHL · GRAND PRIX · ${this.gp.tracks.map((t) => TRACKS[t].name).join(' → ')}` : `FAHRERWAHL · ${this.mode === 'timetrial' ? 'ZEITFAHREN' : 'EINZELRENNEN'} · ${TRACK.name.toUpperCase()}`;
     this.renderSelection();
     if(this.portraitCaptureInProgress){const button=document.querySelector<HTMLButtonElement>('#driver-go');if(button)button.disabled=true;}
     if (!this.portraits && this.testScene.portraits && !this.portraitCaptureInProgress) {
@@ -431,10 +527,12 @@ class App {
     if(this.portraitCaptureInProgress)return;
     this.closeSelection();
     try { localStorage.setItem('dk-driver', String(this.chosen)); } catch { /* storage optional */ }
-    void this.beginRace();
+    // Grand Prix (Marcel, 07.10.): after the driver comes Sarah's track selection; the chosen track opens the cup.
+    if (this.mode === 'gp' && this.gp && this.gp.round === 0 && !this.gp.results.length && !this.gpTrackChosen) { this.openTrackSelection(); return; }
+    if (this.mode === 'gp' && this.gp) this.startGpRound(); else void this.beginRace();
   }
   private pick(index: number): void {
-    this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order);
+    this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order); this.applyTires();
     this.renderSelection(); this.audio.voice(`${CAST[index].voice}-horn`, { channel: 'driver', rate: CAST[index].voiceRate, volume: .8 });
   }
   private renderSelection(): void {
@@ -456,14 +554,23 @@ class App {
     const line = document.createElement('div'); line.textContent = `„${m.title}“ – ${m.flavour}`;
     const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit (Q):</em> '; ability.append(m.abilityIdea + ' · ');
     const item = document.createElement('em'); item.textContent = 'Wurfobjekt:'; ability.append(item, ` ${m.projectileIcon} ${m.projectileName}`);
-    detail.append(title, line, ability);
+    const rival = document.createElement('div'); rival.innerHTML = '<em>Als Rivale:</em> '; rival.append(BOT_STYLES[this.chosen]?.label ?? '');
+    const tires = document.createElement('div'); tires.className = 'tire-choice';
+    const set = TIRE_SETS.find((t) => t.id === this.playerTires())!;
+    const prev = document.createElement('button'); prev.type = 'button'; prev.textContent = '◀'; prev.addEventListener('click', () => this.cycleTires(-1));
+    const next = document.createElement('button'); next.type = 'button'; next.textContent = '▶'; next.addEventListener('click', () => this.cycleTires(1));
+    const label = document.createElement('span'); label.innerHTML = '<em>Reifen:</em> '; label.append(`${set.name} (${set.owner})${this.tireChoice === 'auto' ? ' · eigene' : ''}`);
+    tires.append(prev, label, next);
+    detail.append(title, line, ability, rival, tires);
   }
 
   private async beginRace(): Promise<void> {
     if (LAB_WORLD || this.state === 'loading') return;
     const generation=this.generation;
-    await this.audio.unlock();
+    // A suspended AudioContext can wait for a fresh gesture: never let sound hold back the start.
+    await Promise.race([this.audio.unlock(), new Promise((resolve) => setTimeout(resolve, 400))]);
     if(generation!==this.generation||!this.testScene)return;
+    setBotStyles(this.order.map((driver, slot) => slot === 0 ? undefined : BOT_STYLES[driver]));
     this.closeMenu();
     this.mouse.release(); this.camera?.resetLook();
     if (this.camera?.photoMode) this.camera.togglePhoto(); document.body.classList.remove('photo-mode');
@@ -471,18 +578,21 @@ class App {
     this.kart = gridKart(LOAD_KART_COUNT); this.loadKarts = this.mode === 'timetrial' ? [] : initialLoadKarts();
     this.testScene.setBotsVisible?.(this.mode !== 'timetrial');
     this.ghostRecord = []; this.ghostRun = null;
-    if (this.mode === 'timetrial') { try { const saved = JSON.parse(localStorage.getItem('dk-ghost-v2') ?? 'null'); if (saved && Array.isArray(saved.samples)) this.ghostRun = saved; } catch { /* no ghost yet */ } }
+    if (this.mode === 'timetrial') { try { const saved = JSON.parse(localStorage.getItem(this.storageKey('ghost')) ?? 'null'); if (saved && Array.isArray(saved.samples) && (saved.track ?? 'stadionring') === TRACK.id) this.ghostRun = saved; } catch { /* no ghost yet */ } }
+    this.ghostDelta = null;
     this.testScene.setGhost?.(null);
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
-    this.queuedItemUse=false;this.itemHeld=false;this.itemDirection='forward';
+    this.queuedItemUse=false;this.itemHeld=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.endCeremony();
+    this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
     this.accumulator = 0; this.queuedHopPress = false;
@@ -502,7 +612,10 @@ class App {
         document.querySelector('#place')!.textContent = `${place}`;
     document.querySelector('#lap')!.textContent = `${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[0].distance) / TRACK.length))} / 3`;
     document.querySelector('#race-time')!.textContent = `${Math.floor(this.raceTime / 60)}:${(this.raceTime % 60).toFixed(2).padStart(5, '0')}`;
-    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? 'FREIE FAHRT' : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `${this.mode==='timetrial'?'ZEITFAHREN':'STADION GRAND PRIX'} · ${this.castOf(0).name.toUpperCase()}`;
+    document.querySelector('#race-label')!.textContent = this.racePhase === 'practice' ? `FREIE FAHRT · ${TRACK.name.toUpperCase()}` : this.racePhase === 'finished' ? 'ZIEL ERREICHT' : `${this.mode==='timetrial'?'ZEITFAHREN':this.mode==='gp'&&this.gp?`GRAND PRIX ${this.gp.round+1}/${this.gp.tracks.length}`:'EINZELRENNEN'} · ${TRACK.name.toUpperCase()} · ${this.castOf(0).name.toUpperCase()}${this.mode==='timetrial'&&this.ghostDelta!==null?` · GEIST ${this.ghostDelta>=0?'+':'−'}${Math.abs(this.ghostDelta).toFixed(1)} s`:''}`;
+    document.querySelector<HTMLElement>('#gp-intro')!.hidden = !(this.racePhase === 'countdown' || this.racePhase === 'race' && this.raceTime < this.gpIntroUntil);
+    if (this.racePhase !== 'practice') this.ranking.update(rankRace(this.progress), (i) => ({ name: i === 0 ? `${this.castOf(0).name}` : this.castOf(i).name, paint: this.castOf(i).paint, portrait: this.portraits?.[this.order[i] ?? i], finished: this.progress[i]?.finished ?? false }), this.racePhase === 'finished', performance.now());
+    document.body.classList.toggle('ranking-on', this.racePhase !== 'practice' && this.mode !== 'timetrial');
     const notice=document.querySelector<HTMLElement>('#lap-notice')!;notice.hidden=this.racePhase!=='race'||this.raceTime>=this.lapNoticeUntil;notice.textContent=this.lapNotice;
     const meter=document.querySelector<HTMLElement>('#drift-meter')!;meter.hidden=!this.kart.drifting&&this.kart.turboRemaining<=0;
     meter.classList.toggle('charged',driftTier(this.kart.driftCharge)>0||this.kart.turboRemaining>0);meter.dataset.tier=String(driftTier(this.kart.driftCharge));
@@ -512,7 +625,7 @@ class App {
     const own=this.castOf(0);
     const itemName=item?(item==='direct'||item==='homing'?`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`:ITEM_NAMES[item]):'';
     document.querySelector('#item-name')!.textContent=item?itemName:'Sendung abholen';
-    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':'✉';
+    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':item==='boost'?'📜':'✉';
     const itemCard=document.querySelector<HTMLElement>('#item-card')!,itemSlot=document.querySelector<HTMLElement>('#item-slot')!;
     itemCard.dataset.state=item?'ready':'empty';itemSlot.dataset.state=item?'ready':'empty';
     itemSlot.setAttribute('aria-label',item?`Item im Slot: ${itemName}`:'Item-Slot leer');
@@ -529,12 +642,12 @@ class App {
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent=this.items.objects.some(o=>o.kind==='censor'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15)?'⚠ Zensurbalken im Anflug · ausweichen':'⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
-      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0;
-      const implemented=ownsTank||ownsKim,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
+      const driver=this.order[0]??0,ownsTank=driver===0,ownsKim=driver===4,ownsPose=driver===2,ownsBlockade=driver===5,tank=ownsTank&&this.kart.tankRemaining>0,kim=this.abilities.kimPolishRemaining[0]>0,pose=(this.abilities.poseRemaining?.[0]??0)>0;
+      const implemented=ownsTank||ownsKim||ownsPose||ownsBlockade,ready=implemented&&abilityReady(this.abilities,0,this.kart),cool=this.abilities.cooldown[0];
       const card=document.querySelector<HTMLElement>('#ability-card');
-      if(card){card.classList.toggle('active',tank||kim);card.classList.toggle('ready',ready);
-        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':this.castOf(0).abilityIdea.split(' –')[0];
-        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
+      if(card){card.classList.toggle('active',tank||kim||pose);card.classList.toggle('ready',ready);
+        document.querySelector('#ability-name')!.textContent=ownsTank?ABILITY_NAME:ownsKim?'Propaganda-Sieg':ownsPose?'Große Pose':ownsBlockade?'Blockade':this.castOf(0).abilityIdea.split(' –')[0];
+        document.querySelector('#ability-info')!.textContent=!implemented?'Q · noch nicht gebaut':pose?'Pose · Kinn hoch':tank?`Panzer · ${this.kart.tankRemaining.toFixed(1)} s`:kim?`Triumphmeldung · ${this.abilities.kimPolishRemaining[0].toFixed(1)} s`:ready?(ownsKim?'Q · Erfolg genehmigt':ownsPose?'Q · Pose bereit':ownsBlockade?'Q · Schranken bereit':'Q · Panzer bereit'):`Q · bereit in ${Math.ceil(cool)} s`;
         document.querySelector<HTMLElement>('#ability-fill')!.style.width=`${100*(tank?this.kart.tankRemaining/ABILITY_RULES.tankDuration:kim?this.abilities.kimPolishRemaining[0]/ABILITY_RULES.kimPolishDuration:1-cool/ABILITY_RULES.cooldown)}%`;}
     }
     countdown.hidden = this.racePhase !== 'countdown'; countdown.textContent = this.countdown > .4 ? `${Math.ceil(this.countdown - .4)}` : 'LOS!';
@@ -566,7 +679,7 @@ class App {
     const a = trackPoint(TRACK.start, -6), b = trackPoint(TRACK.start, 6), [ax, ay] = this.minimapPoint(a.x, a.z), [bx, by] = this.minimapPoint(b.x, b.z);
     c.strokeStyle = '#f3eee0'; c.lineWidth = 3; c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke();
     this.minimapTrack = canvas;
-    document.querySelector('.map-card span')!.textContent = `${Math.round(TRACK.length)} m · STADIONRING`;
+    document.querySelector('.map-card span')!.textContent = `${Math.round(TRACK.length)} m · ${TRACK.name.toUpperCase()}`;
   }
 
   /** Welcome announcement once per page load, after the first gesture unlocked audio. */
@@ -589,6 +702,122 @@ class App {
     this.lastRank = rank;
   }
 
+  /** Player tyre set (driver's own or any other); bots keep their own designs. */
+  private playerTires(): string { return this.tireChoice === 'auto' ? DEFAULT_TIRES[this.chosen] : this.tireChoice; }
+  private applyTires(): void { this.testScene?.setTires?.(0, this.playerTires()); }
+  private cycleTires(step: number): void {
+    const ids = ['auto', ...TIRE_SETS.map((s) => s.id)];
+    this.tireChoice = ids[(ids.indexOf(this.tireChoice) + step + ids.length) % ids.length];
+    try { localStorage.setItem('dk-tires', this.tireChoice); } catch { /* optional */ }
+    this.applyTires(); this.renderSelection();
+  }
+  /** Options: rebinding list for the main driving actions (keys saved locally). */
+  private renderKeymap(): void {
+    const root = document.querySelector<HTMLElement>('#keymap'); if (!root) return;
+    root.replaceChildren();
+    for (const { action, label } of REBINDABLE) {
+      const button = document.createElement('button'); button.type = 'button';
+      button.textContent = this.rebinding === action ? `${label}: Taste drücken …` : `${label}: ${keyLabel(primaryKey(action))}`;
+      button.addEventListener('click', () => { this.rebinding = action; this.renderKeymap(); });
+      root.append(button);
+    }
+    const reset = document.createElement('button'); reset.type = 'button'; reset.textContent = 'Standardtasten';
+    reset.addEventListener('click', () => { resetBindings(); try { localStorage.removeItem('dk-keys-v1'); } catch { /* optional */ } this.renderKeymap(); });
+    root.append(reset);
+  }
+  /** localStorage keys per circuit; the Stadionring keeps its earlier keys so existing records survive. */
+  private storageKey(kind: 'race' | 'timetrial' | 'ghost' | 'lap'): string {
+    if (TRACK.id === 'stadionring') return { race: 'dk-best-stadium-v2', timetrial: 'dk-best-timetrial-v2', ghost: 'dk-ghost-v2', lap: 'dk-best-lap-stadionring-v1' }[kind];
+    return `dk-${kind === 'ghost' ? 'ghost' : kind === 'lap' ? 'best-lap' : `best-${kind}`}-${TRACK.id}-v1`;
+  }
+  /** Seconds ahead (−) or behind (+) the saved ghost at the player's current race distance. */
+  private ghostGap(): number | null {
+    const samples = this.ghostRun?.samples; if (!samples?.length || samples[0].length < 5) return null;
+    const d = Math.max(0, this.progress[0].distance);
+    let i = samples.findIndex((p) => p[4] >= d); if (i < 0) i = samples.length - 1;
+    return this.raceTime - i / 20;
+  }
+  /** Start menu backdrop (Marcel, 07.10.): the camera glides from driver to driver every few seconds, random start. */
+  private menuCycle={from:-1,to:Math.floor(Math.random()*6),since:0};
+  private menuFocus(): KartState {
+    const all=[this.kart,...this.loadKarts], now=performance.now()/1000, hold=6.5, glide=2.6;
+    if(this.menuCycle.from<0){this.menuCycle={from:this.menuCycle.to%all.length,to:this.menuCycle.to%all.length,since:now};}
+    if(now-this.menuCycle.since>hold+glide){this.menuCycle={from:this.menuCycle.to,to:(this.menuCycle.to+1+Math.floor(Math.random()*(all.length-1)))%all.length,since:now};}
+    const a=all[this.menuCycle.from]??this.kart,b=all[this.menuCycle.to]??this.kart;
+    const t=Math.max(0,Math.min(1,(now-this.menuCycle.since-hold)/glide)),u=t*t*(3-2*t);
+    const turn=Math.atan2(Math.sin(b.heading-a.heading),Math.cos(b.heading-a.heading));
+    return {...a,x:a.x+(b.x-a.x)*u,z:a.z+(b.z-a.z)*u,heading:a.heading+turn*u,height:a.height+(b.height-a.height)*u};
+  }
+  /** Podium after the final Grand-Prix race: top three karts on the blocks, slow camera orbit, confetti. */
+  private startCeremony(slots: number[]): void {
+    const at = trackPoint(TRACK.start + 22, 0), y = trackHeightAt(at.x, at.z);
+    const spot = { x: at.x, y, z: at.z, heading: at.heading + Math.PI };
+    this.testScene?.ceremony?.(spot);
+    const offsets = [[0, 1.5], [-3, 1.0], [3, .7]] as const;
+    const all = [this.kart, ...this.loadKarts];
+    slots.forEach((slot, place) => {
+      if (slot < 0 || !all[slot]) return;
+      const [lane, h] = offsets[place], c = Math.cos(spot.heading), s = Math.sin(spot.heading);
+      all[slot] = { ...all[slot], x: spot.x + c * lane, z: spot.z - s * lane, heading: spot.heading + Math.PI, travelHeading: spot.heading + Math.PI, speed: 0, height: h, grounded: true };
+    });
+    // Everyone else lines up behind the podium so the three steps stay clear.
+    all.forEach((k, slot) => { if (!slots.includes(slot)) { const p = trackPoint(TRACK.start - 6 - slot * 3.5, slot % 2 ? 4 : -4); all[slot] = { ...k, x: p.x, z: p.z, heading: p.heading, speed: 0 }; } });
+    this.kart = all[0]; this.loadKarts = all.slice(1); this.resetRenderState();
+    this.camera?.setCeremony(spot); document.body.classList.add('ceremony');
+    this.testScene?.celebrate?.('finish'); this.audio.cheer(1.4);
+  }
+  private endCeremony(): void { this.testScene?.ceremony?.(null); this.camera?.setCeremony(null); document.body.classList.remove('ceremony'); }
+  private showGpIntro(): void {
+    const intro = document.querySelector<HTMLElement>('#gp-intro')!;
+    const lines: Record<TrackId, [string, string]> = {
+      stadionring: ['Das Komitee hat den Sieger bereits beglückwünscht.', 'Gefahren wird trotzdem – aus Gründen der Tradition.'],
+      'duce-drom': ['Der Balkon erwartet Applaus in alphabetischer Reihenfolge.', 'Die Züge sind pünktlich. Behauptet zumindest das Programmheft.'],
+      havanna: ['Die Eröffnungsrede läuft seit gestern. Bitte leise starten.', 'Ersatzteile sind bestellt – seit 1958.'],
+    };
+    const [title, detail] = lines[TRACK.id];
+    document.querySelector('#gp-intro-kicker')!.textContent = this.mode === 'gp' && this.gp ? `GROSSER PREIS DER EITELKEIT · RENNEN ${this.gp.round + 1}/${this.gp.tracks.length} · ${TRACK_INFO.city.toUpperCase()}` : this.mode === 'timetrial' ? `ZEITFAHREN · ${TRACK.name.toUpperCase()}` : `EINZELRENNEN · ${TRACK.name.toUpperCase()} · ${TRACK_INFO.city.toUpperCase()}`;
+    document.querySelector('#gp-intro-title')!.textContent = this.mode === 'timetrial' ? (this.ghostRun ? `Dein Geist fährt ${this.ghostRun.time.toFixed(2)} s vor.` : 'Noch kein Geist gespeichert.') : title;
+    document.querySelector('#gp-intro-detail')!.textContent = this.mode === 'timetrial' ? 'Nur vollständige Läufe zählen als Bestzeit.' : detail;
+    intro.hidden = false; this.gpIntroUntil = 3.5;
+  }
+  /** Finish card buttons and Grand Prix standings: points are awarded once, from the race system's own ranking. */
+  private presentFinishActions(order: number[]): void {
+    const retry = document.querySelector<HTMLButtonElement>('#finish-retry')!, table = document.querySelector<HTMLElement>('#gp-standings')!;
+    table.hidden = true; table.replaceChildren();
+    if (this.mode !== 'gp' || !this.gp) {
+      retry.innerHTML = 'Revanche <span>↵</span>'; this.finishAction = () => void this.beginRace(); return;
+    }
+    const gp = this.gp;
+    awardPoints(gp, TRACK.id, order.map((slot) => this.order[slot] ?? slot), this.raceTime);
+    window.setTimeout(() => this.audio.voice(gp.round >= gp.tracks.length - 1 ? 'announcer-gp-champion' : 'announcer-gp-standings', { force: true }), 6500);
+    const rows = standings(gp), last = gp.round >= gp.tracks.length - 1, me = this.chosen;
+    const head = document.createElement('b'); head.textContent = last ? 'GESAMTWERTUNG · SIEGEREHRUNG' : `ZWISCHENWERTUNG NACH RENNEN ${gp.round + 1}/${gp.tracks.length}`; table.append(head);
+    const list = document.createElement('ol');
+    rows.forEach((row, place) => {
+      const li = document.createElement('li'); li.classList.toggle('player-result', row.driver === me);
+      const gained = gp.results.at(-1)?.points[row.driver] ?? 0;
+      li.innerHTML = `<span></span><strong></strong><small></small>`;
+      li.querySelector('span')!.textContent = `${place + 1}.`; li.querySelector('strong')!.textContent = row.driver === me ? `Du · ${CAST[row.driver].name}` : CAST[row.driver].name;
+      li.querySelector('small')!.textContent = `${row.points} P${gained ? ` (+${gained})` : ''}`;
+      list.append(li);
+    });
+    table.append(list); table.hidden = false;
+    if (last) {
+      const champion = rows[0].driver, won = champion === me;
+      document.querySelector('#finish-title')!.textContent = won ? 'Grand-Prix-Sieg · amtlich bestätigt' : `Grand Prix an ${CAST[champion].name}`;
+      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.filter((r) => r.order.length).map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}`;
+      const podium = document.querySelector<HTMLImageElement>('#finish-portrait');
+      if (podium) { const shot = this.portraits?.[champion]; podium.hidden = !shot; if (shot) { podium.src = shot; podium.alt = `Grand-Prix-Sieger ${CAST[champion].name}`; } }
+      this.startCeremony(rows.slice(0, 3).map((row) => this.order.indexOf(row.driver)));
+      retry.innerHTML = 'Neuer Grand Prix <span>↵</span>';
+      this.finishAction = () => { this.gp = createGrandPrix(GP_TRACKS); this.startGpRound(); };
+    } else {
+      const next = TRACKS[gp.tracks[gp.round + 1]];
+      retry.innerHTML = `Nächstes Rennen: ${next.name} <span>↵</span>`;
+      this.finishAction = () => { if (!this.gp) return; this.gp.round++; this.startGpRound(); };
+    }
+  }
+
   private togglePause(): void {
     if (this.state === 'running') {
       this.queuedHopPress = false;
@@ -609,6 +838,22 @@ class App {
       } else this.frameTimes = [];
     } else if (this.state !== 'running' || document.hidden) this.frameTimes = [];
     this.lastFrameAt = now;
+    { // Gamepads: polled once per rendered frame; in menus A/B/D-pad behave like Enter/Escape/arrows.
+      const menu=!!this.camera?.introMode||this.selecting||this.selectingTrack||this.racePhase==='finished';
+      const found=pollGamepads(this.input,menu,(code)=>{window.dispatchEvent(new KeyboardEvent('keydown',{code,key:code,bubbles:true}));window.dispatchEvent(new KeyboardEvent('keyup',{code,key:code,bubbles:true}));},this.padButtons);
+      if(found&&!this.gamepadSeen){this.gamepadSeen=true;this.itemMessage='Gamepad erkannt · Stick lenkt, RT Gas, A Drift, X Item';this.itemMessageUntil=this.items.time+3;}
+    }
+    if (this.autoQuality && this.state === 'running' && this.camera?.introMode) {
+      const level = pickQuality(this.frameTimes);
+      if (level !== null) {
+        this.autoQuality = false;
+        const median = [...this.frameTimes].sort((a, b) => a - b)[Math.floor(this.frameTimes.length / 2)];
+        if (level !== this.quality) { this.quality = level; this.applyQuality(); } else this.applyQuality();
+        this.lastAction = `Grafik automatisch: ${['Basis', 'Standard', 'Hoch'][level]} (Median ${median.toFixed(1)} ms)`;
+        const hint = document.querySelector<HTMLElement>('.menu-flavor'); if (hint) hint.dataset.autoQuality = this.lastAction;
+        console.info(`[Diktator Kart] ${this.lastAction} – in den Optionen änderbar`);
+      }
+    }
     const frame = this.input.read();
     this.camera?.setLookBack(this.state === 'running' && !this.camera.introMode && this.input.isDown('lookBack'));
     if(frame.pressed.has('menu')&&!this.selecting&&!document.body.classList.contains('select-open')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}
@@ -637,7 +882,7 @@ class App {
       }
       if (frame.pressed.has('item')) this.lastAction = 'Item-Eingabe erkannt';
       if (frame.pressed.has('special') && !this.camera?.introMode && !this.camera?.photoMode && this.racePhase !== 'countdown' && this.racePhase !== 'finished') {
-        if (this.order[0] === 0 || this.order[0] === 4) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : 'Propaganda-Sieg (Q)'; }
+        if (this.order[0] === 0 || this.order[0] === 4 || this.order[0] === 2 || this.order[0] === 5) { this.queuedSpecial = true; this.lastAction = this.order[0] === 0 ? 'Größenbefehl (Q)' : this.order[0] === 2 ? 'Große Pose (Q)' : this.order[0] === 5 ? 'Blockade (Q)' : 'Propaganda-Sieg (Q)'; }
         else { this.itemMessage = `${this.castOf(0).name}: eigene Fähigkeit folgt`; this.itemMessageUntil = this.items.time + 1.8; }
       }
       if (frame.pressed.has('hopDrift')) this.queuedHopPress = true;
@@ -670,12 +915,14 @@ class App {
         if (this.steerAssist && !LAB_WORLD) { const help = botInput(this.kart, 0, traffic).steering; assisted.steering = Math.max(-1, Math.min(1, frame.steering + help * (frame.steering === 0 ? .55 : .25))); }
         if(this.items.censorRemaining[0]>0)assisted.steering*=.72;
         if(this.abilities.kimPenaltyRemaining[0]>0)assisted.throttle*=.55;
+        if((this.abilities.poseRemaining?.[0]??0)>0)assisted.throttle=Math.min(assisted.throttle,ABILITY_RULES.poseThrottle);
         this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : assisted, FIXED_STEP, project, terrain);
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
           let botDrive=LAB_WORLD?{throttle:1,steering:CONTACT_SCENARIO?0:.75}:botInput(other,index+1,traffic);
           if(!LAB_WORLD&&this.items.censorRemaining[index+1]>0)botDrive={...botDrive,steering:botDrive.steering*.72};
           if(!LAB_WORLD&&this.abilities.kimPenaltyRemaining[index+1]>0)botDrive={...botDrive,throttle:botDrive.throttle*.55};
+          if(!LAB_WORLD&&(this.abilities.poseRemaining?.[index+1]??0)>0)botDrive={...botDrive,throttle:Math.min(botDrive.throttle,ABILITY_RULES.poseThrottle)};
           let next = advanceKart(other, botDrive, FIXED_STEP, project, terrain);
           return next;
         });
@@ -700,14 +947,19 @@ class App {
           this.kart = wade(this.kart); this.loadKarts = this.loadKarts.map(wade);
         }
         if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
+        if (!LAB_WORLD && this.raceTime < this.waveUntil) {
+          // Malecón wave: water on the seafront stretch costs speed and a little grip, identical for every kart.
+          const soak = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 330 && k.grounded ? { ...k, speed: k.speed * (1 - .9 * FIXED_STEP), yawRate: k.yawRate * (1 - 1.5 * FIXED_STEP) } : k; };
+          this.kart = soak(this.kart); this.loadKarts = this.loadKarts.map(soak);
+        }
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
           const all=[this.kart,...this.loadKarts];
           const botsActive=this.racePhase==='race';
-          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':'none');
-          const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all));
+          const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':driver===2?'pose':driver===5?'blockade':'none');
+          const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all,owners[i]));
           const changed=stepAbilities(this.abilities,all,activations,this.items.immune,FIXED_STEP,owners);
           this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
           this.testScene?.setKimPolish?.(this.abilities.kimPolishRemaining);
@@ -719,6 +971,21 @@ class App {
             else if(event.kind==='kim-audit'&&event.kart===0)this.audio.itemEvent('hit');
             if(event.kind==='transform'&&event.kart!==0&&Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35){this.itemMessage='Achtung · Hitler wird zum Panzer';this.itemMessageUntil=this.items.time+2;}
             if(event.kind==='transform'&&event.kart===0){this.itemMessage='Größenbefehl · Panzer für 8 s';this.itemMessageUntil=this.items.time+2.2;this.audio.cheer(.8);}
+            if(event.kind==='pose'&&(event.kart===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)){
+              this.abilityAnnouncementTitle='GROSSE POSE · KINN 40 GRAD';
+              this.abilityAnnouncementDetail=event.kart===0?'Das Volk applaudiert. Pflichtgemäß.':`${this.castOf(event.kart).name} posiert. Bitte nicht überholen, er schaut gerade.`;
+              this.abilityAnnouncementUntil=this.items.time+ABILITY_RULES.poseDuration+.6;this.audio.cheer(event.kart===0?.9:.4);
+            }
+            if(event.kind==='blockade'){
+              const k=all[event.kart];
+              for(const lane of [-1.7,1.7]){const back=4.2,x=k.x-Math.sin(k.heading)*back+Math.cos(k.heading)*lane,z=k.z-Math.cos(k.heading)*back-Math.sin(k.heading)*lane;
+                this.items.objects.push({id:this.items.nextId++,kind:'trap',owner:event.kart,x,z,heading:k.heading,age:0,remaining:ITEM_RULES.trapLifetime,target:null});}
+              if(event.kart===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<35){
+                this.abilityAnnouncementTitle='BLOCKADE · DURCHFAHRT NUR MIT VISUM';
+                this.abilityAnnouncementDetail=event.kart===0?'Zwei Paragraphenschranken hinter dir.':`${this.castOf(event.kart).name} sperrt die Straße. Antrag auf Durchfahrt läuft.`;
+                this.abilityAnnouncementUntil=this.items.time+2.2;this.audio.itemEvent('launch');}
+            }
+            if(event.kind==='pose-applause'&&event.kart===0){this.itemMessage='Pflichtapplaus · Schub und kurz geschützt';this.itemMessageUntil=this.items.time+1.8;this.audio.cue('start');}
             if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}
             if(event.kind==='kim-surge'&&(event.kart===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)){
               this.abilityAnnouncementTitle='Rennergebnis NICHT manipuliert.';
@@ -743,13 +1010,20 @@ class App {
           if(down&&(this.input.isDown('itemBackward')||frame.pressed.has('itemBackward')))this.itemDirection='backward';
           else if(down&&(this.input.isDown('itemForward')||frame.pressed.has('itemForward')))this.itemDirection='forward';
           this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
-          const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all));
+          const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all,botStyleOf(i)?.itemPatience));
           const directions=all.map((_,i)=>i===0?this.itemDirection:'forward');
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP,directions);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           if(release)this.itemDirection='forward';
+          for(const event of this.items.events) if(event.kind==='hit') loseMedals(this.medals,event.kart);
+          { const medalled=stepMedals(this.medals,[this.kart,...this.loadKarts],FIXED_STEP);this.kart=medalled[0];this.loadKarts=medalled.slice(1);
+            for(const event of this.medals.events) if(event.kart===0){
+              if(event.kind==='pickup'){this.audio.itemEvent('pickup');this.testScene?.abilityEvent?.('pose-applause',0);if(this.medals.counts[0]===MEDAL_RULES.max){this.itemMessage='Brust voller Orden · Höchsttempo';this.itemMessageUntil=this.items.time+1.6;}}
+              else{this.itemMessage=`${event.amount} Orden verloren · Ansehen beschädigt`;this.itemMessageUntil=this.items.time+1.6;}
+            } }
           for(const event of this.items.events) if(event.kart===0) {
             const projectile=this.castOf(0).projectileName;
             if(event.kind==='block'){this.itemMessage='Abgewehrt · Item als Schild verbraucht';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('hit');continue;}
+            if(event.item==='boost'){this.itemMessage=event.kind==='pickup'?'Eilerlass erhalten · E = Vorfahrt per Dekret':'Eilerlass · Vorfahrt per Dekret!';this.itemMessageUntil=this.items.time+1.6;if(event.kind==='launch')this.audio.cue('start');else this.audio.itemEvent('pickup');continue;}
             this.itemMessage=event.item==='censor'?(event.kind==='hit'?'Faktenlage amtlich geschwärzt':'FAKTENLAGE ERFOLGREICH GESCHWÄRZT'):event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+(event.item==='censor'?2.6:1.8);
             if(event.kind==='launch'&&event.item!=='trap'&&event.item!=='censor'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);
@@ -758,13 +1032,19 @@ class App {
             if(event.kind==='hit')this.say(0,'hit');
           }
           // A nearby rival's dog barks too (Hitler as a bot).
-          for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
+          for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&event.item!=='boost'&&event.item!=='censor'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
             this.audio.voice(event.item==='trap'||event.item==='censor'?'announcer-stamp':'announcer-delivery');this.audio.cheer(.5);
             window.setTimeout(()=>this.say(event.kart,'hit',.75),900);
           }
           if(this.mode==='timetrial'){
-            if(Math.round(this.raceTime*60)%3===0)this.ghostRecord.push([+this.kart.x.toFixed(2),+this.kart.z.toFixed(2),+this.kart.heading.toFixed(3),+this.kart.height.toFixed(2)]);
+            if(Math.round(this.raceTime*60)%3===0)this.ghostRecord.push([+this.kart.x.toFixed(2),+this.kart.z.toFixed(2),+this.kart.heading.toFixed(3),+this.kart.height.toFixed(2),+Math.max(0,this.progress[0].distance).toFixed(1)]);
+            if(this.ghostRun&&Math.round(this.raceTime*60)%15===0)this.ghostDelta=this.ghostGap();
+          }
+          if(this.raceTime<5&&this.raceTime+FIXED_STEP>=5&&this.mode!=='timetrial'){
+            if(this.mode==='gp'&&this.gp&&this.gp.round===0)this.audio.voice('announcer-gp-intro',{force:true});
+            else if(TRACK.id==='duce-drom')this.audio.voice('announcer-rome',{force:true});
+            else if(TRACK.id==='havanna')this.audio.voice('announcer-havana',{force:true});
           }
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
@@ -773,14 +1053,19 @@ class App {
             const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
             this.lapNoticeUntil=this.raceTime+3;
-            if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);}
-            if(this.lapTimes.length===1){this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';this.itemMessageUntil=this.items.time+3;}
+            if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);if(this.lapTimes.length===2)this.audio.setMusicTempo(1.07);}
+            if(this.lapTimes.length===1){
+              if(TRACK_INFO.theme==='havana'){this.testScene?.trackEvent?.('wave');this.itemMessage='Achtung: Malecón-Welle! Gischt über der Uferstraße';this.audio.cheer(.7);this.waveUntil=this.raceTime+14;window.setTimeout(()=>this.audio.voice('announcer-wave',{force:true}),900);}
+              else if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
+              else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
+              this.itemMessageUntil=this.items.time+3;}
           }
           if (this.progress[0].finished) {
             this.racePhase = 'finished';
             this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.audio.cheer(1.4);
             {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});const champion=rankRace(this.progress)[0];window.setTimeout(()=>this.say(won?0:champion,'win',won?1:.85),3200);}
             const place=rankRace(this.progress).indexOf(0)+1;
+            document.querySelector('#finish-kicker')!.textContent=this.mode==='gp'&&this.gp?`GRAND PRIX · RENNEN ${this.gp.round+1}/${this.gp.tracks.length} · ${TRACK.name.toUpperCase()}`:this.mode==='timetrial'?`ZEITFAHREN · ${TRACK.name.toUpperCase()}`:`EINZELRENNEN · ${TRACK.name.toUpperCase()}`;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
             const names=this.order.map((_,i)=>i===0?`Du · ${this.castOf(0).name}`:this.castOf(i).name);
@@ -791,14 +1076,17 @@ class App {
             // Winner's portrait on the podium card.
             const winner=ranking[0]?.i??0,podium=document.querySelector<HTMLImageElement>('#finish-portrait');
             if(podium){const shot=this.portraits?.[this.order[winner]];podium.hidden=!shot;if(shot){podium.src=shot;podium.alt=`Sieger ${this.castOf(winner).name}`;}}
-            const bestKey=this.mode==='timetrial'?'dk-best-timetrial-v2':'dk-best-stadium-v2';let improved=false;
+            const bestKey=this.storageKey(this.mode==='timetrial'?'timetrial':'race');let improved=false;
             let best:number|null=null;try{const value=Number(localStorage.getItem(bestKey));if(value>0&&Number.isFinite(value))best=value;if(!DEMO&&(best===null||this.raceTime<best)){best=this.raceTime;improved=true;localStorage.setItem(bestKey,String(best));}}catch{}
-            if(this.mode==='timetrial'&&improved){try{localStorage.setItem('dk-ghost-v2',JSON.stringify({time:this.raceTime,driver:this.chosen,samples:this.ghostRecord}));}catch{}}
+            if(this.mode==='timetrial'&&improved&&!DEMO){try{localStorage.setItem(this.storageKey('ghost'),JSON.stringify({time:this.raceTime,driver:this.chosen,samples:this.ghostRecord,track:TRACK.id,laps:this.lapTimes}));}catch{}}
+            let bestLap:number|null=null;
+            try{const lap=Math.min(...this.lapTimes);const stored=Number(localStorage.getItem(this.storageKey('lap')));bestLap=stored>0&&Number.isFinite(stored)?stored:null;if(!DEMO&&Number.isFinite(lap)&&(bestLap===null||lap<bestLap)){bestLap=lap;localStorage.setItem(this.storageKey('lap'),String(lap));}}catch{}
             // Time-trial medals by total time on the course (average 15.8 / 14.5 / 13 m/s; hard bots win in ~164 s).
             if(this.mode==='timetrial'){const medal=([[3*TRACK.length/15.8,'Gold'],[3*TRACK.length/14.5,'Silber'],[3*TRACK.length/13,'Bronze']] as [number,string][]).find(([t])=>this.raceTime<=t);
               document.querySelector('#finish-detail')!.textContent+=` · ${medal?`Medaille ${medal[1]}`:`Bronze ab ${(3*TRACK.length/13).toFixed(0)} s`}`;}
             if(this.mode==='timetrial')document.querySelector('#finish-title')!.textContent=improved?'Neue Bestzeit · Geist gespeichert':`Zeitfahren · ${this.ghostRun?`Geist ${this.ghostRun.time.toFixed(2)} s`:'beendet'}`;
-            document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Deine Bestzeit ${best.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
+            document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Bestzeit ${TRACK.name} ${best.toFixed(2)} s`:''}${bestLap!==null?` · Beste Runde ${bestLap.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
+            this.presentFinishActions(rankRace(this.progress));
             document.querySelector('#finish-card')!.removeAttribute('hidden');
           }
         }
@@ -833,7 +1121,7 @@ class App {
             allKarts.forEach((k,i)=>{ if(!k.grounded||craterAt(k.x,k.z)<0){this.inCrater[i]=false;return;}
               allKarts[i]={...k,speed:k.speed*(1-1.5*FIXED_STEP),suspensionVelocity:this.inCrater[i]?k.suspensionVelocity:k.suspensionVelocity-1.4,drifting:false,driftCharge:0};
               if(!this.inCrater[i]){this.testScene?.craterHit?.(i);if(i===0)this.audio.itemEvent('hit');} this.inCrater[i]=true;
-              if(shouldStartCraterFall(k.x,k.z,k.grounded,this.salvage[i]??0)){this.salvage[i]=3.2;this.testScene?.splash?.(i,'crater');
+              if(shouldStartCraterFall(k.x,k.z,k.grounded,this.salvage[i]??0)){this.salvage[i]=3.2;this.testScene?.splash?.(i,'crater');loseMedals(this.medals,i,MEDAL_RULES.lossOnFall);
                 if(i===0){this.itemMessage='Granattrichter · Das Staatliche Bergungsamt zieht dich heraus';this.itemMessageUntil=this.items.time+3.2;this.audio.itemEvent('hit');}}
             });
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
@@ -844,7 +1132,7 @@ class App {
               this.salvage[i]=Math.max(0,this.salvage[i]-FIXED_STEP);this.recoveryRemaining[i]=Math.max(this.recoveryRemaining[i],FIXED_STEP*2);
               if(this.salvage[i]===0){all[i]=recoverKart(k,all);this.recoveryRemaining[i]=0;this.testScene?.salvaged?.(i);}
             } else if(hazardAt(k.x,k.z)||(overCanal(k.x,k.z)&&(k.jumpRemaining??0)===0&&k.height<.05)){
-              const kind=hazardAt(k.x,k.z)??'water';this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);
+              const kind=hazardAt(k.x,k.z)??'water';this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);loseMedals(this.medals,i,MEDAL_RULES.lossOnFall);
               if(i===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<40){this.audio.itemEvent('hit');this.audio.cheer(.7);}
               if(i===0){this.itemMessage=kind==='cliff'?'Absturz! Das Staatliche Bergungsamt seilt sich ab':kind==='lava'?'In den Staatsofen! Das Staatliche Bergungsamt rückt an':'Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
             }
@@ -857,7 +1145,7 @@ class App {
           for(const event of this.damage.events){
             if(event.kind==='repaired'){if(event.kart===0){this.itemMessage='Repariert · Staatliche Werkstatt stempelt ab';this.itemMessageUntil=this.items.time+2;}continue;}
             if(event.kind!=='wreck')continue;
-            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);
+            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);loseMedals(this.medals,event.kart,MEDAL_RULES.lossOnWreck);
             const at=[this.kart,...this.loadKarts][event.kart],near=Math.hypot(at.x-this.kart.x,at.z-this.kart.z)<40;
             if(event.kart===0||near){this.audio.itemEvent('hit');this.audio.thunder();this.audio.cheer(.9);}
             if(event.kart===0){this.itemMessage='Totalschaden! Die Staatliche Werkstatt rückt an';this.itemMessageUntil=this.items.time+3;}
@@ -879,12 +1167,14 @@ class App {
         if (a && b) this.testScene.setGhost?.({ x: a[0] + (b[0] - a[0]) * u, z: a[1] + (b[1] - a[1]) * u, heading: a[2] + Math.atan2(Math.sin(b[2] - a[2]), Math.cos(b[2] - a[2])) * u, height: a[3] });
       }
       this.testScene.presentItems?.(this.items,[this.renderKart,...renderBots]);
+      this.testScene.presentMedals?.(this.racePhase==='practice'?[]:this.medals.medals);
       this.camera?.update(this.renderKart, delta, false, frame.steering);
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       this.commentary();
       if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? `STAATSFERNSEHEN · Freies Training · ${{ sun: 'Sonnenschein genehmigt', rain: 'Regen angeordnet', snow: 'Schneefall verordnet' }[this.weather]}` : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
+      { const el=document.querySelector<HTMLElement>('#medal-count'); if(el){const n=this.medals.counts[0]??0;el.textContent=`${'✪'.repeat(n)}${'·'.repeat(MEDAL_RULES.max-n)} ${n}/${MEDAL_RULES.max} Orden${n?` · +${Math.round(n*MEDAL_RULES.topSpeedPerMedal*3.6)} km/h Spitze`:''}`;el.hidden=this.racePhase==='practice';el.classList.toggle('full',n===MEDAL_RULES.max);} }
       { const health=Math.round(this.damage.health[0]),meter=document.querySelector<HTMLElement>('#health')!;
         meter.classList.toggle('worn',health<66);meter.classList.toggle('critical',health<33);meter.classList.toggle('wrecked',this.damage.wrecked[0]>0);meter.classList.toggle('shown',this.racePhase==='practice');
         meter.setAttribute('aria-valuenow',String(health));meter.setAttribute('aria-valuetext',health===0?'Totalschaden':`${health} Prozent Fahrzeugzustand`);
@@ -909,7 +1199,7 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
-    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
+    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.camera.introMode&&!this.selecting&&!this.selectingTrack&&this.racePhase!=='finished'?this.menuFocus():this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) {
       const stand = trackPoint(TRACK.start + 20), nearness = Math.max(0, 1 - Math.hypot(this.kart.x - stand.x, this.kart.z - stand.z) / 70);
       const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);

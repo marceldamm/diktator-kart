@@ -9,7 +9,7 @@ const glbDocument = JSON.parse(glb.toString('utf8', 20, 20 + glbJsonLength));
 const glbNodeNames = new Set(glbDocument.nodes.map(({ name }) => name));
 
 test('the six current drivers keep distinct kart and face variants with deliberate cap assignments', () => {
-  assert.deepEqual(DRIVER_HEAD_SCALE, [0.82, 0.79, 0.77]);
+  assert.deepEqual(DRIVER_HEAD_SCALE, [0.75, 0.74, 0.74]);
   assert.equal(CAST.length, 6);
   assert.equal(new Set(CAST.map(({ body }) => body)).size, CAST.length, 'each driver retains an individual kart silhouette');
   assert.equal(new Set(CAST.map(({ faceStyle }) => faceStyle)).size, CAST.length, 'each driver has an individually sculpted head variant');
@@ -89,4 +89,14 @@ test('seat upholstery details stay flat and non-metallic instead of reading as l
   const position = glbDocument.accessors[glbDocument.meshes[seamNode.mesh].primitives[0].attributes.POSITION];
   const depth = (position.max[2] - position.min[2]) * seamNode.scale[2] / (position.normalized ? 32767 : 1);
   assert.ok(depth < .01, `upholstery thread stays under 1 cm thick (got ${depth.toFixed(4)} m)`);
+});
+
+test('every tyre set exists on all four wheels and each driver owns one by default', async () => {
+  const { TIRE_SETS, DEFAULT_TIRES } = await import('../src/cast.ts');
+  const { readFileSync } = await import('node:fs');
+  const buf = readFileSync(new URL('../public/assets/models/hero-kart.glb', import.meta.url));
+  const json = JSON.parse(buf.subarray(20, 20 + buf.readUInt32LE(12)).toString('utf8'));
+  const names = new Set(json.nodes.map((n) => n.name));
+  for (const set of TIRE_SETS) for (let i = 0; i < 4; i++) assert.ok(names.has(`wheelStyle-${set.id}-${i}`), `${set.id} wheel ${i}`);
+  assert.equal(new Set(DEFAULT_TIRES).size, 6);
 });

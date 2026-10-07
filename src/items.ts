@@ -1,10 +1,11 @@
 import { TRACK, trackLocate, trackPoint, trackProgress, wrap } from './track.ts';
-import { MAP_SCALE } from './track-layout.ts';
+import { ITEM_BOX_PROGRESS } from './track-layout.ts';
+export { ITEM_BOX_PROGRESS };
 import type { KartState } from './kart-model.ts';
 
-export type ItemKind = 'direct' | 'homing' | 'trap' | 'censor';
+export type ItemKind = 'direct' | 'homing' | 'trap' | 'censor' | 'boost';
 export type ItemDirection = 'forward' | 'backward';
-export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Suchauftrag',trap:'Stempelfalle',censor:'Zensurbalken'};
+export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Suchauftrag',trap:'Stempelfalle',censor:'Zensurbalken',boost:'Eilerlass'};
 export interface ItemBox { id:number; x:number; z:number; readyIn:number }
 export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; direction?:ItemDirection; bounces?:number }
 export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'; kart:number; item:ItemKind; owner?:number }
@@ -13,19 +14,21 @@ export interface ItemWorld { /** Karts holding their item behind them as a shiel
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
-export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3,censorDuration:2.6,censorSpeedFactor:.72,censorBannerDuration:.9};
-/** Dispatch box rows: end of the grandstand straight, the boulevard and the archive leg. */
-export const ITEM_BOX_PROGRESS=[72,330,520].map(s=>s*MAP_SCALE);
+export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3,censorDuration:2.6,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:4};
+/** Dispatch box rows come from the active circuit (track-layout.ts). */
 export function createItems(count:number,seed=921):ItemWorld {
   return {slots:Array(count).fill(null),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
     boxes:ITEM_BOX_PROGRESS.flatMap((s,row)=>[-3,0,3].map((lane,col)=>({id:row*3+col,...trackPoint(s,lane),readyIn:0}))),events:[],random:seed,nextId:1,time:0,
-    stats:{direct:{collected:0,launched:0,hits:0},homing:{collected:0,launched:0,hits:0},trap:{collected:0,launched:0,hits:0},censor:{collected:0,launched:0,hits:0}}};
+    stats:{direct:{collected:0,launched:0,hits:0},homing:{collected:0,launched:0,hits:0},trap:{collected:0,launched:0,hits:0},censor:{collected:0,launched:0,hits:0},boost:{collected:0,launched:0,hits:0}}};
 }
 function roll(world:ItemWorld,rank:number,count:number):ItemKind {
   world.random=(Math.imul(world.random,1664525)+1013904223)>>>0;
   const n=world.random/4294967296;
   if(n<.1)return 'censor';
-  const regular=(n-.1)/.9;
+  // Eilerlass (express decree, 07.10.2026): a self-boost, more likely the further back a kart runs.
+  const boost=.08+.17*(rank-1)/Math.max(1,count-1);
+  if(n<.1+boost)return 'boost';
+  const regular=(n-.1-boost)/(.9-boost);
   const homing=.25+.2*(rank-1)/Math.max(1,count-1);
   return regular<homing?'homing':regular<homing+.4?'direct':'trap';
 }
@@ -60,7 +63,10 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
   }
   for(let i=0;i<karts.length;i++)if(activations[i]&&world.slots[i]) {
     const kind=world.slots[i]!;
-    if(kind==='censor') {
+    if(kind==='boost') {
+      const k=result[i];world.slots[i]=null;world.stats.boost.launched++;world.events.push({kind:'launch',kart:i,item:'boost'});
+      result[i]={...k,turboRemaining:Math.max(k.turboRemaining,ITEM_RULES.boostDuration),speed:Math.min(20,Math.max(k.speed,0)+ITEM_RULES.boostKick)};
+    } else if(kind==='censor') {
       world.slots[i]=null;world.censorBannerRemaining[i]=Math.max(world.censorBannerRemaining[i],ITEM_RULES.censorBannerDuration);
       world.stats.censor.launched++;world.events.push({kind:'launch',kart:i,item:'censor'});
       for(let target=0;target<karts.length;target++)if(target!==i&&world.immune[target]<=0) {
@@ -106,10 +112,11 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
   world.objects=world.objects.filter(o=>o.remaining>0);return result;
 }
 
-export function botUsesItem(world:ItemWorld,index:number,karts:KartState[]):boolean {
-  const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2)return false;
+export function botUsesItem(world:ItemWorld,index:number,karts:KartState[],patience=1):boolean {
+  const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2*patience)return false;
   const k=karts[index];
   if(kind==='trap')return world.heldFor[index]>2;
+  if(kind==='boost')return world.heldFor[index]>1.6*patience&&(karts[index].speed??0)>6;
   if(kind==='censor')return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<65)||world.heldFor[index]>5;
   if(kind==='direct')return karts.some((other,i)=>{
     if(i===index||Math.hypot(other.x-k.x,other.z-k.z)>38)return false;

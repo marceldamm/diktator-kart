@@ -9,6 +9,61 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Marcels Spieltest-Feedback – 07.10.2026 abends (Aufgabenliste)
+
+**Quelle:** Marcels Durchspiel-Feedback im Projekt-Thread (07.10.2026, 16:33 UTC). Status wird hier fortgeschrieben.
+
+- [ ] F1 Startmenü: Hintergrundkamera wechselt nach einigen Sekunden fließend zwischen allen Fahrern (zufälliger Start).
+- [ ] F2 Grand Prix: nach der Fahrerwahl wieder Sarahs Streckenauswahl (gewählte Strecke = erstes Rennen, danach die übrigen).
+- [ ] F3 Rampe: Leertaste halten und auf/vor der Rampe loslassen löst Sprungtrick + Boost aus; Hüpfen auf der Rampe darf den Absprung nicht verhindern.
+- [ ] F4 Drift: Leertaste halten = Driftbereitschaft; Drift erst mit Lenkung, Richtung folgt der Lenkung fließend (Schlangenlinie), Loslassen beendet Drift (Turbo nach Ladung).
+- [ ] F5 Bergung: neues, thematisches Bergungsobjekt statt Haken/Magnet.
+- [ ] F6 Gesichter: die „Barteln“ neben der Nase (Nasolabialrohre) entfernen, weiter Richtung erkennbar statt lustig.
+- [ ] F7 Lenkung etwas weicher (nicht zu weich); Drift-Grundgefühl bleibt.
+- [ ] F8 Orden: spürbarer Effekt (10 Orden = dauerhaft merklich schneller), sichtbares Feedback; Verlust auch bei Absturz/Wasser/Totalschaden.
+- [ ] F9 Panzer (Hitler): Überfahrene nehmen Schaden, werden sichtbar plattgedrückt; mehrfach überfahren = kaputt.
+- [ ] F10 Gebäuderückseiten an sichtbaren Stellen gestalten (Fenster/Gliederung statt leerer Wand).
+- [ ] F11 Pfeile auf Schubfeldern und Rampen zeigen in Fahrtrichtung.
+- [ ] F12 Stadion-Monitor: Bild steht auf dem Kopf.
+- [ ] F13 Hitlers Hund: sucht Ziele (folgt Strecke, prallt ab, stürzt sich auf Gegner vor ihm), explodiert beim Treffer, Fahrzeugschaden.
+- [ ] F14 Ziel: Meldung sofort beim Überfahren der Ziellinie; Rennen läuft weiter (Spieler-Kart fährt per KI), Gegner fahren ins Ziel, Zeiten und Punkte werden erst dann endgültig.
+
+## Claude-Folgeauftrag: Themen-Strecken, Mario-Kart-Lücken, Modelle – 07.10.2026 (Marcel)
+
+**Quelle:** Marcels Nachricht vom 07.10.2026 früh („Duce-Drom muss themenbasierter sein … mit Mario Kart vergleichen … an Fahrermodelle, Gesichter, Fahrzeuge … bis 95 % des Limits, danach auf main“). Stalin-/Mao-Fähigkeiten bleiben bis zu einer Satire-Entscheidung ausgelassen.
+
+- [x] **Duce-Drom thematisch neu** ([docs/26](docs/26-duce-drom.md)): Travertinplatten statt Kopfsteinpflaster, Marmorstadion mit Publikum und identischen Kult-Athleten (gleicher kahler Kopf, gleiches Kinn) um Start und Meta-Kehre, Würfel-Arkadenpalast mit Pathos-Inschrift, Kolossalkopf-Fassade, rationalistische Travertinblöcke und Kolonnaden, schwarz-weiße Randsteine, Travertin-Brüstungen, Banner „MEHR MARMOR BITTE“. Route unverändert (bereits eigene Streckenführung).
+- [x] **Dritte Strecke Havanna-Revolutionsring** ([docs/29](docs/29-havanna-revolutionsring.md)): Malecón am offenen Meer, Prado, Kapitol-Kreisel, Altstadt mit Zigarrenfabrik-Abkürzung, Redner-Hügel mit Sprung; elf neue Blender-Module; Malecón-Welle als Ereignis. Grand Prix jetzt über drei Strecken.
+- [x] **Mario-Kart-Vergleich** ([docs/28](docs/28-mario-kart-vergleich.md)) und daraus: **Orden** (Sammelobjekte, bis zehn, je etwas mehr Höchsttempo, drei fallen bei Treffer ab), **Eilerlass** (Selbst-Boost-Item, hinten häufiger), schnellerer Marsch in der letzten Runde.
+- [x] **Fahrergesichter:** erwachsenere Schädelform (schmaler, flachere Gesichtsebene, volleres Hinterhaupt), tiefere Augenhöhlen, Wangenknochen, Lichtreflex in den Augen, natürlichere Haut und Lippen, kleinerer gemeinsamer Kopfmaßstab. Vergleich: `docs/evidence/drivers-compare-20261007.png`. Realistische Porträts bleiben ein offenes Ziel.
+- [x] **Zeitfahren im echten Lauf geprüft** (Auto-Gas + Lenkhilfe, kein Demo): Bestzeit 221,28 s, beste Runde 72,77 s und Geist gespeichert; zweiter gleich schneller Lauf überschrieb nichts, HUD zeigte „GEIST −0,0 s“.
+- [x] **Reifenwahl (Fragebogen):** sechs eigene Radsätze, einer je Fahrer, auf jedem Kart frei wählbar (Fahrerwahl ◀ ▶, `dk-tires`); Bots behalten ihre eigenen. Test + Chrome-Umschaltung bestanden.
+- [x] Grand Prix über drei Strecken komplett im Chrome (Demo-Autopilot): Stadionring → Duce-Drom → Havanna, Gesamtwertung korrekt, ca. 14 min Fahrzeit (`gp-*-gp3-20261007.png`).
+- [x] **3D-Siegerpodest** nach dem letzten Grand-Prix-Rennen: Top 3 auf Gold/Silber/Bronze-Sockeln hinter der Ziellinie, Kamerafahrt, Konfetti; Ergebniskarte rückt zur Seite (`gp-ceremony-20261007.png`).
+- [x] **Gleiches Grundtempo für alle Bots** (vorher je Startplatz +0/+0,5/+1,0 m/s, ein versteckter Vorteil): Unterschiede kommen nur noch aus den sichtbaren Rivalenstilen. Nebenwirkung: Mussolini gewinnt nicht mehr automatisch (Testlauf: Mao Sieger in Havanna).
+- [ ] Menschliche Fahr-, Stil- und Hörprobe aller drei Strecken; Karosserien im nächsten Pass.
+
+## Claude-Masterauftrag: zweite Strecke, Live-Rangliste, Grand Prix – 06./07.10.2026 (Marcel)
+
+**Quelle:** Marcels Masterauftrag „Diktator Kart als vollständiges Rennspiel weiterentwickeln“ (Projekt-Thread, 06.10.2026). Reihenfolge laut Auftrag: Ist-Abgleich → zweite Strecke → Live-Rangliste → Grand-Prix-Wertung → Zeitfahren/Geist → weitere Fragebogen-Ziele.
+**Arbeitsbranch:** `codex/team-marcel-20261006-214551-132` (von `origin/main` `110fa15`).
+
+- [x] **Paket 1 – Duce-Drom (Rom) spielbar** (Sarahs Name/Ort; Route und Details sind Claudes Ausarbeitung, siehe [docs/26-duce-drom.md](docs/26-duce-drom.md)): eigene 1 238-m-Route mit Circus-Gerade, Meta-Kehre um einen Obelisken, Serpentine auf ein 6-m-Belvedere mit Sprungrampe, Abfahrt zum offenen Tiber-Kai, Forum-Bogen, Prunkstraße mit Triumphbogen und Balkonpalast. Stallgasse als Schotter-Abkürzung (Risiko/Turbo-Entscheidung). Zehn neue editierbare Blender-Module (`art-source/rome_kit_modules.py`) im gemeinsamen Kit. In Streckenauswahl, Einzelrennen, Zeitfahren und Grand Prix integriert; die übrigen vier Strecken bleiben „In Planung · nicht spielbar“.
+- [x] **Paket 2 – Live-Rangliste rechts:** alle sechs Fahrer mit Porträt, Farbe und Platz unter der Minikarte; Führender golden, Spieler hell markiert; Datenquelle ist ausschließlich `rankRace` (dieselbe Rangfolge wie Platzanzeige/Ziel). Ruhige Positionswechsel (Gleitanimation, höchstens ca. 7 Aktualisierungen/s), Zielhäkchen, kompakte Varianten für kleine Fenster.
+- [x] **Paket 3 – Grand Prix als Meisterschaft:** „Großer Preis der Eitelkeit“ über Stadionring → Duce-Drom, Punkte 10/7/5/3/2/1 aus der echten Zielreihenfolge, Zwischenwertung, Gesamtwertung mit Siegerehrung, „Nächstes Rennen“/„Neuer Grand Prix“/Menü. Gleichstand: Siege, bestes Einzelergebnis, letztes Rennen. Knappe satirische Einleitung je Rennen.
+- [x] **Paket 4 – Zeitfahren:** Bestzeit, beste Runde und Geist werden je Strecke lokal gespeichert, nur nach vollständigem Lauf; HUD zeigt den Abstand zum Geist. Stadionring-Schlüssel unverändert (bisherige Bestzeiten bleiben).
+- [x] **Fragebogen-Ziel Bedienung:** Tastenbelegung für zehn Fahraktionen in den Optionen (lokal gespeichert, Pfeiltasten bleiben); Gamepad-Standardbelegung (Stick lenkt analog, RT/LT Gas/Bremse, A Drift, X Item, Y Kamera, RB Fähigkeit, Menüs mit A/B/Steuerkreuz) – mit echtem Controller noch ungeprüft.
+- [x] **Paket 5 – Rivalenstile:** Linie, Drift/Haftung, Abkürzung, Überholdrang und Item-Geduld je Figur, ohne Tempo- oder Gripbonus; Hinweis „Als Rivale“ in der Fahrerwahl.
+- [x] Fragebogen-Abgleich mit Status je Ziel: [docs/27-questionnaire-status.md](docs/27-questionnaire-status.md).
+- [x] **Fragebogen-Ziel Grafik-Startwert:** Ohne gespeicherte Grafikwahl stellt das Spiel nach den ersten Menüsekunden automatisch Basis/Standard/Hoch ein (Median-Framezeit); manuelle Wahl hat Vorrang. Im Chrome: Standard bei 18,1 ms Median (RTX 3070). Intel UHD offen.
+- [x] **Castro-Fähigkeit „Blockade“ (Q):** zwei Paragraphenschranken 4 m hinter dem Cabrio, gleiche Regeln wie die Item-Falle; Bots nutzen sie nur mit einem Gegner dicht dahinter. Test und Chrome-Auslösung (2 Schranken) bestanden.
+- [x] **Mussolini-Fähigkeit „Große Pose“ (Q):** 1,3 s Kinn hoch bei halbem Gas, danach Pflichtapplaus-Schub, Konfetti und 2,2 s Itemschutz; Bots nach derselben Regel. Test und Chrome-Auslösung (`pose`/`pose-applause`) bestanden. **Entscheidung nötig:** Stalins „Große Säuberung“ und Maos „Kulturrevolution“ benennen reale Massenverbrechen – vor dem Bau festlegen, wie die Satire die Täter trifft und nicht die Opfer.
+- [x] **Ansagen:** fünf neue Sprecherinnen-Zeilen (Piper/Kerstin wie die vorhandenen Platzhalterstimmen): Grand-Prix-Begrüßung, Duce-Drom-Begrüßung, Balkonrede, Zwischenwertung, Gesamtsieger. Im Chrome geladen (43 Zeilen) und `announcer-rome` im Rennen ausgelöst; Hörabnahme offen.
+- [x] Streckenereignis Duce-Drom: angekündigte „Balkonrede“ in Runde 2 mit Rosenregen über der Prunkstraße und Jubel (rein visuell, für alle gleich).
+- [ ] Menschliche Fahr-, Stil- und Hörabnahme der neuen Strecke; Intel-UHD-Messung beider Strecken (Issue #4 bleibt offen).
+
+**Nächster Schritt:** Siehe Abschlussbericht im [Fortschrittslog](PROGRESS-LOG.md); danach Rivalen-Persönlichkeiten (Paket 5) und die nächste Strecke aus Sarahs Liste.
+
 ## GitHub-Dokumentation, Aufgaben und Prüfungen – 06.10.2026 (Marcel)
 
 **Status:** Die GitHub-Workflow-Basis aus [PR #1](https://github.com/marceldamm/diktator-kart/pull/1), die Status-/Einstiegsaktualisierung aus [PR #5](https://github.com/marceldamm/diktator-kart/pull/5) und die Board-Automation aus [PR #8](https://github.com/marceldamm/diktator-kart/pull/8) sind in `main`; die erforderlichen `validate / tests-and-build`-Checks waren erfolgreich. Issue-Formulare, PR-Vorlage, automatische Prüfungen und das `main`-Ruleset sind aktiv. [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2) und [Milestone „GitHub-Workflow-Pilot“](https://github.com/marceldamm/diktator-kart/milestone/1) verfolgen den Team-Pilot; der aktuelle Stand und der offene Sarah-Praxistest stehen in Issue #2. Das private [Projektboard](https://github.com/users/marceldamm/projects/1/views/1) nimmt neue offene Issues und PRs automatisch auf; PR #5 steht dort auf `Done`. [Issue #4](https://github.com/marceldamm/diktator-kart/issues/4) ist im Status `In progress` des [Meilensteins „Redesign-Performance-Abnahme“](https://github.com/marceldamm/diktator-kart/milestone/2). Die vier Markdown-Hauptdateien bleiben kanonisch. Copilot Cloud Agent ist für dieses Konto nicht freigeschaltet.
@@ -27,8 +82,8 @@ Der kontrollierte frühere Feed-A/B maß an der Startzone P95 rAF 83,2–83,4 ms
 
 ## Streckenauswahl – 06.10.2026 (Sarah-Auftrag)
 
-- [x] Vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Der vorhandene Stadionring ist die einzige anwählbare und spielbare Strecke.
-- [x] Fünf weitere Plätze zeigen „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau).
+- [x] Vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Damals war der Stadionring die einzige spielbare Strecke; seit 07.10.2026 ist zusätzlich der Duce-Drom spielbar (siehe oben), der Grand Prix fährt beide Strecken nacheinander.
+- [x] Fünf weitere Plätze zeigten „In Planung · nicht spielbar“ samt Ort: Ewige-Führer-Alee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Stand 07.10.2026: Duce-Drom spielbar, die übrigen vier bleiben in Planung.
 - [x] Sichtbarkeitsfehler beim Fahrerwahl-Übergang behoben: Die sechs asynchron gerenderten Porträts blendeten zuvor die Hauptstrecke aus, während der normale Renderloop den Zwischenzustand zeichnete. Während der Offscreen-Aufnahmen bleibt jetzt das letzte vollständige Streckenbild stehen; der Startbutton wird erst nach Wiederherstellung der Szene freigegeben.
 - [x] Sichtbare Laufzeitprüfung: Strecke im Auswahlbild sichtbar; nach Porträtabschluss alle 271/271 aktivierten Stadt-Meshes im Countdown sichtbar. Die automatisierten Browsertest-Helfer decken den Track-zu-Fahrer-zu-Rennen-Ablauf ab.
 - [ ] Laufzeitruckeln auf Intel UHD bleibt offen: WebGL2 bei 1186×888, Standard, ca. 14 FPS, P50 40,5 ms/P95 150,8 ms im 300-Frame-Fenster. Samplerformat-WebGL-Warnungen erscheinen weiter; gezielte M7-Ursachenmessung ist erforderlich. Grafikqualität nicht ohne kontrolliertes A/B senken.

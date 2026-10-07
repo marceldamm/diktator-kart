@@ -138,6 +138,8 @@ export class KartAudio {
   cheer(amount = 1): void { this.crowdSwell = Math.max(this.crowdSwell, amount); }
 
   setEnabled(enabled: boolean): void { this.enabled = enabled; this.music.muted = !enabled; if (this.master) this.master.gain.value = enabled ? .35 : 0; }
+  /** Final lap: the march hurries a little (pitch-preserving where the browser supports it). */
+  setMusicTempo(rate:number):void {this.music.playbackRate=rate;(this.music as HTMLAudioElement&{preservesPitch?:boolean}).preservesPitch=true;}
   setMusicVolume(volume:number):void {this.musicVolume=Math.max(0,Math.min(1,volume));this.music.volume=this.musicVolume;}
   itemEvent(kind:'pickup'|'launch'|'hit'):void { this.play(kind==='pickup'?this.pickup:kind==='launch'?this.launch:this.impact,.65); }
   dogBark():void { this.play(this.bark,.85); }

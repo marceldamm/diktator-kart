@@ -1,5 +1,51 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-07 (Folgelauf) – Duce-Drom-Thema, Havanna, Orden, Eilerlass, Gesichter
+
+- Neue Kit-Module: `art-source/rome_monuments.py` (Athlet, Marmorterrasse, Würfelpalast, Kolossalkopf, drei Travertinblöcke, Kolonnade) und `art-source/havana_modules.py` (drei Kolonialhäuser, zwei Palmen, drei Straßenkreuzer, Leuchtturmfestung, Bart-Ministerium, Tribüne); keine neuen Materialien (Kit-Test ≤ 24). `city-kit.glb` jetzt 10 554 032 Byte (vorher 7 970 904).
+- Duce-Drom: Thema-Zweige in `track-world.ts`/`city-world.ts` (Travertin-Straßentextur, Randsteine, Brüstung, Banner, Marmorterrassen + Athleten auf jeder zweiten Terrasse, Helden mit `__DK_CITY.heroFailures` geprüft = leer).
+- Havanna: Definition in `track-layout.ts`, Themen-Zweige, Malecón-Welle (`trackEvent('wave')`, Tempo-/Gripabzug 95–330 m für alle, 14 s), zwei Ansagen (Piper/Kerstin). Tests `tests/havanna.test.mjs` 3/3 (Fortschritt, Barrieren, Kai zur Seeseite, Hügel/Rampe, Rasenabstand, fünf Bots drei Runden, Abkürzung).
+- Orden: `src/medals.ts`, `topSpeedBonus` im normalen Tempolimit von `advanceKart` (einzige Kernänderung), HUD-Zähler, Verlust bei Treffer; Tests 2/2; Chrome: 2 Orden nach 45 s.
+- Eilerlass: neues Item `boost`, Wahrscheinlichkeit 8–25 % nach Platz, Selbst-Turbo 1,4 s; Test 1/1.
+- Gesichter: `build_kart.py` (Schädel, Augenhöhlen, Wangenknochen, Lichtreflex, Haut/Lippen), `DRIVER_HEAD_SCALE` 0,75/0,74/0,74; Hero-Kart-GLB 6 418 620 Byte.
+- Zeitfahren echt geprüft (siehe CURRENT-WORKLIST). `npm test` 93/93.
+
+## 2026-10-07 – Claude-Masterauftrag: Duce-Drom, Live-Rangliste, Grand Prix, Zeitfahren je Strecke, Rivalenstile
+
+**Ausgangslage:** Branch `codex/team-marcel-20261006-214551-132` vom aktuellen `origin/main` `110fa15` (sauber, keine fremden ungesicherten Änderungen). Ist-Abgleich im Code: eine spielbare Strecke als Modul-Singleton (`track.ts` baute die Mittellinie beim Import), Grand Prix = ein einzelnes Rennen, Zeitfahren mit einem globalen Geist-/Bestzeit-Slot, Platz nur als Zahl im HUD, Bots mit Slot-basierten Linien.
+
+**Umgesetzt**
+- Streckendefinitionen statt Einzelkonstanten (`src/track-layout.ts`): Stadionring unverändert übernommen, Duce-Drom neu. `selectTrack()` (`src/track.ts`) schaltet Mittellinie, Suchgitter, Abkürzung, Höhenprofil, Gefahren, Items und Weltbezirke über ES-Live-Bindings um. Höhenprofil als Keyframes (Prachtallee-Kuppe identisch), Stützmauern für alle Hochlagen, Rampen folgen der Fahrbahnhöhe.
+- Duce-Drom (1 238 m): Circus-Gerade, Meta-Kehre um Obelisk, Stallgasse (Schotter-Abkürzung), Aventin-Serpentine auf 6 m, Belvedere-Sprung, Abfahrt, offener Tiber-Kai mit Bergungsamt, Forum, Prunkstraße mit Triumphbogen und Balkonpalast. Details/Herkunft: `docs/26-duce-drom.md`.
+- Zehn Blender-Module (`art-source/rome_kit_modules.py`, eingebunden in `build_city_kit.py`), Materialpalette nur um Terrakotta und Inschrift erweitert (24 Materialien, Kit-Test angepasst). Blender 4.5.3: Bau ~2 s; Raw 9 918 216 Byte, Runtime `city-kit.glb` 7 969 224 Byte (vorher 6 217 228 Byte).
+- Welt (`src/city-world.ts`, `src/track-world.ts`): Themen „berlin“/„rome“ (Putztöne, Ladenschilder, Banner-Slogans, Familien, Pinien/Ruinen-Bezirke, Hero-Platzierungen, Fluss/Brücken/Kathedrale aus der Definition). Berlin-spezifische Periodendetails nur noch auf dem Stadionring.
+- Menü/Ablauf (`src/main.ts`, `index.html`): Grand Prix (Fahrerwahl → Stadionring → Zwischenwertung → Duce-Drom → Gesamtwertung/Siegerehrung), Einzelrennen und Zeitfahren mit Streckenauswahl (Streckenkarten zeichnen die echte Mittellinie), Szenenneubau beim Streckenwechsel mit Streckenname im Ladebild. Fahrerporträts bleiben über Streckenwechsel erhalten.
+- `src/grand-prix.ts`: Punkte 10/7/5/3/2/1 aus `rankRace` beim Zieleinlauf des Spielers, einmalige Vergabe je Runde, Gleichstand Siege → bestes Ergebnis → letztes Rennen.
+- `src/ranking-hud.ts`: Live-Rangliste rechts (Porträt, Farbe, Platz, Spielermarke, Führender, Ziel-Häkchen), ausschließlich aus `rankRace`, DOM höchstens alle 150 ms, Gleitanimation; kompakte Varianten < 700 px Höhe bzw. < 600 px Breite; ausgeblendet in Menü/Foto/Zeitfahren.
+- Zeitfahren: Bestzeit, beste Runde, Geist je Strecke (`dk-*-duce-drom-v1`; Stadionring behält `dk-best-stadium-v2`, `dk-best-timetrial-v2`, `dk-ghost-v2`), Speichern nur nach vollständigem Lauf und nie im Demo-Modus, Geist trägt Strecke und Distanz, HUD zeigt Abstand zum Geist.
+- Rivalenstile (`BOT_STYLES` in `src/track.ts`): Linie, Drift/Haftung, Abkürzung, Überholdrang, Item-Geduld je Figur; keine Tempo-/Gripänderung. Hinweis „Als Rivale“ in der Fahrerwahl.
+- Streckenereignis Duce-Drom Runde 2: Balkonrede-Meldung, Jubel, Rosenregen über der Prunkstraße.
+- Fehler behoben: `beginRace` wartete auf `AudioContext.resume()`; ohne frische Nutzergeste (z. B. „Nächstes Rennen“ per Skript oder nach Szenenneubau) startete das zweite GP-Rennen nicht. Der Ton wartet jetzt höchstens 400 ms.
+
+**Geprüft**
+- `npm test`: 81/81 (neu: `tests/duce-drom.test.mjs` 7 Tests inkl. Barrieren, Hügel/Rampe, fünf Bots drei Runden über den Hügel, Stallgasse, Streckenwechsel/Items, Rivalenstile; `tests/grand-prix.test.mjs` 2 Tests). `npm run build` erfolgreich (bekannte Chunk-Größenwarnung).
+- Sichtbares Chrome (eigenes Profil, CDP 9231, 1600×1000, RTX 3070 Laptop), `demo=1` (Spielerkart fährt mit Bot-Regler): Einzelrennen Duce-Drom komplett (Runden 87,75/86,75/87,00 s; alle sechs im Ziel), Grand Prix komplett über beide Strecken (Rennen 1 Stadionring, Rennen 2 Duce-Drom, korrekte Zwischen-/Gesamtwertung inkl. Gleichstand 3:3 nach letztem Rennen aufgelöst). Keine Seitenfehler. FPS-Anzeige im Rennen 44–57 (Duce-Drom) bzw. 52 (Stadionring) – unkontrollierte Momentwerte, keine M7-Messung.
+- Belege: `docs/evidence/rome-*-20261007.png`, `docs/evidence/gp-*-20261007.png` (Index in `docs/evidence/README.md`).
+
+**Nachtrag (gleicher Lauf):** Tastenbelegung (`REBINDABLE`, `rebind`, `dk-keys-v1`) und Gamepad-Abfrage (`pollGamepads`, analoge Achsen in `InputHub`) ergänzt; `tests/input-bindings.test.mjs` 2/2; im sichtbaren Chrome Item auf J umgelegt, gespeichert und zurückgesetzt. Ein echtes Gamepad stand nicht zur Verfügung. Triumphbogen-Reliefs/Schlussstein sitzen jetzt über der Öffnung, Duce-Drom-Rasenflächen halten Abstand zur Fahrbahn (neuer Test). Ansichten: `docs/evidence/rome-view-*-20261007.png`.
+
+**Ansagen:** `art-source/build_voices.mjs` um fünf Zeilen ergänzt (Piper 2023.11.14-2, Modell de_DE-kerstin-low wie bisher; Texte eigene Satire). Laufzeit: `__DK.voices` = 43, im Duce-Drom-Rennen `announcer-1`, `announcer-go`, `announcer-rome` gespielt (vertrauenswürdiger CDP-Mausklick entsperrte Web Audio).
+
+**Grafik-Startwert:** `src/auto-quality.ts` + Test; nur ohne gespeicherte Wahl und nicht im Demo-/Labormodus. Chrome nach Löschen von `dk-quality`: „Grafik automatisch: Standard (Median 18.1 ms)“.
+
+**Blockade (Castro):** `blockade`-Ereignis in `abilities.ts`, Bot-Regel „Gegner 3–16 m dahinter“, `main.ts` legt zwei `trap`-Objekte (Itemregeln, 12 s) ab. Test 1/1; Chrome: Q legte 2 Schranken.
+
+**Große Pose (Mussolini):** `abilities.ts` (`pose`, `pose-applause`, `poseRemaining`), Drosselung in `main.ts` für Spieler und Bots, Kopf hebt sich in `slice-scene.ts`, HUD-Karte. Test 1/1; Chrome: Q im freien Training löste beide Ereignisse aus, Abklingzeit 18 s.
+
+**Schluss-Regression (alle Pakete):** `npm test` 87/87, Build erfolgreich; kompletter Grand Prix erneut im sichtbaren Chrome (Belege `gp-*-final-20261007.png`): Stadionring P5, Duce-Drom P6 (Demo-Spieler), Gesamtsieger Mussolini 20 P, Gleichstand Castro/Kim 12:12 korrekt über das letzte Rennen aufgelöst, keine Seitenfehler. Beobachtung Balance: Mussolini gewann alle drei Demo-Grands-Prix (Stil nutzt Abkürzung, dazu das bestehende Slot-Grundtempo) – menschlich prüfen, ggf. Grundtempo vereinheitlichen.
+
+**Nicht geprüft / offen:** menschliche Fahr-, Stil- und Hörprobe; echtes Gamepad; Grafik-Startwert auf Intel UHD; Speicherung von Bestzeit/Geist im echten Zeitfahren (Demo speichert absichtlich nicht); Intel UHD und kontrollierte Framezeit beider Strecken (Issue #4); Ton für die Balkonrede; Pull Request/Issue-Anlage (in dieser Umgebung kein GitHub-CLI/Connector – Branch ist gepusht, PR muss über GitHub geöffnet werden).
+
 ## 2026-10-06 – Strecke vor Rennstart unsichtbar und Laufzeitruckeln geprüft
 
 **Reproduktion / Ursache:** Im sichtbaren Browser zeigte die frische Hauptseite nach dem Laden die Strecke. Beim Übergang über Streckenwahl zur Fahrerwahl rendert `createSliceScene().portraits()` sechs Fahrerbilder als Render-Target-Aufnahmen. Dafür setzt die Funktion hunderte Szene-Meshes, darunter die Stadt, zeitweise auf `isVisible = false` und stellt sie erst nach der asynchronen Screenshotfolge wieder her. Parallel zeichnete `App.frame()` diese Zwischenzustände auf den Hauptcanvas: der Streckenhintergrund wurde einfarbig, kurz vor dem Rennstart fehlte die Strecke. Die Capture-Folge dauerte mehrere Sekunden und beanspruchte dabei ebenfalls den Renderer.

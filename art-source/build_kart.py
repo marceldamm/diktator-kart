@@ -100,17 +100,18 @@ limousine_glass = mat('Limousine touring glass', (.18, .36, .39), .12, .18)
 limousine_glass.node_tree.nodes.get('Principled BSDF').inputs['Alpha'].default_value = .24
 limousine_glass.surface_render_method = 'BLENDED'
 uniform = mat('Uniform racing suit', (.8, .77, .68), 0, .78)
-skin = mat('Mature skin', (.5, .35, .27), 0, .84)
+skin = mat('Mature skin', (.46, .33, .27), 0, .78)
 cape_cloth = mat('Cape cloth', (.5, .04, .06), 0, .72)
 hat_cloth = mat('Hat cloth', (.12, .14, .16), 0, .7)
 fur = mat('Fur trim', (.42, .36, .3), 0, .98)
 white_glove = mat('White glove', (.86, .84, .78), 0, .6)
 eye_white = mat('Eye white', (.78, .74, .68), 0, .48)
 mouth_inner = mat('Mouth interior', (.12, .03, .025), 0, .92)
-lips = mat('Lip rouge', (.38, .13, .11), 0, .58)
+lips = mat('Lip rouge', (.33, .17, .14), 0, .62)
 lens = mat('Sunglass lens', (.02, .025, .03), .6, .08)
 medal_red = mat('Medal ribbon', (.6, .05, .08), 0, .6)
-iris = mat('Eye iris', (.22, .12, .055), 0, .42)
+iris = mat('Eye iris', (.3, .19, .1), 0, .32)
+OLIVE = mat('Olive wheel enamel', (.2, .24, .13), .15, .55)
 
 kart = empty('hero-kart')
 
@@ -343,6 +344,41 @@ for i, (x, y, r) in enumerate([(-.86, .8, .36), (.86, .8, .36), (-.92, -.74, .36
                 (sd * (w * .48 + .027), r * .31 * math.sin(a + .08), r * .31 * math.cos(a + .08)),
                 .008, trim, limo_wheel_style)
         cyl('Limousine domed hub badge', (sd * (w * .48 + .04), 0, 0), r * .085, .032, chrome, limo_wheel_style, 'X', verts=24)
+    # Tyre sets (07.10.2026, Marcel's questionnaire): every driver has an own tyre/wheel design and any set can be
+    # fitted to any kart. Each set is an overlay group on the shared tyre; the runtime enables exactly one.
+    olive_enamel = OLIVE
+    styles = {name: empty('wheelStyle-' + name + '-' + str(i), parent=spin) for name in ('parade', 'corsa', 'volk', 'rakete', 'gelaende')}
+    for sd in [-1, 1]:
+        side_x = sd * (w * .48 + .012)
+        # parade: broad whitewall band and a polished three-eared spinner
+        torus('Parade whitewall', (sd * w * .49, 0, 0), r * .74, .045, ivory, styles['parade'], 'X')
+        cyl('Parade spinner hub', (side_x, 0, 0), r * .16, .05, chrome, styles['parade'], 'X', verts=24)
+        for k in range(3):
+            a = k * 2 * math.pi / 3
+            rod('Parade spinner ear', (side_x + sd * .03, 0, 0), (side_x + sd * .03, r * .3 * math.sin(a), r * .3 * math.cos(a)), .018, chrome, styles['parade'])
+        # corsa: dense wire spokes, a red rim band and a knock-off cap
+        torus('Corsa red rim band', (sd * w * .47, 0, 0), r * .57, .018, medal_red, styles['corsa'], 'X')
+        for k in range(28):
+            a = k * math.pi / 14
+            rod('Corsa wire spoke', (sd * w * .3, r * .08 * math.sin(a), r * .08 * math.cos(a)), (sd * w * .46, r * .56 * math.sin(a + .3), r * .56 * math.cos(a + .3)), .0045, chrome, styles['corsa'])
+        cyl('Corsa knock-off cap', (side_x, 0, 0), r * .1, .06, gold, styles['corsa'], 'X', verts=12)
+        # volk: plain pressed-steel disc with round lightening holes (olive enamel)
+        cyl('Volk steel disc', (sd * w * .47, 0, 0), r * .56, .02, olive_enamel, styles['volk'], 'X', verts=28)
+        for k in range(5):
+            a = k * 2 * math.pi / 5
+            cyl('Volk disc hole', (sd * (w * .47 + .012), r * .34 * math.sin(a), r * .34 * math.cos(a)), r * .08, .012, rubber, styles['volk'], 'X', verts=12)
+        # rakete: gilded rim ring and a pointed nose-cone hub
+        torus('Rakete gilded rim', (sd * w * .48, 0, 0), r * .6, .03, gold, styles['rakete'], 'X')
+        for k in range(6):
+            a = k * math.pi / 3
+            rod('Rakete fin spoke', (sd * w * .46, r * .12 * math.sin(a), r * .12 * math.cos(a)), (sd * w * .47, r * .55 * math.sin(a), r * .55 * math.cos(a)), .022, gold, styles['rakete'])
+        lathe('Rakete nose cone hub', [(r * .16, sd * w * .48), (r * .1, sd * (w * .48 + .06)), (0.004, sd * (w * .48 + .11))], chrome, styles['rakete'], 16)
+        # gelaende: chunky knobby tread blocks and an olive drab disc for the field car
+        cyl('Gelaende olive disc', (sd * w * .47, 0, 0), r * .55, .02, olive_enamel, styles['gelaende'], 'X', verts=20)
+        for k in range(16):
+            a = k * math.pi / 8
+            knob = box('Gelaende tread block', (sd * w * .26, (r + .025) * math.sin(a), (r + .025) * math.cos(a)), (w * .3, .085, .05), rubber, .01, styles['gelaende'])
+            knob.rotation_euler[0] = -a
 
 # --- Steering ------------------------------------------------------------------------------------
 steering = empty('steeringWheel', (0, .2, 1.2), kart)
@@ -446,8 +482,12 @@ for z, rx, ry, jut in rows:
     for k in range(N):
         a = 2 * math.pi * k / N
         front = max(0, math.sin(a))                         # +Y is the face
-        jowl = .05 * front ** 2 if z < 0 else 0
-        hv.append(((rx + jowl * .6) * math.cos(a), (ry + jowl) * math.sin(a) + jut * front, z))
+        back = max(0, -math.sin(a))
+        jowl = .03 * front ** 2 if z < 0 else 0
+        # Adult skull in plan view: fuller occiput, flatter and narrower face plane (no balloon cheeks).
+        c, s_ = math.cos(a), math.sin(a)
+        flat = 1 - .12 * front ** 3
+        hv.append(((rx * .92 + jowl * .6) * c * (1 - .05 * front), (ry * (.9 * flat if s_ > 0 else 1.06) + jowl) * s_ + jut * front, z * 1.05))
 for j in range(len(rows) - 1):
     for k in range(N): hf.append((j * N + k, j * N + (k + 1) % N, (j + 1) * N + (k + 1) % N, (j + 1) * N + k))
 hf.append(tuple(reversed(range(N)))); hf.append(tuple((len(rows) - 1) * N + k for k in range(N)))
@@ -459,10 +499,11 @@ for v in head_mesh.data.vertices:
     x, y, z = v.co
     if y <= 0: continue
     f = min(1, y / .2)                                                    # sculpt only the face side
-    dy = (.018 * bump(x, z, 0, .19, .14, .03)                              # brow ridge
-          - .03 * (bump(x, z, .095, .14, .045, .035) + bump(x, z, -.095, .14, .045, .035))  # eye sockets
-          + .016 * (bump(x, z, .14, .05, .05, .05) + bump(x, z, -.14, .05, .05, .05))       # cheekbones
-          - .012 * (bump(x, z, .12, -.05, .05, .05) + bump(x, z, -.12, -.05, .05, .05))     # cheek hollows
+    dy = (.026 * bump(x, z, 0, .19, .15, .03)                              # brow ridge
+          - .042 * (bump(x, z, .095, .14, .045, .035) + bump(x, z, -.095, .14, .045, .035))  # eye sockets
+          + .018 * (bump(x, z, .15, .07, .04, .035) + bump(x, z, -.15, .07, .04, .035))     # cheekbones
+          - .02 * (bump(x, z, .12, -.05, .05, .05) + bump(x, z, -.12, -.05, .05, .05))      # cheek hollows
+          + .012 * bump(x, z, 0, .08, .025, .08)                          # nose bridge root
           + .022 * bump(x, z, 0, -.16, .07, .04)                          # chin
           - .008 * bump(x, z, 0, -.09, .07, .02))                         # mouth line
     dx = .01 * math.copysign(bump(abs(x), z, .2, -.1, .05, .06), x)      # jaw corners
@@ -564,6 +605,7 @@ for sd in [-1, 1]:
     ellipsoid('Eye white', (sd * .095, .248, .14), (.05, .026, .036), eye_white, head)
     ellipsoid('Eye iris', (sd * .095, .268, .136), (.027, .01, .027), iris, head, 12)
     ellipsoid('Eye pupil', (sd * .095, .274, .136), (.012, .006, .014), leather, head, 10)
+    ellipsoid('Eye catchlight', (sd * .089, .278, .145), (.0045, .002, .0045), eye_white, head, 6)
     tube('Upper eyelid', [(sd * .043, .259, .143), (sd * .061, .273, .168),
                           (sd * .095, .277, .176), (sd * .129, .273, .168),
                           (sd * .147, .259, .143)], .008, skin, head)
@@ -571,7 +613,6 @@ for sd in [-1, 1]:
                               (sd * .095, .268, .104), (sd * .123, .264, .109),
                               (sd * .145, .253, .128)], .006, skin, head)
     tube('Bushy brow', [(sd * .04, .265, .2), (sd * .1, .272, .215), (sd * .16, .25, .2)], .016, hair, head)
-    tube('Nasolabial fold', [(sd * .065, .3, .0), (sd * .095, .285, -.06), (sd * .1, .27, -.11)], .011, skin, head)
 # Mouth: real upper and lower lip with a slight self-satisfied corner, chin and philtrum.
 ellipsoid('Mouth opening', (0, .294, -.09), (.055, .018, .014), mouth_inner, head, 24)
 tube('Upper lip', [(-.085, .277, -.082), (-.045, .295, -.076), (0, .3, -.079), (.045, .295, -.076), (.085, .277, -.082)], .017, lips, head)

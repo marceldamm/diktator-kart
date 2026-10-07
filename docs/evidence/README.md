@@ -10,6 +10,23 @@
 
 Der Prozess für Selbstprüfung gegen Detaildrift und für das Beobachten eigener Browser-/Buildlast steht in [docs/21-team-workflow.md](../21-team-workflow.md).
 
+## 07.10.2026 (Folgelauf) – Themen, Havanna, Gesichter (Claude)
+
+Gleiche Bedingungen wie unten (eigenes sichtbares Chrome, CDP 9231, 1600×1000). `rome2-*`: neuer Duce-Drom (Fotomodus, Kart per Diagnose versetzt). `hav-*`: Havanna-Ansichten. `medals-duce-drom-*`: Orden im Rennen. `drivers-before/after/compare-*`: Fahrerwahl vor/nach dem Gesichtspass. `timetrial-ghost-*`: echtes Zeitfahren mit Geist. `gp-*-gp3-*`: Grand Prix über drei Strecken.
+
+## 07.10.2026 – Duce-Drom, Live-Rangliste, Grand Prix (Claude)
+
+Sichtbares, eigens gestartetes Chrome-Fenster (CDP 9231, 1600×1000, RTX-3070-Laptop von Marcel), Vite-Dev-Server `http://127.0.0.1:4173/`, Branch `codex/team-marcel-20261006-214551-132` auf Basis `110fa15` mit den ungesicherten Änderungen dieses Laufs. `demo=1` lässt den Spielerkart vom gemeinsamen Bot-Regler fahren (keine menschliche Fahrprobe); Wetter Sonne.
+
+- `rome-first-load-20261007.png`: erster Start auf dem Duce-Drom (Circus-Gerade, Startportal, Tribünen, Pinien).
+- `rome-countdown-20261007.png`: Einzelrennen-Countdown mit Einleitungskarte und Live-Rangliste rechts.
+- `rome-race-0…7-20261007.png`: Rennverlauf alle 15 s (u. a. Abfahrt zum Tiber-Kai `rome-race-2`, Balkonrede-Meldung und Rangliste `rome-race-5`).
+- `rome-finish-20261007.png`: Ziel mit vollständiger Ergebnisliste, Rangliste mit Zielhäkchen.
+- `gp-*-20261007.png`: Grand Prix über beide Strecken – Fahrerwahl, Countdown, Rennen und Zwischen-/Gesamtwertung je Runde.
+- `gp-*-final-20261007.png`: Schluss-Regression nach Rivalenstilen, Tastenbelegung, Ansagen, Pose/Blockade und Grafik-Startwert (Commit `d8f7337`).
+- `rome-view-*-20261007.png`: gezielte Ansichten (Triumphbogen, Balkonpalast, Belvedere, Tiber-Kai, Meta-Kehre) im freien Training, teils Fotomodus.
+- `options-keymap-20261007.png`, `ability-pose-20261007.png`, `ability-blockade-20261007.png`: Tastenbelegung und neue Fähigkeiten.
+
 **Archivhinweis zum folgenden Bestand:** Die nachfolgenden datierten Einträge beschreiben frühere Aufnahmen und Prüfläufe, keine pauschal aktuelle Sicht des Spiels. Zum Beispiel ist `slice-first-inspection-quality-1005f.png` eine ältere Browseraufnahme; ihr Dateidatum liegt vor dem später erneuerten `hero-kart.glb`. Verwende sie nur als historischen Vergleich. Für Aussagen über den aktuellen Fahrer-/Fahrzeugstand ist ein frischer sichtbarer Lauf mit bestätigtem Runtime-Commit erforderlich.
 
 ## 05.10.2026 – aktueller Runtime-/Modellpass

@@ -37,6 +37,9 @@ export class KartCamera {
   private fovKick=0;
   private shake=0;
   private tankBlend=0;
+  /** Grand-Prix ceremony: a slow orbit around the podium instead of the chase view (null = normal cameras). */
+  private ceremonyAt: { x: number; y: number; z: number; heading: number } | null = null;
+  setCeremony(at: { x: number; y: number; z: number; heading: number } | null): void { this.ceremonyAt = at; }
   /** Mouse look: orbit offsets, rear view and zoom (chase views); recentres after a short idle. */
   private lookYaw=0;
   private lookPitch=0;
@@ -119,6 +122,12 @@ export class KartCamera {
   togglePhoto(): boolean { this.photo = !this.photo; this.cockpit.setEnabled(!this.photo && this.view === 2 && !this.realCockpit); return this.photo; }
 
   update(state: KartState, dt: number, immediate = false, steering = 0): void {
+    if (this.ceremonyAt) {
+      const c = this.ceremonyAt, a = c.heading + Math.PI + Math.sin(performance.now() / 5200) * .35, d = 11;
+      this.camera.position.set(c.x + Math.sin(a) * d, c.y + 3.6, c.z + Math.cos(a) * d);
+      this.camera.setTarget(new Vector3(c.x, c.y + 1.4, c.z));
+      return;
+    }
     // Smooth road elevation (Prachtallee crest) lifts every camera with the kart; small bumps stay in suspensionOffset.
     const ground = elevationAt(trackLocate(state.x, state.z).s);
     if (this.photo||this.intro) {

@@ -11,7 +11,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, SHORTCUT_LENGTH } from './track';
-import { CREST, GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, MAP_SCALE, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout';
+import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, TRACK_INFO, raisedSpans } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
 import { canalFoamBands } from './environment-effects';
@@ -22,9 +22,6 @@ const trackLocateS = (x: number, z: number) => trackLocate(x, z).s;
 export interface TrackWorld { animate(time: number): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
 const W = TRACK.halfWidth;
-/** Progress ranges dressed with slogan boards instead of plain striped barriers. */
-const BOARD_RANGES: [number, number][] = [[2 * MAP_SCALE, 92 * MAP_SCALE], [282 * MAP_SCALE, 372 * MAP_SCALE]];
-const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
   const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
@@ -106,10 +103,51 @@ function without(from: number, to: number, gaps: [number, number][]): [number, n
 }
 
 export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld {
-  addPeriodDetails(scene,shadow);
+  /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
+  const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
+  const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana';
+  if (!rome) addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
-  const road = pbr(scene, 'Cobblestone boulevard', '#d8d2c2', 0, 1);
+  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : 'Cobblestone boulevard', '#d8d2c2', 0, 1);
+  if (havana) {
+    // Havana: sun-bleached, patched asphalt with tar seams (procedural, original).
+    let seed = 1959; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    road.albedoTexture = canvasTexture(scene, 'Patched asphalt colour', 512, 512, (c) => {
+      c.fillStyle = '#6f6a63'; c.fillRect(0, 0, 512, 512);
+      for (let k = 0; k < 2600; k++) { const t = 70 + rnd() * 70; c.fillStyle = `rgba(${t},${t - 4},${t - 10},.5)`; c.fillRect(rnd() * 512, rnd() * 512, 1 + rnd() * 3, 1 + rnd() * 3); }
+      for (let k = 0; k < 9; k++) { c.fillStyle = `rgba(${92 + rnd() * 16},${88 + rnd() * 14},${82 + rnd() * 12},.32)`; c.fillRect(rnd() * 440, rnd() * 440, 40 + rnd() * 90, 30 + rnd() * 70); }
+      c.strokeStyle = 'rgba(30,28,26,.7)'; c.lineWidth = 2;
+      for (let k = 0; k < 7; k++) { c.beginPath(); let x = rnd() * 512, y = rnd() * 512; c.moveTo(x, y); for (let j = 0; j < 6; j++) { x += rnd() * 60 - 30; y += rnd() * 60 - 30; c.lineTo(x, y); } c.stroke(); }
+    });
+    road.bumpTexture = canvasTexture(scene, 'Patched asphalt grain', 256, 256, (c) => {
+      c.fillStyle = '#8080ff'; c.fillRect(0, 0, 256, 256);
+      for (let k = 0; k < 1500; k++) { c.fillStyle = rnd() < .5 ? 'rgba(110,110,255,.6)' : 'rgba(150,150,255,.6)'; c.fillRect(rnd() * 256, rnd() * 256, 1 + rnd() * 2, 1 + rnd() * 2); }
+    });
+    road.bumpTexture.level = .45; road.roughness = .88;
+    for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  } else if (rome) {
+    // Duce-Drom: large honed travertine slabs in a running bond with dark joints (procedural, original).
+    let seed = 1922; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    const slabs: [number, number, number, number, number][] = [];
+    for (let row = 0; row < 4; row++) for (let col = -1; col < 3; col++) slabs.push([col * 256 + (row % 2) * 128, row * 128, 256, 128, rnd()]);
+    road.albedoTexture = canvasTexture(scene, 'Travertine slab colour', 512, 512, (c) => {
+      c.fillStyle = '#8f8574'; c.fillRect(0, 0, 512, 512);
+      for (const [x, y, w, h, t] of slabs) {
+        const tone = 206 + Math.round(t * 26), g = c.createLinearGradient(x, y, x + w, y + h);
+        g.addColorStop(0, `rgb(${tone},${tone - 8},${tone - 26})`); g.addColorStop(1, `rgb(${tone - 14},${tone - 22},${tone - 40})`);
+        c.fillStyle = g; c.fillRect(x + 2, y + 2, w - 4, h - 4);
+        for (let k = 0; k < 40; k++) { c.fillStyle = `rgba(120,96,64,${.06 + rnd() * .08})`; c.fillRect(x + 4 + rnd() * (w - 12), y + 4 + rnd() * (h - 12), 2 + rnd() * 18, 1 + rnd() * 2); }
+      }
+    });
+    road.bumpTexture = canvasTexture(scene, 'Travertine slab joints', 512, 512, (c) => {
+      c.fillStyle = '#8080ff'; c.fillRect(0, 0, 512, 512);
+      for (const [x, y, w, h] of slabs) { c.strokeStyle = '#6a6aff'; c.lineWidth = 4; c.strokeRect(x, y, w, h); c.strokeStyle = '#a0a0ff'; c.lineWidth = 2; c.strokeRect(x + 4, y + 4, w - 8, h - 8); }
+    });
+    road.bumpTexture.level = .6; road.roughness = .78;
+    for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  } else {
   road.albedoTexture = new Texture('/assets/textures/cobble-color.jpg', scene);
   road.bumpTexture = new Texture('/assets/textures/cobble-normal.jpg', scene);
   road.metallicTexture = new Texture('/assets/textures/cobble-arm.jpg', scene);
@@ -117,6 +155,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   road.useMetallnessFromMetallicTextureBlue = true; road.useAmbientOcclusionFromMetallicTextureRed = true;
   road.invertNormalMapX = true; road.bumpTexture.level = .8;
   for (const t of [road.albedoTexture, road.bumpTexture, road.metallicTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  }
   const waterRipple = canvasTexture(scene, 'Soft flowing water normals', 256, 128, (c) => {
     c.fillStyle = '#8080ff'; c.fillRect(0, 0, 256, 128);
     for (let row = 0; row < 13; row++) {
@@ -131,7 +170,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   });
   waterRipple.uScale = 10; waterRipple.vScale = 1.8;
   const roadLanes: [number, number][] = [-W, -W * .6, -W * .25, 0, W * .25, W * .6, W].map((lane) => [lane, .02]);
-  sweep(scene, 'Racing surface', roadLanes, road, { uScale: 2, vScale: 2, step: .75, follow: true, color: (s, lane) => {
+  sweep(scene, 'Racing surface', roadLanes, road, { uScale: rome ? 6 : havana ? 8 : 2, vScale: rome ? 6 : havana ? 8 : 2, step: .75, follow: true, color: (s, lane) => {
     const wear = Math.exp(-((lane - Math.sin(s * .021) * 1.6) ** 2) / 5) * .16;
     const tone = .93 + Math.sin(s * .047) * .05 + Math.sin(s * .13 + lane) * .025 - wear;
     return [tone, tone * .985, tone * .96];
@@ -160,7 +199,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   // Painted kerbs and the start line.
   const kerbTexture = canvasTexture(scene, 'Kerb stripes', 256, 32, (c) => {
-    c.fillStyle = '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = '#b3262b'; c.fillRect(0, 0, 128, 32);
+    c.fillStyle = rome ? '#ece6d8' : '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = havana ? '#2e8f8a' : rome ? '#1c1c1e' : '#b3262b'; c.fillRect(0, 0, 128, 32);
     c.fillStyle = '#0003'; c.fillRect(0, 28, 256, 4);
   });
   const kerb = pbr(scene, 'Painted kerb', '#ffffff', 0, .55); kerb.albedoTexture = kerbTexture;
@@ -175,13 +214,25 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   start.setVerticesData('uv', lineUv);
 
   // Barrier walls: striped racing barrier, or slogan boards along the two long straights.
-  const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, (c) => {
+  const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, havana ? (c) => {
+    // Malecón seawall: weathered whitewashed concrete with salt stains.
+    c.fillStyle = '#e3e0d6'; c.fillRect(0, 0, 512, 256);
+    for (let k = 0; k < 60; k++) { c.fillStyle = `rgba(120,110,95,${.05 + (k % 5) * .02})`; c.fillRect((k * 83) % 512, (k * 37) % 150, 20 + (k % 7) * 9, 8 + (k % 4) * 10); }
+    c.fillStyle = '#c9c3b3'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
+    c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42);
+  } : rome ? (c) => {
+    // Travertine parapet blocks with a bronze band (Duce-Drom).
+    c.fillStyle = '#e4dccb'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#c9bea7';
+    for (let x = 0; x < 512; x += 128) c.fillRect(x, 0, 3, 150);
+    c.fillStyle = '#8a6a3a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
+    c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42);
+  } : (c) => {
     c.fillStyle = '#efe4c8'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#a3242a'; c.fillRect(0, 0, 256, 150);
     c.fillStyle = '#efe4c8'; c.fillRect(256, 0, 256, 150);
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-  const slogans = ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {
@@ -234,7 +285,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const wallStone = pbr(scene, 'Crest retaining ashlar', '#cbb894', 0, .85);
     const maps = surfaceTextures(scene, 'Crest ashlar', 'stone'); wallStone.albedoTexture = maps.color; wallStone.bumpTexture = maps.normal;
     const outer = W + 1.45 + LANDMARKS.promenade;
-    for (const side of [-1, 1]) {
+    for (const [crestFrom, crestTo] of raisedSpans()) for (const side of [-1, 1]) {
+      const CREST = { from: crestFrom, to: crestTo };
       const positions: number[] = [], indices: number[] = [], uvs: number[] = [];
       const steps = Math.round((CREST.to - CREST.from) / 1.5);
       for (let k = 0; k <= steps; k++) {
@@ -242,6 +294,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
         positions.push(p.x, -.02, p.z, p.x, top, p.z); uvs.push(s / 2, 0, s / 2, top / 2);
         if (k < steps) { const i = k * 2; indices.push(...(side > 0 ? [i, i + 2, i + 1, i + 1, i + 2, i + 3] : [i, i + 1, i + 2, i + 1, i + 3, i + 2])); }
       }
+      // Open hazard edges (quay basins) keep their own walls instead of a parapet.
+      if (side > 0 && HAZARDS.some((h) => h.from < CREST.to && h.to > CREST.from)) continue;
       const wall = new Mesh(`Crest retaining wall ${side}`, scene), data = new VertexData(), normals: number[] = [];
       VertexData.ComputeNormals(positions, indices, normals); data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs;
       data.applyToMesh(wall); wall.material = wallStone; wall.receiveShadows = true; wall.isPickable = false; wall.freezeWorldMatrix(); shadow.addShadowCaster(wall);
@@ -253,7 +307,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   { // Canal across the road (in front of the grandstands) with a timber take-off ramp.
     const canalWater = pbr(scene, 'Canal water', '#1d3b44', .25, .08); canalWater.alpha = .95;
     canalWater.bumpTexture = waterRipple; waterRipple.level = .27;
-    sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
+    if (CANAL_LENGTH > 0) sweep(scene, 'Canal water', [[-W - 1.3, .04], [W + 1.3, .04]], canalWater, { uScale: 2, step: .5, from: CANAL_FROM, to: CANAL_FROM + CANAL_LENGTH });
     // A broken, low-contrast foam wash helps read where the dark canal begins/ends.
     // It is visual-only and floats 8 mm above the water to avoid z-fighting.
     const foamTexture = canvasTexture(scene, 'Canal shoreline foam', 256, 64, (c) => {
@@ -278,22 +332,23 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     foam.diffuseTexture = foamTexture; foam.useAlphaFromDiffuseTexture = true; foam.alpha = .7;
     foam.diffuseColor = Color3.White(); foam.specularColor = new Color3(.12, .16, .16);
     foam.backFaceCulling = false;
-    for (const [from, to] of canalFoamBands(CANAL_FROM, CANAL_LENGTH)) {
+    if (CANAL_LENGTH > 0) for (const [from, to] of canalFoamBands(CANAL_FROM, CANAL_LENGTH)) {
       sweep(scene, 'Canal shoreline foam', [[-W - 1.3, .048], [W + 1.3, .048]], foam,
         { uScale: .16, vScale: 4.4, step: .04, from, to });
     }
     const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
     edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
-    for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
-    const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let y = 0; y < 256; y += 32) { c.fillStyle = y % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(0, y + 2, 256, 28); }
-      c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let y = 40; y < 256; y += 90) { c.beginPath(); c.moveTo(40, y + 40); c.lineTo(128, y); c.lineTo(216, y + 40); c.stroke(); } });
+    if (CANAL_LENGTH > 0) for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
+    // Ribbon u runs up the ramp: boards cross the ramp and the chevrons point toward +x = up the ramp.
+    const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let x = 0; x < 256; x += 32) { c.fillStyle = x % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(x + 2, 0, 28, 256); }
+      c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let x = 40; x < 256; x += 90) { c.beginPath(); c.moveTo(x, 40); c.lineTo(x + 40, 128); c.lineTo(x, 216); c.stroke(); } });
     const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
     for (const end of RAMP_LIPS) {
       const paths: Vector3[][] = [];
       // The road follows the same ramp profile; lift the timber by a thin plank thickness to avoid coplanar flicker.
-      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + RAMP_HEIGHT * k / 12, p.z)); } paths.push(path); }
+      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + RAMP_HEIGHT * k / 12 + elevationAt(s), p.z)); } paths.push(path); }
       const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
-      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane); return [new Vector3(p.x, RAMP_HEIGHT + .07, p.z), new Vector3(p.x, -.2, p.z)]; });
+      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane), e = elevationAt(end); return [new Vector3(p.x, RAMP_HEIGHT + .07 + e, p.z), new Vector3(p.x, -.2 + e, p.z)]; });
       const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
     }
   }
@@ -309,11 +364,12 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const sign = canvasTexture(scene, 'Training ground sign', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a'; c.textAlign = 'center';
       c.font = 'bold 44px Georgia'; c.fillText('STAATLICHES', 256, 80); c.fillText('ÜBUNGSGELÄNDE', 256, 135); c.font = '26px Georgia'; c.fillText('Trichter bitte umfahren', 256, 195); });
     const signMaterial = pbr(scene, 'Training ground sign', '#ffffff', 0, .6); signMaterial.albedoTexture = sign;
-    const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
-    board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; }
+    if (CRATERS.length) { const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
+    board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; } }
   { // Boost pads: glowing chevrons painted on the cobbles.
-    const chevrons = canvasTexture(scene, 'Boost chevrons', 128, 256, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 128, 256); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
-      for (let y = 30; y < 256; y += 64) { c.beginPath(); c.moveTo(14, y + 34); c.lineTo(64, y); c.lineTo(114, y + 34); c.stroke(); } });
+    // Texture u runs along the track (sweep), so the chevrons point toward +x = the driving direction.
+    const chevrons = canvasTexture(scene, 'Boost chevrons', 256, 128, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 256, 128); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
+      for (let x = 30; x < 256; x += 64) { c.beginPath(); c.moveTo(x, 14); c.lineTo(x + 34, 64); c.lineTo(x, 114); c.stroke(); } });
     const padMaterial = new StandardMaterial('Boost pad', scene); padMaterial.diffuseTexture = chevrons; padMaterial.emissiveTexture = chevrons; padMaterial.emissiveColor = new Color3(1, .8, .4); padMaterial.specularColor = Color3.Black();
     for (const [from, centre] of BOOST_PADS) { const pad = sweep(scene, 'Boost pad', [[centre - 1.5, .05], [centre + 1.5, .05]], padMaterial, { uScale: 1, vScale: 1, step: .5, from, to: from + 6 }); boostPads.push(pad); }
   }
@@ -339,7 +395,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
     const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
-      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : havana ? 'MALECÓN' : rome ? 'TIBER' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
     const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
     for (const at of [from - 4, to + 4]) {
       const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
@@ -457,7 +513,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = g; c.fillRect(0, 0, 256, 700);
     c.fillStyle = '#d4a650'; c.fillRect(0, 0, 256, 22); c.fillRect(18, 40, 8, 600); c.fillRect(230, 40, 8, 600);
     paintEmblem(c, 128, 250, 78);
-    c.font = 'bold 30px Georgia'; c.textAlign = 'center'; c.fillStyle = '#e9c77a'; c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510);
+    c.font = 'bold 30px Georgia'; c.textAlign = 'center'; c.fillStyle = '#e9c77a';
+    if (havana) { c.fillText('REDE', 128, 430); c.fillText('DAUERT', 128, 470); c.fillText('NOCH', 128, 510); }
+    else if (rome) { c.fillText('MEHR', 128, 430); c.fillText('MARMOR', 128, 470); c.fillText('BITTE', 128, 510); } else { c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510); }
     c.beginPath(); c.moveTo(0, 690); c.lineTo(128, 768); c.lineTo(256, 690); c.closePath(); c.fillStyle = '#8b1e26'; c.fill();
     c.fillStyle = '#d4a650'; c.fillRect(0, 682, 256, 10);
   }, true);
@@ -506,9 +564,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const mast = MeshBuilder.CreateCylinder('Flag mast', { diameterTop: .09, diameterBottom: .16, height: 9.5, tessellation: 8 }, scene);
   mast.material = brass; mast.isPickable = false;
   const mastMatrices: number[] = [], flagMatrices: number[] = [];
-  for (let s = 112 * MAP_SCALE; s <= 205 * MAP_SCALE; s += 13) {
+  for (let s = TRACK_INFO.dressing.flagRange[0]; s <= TRACK_INFO.dressing.flagRange[1]; s += 13) {
     const p = trackPoint(s, W + 4.2);
-    mastMatrices.push(...Matrix.Translation(p.x, 4.75, p.z).asArray());
+    mastMatrices.push(...Matrix.Translation(p.x, 4.75 + elevationAt(s), p.z).asArray());
     flagMatrices.push(...Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(p.x, 8.2 + elevationAt(trackLocateS(p.x, p.z)), p.z)).asArray());
   }
   mast.thinInstanceSetBuffer('matrix', new Float32Array(mastMatrices), 16, true);
@@ -528,12 +586,12 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   // Pennant strings across the straights: one vertex-coloured mesh, gently swaying.
   const pennantPositions: number[] = [], pennantColors: number[] = [], pennantIndices: number[] = [];
   const palette = [new Color4(.62, .1, .13, 1), new Color4(.86, .68, .34, 1), new Color4(.93, .89, .78, 1), new Color4(.08, .28, .28, 1)];
-  for (const s of [12, 60, 300, 345, 515]) {
-    const a = trackPoint(s, -W - 2.6), b = trackPoint(s, W + 2.6);
+  for (const s of TRACK_INFO.dressing.pennants) {
+    const a = trackPoint(s, -W - 2.6), b = trackPoint(s, W + 2.6), lift = elevationAt(s);
     const count = 22;
     for (let i = 0; i < count; i++) {
       const t0 = i / count, t1 = (i + .8) / count;
-      const sag = (t: number) => 7.3 - Math.sin(Math.PI * t) * 1.3;
+      const sag = (t: number) => 7.3 + lift - Math.sin(Math.PI * t) * 1.3;
       const x0 = a.x + (b.x - a.x) * t0, z0 = a.z + (b.z - a.z) * t0, x1 = a.x + (b.x - a.x) * t1, z1 = a.z + (b.z - a.z) * t1;
       const k = pennantPositions.length / 3;
       pennantPositions.push(x0, sag(t0), z0, x1, sag(t1), z1, (x0 + x1) / 2, sag((t0 + t1) / 2) - .62, (z0 + z1) / 2);

@@ -21,6 +21,12 @@ export interface TestScene {
   setPlayerVisible(visible: boolean): void;
   setQuality?(level: number, reducedEffects: boolean): void;
   presentItems?(world:ItemWorld,karts:KartState[]):void;
+  /** Orden (medals) along the circuit; hidden while respawning. */
+  /** Fits one tyre set (cast.ts TIRE_SETS) to the kart in this slot. */
+  setTires?(slot: number, set: string): void;
+  /** Grand-Prix ceremony podium at a road position (null hides it). */
+  ceremony?(at: { x: number; y: number; z: number; heading: number } | null): void;
+  presentMedals?(medals: { x: number; z: number; s: number; readyIn: number }[]): void;
   /** Builds the post-processing chain for the active gameplay camera. */
   attachCamera?(camera: Camera): void;
   celebrate?(kind: 'start' | 'finish'): void;
@@ -28,7 +34,7 @@ export interface TestScene {
   /** State TV wall: which kart the live camera follows and the caption under the picture. */
   broadcast?(kart: number, caption: string): void;
   /** Ability feedback: transformation burst, run-over dust and Kim's official audit effects. */
-  abilityEvent?(kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit', kart: number, target?: number): void;
+  abilityEvent?(kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit' | 'pose' | 'pose-applause' | 'blockade', kart: number, target?: number): void;
   /** Per-kart remaining duration of Kim's temporary gilded propaganda finish. */
   setKimPolish?(timers: number[]): void;
   /** Weather: false = late-afternoon sun, true = rain with wet road, puddles and lightning. */
@@ -52,7 +58,7 @@ export interface TestScene {
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
   /** Announced decorative track event (lap 2 propaganda zeppelin flyover). */
-  trackEvent?(kind: 'zeppelin'): void;
+  trackEvent?(kind: 'zeppelin' | 'balcony' | 'wave'): void;
   /** Dirt burst when a kart drops into a shell crater. */
   craterHit?(kart: number): void;
   /** Time trial: hide the five bots; show the translucent ghost of the best run (null hides it). */
