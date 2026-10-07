@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T17:26:05.570Z",
+  "date": "2026-10-07T17:39:57.891Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -34,8 +34,8 @@
     },
     {
       "name": "cc0-driver-hitler",
-      "originalBytes": 15626480,
-      "runtimeBytes": 2928392
+      "originalBytes": 11300360,
+      "runtimeBytes": 2249780
     }
   ]
 }

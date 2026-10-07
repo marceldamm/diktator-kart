@@ -37,7 +37,7 @@ for sd in ('l', 'r'):
     aim(f'thigh_{sd}', (0, -1, .12)); aim(f'calf_{sd}', (0, -.45, -1)); aim(f'foot_{sd}', (0, -1, -.2))
     s = 1 if sd == 'l' else -1
     aim(f'upperarm_{sd}', (s * .18, -.75, -.6)); aim(f'lowerarm_{sd}', (s * -.12, -1, .18)); aim(f'hand_{sd}', (s * -.1, -1, .05))
-aim('spine_03', (0, -.12, 1)); aim('Head', (0, .02, 1))
+aim('spine_03', (0, -.03, 1)); aim('neck_01', (0, -.02, 1)); aim('Head', (0, -.04, 1))
 bpy.ops.object.mode_set(mode='OBJECT')
 
 # --- Bake pose into meshes ------------------------------------------------------------------------
@@ -65,7 +65,10 @@ for p in suit.data.polygons: p.use_smooth = True
 
 # --- Hair colour, moustache --------------------------------------------------------------------------
 for h in hair:
-    for m in h.data.materials:
+    h.data.materials.clear(); dark = bpy.data.materials.new('Pilot hair'); dark.use_nodes = True
+    dark.node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value = (.025, .018, .013, 1); dark.node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value = .45
+    h.data.materials.append(dark)
+    for m in []:
         if m and m.use_nodes and 'Principled BSDF' in m.node_tree.nodes:
             node = m.node_tree.nodes['Principled BSDF']; node.inputs['Base Color'].default_value = (.03, .022, .016, 1)
             for link in list(node.inputs['Base Color'].links): m.node_tree.links.remove(link)
@@ -83,7 +86,8 @@ root = bpy.data.objects.new('cc0-driver-hitler', None); bpy.context.collection.o
 for o in [o for o in bpy.data.objects if o.type == 'MESH']:
     mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
 root.rotation_euler[2] = math.pi
-root.location = (0, -.5, -.08)
+root.scale = (1.12, 1.12, 1.12)   # Marcel 07.10.: the pilot sat too low and looked too small
+root.location = (0, -.56, .12)
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, 'art-source', 'cc0-driver-hitler.blend'))
 out = os.path.join(ROOT, '.tools', 'raw-models', 'cc0-driver-hitler.glb')
 bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True)
