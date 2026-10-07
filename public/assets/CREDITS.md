@@ -53,3 +53,5 @@ Sprachupdate: eigene freundliche kurze Sprechertexte und sechs eigene Parodie-Sp
 - `models/city-kit.glb` (Stadtbaukasten) und die neuen Hitler-/Grand-Prix-Teile in `models/hero-kart.glb`: originale prozedurale Projektgeometrie aus `art-source/build_city_kit.py` bzw. `art-source/build_kart.py`. Keine externen Modelle, Texturen oder Logos.
 - `audio/motor.wav`: originale Synthese aus `art-source/build_engine.mjs`, keine Samples.
 - `audio/roll-cobble.wav`, `roll-gravel.wav`, `roll-grass.wav`, `splash.wav`: originale Synthese aus `art-source/build_surface_audio.mjs`, keine Samples.
+
+| `models/cc0-debris.glb`, `art-source/cc0-debris.blend` | Kenney, Car Kit 3.1 (debris-bumper, debris-door, debris-door-window, debris-tire, debris-spoiler-a, debris-plate-a, debris-drivetrain), https://kenney.nl/assets/car-kit . Lizenz CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), laut beiliegender License.txt; Nennung freiwillig, Änderungen erlaubt. Über `art-source/import_cc0_pack.py` zusammengeführt, als Totalschaden-Trümmer verwendet (07.10.2026). |

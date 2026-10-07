@@ -482,8 +482,20 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const papers = Array.from({ length: 5 }, (_, i) => { const m = MeshBuilder.CreatePlane(`Newspaper ${i}`, { width: .6, height: .42 }, scene); m.material = paperMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vz: 0, spin: 0 }; });
     // Loose parts after a wreck: lie on the road for a while, then shrink away.
     const debrisMaterial = new StandardMaterial('Wreck debris', scene); debrisMaterial.diffuseColor = new Color3(.12, .11, .1); debrisMaterial.specularColor = new Color3(.2, .2, .2);
-    const debris = Array.from({ length: 12 }, (_, i) => { const m = i % 3 === 0 ? MeshBuilder.CreateCylinder(`Debris hubcap ${i}`, { diameter: .32, height: .06, tessellation: 12 }, scene) : MeshBuilder.CreateBox(`Debris plate ${i}`, { width: .4, height: .05, depth: .28 }, scene);
-      m.material = debrisMaterial; m.isPickable = false; m.setEnabled(false); return { mesh: m, life: 0, vx: 0, vy: 0, vz: 0 }; });
+    // Wreck debris: real car parts from Kenney's Car Kit (CC0, see CREDITS.md) instead of plain boxes (07.10.2026).
+    const debrisKit = await LoadAssetContainerAsync('/assets/models/cc0-debris.glb', scene);
+    scene.onDisposeObservable.add(() => debrisKit.dispose());
+    const debrisParts = ['debris-bumper', 'debris-door', 'debris-tire', 'debris-door-window', 'debris-spoiler-a', 'debris-plate-a', 'debris-drivetrain'];
+    void debrisMaterial;
+    const debris = Array.from({ length: 12 }, (_, i) => {
+      const holder = new TransformNode(`Debris ${i}`, scene);
+      const part = debrisParts[i % debrisParts.length];
+      const inst = debrisKit.instantiateModelsToScene((n) => `debris ${i}/${n}`, false);
+      for (const node of inst.rootNodes.flatMap((r) => r.getChildren())) node.setEnabled(node.name === `debris ${i}/${part}`);
+      for (const node of inst.rootNodes.flatMap((r) => r.getChildren())) if (node.name === `debris ${i}/${part}`) (node as TransformNode).position?.setAll(0);
+      for (const r of inst.rootNodes) r.parent = holder;
+      holder.getChildMeshes().forEach((m) => { m.isPickable = false; shadow.addShadowCaster(m); });
+      holder.setEnabled(false); return { mesh: holder, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
     let salvageNow: number[] = []; let botsShownForGhost = false; const salvageDepth: number[] = [];
     // Propaganda zeppelin: announced lap-2 flyover with a slogan banner (purely decorative).
