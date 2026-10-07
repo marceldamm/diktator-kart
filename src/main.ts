@@ -116,6 +116,8 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  /** Set once the player picked the opening track of the current Grand Prix. */
+  private gpTrackChosen=false;
   /** Player's tyre set: 'auto' = the driver's own design, otherwise any set id from TIRE_SETS. */
   private tireChoice:string='auto';
   /** Malecón wave (Havanna, lap 2): the flooded seafront stretch slows everyone alike until this race time. */
@@ -443,7 +445,7 @@ class App {
   /** A new Grand Prix: all playable circuits in a fixed order, points per finish, driver chosen once. */
   private startGrandPrix(): void {
     if (LAB_WORLD || this.state === 'loading') return;
-    this.mode = 'gp'; this.gp = createGrandPrix(GP_TRACKS);
+    this.mode = 'gp'; this.gp = createGrandPrix(GP_TRACKS); this.gpTrackChosen = false;
     // Test aid: ?gp-round=N starts at round N (earlier rounds score nothing); used to check the final ceremony quickly.
     { const round = Number(new URLSearchParams(location.search).get('gp-round')); if (Number.isInteger(round) && round > 1 && round <= this.gp.tracks.length) { for (let r = 0; r < round - 1; r++) this.gp.results.push({ track: this.gp.tracks[r], order: [], points: [], time: 0 }); this.gp.round = round - 1; } }
     this.closeTrackSelection(); this.openSelection();
@@ -482,6 +484,7 @@ class App {
     if (LAB_WORLD || this.state === 'loading' || !this.testScene) return;
     if (!this.camera?.introMode) this.openMenu();
     this.selectingTrack = true; document.body.classList.add('track-select-open');
+    const go = document.querySelector('#track-go'); if (go) go.innerHTML = this.mode === 'gp' && this.gp && !this.gpTrackChosen ? 'Grand Prix starten <span>↵</span>' : 'Fahrer wählen <span>↵</span>';
     this.renderTrackSelection();
   }
   private closeTrackSelection(): void {
@@ -490,6 +493,11 @@ class App {
   private confirmTrackSelection(): void {
     if (!isTrackId(this.selectedTrackId)) return;
     this.closeTrackSelection();
+    if (this.mode === 'gp' && this.gp && !this.gpTrackChosen) {
+      const first = this.selectedTrackId;
+      this.gp.tracks = [first, ...GP_TRACKS.filter((t) => t !== first)]; this.gpTrackChosen = true;
+      this.closeMenu(); this.startGpRound(); return;
+    }
     if (TRACK.id !== this.selectedTrackId) void this.loadTrack(this.selectedTrackId, () => this.openSelection());
     else this.openSelection();
   }
@@ -519,6 +527,8 @@ class App {
     if(this.portraitCaptureInProgress)return;
     this.closeSelection();
     try { localStorage.setItem('dk-driver', String(this.chosen)); } catch { /* storage optional */ }
+    // Grand Prix (Marcel, 07.10.): after the driver comes Sarah's track selection; the chosen track opens the cup.
+    if (this.mode === 'gp' && this.gp && this.gp.round === 0 && !this.gp.results.length && !this.gpTrackChosen) { this.openTrackSelection(); return; }
     if (this.mode === 'gp' && this.gp) this.startGpRound(); else void this.beginRace();
   }
   private pick(index: number): void {
@@ -726,6 +736,17 @@ class App {
     const d = Math.max(0, this.progress[0].distance);
     let i = samples.findIndex((p) => p[4] >= d); if (i < 0) i = samples.length - 1;
     return this.raceTime - i / 20;
+  }
+  /** Start menu backdrop (Marcel, 07.10.): the camera glides from driver to driver every few seconds, random start. */
+  private menuCycle={from:-1,to:Math.floor(Math.random()*6),since:0};
+  private menuFocus(): KartState {
+    const all=[this.kart,...this.loadKarts], now=performance.now()/1000, hold=6.5, glide=2.6;
+    if(this.menuCycle.from<0){this.menuCycle={from:this.menuCycle.to%all.length,to:this.menuCycle.to%all.length,since:now};}
+    if(now-this.menuCycle.since>hold+glide){this.menuCycle={from:this.menuCycle.to,to:(this.menuCycle.to+1+Math.floor(Math.random()*(all.length-1)))%all.length,since:now};}
+    const a=all[this.menuCycle.from]??this.kart,b=all[this.menuCycle.to]??this.kart;
+    const t=Math.max(0,Math.min(1,(now-this.menuCycle.since-hold)/glide)),u=t*t*(3-2*t);
+    const turn=Math.atan2(Math.sin(b.heading-a.heading),Math.cos(b.heading-a.heading));
+    return {...a,x:a.x+(b.x-a.x)*u,z:a.z+(b.z-a.z)*u,heading:a.heading+turn*u,height:a.height+(b.height-a.height)*u};
   }
   /** Podium after the final Grand-Prix race: top three karts on the blocks, slow camera orbit, confetti. */
   private startCeremony(slots: number[]): void {
@@ -996,7 +1017,7 @@ class App {
           for(const event of this.items.events) if(event.kind==='hit') loseMedals(this.medals,event.kart);
           { const medalled=stepMedals(this.medals,[this.kart,...this.loadKarts],FIXED_STEP);this.kart=medalled[0];this.loadKarts=medalled.slice(1);
             for(const event of this.medals.events) if(event.kart===0){
-              if(event.kind==='pickup'){this.audio.itemEvent('pickup');if(this.medals.counts[0]===MEDAL_RULES.max){this.itemMessage='Brust voller Orden · Höchsttempo';this.itemMessageUntil=this.items.time+1.6;}}
+              if(event.kind==='pickup'){this.audio.itemEvent('pickup');this.testScene?.abilityEvent?.('pose-applause',0);if(this.medals.counts[0]===MEDAL_RULES.max){this.itemMessage='Brust voller Orden · Höchsttempo';this.itemMessageUntil=this.items.time+1.6;}}
               else{this.itemMessage=`${event.amount} Orden verloren · Ansehen beschädigt`;this.itemMessageUntil=this.items.time+1.6;}
             } }
           for(const event of this.items.events) if(event.kart===0) {
@@ -1100,7 +1121,7 @@ class App {
             allKarts.forEach((k,i)=>{ if(!k.grounded||craterAt(k.x,k.z)<0){this.inCrater[i]=false;return;}
               allKarts[i]={...k,speed:k.speed*(1-1.5*FIXED_STEP),suspensionVelocity:this.inCrater[i]?k.suspensionVelocity:k.suspensionVelocity-1.4,drifting:false,driftCharge:0};
               if(!this.inCrater[i]){this.testScene?.craterHit?.(i);if(i===0)this.audio.itemEvent('hit');} this.inCrater[i]=true;
-              if(shouldStartCraterFall(k.x,k.z,k.grounded,this.salvage[i]??0)){this.salvage[i]=3.2;this.testScene?.splash?.(i,'crater');
+              if(shouldStartCraterFall(k.x,k.z,k.grounded,this.salvage[i]??0)){this.salvage[i]=3.2;this.testScene?.splash?.(i,'crater');loseMedals(this.medals,i,MEDAL_RULES.lossOnFall);
                 if(i===0){this.itemMessage='Granattrichter · Das Staatliche Bergungsamt zieht dich heraus';this.itemMessageUntil=this.items.time+3.2;this.audio.itemEvent('hit');}}
             });
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
@@ -1111,7 +1132,7 @@ class App {
               this.salvage[i]=Math.max(0,this.salvage[i]-FIXED_STEP);this.recoveryRemaining[i]=Math.max(this.recoveryRemaining[i],FIXED_STEP*2);
               if(this.salvage[i]===0){all[i]=recoverKart(k,all);this.recoveryRemaining[i]=0;this.testScene?.salvaged?.(i);}
             } else if(hazardAt(k.x,k.z)||(overCanal(k.x,k.z)&&(k.jumpRemaining??0)===0&&k.height<.05)){
-              const kind=hazardAt(k.x,k.z)??'water';this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);
+              const kind=hazardAt(k.x,k.z)??'water';this.salvage[i]=3.2;this.testScene?.splash?.(i,kind);loseMedals(this.medals,i,MEDAL_RULES.lossOnFall);
               if(i===0||Math.hypot(k.x-this.kart.x,k.z-this.kart.z)<40){this.audio.itemEvent('hit');this.audio.cheer(.7);}
               if(i===0){this.itemMessage=kind==='cliff'?'Absturz! Das Staatliche Bergungsamt seilt sich ab':kind==='lava'?'In den Staatsofen! Das Staatliche Bergungsamt rückt an':'Ins Hafenbecken! Das Staatliche Bergungsamt rückt an';this.itemMessageUntil=this.items.time+3;}
             }
@@ -1124,7 +1145,7 @@ class App {
           for(const event of this.damage.events){
             if(event.kind==='repaired'){if(event.kart===0){this.itemMessage='Repariert · Staatliche Werkstatt stempelt ab';this.itemMessageUntil=this.items.time+2;}continue;}
             if(event.kind!=='wreck')continue;
-            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);
+            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);loseMedals(this.medals,event.kart,MEDAL_RULES.lossOnWreck);
             const at=[this.kart,...this.loadKarts][event.kart],near=Math.hypot(at.x-this.kart.x,at.z-this.kart.z)<40;
             if(event.kart===0||near){this.audio.itemEvent('hit');this.audio.thunder();this.audio.cheer(.9);}
             if(event.kart===0){this.itemMessage='Totalschaden! Die Staatliche Werkstatt rückt an';this.itemMessageUntil=this.items.time+3;}
@@ -1153,7 +1174,7 @@ class App {
       this.commentary();
       if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? `STAATSFERNSEHEN · Freies Training · ${{ sun: 'Sonnenschein genehmigt', rain: 'Regen angeordnet', snow: 'Schneefall verordnet' }[this.weather]}` : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
-      { const el=document.querySelector<HTMLElement>('#medal-count'); if(el){const n=this.medals.counts[0]??0;el.textContent=`${'✪'.repeat(n)}${'·'.repeat(MEDAL_RULES.max-n)} ${n}/${MEDAL_RULES.max} Orden`;el.hidden=this.racePhase==='practice';el.classList.toggle('full',n===MEDAL_RULES.max);} }
+      { const el=document.querySelector<HTMLElement>('#medal-count'); if(el){const n=this.medals.counts[0]??0;el.textContent=`${'✪'.repeat(n)}${'·'.repeat(MEDAL_RULES.max-n)} ${n}/${MEDAL_RULES.max} Orden${n?` · +${Math.round(n*MEDAL_RULES.topSpeedPerMedal*3.6)} km/h Spitze`:''}`;el.hidden=this.racePhase==='practice';el.classList.toggle('full',n===MEDAL_RULES.max);} }
       { const health=Math.round(this.damage.health[0]),meter=document.querySelector<HTMLElement>('#health')!;
         meter.classList.toggle('worn',health<66);meter.classList.toggle('critical',health<33);meter.classList.toggle('wrecked',this.damage.wrecked[0]>0);meter.classList.toggle('shown',this.racePhase==='practice');
         meter.setAttribute('aria-valuenow',String(health));meter.setAttribute('aria-valuetext',health===0?'Totalschaden':`${health} Prozent Fahrzeugzustand`);
@@ -1178,7 +1199,7 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
-    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
+    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.camera.introMode&&!this.selecting&&!this.selectingTrack&&this.racePhase!=='finished'?this.menuFocus():this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) {
       const stand = trackPoint(TRACK.start + 20), nearness = Math.max(0, 1 - Math.hypot(this.kart.x - stand.x, this.kart.z - stand.z) / 70);
       const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);

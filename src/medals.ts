@@ -7,7 +7,7 @@ import { TRACK, trackPoint } from './track.ts';
  * every kart – player and bots alike – pins them on, up to ten. Each medal lifts the kart's own top speed
  * a little, an item hit makes three fall off. Same rule for everyone, visible on the HUD and the track.
  */
-export const MEDAL_RULES = { max: 10, radius: 1.35, respawn: 9, topSpeedPerMedal: .07, lossOnHit: 3, spacing: 72 } as const;
+export const MEDAL_RULES = { max: 10, radius: 1.35, respawn: 9, topSpeedPerMedal: .13, lossOnHit: 3, lossOnFall: 3, lossOnWreck: 5, spacing: 72 } as const;
 
 export interface Medal { x: number; z: number; s: number; lane: number; readyIn: number }
 export interface MedalWorld { medals: Medal[]; counts: number[]; events: { kind: 'pickup' | 'lost'; kart: number; amount: number }[] }
@@ -42,8 +42,8 @@ export function stepMedals(world: MedalWorld, karts: KartState[], dt: number): K
   });
 }
 
-/** An item hit knocks medals off. */
-export function loseMedals(world: MedalWorld, kart: number): void {
-  const lost = Math.min(world.counts[kart], MEDAL_RULES.lossOnHit);
+/** An item hit (default), a fall into water/pits or a wreck knocks medals off. */
+export function loseMedals(world: MedalWorld, kart: number, amount: number = MEDAL_RULES.lossOnHit): void {
+  const lost = Math.min(world.counts[kart], amount);
   if (lost > 0) { world.counts[kart] -= lost; world.events.push({ kind: 'lost', kart, amount: lost }); }
 }

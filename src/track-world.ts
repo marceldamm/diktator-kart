@@ -339,8 +339,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const edge = pbr(scene, 'Canal hazard edge', '#ffffff', 0, .6);
     edge.albedoTexture = canvasTexture(scene, 'Canal edge stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     if (CANAL_LENGTH > 0) for (const at of [CANAL_FROM + CANAL_LENGTH - .4]) sweep(scene, 'Canal landing edge', [[-W - 1.3, .07], [W + 1.3, .07]], edge, { uScale: 4, step: .4, from: at, to: at + .4 });
-    const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let y = 0; y < 256; y += 32) { c.fillStyle = y % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(0, y + 2, 256, 28); }
-      c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let y = 40; y < 256; y += 90) { c.beginPath(); c.moveTo(40, y + 40); c.lineTo(128, y); c.lineTo(216, y + 40); c.stroke(); } });
+    // Ribbon u runs up the ramp: boards cross the ramp and the chevrons point toward +x = up the ramp.
+    const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let x = 0; x < 256; x += 32) { c.fillStyle = x % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(x + 2, 0, 28, 256); }
+      c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let x = 40; x < 256; x += 90) { c.beginPath(); c.moveTo(x, 40); c.lineTo(x + 40, 128); c.lineTo(x, 216); c.stroke(); } });
     const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
     for (const end of RAMP_LIPS) {
       const paths: Vector3[][] = [];
@@ -366,8 +367,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     if (CRATERS.length) { const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
     board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; } }
   { // Boost pads: glowing chevrons painted on the cobbles.
-    const chevrons = canvasTexture(scene, 'Boost chevrons', 128, 256, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 128, 256); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
-      for (let y = 30; y < 256; y += 64) { c.beginPath(); c.moveTo(14, y + 34); c.lineTo(64, y); c.lineTo(114, y + 34); c.stroke(); } });
+    // Texture u runs along the track (sweep), so the chevrons point toward +x = the driving direction.
+    const chevrons = canvasTexture(scene, 'Boost chevrons', 256, 128, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 256, 128); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
+      for (let x = 30; x < 256; x += 64) { c.beginPath(); c.moveTo(x, 14); c.lineTo(x + 34, 64); c.lineTo(x, 114); c.stroke(); } });
     const padMaterial = new StandardMaterial('Boost pad', scene); padMaterial.diffuseTexture = chevrons; padMaterial.emissiveTexture = chevrons; padMaterial.emissiveColor = new Color3(1, .8, .4); padMaterial.specularColor = Color3.Black();
     for (const [from, centre] of BOOST_PADS) { const pad = sweep(scene, 'Boost pad', [[centre - 1.5, .05], [centre + 1.5, .05]], padMaterial, { uScale: 1, vScale: 1, step: .5, from, to: from + 6 }); boostPads.push(pad); }
   }

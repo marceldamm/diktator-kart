@@ -613,7 +613,6 @@ for sd in [-1, 1]:
                               (sd * .095, .268, .104), (sd * .123, .264, .109),
                               (sd * .145, .253, .128)], .006, skin, head)
     tube('Bushy brow', [(sd * .04, .265, .2), (sd * .1, .272, .215), (sd * .16, .25, .2)], .016, hair, head)
-    tube('Nasolabial fold', [(sd * .065, .3, .0), (sd * .095, .285, -.06), (sd * .1, .27, -.11)], .011, skin, head)
 # Mouth: real upper and lower lip with a slight self-satisfied corner, chin and philtrum.
 ellipsoid('Mouth opening', (0, .294, -.09), (.055, .018, .014), mouth_inner, head, 24)
 tube('Upper lip', [(-.085, .277, -.082), (-.045, .295, -.076), (0, .3, -.079), (.045, .295, -.076), (.085, .277, -.082)], .017, lips, head)

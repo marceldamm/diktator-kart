@@ -9,6 +9,25 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Marcels Spieltest-Feedback – 07.10.2026 abends (Aufgabenliste)
+
+**Quelle:** Marcels Durchspiel-Feedback im Projekt-Thread (07.10.2026, 16:33 UTC). Status wird hier fortgeschrieben.
+
+- [ ] F1 Startmenü: Hintergrundkamera wechselt nach einigen Sekunden fließend zwischen allen Fahrern (zufälliger Start).
+- [ ] F2 Grand Prix: nach der Fahrerwahl wieder Sarahs Streckenauswahl (gewählte Strecke = erstes Rennen, danach die übrigen).
+- [ ] F3 Rampe: Leertaste halten und auf/vor der Rampe loslassen löst Sprungtrick + Boost aus; Hüpfen auf der Rampe darf den Absprung nicht verhindern.
+- [ ] F4 Drift: Leertaste halten = Driftbereitschaft; Drift erst mit Lenkung, Richtung folgt der Lenkung fließend (Schlangenlinie), Loslassen beendet Drift (Turbo nach Ladung).
+- [ ] F5 Bergung: neues, thematisches Bergungsobjekt statt Haken/Magnet.
+- [ ] F6 Gesichter: die „Barteln“ neben der Nase (Nasolabialrohre) entfernen, weiter Richtung erkennbar statt lustig.
+- [ ] F7 Lenkung etwas weicher (nicht zu weich); Drift-Grundgefühl bleibt.
+- [ ] F8 Orden: spürbarer Effekt (10 Orden = dauerhaft merklich schneller), sichtbares Feedback; Verlust auch bei Absturz/Wasser/Totalschaden.
+- [ ] F9 Panzer (Hitler): Überfahrene nehmen Schaden, werden sichtbar plattgedrückt; mehrfach überfahren = kaputt.
+- [ ] F10 Gebäuderückseiten an sichtbaren Stellen gestalten (Fenster/Gliederung statt leerer Wand).
+- [ ] F11 Pfeile auf Schubfeldern und Rampen zeigen in Fahrtrichtung.
+- [ ] F12 Stadion-Monitor: Bild steht auf dem Kopf.
+- [ ] F13 Hitlers Hund: sucht Ziele (folgt Strecke, prallt ab, stürzt sich auf Gegner vor ihm), explodiert beim Treffer, Fahrzeugschaden.
+- [ ] F14 Ziel: Meldung sofort beim Überfahren der Ziellinie; Rennen läuft weiter (Spieler-Kart fährt per KI), Gegner fahren ins Ziel, Zeiten und Punkte werden erst dann endgültig.
+
 ## Claude-Folgeauftrag: Themen-Strecken, Mario-Kart-Lücken, Modelle – 07.10.2026 (Marcel)
 
 **Quelle:** Marcels Nachricht vom 07.10.2026 früh („Duce-Drom muss themenbasierter sein … mit Mario Kart vergleichen … an Fahrermodelle, Gesichter, Fahrzeuge … bis 95 % des Limits, danach auf main“). Stalin-/Mao-Fähigkeiten bleiben bis zu einer Satire-Entscheidung ausgelassen.

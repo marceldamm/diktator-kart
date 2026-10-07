@@ -90,10 +90,10 @@ export const KART_TUNING = {
   driftMaxSlip: 0.42,
   normalHeadingFollow: 5.5,
   /** Steering wheel travel rate (1/s) and yaw response rate (1/s): less direct, more car-like. */
-  steerRate: 9,
+  steerRate: 7,
   /** Faster self-centring when the key is released or reversed (Marcel: steering felt too soft). */
   steerReturnRate: 18,
-  yawResponse: 11,
+  yawResponse: 9,
   turboDuration: 1.2,
   turboSpeedBonus: 4,
   turboAcceleration: 4,

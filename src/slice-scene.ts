@@ -554,7 +554,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
     const wallAt = trackPoint(TRACK_INFO.dressing.screenProgress, -(TRACK.halfWidth + 11));
     const tv = new TransformNode('Staatsfernsehen wall', scene); tv.position.set(wallAt.x, 0, wallAt.z); tv.rotation.y = wallAt.heading - .45;
-    const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = new Texture('/assets/textures/loading-stadium-v1.webp', scene, true, false); screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.White();
+    const screenMaterial = new StandardMaterial('Staatsfernsehen screen', scene); screenMaterial.emissiveTexture = new Texture('/assets/textures/loading-stadium-v1.webp', scene, true, true); screenMaterial.disableLighting = true; screenMaterial.diffuseColor = Color3.White();
     const screen = MeshBuilder.CreatePlane('Staatsfernsehen picture', { width: 9.6, height: 5.4 }, scene); screen.parent = tv; screen.position.y = 9.2; screen.material = screenMaterial;
     const frameMaterial = new PBRMaterial('Staatsfernsehen gilded frame', scene); frameMaterial.albedoColor = Color3.FromHexString('#b98a3e'); frameMaterial.metallic = .9; frameMaterial.roughness = .3;
     const frame = MeshBuilder.CreateBox('Staatsfernsehen frame', { width: 10.6, height: 7.6, depth: .5 }, scene); frame.parent = tv; frame.position.set(0, 8.6, .3); frame.material = frameMaterial;
