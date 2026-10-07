@@ -584,9 +584,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       scene.onDisposeObservable.add(() => pilot.dispose());
       const inst = pilot.instantiateModelsToScene((n) => `pilot/${n}`, false);
       const v0 = visuals[0];
-      for (const node of [v0.driver, v0.head, ...v0.arms.filter((x): x is TransformNode => !!x)]) for (const m of node.getChildMeshes(false)) m.setEnabled(false);
-      // Keep them hidden even when dress()/setPlayerVisible toggle the procedural figure.
-      scene.onBeforeRenderObservable.add(() => { for (const node of [v0.head, ...v0.arms.filter((x): x is TransformNode => !!x)]) for (const m of node.getChildMeshes(false)) if (m.isEnabled()) m.setEnabled(false); });
+      // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
+      const oldDriver = new Set<AbstractMesh>([v0.driver, v0.head, ...v0.arms.filter((x): x is TransformNode => !!x)].flatMap((n) => n.getChildMeshes(false)));
+      for (const m of v0.root.getChildMeshes(false)) if (/driverPose|headPose|armPose|cast-|scarfFlap|gripHand|White glove|Uniform racing suit|Cape cloth|Hat cloth|Hair and leather/.test(m.name)) oldDriver.add(m);
+      const hideOld = () => { for (const m of oldDriver) if (m.isEnabled()) m.setEnabled(false); };
+      hideOld(); scene.onBeforeRenderObservable.add(hideOld);
       for (const r of inst.rootNodes) { r.parent = visuals[0].orientation; for (const m of r.getChildMeshes(false)) { m.receiveShadows = true; shadow.addShadowCaster(m); } }
     }
     report?.('items');
