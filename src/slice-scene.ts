@@ -520,6 +520,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     roses.color1 = new Color4(.86, .12, .2, 1); roses.color2 = new Color4(.95, .5, .55, 1); roses.colorDead = new Color4(.7, .1, .15, 0);
     roses.blendMode = ParticleSystem.BLENDMODE_STANDARD; roses.start();
     let roseTime = -1;
+    // Havanna lap-2 event: a wall of sea spray washes over the Malecón stretch (s 95–330); main.ts slows karts there alike.
+    const waveSpray = new ParticleSystem('Malecon wave spray', 900, scene); waveSpray.particleTexture = particleTexture(scene);
+    { const a = trackPoint(110, 7), b = trackPoint(320, 7);
+      waveSpray.emitter = new Vector3((a.x + b.x) / 2, .5, (a.z + b.z) / 2);
+      waveSpray.minEmitBox = new Vector3(-Math.abs(b.x - a.x) / 2, 0, -3); waveSpray.maxEmitBox = new Vector3(Math.abs(b.x - a.x) / 2, .5, 3); }
+    waveSpray.direction1 = new Vector3(-.4, 3.2, -2.6); waveSpray.direction2 = new Vector3(.4, 5, -1.2); waveSpray.gravity = new Vector3(0, -6, 0);
+    waveSpray.minEmitPower = 1.2; waveSpray.maxEmitPower = 2.4; waveSpray.minLifeTime = 1.1; waveSpray.maxLifeTime = 1.8; waveSpray.minSize = .3; waveSpray.maxSize = .9;
+    waveSpray.color1 = new Color4(.85, .95, .98, .75); waveSpray.color2 = new Color4(.7, .86, .9, .6); waveSpray.colorDead = new Color4(.8, .9, .95, 0);
+    waveSpray.emitRate = 0; waveSpray.start();
+    let waveTime = -1;
     const cableMaterial = new StandardMaterial('Salvage cable', scene); cableMaterial.diffuseColor = new Color3(.1, .1, .1);
     const cables = visuals.map((_, i) => { const c = MeshBuilder.CreateCylinder(`Salvage cable ${i}`, { diameter: .06, height: 1 }, scene); c.material = cableMaterial; c.isPickable = false; c.setEnabled(false);
       const hook = MeshBuilder.CreateTorus(`Salvage hook ${i}`, { diameter: .5, thickness: .08, tessellation: 12 }, scene); hook.material = cableMaterial; hook.parent = c; hook.position.y = -.5; return c; });
@@ -609,7 +619,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (!botsShownForGhost) { botsShownForGhost = true; for (const m of g.root.getChildMeshes()) m.visibility = .35; }
         g.root.setEnabled(true); g.root.position.set(ghost.x, ghost.height, ghost.z); g.root.rotation.y = ghost.heading;
       },
-      trackEvent(kind) { if (kind === 'balcony') { roseTime = 0; roses.emitRate = 70; } else { zeppelinTime = 0; zeppelin.setEnabled(true); } },
+      trackEvent(kind) {
+        if (kind === 'balcony') { roseTime = 0; roses.emitRate = 70; }
+        else if (kind === 'wave') { waveTime = 0; waveSpray.emitRate = reducedEffects ? 160 : 420; }
+        else { zeppelinTime = 0; zeppelin.setEnabled(true); }
+      },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
         if (kind === 'crater') { burst(puff, at, reducedEffects ? 14 : 42); return; }
         if (kind === 'cliff') { burst(puff, at, reducedEffects ? 10 : 30); return; }
@@ -673,7 +687,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
         if (kind === 'finish') { fireworkTime = reducedEffects ? 4 : 9; nextBurst = 0; }
       },
-      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); roseTime = -1; roses.emitRate = 0; roses.reset(); },
+      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); roseTime = -1; roses.emitRate = 0; roses.reset(); waveTime = -1; waveSpray.emitRate = 0; waveSpray.reset(); },
       setQuality(level, reduced) {
         pipelineLevel = level;
         if(level!==skyQuality) {
@@ -696,6 +710,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (sunDisc.isEnabled() && gameCamera) { const c = gameCamera.position; sunDisc.position.set(c.x - sunDirection.x * 380, c.y - sunDirection.y * 380, c.z - sunDirection.z * 380); sunDiscMaterial.alpha = 1 - Math.min(1, timeOfDay * 1.6); sunDisc.isVisible = timeOfDay < .6 && !raining && !snowing; }
         trackWorld.animate(time); city.animate(time);
         if (roseTime >= 0) { roseTime += dt; if (roseTime > 16) { roseTime = -1; roses.emitRate = 0; } }
+        if (waveTime >= 0) { waveTime += dt; waveSpray.emitRate = waveTime > 13 ? 0 : (reducedEffects ? 160 : 420) * (.6 + .4 * Math.abs(Math.sin(waveTime * 1.7))); if (waveTime > 15) waveTime = -1; }
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;
           if (u >= 1) { zeppelinTime = -1; zeppelin.setEnabled(false); } }

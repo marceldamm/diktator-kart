@@ -6,7 +6,7 @@
   },
   "announcer-gp-intro": {
     "voice": "announcer",
-    "text": "Willkommen zum Großen Preis der Eitelkeit. Zwei Rennen, eine Wertung. Das Ergebnis wird ausnahmsweise gezählt.",
+    "text": "Willkommen zum Großen Preis der Eitelkeit. Drei Rennen, eine Wertung. Das Ergebnis wird ausnahmsweise gezählt.",
     "emotion": null
   },
   "announcer-rome": {
@@ -17,6 +17,16 @@
   "announcer-balcony": {
     "voice": "announcer",
     "text": "Achtung, der Balkon spricht. Rosen auf der Prunkstraße. Bitte weiterfahren.",
+    "emotion": null
+  },
+  "announcer-havana": {
+    "voice": "announcer",
+    "text": "Willkommen am Havanna-Revolutionsring. Die Eröffnungsrede läuft noch. Wir starten trotzdem.",
+    "emotion": null
+  },
+  "announcer-wave": {
+    "voice": "announcer",
+    "text": "Achtung, Welle über dem Malecón! Langsam durch die Gischt.",
     "emotion": null
   },
   "announcer-gp-standings": {

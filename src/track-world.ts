@@ -106,12 +106,28 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
   const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
   const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
-  const rome = TRACK_INFO.theme === 'rome';
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana';
   if (!rome) addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
-  const road = pbr(scene, rome ? 'Travertine parade slabs' : 'Cobblestone boulevard', '#d8d2c2', 0, 1);
-  if (rome) {
+  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : 'Cobblestone boulevard', '#d8d2c2', 0, 1);
+  if (havana) {
+    // Havana: sun-bleached, patched asphalt with tar seams (procedural, original).
+    let seed = 1959; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    road.albedoTexture = canvasTexture(scene, 'Patched asphalt colour', 512, 512, (c) => {
+      c.fillStyle = '#6f6a63'; c.fillRect(0, 0, 512, 512);
+      for (let k = 0; k < 2600; k++) { const t = 70 + rnd() * 70; c.fillStyle = `rgba(${t},${t - 4},${t - 10},.5)`; c.fillRect(rnd() * 512, rnd() * 512, 1 + rnd() * 3, 1 + rnd() * 3); }
+      for (let k = 0; k < 9; k++) { c.fillStyle = `rgba(${92 + rnd() * 16},${88 + rnd() * 14},${82 + rnd() * 12},.32)`; c.fillRect(rnd() * 440, rnd() * 440, 40 + rnd() * 90, 30 + rnd() * 70); }
+      c.strokeStyle = 'rgba(30,28,26,.7)'; c.lineWidth = 2;
+      for (let k = 0; k < 7; k++) { c.beginPath(); let x = rnd() * 512, y = rnd() * 512; c.moveTo(x, y); for (let j = 0; j < 6; j++) { x += rnd() * 60 - 30; y += rnd() * 60 - 30; c.lineTo(x, y); } c.stroke(); }
+    });
+    road.bumpTexture = canvasTexture(scene, 'Patched asphalt grain', 256, 256, (c) => {
+      c.fillStyle = '#8080ff'; c.fillRect(0, 0, 256, 256);
+      for (let k = 0; k < 1500; k++) { c.fillStyle = rnd() < .5 ? 'rgba(110,110,255,.6)' : 'rgba(150,150,255,.6)'; c.fillRect(rnd() * 256, rnd() * 256, 1 + rnd() * 2, 1 + rnd() * 2); }
+    });
+    road.bumpTexture.level = .45; road.roughness = .88;
+    for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+  } else if (rome) {
     // Duce-Drom: large honed travertine slabs in a running bond with dark joints (procedural, original).
     let seed = 1922; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
     const slabs: [number, number, number, number, number][] = [];
@@ -154,7 +170,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   });
   waterRipple.uScale = 10; waterRipple.vScale = 1.8;
   const roadLanes: [number, number][] = [-W, -W * .6, -W * .25, 0, W * .25, W * .6, W].map((lane) => [lane, .02]);
-  sweep(scene, 'Racing surface', roadLanes, road, { uScale: rome ? 6 : 2, vScale: rome ? 6 : 2, step: .75, follow: true, color: (s, lane) => {
+  sweep(scene, 'Racing surface', roadLanes, road, { uScale: rome ? 6 : havana ? 8 : 2, vScale: rome ? 6 : havana ? 8 : 2, step: .75, follow: true, color: (s, lane) => {
     const wear = Math.exp(-((lane - Math.sin(s * .021) * 1.6) ** 2) / 5) * .16;
     const tone = .93 + Math.sin(s * .047) * .05 + Math.sin(s * .13 + lane) * .025 - wear;
     return [tone, tone * .985, tone * .96];
@@ -183,7 +199,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   // Painted kerbs and the start line.
   const kerbTexture = canvasTexture(scene, 'Kerb stripes', 256, 32, (c) => {
-    c.fillStyle = rome ? '#ece6d8' : '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = rome ? '#1c1c1e' : '#b3262b'; c.fillRect(0, 0, 128, 32);
+    c.fillStyle = rome ? '#ece6d8' : '#f1e7d2'; c.fillRect(0, 0, 256, 32); c.fillStyle = havana ? '#2e8f8a' : rome ? '#1c1c1e' : '#b3262b'; c.fillRect(0, 0, 128, 32);
     c.fillStyle = '#0003'; c.fillRect(0, 28, 256, 4);
   });
   const kerb = pbr(scene, 'Painted kerb', '#ffffff', 0, .55); kerb.albedoTexture = kerbTexture;
@@ -198,7 +214,13 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   start.setVerticesData('uv', lineUv);
 
   // Barrier walls: striped racing barrier, or slogan boards along the two long straights.
-  const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, rome ? (c) => {
+  const stripes = canvasTexture(scene, 'Barrier stripes', 512, 256, havana ? (c) => {
+    // Malecón seawall: weathered whitewashed concrete with salt stains.
+    c.fillStyle = '#e3e0d6'; c.fillRect(0, 0, 512, 256);
+    for (let k = 0; k < 60; k++) { c.fillStyle = `rgba(120,110,95,${.05 + (k % 5) * .02})`; c.fillRect((k * 83) % 512, (k * 37) % 150, 20 + (k % 7) * 9, 8 + (k % 4) * 10); }
+    c.fillStyle = '#c9c3b3'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
+    c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42);
+  } : rome ? (c) => {
     // Travertine parapet blocks with a bronze band (Duce-Drom).
     c.fillStyle = '#e4dccb'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#c9bea7';
     for (let x = 0; x < 512; x += 128) c.fillRect(x, 0, 3, 150);
@@ -210,7 +232,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-  const slogans = rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {
@@ -371,7 +393,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     hazard.albedoTexture = canvasTexture(scene, 'Hazard stripes', 128, 16, (c) => { c.fillStyle = '#1a1a1a'; c.fillRect(0, 0, 128, 16); c.fillStyle = '#e8b82a'; for (let x = -16; x < 128; x += 32) { c.beginPath(); c.moveTo(x, 16); c.lineTo(x + 16, 0); c.lineTo(x + 32, 0); c.lineTo(x + 16, 16); c.fill(); } });
     sweep(scene, 'Quay hazard edge', [[W + .7, .16], [inner, .16]], hazard, { uScale: 12, step: .5, from, to });
     const signTexture = canvasTexture(scene, 'Harbour warning', 512, 256, (c) => { c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.fillStyle = '#141414'; c.fillRect(12, 12, 488, 232); c.fillStyle = '#e8b82a';
-      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : rome ? 'TIBER' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
+      c.font = 'bold 54px Georgia'; c.textAlign = 'center'; c.fillText('ACHTUNG', 256, 80); c.fillText(cliff ? 'ABGRUND' : lava ? 'STAATSOFEN' : havana ? 'MALECÓN' : rome ? 'TIBER' : 'HAFENBECKEN', 256, 145); c.font = '26px Georgia'; c.fillText('Bergung nur durch das', 256, 195); c.fillText('Staatliche Bergungsamt', 256, 228); });
     const signMaterial = pbr(scene, 'Harbour warning sign', '#ffffff', 0, .6); signMaterial.albedoTexture = signTexture;
     for (const at of [from - 4, to + 4]) {
       const p = trackPoint(at, W + 3); const sign = MeshBuilder.CreatePlane('Harbour warning sign', { width: 2.6, height: 1.3 }, scene);
@@ -490,7 +512,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#d4a650'; c.fillRect(0, 0, 256, 22); c.fillRect(18, 40, 8, 600); c.fillRect(230, 40, 8, 600);
     paintEmblem(c, 128, 250, 78);
     c.font = 'bold 30px Georgia'; c.textAlign = 'center'; c.fillStyle = '#e9c77a';
-    if (rome) { c.fillText('MEHR', 128, 430); c.fillText('MARMOR', 128, 470); c.fillText('BITTE', 128, 510); } else { c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510); }
+    if (havana) { c.fillText('REDE', 128, 430); c.fillText('DAUERT', 128, 470); c.fillText('NOCH', 128, 510); }
+    else if (rome) { c.fillText('MEHR', 128, 430); c.fillText('MARMOR', 128, 470); c.fillText('BITTE', 128, 510); } else { c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510); }
     c.beginPath(); c.moveTo(0, 690); c.lineTo(128, 768); c.lineTo(256, 690); c.closePath(); c.fillStyle = '#8b1e26'; c.fill();
     c.fillStyle = '#d4a650'; c.fillRect(0, 682, 256, 10);
   }, true);

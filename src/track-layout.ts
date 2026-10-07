@@ -12,7 +12,7 @@
 export const MAP_SCALE = 1.5;
 const S = MAP_SCALE;
 
-export type TrackId = 'stadionring' | 'duce-drom';
+export type TrackId = 'stadionring' | 'duce-drom' | 'havanna';
 export type HazardKind = 'water' | 'lava' | 'cliff';
 export interface Hazard { from: number; to: number; side: 1 | -1; basin: number; kind: HazardKind }
 /** City district along the circuit: what lines each side between two progress values. */
@@ -21,7 +21,7 @@ export interface District { from: number; to: number; left: string; right: strin
 export interface HeroPlacement { m: string; s?: number; lane?: number; x?: number; z?: number; yaw?: number; spanRoad?: boolean }
 
 export interface TrackDefinition {
-  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome';
+  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana';
   /** Short German line for the track card and the loading caption. */
   tagline: string;
   controlPoints: readonly (readonly [number, number])[];
@@ -163,8 +163,54 @@ const DUCE_DROM: TrackDefinition = {
   },
 };
 
-export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM };
-export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom';
+/** Havanna-Revolutionsring (Havanna): Sarah's track name and place; route, Malecón wave, beard ministry and details are Claude's elaboration (07.10.2026). */
+const HV = .85;
+const HAVANNA: TrackDefinition = {
+  id: 'havanna', name: 'Havanna-Revolutionsring', city: 'Havanna', theme: 'havana',
+  tagline: 'Malecón am offenen Meer, Prado, Kapitol-Kreisel, Altstadtgassen und Redner-Hügel',
+  controlPoints: ([
+    [300, 205], [200, 214], [100, 210], [0, 200], [-100, 206], [-180, 196],   // Malecón, open sea on the right
+    [-232, 172], [-252, 135], [-256, 85], [-258, 30],                          // into the Prado, palms
+    [-274, -10], [-270, -55], [-240, -80], [-205, -68], [-195, -35], [-172, -12], // Kapitol-Kreisel around the column
+    [-130, -22], [-100, -46], [-62, -62], [-40, -92], [-2, -94], [28, -66], [70, -52], // old-town lanes, cigar-factory shortcut
+    [118, -46], [160, -20], [190, 20], [214, 62],                              // Redner-Hügel with the beard ministry
+    [262, 90], [318, 112], [350, 150], [342, 190],                             // back down to the seafront
+  ] as const).map(([x, z]) => [x * HV, z * HV] as const),
+  halfWidth: 6, start: 40, bump: 1240,
+  /** Zigarrenfabrik: gravel passage through the factory yard, straight across the old-town dip. */
+  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 10.5, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]] },
+  canal: { from: -1000, length: 0 },
+  rampLips: [1146],
+  boostPads: [[100, 0], [500, 0], [800, 0], [1120, 0], [1300, 1.5]],
+  craters: [], grassVerges: [],
+  elevation: [[1060, 0], [1105, 4], [1150, 4], [1195, 0]],
+  hazards: [{ from: 150, to: 215, side: 1, basin: 8, kind: 'water' }],
+  itemBoxes: [140, 545, 1030],
+  landmarks: {
+    palace: null, fountains: [], trees: [],
+    column: [-200, -36], gateProgress: 520,
+    lawns: [[-210, -46, -190, -26]], promenade: 5,
+  },
+  river: { north: 515, south: 197, west: -460, east: 520, level: -1.15 },
+  ground: { west: -460, east: 520, north: 520, south: -420 },
+  dressing: {
+    boardRanges: [[20, 140], [420, 560]], flagRange: [600, 700], pennants: [30, 90, 450, 520, 1090], screenProgress: 70,
+    districts: [
+      { from: 0, to: 95, left: 'stands', right: 'quay' }, { from: 95, to: 410, left: 'colonial', right: 'quay' },
+      { from: 410, to: 585, left: 'avenue', right: 'avenue' }, { from: 585, to: 790, left: 'park', right: 'colonial' },
+      { from: 790, to: 1040, left: 'colonial', right: 'colonial' }, { from: 1040, to: 1200, left: 'plaza', right: 'plaza' },
+      { from: 1200, to: 99999, left: 'colonial', right: 'colonial' },
+    ],
+    heroes: [
+      { m: 'kit-cathedral', x: -330, z: -45 }, { m: 'kit-beard-ministry', s: 1120, lane: -34 }, { m: 'kit-tribune', s: 1090, lane: 22 },
+      { m: 'kit-lighthouse', x: -120, z: 300, yaw: Math.PI },
+    ],
+    bridges: [], cathedral: null, petals: [10, 120],
+  },
+};
+
+export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA };
+export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna';
 
 export interface TrackSample { x: number; z: number; heading: number; s: number; curvature: number }
 

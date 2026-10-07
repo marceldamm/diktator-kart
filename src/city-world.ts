@@ -52,16 +52,22 @@ const DIMS: Record<string, Footprint> = {
   'kit-quadrato': { u0: -20, u1: 20, v0: -4.5, v1: 34.5 }, 'kit-colossal-head': { u0: -11.2, u1: 11.2, v0: -6.5, v1: 12 },
   'kit-rational-a': { u0: -9.2, u1: 9.2, v0: -2.9, v1: 14 }, 'kit-rational-b': { u0: -13.2, u1: 13.2, v0: -2.9, v1: 15 },
   'kit-rational-c': { u0: -6.2, u1: 6.2, v0: -.3, v1: 12 }, 'kit-colonnade': { u0: -13.2, u1: 13.2, v0: -.7, v1: 3.6 },
+  // Havanna-Revolutionsring (art-source/havana_modules.py)
+  'kit-colonial-a': { u0: -6.2, u1: 6.2, v0: -2.8, v1: 12 }, 'kit-colonial-b': { u0: -8.2, u1: 8.2, v0: -2.8, v1: 12 }, 'kit-colonial-c': { u0: -4.7, u1: 4.7, v0: -2.8, v1: 12 },
+  'kit-palm': { u0: -1, u1: 1, v0: -1, v1: 1 }, 'kit-palm-b': { u0: -1, u1: 1, v0: -1, v1: 1 },
+  'kit-lighthouse': { u0: -17, u1: 17, v0: -11, v1: 11 }, 'kit-beard-ministry': { u0: -17.5, u1: 17.5, v0: -3, v1: 14 }, 'kit-tribune': { u0: -7.5, u1: 7.5, v0: -4, v1: 3.5 },
 };
 const BERLIN_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c7c9a6', '#d49d7c', '#e8d3b0'];
 /** Roman ochre, sienna, terracotta and pale travertine plasters. */
 const ROME_TINTS = ['#e2a85e', '#cf7d4b', '#e8bd7c', '#bd6a42', '#ecd3a2', '#d9925c', '#cfa77c', '#f1dcb2', '#c9885c'];
+/** Faded Caribbean pastels for Havana's colonial arcades. */
+const HAVANA_TINTS = ['#86c9c1', '#e7a7b2', '#efd27e', '#a3c5e4', '#bfe0b2', '#f2b98e', '#ece3cf', '#c9abd9', '#9ed1d8'];
 
 function rng(seed: number) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
 export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promise<CityWorld> {
-  const rome = TRACK_INFO.theme === 'rome';
-  const PLASTER_TINTS = (rome ? ROME_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana';
+  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
   /** Pale travertine tones for the rationalist blocks of the Duce-Drom. */
   const TRAVERTINE = ['#f1ebdd', '#e8dfcc', '#f5f1e6', '#e2d8c2'].map((h) => Color3.FromHexString(h).toLinearSpace());
   const kit = await LoadAssetContainerAsync('/assets/models/city-kit.glb', scene);
@@ -101,7 +107,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const signs = new DynamicTexture('Kit shop sign atlas', { width: 512, height: 512 }, scene, true);
   {
     const c = signs.getContext() as CanvasRenderingContext2D;
-    const names = rome ? ['CAFFÈ DEL BALCONE', 'MARMOR & PATHOS', 'GELATO GENEHMIGT', 'BÜSTEN NACH MASS', 'TRIUMPHBOGEN-VERLEIH', 'APPLAUS-AGENTUR', 'SCHÄRPEN & ORDEN', 'TOGA-REINIGUNG']
+    const names = havana ? ['ZIGARREN VOLKSEIGEN', 'RUM & REDE', 'ERSATZTEILE (1958)', 'BÄRTE NACH NORM', 'REDEZEIT-VERLÄNGERUNG', 'EIS DER REVOLUTION', 'MIKROFON-REPARATUR', 'ZUCKERQUOTE 104 %']
+      : rome ? ['CAFFÈ DEL BALCONE', 'MARMOR & PATHOS', 'GELATO GENEHMIGT', 'BÜSTEN NACH MASS', 'TRIUMPHBOGEN-VERLEIH', 'APPLAUS-AGENTUR', 'SCHÄRPEN & ORDEN', 'TOGA-REINIGUNG']
       : ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
     names.forEach((name, k) => {
       const y = k * 64;
@@ -200,7 +207,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   for (const h of TRACK_INFO.dressing.heroes) {
     let ok: boolean;
     if (h.s !== undefined) { const p = trackPoint(h.s, h.lane ?? 0); ok = tryPlace({ m: h.m, x: p.x, z: p.z, yaw: h.yaw ?? facing(p.x, p.z) }, { lawnOk: true }); }
-    else ok = tryPlace({ m: h.m, x: h.x ?? 0, z: h.z ?? 0, yaw: h.yaw ?? facing(h.x ?? 0, h.z ?? 0) }, { lawnOk: true });
+    else ok = tryPlace({ m: h.m, x: h.x ?? 0, z: h.z ?? 0, yaw: h.yaw ?? facing(h.x ?? 0, h.z ?? 0) }, { lawnOk: true, riverOk: h.m === 'kit-lighthouse' });
     if (!ok) heroFailures.push(h.m);
   }
   // Diagnostics only: lets browser checks confirm that every hero landmark found a free plot.
@@ -217,7 +224,10 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   // --- Districts along the circuit -------------------------------------------------------------------
   type District = { from: number; to: number; left: string; right: string };
   const districts: District[] = TRACK_INFO.dressing.districts.map((d) => ({ ...d, to: Math.min(d.to, TRACK.length - 1) }));
-  const families: Record<string, string[]> = rome ? {
+  const families: Record<string, string[]> = havana ? {
+    colonial: ['kit-colonial-a', 'kit-colonial-b', 'kit-colonial-c', 'kit-colonial-a', 'kit-colonial-b'],
+    avenue: ['kit-colonial-b', 'kit-colonial-a'],
+  } : rome ? {
     insula: ['kit-rational-a', 'kit-insula-a', 'kit-rational-b', 'kit-insula-c', 'kit-rational-c', 'kit-insula-b'],
     avenue: ['kit-rational-b', 'kit-colonnade', 'kit-rational-a', 'kit-colonnade'],
   } : {
@@ -270,7 +280,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
         const rows = kind === 'park' ? [PROMENADE + 3 + random() * 4, PROMENADE + 9 + random() * 8, PROMENADE + 18 + random() * 12] : [PROMENADE + 2.6];
         for (const lane of rows) {
           const p = trackPoint(s + random() * 3, side * lane);
-          const m = rome ? (random() < .35 ? 'kit-cypress' : 'kit-pine') : kind === 'park' && random() < .28 ? 'kit-cypress' : 'kit-linden';
+          const m = havana ? (random() < .5 ? 'kit-palm' : 'kit-palm-b') : rome ? (random() < .35 ? 'kit-cypress' : 'kit-pine') : kind === 'park' && random() < .28 ? 'kit-cypress' : 'kit-linden';
           tryPlace({ m, x: p.x, z: p.z, yaw: random() * 6.28, sc: .85 + random() * .4 }, { lawnOk: true });
         }
       }
@@ -283,11 +293,12 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   // Infield park lawns get groves as well.
   const grove = rome ? 17 : 9;
   for (const [x0, z0, x1, z1] of LANDMARKS.lawns) for (let x = x0 + 5; x < x1 - 4; x += grove) for (let z = z0 + 5; z < z1 - 4; z += grove) {
-    const m = rome ? (random() < .25 ? 'kit-cypress' : random() < .5 ? 'kit-pine' : 'kit-pine-b') : random() < .3 ? 'kit-cypress' : 'kit-linden';
+    const m = havana ? (random() < .5 ? 'kit-palm' : 'kit-palm-b') : rome ? (random() < .25 ? 'kit-cypress' : random() < .5 ? 'kit-pine' : 'kit-pine-b') : random() < .3 ? 'kit-cypress' : 'kit-linden';
     tryPlace({ m, x: x + random() * (rome ? 9 : 4), z: z + random() * (rome ? 9 : 4), yaw: random() * 6.28, sc: .9 + random() * .4 }, { lawnOk: true });
   }
   // Promenade furniture between the existing lamps (lamps every 24 m at lane W+2.6).
-  const furniture = ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
+  // Havana: the cruisers of 1958 are parked along the kerb for good (no spare parts).
+  const furniture = havana ? ['kit-oldtimer-a', 'kit-bench', 'kit-oldtimer-b', 'kit-kiosk', 'kit-oldtimer-c', 'kit-bench'] : ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
   let fk = 0;
   for (let s = 14; s < TRACK.length - 8; s += 12) for (const side of [-1, 1]) {
     if (HAZARDS.some((h) => side === h.side && s >= h.from - 6 && s <= h.to + 6)) continue;
@@ -298,14 +309,14 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const p = trackPoint(s, side * (W + 4.6));
     const a = shortcutLocate(p.x, p.z); if (a.u > -6 && a.u < SHORTCUT_LENGTH + 6 && Math.abs(a.lane) < 8) continue;
     if (reserved.some((r) => Math.hypot(r.x - p.x, r.z - p.z) < r.r)) continue;
-    placements.push({ m, x: p.x, z: p.z, y: elevationAt(s) + .14, yaw: facing(p.x, p.z) + (m === 'kit-flag' ? Math.PI / 2 : 0) });
+    placements.push({ m, x: p.x, z: p.z, y: elevationAt(s) + .14, yaw: facing(p.x, p.z) + (m === 'kit-flag' || m.startsWith('kit-oldtimer') ? Math.PI / 2 : 0) });
   }
   // Second line and distant city: taller blocks fill every free plot so no street ends in a void.
   for (let x = GROUND.west + 30; x < GROUND.east - 30; x += 30) for (let z = GROUND.south + 30; z < GROUND.north - 30; z += 30) {
     const px = x + (random() - .5) * 10, pz = z + (random() - .5) * 10;
     const { lane } = trackLocate(px, pz);
     if (Math.abs(lane) < 34) continue;
-    const m = pick(rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
+    const m = pick(havana ? ['kit-colonial-b', 'kit-colonial-a', 'kit-colonial-b', 'kit-colonial-c'] : rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
     const towardCentre = Math.atan2(-(60 - px), -(-20 - pz));
     const yaw = Math.abs(lane) < 70 ? facing(px, pz) : Math.round(towardCentre / (Math.PI / 2)) * Math.PI / 2;
     tryPlace({ m, x: px, z: pz, yaw, tint: m.startsWith('kit-rational') ? pick(TRAVERTINE) : tint() }, { extra: 18, skipCircuit: Math.abs(lane) > 70 });

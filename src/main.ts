@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, setBotStyles, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, rosterOrder } from './cast';
 import {createItems,stepItems,botUsesItem,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
@@ -54,6 +54,8 @@ function initialLoadKarts(): KartState[] {
       heading, travelHeading: heading, speed: 8 };
   });
 }
+
+const trackProgressOf = (k: { x: number; z: number }) => trackProgressAt(k.x, k.z);
 
 class App {
   private engine: Engine | undefined;
@@ -114,6 +116,8 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  /** Malecón wave (Havanna, lap 2): the flooded seafront stretch slows everyone alike until this race time. */
+  private waveUntil=0;
   private medals:MedalWorld={medals:[],counts:[],events:[]};
   /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
   private autoQuality=false;
@@ -565,7 +569,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -707,6 +711,7 @@ class App {
     const lines: Record<TrackId, [string, string]> = {
       stadionring: ['Das Komitee hat den Sieger bereits beglückwünscht.', 'Gefahren wird trotzdem – aus Gründen der Tradition.'],
       'duce-drom': ['Der Balkon erwartet Applaus in alphabetischer Reihenfolge.', 'Die Züge sind pünktlich. Behauptet zumindest das Programmheft.'],
+      havanna: ['Die Eröffnungsrede läuft seit gestern. Bitte leise starten.', 'Ersatzteile sind bestellt – seit 1958.'],
     };
     const [title, detail] = lines[TRACK.id];
     document.querySelector('#gp-intro-kicker')!.textContent = this.mode === 'gp' && this.gp ? `GROSSER PREIS DER EITELKEIT · RENNEN ${this.gp.round + 1}/${this.gp.tracks.length} · ${TRACK_INFO.city.toUpperCase()}` : this.mode === 'timetrial' ? `ZEITFAHREN · ${TRACK.name.toUpperCase()}` : `EINZELRENNEN · ${TRACK.name.toUpperCase()} · ${TRACK_INFO.city.toUpperCase()}`;
@@ -880,6 +885,11 @@ class App {
           this.kart = wade(this.kart); this.loadKarts = this.loadKarts.map(wade);
         }
         if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
+        if (!LAB_WORLD && this.raceTime < this.waveUntil) {
+          // Malecón wave: water on the seafront stretch costs speed and a little grip, identical for every kart.
+          const soak = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 330 && k.grounded ? { ...k, speed: k.speed * (1 - .9 * FIXED_STEP), yawRate: k.yawRate * (1 - 1.5 * FIXED_STEP) } : k; };
+          this.kart = soak(this.kart); this.loadKarts = this.loadKarts.map(soak);
+        }
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
@@ -972,6 +982,7 @@ class App {
           if(this.raceTime<5&&this.raceTime+FIXED_STEP>=5&&this.mode!=='timetrial'){
             if(this.mode==='gp'&&this.gp&&this.gp.round===0)this.audio.voice('announcer-gp-intro',{force:true});
             else if(TRACK.id==='duce-drom')this.audio.voice('announcer-rome',{force:true});
+            else if(TRACK.id==='havanna')this.audio.voice('announcer-havana',{force:true});
           }
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
@@ -982,7 +993,8 @@ class App {
             this.lapNoticeUntil=this.raceTime+3;
             if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);if(this.lapTimes.length===2)this.audio.setMusicTempo(1.07);}
             if(this.lapTimes.length===1){
-              if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
+              if(TRACK_INFO.theme==='havana'){this.testScene?.trackEvent?.('wave');this.itemMessage='Achtung: Malecón-Welle! Gischt über der Uferstraße';this.audio.cheer(.7);this.waveUntil=this.raceTime+14;window.setTimeout(()=>this.audio.voice('announcer-wave',{force:true}),900);}
+              else if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}
           }

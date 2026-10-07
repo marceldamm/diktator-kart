@@ -24,9 +24,11 @@ const VOICE = {
 const LINES = {
   'announcer-welcome': ['announcer', 'Hallo zusammen! Willkommen im Stadion der Eitelkeit. Sechs Fahrer, drei Runden. Viel Spaß!'],
   // Grand Prix and Duce-Drom (Claude, 07.10.2026): dry stadium announcer, original satirical text.
-  'announcer-gp-intro': ['announcer', 'Willkommen zum Großen Preis der Eitelkeit. Zwei Rennen, eine Wertung. Das Ergebnis wird ausnahmsweise gezählt.'],
+  'announcer-gp-intro': ['announcer', 'Willkommen zum Großen Preis der Eitelkeit. Drei Rennen, eine Wertung. Das Ergebnis wird ausnahmsweise gezählt.'],
   'announcer-rome': ['announcer', 'Willkommen im Duce-Drom. Der Balkon ist besetzt, das Rednerpult ist leer. Applaus bitte trotzdem.'],
   'announcer-balcony': ['announcer', 'Achtung, der Balkon spricht. Rosen auf der Prunkstraße. Bitte weiterfahren.'],
+  'announcer-havana': ['announcer', 'Willkommen am Havanna-Revolutionsring. Die Eröffnungsrede läuft noch. Wir starten trotzdem.'],
+  'announcer-wave': ['announcer', 'Achtung, Welle über dem Malecón! Langsam durch die Gischt.'],
   'announcer-gp-standings': ['announcer', 'Die Zwischenwertung ist amtlich. Einsprüche nur schriftlich und nach dem Rennen.'],
   'announcer-gp-champion': ['announcer', 'Der Große Preis ist entschieden. Der Pokal war schon graviert. Diesmal stimmt sogar der Name.'],
   'announcer-grid': ['announcer', 'Alle bereit? Dann ab an den Start!'],
