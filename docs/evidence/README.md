@@ -1,5 +1,9 @@
 # Echte Laufzeitbelege des Stadion-Slices
 
+## 07.10.2026 – CC0-Hitler-Gesichtspass (Codex)
+
+[Belegordner und Quellen](hitler-face-20261007/README.md): feste Blender-Front-/Dreiviertel-/Profilbilder als **Assetvergleich**, tatsächliches Grand-Prix-Kart als Sitzdiagnose und kurze sichtbare Chrome-Spielprobe. Historische Ähnlichkeit, Kleidung und Kontakte bleiben offen. Runtimebild stammt vor der letzten Hautfarben-Exportkorrektur; finaler Tint technisch geprüft, nicht visuell auf diesem Runtimebild bestätigt. Blender-Vordergrundwunsch ausdrücklich zurückgenommen, Hintergrund-Einzelbilder bleiben bevorzugt.
+
 ## Belegregeln für künftige Pakete
 
 - Laufzeitbilder müssen aus dem tatsächlichen Babylon-Spiel in einem sichtbaren Chrome-Fenster stammen. Studio-, Konzept-, Headless- oder abweichende Testszene-Bilder sind keine Runtime-Abnahme.

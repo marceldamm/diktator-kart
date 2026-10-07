@@ -9,6 +9,24 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Projektstart und Team-Synchronisierung – 07./08.10.2026 (Codex für Marcel)
+
+**Aktuell:** Der Projektstart begann auf `origin/main` `90cc6d0`; beim Abschluss wurde der neuere Teamstand `f842e00` mit Sarahs viertem Kurs entdeckt. Seine Strecken- und Teamänderungen wurden in den persönlichen Arbeitsbranch `codex/team-marcel-20261007-183328-214` integriert; beide Aufgabenstränge bleiben dokumentiert.
+
+**Nächster Schritt:** R28 ist der geprüfte Gesichtskandidat aus festen Front-/Profil-/Dreiviertel-Overlays; weitere Ähnlichkeitsarbeit bleibt in Issue #13 offen. Der schwarze Leder-/S&M-Anzug ist im GLB umgesetzt. Sichtbare Chrome-Seitenansicht bestätigte Hände am Lenkrad und angewinkelte Beine im Fußraum, genauer Pedalkontakt bleibt offen. Vollsuite/Build nach der Team-Synchronisierung und der veröffentlichte PR-Abschluss stehen noch aus. Keine fotogenaue Ähnlichkeit oder vollständige Sitzabnahme behaupten. Sarahs Pjöngjang-Kurs braucht noch menschliche Sicht-/Fahrabnahme; Intel-UHD-Abnahme (Issue #4) und gemeinsamer Team-Praxistest (Issue #2) bleiben offen.
+
+## Hitler-Fahrer: CC0-Modell, Bildvergleich und schwarzer Anzug – 07.10.2026 (Marcel, Codex)
+
+**Auftrag:** [Issue #13](https://github.com/marceldamm/diktator-kart/issues/13). Marcel änderte die Modellauswahl ausdrücklich zurück auf den zuvor verwendeten CC0-Fahrer und bat um weitere referenzgeführte Gesichtsiterationen, dann um einen schwarzen S&M-Anzug. Den Wolfenstein-Zweig nicht weiter als Runtimefigur verwenden.
+
+**Aktuell:** Der Quaternius-CC0-Fahrer ist wieder in `public/assets/models/cc0-driver-hitler.glb` und wird aus `art-source/build_cc0_driver.py -- hitler` gebaut. R16s abgeflachte Frisur legte Schläfen frei, R19s kontrastreiche Falten wirkten aufgesetzt, R20s lange dunkle Nasolabialzüge erinnerten an die entfernten „Barteln“, R22 zeigte kahle Kopfhaut; diese Varianten sind verworfen. R23 markierte den brauchbaren Zwischenstand. R24 bog/schmalte die Brauen, R25 verschmälerte die Lider und füllte die Wangen; R25s überzogene Brauen und zu kleiner/fransiger Kragen wurden verworfen. R26 stabilisierte Haaransatz und Gesicht; R27 legte durch minimale Kronenkürzung kahle Kopfhaut frei und wurde verworfen. R28 ist der aktuelle lokale Kandidat mit R26-Haaransatz, ruhigerer Brauenlinie, schmaleren Lidern, leicht breiterer Nasenspitze und weichen projizierten Stirn-/Augenfalten. Vergleiche `overlay-r23-front.jpg`, `overlay-r24-front.jpg`, `overlay-r25-front.jpg`, `overlay-r26-front.jpg` und `overlay-r28-front.jpg`; trotz Verbesserung bleiben Frisur, Mundausdruck, Nase und Haut deutlich stilisiert/generisch. `r28-seating.png` zeigt den schwarzen Lederanzug mit Halsband, Brustgeschirr und Gürtel. Sichtbare Chrome-Seitenansicht bestätigte Hände am Lenkrad und angewinkelte Beine im Fußraum; genauer Pedalkontakt bleibt offen.
+
+**Bestätigte Folgepunkte:** Weitere referenzbasierte Gesichtsiterationen und eine eindeutige sichtbare Runtime-Aufnahme der Füße/Pedale bleiben offen. Die übrigen Fahrer bleiben unverändert. Der frühere Wolfenstein-Testzweig bleibt lokal archiviert; er ist nicht Teil des aktiven Runtime-Modells.
+
+**Abnahme:** gleiche Blender-Kameras/Licht vor und nach dem Pass, editierbare Quelle/Runtime-GLB, Export-/Buildprüfung und gezielte Spielkontrolle. Historische Ähnlichkeit und Stil brauchen Marcels Urteil; keine fotogenaue Abnahme behaupten.
+
+**Pausierter Modellzweig:** Wolfenstein/W1–W6 nach Marcels neuer Entscheidung nicht weiterführen. Lokaler Sketchfab-Download und Evidence bleiben als historische, unpublizierte Vergleichsarbeit; sie ersetzen den CC0-Runtime-Fahrer nicht.
+
 ## Sarah-Auftrag: Ewige-Führer-Allee (Pjöngjang) – spielbare Strecke ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14))
 
 **Status: Technisch spielbar, menschliche Abnahme offen.** Sarah beauftragte am 07.10.2026 die spielbare Umsetzung mit Pjöngjang-inspirierter Monumentalstadt, Führerstatuen, satirischer Propaganda, überzogener Militärparade und einer kürzeren Unterführung mit Booststreifen.

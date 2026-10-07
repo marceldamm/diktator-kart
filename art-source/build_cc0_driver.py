@@ -10,6 +10,8 @@ Run: blender --background --python art-source/build_cc0_driver.py -- <id|all>
 import bpy, bmesh, os, sys, math, shutil
 import numpy as np
 from mathutils import Vector
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from hitler_face import refine_hitler_face
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACK = os.path.join(ROOT, '.tools', 'packs', 'ubc', 'Universal Base Characters[Standard]')
@@ -23,8 +25,8 @@ STOUT = build(**{'spine_03': (.92, 1, 1.0), 'spine_02': (1.12, 1, 1.22), 'spine_
                  'neck_01': (.98, 1, .98), 'upperarm_l': (.84, 1, .84), 'upperarm_r': (.84, 1, .84), 'thigh_l': (1, 1, 1), 'thigh_r': (1, 1, 1)})
 # Colours are linear RGB. Cloth colours follow cast.ts (uniform), toned to real fabric.
 SPECS = {
-    'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.075, .055, .04), girth=SLIM, pale=.25,
-                      details=['toothbrush', 'forelock', 'shirt-collar', 'tie', 'lapels']),
+    'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.008, .007, .007), girth=SLIM, pale=.25,
+                      details=['toothbrush', 'leather-collar', 'leather-harness', 'leather-belt']),
     'stalin':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.09, .085, .075), cloth=(.17, .18, .14), girth=build(**{'spine_02': (1.0, 1, 1.05)}), pale=.12,
                       details=['walrus', 'stand-collar', 'buttons']),
     'mussolini': dict(hair=[], hair_rgb=(.02, .016, .012), cloth=(.012, .012, .014), girth=build(**{'neck_01': (1.0, 1, 1.0), 'spine_03': (.92, 1, .95)}), pale=.12,
@@ -108,6 +110,11 @@ def make(id):
 
     # --- Cloth shell: body copy without head, neck and hands; fabric drapes over the muscle grooves ----------
     cloth = solid('Pilot cloth', spec['cloth'], .86)
+    if id == 'hitler':
+        cloth.name = 'Black leather'
+        leather_shader = cloth.node_tree.nodes['Principled BSDF']
+        leather_shader.inputs['Roughness'].default_value = .36
+        leather_shader.inputs['Metallic'].default_value = .04
     suit = body.copy(); suit.data = body.data.copy(); bpy.context.collection.objects.link(suit); suit.name = 'Pilot suit'
     skin_groups = [g.index for g in body.vertex_groups if g.name.startswith(('Head', 'neck', 'hand', 'index', 'middle', 'pinky', 'ring', 'thumb'))]
     bm = bmesh.new(); bm.from_mesh(suit.data); deform = bm.verts.layers.deform.active
@@ -152,8 +159,12 @@ def make(id):
     px[:, :3] = px[:, :3] * (1 - spec['pale']) + np.array([.86, .66, .56], dtype=np.float32) * spec['pale']
     light.pixels.foreach_set(px.ravel()); light.update()
 
-    hair_mat = solid('Pilot hair', spec['hair_rgb'], .45)
-    for h in hair + brows: h.data.materials.clear(); h.data.materials.append(hair_mat)
+    hair_mat = solid('Pilot hair', spec['hair_rgb'], .58)
+    if id == 'hitler':
+        hair_mat.node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value = .82
+    brow_mat = solid('Pilot eyebrows', tuple(c * .72 for c in spec['hair_rgb']), .82)
+    for h in hair: h.data.materials.clear(); h.data.materials.append(hair_mat)
+    for b in brows: b.data.materials.clear(); b.data.materials.append(brow_mat)
 
     # --- Face landmarks ---------------------------------------------------------------------------------
     eyes = next(o for o in bpy.data.objects if o.type == 'MESH' and o.name.startswith('Eyes'))
@@ -177,16 +188,20 @@ def make(id):
         bpy.ops.object.transform_apply(scale=True, rotation=True); o.data.materials.append(mat)
         for p in o.data.polygons: p.use_smooth = kind != 'cube'
         return o
-    whisker = solid('Pilot moustache', tuple(c * 1.2 for c in spec['hair_rgb']), .7)
-    shirt = solid('Pilot shirt', (.78, .76, .7))
-    brass = solid('Pilot buttons', (.55, .4, .16), .35, .9)
+    whisker = solid('Pilot moustache', tuple(c * .8 for c in spec['hair_rgb']), .9)
+    shirt = solid('Pilot shirt', (.015, .013, .012) if id == 'hitler' else (.78, .76, .7), .3 if id == 'hitler' else .6)
+    brass = solid('Pilot hardware', (.38, .38, .36), .3, .82)
     d = set(spec['details'])
-    if 'toothbrush' in d:   # about the width of the nose
-        blob('Pilot moustache', whisker, (0, tip.y + .027, tip.z - .019), (.03, .016, .014), kind='cube')
+    if 'toothbrush' in d:   # narrow, flat brush band directly under the nose
+        # The root is flipped 180° into the kart frame; keep the patch tucked
+        # against the upper lip. A bevel keeps the silhouette crisp without a cube edge.
+        moustache = blob('Pilot moustache', whisker, (0, tip.y + .022, tip.z - .019), (.013, .006, .002))
+        bevel = moustache.modifiers.new('Soft moustache edge', 'BEVEL'); bevel.width = .001; bevel.segments = 3
+        moustache.modifiers.new('Weighted moustache normals', 'WEIGHTED_NORMAL')
     if 'walrus' in d:       # broad, drooping at the ends
         for sd in (-1, 1): blob('Pilot moustache', whisker, (sd * .019, tip.y + .022, tip.z - .024), (.03, .016, .013), (0, sd * -.38, 0))
     if 'forelock' in d:     # parted on his right, swept down across the forehead to his left temple (his left is +X)
-        blob('Pilot forelock', hair_mat, (.018, brow_y + .003, eye_z + .056), (.058, .01, .014), (0, .5, 0))
+        blob('Pilot forelock', hair_mat, (.018, brow_y + .001, eye_z + .056), (.033, .004, .006), (0, .5, 0))
     if 'mole' in d:
         chin_y = min(p.y for p in face if tip.z - .075 < p.z < tip.z - .055 and abs(p.x) < .02)
         blob('Pilot mole', solid('Pilot mole skin', (.18, .09, .06), .7), (.012, chin_y + .002, tip.z - .065), (.0055, .0045, .0055))
@@ -207,6 +222,31 @@ def make(id):
         for sd in (-1, 1):
             z = (neck_at.z + chest_at.z) / 2 - .05
             blob('Pilot lapel', cloth, (sd * .07, chest_front(z) + .006, z), (.06, .012, .2), (0, sd * .35, 0), kind='cube')
+    if 'leather-collar' in d:
+        harness_mat = solid('Harness leather', (.025, .023, .021), .34, .02)
+        blob('Pilot leather collar', harness_mat, (neck_at.x, neck_at.y - .005, neck_at.z - .015), (.076, .066, .027), kind='torus')
+        blob('Pilot collar buckle', brass, (0, neck_at.y - .073, neck_at.z - .015), (.018, .008, .022), kind='cube')
+    if 'leather-harness' in d:
+        harness_mat = bpy.data.materials.get('Harness leather') or solid('Harness leather', (.025, .023, .021), .34, .02)
+        mid = (neck_at.z + chest_at.z) / 2 - .025
+        length = max(.20, neck_at.z - chest_at.z - .04)
+        panel_center = (neck_at.z + .004 + chest_at.z - .035) / 2
+        panel_height = max(.10, neck_at.z - chest_at.z - .039)
+        panel = blob('Pilot leather bib', harness_mat, (0, chest_front(panel_center) + .010, panel_center), (.080, .012, panel_height / 2), kind='cube')
+        panel_bevel = panel.modifiers.new('Rounded bib edge', 'BEVEL'); panel_bevel.width = .016; panel_bevel.segments = 4
+        panel.modifiers.new('Bib normals', 'WEIGHTED_NORMAL')
+        for sd in (-1, 1):
+            strap = blob('Pilot leather harness', harness_mat, (0, chest_front(mid) + .020, mid), (.024, .014, length / 2), (0, sd * .36, 0), kind='cube')
+            bevel = strap.modifiers.new('Rounded harness edge', 'BEVEL'); bevel.width = .008; bevel.segments = 3
+            strap.modifiers.new('Harness normals', 'WEIGHTED_NORMAL')
+        blob('Pilot harness ring', brass, (0, chest_front(mid) + .030, mid), (.023, .023, .005), kind='torus')
+    if 'leather-belt' in d:
+        harness_mat = bpy.data.materials.get('Harness leather') or solid('Harness leather', (.025, .023, .021), .34, .02)
+        belt_z = chest_at.z - .13
+        belt = blob('Pilot leather belt', harness_mat, (0, chest_front(belt_z) + .015, belt_z), (.16, .014, .022), kind='cube')
+        bevel = belt.modifiers.new('Rounded belt edge', 'BEVEL'); bevel.width = .006; bevel.segments = 3
+        belt.modifiers.new('Belt normals', 'WEIGHTED_NORMAL')
+        blob('Pilot belt buckle', brass, (0, chest_front(belt_z) + .026, belt_z), (.025, .008, .028), kind='cube')
     if 'buttons' in d:
         for i in range(5):
             z = neck_at.z - .07 - i * .085
@@ -244,9 +284,11 @@ def make(id):
     for o in [o for o in bpy.data.objects if o.type == 'MESH']:
         mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
     root.rotation_euler[2] = math.pi; root.scale = (SCALE,) * 3; root.location = (0, SEAT[0], SEAT[1])
+    if id == 'hitler': refine_hitler_face(root)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.blend'))
     out = os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.glb')
-    bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True)
+    face_export = dict(export_vertex_color='NAME', export_vertex_color_name='Face age tint', export_all_vertex_colors=False) if id == 'hitler' else {}
+    bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True, **face_export)
     shutil.copy(out, os.path.join(ROOT, 'public', 'assets', 'models', f'cc0-driver-{id}.glb'))
     print('CC0_DRIVER_DONE', id)
 

@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 07.10.2026 – Marcel: Blender-Prüfung mit Einzelbildern
+
+**Aktueller bestätigter Wunsch:** Wieder Hintergrundprüfung in Blender mit getrennten Einzelbildern im Chat verwenden; Blender nicht automatisch im Vordergrund öffnen. Marcel nahm seinen kurzzeitigen Sichtbarkeitswunsch ausdrücklich zurück, nachdem die Editoransicht überlagerte Varianten zeigte. Feste Front-/Dreiviertel-/Profilbilder und korrekt ausgewählte Fahrer/Kart-Kontaktbilder bleiben der effektive Ablauf. Historische Formreferenzen wiederholt als beschriftetes Overlay mit dem Blenderbild vergleichen, Abweichungen benennen, gezielt ändern und im gleichen Kamerawinkel neu prüfen; verworfene Varianten nur als solche dokumentieren. Marcels konkrete Korrektur für die Frisur: keine einzelne Stirnlocke, sondern seitlich gescheiteltes Haar. Gezielte sichtbare Spielprüfung bleibt separat. Herkunft: Marcels Korrektur und Folgefeedback im Codex-Chat; Issue #13 und PROGRESS-LOG.md. Keine Teamnachricht versandt.
+
 > **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Anleitung, persönliche Notizen und Teamnachrichten. Notizen/Vorschläge sind keine Zustimmung oder Umsetzung. Erledigte Notizen erhalten einen Ergebnisverweis statt kommentarlos gelöscht zu werden. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
 
 
@@ -286,3 +290,33 @@ Für die neue Babylon-Version habe ich die Steuerung für Items festgelegt: Rohr
 **Integrationsstatus (Codex, 05.10.2026):** Diese Sarah-Änderungen waren in `origin/main` bei `b3df669` enthalten und wurden in Marcels Abschlussbranch inhaltlich mit dem Touch-/HUD-Stand zusammengeführt. Kombinierter Stand: 71/71 Tests und Produktionsbuild bestanden; weitere menschliche Spiel-/Stilabnahme bleibt offen.
 
 - **Hinweis Claude 06.10.2026 (an Marcel und Sarah, Status: offen zur Sichtung):** Bitte das neue Rennen einmal selbst fahren und vor allem den Spree-Kai, die Säulen-Haarnadel und Hitlers Nahansicht (Fahrerwahl, Kamera C) ansehen sowie den neuen Motor anhören. Rückmeldung zu Gesicht, Fassaden und Klang in CURRENT-WORKLIST.md eintragen lassen. Belege: docs/evidence/after-redesign-*.png und hitler-anchor-*.png.
+
+### 07.10.2026 – Hitler-Komplettmodell und Mantel
+
+**Quelle:** Marcels damalige Auswahl des vollständigen Wolfenstein-2-Modells und sein Wunsch, den Mantel auszuziehen. Er stoppte diesen Modellzweig anschließend und setzte den vorherigen CC0-Fahrer wieder ein. Der lange Mantelsaum war aus der Quellfigur entfernt; unter dem Mantel lag kein Torso. Quelldatei, Modellierungsskript und damalige Ansichten wurden lokal unter `.tools/paused-wolfenstein-20261007/` archiviert. Sie sind nicht Teil dieses Pakets.
+
+**Attribution/Rechte:** Sketchfab-Seite nennt Ersteller AkhdanLA und CC BY. Ob der Uploader Rechte an der zugrunde liegenden kommerziellen Wolfenstein-Figur hat, wurde nicht verifiziert. Daher keine öffentliche Veröffentlichung des Modells vor Rechteklärung; das aktuelle lokale Testen ist davon getrennt.
+
+**Referenzdurchgänge W2–W3 (Codex, 07.10.2026, historisch):** Ein festes 50-%-Overlay mit dem Bundesarchiv-Porträt (1938) zeigte die Quellfrisur deutlich zu hell und Kopf-/Haarbreite leicht zu groß. W2 tönte die texturierte Frisur dunkelbraun; W3 verengte Nase und untere Gesichtskontur vorsichtig. Diese Variante ist nicht mehr aktiv. Vergleiche sind lokal unter `.tools/paused-wolfenstein-20261007/` archiviert.
+
+**Referenzdurchgang W4 (Codex, 07.10.2026, historisch):** Isolierter Augenmesh-Render bestätigte zwei getrennte Augenkomponenten ohne Brauen. W4 verkleinerte/vertiefte sie um je einen Augenmittelpunkt; der dunkle Balken blieb. W5/W6 testeten einen Rückversatz. Nach Marcels Modellwechsel wurden alle weiteren Schritte eingestellt; der lokale Vergleich liegt unter `.tools/paused-wolfenstein-20261007/`.
+
+**Rückversatzversuche W5/W6 (Codex, 07.10.2026):** 3 mm (W5) erzeugte im unveränderten Foto-/Render-Overlay praktisch keine sichtbare Änderung und wurde zurückgenommen. 6 mm (W6) wirkt leicht weniger hervorstehend, der Brauen-/Lidbalken bleibt. W6 bleibt vorläufiger Runtime-Kandidat. Nächster Schritt: UV- und Materialquelle des dunklen Balkens identifizieren, vor weiterer Geometrieänderung. Evidence-Ordner enthält beide Tests samt gleicher 1938er Vorlage.
+
+### 07.10.2026 – Auswahl zurück zum CC0-Modell und schwarzer Anzug
+
+**Quelle:** Marcels neue ausdrückliche Steuerung: die Wolfenstein-Version stoppen und mit dem zuvor verwendeten Modell weiterarbeiten; die Bildvergleichsmethode fortführen und danach einen schwarzen S&M-Anzug anlegen.
+
+**Aktueller Stand:** Quaternius-CC0-Fahrer ist wieder die aktive Runtimefigur. R16 und R22 wurden wegen sichtbarer kahler Kopfhaut verworfen. R23 behält die seitliche Haarlinie, mit schmaleren Augen/Brauen und leicht verlängertem Nasenrücken; Stirn-/Augenfalten sind als feine, weich gerundete Meshzüge auf die Vorderseite projiziert. R20s dunkle Röhren und längere Nasolabiallinien wurden wegen aufgemalter/„barteliger“ Wirkung verworfen. Der Anzug ist schwarz und leicht glänzend, mit matterem Brustgeschirr, Gürtel und Halsband. Blender-Kartbilder zeigen noch ungeklärte Kartteile und sind keine Runtime-Abnahme.
+
+**Nächster Schritt:** Overlay R23 beurteilen und weitere gezielte Formpassagen nach Front-/Profil-/Dreiviertelvergleich durchführen; Outfit-/Kartpreview bereinigen und in sichtbarer Babylon-Runtime Sitz, Hände und Pedale prüfen. Der Wolfenstein-Zweig ist pausiert und nicht aktiv.
+
+### 07.10.2026 spät – Fortschreibung nach R26
+
+**Quelle:** Marcel bestätigte die Rückkehr zum vorletzten CC0-Fahrer und bat um wiederholten Bildvergleich, Gesichtsdetails, schwarzen S&M-Anzug sowie späteren Abschluss/Veröffentlichung.
+
+**Status (Codex):** R23–R26 liegen als gleiche-Kamera-Front-/Profil-/Dreiviertel- und Kart-Previewbilder vor. R26 ist ein lokaler Arbeitskandidat, keine bestätigte Ähnlichkeit. Der schwarze Lederanzug mit Halsband, Brustgeschirr und Gürtel ist in der Runtime-GLB-Datei. Blender zeigt die Sitzpose nur teilweise; Hände greifen den Lenkradkranz nicht sauber, Pedalkontakt ist nicht bestätigt. Eine sichtbare Babylon-Prüfung fehlt noch.
+
+**Offen:** Gesicht weiter verfeinern, Spielansicht/Lenkrad-/Pedalposition verifizieren, Vollsuite und Produktionsbuild belegen, Issue #13/CURRENT-WORKLIST/Progress synchron halten, nur die freigegebene CC0-Arbeit in einem PR veröffentlichen. Teamabschluss verlangt erfolgreichen `tests-and-build`-Check und PR-Merge; direkter Push nach `main` ist nicht der Projektworkflow. Rechner-Ruhezustand erst nach bestätigter Veröffentlichung ausführen.
+
+**Fortschreibung (Codex, gleicher Auftrag):** R27s Kronenkürzung wurde wegen kahler Hinterkopf-/Scheitelfläche im Profil verworfen. R28 ist wieder auf sicherer R26-Haarform und verbreitert nur die Nasenspitze/Nasenflügel leicht. Sichtbare Chrome-Seitenansicht zeigte Hände am Lenkrad und angewinkelte Beine im Fußraum; Pedalberührung ist noch nicht eindeutig. Der Modellvergleich bleibt eine deutliche Näherung und braucht Marcels Urteil.

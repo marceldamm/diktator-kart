@@ -1,5 +1,15 @@
 # Editierbare Art-Pipeline des Stadion-Slices
 
+## Pausierter lokaler Vergleichszweig: Wolfenstein (07.10.2026)
+
+Historischer, pausierter Versuch nach Marcels Modellwechsel zurück zu Quaternius-CC0. Die heruntergeladenen Quelldateien, Modellierungs-Skripte und Bilder liegen lokal unter `.tools/paused-wolfenstein-20261007/` und sind kein Teil des aktiven Runtime-Exports oder dieser Veröffentlichung. Die Sketchfab-Seite führt AkhdanLA und CC BY an; Rechte an der kommerziellen Wolfenstein-Ausgangsfigur sind nicht verifiziert.
+
+## Aktiver Hitler-Fahrer: Quaternius CC0, Gesicht und schwarzer Lederanzug (07.10.2026)
+
+`build_cc0_driver.py -- hitler` baut nur Hitlers Quaternius-Fahrer; `hitler_face.py` verändert dessen Geometrie in Kart-Metern. Der aktuelle lokale Kandidat R28 enthält eine feinere, leicht gebogene Brauenform, schmalere Lider, weiche Stirn-/Augenfalten und eine leicht verbreiterte Nasenspitze; dazu einen schwarzen Lederanzug mit Halsband, Brustgeschirr und Gürtel. Danach `node art-source/optimize_assets.mjs cc0-driver-hitler`. Andere Fahrer werden dabei nicht neu gebaut. Der benannte `Face age tint` muss als glTF `COLOR_0` exportiert werden; der Pack enthält sonst konstante weiße Farbsätze, die die Hautvariation verdrängen. Regression: `tests/cc0-driver-assets.test.mjs`. R28 bleibt deutlich stilisiert; die Overlaybilder belegen Unterschiede bei Frisur, Mundausdruck, Nase und Hautoberfläche.
+
+`blender --background --python art-source/preview_cc0_driver.py -- hitler r28` erstellt feste Front-/Dreiviertel-/Profil- und Sitzbilder samt tatsächlicher `grandprix`-Karosserie. Die saubere Exportquelle liegt in `.tools/raw-models/cc0-driver-hitler.blend`; die separate Prüfszene `qa-hitler-seated.blend` enthält Kamera/Licht/Kart und wird niemals als Fahrer exportiert. Belegordner: `docs/evidence/hitler-face-20261007/`. Blender nicht automatisch im Vordergrund öffnen, entsprechend Marcels korrigiertem Wunsch. Die sichtbare Babylon-Seitenansicht bestätigte den schwarzen Anzug und Hände am Lenkrad; genaue Fuß-/Pedalauflage bleibt offen. Historische Bildquellen und Grenzen stehen im Beleg-README.
+
 ## Schäferhund reproduzieren
 
 Mit vorhandenem Blender: --background --python art-source/build_shepherd.py; danach node art-source/optimize_assets.mjs shepherd. .blend behält bewegliche Gelenke. node art-source/build_shepherd_audio.mjs erzeugt den eigenen Doppelbelllaut. GlTF-Optimierung mit Einzelmodellaufruf erhält jetzt vorhandene andere Modellmessungen statt sie zu überschreiben.
