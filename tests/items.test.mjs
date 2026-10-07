@@ -87,3 +87,18 @@ test('censor bar briefly impairs opponents, shows its sender a short banner, and
   assert.equal(world.censorBannerRemaining[0], 0, 'sender banner expires quickly');
   assert.equal(world.censorRemaining[1], 0, 'opponent steering effect expires');
 });
+
+test('Eilerlass boost item: rank-weighted, self-applied turbo, never a projectile', async () => {
+  const { createItems, stepItems, ITEM_RULES } = await import('../src/items.ts');
+  const { gridKart } = await import('../src/track.ts');
+  const world = createItems(2);
+  world.slots[0] = 'boost';
+  const karts = [{ ...gridKart(0), speed: 10, turboRemaining: 0 }, gridKart(1)];
+  const out = stepItems(world, karts, [true, false], [1, 2], 1 / 60);
+  assert.equal(world.slots[0], null);
+  assert.equal(world.objects.length, 0);
+  assert.ok(out[0].turboRemaining >= ITEM_RULES.boostDuration - 1e-9 && out[0].speed > 13);
+  let boosts = 0; const w = createItems(6, 7);
+  for (let k = 0; k < 400; k++) { w.slots[5] = null; w.boxes.forEach(b => b.readyIn = 0); const box = w.boxes[0]; stepItems(w, Array.from({ length: 6 }, (_, i) => i === 5 ? { ...gridKart(5), x: box.x, z: box.z } : { ...gridKart(i), x: 9999, z: 9999 }), Array(6).fill(false), [1, 2, 3, 4, 5, 6], 1 / 60); if (w.slots[5] === 'boost') boosts++; }
+  assert.ok(boosts > 60, `last place should draw boosts often (${boosts}/400)`);
+});

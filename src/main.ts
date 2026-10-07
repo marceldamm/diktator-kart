@@ -599,7 +599,7 @@ class App {
     const own=this.castOf(0);
     const itemName=item?(item==='direct'||item==='homing'?`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`:ITEM_NAMES[item]):'';
     document.querySelector('#item-name')!.textContent=item?itemName:'Sendung abholen';
-    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':'✉';
+    document.querySelector('#item-icon')!.textContent=item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':item==='boost'?'📜':'✉';
     const itemCard=document.querySelector<HTMLElement>('#item-card')!,itemSlot=document.querySelector<HTMLElement>('#item-slot')!;
     itemCard.dataset.state=item?'ready':'empty';itemSlot.dataset.state=item?'ready':'empty';
     itemSlot.setAttribute('aria-label',item?`Item im Slot: ${itemName}`:'Item-Slot leer');
@@ -951,6 +951,7 @@ class App {
           for(const event of this.items.events) if(event.kart===0) {
             const projectile=this.castOf(0).projectileName;
             if(event.kind==='block'){this.itemMessage='Abgewehrt · Item als Schild verbraucht';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('hit');continue;}
+            if(event.item==='boost'){this.itemMessage=event.kind==='pickup'?'Eilerlass erhalten · E = Vorfahrt per Dekret':'Eilerlass · Vorfahrt per Dekret!';this.itemMessageUntil=this.items.time+1.6;if(event.kind==='launch')this.audio.cue('start');else this.audio.itemEvent('pickup');continue;}
             this.itemMessage=event.item==='censor'?(event.kind==='hit'?'Faktenlage amtlich geschwärzt':'FAKTENLAGE ERFOLGREICH GESCHWÄRZT'):event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+(event.item==='censor'?2.6:1.8);
             if(event.kind==='launch'&&event.item!=='trap'&&event.item!=='censor'&&this.castOf(0).projectile==='dog')this.audio.dogBark();else this.audio.itemEvent(event.kind);
@@ -959,7 +960,7 @@ class App {
             if(event.kind==='hit')this.say(0,'hit');
           }
           // A nearby rival's dog barks too (Hitler as a bot).
-          for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
+          for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&event.item!=='boost'&&event.item!=='censor'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
             this.audio.voice(event.item==='trap'||event.item==='censor'?'announcer-stamp':'announcer-delivery');this.audio.cheer(.5);
             window.setTimeout(()=>this.say(event.kart,'hit',.75),900);
