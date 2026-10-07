@@ -21,6 +21,8 @@ export interface TestScene {
   setPlayerVisible(visible: boolean): void;
   setQuality?(level: number, reducedEffects: boolean): void;
   presentItems?(world:ItemWorld,karts:KartState[]):void;
+  /** Orden (medals) along the circuit; hidden while respawning. */
+  presentMedals?(medals: { x: number; z: number; s: number; readyIn: number }[]): void;
   /** Builds the post-processing chain for the active gameplay camera. */
   attachCamera?(camera: Camera): void;
   celebrate?(kind: 'start' | 'finish'): void;

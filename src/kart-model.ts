@@ -1,4 +1,6 @@
 export interface KartState {
+  /** Extra top speed from pinned-on medals (src/medals.ts); 0 or absent for everyone without medals. */
+  topSpeedBonus?: number;
   x: number;
   z: number;
   heading: number;
@@ -195,7 +197,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
 
   if (drive > 0) {
     // A tank is heavy but not slow; a kart just pushed aside by one is briefly throttled.
-    const cap = turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : (state.slowRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .62 : (state.tankRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .94 : KART_TUNING.maxForwardSpeed;
+    const cap = turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : (state.slowRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .62 : (state.tankRemaining ?? 0) > 0 ? KART_TUNING.maxForwardSpeed * .94 : KART_TUNING.maxForwardSpeed + (state.topSpeedBonus ?? 0);
     speed = speed < 0
       ? Math.min(0, speed + KART_TUNING.braking * drive * dt)
       : speed > cap

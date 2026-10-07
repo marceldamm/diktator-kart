@@ -289,3 +289,8 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 #finish-card { max-height:calc(100vh - 24px);overflow:auto; }
 .keymap-title { margin:10px 0 4px;font-size:9px;letter-spacing:.1em;color:#d7bc86; }
 .keymap button { font-size:10px; }
+
+/* Orden (medals) counter under the speed display. */
+#medal-count { margin:0 0 .2rem;font-size:11px;letter-spacing:.04em;color:#e2b65c;white-space:nowrap; }
+#medal-count.full { color:#ffd98a;text-shadow:0 0 8px #e7c06a88; }
+#medal-count[hidden] { display:none; }

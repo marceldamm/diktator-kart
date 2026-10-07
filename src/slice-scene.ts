@@ -497,6 +497,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     let zeppelinTime = -1;
+    // Orden (medals): gilded discs on a short oxblood ribbon, thin-instanced, spinning slowly above the road.
+    const medalGold = new PBRMaterial('Medal gold', scene); medalGold.albedoColor = Color3.FromHexString('#d9a640'); medalGold.metallic = .9; medalGold.roughness = .25; medalGold.emissiveColor = new Color3(.18, .12, .02);
+    const medalRibbon = new PBRMaterial('Medal ribbon', scene); medalRibbon.albedoColor = Color3.FromHexString('#8e2230'); medalRibbon.roughness = .6;
+    const medalDisc = MeshBuilder.CreateCylinder('Medal disc', { diameter: .62, height: .07, tessellation: 18 }, scene); medalDisc.rotation.x = Math.PI / 2; medalDisc.bakeCurrentTransformIntoVertices(); medalDisc.material = medalGold; medalDisc.isPickable = false;
+    const medalBand = MeshBuilder.CreateBox('Medal ribbon', { width: .26, height: .42, depth: .05 }, scene); medalBand.position.y = .48; medalBand.bakeCurrentTransformIntoVertices(); medalBand.material = medalRibbon; medalBand.isPickable = false;
+    let medalBuffer = new Float32Array(0);
+    markGlow(medalDisc);
     /** Mussolini's 'Große Pose': chin up until this time (seconds) per kart slot. */
     const posingUntil: number[] = [];
     // Duce-Drom lap-2 event: the empty balcony 'speaks' and a rose-petal shower drifts over the Prunkstraße (decorative, same for all).
@@ -541,6 +548,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const api: TestScene = {
       scene,
       presentItems,
+      presentMedals(list) {
+        if (medalBuffer.length !== list.length * 16) { medalBuffer = new Float32Array(list.length * 16); for (const mesh of [medalDisc, medalBand]) mesh.thinInstanceSetBuffer('matrix', medalBuffer, 16, false); }
+        const t = performance.now() / 1000, m = new Matrix();
+        list.forEach((medal, i) => {
+          const visible = medal.readyIn <= 0, y = elevationAt(medal.s) + .85 + Math.sin(t * 2 + i) * .08;
+          Matrix.ComposeToRef(new Vector3(visible ? 1 : 0, visible ? 1 : 0, visible ? 1 : 0), Quaternion.RotationYawPitchRoll(t * 1.8 + i, 0, 0), new Vector3(medal.x, y, medal.z), m);
+          m.copyToArray(medalBuffer, i * 16);
+        });
+        medalDisc.thinInstanceBufferUpdated('matrix'); medalBand.thinInstanceBufferUpdated('matrix');
+      },
       attachCamera(camera) {
         pipeline?.dispose();
         ssao?.dispose(); ssao = undefined; if (sunShafts && gameCamera) { sunShafts.dispose(gameCamera); sunShafts = undefined; }

@@ -17,6 +17,7 @@ import { TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
 import { pickQuality } from './auto-quality';
+import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -113,6 +114,7 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  private medals:MedalWorld={medals:[],counts:[],events:[]};
   /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
   private autoQuality=false;
   private padButtons=new Map<string,boolean>();
@@ -339,7 +341,7 @@ class App {
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
-    this.queuedItemUse=false;this.itemDirection='forward';
+    this.queuedItemUse=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
     modeDisplay.textContent = 'Bereit';
@@ -556,14 +558,14 @@ class App {
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
     this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
-    this.queuedItemUse=false;this.itemHeld=false;this.itemDirection='forward';
+    this.queuedItemUse=false;this.itemHeld=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
     this.racePhase = 'countdown'; this.countdown = 3.4; this.raceTime = 0; this.testScene.resetEffects?.();
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();
+    this.ranking.reset();this.audio.setMusicTempo(1);
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -940,6 +942,12 @@ class App {
           const directions=all.map((_,i)=>i===0?this.itemDirection:'forward');
           const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP,directions);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           if(release)this.itemDirection='forward';
+          for(const event of this.items.events) if(event.kind==='hit') loseMedals(this.medals,event.kart);
+          { const medalled=stepMedals(this.medals,[this.kart,...this.loadKarts],FIXED_STEP);this.kart=medalled[0];this.loadKarts=medalled.slice(1);
+            for(const event of this.medals.events) if(event.kart===0){
+              if(event.kind==='pickup'){this.audio.itemEvent('pickup');if(this.medals.counts[0]===MEDAL_RULES.max){this.itemMessage='Brust voller Orden · Höchsttempo';this.itemMessageUntil=this.items.time+1.6;}}
+              else{this.itemMessage=`${event.amount} Orden verloren · Ansehen beschädigt`;this.itemMessageUntil=this.items.time+1.6;}
+            } }
           for(const event of this.items.events) if(event.kart===0) {
             const projectile=this.castOf(0).projectileName;
             if(event.kind==='block'){this.itemMessage='Abgewehrt · Item als Schild verbraucht';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('hit');continue;}
@@ -971,7 +979,7 @@ class App {
             const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
             this.lapNoticeUntil=this.raceTime+3;
-            if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);}
+            if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);if(this.lapTimes.length===2)this.audio.setMusicTempo(1.07);}
             if(this.lapTimes.length===1){
               if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
@@ -1084,12 +1092,14 @@ class App {
         if (a && b) this.testScene.setGhost?.({ x: a[0] + (b[0] - a[0]) * u, z: a[1] + (b[1] - a[1]) * u, heading: a[2] + Math.atan2(Math.sin(b[2] - a[2]), Math.cos(b[2] - a[2])) * u, height: a[3] });
       }
       this.testScene.presentItems?.(this.items,[this.renderKart,...renderBots]);
+      this.testScene.presentMedals?.(this.racePhase==='practice'?[]:this.medals.medals);
       this.camera?.update(this.renderKart, delta, false, frame.steering);
       this.testScene.setPlayerVisible(this.camera?.viewName !== 'Fahrerperspektive');
       this.updateRaceHud();
       this.commentary();
       if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? `STAATSFERNSEHEN · Freies Training · ${{ sun: 'Sonnenschein genehmigt', rain: 'Regen angeordnet', snow: 'Schneefall verordnet' }[this.weather]}` : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
+      { const el=document.querySelector<HTMLElement>('#medal-count'); if(el){const n=this.medals.counts[0]??0;el.textContent=`${'✪'.repeat(n)}${'·'.repeat(MEDAL_RULES.max-n)} ${n}/${MEDAL_RULES.max} Orden`;el.hidden=this.racePhase==='practice';el.classList.toggle('full',n===MEDAL_RULES.max);} }
       { const health=Math.round(this.damage.health[0]),meter=document.querySelector<HTMLElement>('#health')!;
         meter.classList.toggle('worn',health<66);meter.classList.toggle('critical',health<33);meter.classList.toggle('wrecked',this.damage.wrecked[0]>0);meter.classList.toggle('shown',this.racePhase==='practice');
         meter.setAttribute('aria-valuenow',String(health));meter.setAttribute('aria-valuetext',health===0?'Totalschaden':`${health} Prozent Fahrzeugzustand`);
