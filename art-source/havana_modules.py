@@ -42,6 +42,7 @@ def colonial_house(name, width=12.0, floors=2, seed=1):
     for k in range(4):
         px = rnd.uniform(-width / 2 + 1, width / 2 - 2); pz = rnd.uniform(gf + .5, top - 2)
         M.box(PLASTER, px, px + rnd.uniform(1, 2.6), -.07, -.01, pz, pz + rnd.uniform(.6, 1.6), (.78, .76, .72))
+    rear_facade(M, width, depth, gf, floors, fh, (.3, .28, .26))
     return M
 
 

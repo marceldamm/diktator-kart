@@ -399,5 +399,6 @@ export function advanceRace(race: RaceProgress, state: KartState, time: number):
   // Never award teleport progress or a jump between neighbouring track sections.
   if (Math.abs(delta) < 3) race.distance = Math.max(-TRACK.length, race.distance + delta);
   race.last = next;
-  if (race.distance >= TRACK.length * 3) { race.finished = true; race.finishTime = time; }
+  // The kart's nose (about 1.6 m ahead of its centre) decides the crossing, for every participant alike.
+  if (race.distance >= TRACK.length * 3 - 1.6) { race.finished = true; race.finishTime = time; }
 }

@@ -263,6 +263,21 @@ def rustic_floor(M, x0, x1, h):
         M.box(DARK, x0, x1, -.12 if r % 2 else -.1, 0, z0 + .03, z0 + h / rows - .03, .93 + .04 * (r % 2))
     M.box(DARK, x0, x1, -.06, 0, 0, h, .7)
 
+# --- Rear facades (Marcel 07.10.2026: no blank back walls where the circuit shows them) -------------
+def rear_facade(M, width, depth, gf, floors, fh, col=(.42, .45, .5)):
+    """Simple courtyard-side facade on the +Y wall: plinth band, punched windows with sills, floor bands."""
+    M.push(TR(0, depth) @ ROT(180))
+    M.box(DARK, -width / 2, width / 2, -.06, 0, 0, gf * .55, .86)
+    n = max(2, int(width / 3.0))
+    for f in range(floors + 1):
+        z = (gf * .55 + .6) if f == 0 else gf + (f - 1) * fh + .8
+        for k in range(n):
+            x = -width / 2 + (k + .5) * width / n
+            M.box(GLASS, x - .5, x + .5, -.05, .02, z, z + (1.6 if f == 0 else 1.9), col)
+            M.box(STONE, x - .62, x + .62, -.12, 0, z - .14, z - .03, .9)
+        if f > 0: M.box(STONE, -width / 2, width / 2, -.08, 0, gf + (f - 1) * fh - .1, gf + (f - 1) * fh + .05, .9)
+    M.pop()
+
 # --- Townhouses ----------------------------------------------------------------------------------
 def townhouse(name, width, axes, floors, roof='mansard', erker=False, giant=False, shutters=None, depth=13.0):
     M = Module(name)
@@ -349,6 +364,7 @@ def townhouse(name, width, axes, floors, roof='mansard', erker=False, giant=Fals
         for x in (-width / 2 + .3, -width / 6, width / 6, width / 2 - .3):
             M.lathe(LIME, x, .12, [(.25, 0), (.25, .2), (.35, .45), (.4, .8), (.22, 1.05), (.12, 1.25), (0, 1.35)], 10, .97, top + 1.5)
         mansard(M, -width / 2, width / 2, top, depth, h1=3.4, h2=1.0, dormers=axes // 2, roof=COPPER)
+    rear_facade(M, width, depth, gf, floors, fh)
     return M
 
 # --- Hero and civic modules ----------------------------------------------------------------------

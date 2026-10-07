@@ -13,7 +13,7 @@ import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
 import { attachMouseCamera } from './mouse-camera';
 import { interpolateKart } from './render-state';
-import { TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
+import { RAMP_LENGTH, RAMP_LIPS, TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
 import { pickQuality } from './auto-quality';
@@ -116,6 +116,12 @@ class App {
   private finishAction:()=>void=()=>void this.beginRace();
   private ranking=new RankingBoard(document.querySelector<HTMLOListElement>('#ranking')!);
   private gpIntroUntil=0;
+  /** True while the player has finished but rivals are still racing (results and points become final afterwards). */
+  private afterRace=false;
+  private afterRaceTime=0;
+  /** Ramp trick (Marcel, 07.10.): Space held near the ramp and released on it or in the air queues the trick. */
+  private rampHold=false;
+  private rampTrickQueued=false;
   /** Set once the player picked the opening track of the current Grand Prix. */
   private gpTrackChosen=false;
   /** Player's tyre set: 'auto' = the driver's own design, otherwise any set id from TIRE_SETS. */
@@ -591,7 +597,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.endCeremony();
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -724,6 +730,24 @@ class App {
     const reset = document.createElement('button'); reset.type = 'button'; reset.textContent = 'Standardtasten';
     reset.addEventListener('click', () => { resetBindings(); try { localStorage.removeItem('dk-keys-v1'); } catch { /* optional */ } this.renderKeymap(); });
     root.append(reset);
+  }
+  /** Result list and winner portrait from the live race ranking (updated while rivals are still finishing). */
+  private renderFinishResults(): void {
+    const names=this.order.map((_,i)=>i===0?`Du · ${this.castOf(0).name}`:this.castOf(i).name);
+    const ranking=rankRace(this.progress).map(i=>({p:this.progress[i],i}));
+    const list=document.querySelector('#finish-results')!;list.replaceChildren();
+    for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;
+      const shot=this.portraits?.[this.order[i]];if(shot)row.append(Object.assign(document.createElement('img'),{src:shot,alt:''}));row.append(label,time);list.append(row);}
+    // Winner's portrait on the podium card.
+    const winner=ranking[0]?.i??0,podium=document.querySelector<HTMLImageElement>('#finish-portrait');
+    if(podium){const shot=this.portraits?.[this.order[winner]];podium.hidden=!shot;if(shot){podium.src=shot;podium.alt=`Sieger ${this.castOf(winner).name}`;}}
+  }
+  /** Player is home, rivals still racing: points and times become final when everyone has crossed the line. */
+  private presentPendingFinish(): void {
+    const retry = document.querySelector<HTMLButtonElement>('#finish-retry')!, table = document.querySelector<HTMLElement>('#gp-standings')!;
+    table.hidden = false; table.replaceChildren(Object.assign(document.createElement('b'), { textContent: 'ZIELEINLAUF LÄUFT · DIE WERTUNG FOLGT, SOBALD ALLE IM ZIEL SIND' }));
+    retry.innerHTML = 'Rest überspringen <span>↵</span>';
+    this.finishAction = () => { if (!this.afterRace) return; this.afterRace = false; this.renderFinishResults(); this.presentFinishActions(rankRace(this.progress)); };
   }
   /** localStorage keys per circuit; the Stadionring keeps its earlier keys so existing records survive. */
   private storageKey(kind: 'race' | 'timetrial' | 'ghost' | 'lap'): string {
@@ -905,7 +929,7 @@ class App {
             this.racePhase='race';this.audio.cue('start');this.audio.voice('announcer-go',{force:true});this.audio.cheer(1);this.testScene?.celebrate?.('start');}
           else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before){this.audio.cue('countdown');this.audio.voice(`announcer-${Math.ceil(this.countdown-.4)}`,{force:true});}
         }
-        if (!countdown && this.racePhase !== 'finished') {
+        if (!countdown && (this.racePhase !== 'finished' || this.afterRace)) {
         const project = LAB_WORLD ? undefined : projectTrack;
         const traffic = [this.kart, ...this.loadKarts];
         const terrain = LAB_WORLD ? undefined : trackHeightAt;
@@ -916,7 +940,8 @@ class App {
         if(this.items.censorRemaining[0]>0)assisted.steering*=.72;
         if(this.abilities.kimPenaltyRemaining[0]>0)assisted.throttle*=.55;
         if((this.abilities.poseRemaining?.[0]??0)>0)assisted.throttle=Math.min(assisted.throttle,ABILITY_RULES.poseThrottle);
-        this.kart = advanceKart(this.kart, DEMO && !LAB_WORLD ? botInput(this.kart, 0, traffic) : assisted, FIXED_STEP, project, terrain);
+        // After the player's finish the state chauffeur (bot controller) drives on while the rivals complete their laps.
+        this.kart = advanceKart(this.kart, (DEMO || this.racePhase === 'finished') && !LAB_WORLD ? botInput(this.kart, 0, traffic) : assisted, FIXED_STEP, project, terrain);
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
           let botDrive=LAB_WORLD?{throttle:1,steering:CONTACT_SCENARIO?0:.75}:botInput(other,index+1,traffic);
@@ -955,7 +980,7 @@ class App {
         const resolved = resolveKartContacts([this.kart, ...this.loadKarts], project);
         this.kart = resolved[0];
         this.loadKarts = resolved.slice(1);
-        if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
+        if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice' || this.afterRace)) {
           const all=[this.kart,...this.loadKarts];
           const botsActive=this.racePhase==='race';
           const owners:AbilityOwner[]=this.order.map(driver=>driver===0?'tank':driver===4?'kim':driver===2?'pose':driver===5?'blockade':'none');
@@ -986,6 +1011,7 @@ class App {
                 this.abilityAnnouncementUntil=this.items.time+2.2;this.audio.itemEvent('launch');}
             }
             if(event.kind==='pose-applause'&&event.kart===0){this.itemMessage='Pflichtapplaus · Schub und kurz geschützt';this.itemMessageUntil=this.items.time+1.8;this.audio.cue('start');}
+            if(event.kind==='crush'&&event.target!==undefined){this.damage.health[event.target]=Math.max(0,this.damage.health[event.target]-22);if(event.target===0){this.itemMessage='Plattgewalzt · Karosserie beschädigt';this.itemMessageUntil=this.items.time+1.6;}}
             if(event.kind==='crush'&&event.kart===0){this.itemMessage='Überrollt · Gegner weggedrängt';this.itemMessageUntil=this.items.time+1.6;}
             if(event.kind==='kim-surge'&&(event.kart===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35)){
               this.abilityAnnouncementTitle='Rennergebnis NICHT manipuliert.';
@@ -1001,7 +1027,7 @@ class App {
             }
           }
         }
-        if (!LAB_WORLD && this.racePhase === 'race') {
+        if (!LAB_WORLD && (this.racePhase === 'race' || this.afterRace)) {
           const all=[this.kart,...this.loadKarts];
           const ranks=this.progress.map(p=>1+this.progress.filter(other=>other.distance>p.distance).length);
           // Hold E: the item trails behind as a shield; release E: throw it. Bots shield while they wait to use theirs.
@@ -1012,7 +1038,13 @@ class App {
           this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
           const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all,botStyleOf(i)?.itemPatience));
           const directions=all.map((_,i)=>i===0?this.itemDirection:'forward');
-          const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP,directions);this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
+          this.items.seekers=all.map((_,i)=>this.castOf(i).projectile==='dog');
+          const itemResult=stepItems(this.items,all,use,ranks,FIXED_STEP,directions);
+          for(const event of this.items.events) if(event.kind==='hit'&&event.item==='direct'&&event.owner!==undefined&&this.castOf(event.owner).projectile==='dog'){
+            // The shepherd explodes on impact: extra body damage and a burst at the victim.
+            this.damage.health[event.kart]=Math.max(0,this.damage.health[event.kart]-12);this.testScene?.abilityEvent?.('crush',event.owner,event.kart);
+            if(event.kart===0||Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<35)this.audio.thunder();
+          }this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           if(release)this.itemDirection='forward';
           for(const event of this.items.events) if(event.kind==='hit') loseMedals(this.medals,event.kart);
           { const medalled=stepMedals(this.medals,[this.kart,...this.loadKarts],FIXED_STEP);this.kart=medalled[0];this.loadKarts=medalled.slice(1);
@@ -1060,22 +1092,22 @@ class App {
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}
           }
-          if (this.progress[0].finished) {
-            this.racePhase = 'finished';
+          if (this.afterRace) {
+            this.afterRaceTime += FIXED_STEP;
+            const allIn = this.progress.every((p) => p.finished);
+            if (allIn || this.afterRaceTime > 60) { this.afterRace = false; this.renderFinishResults(); this.presentFinishActions(rankRace(this.progress)); }
+            else if (Math.round(this.afterRaceTime * 60) % 30 === 0) this.renderFinishResults();
+          }
+          if (this.progress[0].finished && this.racePhase !== 'finished') {
+            this.racePhase = 'finished'; this.afterRace = this.mode !== 'timetrial'; this.afterRaceTime = 0;
+            if(this.lapTimes.length<3)this.lapTimes.push(this.raceTime-this.lapTimes.reduce((sum,t)=>sum+t,0));
             this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.audio.cheer(1.4);
-            {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});const champion=rankRace(this.progress)[0];window.setTimeout(()=>this.say(won?0:champion,'win',won?1:.85),3200);}
+            {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});const champion=rankRace(this.progress)[0];window.setTimeout(()=>this.say(won?0:champion,'win',won?1:.85),1400);}
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-kicker')!.textContent=this.mode==='gp'&&this.gp?`GRAND PRIX · RENNEN ${this.gp.round+1}/${this.gp.tracks.length} · ${TRACK.name.toUpperCase()}`:this.mode==='timetrial'?`ZEITFAHREN · ${TRACK.name.toUpperCase()}`:`EINZELRENNEN · ${TRACK.name.toUpperCase()}`;
             document.querySelector('#finish-title')!.textContent = `Platz ${place} · Genehmigung erteilt`;
             document.querySelector('#finish-detail')!.textContent = `Drei Runden · ${this.raceTime.toFixed(2)} s · Runden ${this.lapTimes.map(t=>t.toFixed(2)).join(' / ')} s`;
-            const names=this.order.map((_,i)=>i===0?`Du · ${this.castOf(0).name}`:this.castOf(i).name);
-            const ranking=rankRace(this.progress).map(i=>({p:this.progress[i],i}));
-            const list=document.querySelector('#finish-results')!;list.replaceChildren();
-            for(const {p,i} of ranking){const row=document.createElement('li');row.classList.toggle('player-result',i===0);const label=document.createElement('strong');label.textContent=names[i];const time=document.createElement('small');time.textContent=p.finished?`${p.finishTime!.toFixed(2)} s`:`${Math.max(0,3*TRACK.length-p.distance).toFixed(0)} m Rest`;
-              const shot=this.portraits?.[this.order[i]];if(shot)row.append(Object.assign(document.createElement('img'),{src:shot,alt:''}));row.append(label,time);list.append(row);}
-            // Winner's portrait on the podium card.
-            const winner=ranking[0]?.i??0,podium=document.querySelector<HTMLImageElement>('#finish-portrait');
-            if(podium){const shot=this.portraits?.[this.order[winner]];podium.hidden=!shot;if(shot){podium.src=shot;podium.alt=`Sieger ${this.castOf(winner).name}`;}}
+            this.renderFinishResults();
             const bestKey=this.storageKey(this.mode==='timetrial'?'timetrial':'race');let improved=false;
             let best:number|null=null;try{const value=Number(localStorage.getItem(bestKey));if(value>0&&Number.isFinite(value))best=value;if(!DEMO&&(best===null||this.raceTime<best)){best=this.raceTime;improved=true;localStorage.setItem(bestKey,String(best));}}catch{}
             if(this.mode==='timetrial'&&improved&&!DEMO){try{localStorage.setItem(this.storageKey('ghost'),JSON.stringify({time:this.raceTime,driver:this.chosen,samples:this.ghostRecord,track:TRACK.id,laps:this.lapTimes}));}catch{}}
@@ -1086,12 +1118,12 @@ class App {
               document.querySelector('#finish-detail')!.textContent+=` · ${medal?`Medaille ${medal[1]}`:`Bronze ab ${(3*TRACK.length/13).toFixed(0)} s`}`;}
             if(this.mode==='timetrial')document.querySelector('#finish-title')!.textContent=improved?'Neue Bestzeit · Geist gespeichert':`Zeitfahren · ${this.ghostRun?`Geist ${this.ghostRun.time.toFixed(2)} s`:'beendet'}`;
             document.querySelector('#finish-best')!.textContent=`Stand bei deiner Zielankunft${best!==null?` · Bestzeit ${TRACK.name} ${best.toFixed(2)} s`:''}${bestLap!==null?` · Beste Runde ${bestLap.toFixed(2)} s`:''}${DEMO?' · Demonstrationsfahrt':''}`;
-            this.presentFinishActions(rankRace(this.progress));
+            if (!this.afterRace) this.presentFinishActions(rankRace(this.progress)); else this.presentPendingFinish();
             document.querySelector('#finish-card')!.removeAttribute('hidden');
           }
         }
         }
-        if (!LAB_WORLD && this.racePhase !== 'finished') {
+        if (!LAB_WORLD && (this.racePhase !== 'finished' || this.afterRace)) {
           // Boost pads: a short turbo for whoever drives over the glowing chevrons.
           { const allKarts=[this.kart,...this.loadKarts];
             allKarts.forEach((k,i)=>{this.padCooldown[i]=Math.max(0,(this.padCooldown[i]??0)-FIXED_STEP);
@@ -1108,9 +1140,15 @@ class App {
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }
           // Ramp: launch from the lip into a flight that scales with speed; a clean landing earns a short boost.
           { const allKarts=[this.kart,...this.loadKarts];
+            { const s=trackProgressOf(this.kart),inZone=RAMP_LIPS.some((lip)=>s>lip-RAMP_LENGTH-12&&s<lip+1.5),jumping=(this.kart.jumpRemaining??0)>0,space=this.input.isDown('hopDrift');
+              if(space&&(inZone||jumping))this.rampHold=true;
+              else if(this.rampHold&&!space){this.rampHold=false;if(inZone||jumping)this.rampTrickQueued=true;}
+              if(!inZone&&!jumping&&!space){this.rampHold=false;this.rampTrickQueued=false;} }
             allKarts.forEach((k,i)=>{
-              if((k.jumpRemaining??0)===0&&k.hopRemaining===0&&k.speed>3&&atRampLip(k.x,k.z)){const v=k.speed;allKarts[i]={...k,jumpRemaining:.45+v*.034,jumpDuration:.45+v*.034,jumpStart:1,jumpPeak:.7+v*.05,drifting:false,driftCharge:0};if(i===0)this.audio.cue('start');}
+              // A hop on the ramp no longer cancels the launch: the lip always takes the kart into the air.
+              if((k.jumpRemaining??0)===0&&k.speed>3&&atRampLip(k.x,k.z)&&k.height<1.2){const v=k.speed;allKarts[i]={...k,hopRemaining:0,jumpRemaining:.45+v*.034,jumpDuration:.45+v*.034,jumpStart:1,jumpPeak:.7+v*.05,drifting:false,driftCharge:0};if(i===0)this.audio.cue('start');}
               // Trick: Space in the air (player) or a confident bot spins the kart for a bigger landing boost.
+              if(i===0&&this.rampTrickQueued&&(allKarts[0].jumpRemaining??0)>.05&&!allKarts[0].trick){allKarts[0]={...allKarts[0],trick:true};this.rampTrickQueued=false;}
               if((k.jumpRemaining??0)>.15&&!k.trick&&((i===0&&frame.pressed.has('hopDrift'))||(i>0&&(k.jumpRemaining??0)<(k.jumpDuration??1)-.2&&i%2===1)))allKarts[i]={...allKarts[i],trick:true};
               if(k.landedClean){const trick=!!k.trick;allKarts[i]={...k,trick:false,landedClean:false,turboRemaining:Math.max(k.turboRemaining,trick?1.1:.7),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+(trick?3.6:2.5))};if(i===0){this.itemMessage=trick?'Trick gestanden · Großer Schub!':'Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(trick?1:.6);}}
               else if(k.trick&&(k.jumpRemaining??0)===0)allKarts[i]={...allKarts[i],trick:false};
@@ -1139,7 +1177,7 @@ class App {
           });
           this.kart=all[0];this.loadKarts=all.slice(1);this.testScene?.setSalvage?.(this.salvage);
         }
-        if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice')) {
+        if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice' || this.afterRace)) {
           // Cumulative damage from this step's contacts, crashes and item hits; a wreck waits for the state workshop.
           stepDamage(this.damage,[this.previousKart,...this.previousLoadKarts],[this.kart,...this.loadKarts],FIXED_STEP);
           for(const event of this.damage.events){

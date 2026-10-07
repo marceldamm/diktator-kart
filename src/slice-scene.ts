@@ -522,6 +522,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     markGlow(medalDisc);
     /** Mussolini's 'Große Pose': chin up until this time (seconds) per kart slot. */
     const posingUntil: number[] = [];
+    /** Tank victims: flattened like a pancake until this time (seconds), then spring back. */
+    const squashUntil: number[] = [];
     // Duce-Drom lap-2 event: the empty balcony 'speaks' and a rose-petal shower drifts over the Prunkstraße (decorative, same for all).
     const roseTexture = new DynamicTexture('Rose petal sprite', { width: 32, height: 32 }, scene, false);
     { const c = roseTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 12, 8, .4, 0, Math.PI * 2); c.fill(); roseTexture.hasAlpha = true; roseTexture.update(); }
@@ -548,7 +550,21 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     let waveTime = -1;
     const cableMaterial = new StandardMaterial('Salvage cable', scene); cableMaterial.diffuseColor = new Color3(.1, .1, .1);
     const cables = visuals.map((_, i) => { const c = MeshBuilder.CreateCylinder(`Salvage cable ${i}`, { diameter: .06, height: 1 }, scene); c.material = cableMaterial; c.isPickable = false; c.setEnabled(false);
-      const hook = MeshBuilder.CreateTorus(`Salvage hook ${i}`, { diameter: .5, thickness: .08, tessellation: 12 }, scene); hook.material = cableMaterial; hook.parent = c; hook.position.y = -.5; return c; });
+      return c; });
+    const rescueRed = new PBRMaterial('Salvage blimp red', scene); rescueRed.albedoColor = Color3.FromHexString('#8e1f26'); rescueRed.roughness = .45;
+    const rescueGold = new PBRMaterial('Salvage paragraph gold', scene); rescueGold.albedoColor = Color3.FromHexString('#d6a548'); rescueGold.metallic = .9; rescueGold.roughness = .28;
+    const paragraphPath = Array.from({ length: 33 }, (_, k) => { const t = k / 32, a = t * Math.PI * 2.6 - Math.PI * .3, side = t < .5 ? 1 : -1;
+      return new Vector3(Math.cos(a) * .32 * side, .9 - t * 1.8, 0); });
+    const rescueRigs = visuals.map((_, i) => {
+      const blimp = new TransformNode(`Salvage blimp ${i}`, scene); blimp.setEnabled(false);
+      const hull = MeshBuilder.CreateSphere(`Salvage blimp hull ${i}`, { diameter: 1, segments: 14 }, scene); hull.scaling.set(1.5, 1.5, 4.6); hull.parent = blimp; hull.material = rescueRed;
+      const band = MeshBuilder.CreateTorus(`Salvage blimp band ${i}`, { diameter: 1.52, thickness: .09, tessellation: 24 }, scene); band.rotation.x = Math.PI / 2; band.parent = blimp; band.material = rescueGold;
+      for (const [x, y] of [[0, .9], [0, -.9], [.9, 0], [-.9, 0]]) { const fin = MeshBuilder.CreateBox(`Salvage blimp fin ${i}`, { width: x ? .9 : .06, height: y ? .9 : .06, depth: .9 }, scene); fin.position.set(x, y, -2); fin.parent = blimp; fin.material = rescueGold; }
+      const gondola = MeshBuilder.CreateBox(`Salvage blimp gondola ${i}`, { width: .5, height: .35, depth: 1.2 }, scene); gondola.position.y = -.95; gondola.parent = blimp; gondola.material = rescueGold;
+      const hook = MeshBuilder.CreateTube(`Salvage paragraph hook ${i}`, { path: paragraphPath, radius: .07, tessellation: 8 }, scene); hook.material = rescueGold; hook.setEnabled(false);
+      for (const m of [hull, band, gondola, hook]) m.isPickable = false;
+      return { blimp, hook };
+    });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
     report?.('items');
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
@@ -596,7 +612,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       broadcast(_kart, text) { if (text !== captionText) { captionText = text; paintCaption(text); } },
       abilityEvent(kind, kart, target) {
         const at = lastStates[kind === 'crush' ? target ?? kart : kart]; if (!at) return;
-        if (kind === 'crush') { burst(puff, at, reducedEffects ? 10 : 40); burst(paper, at, reducedEffects ? 8 : 25); return; }
+        if (kind === 'crush') { burst(puff, at, reducedEffects ? 10 : 40); burst(paper, at, reducedEffects ? 8 : 25); squashUntil[target ?? kart] = performance.now() / 1000 + 2.4; return; }
         if (kind === 'kim-surge') { burst(paper, at, reducedEffects ? 14 : 42); burst(puff, at, reducedEffects ? 8 : 24); return; }
         if (kind === 'kim-audit') { smoke.emitter=new Vector3(at.x,.35,at.z);smoke.manualEmitCount=reducedEffects?8:24;return; }
         if (kind === 'pose') { posingUntil[kart] = performance.now() / 1000 + 1.3; return; }
@@ -875,6 +891,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           // The driver leans into the bend against the body roll.
           v.driver.rotation.z = (s.drifting ? s.driftDirection * .1 : 0) + Math.max(-.14, Math.min(.14, lateral * .013));
           v.head.rotation.z=Math.sin(s.heading-s.travelHeading)*-.16;
+          { const left = (squashUntil[index] ?? 0) - time; const flat = left > 0 ? Math.min(1, left / .3) * (left > 2.1 ? (2.4 - left) / .3 : 1) : 0; v.root.scaling.set(1 + .35 * flat, 1 - .62 * flat, 1 + .18 * flat); }
           v.head.rotation.x=(posingUntil[index]??0)>time?-.42:s.turboRemaining>0?-.06:s.impactRemaining>0?.09:0;
           if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }
           // Pedals follow what the driver is doing: gas while gaining speed, brake while slowing hard.
@@ -904,8 +921,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           { const left = salvageNow[index] ?? 0, cable = cables[index];
             if (left > 0) { const t = 3.2 - left, d = salvageDepth[index] ?? .9, y = t < 1 ? -d * t : -d + Math.min(1, (t - 1) / 1.4) * (d + 3.2);
               v.root.position.y = y + Math.sin(time * 3) * (t > 2.4 ? .08 : 0); v.root.rotation.z = t > 1 ? Math.sin(time * 2.4) * .12 : 0;
-              cable.setEnabled(t > .7 && d < 1.5); const top = 11, bottom = y + 1.6; cable.scaling.y = Math.max(.1, top - bottom); cable.position.set(s.x, (top + bottom) / 2, s.z);
-            } else { cable.setEnabled(false); v.root.rotation.z = 0; } }
+              const rig = rescueRigs[index], show = t > .7 && d < 1.5;
+              cable.setEnabled(show); const top = 11, bottom = y + 1.6; cable.scaling.y = Math.max(.1, top - bottom); cable.position.set(s.x, (top + bottom) / 2, s.z);
+              rig.blimp.setEnabled(t > .2); rig.blimp.position.set(s.x, top + 1.5 + Math.sin(time * 1.3) * .15, s.z); rig.blimp.rotation.y = s.heading + Math.sin(time * .7) * .1;
+              rig.hook.setEnabled(show); rig.hook.position.set(s.x, bottom + .9, s.z); rig.hook.rotation.y = s.heading + Math.PI / 2;
+            } else { cable.setEnabled(false); rescueRigs[index].blimp.setEnabled(false); rescueRigs[index].hook.setEnabled(false); v.root.rotation.z = 0; } }
           // Damage look: soot on the paint, engine smoke, and the comic driver ejection during a wreck.
           const health = healthNow[index] ?? 100, wrecked = (wreckedNow[index] ?? 0) > 0;
           const soot = wrecked ? .85 : health < 66 ? (66 - health) / 66 * .65 : 0;
