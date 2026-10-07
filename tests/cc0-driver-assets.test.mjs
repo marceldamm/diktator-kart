@@ -21,5 +21,12 @@ test('Hitler CC0 export retains cockpit head and nonconstant skin tint in COLOR_
     assert.ok([...position.getArray()].every(Number.isFinite));
   }
   assert.ok(nodes.some(n => n.getName() === 'Pilot moustache'));
+  assert.ok(!nodes.some(n => n.getName() === 'Pilot forelock'), 'the historical side part must not add a separate forehead curl');
+  assert.ok(nodes.some(n => n.getName() === 'Pilot suit'));
+  assert.ok(nodes.some(n => n.getName() === 'Pilot leather collar'));
+  assert.ok(nodes.some(n => n.getName() === 'Pilot leather harness'));
+  assert.ok(nodes.some(n => n.getName() === 'Pilot leather belt'));
+  assert.equal(nodes.filter(n => /^Pilot face crease [1-6]$/.test(n.getName())).length, 6);
+  assert.ok(doc.getRoot().listMaterials().some(m => m.getName() === 'Black leather'));
   assert.ok(!nodes.some(n => n.getName().startsWith('QA ')), 'studio lights/cameras must not ship in the driver GLB');
 });

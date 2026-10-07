@@ -1,5 +1,19 @@
 # Gemeinsamer Änderungsverlauf
 
+- **07.10.2026 – Modellwechsel zurück zum CC0-Fahrer und Outfit (Marcel, Codex):** Marcel stoppte die Wolfenstein-Version und bestätigte den zuvor verwendeten Quaternius-CC0-Fahrer als aktives Modell. R16/R22 (kahle Kopfhaut), R19/R20 (zu harte Gesichtsfalten) und R25 (überzogene Brauen) wurden verworfen; R28 behält R26s sichere Haarlinie, schmalere Lider und weiche Stirn-/Augenfalten und verbreitert Nasenspitze/Nasenflügel leicht. Der Fahrer trägt einen schwarzen, glänzenden Ledersuit mit Brustgeschirr, Halsband und Gürtel. Frontvergleich und Kartbilder: `docs/evidence/hitler-face-20261007/overlay-r28-front.jpg`, `r28-seating.png`. Die sichtbare Spielansicht zeigte Hände am Lenkrad und angewinkelte Beine im Fußraum; Pedalkontakt und menschliche Ähnlichkeitsabnahme bleiben offen.
+
+- **07.10.2026 – Wolfenstein-Zweig pausiert (Marcel):** Nach Auswahl des zuvor verwendeten Modells ist das Sketchfab-Wolfenstein-GLB nicht mehr die aktive Hitler-Runtimefigur. Frühere W1–W6-Vergleiche bleiben historische lokale Evidenz; es gab keinen öffentlichen Release.
+
+- **07.10.2026 – Wolfenstein-Augen-W5/W6 (historisch, lokal):** 3-mm-Rückversatz (W5) veränderte das identische Overlay kaum; W6 versetzte die verkleinerten Augäpfel 6 mm in die Augenhöhlen zurück. Nach Marcels Modellwechsel wurde die Arbeit gestoppt. Der lokale Inhalt liegt unter `.tools/paused-wolfenstein-20261007/`; nicht Teil dieser Veröffentlichung.
+
+- **07.10.2026 – Wolfenstein-Gesichtsabgleich W4 (historisch, lokal):** Die Augenmesh bestand aus zwei separaten Augäpfeln; W4 skalierte jeden um seinen Mittelpunkt. Nach Marcels Modellwechsel liegt die nicht veröffentlichte Vergleichsarbeit unter `.tools/paused-wolfenstein-20261007/`.
+
+- **07.10.2026 – Wolfenstein-Gesichtsabgleich W2–W3 (historisch, lokal):** Der feste Frontvergleich zeigte zu helles Quellhaar und breites Kopf-/Augenmaß; W2 tönt das Haar dunkel und W3 verfeinert Nase und untere Gesichtskontur. Diese nicht aktive Linie wurde gestoppt; lokale Quell-/Bilddateien liegen unter `.tools/paused-wolfenstein-20261007/`.
+
+- **07.10.2026 – Wolfenstein-Komplettmodell (historisch, nicht veröffentlicht):** Marcel wählte das Sketchfab-GLB zunächst als vollständigen Fahrer. Später stoppte er diese Variante ausdrücklich und setzte den Quaternius-CC0-Fahrer wieder ein. Rechte an der kommerziellen Ausgangsfigur sind ungeklärt; Quelldateien und Bilder bleiben lokal unter `.tools/paused-wolfenstein-20261007/`.
+
+- **07.10.2026 – Referenzgeführte Gesichtsiterationen R11–R15 (Marcel, Codex):** Frontfoto und identische Blender-Ansichten wiederholt übereinandergelegt und bewertet. R11 senkte den Quiff und korrigierte die Bartgröße; R12s Entfernen der Stirnlocke wurde zunächst wegen Profil-Kante verworfen, R14s zu starke Abflachung wegen kahler Kopfspur. Marcel stellte klar, dass Hitler keine einzelne Stirnlocke trägt. R15 entfernt dieses separate Teil, behält die seitlich gescheitelte Kappe und die strengere Lid-/Brauenform. Aktueller Blender-/GLB-Stand R15, Ähnlichkeit weiterhin offen. Belege, Attribution und Prüfgrenzen in [Gesichtsevidenz](docs/evidence/hitler-face-20261007/README.md); Blender-/Buildquelle in PROGRESS-LOG.md.
+
 - **07.10.2026 – Erster CC0-Hitler-Gesichtspass (Marcel, Codex):** Wangen/Unterkiefer, Nase, Lider/Brauen und Schädel-/Haarvolumen gegenüber dem gemeinsamen Ausgangskopf verändert; subtile Hautvariation im Runtime-Export abgesichert. Feste Blender-Vergleichsbilder und gezielte Spielprobe vorhanden. Historische Ähnlichkeit bleibt offen; Kleidung und Kontakte sind Folgearbeit. Issue #13, technische Details in PROGRESS-LOG.md.
 
 - **07.10.2026 – Blender-Prüfung mit Einzelbildern (Marcel, korrigiert):** Hintergrundrenderings mit festen Front-/Dreiviertel-/Profil- und Kontaktansichten im Chat verwenden. Der kurzzeitig gewünschte Blender-Vordergrundablauf wurde ausdrücklich zurückgenommen, nachdem der Editor überlagerte Varianten zeigte. Assetbilder und abschließende sichtbare Spielprüfung bleiben getrennt. Regel in AGENTS.md, TEAM-NOTES.md und docs/21-team-workflow.md.
@@ -171,3 +185,11 @@ Für Marcel und Sarah: nur wichtige besprochene Entscheidungen und sichtbare Än
 - **Hitler-Anker als Zwischenstufe:** eigener Grand-Prix-Wagen, Jacke mit Krawatte, kompakter Bart, ohne Mütze und Abzeichen. Realitätsnahes Gesicht bleibt nächster Schritt.
 - **Atmosphäre:** wärmeres Licht, Fluss, Konfetti, neuer Motorklang (noch nicht angehört).
 - **Detailpass (Claude, zweiter Lauf):** Prachtallee steigt jetzt als Kuppe an, Ladenschilder mit satirischen Namen, Hitler-Kopf und Anzug verfeinert, Reifen klingen je nach Untergrund, Wasser platscht. Zwei alte Testfehler behoben.
+
+## 07.10.2026 – CC0-Fahrer wieder aktiv, R23–R26 und schwarzer Lederanzug (Codex)
+
+- Marcel stoppte den Wolfenstein-Komplettmodellversuch ausdrücklich und setzte den zuvor verwendeten Quaternius-CC0-Fahrer wieder als Arbeits-/Runtimebasis. Wolfenstein bleibt pausierte lokale Historie.
+- Die festen Blender-Front-/Profil-/Dreiviertel-Overlays wurden fortgesetzt. R16/R22-Kronenabflachungen, R19/R20-Falten und R25s überzogene Brauen/zu kleiner Kragen wurden nach Sichtvergleich verworfen. R26 ist ein vorsichtiger Arbeitskandidat mit feinen Stirn-/Augenfalten, schmaleren Lidern und leicht angepasster Brauen-/Nasen-/Wangenform; Gesicht, Haar und Ausdruck weichen klar von der Referenz ab.
+- Hitlers Anzug ist im CC0-GLB schwarz und leicht glänzend, mit Halsband, Brustgeschirr und Gürtel. Sitz- und Pedalkontakt ist in Blender noch nicht bestätigt.
+- R27s minimale Kronenkürzung legte im Profil kahle Kopfhaut frei und wurde verworfen. R28 stellt die sichere R26-Haarform wieder her und verbreitert die Nasenspitze/Flügel leicht. Sichtbare Chrome-Rennansicht lud den schwarzen Suit; Seitenansicht zeigte Hände am Lenkrad und angewinkelte Beine im Fußraum. Exakter Pedalkontakt bleibt offen.
+- Produktionsbuild erfolgreich; Vollsuite nach Sandbox-Freigabe 95/95 bestanden. PR/Actions/Merge und die teamseitige menschliche Ähnlichkeitsabnahme stehen noch aus.
