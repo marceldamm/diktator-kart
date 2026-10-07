@@ -14,7 +14,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 PANEL = (320, 376)
 PHOTO_CROP = (164, 15, 300, 172)
-MODEL_CROP = (186, 110, 455, 420)
+# Recalibrated 08.10.2026 against the reference hairline and eye row; the
+# earlier top crop left excess background above the Blender head and made all
+# facial landmarks appear too low in the overlay.
+MODEL_CROP = (186, 135, 455, 420)
 OPACITY = 0.48
 
 
