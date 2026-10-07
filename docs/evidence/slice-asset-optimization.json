@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-07T18:05:46.938Z",
+  "date": "2026-10-07T18:15:33.594Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -34,8 +34,33 @@
     },
     {
       "name": "cc0-driver-hitler",
-      "originalBytes": 10091456,
-      "runtimeBytes": 1939644
+      "originalBytes": 3785940,
+      "runtimeBytes": 948272
+    },
+    {
+      "name": "cc0-driver-stalin",
+      "originalBytes": 3855244,
+      "runtimeBytes": 968048
+    },
+    {
+      "name": "cc0-driver-mussolini",
+      "originalBytes": 3812832,
+      "runtimeBytes": 942160
+    },
+    {
+      "name": "cc0-driver-mao",
+      "originalBytes": 3851172,
+      "runtimeBytes": 969844
+    },
+    {
+      "name": "cc0-driver-kim",
+      "originalBytes": 3837312,
+      "runtimeBytes": 958860
+    },
+    {
+      "name": "cc0-driver-castro",
+      "originalBytes": 3850488,
+      "runtimeBytes": 971336
     }
   ]
 }

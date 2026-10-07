@@ -578,29 +578,48 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       return { blimp, hook };
     });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
-    // CC0 driver pilot (07.10.2026): ?pilot=1 seats the Quaternius-based Hitler (art-source/build_cc0_driver.py) in kart 0.
-    if (new URLSearchParams(location.search).get('pilot') === '1' && visuals[0]) {
-      const pilot = await LoadAssetContainerAsync('/assets/models/cc0-driver-hitler.glb', scene);
-      scene.onDisposeObservable.add(() => pilot.dispose());
-      const inst = pilot.instantiateModelsToScene((n) => `pilot/${n}`, false);
-      const v0 = visuals[0];
-      // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
-      const oldDriver = new Set<AbstractMesh>([v0.driver, v0.head, ...v0.arms.filter((x): x is TransformNode => !!x)].flatMap((n) => n.getChildMeshes(false)));
-      for (const m of v0.root.getChildMeshes(false)) if (/driverPose|headPose|armPose|cast-|scarfFlap|gripHand|White glove|Uniform racing suit|Cape cloth|Hat cloth|Hair and leather/.test(m.name)) oldDriver.add(m);
-      const hideOld = () => { for (const m of oldDriver) if (m.isEnabled()) m.setEnabled(false); };
-      hideOld(); scene.onBeforeRenderObservable.add(hideOld);
-      // The CC0 body has realistic arm lengths; bring the wheel 10 cm towards the chest so the hands reach the rim.
-      v0.steering.position.z += .1;
-      // Cockpit camera: the eye sits inside the pilot's head, so head, hair and face parts are hidden while the camera is that close.
-      const pilotHead = inst.rootNodes.flatMap((r) => r.getChildMeshes(false)).filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar/.test(m.name));
-      const headMesh = pilotHead.find((m) => /Pilot head/.test(m.name));
-      if (headMesh) scene.onBeforeRenderObservable.add(() => {
-        const cam = scene.activeCamera; if (!cam) return;
-        const b = headMesh.getBoundingInfo().boundingSphere;
-        const inside = Vector3.Distance(cam.globalPosition, b.centerWorld) < b.radiusWorld * 2.2;
-        for (const m of pilotHead) if (m.isEnabled() === inside) m.setEnabled(!inside);
+    // CC0 drivers (07.10.2026, Marcel's method switch): Quaternius-based bodies from art-source/build_cc0_driver.py
+    // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
+    if (new URLSearchParams(location.search).get('pilot') !== '0') {
+      const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
+      const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(`/assets/models/cc0-driver-${id}.glb`, scene)] as const)));
+      scene.onDisposeObservable.add(() => { for (const c of models.values()) c.dispose(); });
+      const seats = visuals.map((v, index) => {
+        // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
+        const old = new Set<AbstractMesh>([v.driver, v.head, ...v.arms.filter((x): x is TransformNode => !!x)].flatMap((n) => n.getChildMeshes(false)));
+        for (const m of v.root.getChildMeshes(false)) if (/driverPose|headPose|armPose|cast-|scarfFlap|gripHand|White glove|Uniform racing suit|Cape cloth|Hat cloth|Hair and leather/.test(m.name)) old.add(m);
+        // Realistic arm lengths: the wheel comes 10 cm towards the chest so the hands reach the rim.
+        v.steering.position.z += .1;
+        // The holder follows the old driver node: lean in corners, rise into the tank hatch, ejection after a wreck.
+        const holder = new TransformNode(`cc0Driver-${index}`, scene); holder.parent = v.orientation;
+        const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined };
+        const sit = (cast: CastMember) => {
+          if (seat.style === cast.faceStyle) return;
+          for (const m of seat.meshes) { shadow.removeShadowCaster(m); }
+          for (const n of holder.getChildren()) n.dispose();
+          const inst = models.get(cast.faceStyle)!.instantiateModelsToScene((n) => `cc0-${index}/${n}`, false);
+          for (const r of inst.rootNodes) r.parent = holder;
+          seat.meshes = inst.rootNodes.flatMap((r) => r.getChildMeshes(false));
+          for (const m of seat.meshes) { m.receiveShadows = true; shadow.addShadowCaster(m); }
+          seat.head = seat.meshes.filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar|mole|top hair|cap|cigar/.test(m.name));
+          seat.skull = seat.head.find((m) => /Pilot head/.test(m.name)); seat.style = cast.faceStyle;
+        };
+        const dress = v.dress; v.dress = (cast: CastMember) => { dress(cast); sit(cast); };
+        sit(CAST[(roster[index] ?? index) % CAST.length]);
+        return seat;
       });
-      for (const r of inst.rootNodes) { r.parent = visuals[0].orientation; for (const m of r.getChildMeshes(false)) { m.receiveShadows = true; shadow.addShadowCaster(m); } }
+      scene.onBeforeRenderObservable.add(() => {
+        const cam = scene.activeCamera;
+        seats.forEach((seat, i) => {
+          for (const m of seat.old) if (m.isEnabled()) m.setEnabled(false);
+          const d = visuals[i].driver; seat.holder.position.y = d.position.y; seat.holder.rotation.x = d.rotation.x; seat.holder.rotation.z = d.rotation.z;
+          // Cockpit camera: the eye sits inside the head, so head, hair and face parts hide while the camera is that close.
+          if (!cam || !seat.skull) return;
+          const b = seat.skull.getBoundingInfo().boundingSphere;
+          const inside = Vector3.Distance(cam.globalPosition, b.centerWorld) < b.radiusWorld * 2.2;
+          for (const m of seat.head) if (m.isEnabled() === inside) m.setEnabled(!inside);
+        });
+      });
     }
     report?.('items');
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
