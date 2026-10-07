@@ -4,7 +4,7 @@
 
 **Abgleich:** Während des Abschlusses wurde `origin/main` auf `f842e00` (PR #15, Pjöngjang-Strecke) aktualisiert. Die gemeinsame Worklist, der Fortschrittslog und der Änderungsverlauf enthielten parallel lokale CC0-Fahrer- und Sarah-Streckenänderungen; beide Seiten wurden zusammengeführt. `LONG-TERM-GOALS.md` und `TEAM-NOTES.md` wurden automatisch integriert. Die neue Strecke, Tests und Dokumente aus `main` bleiben unverändert erhalten; R28-Änderung und CC0-Belege bleiben ebenfalls erhalten.
 
-**Prüfstatus:** Die Konfliktauflösung ist dokumentiert und wird in einem Merge-Commit gesichert. Die Abschlussworkflow-Tests/Build müssen nach dieser Integration erneut laufen; Branch-Push und PR sind bis dahin offen. Es wurde kein direkter Push nach `main` ausgeführt.
+**Prüfung und Veröffentlichung:** Die manuell aufgelöste Integration wurde mit Merge-Commit `1118166` gesichert. Danach bestanden `npm test` mit 105/105 und `npm run build` (1.302 Module; bekannte Warnung zum großen Hauptchunk). Arbeitsbranch auf GitHub bestätigt; PR [#16](https://github.com/marceldamm/diktator-kart/pull/16) erhielt den erfolgreichen Pflichtcheck `validate / tests-and-build` und wurde regulär zusammengeführt. `origin/main` bestätigt Merge-Commit `e900094`; lokaler Branch und inaktiver lokaler `main` wurden per Fast-Forward aktualisiert. Issue #13 bleibt für menschliche Ähnlichkeits-/Stilabnahme und eindeutigen Pedalkontakt offen. Es erfolgte kein direkter Push nach `main`.
 
 ## 2026-10-07 – Erster CC0-Hitler-Gesichtspass und Blender-Bildprüfung (Codex)
 

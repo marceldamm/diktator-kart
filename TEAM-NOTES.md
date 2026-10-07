@@ -301,22 +301,22 @@ Für die neue Babylon-Version habe ich die Steuerung für Items festgelegt: Rohr
 
 **Referenzdurchgang W4 (Codex, 07.10.2026, historisch):** Isolierter Augenmesh-Render bestätigte zwei getrennte Augenkomponenten ohne Brauen. W4 verkleinerte/vertiefte sie um je einen Augenmittelpunkt; der dunkle Balken blieb. W5/W6 testeten einen Rückversatz. Nach Marcels Modellwechsel wurden alle weiteren Schritte eingestellt; der lokale Vergleich liegt unter `.tools/paused-wolfenstein-20261007/`.
 
-**Rückversatzversuche W5/W6 (Codex, 07.10.2026):** 3 mm (W5) erzeugte im unveränderten Foto-/Render-Overlay praktisch keine sichtbare Änderung und wurde zurückgenommen. 6 mm (W6) wirkt leicht weniger hervorstehend, der Brauen-/Lidbalken bleibt. W6 bleibt vorläufiger Runtime-Kandidat. Nächster Schritt: UV- und Materialquelle des dunklen Balkens identifizieren, vor weiterer Geometrieänderung. Evidence-Ordner enthält beide Tests samt gleicher 1938er Vorlage.
+**Rückversatzversuche W5/W6 (Codex, 07.10.2026, historisch):** W5 mit 3 mm veränderte das Overlay kaum; W6 mit 6 mm wirkte leicht weniger hervorstehend. Marcel stoppte diese Modelllinie anschließend ausdrücklich. Quelldateien und Bilder liegen lokal unter `.tools/paused-wolfenstein-20261007/`.
 
 ### 07.10.2026 – Auswahl zurück zum CC0-Modell und schwarzer Anzug
 
 **Quelle:** Marcels neue ausdrückliche Steuerung: die Wolfenstein-Version stoppen und mit dem zuvor verwendeten Modell weiterarbeiten; die Bildvergleichsmethode fortführen und danach einen schwarzen S&M-Anzug anlegen.
 
-**Aktueller Stand:** Quaternius-CC0-Fahrer ist wieder die aktive Runtimefigur. R16 und R22 wurden wegen sichtbarer kahler Kopfhaut verworfen. R23 behält die seitliche Haarlinie, mit schmaleren Augen/Brauen und leicht verlängertem Nasenrücken; Stirn-/Augenfalten sind als feine, weich gerundete Meshzüge auf die Vorderseite projiziert. R20s dunkle Röhren und längere Nasolabiallinien wurden wegen aufgemalter/„barteliger“ Wirkung verworfen. Der Anzug ist schwarz und leicht glänzend, mit matterem Brustgeschirr, Gürtel und Halsband. Blender-Kartbilder zeigen noch ungeklärte Kartteile und sind keine Runtime-Abnahme.
+**Aktueller Stand (08.10.2026):** R28 des Quaternius-CC0-Fahrers ist mit PR #16 in `main` (Merge `e900094`). Verglichen mit festen Front-/Profil-/Dreiviertel-Overlays behält der Kandidat R26s sichere Haarform, feine Lid-/Brauenänderungen und eine etwas breitere Nasenspitze; zahlreiche frühere Varianten wurden verworfen. Der Anzug ist schwarz und leicht glänzend, mit Brustgeschirr, Gürtel und Halsband. Sichtbare Chrome-Seitenansicht zeigte Hände am Lenkrad und angewinkelte Beine; die genaue Fuß-/Pedalauflage blieb unklar. Die Gesichtsnachbildung bleibt erkennbar stilisiert.
 
-**Nächster Schritt:** Overlay R23 beurteilen und weitere gezielte Formpassagen nach Front-/Profil-/Dreiviertelvergleich durchführen; Outfit-/Kartpreview bereinigen und in sichtbarer Babylon-Runtime Sitz, Hände und Pedale prüfen. Der Wolfenstein-Zweig ist pausiert und nicht aktiv.
+**Nächster Schritt:** Issue #13 bleibt offen. Weitere kleine Gesichtsvarianten gegen dieselben Fotoansichten prüfen und eine sichtbare Runtime-Aufnahme mit eindeutiger Fuß-/Pedalposition sichern. Der Wolfenstein-Zweig ist pausiert und nicht aktiv.
 
 ### 07.10.2026 spät – Fortschreibung nach R26
 
 **Quelle:** Marcel bestätigte die Rückkehr zum vorletzten CC0-Fahrer und bat um wiederholten Bildvergleich, Gesichtsdetails, schwarzen S&M-Anzug sowie späteren Abschluss/Veröffentlichung.
 
-**Status (Codex):** R23–R26 liegen als gleiche-Kamera-Front-/Profil-/Dreiviertel- und Kart-Previewbilder vor. R26 ist ein lokaler Arbeitskandidat, keine bestätigte Ähnlichkeit. Der schwarze Lederanzug mit Halsband, Brustgeschirr und Gürtel ist in der Runtime-GLB-Datei. Blender zeigt die Sitzpose nur teilweise; Hände greifen den Lenkradkranz nicht sauber, Pedalkontakt ist nicht bestätigt. Eine sichtbare Babylon-Prüfung fehlt noch.
+**Status (Codex):** R23–R28 wurden mit gleichen Kameras und einem Foto-Overlay verglichen; die kuratierten Bilder liegen unter `docs/evidence/hitler-face-20261007/`. R28 ist in main enthalten, aber keine bestätigte historische Ähnlichkeit. Der schwarze Lederanzug mit Halsband, Brustgeschirr und Gürtel ist in der Runtime-GLB-Datei.
 
-**Offen:** Gesicht weiter verfeinern, Spielansicht/Lenkrad-/Pedalposition verifizieren, Vollsuite und Produktionsbuild belegen, Issue #13/CURRENT-WORKLIST/Progress synchron halten, nur die freigegebene CC0-Arbeit in einem PR veröffentlichen. Teamabschluss verlangt erfolgreichen `tests-and-build`-Check und PR-Merge; direkter Push nach `main` ist nicht der Projektworkflow. Rechner-Ruhezustand erst nach bestätigter Veröffentlichung ausführen.
+**Offen:** Gesicht weiter verfeinern, sichtbare Fuß-/Pedalposition belegen und Marcels Ähnlichkeits-/Stilurteil aufnehmen. PR #16 hat `tests-and-build` bestanden und ist in main integriert; Issue #13 bleibt dafür offen. Direkte Pushes nach `main` sind nicht der Projektworkflow. Der Rechner wurde nach der erfolgreichen Veröffentlichung in den angeforderten Ruhezustand versetzt.
 
 **Fortschreibung (Codex, gleicher Auftrag):** R27s Kronenkürzung wurde wegen kahler Hinterkopf-/Scheitelfläche im Profil verworfen. R28 ist wieder auf sicherer R26-Haarform und verbreitert nur die Nasenspitze/Nasenflügel leicht. Sichtbare Chrome-Seitenansicht zeigte Hände am Lenkrad und angewinkelte Beine im Fußraum; Pedalberührung ist noch nicht eindeutig. Der Modellvergleich bleibt eine deutliche Näherung und braucht Marcels Urteil.
