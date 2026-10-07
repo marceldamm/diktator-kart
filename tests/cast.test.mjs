@@ -9,7 +9,7 @@ const glbDocument = JSON.parse(glb.toString('utf8', 20, 20 + glbJsonLength));
 const glbNodeNames = new Set(glbDocument.nodes.map(({ name }) => name));
 
 test('the six current drivers keep distinct kart and face variants with deliberate cap assignments', () => {
-  assert.deepEqual(DRIVER_HEAD_SCALE, [0.82, 0.79, 0.77]);
+  assert.deepEqual(DRIVER_HEAD_SCALE, [0.75, 0.74, 0.74]);
   assert.equal(CAST.length, 6);
   assert.equal(new Set(CAST.map(({ body }) => body)).size, CAST.length, 'each driver retains an individual kart silhouette');
   assert.equal(new Set(CAST.map(({ faceStyle }) => faceStyle)).size, CAST.length, 'each driver has an individually sculpted head variant');

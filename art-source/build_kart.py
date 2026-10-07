@@ -100,17 +100,17 @@ limousine_glass = mat('Limousine touring glass', (.18, .36, .39), .12, .18)
 limousine_glass.node_tree.nodes.get('Principled BSDF').inputs['Alpha'].default_value = .24
 limousine_glass.surface_render_method = 'BLENDED'
 uniform = mat('Uniform racing suit', (.8, .77, .68), 0, .78)
-skin = mat('Mature skin', (.5, .35, .27), 0, .84)
+skin = mat('Mature skin', (.46, .33, .27), 0, .78)
 cape_cloth = mat('Cape cloth', (.5, .04, .06), 0, .72)
 hat_cloth = mat('Hat cloth', (.12, .14, .16), 0, .7)
 fur = mat('Fur trim', (.42, .36, .3), 0, .98)
 white_glove = mat('White glove', (.86, .84, .78), 0, .6)
 eye_white = mat('Eye white', (.78, .74, .68), 0, .48)
 mouth_inner = mat('Mouth interior', (.12, .03, .025), 0, .92)
-lips = mat('Lip rouge', (.38, .13, .11), 0, .58)
+lips = mat('Lip rouge', (.33, .17, .14), 0, .62)
 lens = mat('Sunglass lens', (.02, .025, .03), .6, .08)
 medal_red = mat('Medal ribbon', (.6, .05, .08), 0, .6)
-iris = mat('Eye iris', (.22, .12, .055), 0, .42)
+iris = mat('Eye iris', (.3, .19, .1), 0, .32)
 
 kart = empty('hero-kart')
 
@@ -446,8 +446,12 @@ for z, rx, ry, jut in rows:
     for k in range(N):
         a = 2 * math.pi * k / N
         front = max(0, math.sin(a))                         # +Y is the face
-        jowl = .05 * front ** 2 if z < 0 else 0
-        hv.append(((rx + jowl * .6) * math.cos(a), (ry + jowl) * math.sin(a) + jut * front, z))
+        back = max(0, -math.sin(a))
+        jowl = .03 * front ** 2 if z < 0 else 0
+        # Adult skull in plan view: fuller occiput, flatter and narrower face plane (no balloon cheeks).
+        c, s_ = math.cos(a), math.sin(a)
+        flat = 1 - .12 * front ** 3
+        hv.append(((rx * .92 + jowl * .6) * c * (1 - .05 * front), (ry * (.9 * flat if s_ > 0 else 1.06) + jowl) * s_ + jut * front, z * 1.05))
 for j in range(len(rows) - 1):
     for k in range(N): hf.append((j * N + k, j * N + (k + 1) % N, (j + 1) * N + (k + 1) % N, (j + 1) * N + k))
 hf.append(tuple(reversed(range(N)))); hf.append(tuple((len(rows) - 1) * N + k for k in range(N)))
@@ -459,10 +463,11 @@ for v in head_mesh.data.vertices:
     x, y, z = v.co
     if y <= 0: continue
     f = min(1, y / .2)                                                    # sculpt only the face side
-    dy = (.018 * bump(x, z, 0, .19, .14, .03)                              # brow ridge
-          - .03 * (bump(x, z, .095, .14, .045, .035) + bump(x, z, -.095, .14, .045, .035))  # eye sockets
-          + .016 * (bump(x, z, .14, .05, .05, .05) + bump(x, z, -.14, .05, .05, .05))       # cheekbones
-          - .012 * (bump(x, z, .12, -.05, .05, .05) + bump(x, z, -.12, -.05, .05, .05))     # cheek hollows
+    dy = (.026 * bump(x, z, 0, .19, .15, .03)                              # brow ridge
+          - .042 * (bump(x, z, .095, .14, .045, .035) + bump(x, z, -.095, .14, .045, .035))  # eye sockets
+          + .018 * (bump(x, z, .15, .07, .04, .035) + bump(x, z, -.15, .07, .04, .035))     # cheekbones
+          - .02 * (bump(x, z, .12, -.05, .05, .05) + bump(x, z, -.12, -.05, .05, .05))      # cheek hollows
+          + .012 * bump(x, z, 0, .08, .025, .08)                          # nose bridge root
           + .022 * bump(x, z, 0, -.16, .07, .04)                          # chin
           - .008 * bump(x, z, 0, -.09, .07, .02))                         # mouth line
     dx = .01 * math.copysign(bump(abs(x), z, .2, -.1, .05, .06), x)      # jaw corners
@@ -564,6 +569,7 @@ for sd in [-1, 1]:
     ellipsoid('Eye white', (sd * .095, .248, .14), (.05, .026, .036), eye_white, head)
     ellipsoid('Eye iris', (sd * .095, .268, .136), (.027, .01, .027), iris, head, 12)
     ellipsoid('Eye pupil', (sd * .095, .274, .136), (.012, .006, .014), leather, head, 10)
+    ellipsoid('Eye catchlight', (sd * .089, .278, .145), (.0045, .002, .0045), eye_white, head, 6)
     tube('Upper eyelid', [(sd * .043, .259, .143), (sd * .061, .273, .168),
                           (sd * .095, .277, .176), (sd * .129, .273, .168),
                           (sd * .147, .259, .143)], .008, skin, head)

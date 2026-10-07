@@ -7,7 +7,7 @@
 export type ProjectileStyle = 'dog' | 'tractor' | 'megaphone' | 'book' | 'rocket' | 'briefcase';
 
 /** Shared, slightly enlarged head scale keeps the driver portrait readable over the broad kart bodies. */
-export const DRIVER_HEAD_SCALE = [0.82, 0.79, 0.77] as const;
+export const DRIVER_HEAD_SCALE = [0.75, 0.74, 0.74] as const;
 
 export interface CastMember {
   name: string;
