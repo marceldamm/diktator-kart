@@ -11,7 +11,9 @@ const signedGap = (s: number) => { const d = wrap(s); return d > TRACK.length / 
 
 // Uniform hash grid over centreline samples for nearest-segment lookup.
 const CELL = 6;
-const grid = new Map<string, number[]>();
+const grid = new Map<number, number[]>();
+// Numeric cell key (08.10.2026): string keys allocated for every probe and cost ~2.5 % of a frame.
+const cellKey = (cx: number, cz: number) => (cx + 32768) * 65536 + (cz + 32768);
 
 /** Builds the centreline, lookup grid and shortcut path of the active layout. */
 function rebuild(): void {
@@ -20,7 +22,7 @@ function rebuild(): void {
   Object.assign(TRACK, { halfWidth: TRACK_HALF_WIDTH, wall: TRACK_HALF_WIDTH + 1, length: built.length, start: START_PROGRESS, samples: SAMPLES, id: TRACK_INFO.id, name: TRACK_INFO.name });
   grid.clear();
   SAMPLES.forEach((p, i) => {
-    const key = `${Math.floor(p.x / CELL)},${Math.floor(p.z / CELL)}`;
+    const key = cellKey(Math.floor(p.x / CELL), Math.floor(p.z / CELL));
     const list = grid.get(key) ?? []; list.push(i); grid.set(key, list);
   });
   SHORTCUT_PATH = buildShortcutPath(); SHORTCUT_LENGTH = SHORTCUT_PATH.length;
@@ -78,7 +80,8 @@ export function trackLocate(x: number, z: number): { s: number; lane: number } {
   let best = -1, bestDistance = Infinity;
   for (let ring = 1; ring <= 6 && best < 0; ring += 2) {
     for (let dx = -ring; dx <= ring; dx++) for (let dz = -ring; dz <= ring; dz++) {
-      for (const i of grid.get(`${cx + dx},${cz + dz}`) ?? []) {
+      const cell = grid.get(cellKey(cx + dx, cz + dz)); if (!cell) continue;
+      for (const i of cell) {
         const d = (SAMPLES[i].x - x) ** 2 + (SAMPLES[i].z - z) ** 2;
         if (d < bestDistance) { bestDistance = d; best = i; }
       }
