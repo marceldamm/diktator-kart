@@ -638,7 +638,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         // Realistic arm lengths: the wheel comes 22 cm towards the chest and 3 cm up so the wrists sit just behind
         // the rim at ten-to-two (08.10.: at 10 cm the hands hovered 18 cm behind it); the column grows to match.
         v.steering.position.z += .22; v.steering.position.y += .03;
-        for (const m of v.steering.getChildMeshes(false)) if (/Polished steel/.test(m.name)) m.scaling.z *= 1.41;
+        // B1 (08.10.2026): the column sits below the hub, off the wheel's spin axis, and used to orbit with the rim.
+        // It now hangs on the wheel's parent, so only the rim turns.
+        const turn = v.steering.rotation.z; v.steering.rotation.z = 0; v.steering.computeWorldMatrix(true);
+        for (const m of v.steering.getChildMeshes(false)) if (/Polished steel/.test(m.name)) { m.scaling.z *= 1.41; m.computeWorldMatrix(true); m.setParent(v.steering.parent); }
+        v.steering.rotation.z = turn;
         // The holder follows the old driver node: lean in corners, rise into the tank hatch, ejection after a wreck.
         const holder = new TransformNode(`cc0Driver-${index}`, scene); holder.parent = v.orientation;
         const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined, arms: [] as PilotArm[] };

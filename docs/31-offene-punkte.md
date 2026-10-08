@@ -10,12 +10,12 @@ Der Cloud-Thread „Stand auf main bringen“ legt zu jedem Eintrag ein GitHub-I
 
 | Nr. | Titel | Beschreibung | Status |
 |---|---|---|---|
-| B1 | Lenksäule kreist beim Lenken mit | Die Lenksäule hängt am Lenkrad, liegt aber außerhalb seiner Drehachse; bei Einschlag schwenkt sie sichtbar um die Nabe (Spielbilder `hands-*-20261008.png`). Sie soll fest stehen, nur das Rad dreht. | offen |
+| B1 | Lenksäule kreist beim Lenken mit | Die Lenksäule hängt am Lenkrad, liegt aber außerhalb seiner Drehachse; bei Einschlag schwenkt sie sichtbar um die Nabe (Spielbilder `hands-*-20261008.png`). Sie soll fest stehen, nur das Rad dreht. | erledigt (Säule hängt am Lenkradträger, Beleg `docs/evidence/b1-left-20261008.png`) |
 | B2 | Zu viele Draw Calls pro Kart | Jedes Kart besteht im Rennen aus ~45 Meshes, jeder Fahrer aus ~14; zusammen etwa die Hälfte aller Draw Calls. Statische Teile gleichen Materials zur Laufzeit zusammenfassen. | offen |
 | B3 | Schwache Grafik ungemessen | Intel UHD lief früher mit ca. 14 FPS (Standard). Nach den Leistungspässen vom 08.10. fehlt eine neue Messung auf einem Rechner mit integrierter Grafik (Issue #4). | nur menschlich prüfbar |
 | B4 | ~1.950 deaktivierte Meshes je Bild durchlaufen | Alle Karosserie-, Rad- und alten Fahrervarianten bleiben in der Szene und werden jedes Bild geprüft (≈7 % CPU in `_evaluateActiveMeshes`/`getActiveMeshCandidates`). | offen |
 | B5 | Fahrerkarten: Haut wirkt orange | In den Porträts der Fahrerwahl sind alle Gesichter rot-orange; neutraleres Studiolicht änderte nichts. Ursache (Hauttextur, Umgebungslicht oder Bildverarbeitung) suchen. | offen |
-| B6 | Fehlendes favicon (404) | Jeder Seitenaufruf erzeugt einen 404-Fehler für `/favicon.ico` in der Konsole. | offen |
+| B6 | Fehlendes favicon (404) | Jeder Seitenaufruf erzeugt einen 404-Fehler für `/favicon.ico` in der Konsole. | erledigt (`public/favicon.svg`, DK-Monogramm) |
 | B7 | Hauptbundle 2,1 MB | Der Build warnt bei jedem Lauf vor dem großen Hauptchunk; Babylon-Teile könnten nachgeladen werden, um den Start zu beschleunigen. | offen |
 | B8 | Pjöngjang: Deckübergänge und Tunnel ungeprüft | Nahansicht der Brückendecks und der Tunnelinnenraum der Ewige-Führer-Allee sind noch nicht im Spiel abgenommen (Issue #14). | offen |
 | B9 | Fuß-/Pedalkontakt nicht belegt | Füße der CC0-Fahrer sind im Spiel verdeckt; Kontakt mit den Pedalen ist nicht nachgewiesen (Issue #13). | gestoppt |
