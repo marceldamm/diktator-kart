@@ -9,6 +9,12 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Projektstart Sarah – 08.10.2026
+
+**Aktuell:** Sarahs bestätigter visueller Wasser-/Uferpass für die Ewige-Führer-Allee ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14)) ist lokal umgesetzt und geprüft. Auf Branch `codex/team-sarah-20261008-131455-001`, Basis `4d15188`, wurden Pyongyang-spezifisches mattes, deckendes Wasser, eine Granit-Kaimauer mit Deckkante/Wasserliniensims und bündige Deckabschnitte unter den zwei nördlichen Straßenquerungen ergänzt. Der lokale Boden-A/B änderte das Pyongyang-Albedo von `#a9aaa5` auf `#929791`; das Nahpflaster bleibt lesbar, der Fernhorizont wirkt fast unverändert. `npm test` (105/105), `npm run build` und `git diff --check` bestanden.
+
+**Nächster Schritt:** Projektabschluss über den geprüften Arbeitsbranch und PR abschließen. Offen bleiben die Ursache der hellen Fernaufhellung (F3 bei `z≈200`, Stadtboden; kein transparentes Loch bestätigt), eine gezielte Nahansicht der Deckübergänge, der Tunnelinnenraum sowie unabhängige menschliche Fahr-/Stil-/Hörproben. Laufzeitbilder wurden nicht dauerhaft gespeichert. Intel-UHD-Abnahme (Issue #4), Team-Praxistest (Issue #2) und Issue #13 bleiben unabhängig offen.
+
 ## Projektstart und Team-Synchronisierung – 07./08.10.2026 (Codex für Marcel)
 
 **Aktuell:** Der Projektstart begann auf `origin/main` `90cc6d0`; beim Abschluss wurde `f842e00` mit Sarahs viertem Kurs integriert. PR #16 ist nach 105/105 Tests und Produktionsbuild in `main` zusammengeführt (`e900094`). Der persönliche Branch und der nicht anderweitig ausgecheckte lokale `main` stehen per Fast-Forward auf diesem Merge.
