@@ -666,11 +666,16 @@ class App {
   }
 
   private minimapTrack: HTMLCanvasElement | undefined;
+  // Track bounds per course: recomputing them for every dot cost ~2 % of a frame (CPU profile 08.10.2026).
+  private minimapFrame: { samples: unknown; cx: number; cz: number; scale: number } | undefined;
   private minimapPoint(x: number, z: number): [number, number] {
-    const xs = TRACK.samples.map((p) => p.x), zs = TRACK.samples.map((p) => p.z);
-    const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs);
-    const scale = Math.min(130 / (maxX - minX), 210 / (maxZ - minZ));
-    return [75 + (x - (minX + maxX) / 2) * scale, 115 - (z - (minZ + maxZ) / 2) * scale];
+    if (this.minimapFrame?.samples !== TRACK.samples) {
+      const xs = TRACK.samples.map((p) => p.x), zs = TRACK.samples.map((p) => p.z);
+      const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs);
+      this.minimapFrame = { samples: TRACK.samples, cx: (minX + maxX) / 2, cz: (minZ + maxZ) / 2, scale: Math.min(130 / (maxX - minX), 210 / (maxZ - minZ)) };
+    }
+    const f = this.minimapFrame;
+    return [75 + (x - f.cx) * f.scale, 115 - (z - f.cz) * f.scale];
   }
   private drawMinimapTrack(): void {
     const canvas = document.createElement('canvas'); canvas.width = 150; canvas.height = 230; const c = canvas.getContext('2d')!;

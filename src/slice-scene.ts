@@ -130,6 +130,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     scene.metadata={timings,gpuTimings};
     scene.onDisposeObservable.add(()=>{timings.dispose();gpuTimings.dispose();});
     const glow = new GlowLayer('Restrained lamp and exhaust glow', scene, { mainTextureRatio: .35 }); glow.intensity = .45;
+    // The glow map redraws the whole scene as occluders (~15 % of a frame's CPU, profile 08.10.2026). Its blurred
+    // result is soft enough to refresh every second frame; the composite still runs each frame.
+    const glowMap = (glow as unknown as { _mainTexture?: { refreshRate: number } })._mainTexture;
+    if (glowMap) glowMap.refreshRate = 2;
     // Every mesh draws into the glow map so drivers, karts and buildings hide lamps behind them; only marked
     // lamp/flame meshes contribute colour, all others render black as occluders (no glow through bodies).
     const glowing = new Set<object>();
@@ -332,7 +336,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         ssao = new SSAO2RenderingPipeline('Ambient occlusion', scene, { ssaoRatio: .5, blurRatio: .5 }, [gameCamera], true);
         ssao.radius = 1.4; ssao.totalStrength = 1.1; ssao.base = .12; ssao.samples = 16; ssao.maxZ = 140; ssao.expensiveBlur = true;
       }
-      if (!high && ssao) { ssao.dispose(); ssao = undefined; }
+      if (!high && ssao) { ssao.dispose(true); ssao = undefined; } // true: also stop the G-buffer pass, which otherwise kept redrawing every mesh after leaving Hoch
       if (high && !sunShafts && gameCamera) {
         sunShafts = new VolumetricLightScatteringPostProcess('Sun shafts', 1, gameCamera, sunDisc, 70, Texture.BILINEAR_SAMPLINGMODE, engine, false);
         sunShafts.exposure = .16; sunShafts.decay = .965; sunShafts.weight = .45; sunShafts.density = .9;
