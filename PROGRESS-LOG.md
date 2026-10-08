@@ -1,5 +1,9 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-08 – Pjöngjang mit halbem Nebel (Marcels Entscheidung)
+
+Marcel wählte im Projekt-Thread „halbe Dichte“. `slice-scene.ts`: Basisnebel 0,0012 statt 0,0024, nur für das Pjöngjang-Thema; Regen/Schnee setzen weiter ihre eigenen Werte. Sichtbare Chrome-Prüfung: Pjöngjang 0,0012, Stadionring unverändert 0,0024 (`docs/evidence/pyong-fog-after-20261008.png`). `npm test` 107/107, Build erfolgreich.
+
 ## 2026-10-08 – Streckensuche schneller, Ursache der Pjöngjang-Fernaufhellung (Claude)
 
 **Auftrag:** Marcel (Projekt-Thread, 17:17/17:21): Modell- und Gesichtsarbeit beenden, andere offene Punkte angehen. Diese Nachrichten erreichten die Sitzung erst nach Abschluss von R74 (PR #22).
