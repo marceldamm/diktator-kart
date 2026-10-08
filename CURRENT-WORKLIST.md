@@ -20,13 +20,15 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] PR nach `main` und `tests-and-build`: [PR #22](https://github.com/marceldamm/diktator-kart/pull/22) gemergt.
 - [x] Leistung, erster Pass (Issue #4): verwaistes G-Buffer-Rendering nach „Hoch“ abgestellt, Glow-Karte jedes zweite Bild, Minimap-Cache; Draw Calls in Basis halbiert ([Messung](docs/evidence/performance-draw-calls-20261008.json)).
 - [ ] Intel-UHD-Messung selbst (fehlt auf Marcels Rechner); nächste Posten: Kart-/Fahrer-Draw-Calls, Schattenpass, Stadtkacheln.
-- [ ] Porträtlicht der Fahrerkarten (Haut zu orange); Haarsträhnen und Augen beim Hitler-Modell.
+- [ ] Porträtlicht der Fahrerkarten (Haut zu orange): neutraleres Licht half nicht. Modellarbeit (Haar, Augen) ist auf Marcels Wunsch vom 08.10. gestoppt.
+- [x] Streckensuche `trackLocate` mit numerischen Rasterschlüsseln (2,5 % → 1 % Frame-CPU).
+- [ ] Pjöngjang-Fernaufhellung: Ursache ist der gemeinsame warme Nebel ([A/B](docs/evidence/pyong-fog-ab-20261008.png)); streckeneigener Nebel braucht Sarahs oder Marcels Entscheidung.
 
 ## Projektstart Sarah – 08.10.2026
 
 **Erledigt:** Sarahs bestätigter Wasser-/Uferpass für die Ewige-Führer-Allee ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14)) ist nach erfolgreicher Vollsuite und Produktionsbuild über [PR #20](https://github.com/marceldamm/diktator-kart/pull/20) in `main` integriert (Merge `001b351`). Der sichtbare Chrome-Rennlauf zeigte Wasser, Uferwand, Deck/Schienen und Straßenquerungen; die entfernte helle Stadtfläche blieb ungeklärt. Kein Bildbeleg wurde gespeichert. Der Pflichtcheck `tests-and-build` war erfolgreich.
 
-**Offen, separat weiterzuverfolgen:** Ursache der Fernaufhellung, Nahansicht der Deckübergänge, Tunnelinnenraum und menschliche Fahr-/Stil-/Hörproben. Intel-UHD-Abnahme (Issue #4), Team-Praxistest (Issue #2) und Fahrer-/Ähnlichkeitsabnahme (Issue #13) bleiben eigenständige offene Aufgaben.
+**Offen, separat weiterzuverfolgen:** Fernaufhellung (Ursache 08.10. gefunden: gemeinsamer warmer Nebel, Entscheidung offen, siehe oben), Nahansicht der Deckübergänge, Tunnelinnenraum und menschliche Fahr-/Stil-/Hörproben. Intel-UHD-Abnahme (Issue #4), Team-Praxistest (Issue #2) und Fahrer-/Ähnlichkeitsabnahme (Issue #13) bleiben eigenständige offene Aufgaben.
 
 ## Projektstart und Team-Synchronisierung – 07./08.10.2026 (Codex für Marcel)
 

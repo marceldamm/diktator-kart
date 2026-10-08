@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-08 – Streckensuche schneller, Ursache der Pjöngjang-Fernaufhellung (Claude)
+
+**Auftrag:** Marcel (Projekt-Thread, 17:17/17:21): Modell- und Gesichtsarbeit beenden, andere offene Punkte angehen. Diese Nachrichten erreichten die Sitzung erst nach Abschluss von R74 (PR #22).
+
+**Streckensuche:** `trackLocate` erzeugte für jede geprüfte Rasterzelle einen Text-Schlüssel; numerische Schlüssel senken den Anteil im CPU-Profil des Grand Prix von 2,5 % auf 1,0 %. Streckentests 33/33, Vollsuite 107/107.
+
+**Fernaufhellung Pjöngjang (Befund, keine Änderung):** Ursache ist der für alle Strecken gleiche warme Exp2-Nebel (Farbe 0,86/0,80/0,70, Dichte 0,0024): bei 300 m liegen rund 40 % Nebelanteil auf Gebäuden und Wasser. A/B im selben Bild mit halber Dichte zeigt dunklere Dächer und kräftigere Fassaden in der Ferne (`docs/evidence/pyong-fog-ab-20261008.png`, oben Ist, unten halbe Dichte). Vorschlag: streckeneigene Nebeldichte/-farbe für Pjöngjang. Das ist eine Stilentscheidung zu Sarahs Strecke und bleibt bis zu ihrer oder Marcels Bestätigung offen.
+
+**Verworfen:** Neutraleres Studiolicht für die Fahrerkarten änderte den orangen Hautton sichtbar nicht (Ursache liegt wohl in Hauttextur/Umgebungslicht) und wurde zurückgenommen.
+
 ## 2026-10-08 – Leistung: verwaistes G-Buffer-Rendering, Glow-Takt, Minimap (Claude)
 
 **Befund (CPU-Profil und A/B im sichtbaren Chrome, RTX 3070 Laptop; Intel UHD ist auf diesem Rechner nicht vorhanden):** Wer einmal „Grafik Hoch" gewählt hatte, behielt in Standard und Basis einen unsichtbaren G-Buffer-Durchlauf: `SSAO2RenderingPipeline.dispose()` schaltet den Geometry-Buffer-Renderer ohne Argument nicht ab, er zeichnete weiter jedes Mesh. Die Glow-Ebene zeichnet die ganze Szene als Verdecker (~15 % der Frame-CPU). Die Minimap berechnete die Streckengrenzen für jeden Punkt neu (~2 %).
