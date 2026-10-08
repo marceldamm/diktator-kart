@@ -1,6 +1,6 @@
 # Ewige-Führer-Allee (Pjöngjang)
 
-**Stand:** 07.10.2026 · **Name und Ort:** Sarahs Streckenliste. Route, Kulisse und Fahrmechaniken wurden als Umsetzung des beauftragten Streckenpakets ausgearbeitet; konkrete Layoutdetails sind keine zusätzlichen historischen Behauptungen.
+**Stand:** 08.10.2026 · **Name und Ort:** Sarahs Streckenliste. Route, Kulisse und Fahrmechaniken wurden als Umsetzung des beauftragten Streckenpakets ausgearbeitet; konkrete Layoutdetails sind keine zusätzlichen historischen Behauptungen.
 
 ## Leitbild
 
@@ -30,4 +30,4 @@ Das separate weiß-graue Ufergeländer wird an beiden Nordufer-Kreuzungen der St
 
 Die Strecke ist in Einzelrennen, Zeitfahren und Grand Prix auswählbar. Gezielte Regressionen prüfen den ebenen Rundkurs, Tunnel und Boosts, Lenkung an der Einfahrt, Pfeilerkontakt/Dodge/Rückstoß, Bots über drei Runden und das Startgatter nach der Startlinie. Fullsuite und Produktionsbuild bestanden; ein sichtbarer Demo-GP bestätigte den ersten Gatterbruch und die aktivierten Fragmente.
 
-**Offen:** Menschliche Fahr-/Stilprobe, visuelle Nahprüfung der endgültigen Tunnelinnenansicht und Trümmerlesbarkeit, Audioabnahme und Messung auf Intel UHD. Der Wasser-/Uferpass wurde im sichtbaren Dev-Runtime-Seitenblick angesehen; ein dauerhafter Bildbeleg wurde nicht gespeichert. Die helle Fläche links der Fahrbahn braucht eine eigene Ursachenprüfung.
+**Offen:** Menschliche Fahr-/Stilprobe, visuelle Nahprüfung der endgültigen Tunnelinnenansicht und Trümmerlesbarkeit, Audioabnahme und Messung auf Intel UHD. Im sichtbaren Chrome-Einzelrennen waren Wasser, Uferwand, Deck/Schienen und Straßenquerungen in der Rennansicht erkennbar; ein dauerhafter Bildbeleg wurde nicht gespeichert. Die breite helle Fernfläche blieb sichtbar und braucht eine eigene Ursachenprüfung. Die Querungsdecks wurden nicht aus der Nähe abgenommen.
