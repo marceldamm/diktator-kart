@@ -17,8 +17,9 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 - [x] Gesichter von Stalin, Mussolini, Mao, Kim und Castro älter und charaktervoller (`art-source/driver_faces.py`).
 - [x] Fahrerwahl zeigt wieder Porträts (waren seit dem CC0-Wechsel leer).
 - [x] Hitler R68–R74 mit Overlays (Bart, Nase, Strähne, Brauen, Ohren, Hautton); R69a/R73 verworfen; R67 bleibt Rückfall. Ähnlichkeit weiter nicht menschlich abgenommen ([Issue #13](https://github.com/marceldamm/diktator-kart/issues/13)).
-- [ ] PR nach `main` und `tests-and-build`.
-- [ ] Leistung auf schwacher Grafik (Issue #4): Intel UHD fehlt auf diesem Rechner; GPU-Kosten der Effekte messen und senken.
+- [x] PR nach `main` und `tests-and-build`: [PR #22](https://github.com/marceldamm/diktator-kart/pull/22) gemergt.
+- [x] Leistung, erster Pass (Issue #4): verwaistes G-Buffer-Rendering nach „Hoch“ abgestellt, Glow-Karte jedes zweite Bild, Minimap-Cache; Draw Calls in Basis halbiert ([Messung](docs/evidence/performance-draw-calls-20261008.json)).
+- [ ] Intel-UHD-Messung selbst (fehlt auf Marcels Rechner); nächste Posten: Kart-/Fahrer-Draw-Calls, Schattenpass, Stadtkacheln.
 - [ ] Porträtlicht der Fahrerkarten (Haut zu orange); Haarsträhnen und Augen beim Hitler-Modell.
 
 ## Projektstart Sarah – 08.10.2026

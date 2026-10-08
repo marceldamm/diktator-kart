@@ -1,5 +1,15 @@
 # Fortschrittslog und globale Projekthistorie
 
+## 2026-10-08 – Leistung: verwaistes G-Buffer-Rendering, Glow-Takt, Minimap (Claude)
+
+**Befund (CPU-Profil und A/B im sichtbaren Chrome, RTX 3070 Laptop; Intel UHD ist auf diesem Rechner nicht vorhanden):** Wer einmal „Grafik Hoch" gewählt hatte, behielt in Standard und Basis einen unsichtbaren G-Buffer-Durchlauf: `SSAO2RenderingPipeline.dispose()` schaltet den Geometry-Buffer-Renderer ohne Argument nicht ab, er zeichnete weiter jedes Mesh. Die Glow-Ebene zeichnet die ganze Szene als Verdecker (~15 % der Frame-CPU). Die Minimap berechnete die Streckengrenzen für jeden Punkt neu (~2 %).
+
+**Änderungen:** `ssao.dispose(true)`; Glow-Karte aktualisiert jedes zweite Bild (`refreshRate 2`, Komposit weiter jedes Bild); Minimap-Grenzen je Strecke zwischengespeichert. Ein Glasflächen-Trim im Stadt-Kit (nur die zwei breiten Scheibenflächen) brachte auf dieser GPU messbar nichts und wurde zurückgenommen.
+
+**Messung:** `docs/evidence/performance-draw-calls-20261008.json`. Grand Prix, 1280×800, abwechselnd alt/neu: Draw Calls Basis 988 → 457, Standard ~2.110 → 1.685; Basis P95 33 → 17 ms. Ruhige Startaufstellung (nur G-Buffer-Fix): Basis 1.097 → 549 Draw Calls, GPU 12,0 → 7,8 ms, CPU 19,7 → 13,9 ms. Millisekundenwerte schwanken mit der Hintergrundlast des Rechners. `npm test` 107/107, Build erfolgreich, `git diff --check` sauber.
+
+**Offen:** Intel-UHD-Messung (Issue #4). Größte verbleibende Posten: Karts und Fahrer (~45 + 14 Meshes je Fahrzeug, etwa die Hälfte der Draw Calls), Schattenpass, Stadtblöcke (260-m-Kacheln, wenig Culling), `trackLocate`.
+
 ## 2026-10-08 – Claude-Arbeitsblock: Hände am Lenkrad, ältere Gesichter, Hitler R68–R74
 
 **Auftrag:** Marcels Projektstart (Projekt-Thread, 08.10.2026) mit den offenen Punkten aus dem Projektgedächtnis; danach Marcels ausdrücklicher Auftrag „Mache das als erstes": Hitler-Gesicht ab R67 in kleinen Blender-Schritten mit Referenzoverlays weiterentwickeln, PR anlegen. Branch `claude/project-thread-93qjup` von `origin/main` `4b04eeb`.

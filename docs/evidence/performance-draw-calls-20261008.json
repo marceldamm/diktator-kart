@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-08",
+  "author": "Claude (Marcel's project start)",
+  "machine": "Marcel's laptop, NVIDIA GeForce RTX 3070 Laptop GPU only (no Intel UHD present); background load ~50 % CPU from other apps during the runs",
+  "method": "Visible CDP Chrome (port 9231), 1280x800 viewport, ?track=stadionring&weather=sun&demo=1, Grand Prix via tests/cdp.mjs startGrandPrix, 12 s into the race, photo mode; quality switched with the options button (Standard -> Hoch -> Basis -> Standard, so Basis and Standard are measured after Hoch was visited, as in normal toggling). 150 rAF intervals; gpu/cpu from Babylon EngineInstrumentation/SceneInstrumentation averages. Runs interleaved old/new/old/new via git stash of src/main.ts and src/slice-scene.ts.",
+  "changes": [
+    "SSAO2 dispose(true): leaving Hoch now also disables the geometry-buffer renderer, which otherwise kept redrawing every mesh each frame in Standard and Basis",
+    "Glow map refreshRate 2 (blurred occluder pass every second frame)",
+    "Minimap bounds cached per track instead of recomputed for every dot"
+  ],
+  "runs": [
+    {"variant": "new", "Basis": {"p50": 16.7, "p95": 16.8, "gpuMs": 18.42, "cpuMs": 27.07, "drawCalls": 457}, "Standard": {"p50": 33.3, "p95": 49.9, "gpuMs": 17.7, "cpuMs": 26.87, "drawCalls": 1684}},
+    {"variant": "old", "Basis": {"p50": 16.8, "p95": 33.4, "gpuMs": 16.99, "cpuMs": 26.1, "drawCalls": 988}, "Standard": {"p50": 33.4, "p95": 50.1, "gpuMs": 18.56, "cpuMs": 27.71, "drawCalls": 2122}},
+    {"variant": "new", "Basis": {"p50": 16.7, "p95": 16.9, "gpuMs": 13.53, "cpuMs": 22.06, "drawCalls": 456}, "Standard": {"p50": 33.3, "p95": 33.5, "gpuMs": 13.73, "cpuMs": 22.59, "drawCalls": 1686}},
+    {"variant": "old", "Basis": {"p50": 16.8, "p95": 33.4, "gpuMs": 17.13, "cpuMs": 25.91, "drawCalls": 988}, "Standard": {"p50": 33.4, "p95": 50.1, "gpuMs": 18.6, "cpuMs": 27.42, "drawCalls": 2106}}
+  ],
+  "reading": "Draw calls halve in Basis (988 -> 457) and drop ~20 % in Standard; Basis p95 falls from 33 ms to 17 ms. Millisecond values swing with the machine's background load and are not a clean A/B. The quiet-machine practice-grid check before the glow change measured Basis 1097 -> 549 draws, gpu 12.0 -> 7.8 ms, cpu 19.7 -> 13.9 ms for the G-buffer fix alone. Intel UHD itself is not measured (issue #4 stays open).",
+  "notDone": "Glass-pane triangle trim in the city kit showed no measurable change on this GPU and was reverted."
+}

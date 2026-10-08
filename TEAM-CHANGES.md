@@ -1,5 +1,6 @@
 # Gemeinsamer Änderungsverlauf
 
+- **08.10.2026 – Leistung erster Pass (Marcel, Claude):** Nach einmal gewählter Grafikstufe „Hoch" lief ein unsichtbarer G-Buffer-Durchlauf weiter; behoben. Glow-Karte nur noch jedes zweite Bild, Minimap-Cache. Draw Calls in Basis von 988 auf 457. Intel UHD selbst bleibt ungemessen (Issue #4).
 - **08.10.2026 – Hände folgen dem Lenkrad, ältere Gesichter, Hitler R74 (Marcel, Claude):** Alle sechs CC0-Fahrer greifen den Kranz und drehen per Arm-IK mit dem Lenkrad; das Lenkrad sitzt dafür 22 cm näher. Stalin, Mussolini, Mao, Kim und Castro haben ältere, schwerere Gesichter; die Fahrerwahl zeigt wieder Porträts. Hitler R68–R74: sichtbarer Zahnbürstenbart, kürzere Nase, schräge Stirnsträhne, dickere Brauen, größere Ohren, blassere Haut; R69a/R73 verworfen, R67 bleibt Rückfallbasis. Details: PROGRESS-LOG.md.
 
 - **08.10.2026 – Pjöngjang-Wasser-/Uferpass veröffentlicht (Sarah, integriert von Codex):** Sarahs bestätigte Änderungen aus Issue #14 sind mit PR #20 nach erfolgreichem `tests-and-build` in `main` gemergt (Merge `001b351`). Wasser, Kaimauer, Querungsdecks und lokale Stadtbodenfarbe wurden integriert. Fernaufhellung, Deck-Nahansicht und menschliche Streckenabnahme bleiben offen; technische Grenzen stehen in PROGRESS-LOG.md.
