@@ -11,9 +11,9 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 ## Projektstart Sarah – 08.10.2026
 
-**Aktuell:** Sarahs bestätigter visueller Wasser-/Uferpass für die Ewige-Führer-Allee ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14)) ist in Marcels Abschlussbranch integriert (`ba06ebe`). Pyongyang-spezifisches mattes, deckendes Wasser, Granit-Kaimauer, Deckkante/Wasserliniensims und bündige Querungsdecks sind ergänzt; der lokale Boden-A/B dunkelte `#a9aaa5` auf `#929791` ab. In der sichtbaren Chrome-Rennansicht waren Wasser, Uferwand, Deck/Schienen und verbundene Straßenübergänge erkennbar; die entfernte helle Stadtfläche blieb sichtbar und ungeklärt. Kein Bildbeleg wurde gespeichert. Tests, Build und PR-Abschluss dieses kombinierten Stands laufen noch.
+**Erledigt:** Sarahs bestätigter Wasser-/Uferpass für die Ewige-Führer-Allee ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14)) ist nach erfolgreicher Vollsuite und Produktionsbuild über [PR #20](https://github.com/marceldamm/diktator-kart/pull/20) in `main` integriert (Merge `001b351`). Der sichtbare Chrome-Rennlauf zeigte Wasser, Uferwand, Deck/Schienen und Straßenquerungen; die entfernte helle Stadtfläche blieb ungeklärt. Kein Bildbeleg wurde gespeichert. Der Pflichtcheck `tests-and-build` war erfolgreich.
 
-**Nächster Schritt:** Kombinierten Arbeitsbranch testen und als PR nach `main` veröffentlichen; `tests-and-build` abwarten, nur bei Erfolg mergen und lokalen `main` per Fast-Forward synchronisieren. Zusätzlich ungeprüft bleiben Fernaufhellung (F3 bei `z≈200`, Stadtboden; kein transparentes Loch bestätigt), Nahansicht der Deckübergänge, Tunnelinnenraum sowie menschliche Fahr-/Stil-/Hörproben. Intel-UHD-Abnahme (Issue #4), Team-Praxistest (Issue #2) und Issue #13 bleiben unabhängig offen.
+**Offen, separat weiterzuverfolgen:** Ursache der Fernaufhellung, Nahansicht der Deckübergänge, Tunnelinnenraum und menschliche Fahr-/Stil-/Hörproben. Intel-UHD-Abnahme (Issue #4), Team-Praxistest (Issue #2) und Fahrer-/Ähnlichkeitsabnahme (Issue #13) bleiben eigenständige offene Aufgaben.
 
 ## Projektstart und Team-Synchronisierung – 07./08.10.2026 (Codex für Marcel)
 
