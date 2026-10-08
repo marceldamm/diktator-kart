@@ -532,6 +532,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   if (pyongyang) {
     const concrete = pbr(scene, 'Underpass reinforced concrete', '#777d79', 0, .9);
     concrete.backFaceCulling = false;
+    // B8 (08.10.2026): seen from below the ceiling took the up-facing normal and lit like an open sky; light both sides properly.
+    concrete.twoSidedLighting = true;
     const roofFrom = SHORTCUT_LENGTH * .2, roofTo = SHORTCUT_LENGTH * .8;
     for (const side of [-1, 1]) {
       const wallLane = SHORTCUT.halfWidth + .9;
