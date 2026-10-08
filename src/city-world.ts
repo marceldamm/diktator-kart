@@ -549,25 +549,41 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     ripple.update();
   }
   ripple.uScale = 60; ripple.vScale = 6;
-  const water = new PBRMaterial('River Spree water', scene);
-  water.albedoColor = Color3.FromHexString('#2d4f55').toLinearSpace(); water.metallic = .05; water.roughness = .07; water.bumpTexture = ripple; ripple.level = .45;
-  water.environmentIntensity = 1.3; water.alpha = .94;
+  const water = new PBRMaterial(pyongyang ? 'Taedong water' : 'River Spree water', scene);
+  water.albedoColor = Color3.FromHexString(pyongyang ? '#29454a' : '#2d4f55').toLinearSpace();
+  water.metallic = pyongyang ? 0 : .05; water.roughness = pyongyang ? .42 : .07; water.bumpTexture = ripple; ripple.level = pyongyang ? .18 : .45;
+  water.environmentIntensity = pyongyang ? .4 : 1.3; water.alpha = pyongyang ? 1 : .94;
   const river = MeshBuilder.CreateGround('River Spree', { width: RIVER.east - RIVER.west, height: RIVER.north - RIVER.south }, scene);
   river.position.set((RIVER.east + RIVER.west) / 2, RIVER.level, (RIVER.north + RIVER.south) / 2); river.material = water; river.isPickable = false; river.receiveShadows = true;
   const bedMaterial = new PBRMaterial('River bed', scene); bedMaterial.albedoColor = Color3.FromHexString('#1d2a26').toLinearSpace(); bedMaterial.roughness = 1;
+  const quayWallMaterial = new PBRMaterial('Taedong retaining granite', scene); quayWallMaterial.albedoColor = Color3.FromHexString('#78817e').toLinearSpace(); quayWallMaterial.roughness = .92;
+  const quayCopingMaterial = new PBRMaterial('Taedong granite coping', scene); quayCopingMaterial.albedoColor = Color3.FromHexString('#a8afaa').toLinearSpace(); quayCopingMaterial.roughness = .88;
+  const quayWaterlineMaterial = new PBRMaterial('Taedong waterline stone', scene); quayWaterlineMaterial.albedoColor = Color3.FromHexString('#59625f').toLinearSpace(); quayWaterlineMaterial.roughness = .95;
   const bed = MeshBuilder.CreateGround('River bed', { width: RIVER.east - RIVER.west, height: RIVER.north - RIVER.south }, scene);
   bed.position.set(river.position.x, -3, river.position.z); bed.material = bedMaterial; bed.isPickable = false;
   for (const z of [RIVER.north, RIVER.south]) {
+    const bankDirection = z === northBank ? 1 : -1;
     const gaps = pyongyang && z === northBank ? trackCrossingsAtZ(z, 4) : [];
     let from = GROUND.west;
     for (const [left, right] of [...gaps, [GROUND.east, GROUND.east]]) {
       const to = Math.max(from, Math.min(GROUND.east, left));
       if (to - from > .2) {
-        const bank = MeshBuilder.CreateBox('River embankment wall', { width: to - from, height: 2.6, depth: .6 }, scene);
-        bank.position.set((from + to) / 2, -1.5, z + (z === northBank ? .3 : -.3)); bank.material = bedMaterial; bank.isPickable = false;
+        const bank = MeshBuilder.CreateBox('River embankment wall', { width: to - from, height: pyongyang ? 2.8 : 2.6, depth: .6 }, scene);
+        bank.position.set((from + to) / 2, pyongyang ? -1.4 : -1.5, z + bankDirection * .3); bank.material = pyongyang ? quayWallMaterial : bedMaterial; bank.isPickable = false;
+        if (pyongyang) {
+          const coping = MeshBuilder.CreateBox('Taedong quay coping', { width: to - from, height: .14, depth: 1.3 }, scene);
+          coping.position.set((from + to) / 2, 0, z + bankDirection * .65); coping.material = quayCopingMaterial; coping.isPickable = false;
+          const waterline = MeshBuilder.CreateBox('Taedong waterline ledge', { width: to - from, height: .12, depth: .32 }, scene);
+          waterline.position.set((from + to) / 2, RIVER.level + .03, z - bankDirection * .16); waterline.material = quayWaterlineMaterial; waterline.isPickable = false;
+        }
       }
       from = Math.max(from, Math.min(GROUND.east, right));
     }
+  }
+  if (pyongyang) for (const [left, right] of northBankGaps) {
+    const crossing = trackLocate((left + right) / 2, northBank), point = trackPoint(crossing.s);
+    const deck = MeshBuilder.CreateBox('Taedong road crossing apron', { width: TRACK.halfWidth * 2 + 2, height: 1.2, depth: 10 }, scene);
+    deck.position.set(point.x, -.595, point.z); deck.rotation.y = point.heading; deck.material = quayWallMaterial; deck.isPickable = false; deck.receiveShadows = true;
   }
   meshes.push(river, bed);
   // Red and gold paper petals drifting over the grandstand straight (loading-art mood), hard-capped and cheap.
