@@ -37,3 +37,23 @@ export function armGripPose(rest: Vector3, target: Vector3, restUp: Vector3, tar
 export function armGripReach(rest: Vector3, target: Vector3, rotation: Quaternion): number {
   return armGripPose(rest, target, Vector3.Up(), Vector3.Up(), rotation);
 }
+
+/**
+ * Two-bone arm IK (CC0 drivers, 08.10.2026): new elbow position for shoulder S, rest elbow E, rest wrist H and
+ * wrist target T. Bone lengths stay fixed; the elbow keeps bending to the side it bent in the rest pose.
+ * An out-of-reach target straightens the arm towards it.
+ */
+export function twoBoneElbow(shoulder: Vector3, elbow: Vector3, wrist: Vector3, target: Vector3): Vector3 {
+  const upper = Vector3.Distance(shoulder, elbow), lower = Vector3.Distance(elbow, wrist);
+  const toTarget = target.subtract(shoulder);
+  const length = toTarget.length();
+  if (length < 1e-6 || upper < 1e-6 || lower < 1e-6) return elbow.clone();
+  const direction = toTarget.scale(1 / length);
+  const reach = Math.max(Math.abs(upper - lower) + 1e-4, Math.min(upper + lower - 1e-4, length));
+  const bend = elbow.subtract(shoulder);
+  bend.subtractInPlace(direction.scale(Vector3.Dot(bend, direction)));
+  if (bend.lengthSquared() < 1e-10) bend.copyFrom(Math.abs(direction.y) < .9 ? Vector3.Up() : Vector3.Right()).subtractInPlace(direction.scale(Math.abs(direction.y) < .9 ? direction.y : direction.x));
+  bend.normalize();
+  const cos = Math.max(-1, Math.min(1, (upper * upper + reach * reach - lower * lower) / (2 * upper * reach)));
+  return shoulder.add(direction.scale(upper * cos)).addInPlace(bend.scale(upper * Math.sqrt(1 - cos * cos)));
+}
