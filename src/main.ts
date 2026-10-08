@@ -804,6 +804,7 @@ class App {
       'duce-drom': ['Der Balkon erwartet Applaus in alphabetischer Reihenfolge.', 'Die Züge sind pünktlich. Behauptet zumindest das Programmheft.'],
       havanna: ['Die Eröffnungsrede läuft seit gestern. Bitte leise starten.', 'Ersatzteile sind bestellt – seit 1958.'],
       pyongyang: ['Die Parade fährt im Gleichschritt. Die Stoppuhr widerspricht.', 'Hundert Prozent Zustimmung – laut Lautsprecher.'],
+      moskau: ['Die Gerade ist planmäßig unendlich lang.', 'Überholen nur mit Passierschein – Formular 7b, dreifach.'],
     };
     const [title, detail] = lines[TRACK.id];
     document.querySelector('#gp-intro-kicker')!.textContent = this.mode === 'gp' && this.gp ? `GROSSER PREIS DER EITELKEIT · RENNEN ${this.gp.round + 1}/${this.gp.tracks.length} · ${TRACK_INFO.city.toUpperCase()}` : this.mode === 'timetrial' ? `ZEITFAHREN · ${TRACK.name.toUpperCase()}` : `EINZELRENNEN · ${TRACK.name.toUpperCase()} · ${TRACK_INFO.city.toUpperCase()}`;

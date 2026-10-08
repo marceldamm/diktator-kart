@@ -106,7 +106,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
   const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
   const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang';
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow';
   type FenceDebris = { mesh: Mesh; origin: Vector3; heading: number; vx: number; vy: number; vz: number; spin: number };
   const startFenceParts: Mesh[] = [], startFenceDebris: FenceDebris[] = [];
   let startFenceBroken = false, startFenceClock = 0, startFenceBreakTime = 0;
@@ -328,7 +328,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : moscow ? ['FÜNFJAHRESPLAN IN VIER JAHREN', 'DIE GERADE IST UNENDLICH', 'SCHLANGESTEHEN MIT STOLZ', 'APPLAUS BITTE IN DREIFACHER AUSFERTIGUNG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {
@@ -641,7 +641,8 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     paintEmblem(c, 128, 250, 78);
     c.font = 'bold 30px Georgia'; c.textAlign = 'center'; c.fillStyle = '#e9c77a';
     if (havana) { c.fillText('REDE', 128, 430); c.fillText('DAUERT', 128, 470); c.fillText('NOCH', 128, 510); }
-    else if (rome) { c.fillText('MEHR', 128, 430); c.fillText('MARMOR', 128, 470); c.fillText('BITTE', 128, 510); } else { c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510); }
+    else if (rome) { c.fillText('MEHR', 128, 430); c.fillText('MARMOR', 128, 470); c.fillText('BITTE', 128, 510); }
+    else if (moscow) { c.fillText('PLAN', 128, 430); c.fillText('VOR', 128, 470); c.fillText('VORFAHRT', 128, 510); } else { c.fillText('ORDNUNG', 128, 430); c.fillText('UND', 128, 470); c.fillText('VORFAHRT', 128, 510); }
     c.beginPath(); c.moveTo(0, 690); c.lineTo(128, 768); c.lineTo(256, 690); c.closePath(); c.fillStyle = '#8b1e26'; c.fill();
     c.fillStyle = '#d4a650'; c.fillRect(0, 682, 256, 10);
   }, true);

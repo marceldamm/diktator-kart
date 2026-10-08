@@ -12,7 +12,7 @@
 export const MAP_SCALE = 1.5;
 const S = MAP_SCALE;
 
-export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang';
+export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang' | 'moskau';
 export type HazardKind = 'water' | 'lava' | 'cliff';
 export interface Hazard { from: number; to: number; side: 1 | -1; basin: number; kind: HazardKind }
 /** City district along the circuit: what lines each side between two progress values. */
@@ -23,7 +23,7 @@ export interface HeroPlacement { m: string; s?: number; lane?: number; x?: numbe
 export interface TrackObstacle { s: number; lane: number; radius: number }
 
 export interface TrackDefinition {
-  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang';
+  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang' | 'moscow';
   /** Short German line for the track card and the loading caption. */
   tagline: string;
   controlPoints: readonly (readonly [number, number])[];
@@ -265,8 +265,54 @@ const EWIGE_FUEHRER_ALLEE: TrackDefinition = {
   ],
 };
 
-export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE };
-export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang';
+/** Genossen-Gerade (Moskau): Sarah's track name and place; route and details are Claude's elaboration with the
+ * existing city kit (08.10.2026, no new models): the endless Comrades' Straight along the Moskva quay, a hairpin round
+ * the plan column, the Fünfjahresplan esses, the parade square and the boulevard back down. */
+const MK = 1;
+const MOSKAU: TrackDefinition = {
+  id: 'moskau', name: 'Genossen-Gerade', city: 'Moskau', theme: 'moscow',
+  tagline: 'Endlose Genossen-Gerade am Moskwa-Kai, Plansäulen-Kehre, Paradeplatz und Boulevard',
+  controlPoints: ([
+    [-260, -150], [-160, -152], [-60, -152], [40, -152], [140, -150], [220, -146],   // Genossen-Gerade, river on the right
+    [262, -128], [282, -92], [274, -55], [250, -30],                                 // Plansäulen-Kehre
+    [212, -20], [176, -34], [146, -12], [136, 24],                                   // Fünfjahresplan esses
+    [122, 60], [92, 92], [50, 108],                                                  // up to the parade square
+    [0, 112], [-50, 104], [-92, 82],                                                 // parade square sweep
+    [-126, 52], [-166, 42], [-204, 54], [-238, 30],                                  // boulevard chicane
+    [-264, -8], [-276, -58], [-276, -108],                                           // down to the quay
+  ] as const).map(([x, z]) => [x * MK, z * MK] as const),
+  halfWidth: 6, start: 40, bump: -1,
+  /** Hinterhof der Planbehörde: gravel cut across the esses. */
+  shortcut: { from: 690, to: 792, halfWidth: 3, speedCap: 10.5, points: [[196, -8], [160, 2]], elevation: [[0, 0], [1, 0]], boostPads: [] },
+  canal: { from: -1000, length: 0 },
+  rampLips: [],
+  boostPads: [[160, 0], [330, 0], [760, 0], [1080, 0]],
+  craters: [], grassVerges: [],
+  elevation: [],
+  hazards: [{ from: 120, to: 300, side: 1, basin: 9, kind: 'water' }],
+  itemBoxes: [210, 640, 1010],
+  landmarks: {
+    palace: null, fountains: [[-30, 70]], trees: [[60, 10], [-80, -40], [-150, -60]],
+    column: [250, -82], gateProgress: 1150,
+    lawns: [[30, -100, 110, -40]], promenade: 5,
+  },
+  river: { north: -170, south: -250, west: -470, east: 480, level: -1.15 },
+  ground: { west: -470, east: 480, north: 330, south: -330 },
+  dressing: {
+    boardRanges: [[10, 110], [500, 600]], flagRange: [880, 990], pennants: [20, 90, 520, 900, 960], screenProgress: 60,
+    districts: [
+      { from: 0, to: 110, left: 'stands', right: 'quay' }, { from: 110, to: 480, left: 'city', right: 'quay' },
+      { from: 480, to: 690, left: 'avenue', right: 'park' }, { from: 690, to: 800, left: 'park', right: 'city' },
+      { from: 800, to: 960, left: 'city', right: 'avenue' }, { from: 960, to: 1100, left: 'plaza', right: 'plaza' },
+      { from: 1100, to: 1300, left: 'avenue', right: 'avenue' }, { from: 1300, to: 99999, left: 'city', right: 'stands' },
+    ],
+    heroes: [{ m: 'kit-cathedral', x: -10, z: 178, yaw: Math.PI }, { m: 'kit-palace', x: 40, z: 30, yaw: 0 }],
+    bridges: [-360, 360], cathedral: null, petals: [880, 990],
+  },
+};
+
+export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE, moskau: MOSKAU };
+export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang' || id === 'moskau';
 
 export interface TrackSample { x: number; z: number; heading: number; s: number; curvature: number }
 

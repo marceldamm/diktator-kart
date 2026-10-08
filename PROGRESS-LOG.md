@@ -1,6 +1,10 @@
 # Fortschrittslog und globale Projekthistorie
 
-## 2026-10-08 – Pjöngjang mit halbem Nebel (Marcels Entscheidung)
+## 2026-10-08 – Fünfte Strecke: Genossen-Gerade (Moskau)
+
+Aus vorhandenem Stadt-Kit und Streckencode, ohne neue Modelle (Details `docs/32-genossen-gerade.md`, Issue #37). Neues Thema `moscow` (Farben, Schilder, Losungen, Banner), Strecke im Grand Prix (jetzt fünf Rennen) und in der Streckenwahl spielbar. `tests/moskau.test.mjs` 3/3, Vollsuite grün, Build erfolgreich. Sichtbarer Demo-Grand-Prix im Chrome ohne Fehler; Bilder `docs/evidence/moskau-*-20261008.png`. Menschliche Fahrprobe offen. Außerdem B8: Pjöngjang-Tunneldecke beidseitig beleuchtet (wirkte von innen wie Himmel).
+
+ (Marcels Entscheidung)
 
 Marcel wählte im Projekt-Thread „halbe Dichte“. `slice-scene.ts`: Basisnebel 0,0012 statt 0,0024, nur für das Pjöngjang-Thema; Regen/Schnee setzen weiter ihre eigenen Werte. Sichtbare Chrome-Prüfung: Pjöngjang 0,0012, Stadionring unverändert 0,0024 (`docs/evidence/pyong-fog-after-20261008.png`). `npm test` 107/107, Build erfolgreich.
 

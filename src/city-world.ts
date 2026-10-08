@@ -64,13 +64,14 @@ const ROME_TINTS = ['#e2a85e', '#cf7d4b', '#e8bd7c', '#bd6a42', '#ecd3a2', '#d99
 /** Faded Caribbean pastels for Havana's colonial arcades. */
 const HAVANA_TINTS = ['#86c9c1', '#e7a7b2', '#efd27e', '#a3c5e4', '#bfe0b2', '#f2b98e', '#ece3cf', '#c9abd9', '#9ed1d8'];
 /** Cold granite, weathered concrete and restrained red accents for Pyongyang's monumental axis. */
+const MOSCOW_TINTS = ['#c9a14a', '#b5503f', '#e3d6b8', '#a9b79f', '#d8b98c', '#c58a63', '#ead9b2'];
 const PYONGYANG_TINTS = ['#b9bfbc', '#a8b0ae', '#d0d0c8', '#929c9d', '#c4c3ba', '#a9ada6', '#d8d2c6'];
 
 function rng(seed: number) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
 export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promise<CityWorld> {
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang';
-  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : pyongyang ? PYONGYANG_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow';
+  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : pyongyang ? PYONGYANG_TINTS : moscow ? MOSCOW_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
   /** Pale travertine tones for the rationalist blocks of the Duce-Drom. */
   const TRAVERTINE = ['#f1ebdd', '#e8dfcc', '#f5f1e6', '#e2d8c2'].map((h) => Color3.FromHexString(h).toLinearSpace());
   const kit = await LoadAssetContainerAsync('/assets/models/city-kit.glb', scene);
@@ -113,6 +114,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const names = havana ? ['ZIGARREN VOLKSEIGEN', 'RUM & REDE', 'ERSATZTEILE (1958)', 'BÄRTE NACH NORM', 'REDEZEIT-VERLÄNGERUNG', 'EIS DER REVOLUTION', 'MIKROFON-REPARATUR', 'ZUCKERQUOTE 104 %']
       : rome ? ['CAFFÈ DEL BALCONE', 'MARMOR & PATHOS', 'GELATO GENEHMIGT', 'BÜSTEN NACH MASS', 'TRIUMPHBOGEN-VERLEIH', 'APPLAUS-AGENTUR', 'SCHÄRPEN & ORDEN', 'TOGA-REINIGUNG']
       : pyongyang ? ['PLANERFÜLLUNG (FAST)', 'APPLAUS IM TAKT', 'JUBELBEDARF OST', 'PARADENORM 08/15', 'LAUTSPRECHER & PLAN', 'EWIGER BAUBEDARF', 'SIEG MELDEPFLICHTIG', 'STATISTIK NACH MASS']
+      : moscow ? ['KAUFHAUS (LEER)', 'PELZMÜTZEN-ZUTEILUNG', 'BORSCHT NACH PLAN', 'WARTELISTE NR. 4711', 'MÄNTEL IN GRAU', 'SAMOWAR-VERWALTUNG', 'NORMERFÜLLUNG 300 %', 'STEMPEL FÜR STEMPEL']
       : ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
     names.forEach((name, k) => {
       const y = k * 64;
