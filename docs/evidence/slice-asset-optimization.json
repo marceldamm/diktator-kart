@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08T16:48:07.351Z",
+  "date": "2026-10-08T17:02:15.448Z",
   "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
   "results": [
     {
@@ -33,34 +33,34 @@
       "runtimeBytes": 45864
     },
     {
-      "name": "cc0-driver-stalin",
-      "originalBytes": 4049728,
-      "runtimeBytes": 1028208
-    },
-    {
-      "name": "cc0-driver-mussolini",
-      "originalBytes": 4005708,
-      "runtimeBytes": 997264
-    },
-    {
-      "name": "cc0-driver-mao",
-      "originalBytes": 4042756,
-      "runtimeBytes": 1022988
-    },
-    {
-      "name": "cc0-driver-kim",
-      "originalBytes": 4031868,
-      "runtimeBytes": 1016260
-    },
-    {
       "name": "cc0-driver-hitler",
       "originalBytes": 3882952,
       "runtimeBytes": 1022584
     },
     {
+      "name": "cc0-driver-stalin",
+      "originalBytes": 3818892,
+      "runtimeBytes": 964828
+    },
+    {
+      "name": "cc0-driver-mussolini",
+      "originalBytes": 3774952,
+      "runtimeBytes": 933960
+    },
+    {
+      "name": "cc0-driver-mao",
+      "originalBytes": 3811932,
+      "runtimeBytes": 959648
+    },
+    {
+      "name": "cc0-driver-kim",
+      "originalBytes": 3801128,
+      "runtimeBytes": 952940
+    },
+    {
       "name": "cc0-driver-castro",
-      "originalBytes": 4042072,
-      "runtimeBytes": 1021760
+      "originalBytes": 3811244,
+      "runtimeBytes": 958408
     }
   ]
 }

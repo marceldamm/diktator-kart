@@ -12,6 +12,7 @@ import numpy as np
 from mathutils import Vector, Quaternion
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hitler_face import refine_hitler_face
+from driver_faces import age_face
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACK = os.path.join(ROOT, '.tools', 'packs', 'ubc', 'Universal Base Characters[Standard]')
@@ -27,7 +28,7 @@ STOUT = build(**{'spine_03': (.92, 1, 1.0), 'spine_02': (1.12, 1, 1.22), 'spine_
 SPECS = {
     'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.008, .007, .007), girth=SLIM, pale=.25,
                       details=['toothbrush', 'leather-collar', 'leather-harness', 'leather-belt']),
-    'stalin':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.09, .085, .075), cloth=(.17, .18, .14), girth=build(**{'spine_02': (1.0, 1, 1.05)}), pale=.12,
+    'stalin':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.15, .14, .125), cloth=(.17, .18, .14), girth=build(**{'spine_02': (1.0, 1, 1.05)}), pale=.12,
                       details=['walrus', 'stand-collar', 'buttons']),
     'mussolini': dict(hair=[], hair_rgb=(.02, .016, .012), cloth=(.012, .012, .014), girth=build(**{'neck_01': (1.0, 1, 1.0), 'spine_03': (.92, 1, .95)}), pale=.12,
                       details=['stand-collar', 'buttons', 'sash']),
@@ -348,9 +349,10 @@ def make(id):
         mw = o.matrix_world.copy(); o.parent = arm if any(m.type == 'ARMATURE' for m in o.modifiers) else root; o.matrix_world = mw
     root.rotation_euler[2] = math.pi; root.scale = (SCALE,) * 3; root.location = (0, SEAT[0], SEAT[1])
     if id == 'hitler': refine_hitler_face(root)
+    else: age_face(root, id)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.blend'))
     out = os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.glb')
-    face_export = dict(export_vertex_color='NAME', export_vertex_color_name='Face age tint', export_all_vertex_colors=False) if id == 'hitler' else {}
+    face_export = dict(export_vertex_color='NAME', export_vertex_color_name='Face age tint', export_all_vertex_colors=False)
     bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True, **face_export)
     shutil.copy(out, os.path.join(ROOT, 'public', 'assets', 'models', f'cc0-driver-{id}.glb'))
     print('CC0_DRIVER_DONE', id)

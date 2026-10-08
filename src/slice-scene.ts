@@ -817,11 +817,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             const v = visuals[kartIndex];
             // Studio portraits should show only the selected driver, without the track or rival karts.
             visuals.forEach((visual, index) => visual.root.setEnabled(index === kartIndex));
-            scene.meshes.forEach((mesh) => { mesh.isVisible = mesh.isDescendantOf(v.driver); });
+            // The CC0 pilot hangs off the kart body, not off the old driver node (08.10.: cards were empty).
+            const pilot = scene.getTransformNodeByName(`cc0Driver-${kartIndex}`);
+            scene.meshes.forEach((mesh) => { mesh.isVisible = mesh.isDescendantOf(v.driver) || (!!pilot && mesh.isDescendantOf(pilot)); });
             scene.clearColor = new Color4(.17, .21, .22, 1);
-            const head = v.head.getAbsolutePosition(), h = v.root.rotation.y;
-            camera.position.set(head.x + Math.sin(h) * 1.6 + Math.cos(h) * .28, head.y + .02, head.z + Math.cos(h) * 1.6 - Math.sin(h) * .28);
-            camera.setTarget(new Vector3(head.x, head.y - .1, head.z));
+            const skull = pilot?.getChildMeshes(false).find((m) => /Pilot head/.test(m.name));
+            const head = skull ? skull.getBoundingInfo().boundingSphere.centerWorld.clone() : v.head.getAbsolutePosition(), h = v.root.rotation.y;
+            const reach = skull ? 1.15 : 1.6, drop = skull ? .09 : .1;
+            camera.position.set(head.x + Math.sin(h) * reach + Math.cos(h) * .22, head.y + .02, head.z + Math.cos(h) * reach - Math.sin(h) * .22);
+            camera.setTarget(new Vector3(head.x, head.y - drop, head.z));
             shots.push(await CreateScreenshotUsingRenderTargetAsync(engine, camera, { width: 320, height: 360 }, 'image/jpeg', 4));
           }
         } finally {
