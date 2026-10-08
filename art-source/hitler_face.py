@@ -4,7 +4,7 @@
 eyes, long nasal bridge, modest chin, flat side-parted hair. Numeric offsets
 are art decisions, not photogrammetry measurements. Works in kart metres.
 """
-import bpy, math
+import bpy, bmesh, math
 from mathutils import Vector
 
 def refine_hitler_face(root):
@@ -101,6 +101,9 @@ def refine_hitler_face(root):
                     p.z += -.003 * (1 - taper)
                     p.z += -.001 * taper
                     p.z += .001
+                    # R71 (Claude, 08.10.): the photo brows are about 1.6x as thick as R67's and their inner ends
+                    # dip towards the nose (the stern frown); thicken about the brow's own line, drop the inner end.
+                    p.z = 1.977 + (p.z - 1.977) * 1.6 - .0018 * (1 - taper) ** 2
                     p.y += .008
                 v.co = inv @ p
         if ob.name.startswith('Hair_SimpleParted'):
@@ -126,6 +129,14 @@ def refine_hitler_face(root):
                 v.co = inv @ p
         ob.data.update()
 
+    # R69-R72 shape passes (Claude, 08.10.2026) run before the tint and the creases so both follow the new form;
+    # the tint keeps reading the R67 positions it was tuned on.
+    pre = [v.co.copy() for v in head.data.vertices]
+    lift_lower_face(head)
+    sweep_fringe(head)
+    enlarge_ears(head)
+    # R73 (darker eye and socket materials) changed nothing visible in the fixed renders and was dropped.
+
     # Hitler's 1938 reference has side-combed hair, not a separate forehead
     # curl. Remove the pack's stylized accessory; the parted cap remains.
     forelock = bpy.data.objects.get('Pilot forelock')
@@ -140,7 +151,7 @@ def refine_hitler_face(root):
     head.data.color_attributes.active_color_index = len(head.data.color_attributes)-1
     head.data.color_attributes.render_color_index = len(head.data.color_attributes)-1
     for v in head.data.vertices:
-        p = head.matrix_world @ v.co
+        p = head.matrix_world @ pre[v.index]
         _, (frown, fold, bags, cheek, forehead1, forehead2) = field(p)
         shade = min(.12, .035*frown + .045*fold + .06*bags + .035*forehead1 + .03*forehead2)
         colours.data[v.index].color = (1-shade, 1-shade-.022*cheek, 1-shade-.032*cheek, 1)
@@ -181,7 +192,14 @@ def refine_hitler_face(root):
         [(-.024, eye_z-.035), (-.029, eye_z-.047), (-.033, eye_z-.061)],
         [(.024, eye_z-.035), (.029, eye_z-.047), (.033, eye_z-.061)],
     ]
+    depsgraph = bpy.context.evaluated_depsgraph_get(); hair = bpy.data.objects.get('Hair_SimpleParted')
+    def covered(x, z):   # R72: crease points under the new fringe would poke through the hair
+        hit, _, _, _, ob, _ = bpy.context.scene.ray_cast(depsgraph, Vector((x, 1, z)), Vector((0, -1, 0)))
+        return hit and ob == hair
+    paths = [[(x, z + lower_face_dz(x, z)) for x, z in path] for path in paths]
+    paths = [[(x, z) for x, z in path if not covered(x, z)] for path in paths]
     for path_index, path in enumerate(paths):
+        if len(path) < 2: continue
         curve = bpy.data.curves.new(f'Face crease {path_index+1}', 'CURVE'); curve.dimensions = '3D'; curve.resolution_u = 8
         # R44 softens the line color and tapers its ends so the relief reads
         # as a crease in skin rather than a uniform drawn-on groove.
@@ -211,5 +229,130 @@ def refine_hitler_face(root):
         world = line.matrix_world.copy(); line.parent = root; line.matrix_world = world
         bpy.ops.object.select_all(action='DESELECT'); line.select_set(True); bpy.context.view_layer.objects.active = line
         bpy.ops.object.convert(target='MESH')
+    rebuild_moustache(root, head)
     head['review_status'] = 'R67 local candidate: R66 with 2 mm more nasal projection/drop for the side profile; R57/R61 crown flattening was rejected due exposed scalp'
     print('HITLER_FACE_REFINED_R67_CANDIDATE', len(head.data.vertices))
+
+
+def lift_lower_face(head):
+    """R69 (Claude, 08.10.2026): with the eye rows aligned, the R68 front overlay puts the model's nostrils,
+    moustache and mouth about 0.8-1.2 cm below the photo's, while eyes and chin agree. A first try lifting only the
+    nose underside (R69a) squashed the tip into a pointed ski-jump in profile and was dropped. Instead the whole
+    band from nose base to mouth rises smoothly; eyes and chin stay, so the nose gets shorter and the chin longer."""
+    for v in head.data.vertices:
+        p = head.matrix_world @ v.co
+        front = max(0, min(1, (p.y + .45) / .05))
+        lift = math.exp(-.5 * ((p.z - LOWER_FACE['z']) / LOWER_FACE['width_z']) ** 2) * math.exp(-.5 * (p.x / LOWER_FACE['width_x']) ** 2) * front
+        if lift > 1e-4:
+            p.z += LOWER_FACE['amount'] * lift
+            v.co = head.matrix_world.inverted() @ p
+    head.data.update()
+    # R69c: the nose itself is still about 1 cm too long in front; shorten it towards the eyes with a bump that is
+    # zero at the (lifted) mouth line and at the eye row, so the philtrum lengthens instead of the tip squashing.
+    lo, hi = SHORT_NOSE['mouth'], SHORT_NOSE['eyes']
+    for v in head.data.vertices:
+        p = head.matrix_world @ v.co
+        if not lo < p.z < hi: continue
+        front = max(0, min(1, (p.y + .36) / .025))
+        w = math.sin(math.pi * (p.z - lo) / (hi - lo)) * math.exp(-.5 * (p.x / SHORT_NOSE['width_x']) ** 2) * front
+        if w > 1e-4:
+            p.z += SHORT_NOSE['amount'] * w
+            v.co = head.matrix_world.inverted() @ p
+    head.data.update()
+
+LOWER_FACE = dict(z=1.893, width_z=.022, width_x=.06, amount=.008)
+
+def lower_face_dz(x, z):
+    """Approximate R69 lift at a surface point, for features placed by fixed coordinates (crease paths)."""
+    d = LOWER_FACE['amount'] * math.exp(-.5 * ((z - LOWER_FACE['z']) / LOWER_FACE['width_z']) ** 2) * math.exp(-.5 * (x / LOWER_FACE['width_x']) ** 2)
+    z1 = z + d; lo, hi = SHORT_NOSE['mouth'], SHORT_NOSE['eyes']
+    if lo < z1 < hi: d += SHORT_NOSE['amount'] * math.sin(math.pi * (z1 - lo) / (hi - lo)) * math.exp(-.5 * (x / SHORT_NOSE['width_x']) ** 2)
+    return d
+SHORT_NOSE = dict(mouth=1.8915, eyes=1.955, width_x=.022, amount=.008)
+
+def sweep_fringe(head):
+    """R70 (Claude, 08.10.2026): in the 1938 portrait the side-parted hair falls diagonally across the forehead, from
+    the parting high on the viewer's right down to just above the viewer's left brow (his right, +X in the kart
+    frame). The pack hair stopped in a level hairline, leaving a tall bare forehead. Instead of a separate curl
+    (rejected earlier), the hair shell's own front edge is drawn down that diagonal and kept on the skin."""
+    hair = bpy.data.objects.get('Hair_SimpleParted')
+    if not hair: return
+    inverse_head = head.matrix_world.inverted(); back = (inverse_head.to_3x3() @ Vector((0, -1, 0))).normalized()
+    def skin_y(x, z):
+        hit, location, _, _ = head.ray_cast(inverse_head @ Vector((x, 0, z)), back)
+        return (head.matrix_world @ location).y if hit else None
+    f = FRINGE; inv = hair.matrix_world.inverted()
+    for v in hair.data.vertices:
+        p = hair.matrix_world @ v.co
+        if p.z < 1.99 or p.y < -.42: continue
+        across = max(0., min(1., (p.x - f['start_x']) / (f['end_x'] - f['start_x']))); across = across * across * (3 - 2 * across)
+        w = across * max(0., min(1., (p.y + .41) / .04)) * min(1., math.exp(-(p.z - f['hairline']) / f['falloff']))
+        if w < 1e-3: continue
+        before = skin_y(p.x, p.z)
+        p.z -= f['drop'] * w; p.x += f['sweep'] * w
+        after = skin_y(p.x, p.z)
+        if before is not None and after is not None: p.y = after + max(p.y - before, f['lift'])
+        v.co = inv @ p
+    hair.data.update()
+
+# Kart metres: the fringe starts at the parting side (x=-0.035) and reaches its lowest at x=+0.06.
+FRINGE = dict(start_x=-.035, end_x=.06, hairline=2.022, falloff=.03, drop=.03, sweep=.006, lift=.002)
+
+def enlarge_ears(head):
+    """R72 (Claude, 08.10.2026): the portrait's ears are large and low, top near the eye row and lobes down at the
+    moustache, and they stand off the head; the pack ears end at the nose base. Each ear grows about its centre,
+    drops and stands out a little; a soft mask keeps the join to the skull smooth."""
+    e = EARS; inv = head.matrix_world.inverted()
+    for v in head.data.vertices:
+        p = head.matrix_world @ v.co; ax = abs(p.x)
+        m = max(0., min(1., (ax - e['inner']) / (e['outer'] - e['inner']))) * math.exp(-.5 * ((p.z - e['z']) / .03) ** 2) * math.exp(-.5 * ((p.y - e['y']) / .03) ** 2)
+        if m < 1e-3: continue
+        side = 1 if p.x > 0 else -1
+        t = Vector((p.x + side * e['stand_off'] * (ax - e['inner']) / .02, e['y'] + (p.y - e['y']) * e['scale'], e['z'] + (p.z - e['z']) * e['scale'] - e['drop']))
+        v.co = inv @ p.lerp(t, m)
+    head.data.update()
+
+EARS = dict(inner=.078, outer=.09, z=1.948, y=-.478, scale=1.18, drop=.008, stand_off=.003)
+
+def rebuild_moustache(root, head):
+    """R68 (Claude, 08.10.2026): the R67 moustache was a 4 mm flattened ellipsoid and vanished in every fixed view,
+    while it is the strongest landmark of the 1938 portrait: a dark, boxy block as wide as the nose, filling the
+    whole philtrum from the nostrils to the upper lip. Rebuild it as a shell projected onto the actual lip surface
+    so it neither floats nor sinks in; its outer rows taper like trimmed bristles."""
+    old = bpy.data.objects.get('Pilot moustache')
+    mat = old.data.materials[0] if old and old.data.materials else None
+    if old: bpy.data.objects.remove(old, do_unlink=True)
+    inverse = head.matrix_world.inverted()
+    direction = (inverse.to_3x3() @ Vector((0, -1, 0))).normalized()
+    nx, nz, half, bottom, top = 9, 6, MOUSTACHE['half_width'], MOUSTACHE['bottom'], MOUSTACHE['top']
+    bm = bmesh.new(); front, back = [], []
+    for j in range(nz):
+        rf, rb = [], []
+        for i in range(nx):
+            x = -half + 2 * half * i / (nx - 1); z = bottom + (top - bottom) * j / (nz - 1)
+            # The philtrum is short under the lowered R67 nose: upper rows stay on the lip plane and disappear
+            # under the nose, so from the front the block hangs from the nostrils like the 1938 moustache.
+            hit, location, normal, _ = head.ray_cast(inverse @ Vector((x, 0, min(z, MOUSTACHE['lip_top']))), direction)
+            if not hit: raise RuntimeError(f'moustache ray missed the lip at x={x:.3f} z={z:.3f}')
+            p = head.matrix_world @ location; p.z = z
+            edge = min(i, nx - 1 - i, j)
+            depth = MOUSTACHE['depth'] * (.55 if edge == 0 else .85 if edge == 1 else 1)
+            n = Vector((0, 1, 0))
+            rf.append(bm.verts.new(p + n * depth)); rb.append(bm.verts.new(p - n * .002))
+        front.append(rf); back.append(rb)
+    for j in range(nz - 1):
+        for i in range(nx - 1):
+            bm.faces.new((front[j][i], front[j][i + 1], front[j + 1][i + 1], front[j + 1][i]))
+            bm.faces.new((back[j][i], back[j + 1][i], back[j + 1][i + 1], back[j][i + 1]))
+    ring = [(0, i) for i in range(nx)] + [(j, nx - 1) for j in range(1, nz)] + [(nz - 1, i) for i in range(nx - 2, -1, -1)] + [(j, 0) for j in range(nz - 2, 0, -1)]
+    for k in range(len(ring)):
+        (a, b), (c, d) = ring[k], ring[(k + 1) % len(ring)]
+        bm.faces.new((front[a][b], back[a][b], back[c][d], front[c][d]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    mesh = bpy.data.meshes.new('Pilot moustache'); bm.to_mesh(mesh); bm.free()
+    if mat: mesh.materials.append(mat)
+    ob = bpy.data.objects.new('Pilot moustache', mesh); bpy.context.collection.objects.link(ob)
+    ob.parent = root; ob.matrix_parent_inverse = root.matrix_world.inverted()
+
+# Kart metres. R68: as wide as the nose wings, from the mouth line up under the nose (nostrils ~1.894-1.898).
+MOUSTACHE = dict(half_width=.019, bottom=1.8925, top=1.912, lip_top=1.904, depth=.006)

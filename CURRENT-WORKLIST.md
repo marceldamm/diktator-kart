@@ -9,6 +9,18 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Claude-Projektstart Marcel – 08.10.2026
+
+**Branch:** `claude/project-thread-93qjup` (von `origin/main` `4b04eeb`). Quelle: Marcels Projektstart und sein Auftrag „Mache das als erstes" zum Hitler-Gesicht (Projekt-Thread, 08.10.2026).
+
+- [x] Hände drehen mit dem Lenkrad (alle sechs Fahrer, Arm-Rig + IK, Finger um den Kranz).
+- [x] Gesichter von Stalin, Mussolini, Mao, Kim und Castro älter und charaktervoller (`art-source/driver_faces.py`).
+- [x] Fahrerwahl zeigt wieder Porträts (waren seit dem CC0-Wechsel leer).
+- [x] Hitler R68–R74 mit Overlays (Bart, Nase, Strähne, Brauen, Ohren, Hautton); R69a/R73 verworfen; R67 bleibt Rückfall. Ähnlichkeit weiter nicht menschlich abgenommen ([Issue #13](https://github.com/marceldamm/diktator-kart/issues/13)).
+- [ ] PR nach `main` und `tests-and-build`.
+- [ ] Leistung auf schwacher Grafik (Issue #4): Intel UHD fehlt auf diesem Rechner; GPU-Kosten der Effekte messen und senken.
+- [ ] Porträtlicht der Fahrerkarten (Haut zu orange); Haarsträhnen und Augen beim Hitler-Modell.
+
 ## Projektstart Sarah – 08.10.2026
 
 **Erledigt:** Sarahs bestätigter Wasser-/Uferpass für die Ewige-Führer-Allee ([Issue #14](https://github.com/marceldamm/diktator-kart/issues/14)) ist nach erfolgreicher Vollsuite und Produktionsbuild über [PR #20](https://github.com/marceldamm/diktator-kart/pull/20) in `main` integriert (Merge `001b351`). Der sichtbare Chrome-Rennlauf zeigte Wasser, Uferwand, Deck/Schienen und Straßenquerungen; die entfernte helle Stadtfläche blieb ungeklärt. Kein Bildbeleg wurde gespeichert. Der Pflichtcheck `tests-and-build` war erfolgreich.

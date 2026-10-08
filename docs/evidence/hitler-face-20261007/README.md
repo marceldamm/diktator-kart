@@ -22,6 +22,20 @@ Vorheriger veroeffentlichter Stand **R28**: [Front-Overlay](overlay-r28-front.jp
 
 Quelle: `art-source/build_cc0_driver.py`, `art-source/hitler_face.py`, `art-source/preview_cc0_driver.py`, Overlaygenerator `art-source/overlay_historical_reference.py`. Editierbare lokale Exportquelle unter `.tools/raw-models/cc0-driver-hitler.blend`, separate QA-Szene `qa-hitler-seated.blend`. Runtime-GLB `public/assets/models/cc0-driver-hitler.glb`.
 
+## R68–R74 (Claude, 08.10.2026)
+
+Gleiche Kameras/Licht/Overlay-Crop wie R67, gebaut mit Blender 4.5.3; ein Nachbau von R67 war pixelgleich (Rückfallbasis). Je Schritt Front-Overlay; Endstand mit allen Ansichten.
+
+- [R68](overlay-r68-front.jpg): Schnurrbart neu als auf die Lippe projizierter Block in Nasenbreite (R67-Bart war 4 mm hoch und unsichtbar).
+- [R69](overlay-r69-front.jpg): Band Nase-bis-Mund 8 mm angehoben, Nase zur Augenlinie 8 mm gekürzt; Mund und Bart liegen auf Fotohöhe. R69a (nur Nasenunterseite heben) formte eine spitze Sprungschanze im Profil und wurde verworfen.
+- [R70](overlay-r70-front.jpg): vordere Haarkante fällt diagonal über die Stirn zur Bildlinken (seine rechte Seite), als Teil der Haarschale.
+- [R71](overlay-r71-front.jpg): Brauen 1,6× dicker, Innenenden gesenkt.
+- [R72](overlay-r72-front.jpg): Ohren 18 % größer, 8 mm tiefer, leicht abstehend; Stirnfalten unter der Strähne entfallen, Nasolabialfalten folgen der Anhebung.
+- R73 (Augen-/Höhlenmaterial dunkler) ohne sichtbare Wirkung, verworfen.
+- **R74** (Endstand): Haut blasser. [Overlay](overlay-r74-front.jpg), [Front](r74-front.png), [Dreiviertel](r74-threequarter.png), [Profil](r74-profile.png), [Sitz](r74-seating.png), [Sitzprofil](r74-seating-profile.png), [Vergleich R67/R74](compare-r67-r74.png). Laufzeit: Fahrerwahlkarte `../r74-game-select-20261008.png`.
+
+Weiter abweichend: glatte Haarschale ohne Strähnen (kleine Lücke an der Fransenkante, heller Punkt am Scheitel schon in R67), glasige Augen, Mund-/Wangenform grob, Profil ohne Profilreferenz im Repository. Keine Ähnlichkeitsabnahme. Rohbilder R68–R72: `.tools/face-iteration-archive-20261008-claude/`.
+
 ## Kurze sichtbare Spielintegration
 
 `runtime-seated.jpg` ist ein aelterer sichtbarer Chrome-Beleg vor R11-R13 und belegt R67 nicht. Fuer R67 wurde am 08.10.2026 die bestehende sichtbare Chrome-Sitzung auf `http://127.0.0.1:4173/` im Grand Prix geprueft: schwarzer Anzug geladen, Haende am Lenkrad, Beine angewinkelt; Fuesse/Pedale waren verdeckt. Danach per Escape ins Menue zurueckgekehrt. Diese Laufzeitpruefung wurde nicht als Bilddatei gesichert; daher ist sie nur als in-session Beobachtung dokumentiert. R67 wurde mit Blender 4.5.3 in Front/Profil/Dreiviertel/Sitzansichten gerendert. Die Blender-Kartansicht enthaelt falsch positionierte/fremde Teile und ist nur Assetvorschau. Der gezielte GLB-Test prueft Kopf, variable `COLOR_0`-Haut, Bart, Abwesenheit der Stirnlocke, Falten und schwarzen Anzug.

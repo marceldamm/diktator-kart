@@ -26,7 +26,7 @@ STOUT = build(**{'spine_03': (.92, 1, 1.0), 'spine_02': (1.12, 1, 1.22), 'spine_
                  'neck_01': (.98, 1, .98), 'upperarm_l': (.84, 1, .84), 'upperarm_r': (.84, 1, .84), 'thigh_l': (1, 1, 1), 'thigh_r': (1, 1, 1)})
 # Colours are linear RGB. Cloth colours follow cast.ts (uniform), toned to real fabric.
 SPECS = {
-    'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.008, .007, .007), girth=SLIM, pale=.25,
+    'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.008, .007, .007), girth=SLIM, pale=.4,
                       details=['toothbrush', 'leather-collar', 'leather-harness', 'leather-belt']),
     'stalin':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.15, .14, .125), cloth=(.17, .18, .14), girth=build(**{'spine_02': (1.0, 1, 1.05)}), pale=.12,
                       details=['walrus', 'stand-collar', 'buttons']),
