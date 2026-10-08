@@ -64,7 +64,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
   try {
     // Warm late-afternoon look (G/J): low sun from the south-west, cool sky fill, light aerial haze.
     scene.clearColor = new Color4(.62, .72, .84, 1);
-    scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = .0024; scene.fogColor = new Color3(.86, .80, .70); // warm golden haze over the larger city
+    scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = TRACK_INFO.theme === 'pyongyang' ? .0012 : .0024; scene.fogColor = new Color3(.86, .80, .70); // warm golden haze over the larger city; Pyongyang half as dense (Marcel 08.10.2026: the far city read washed out)
     scene.environmentTexture = CubeTexture.CreateFromPrefilteredData('/assets/textures/studio.env', scene);
     scene.environmentIntensity = .55;
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
