@@ -198,7 +198,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   } });
 
   // City ground: a paved square everywhere; lawn only on the bounded park islands.
-  const square = pbr(scene, 'City square paving', pyongyang ? '#a9aaa5' : '#b9ab8f', 0, 1);
+  const square = pbr(scene, 'City square paving', pyongyang ? '#929791' : '#b9ab8f', 0, 1);
   square.albedoTexture = new Texture('/assets/textures/herringbone-diff.jpg', scene);
   square.bumpTexture = new Texture('/assets/textures/herringbone-nor_gl.jpg', scene);
   for (const t of [square.albedoTexture, square.bumpTexture] as Texture[]) { t.uScale = (GROUND.east - GROUND.west) / 4; t.vScale = (GROUND.north - RIVER.north) / 4; t.anisotropicFilteringLevel = 8; }
@@ -477,8 +477,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   }
   for (const zone of HAZARDS) { // Open-edge hazard: water basin or furnace pit, quay walls, warning edge, signs and the salvage crane.
     const { from, to } = zone, inner = W + 1.2, outer = W + zone.basin, lava = zone.kind === 'lava', cliff = zone.kind === 'cliff';
-    const water = pbr(scene, lava ? 'Furnace glow' : 'Harbour water', lava ? '#ff5a12' : '#1d3b44', lava ? 0 : .25, lava ? .9 : .08); if (!lava) water.alpha = .93;
-    if (!lava && !cliff) { water.bumpTexture = waterRipple; waterRipple.level = .27; }
+    const water = pbr(scene, lava ? 'Furnace glow' : pyongyang ? 'Taedong quay water' : 'Harbour water', lava ? '#ff5a12' : '#1d3b44', lava ? 0 : pyongyang ? 0 : .25, lava ? .9 : pyongyang ? .42 : .08);
+    if (!lava) { water.alpha = pyongyang ? 1 : .93; if (pyongyang) water.environmentIntensity = .4; }
+    if (!lava && !cliff) { water.bumpTexture = waterRipple; waterRipple.level = pyongyang ? .12 : .27; }
     if (cliff) { // painted abyss: rock strata fading into darkness
       const abyss = canvasTexture(scene, 'Abyss', 64, 256, (c) => { const g = c.createLinearGradient(0, 0, 0, 256); g.addColorStop(0, '#5c5246'); g.addColorStop(.12, '#3a332b'); g.addColorStop(.35, '#120f0c'); g.addColorStop(1, '#000000'); c.fillStyle = g; c.fillRect(0, 0, 64, 256);
         c.fillStyle = 'rgba(120,105,85,.35)'; for (let y = 6; y < 70; y += 9) c.fillRect(0, y, 64, 2); });
