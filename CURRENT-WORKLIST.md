@@ -9,6 +9,10 @@
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Offene Probleme und Features – 08.10.2026 (Marcel)
+
+Gesamtliste mit Nummern B1–B10 (Probleme) und F1–F11 (Features): [docs/31-offene-punkte.md](docs/31-offene-punkte.md). GitHub-Issues legt der Cloud-Thread an. Claude arbeitet B1, B6, B2, B4, B5, B7, F6, F8, F7 nacheinander ab; Modellarbeit ruht.
+
 ## Claude-Projektstart Marcel – 08.10.2026
 
 **Branch:** `claude/project-thread-93qjup` (von `origin/main` `4b04eeb`). Quelle: Marcels Projektstart und sein Auftrag „Mache das als erstes" zum Hitler-Gesicht (Projekt-Thread, 08.10.2026).
