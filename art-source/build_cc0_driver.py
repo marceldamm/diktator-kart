@@ -9,9 +9,10 @@ Run: blender --background --python art-source/build_cc0_driver.py -- <id|all>
 """
 import bpy, bmesh, os, sys, math, shutil
 import numpy as np
-from mathutils import Vector
+from mathutils import Vector, Quaternion
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hitler_face import refine_hitler_face
+from driver_faces import age_face
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACK = os.path.join(ROOT, '.tools', 'packs', 'ubc', 'Universal Base Characters[Standard]')
@@ -25,9 +26,9 @@ STOUT = build(**{'spine_03': (.92, 1, 1.0), 'spine_02': (1.12, 1, 1.22), 'spine_
                  'neck_01': (.98, 1, .98), 'upperarm_l': (.84, 1, .84), 'upperarm_r': (.84, 1, .84), 'thigh_l': (1, 1, 1), 'thigh_r': (1, 1, 1)})
 # Colours are linear RGB. Cloth colours follow cast.ts (uniform), toned to real fabric.
 SPECS = {
-    'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.008, .007, .007), girth=SLIM, pale=.25,
+    'hitler':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.025, .018, .013), cloth=(.008, .007, .007), girth=SLIM, pale=.4,
                       details=['toothbrush', 'leather-collar', 'leather-harness', 'leather-belt']),
-    'stalin':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.09, .085, .075), cloth=(.17, .18, .14), girth=build(**{'spine_02': (1.0, 1, 1.05)}), pale=.12,
+    'stalin':    dict(hair=['Hair_SimpleParted'], hair_rgb=(.15, .14, .125), cloth=(.17, .18, .14), girth=build(**{'spine_02': (1.0, 1, 1.05)}), pale=.12,
                       details=['walrus', 'stand-collar', 'buttons']),
     'mussolini': dict(hair=[], hair_rgb=(.02, .016, .012), cloth=(.012, .012, .014), girth=build(**{'neck_01': (1.0, 1, 1.0), 'spine_03': (.92, 1, .95)}), pale=.12,
                       details=['stand-collar', 'buttons', 'sash']),
@@ -41,6 +42,8 @@ SPECS = {
 # Grip and pedals measured in the game (kart frame, 07.10.): wheel rim at x +-0.21, 1.18 m up, 0.1 m ahead of the
 # seat origin once the runtime pulls the wheel 10 cm in; pedals 0.72 m ahead, 0.6 m up.
 SEAT = (-.48, .05)   # root offset forward/up in the kart frame (Blender Y forward)
+CURL = (38, 52, 34, 20)   # knuckle, middle and tip joint, thumb (degrees)
+CURL_SIGN = -1
 SCALE = 1.12         # Marcel 07.10.: the first pilot sat too low and looked too small
 
 def solid(name, rgb, rough=.6, metal=0.):
@@ -48,6 +51,35 @@ def solid(name, rgb, rough=.6, metal=0.):
     b = m.node_tree.nodes['Principled BSDF']; b.inputs['Base Color'].default_value = (*rgb, 1); b.inputs['Roughness'].default_value = rough
     b.inputs['Metallic'].default_value = metal
     return m
+
+# Joints the runtime needs: the arm chains. Every other bone hands its weights to the nearest kept ancestor
+# (fingers to the hand, legs to the root), so the skin stays cheap: ten joints instead of 65.
+ARM_RIG = {'root', 'spine_03', 'clavicle_l', 'clavicle_r', 'upperarm_l', 'upperarm_r', 'lowerarm_l', 'lowerarm_r', 'hand_l', 'hand_r'}
+def prune_arm_rig(arm, skinned):
+    def keeper(name):
+        b = arm.data.bones.get(name)
+        while b and b.name not in ARM_RIG: b = b.parent
+        return b.name if b else 'root'
+    for ob in skinned:
+        names = {g.index: keeper(g.name) for g in ob.vertex_groups}
+        weights = [{} for _ in ob.data.vertices]
+        for v in ob.data.vertices:
+            for g in v.groups:
+                k = names.get(g.group)
+                if k: weights[v.index][k] = weights[v.index].get(k, 0) + g.weight
+        ob.vertex_groups.clear()
+        groups = {k: ob.vertex_groups.new(name=k) for k in sorted(ARM_RIG)}
+        for i, w in enumerate(weights):
+            for k, x in w.items(): groups[k].add([i], min(1., x), 'REPLACE')
+    bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode='EDIT')
+    bones = arm.data.edit_bones
+    for eb in bones:
+        if eb.name in ARM_RIG:
+            p = eb.parent
+            while p and p.name not in ARM_RIG: p = p.parent
+            eb.use_connect = False; eb.parent = p
+    for eb in [b for b in bones if b.name not in ARM_RIG]: bones.remove(eb)
+    bpy.ops.object.mode_set(mode='OBJECT')
 
 def make(id):
     spec = SPECS[id]
@@ -70,6 +102,20 @@ def make(id):
 
     # --- Seat pose: aim bones (armature space, pack faces -Y), then IK for hands and feet ---------------
     bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode='POSE')
+    # Fingers close around the rim (08.10.): each joint bends about the knuckle line, set in rest-local terms so
+    # it survives the arm IK. Rest-pose knuckle line runs pinky -> index.
+    for sd in ('l', 'r'):
+        bones = arm.data.bones
+        across = (bones[f'index_01_{sd}'].head_local - bones[f'pinky_01_{sd}'].head_local).normalized()
+        for finger in ('index', 'middle', 'ring', 'pinky'):
+            for j, deg in ((1, CURL[0]), (2, CURL[1]), (3, CURL[2])):
+                pb = arm.pose.bones[f'{finger}_0{j}_{sd}']; pb.rotation_mode = 'QUATERNION'
+                axis = (pb.bone.matrix_local.to_3x3().inverted() @ across).normalized()
+                pb.rotation_quaternion = Quaternion(axis, math.radians(deg) * (1 if sd == 'l' else -1) * CURL_SIGN)
+        for j, deg in ((2, CURL[3]), (3, CURL[3])):
+            pb = arm.pose.bones[f'thumb_0{j}_{sd}']; pb.rotation_mode = 'QUATERNION'
+            axis = (pb.bone.matrix_local.to_3x3().inverted() @ across).normalized()
+            pb.rotation_quaternion = Quaternion(axis, math.radians(deg) * (1 if sd == 'l' else -1) * CURL_SIGN)
     def aim(name, direction):
         bpy.context.view_layer.update()
         pb = arm.pose.bones[name]
@@ -105,8 +151,15 @@ def make(id):
     bpy.context.view_layer.update()
     neck_at = arm.matrix_world @ arm.pose.bones['neck_01'].head
     chest_at = arm.matrix_world @ arm.pose.bones['spine_03'].head
-    bpy.data.objects.remove(arm)
+    # Slim arm rig (08.10.): the seat pose becomes the rest pose; the runtime turns the arms with the wheel.
+    bpy.context.view_layer.objects.active = arm; bpy.ops.object.mode_set(mode='POSE')
+    bpy.ops.pose.select_all(action='SELECT'); bpy.ops.pose.visual_transform_apply()
+    for pb in arm.pose.bones:
+        for c in list(pb.constraints): pb.constraints.remove(c)
+    bpy.ops.pose.armature_apply(selected=False)
+    bpy.ops.object.mode_set(mode='OBJECT')
     for e in [o for o in bpy.data.objects if o.name.startswith('ik-')]: bpy.data.objects.remove(e)
+    body.modifiers.new('Arm rig', 'ARMATURE').object = arm
 
     # --- Cloth shell: body copy without head, neck and hands; fabric drapes over the muscle grooves ----------
     cloth = solid('Pilot cloth', spec['cloth'], .86)
@@ -275,11 +328,15 @@ def make(id):
     # --- Head and neck as their own mesh: the cockpit camera hides them at runtime ------------------------
     head_neck = [g.index for g in body.vertex_groups if g.name.startswith(('Head', 'neck'))]
     head = body.copy(); head.data = body.data.copy(); bpy.context.collection.objects.link(head); head.name = 'Pilot head'
+    for m in list(head.modifiers): head.modifiers.remove(m)
     for ob, keep_head in ((head, True), (body, False)):
         flags = [sum(g.weight for g in v.groups if g.group in head_neck) > .5 for v in ob.data.vertices]
         bm = bmesh.new(); bm.from_mesh(ob.data)
         dead = [f for f in bm.faces if (sum(flags[v.index] for v in f.verts) * 2 > len(f.verts)) != keep_head]
         bmesh.ops.delete(bm, geom=dead, context='FACES'); bm.to_mesh(ob.data); bm.free()
+
+    head.vertex_groups.clear()
+    prune_arm_rig(arm, [body, suit])
 
     # Textures at 1024 px: six drivers share the screen, the pack ships 2-4k maps.
     for img in bpy.data.images:
@@ -288,13 +345,14 @@ def make(id):
 
     # --- Into the kart frame: face +Y, pelvis over the seat cushion ----------------------------------------
     root = bpy.data.objects.new(f'cc0-driver-{id}', None); bpy.context.collection.objects.link(root)
-    for o in [o for o in bpy.data.objects if o.type == 'MESH']:
-        mw = o.matrix_world.copy(); o.parent = root; o.matrix_world = mw
+    for o in [o for o in bpy.data.objects if o.type in ('MESH', 'ARMATURE')]:
+        mw = o.matrix_world.copy(); o.parent = arm if any(m.type == 'ARMATURE' for m in o.modifiers) else root; o.matrix_world = mw
     root.rotation_euler[2] = math.pi; root.scale = (SCALE,) * 3; root.location = (0, SEAT[0], SEAT[1])
     if id == 'hitler': refine_hitler_face(root)
+    else: age_face(root, id)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.blend'))
     out = os.path.join(ROOT, '.tools', 'raw-models', f'cc0-driver-{id}.glb')
-    face_export = dict(export_vertex_color='NAME', export_vertex_color_name='Face age tint', export_all_vertex_colors=False) if id == 'hitler' else {}
+    face_export = dict(export_vertex_color='NAME', export_vertex_color_name='Face age tint', export_all_vertex_colors=False)
     bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', export_yup=True, export_apply=True, **face_export)
     shutil.copy(out, os.path.join(ROOT, 'public', 'assets', 'models', f'cc0-driver-{id}.glb'))
     print('CC0_DRIVER_DONE', id)

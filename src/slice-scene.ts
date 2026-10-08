@@ -31,7 +31,7 @@ import { addCityWorld } from './city-world';
 import { addTrackWorld } from './track-world';
 import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
-import { airTrickRoll, armGripPose } from './kart-visuals';
+import { airTrickRoll, armGripPose, twoBoneElbow } from './kart-visuals';
 import { canalSurfaceSprayRate, looseSurfaceDustRate } from './environment-effects';
 import type { KartState } from './kart-model';
 import type { TestScene } from './scene';
@@ -43,6 +43,7 @@ import '@babylonjs/core/Engines/AbstractEngine/abstractEngine.timeQuery';
 import {addItems} from './item-scene';
 import { CAST, CAST_PARTS, DEFAULT_TIRES, DRIVER_HEAD_SCALE, TIRE_SETS, type CastMember } from './cast';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
+import type { Node as SceneNode } from '@babylonjs/core/node';
 import { CreateScreenshotUsingRenderTargetAsync } from '@babylonjs/core/Misc/screenshotTools';
 import type { LoadingReporter } from './loading-progress';
 
@@ -578,6 +579,48 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       return { blimp, hook };
     });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
+    type PilotArm = { upper: TransformNode; lower: TransformNode; hand: TransformNode; rest: Quaternion[]; grip: Matrix };
+    const refreshChain = (node: TransformNode) => {
+      const chain: TransformNode[] = [];
+      for (let n: SceneNode | null = node; n; n = n.parent) if (n instanceof TransformNode) chain.unshift(n);
+      for (const n of chain) n.computeWorldMatrix(true);
+    };
+    const armFrom = new Vector3(), armTo = new Vector3(), armTurn = new Quaternion(), armInverse = new Matrix(), armGoal = new Matrix(), armScale = new Vector3(), armSpot = new Vector3();
+    // Turn a bone (in its parent's frame, which may be mirrored by the glTF root) so that `from` points along `to`.
+    const swing = (bone: TransformNode, from: Vector3, to: Vector3) => {
+      bone.parent!.getWorldMatrix().invertToRef(armInverse);
+      Vector3.TransformNormalToRef(from, armInverse, armFrom); Vector3.TransformNormalToRef(to, armInverse, armTo);
+      if (armFrom.lengthSquared() < 1e-12 || armTo.lengthSquared() < 1e-12) return;
+      Quaternion.FromUnitVectorsToRef(armFrom.normalize(), armTo.normalize(), armTurn);
+      armTurn.multiplyToRef(bone.rotationQuaternion!, bone.rotationQuaternion!);
+      bone.computeWorldMatrix(true);
+    };
+    const wheelLocal = new Matrix(), wheelTurn = new Quaternion(), wheelAt = new Matrix();
+    const poseArm = (arm: PilotArm, wheel: TransformNode | undefined) => {
+      arm.upper.rotationQuaternion!.copyFrom(arm.rest[0]); arm.lower.rotationQuaternion!.copyFrom(arm.rest[1]); arm.hand.rotationQuaternion!.copyFrom(arm.rest[2]);
+      if (!wheel) return;
+      refreshChain(arm.hand);
+      const shoulder = arm.upper.getAbsolutePosition().clone(), elbow = arm.lower.getAbsolutePosition().clone();
+      const reach = (Vector3.Distance(shoulder, elbow) + Vector3.Distance(elbow, arm.hand.getAbsolutePosition())) * .995;
+      // Grip on the wheel turned by `share` of its current angle; at full lock the far hand slides along the rim
+      // instead of leaving it, like a driver whose arm is too short for the turn.
+      const gripAt = (share: number) => {
+        Quaternion.FromEulerAnglesToRef(wheel.rotation.x, wheel.rotation.y, wheel.rotation.z * share, wheelTurn);
+        Matrix.ComposeToRef(wheel.scaling, wheelTurn, wheel.position, wheelLocal);
+        wheelLocal.multiplyToRef(wheel.parent ? (wheel.parent as TransformNode).getWorldMatrix() : Matrix.IdentityReadOnly, wheelAt);
+        arm.grip.multiplyToRef(wheelAt, armGoal);
+        return Vector3.Distance(shoulder, armGoal.getTranslation()) <= reach;
+      };
+      if (!gripAt(1)) { let lo = 0, hi = 1; for (let k = 0; k < 6; k++) { const mid = (lo + hi) / 2; if (gripAt(mid)) lo = mid; else hi = mid; } gripAt(lo); }
+      const target = armGoal.getTranslation();
+      const bent = twoBoneElbow(shoulder, elbow, arm.hand.getAbsolutePosition(), target);
+      swing(arm.upper, elbow.subtract(shoulder), bent.subtract(shoulder)); arm.lower.computeWorldMatrix(true); arm.hand.computeWorldMatrix(true);
+      const elbowNow = arm.lower.getAbsolutePosition().clone();
+      swing(arm.lower, arm.hand.getAbsolutePosition().subtract(elbowNow), target.subtract(elbowNow)); arm.hand.computeWorldMatrix(true);
+      // The palm keeps its grip on the rim: hand orientation = wheel turn applied to the seat-pose grip.
+      armGoal.multiplyToRef(arm.lower.getWorldMatrix().clone().invert(), armInverse);
+      armInverse.decompose(armScale, arm.hand.rotationQuaternion!, armSpot);
+    };
     // CC0 drivers (07.10.2026, Marcel's method switch): Quaternius-based bodies from art-source/build_cc0_driver.py
     // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
@@ -588,11 +631,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
         const old = new Set<AbstractMesh>([v.driver, v.head, ...v.arms.filter((x): x is TransformNode => !!x)].flatMap((n) => n.getChildMeshes(false)));
         for (const m of v.root.getChildMeshes(false)) if (/driverPose|headPose|armPose|cast-|scarfFlap|gripHand|White glove|Uniform racing suit|Cape cloth|Hat cloth|Hair and leather/.test(m.name)) old.add(m);
-        // Realistic arm lengths: the wheel comes 10 cm towards the chest so the hands reach the rim.
-        v.steering.position.z += .1;
+        // Realistic arm lengths: the wheel comes 22 cm towards the chest and 3 cm up so the wrists sit just behind
+        // the rim at ten-to-two (08.10.: at 10 cm the hands hovered 18 cm behind it); the column grows to match.
+        v.steering.position.z += .22; v.steering.position.y += .03;
+        for (const m of v.steering.getChildMeshes(false)) if (/Polished steel/.test(m.name)) m.scaling.z *= 1.41;
         // The holder follows the old driver node: lean in corners, rise into the tank hatch, ejection after a wreck.
         const holder = new TransformNode(`cc0Driver-${index}`, scene); holder.parent = v.orientation;
-        const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined };
+        const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined, arms: [] as PilotArm[] };
         const sit = (cast: CastMember) => {
           if (seat.style === cast.faceStyle) return;
           for (const m of seat.meshes) { shadow.removeShadowCaster(m); }
@@ -603,6 +648,18 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const m of seat.meshes) { m.receiveShadows = true; shadow.addShadowCaster(m); }
           seat.head = seat.meshes.filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar|mole|top hair|cap|cigar/.test(m.name));
           seat.skull = seat.head.find((m) => /Pilot head/.test(m.name)); seat.style = cast.faceStyle;
+          // Arm rig: remember the seat pose and where each wrist sits on the wheel (in the wheel's own frame).
+          const bones = new Map(holder.getDescendants(false).map((n) => [n.name.slice(n.name.indexOf('/') + 1), n as TransformNode]));
+          const v = visuals[index], wheelTurn = v.steering.rotation.z, lean = [holder.position.y, holder.rotation.x, holder.rotation.z] as const;
+          v.steering.rotation.z = 0; holder.position.y = 0; holder.rotation.x = 0; holder.rotation.z = 0;
+          seat.arms = (['l', 'r'] as const).flatMap((sd) => {
+            const upper = bones.get(`upperarm_${sd}`), lower = bones.get(`lowerarm_${sd}`), hand = bones.get(`hand_${sd}`);
+            if (!upper?.rotationQuaternion || !lower?.rotationQuaternion || !hand?.rotationQuaternion) return [];
+            refreshChain(hand); refreshChain(v.steering);
+            const grip = hand.getWorldMatrix().multiply(v.steering.getWorldMatrix().clone().invert());
+            return [{ upper, lower, hand, rest: [upper.rotationQuaternion.clone(), lower.rotationQuaternion.clone(), hand.rotationQuaternion.clone()], grip }];
+          });
+          v.steering.rotation.z = wheelTurn; [holder.position.y, holder.rotation.x, holder.rotation.z] = lean;
         };
         const dress = v.dress; v.dress = (cast: CastMember) => { dress(cast); sit(cast); };
         sit(CAST[(roster[index] ?? index) % CAST.length]);
@@ -613,6 +670,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         seats.forEach((seat, i) => {
           for (const m of seat.old) if (m.isEnabled()) m.setEnabled(false);
           const d = visuals[i].driver; seat.holder.position.y = d.position.y; seat.holder.rotation.x = d.rotation.x; seat.holder.rotation.z = d.rotation.z;
+          // Hands follow the turning wheel; an ejected driver lets go.
+          const onWheel = d.position.y <= .05;
+          if (onWheel) refreshChain(visuals[i].steering);
+          for (const arm of seat.arms) poseArm(arm, onWheel ? visuals[i].steering : undefined);
           // Cockpit camera: the eye sits inside the head, so head, hair and face parts hide while the camera is that close.
           if (!cam || !seat.skull) return;
           const b = seat.skull.getBoundingInfo().boundingSphere;
@@ -756,11 +817,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             const v = visuals[kartIndex];
             // Studio portraits should show only the selected driver, without the track or rival karts.
             visuals.forEach((visual, index) => visual.root.setEnabled(index === kartIndex));
-            scene.meshes.forEach((mesh) => { mesh.isVisible = mesh.isDescendantOf(v.driver); });
+            // The CC0 pilot hangs off the kart body, not off the old driver node (08.10.: cards were empty).
+            const pilot = scene.getTransformNodeByName(`cc0Driver-${kartIndex}`);
+            scene.meshes.forEach((mesh) => { mesh.isVisible = mesh.isDescendantOf(v.driver) || (!!pilot && mesh.isDescendantOf(pilot)); });
             scene.clearColor = new Color4(.17, .21, .22, 1);
-            const head = v.head.getAbsolutePosition(), h = v.root.rotation.y;
-            camera.position.set(head.x + Math.sin(h) * 1.6 + Math.cos(h) * .28, head.y + .02, head.z + Math.cos(h) * 1.6 - Math.sin(h) * .28);
-            camera.setTarget(new Vector3(head.x, head.y - .1, head.z));
+            const skull = pilot?.getChildMeshes(false).find((m) => /Pilot head/.test(m.name));
+            const head = skull ? skull.getBoundingInfo().boundingSphere.centerWorld.clone() : v.head.getAbsolutePosition(), h = v.root.rotation.y;
+            const reach = skull ? 1.15 : 1.6, drop = skull ? .09 : .1;
+            camera.position.set(head.x + Math.sin(h) * reach + Math.cos(h) * .22, head.y + .02, head.z + Math.cos(h) * reach - Math.sin(h) * .22);
+            camera.setTarget(new Vector3(head.x, head.y - drop, head.z));
             shots.push(await CreateScreenshotUsingRenderTargetAsync(engine, camera, { width: 320, height: 360 }, 'image/jpeg', 4));
           }
         } finally {

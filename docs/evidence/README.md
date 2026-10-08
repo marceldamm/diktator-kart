@@ -1,5 +1,9 @@
 # Echte Laufzeitbelege des Stadion-Slices
 
+## 08.10.2026 – Hände, Gesichter, Fahrerwahl (Claude)
+
+Branch `claude/project-thread-93qjup`, Dev-Server `127.0.0.1:4173`, sichtbares CDP-Chrome (Port 9231). `hands-straight/left/right-20261008.png`: feste QA-Kamera vor dem Spielerkart, Hände folgen dem Lenkrad; `hands-bot3-straight-20261008.png` Mao-Bot; `hands-chase-race-20261008.png` normale Rennansicht. `faces-blender-before/after-20261008.png`: Blender-Porträts aller sechs vor/nach `driver_faces.py` (Hitler unverändert). `faces-select-20261008.png` und `r74-game-select-20261008.png`: Fahrerwahl mit echten Porträts. Grenzen: Kartenlicht färbt Haut orange; keine Ähnlichkeitsabnahme.
+
 ## 07.10.2026 – CC0-Hitler-Gesichtspass (Codex)
 
 [Belegordner und Quellen](hitler-face-20261007/README.md): feste Blender-Front-/Dreiviertel-/Profilbilder als **Assetvergleich**, tatsächliches Grand-Prix-Kart als Sitzdiagnose und kurze sichtbare Chrome-Spielprobe. Historische Ähnlichkeit, Kleidung und Kontakte bleiben offen. Runtimebild stammt vor der letzten Hautfarben-Exportkorrektur; finaler Tint technisch geprüft, nicht visuell auf diesem Runtimebild bestätigt. Blender-Vordergrundwunsch ausdrücklich zurückgenommen, Hintergrund-Einzelbilder bleiben bevorzugt.
