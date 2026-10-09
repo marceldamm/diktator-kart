@@ -1,6 +1,7 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { Scene } from '@babylonjs/core/scene';
 import { LoadAssetContainerAsync } from '@babylonjs/core/Loading/sceneLoader';
+import type { AssetContainer } from '@babylonjs/core/assetContainer';
 import '@babylonjs/loaders/glTF';
 import { Matrix, Vector3, Quaternion } from '@babylonjs/core/Maths/math.vector';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
@@ -18,7 +19,6 @@ import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator'
 import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent';
 import { GlowLayer } from '@babylonjs/core/Layers/glowLayer';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
-import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline';
 import { SSAO2RenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/ssao2RenderingPipeline';
 import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
@@ -44,7 +44,6 @@ import {addItems} from './item-scene';
 import { CAST, CAST_PARTS, DEFAULT_TIRES, DRIVER_HEAD_SCALE, TIRE_SETS, type CastMember } from './cast';
 import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import type { Node as SceneNode } from '@babylonjs/core/node';
-import { CreateScreenshotUsingRenderTargetAsync } from '@babylonjs/core/Misc/screenshotTools';
 import type { LoadingReporter } from './loading-progress';
 
 
@@ -628,6 +627,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // CC0 drivers (07.10.2026, Marcel's method switch): Quaternius-based bodies from art-source/build_cc0_driver.py
     // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
     // 09.10.2026: all six are now Marcel's Tripo models, posed in art-source/<id>-im-kart.blend (build_driver_kart_pose.py).
+    let presentDriver: ((cast: number | null) => void) | undefined;
+    let presentedAt: Vector3 | undefined;
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
       const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
       const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(
@@ -698,6 +699,48 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const m of seat.head) if (m.isEnabled() === inside) m.setEnabled(!inside);
         });
       });
+      // Driver presentation (Marcel, 09.10.2026): in the selection the chosen driver gets out and stands beside the
+      // player kart in one of four shared poses (art-source/export_driver_stand.py bakes spot, facing and poses into
+      // <id>-stand.glb in the kart frame). Loaded on first click, then cached; the others follow in the background.
+      const standing = new Map<string, Promise<AssetContainer>>();
+      const standingModel = (id: string) => {
+        if (!standing.has(id)) standing.set(id, LoadAssetContainerAsync(`/assets/models/${id}-stand.glb`, scene));
+        return standing.get(id)!;
+      };
+      scene.onDisposeObservable.add(() => { for (const c of standing.values()) void c.then((x) => x.dispose()); });
+      const stage = new TransformNode('driverStage', scene); stage.parent = visuals[0].orientation;
+      let shown: (() => void) | undefined, presenting = 0, lastPose = -1;
+      presentDriver = (cast) => {
+        const generation = ++presenting;
+        shown?.(); shown = undefined; presentedAt = undefined;
+        seats[0].holder.setEnabled(cast === null);
+        if (cast === null) return;
+        const id = CAST[cast].faceStyle;
+        void standingModel(id).then((container) => {
+          if (generation !== presenting) return;
+          const inst = container.instantiateModelsToScene((n) => `stand/${n}`, false);
+          for (const r of inst.rootNodes) r.parent = stage;
+          const meshes = inst.rootNodes.flatMap((r) => r.getChildMeshes(false));
+          for (const m of meshes) {
+            m.receiveShadows = true; m.isPickable = false; shadow.addShadowCaster(m);
+            const material = m.material;
+            if (material instanceof PBRMaterial) { material.metallic = Math.min(material.metallic ?? 0, .12); material.roughness = Math.max(material.roughness ?? 0, .78); }
+          }
+          // A random pose, never the same one twice in a row.
+          const poses = inst.animationGroups;
+          let pose = Math.floor(Math.random() * poses.length);
+          if (poses.length > 1 && pose === lastPose) pose = (pose + 1) % poses.length;
+          lastPose = pose;
+          poses[pose]?.start(false, 1, poses[pose].from, poses[pose].from);
+          shown = () => { for (const m of meshes) shadow.removeShadowCaster(m); inst.dispose(); };
+          stage.computeWorldMatrix(true);
+          for (const m of meshes) { m.computeWorldMatrix(true); m.refreshBoundingInfo({ applySkeleton: true }); }
+          const body = meshes.filter((m) => m.getTotalVertices() > 0).reduce((a, m) => { const b = m.getBoundingInfo().boundingBox; return { min: Vector3.Minimize(a.min, b.minimumWorld), max: Vector3.Maximize(a.max, b.maximumWorld) }; },
+            { min: new Vector3(Infinity, Infinity, Infinity), max: new Vector3(-Infinity, -Infinity, -Infinity) });
+          presentedAt = body.min.add(body.max).scale(.5);
+          for (const other of styles) void standingModel(other);
+        });
+      };
     }
     report?.('items');
     // Static in-world broadcast art: the former live RenderTarget duplicated the full scene render.
@@ -816,44 +859,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         }
         visuals.forEach((v)=>v.setKimPolish(false));for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
       },
-      async portraits(order) {
-        // Head-and-shoulders shots straight from the race models, one per roster member.
-        const camera = new FreeCamera('Portrait camera', Vector3.Zero(), scene); camera.fov = .5; camera.minZ = .05;
-        // Studio light for the selection cards: soft frontal fill, no hard sun shadows across the faces.
-        const fill = new HemisphericLight('Portrait fill', Vector3.Up(), scene); fill.intensity = 1.35; fill.diffuse = new Color3(1, .95, .88); fill.groundColor = new Color3(.55, .5, .46);
-        const sunWasShadowing = sun.shadowEnabled; sun.shadowEnabled = false; const sunLevel = sun.intensity; sun.intensity = sunLevel * .55;
-        const wasEnabled = visuals.map((visual) => visual.root.isEnabled());
-        const wasVisible = scene.meshes.map((mesh) => mesh.isVisible);
-        const activeParticles = scene.particleSystems.filter((system) => system.isStarted());
-        const clearColor = scene.clearColor.clone();
-        for (const system of activeParticles) { system.stop(); system.reset(); }
-        const shots: string[] = [];
-        try {
-          for (let castIndex = 0; castIndex < CAST.length; castIndex++) {
-            const kartIndex = Math.max(0, order.indexOf(castIndex));
-            const v = visuals[kartIndex];
-            // Studio portraits should show only the selected driver, without the track or rival karts.
-            visuals.forEach((visual, index) => visual.root.setEnabled(index === kartIndex));
-            // The CC0 pilot hangs off the kart body, not off the old driver node (08.10.: cards were empty).
-            const pilot = scene.getTransformNodeByName(`cc0Driver-${kartIndex}`);
-            scene.meshes.forEach((mesh) => { mesh.isVisible = mesh.isDescendantOf(v.driver) || (!!pilot && mesh.isDescendantOf(pilot)); });
-            scene.clearColor = new Color4(.17, .21, .22, 1);
-            const skull = pilot?.getChildMeshes(false).find((m) => /Pilot head/.test(m.name));
-            const head = skull ? skull.getBoundingInfo().boundingSphere.centerWorld.clone() : v.head.getAbsolutePosition(), h = v.root.rotation.y;
-            const reach = skull ? 1.15 : 1.6, drop = skull ? .09 : .1;
-            camera.position.set(head.x + Math.sin(h) * reach + Math.cos(h) * .22, head.y + .02, head.z + Math.cos(h) * reach - Math.sin(h) * .22);
-            camera.setTarget(new Vector3(head.x, head.y - drop, head.z));
-            shots.push(await CreateScreenshotUsingRenderTargetAsync(engine, camera, { width: 320, height: 360 }, 'image/jpeg', 4));
-          }
-        } finally {
-          visuals.forEach((visual, index) => visual.root.setEnabled(wasEnabled[index]));
-          scene.meshes.forEach((mesh, index) => { mesh.isVisible = wasVisible[index]; });
-          scene.clearColor = clearColor;
-          activeParticles.forEach((system) => system.start());
-          camera.dispose(); fill.dispose(); sun.shadowEnabled = sunWasShadowing; sun.intensity = sunLevel;
-        }
-        return shots;
-      },
+      presentDriver(cast) { presentDriver?.(cast); },
+      presentedAt() { return presentedAt ? { x: presentedAt.x, z: presentedAt.z } : undefined; },
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);

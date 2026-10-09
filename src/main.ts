@@ -173,8 +173,8 @@ class App {
   private selectedTrackId:TrackId='stadionring';
   private selectingTrack=false;
   private selecting=false;
-  private portraitCaptureInProgress=false;
-  private portraits: string[] | undefined;
+  /** Head portraits, rendered once in Blender (art-source/export_driver_stand.py) instead of live in the browser. */
+  private portraits: string[] = CAST.map((member) => `/assets/portraits/${member.faceStyle}.webp`);
   /** Roster member driving kart slot i (slot 0 = player). */
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
@@ -327,9 +327,6 @@ class App {
 
   private async restart(after?: () => void): Promise<void> {
     const generation = ++this.generation;
-    this.portraitCaptureInProgress=false;
-    const driverGo=document.querySelector<HTMLButtonElement>('#driver-go');
-    if(driverGo){driverGo.disabled=false;driverGo.innerHTML='Rennen starten <span>↵</span>';}
     this.mouse.release();
     const loading = new LoadingProgress(!LAB_WORLD);
     const loadingText = { heading: `${TRACK_INFO.name} wird vorbereitet`, footnote: `${TRACK_INFO.city} · ${TRACK_INFO.name} · ${this.gp ? `Grand Prix · Rennen ${this.gp.round + 1}/${this.gp.tracks.length}` : 'Diktator Kart'}` };
@@ -520,18 +517,10 @@ class App {
     this.selecting = true; document.body.classList.add('select-open');
     document.querySelector('#driver-kicker')!.textContent = this.mode === 'gp' && this.gp ? `FAHRERWAHL · GRAND PRIX · ${this.gp.tracks.map((t) => TRACKS[t].name).join(' → ')}` : `FAHRERWAHL · ${this.mode === 'timetrial' ? 'ZEITFAHREN' : 'EINZELRENNEN'} · ${TRACK.name.toUpperCase()}`;
     this.renderSelection();
-    if(this.portraitCaptureInProgress){const button=document.querySelector<HTMLButtonElement>('#driver-go');if(button)button.disabled=true;}
-    if (!this.portraits && this.testScene.portraits && !this.portraitCaptureInProgress) {
-      const generation = this.generation;
-      this.portraitCaptureInProgress=true;
-      const button=document.querySelector<HTMLButtonElement>('#driver-go');
-      if(button){button.disabled=true;button.textContent='Porträts werden vorbereitet …';}
-      void this.testScene.portraits(this.order).then((shots) => { if (generation === this.generation) { this.portraits = shots; this.renderSelection(); } }).catch(() => undefined).finally(()=>{if(generation===this.generation){this.portraitCaptureInProgress=false;if(button){button.disabled=false;button.innerHTML='Rennen starten <span>↵</span>';}}});
-    }
+    this.testScene.presentDriver?.(this.chosen);
   }
-  private closeSelection(): void { this.selecting = false; document.body.classList.remove('select-open'); }
+  private closeSelection(): void { this.selecting = false; document.body.classList.remove('select-open'); this.testScene?.presentDriver?.(null); }
   private confirmSelection(): void {
-    if(this.portraitCaptureInProgress)return;
     this.closeSelection();
     try { localStorage.setItem('dk-driver', String(this.chosen)); } catch { /* storage optional */ }
     // Grand Prix (Marcel, 07.10.): after the driver comes Sarah's track selection; the chosen track opens the cup.
@@ -540,25 +529,25 @@ class App {
   }
   private pick(index: number): void {
     this.chosen = index; this.order = rosterOrder(index); this.testScene?.setRoster?.(this.order); this.applyTires();
-    this.renderSelection(); this.audio.voice(`${CAST[index].voice}-horn`, { channel: 'driver', rate: CAST[index].voiceRate, volume: .8 });
+    this.renderSelection(); if (this.selecting) this.testScene?.presentDriver?.(index); this.audio.voice(`${CAST[index].voice}-horn`, { channel: 'driver', rate: CAST[index].voiceRate, volume: .8 });
   }
   private renderSelection(): void {
     const grid = document.querySelector('#driver-grid')!; grid.replaceChildren();
     CAST.forEach((member, index) => {
       const card = document.createElement('button'); card.type = 'button'; card.className = 'driver-card'; card.setAttribute('role', 'option');
       card.classList.toggle('selected', index === this.chosen); card.setAttribute('aria-selected', String(index === this.chosen));
-      const shot = this.portraits?.[index];
-      const picture = shot ? Object.assign(document.createElement('img'), { src: shot, alt: `Karikatur ${member.name}` }) : Object.assign(document.createElement('span'), { className: 'portrait-wait', textContent: 'Porträt wird gerendert …' });
+      const picture = Object.assign(document.createElement('img'), { src: this.portraits[index], alt: `Karikatur ${member.name}`, decoding: 'async' });
       const dot = document.createElement('i'); dot.style.background = member.paint;
       const name = document.createElement('strong'); name.textContent = member.name;
-      const kart = document.createElement('small'); kart.textContent = `${member.kartName} · ${member.projectileIcon}`;
-      card.append(picture, dot, name, kart);
+      card.title = `${member.name} · ${member.kartName}`;
+      card.append(picture, dot, name);
       card.addEventListener('click', () => { if (index === this.chosen) this.confirmSelection(); else this.pick(index); });
       grid.append(card);
     });
     const m = CAST[this.chosen], detail = document.querySelector('#driver-detail')!; detail.replaceChildren();
-    const title = document.createElement('b'); title.textContent = `${m.name} · ${m.kartName}`;
-    const line = document.createElement('div'); line.textContent = `„${m.title}“ – ${m.flavour}`;
+    const title = document.createElement('b'); title.textContent = m.name;
+    const kartLine = document.createElement('div'); kartLine.className = 'driver-kart'; kartLine.textContent = `${m.kartName} · „${m.title}“`;
+    const line = document.createElement('div'); line.textContent = m.flavour;
     const ability = document.createElement('div'); ability.innerHTML = '<em>Fähigkeit (Q):</em> '; ability.append(m.abilityIdea + ' · ');
     const item = document.createElement('em'); item.textContent = 'Wurfobjekt:'; ability.append(item, ` ${m.projectileIcon} ${m.projectileName}`);
     const rival = document.createElement('div'); rival.innerHTML = '<em>Als Rivale:</em> '; rival.append(BOT_STYLES[this.chosen]?.label ?? '');
@@ -568,7 +557,7 @@ class App {
     const next = document.createElement('button'); next.type = 'button'; next.textContent = '▶'; next.addEventListener('click', () => this.cycleTires(1));
     const label = document.createElement('span'); label.innerHTML = '<em>Reifen:</em> '; label.append(`${set.name} (${set.owner})${this.tireChoice === 'auto' ? ' · eigene' : ''}`);
     tires.append(prev, label, next);
-    detail.append(title, line, ability, rival, tires);
+    detail.append(title, kartLine, line, ability, rival, tires);
   }
 
   private async beginRace(): Promise<void> {
@@ -766,6 +755,15 @@ class App {
     const d = Math.max(0, this.progress[0].distance);
     let i = samples.findIndex((p) => p[4] >= d); if (i < 0) i = samples.length - 1;
     return this.raceTime - i / 20;
+  }
+  /** Driver selection: frame the player kart and the driver standing beside it, eased so a new driver does not jump. */
+  private presentationAim: { x: number; z: number } | undefined;
+  private presentationFocus(): KartState {
+    const k = this.renderKart, at = this.testScene?.presentedAt?.();
+    const goal = at ? { x: (k.x + at.x) / 2, z: (k.z + at.z) / 2 } : { x: k.x, z: k.z };
+    const aim = this.presentationAim ??= goal;
+    aim.x += (goal.x - aim.x) * .08; aim.z += (goal.z - aim.z) * .08;
+    return { ...k, x: aim.x, z: aim.z };
   }
   /** Start menu backdrop (Marcel, 07.10.): the camera glides from driver to driver every few seconds, random start. */
   private menuCycle={from:-1,to:Math.floor(Math.random()*6),since:0};
@@ -1249,13 +1247,13 @@ class App {
         : this.kart.grounded && Math.abs(this.kart.suspensionOffset) > 0.012
           ? 'Federung schwingt aus' : 'Ebener Boden';
     }
-    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.camera.introMode&&!this.selecting&&!this.selectingTrack&&this.racePhase!=='finished'?this.menuFocus():this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
+    if(this.camera?.photoMode||this.camera?.introMode) this.camera.update(this.camera.introMode&&!this.selecting&&!this.selectingTrack&&this.racePhase!=='finished'?this.menuFocus():this.selecting?this.presentationFocus():this.renderKart, Math.min((this.engine?.getDeltaTime()??16)/1000,.1));
     if (!LAB_WORLD) {
       const stand = trackPoint(TRACK.start + 20), nearness = Math.max(0, 1 - Math.hypot(this.kart.x - stand.x, this.kart.z - stand.z) / 70);
       const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);
       this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness, rollSurface);
     }
-    if(!this.portraitCaptureInProgress)this.testScene?.scene.render();
+    this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();
       debug.textContent = `Status: ${this.state}\nEngine: Babylon ${Engine.Version}\nWebGL: ${this.engine?.webGLVersion ?? '–'}\nGrafik: ${this.rendererName}\nAuflösung: ${canvas.width} × ${canvas.height} Pixel · DPR ${window.devicePixelRatio.toFixed(2)}\nFPS: ${this.engine?.getFps().toFixed(0) ?? '–'}\n${this.frameSummary()}\nMeshes: ${this.testScene?.scene.meshes.length ?? 0}\nFahrzeuge: ${this.loadKarts.length + 1}\nAssetgruppe: ${this.manifestName}\nTempo: ${this.kart.speed.toFixed(2)} m/s\nPosition: ${this.kart.x.toFixed(2)}, ${this.kart.z.toFixed(2)} m\nRichtung: ${this.kart.heading.toFixed(2)} rad\nHop: ${this.kart.height.toFixed(2)} m\nFederung: ${this.kart.suspensionOffset.toFixed(3)} m / ${this.kart.suspensionVelocity.toFixed(2)} m/s\nRadkontakte: ${this.kart.wheelGroundHeights.map((value) => value.toFixed(2)).join(', ')} m\nKarosserieneigung: ${this.kart.bodyPitch.toFixed(3)} / ${this.kart.bodyRoll.toFixed(3)} rad\nRandstoß: ${this.kart.impactRemaining.toFixed(2)} s\nDrift: ${this.kart.drifting ? `${this.kart.driftCharge.toFixed(2)} s` : 'aus'}\nTurbo: ${this.kart.turboRemaining.toFixed(2)} s\nGas/Bremse: ${frame.throttle}\nLenkung: ${frame.steering}\nHop/Drift-Taste: ${frame.hopDrift}\nLetzte Aktion: ${this.lastAction}`;

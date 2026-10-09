@@ -47,8 +47,10 @@ export interface TestScene {
   puddles?(): { x: number; z: number; r: number }[];
   /** Dresses the six karts; order[kart] is the CAST index (kart 0 = player). */
   setRoster?(order: number[]): void;
-  /** Portrait images (data URLs) of every CAST member, rendered from the race models. */
-  portraits?(order: number[]): Promise<string[]>;
+  /** Driver selection: the CAST member stands beside the player kart in a random pose; null puts him back in the seat. */
+  presentDriver?(cast: number | null): void;
+  /** Ground position of the presented driver (for framing kart and driver together), once loaded. */
+  presentedAt?(): { x: number; z: number } | undefined;
   /** Called for every finish firework burst (audio pop). */
   onFirework?: () => void;
   /** Damage look per kart: health 0–100 and seconds left in the wrecked state. */

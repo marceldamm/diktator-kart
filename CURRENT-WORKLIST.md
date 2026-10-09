@@ -9,6 +9,13 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Fahrerwahl mit 3D-Präsentation – 09.10.2026 (Marcel, Claude)
+
+- [x] Fahrerwahl umgebaut: Kopf-Symbole der sechs Fahrer unten, Infos (Kart, Titel, Fähigkeit, Wurfobjekt, Rivalenverhalten, Reifen) links, Knöpfe rechts. Ein Klick auf einen Kopf lässt den Fahrer neben seinem Kart stehen, in einer von vier geteilten Posen (Hände in den Hüften, Hände auf dem Rücken, eine Hand am Rücken, lässig), zufällig und nie zweimal hintereinander gleich. Die Kamera rahmt Kart und Fahrer gemeinsam. Beim Rennstart sitzt er wieder im Kart.
+- [x] Ladezeit: Die Kopfbilder werden nicht mehr bei jedem Öffnen im Browser gerendert, sondern liegen fertig unter `public/assets/portraits/<name>.webp` (je ca. 7–12 KB); der Start-Knopf ist sofort bereit. Die stehenden Figuren (`public/assets/models/<name>-stand.glb`, 1,1–2,0 MB, Texturen 1024 px) laden erst beim ersten Klick, danach im Hintergrund die übrigen. Erzeugt von `art-source/export_driver_stand.py`; der Doppelklick-Export erneuert sie mit.
+- [x] Prüfung: Im Spiel (lokaler Vite-Server, Claude-Browserfenster) Stalin, Kim und Hitler angeklickt, Rennen gestartet; keine Konsolenfehler. `npm run build` erfolgreich; `npm test` 99/107, die acht Fehler sind die bekannten veralteten Workflow-Tests. Browser-Testskript `tests/slice-browser.mjs` an die sofort bereiten Porträts angepasst, nicht ausgeführt. Bilder: `docs/evidence/fahrer-kart-pose-20261009/fahrerwahl-*.jpg`, `posen-alle-fahrer.jpg`.
+- **Offen:** Marcels Urteil zu Layout und Posen; auf schmalen Bildschirmen nur grob geprüft (CSS-Regeln vorhanden).
+
 ## Alle sechs Tripo-Fahrer sitzen im Kart: Blender-Posen zum Selbstbearbeiten – 09.10.2026 (Marcel, Claude)
 
 - [x] Stalin mit eigenem Skelett ins rote Limousinen-Kart gesetzt (Größe wie die CC0-Fahrer, Gesäß auf dem Polster, Hände am Lenkrad an der Spielposition, Füße auf Pedalen). Marcel bestätigte die Pose. Danach auf Wunsch Mütze entfernt.

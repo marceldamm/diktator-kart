@@ -92,6 +92,10 @@ Stalins Mütze ist entfernt (Marcel, 09.10.2026). Der lange Mantel liegt in `sta
 - **Strg+Z**, bis es wieder stimmt, oder **File → Revert** (lädt den zuletzt gespeicherten Stand).
 - Ganz neu erzeugen (überschreibt deine Änderungen in der `.blend`!): Claude oder Codex bitten, `art-source/build_driver_kart_pose.py -- <name>` neu auszuführen.
 
+## 9. Fahrerwahl (Figur neben dem Kart, Kopf-Symbole)
+
+Der Doppelklick-Export erneuert auch die stehenden Figuren für die Fahrerwahl und die Kopf-Symbole. Die vier Posen dort (Hände in den Hüften, Hände auf dem Rücken, eine Hand am Rücken, lässig) stehen in `art-source/export_driver_stand.py` und gelten für alle Fahrer; deine Sitzpose ändert sie nicht.
+
 ## Technischer Hintergrund (für Claude/Codex)
 
 - Quellen: Marcels bezahlte Tripo-Modelle in `art-source/tripo/`. Zuordnung der Download-Namen vom 09.10.2026: „military officer 3d model (1)“ = Mussolini, „military uniformed man“ = Mao, „military commander“ = Kim, „military soldier“ = Castro, „wwii german officer“ = Hitler (zuletzt am 09.10.2026); Stalin = früheres „military officer 3d model“ als `stalin-parts.glb` (Körper/Mütze/Mantel getrennt). Kart: `public/assets/models/hero-kart.glb` mit Karosserie und Lack aus `src/cast.ts`.
@@ -100,3 +104,4 @@ Stalins Mütze ist entfernt (Marcel, 09.10.2026). Der lange Mantel liegt in `sta
 - Skelett: Deform-Knochen tragen die Laufzeitnamen (`upperarm_l`, `lowerarm_l`, `hand_l` …), damit die Lenkrad-Arm-IK im Spiel weiter greift. Gewichte: Bone-Heat auf einer geschlossenen Metaball-Puppe um die Knochen, dann positionsbasiert (Gauß über die nächsten Puppenpunkte) auf die vielen offenen Tripo-Inseln übertragen, damit Nahtstellen nicht aufreißen.
 - Pedale: Im Spiel liegen die Pedale bei den Karosserien unsichtbar im geschlossenen Bodenblech (y 0,8, z 0,5) und sind für die Beine nicht erreichbar. In den Blender-Dateien sitzen sie deshalb unter den Fußballen (Bodenpedal, Neigung 25°). Das Spiel-Kart selbst ist unverändert; dort verschwinden die Fußspitzen unter dem Armaturenbrett, bei Mao und Kim die Unterschenkel in der höheren Karosserie.
 - Export: Pose wird wie bei `build_cc0_driver.py` als Ruhepose gebacken; nur Deform-Knochen; der Kopf wird als `Pilot head` abgetrennt (Fahrerwahl-Porträt, Kopf-Ausblenden in der Cockpitkamera).
+- Fahrerwahl: `art-source/export_driver_stand.py` schreibt `<id>-stand.glb` (stehende Ruhepose, vier Posen als einzelne glTF-Animationen, Standplatz `STAGE`/`STAGE_TURN` im Kart-Rahmen eingebacken) und `public/assets/portraits/<id>.webp`. `slice-scene.ts` (`presentDriver`) hängt die Figur an das Spielerkart, blendet den Sitzfahrer aus und spielt eine zufällige Pose auf Frame 0.
