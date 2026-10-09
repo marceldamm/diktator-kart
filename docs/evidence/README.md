@@ -1,5 +1,13 @@
 # Echte Laufzeitbelege des Stadion-Slices
 
+## 08.10.2026 – Tripo-Sowjetoffizier: lokaler Blender-Assettest
+
+`soviet-officer-inspection/front.png`, `threequarter.png` und `side.png` zeigen den unveränderten Import vor dem Auftrennen. `kart-front.png`, `kart-threequarter.png` und `kart-profile.png` zeigen den lokalen statischen Rig-/Sitzversuch neben dem tatsächlichen Stalin-Limousinen-Kartmodell. Alle sechs Dateien sind Blender-Assetvorschauen, **keine** Babylon-Laufzeit- oder Bewegungsbelege.
+
+Das GLB enthielt einen Mesh-Knoten mit 831 getrennten Flächeninseln und ohne Skin/Animation. Daraus wurden drei benannte Teile exportiert. Der lokale Sitzprototyp nutzt ein abgespecktes Rigify-Metarig mit manuell berechneten Knochengewichten, weil Blenders automatische Gewichte bei dieser Geometrie scheiterten. Mütze und Umhang sind im Bild platziert; der starre Umhang überschneidet noch Sitz/Unterboden und braucht eine spätere Stoff-/Kollisionslösung. Gesichts-/Körperdeformation, Hände/Füße, Bewegung und Laufzeitintegration sind nicht abgenommen. Der aktive Fahrer bleibt unverändert.
+
+Die Quelle und die 3D-Arbeitsdateien liegen lokal in der ignorierten `.tools`-Ablage und werden hier nicht verteilt. Marcel gab einen bezahlten Tripo-Tarif an; Tripo beschreibt für bezahlte Ausgaben Nutzungs-/Änderungs-/Verteilungsrechte, verlangt aber eigene Rechte an verwendeten Eingabereferenzen: [Tripo-Hilfe zu kommerzieller Nutzung](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially). Vor öffentlicher Asset-Verteilung bleiben der konkrete Kontostatus und die Eingabereferenz zu belegen.
+
 ## 08.10.2026 – Hände, Gesichter, Fahrerwahl (Claude)
 
 Branch `claude/project-thread-93qjup`, Dev-Server `127.0.0.1:4173`, sichtbares CDP-Chrome (Port 9231). `hands-straight/left/right-20261008.png`: feste QA-Kamera vor dem Spielerkart, Hände folgen dem Lenkrad; `hands-bot3-straight-20261008.png` Mao-Bot; `hands-chase-race-20261008.png` normale Rennansicht. `faces-blender-before/after-20261008.png`: Blender-Porträts aller sechs vor/nach `driver_faces.py` (Hitler unverändert). `faces-select-20261008.png` und `r74-game-select-20261008.png`: Fahrerwahl mit echten Porträts. Grenzen: Kartenlicht färbt Haut orange; keine Ähnlichkeitsabnahme.
@@ -123,3 +131,6 @@ Gleiche Bedingungen für Vorher/Nachher: sichtbares Chrome 154 (eigenes CDP-Prof
 - **Hitler-Anker in der Laufzeitszene:** `hitler-anchor-face/-faceside/-threequarter/-profile/-rear-20261006.png` (Nahkamera im laufenden Babylon-Rennen, kein Blender-Render).
 - Die Aufnahmen entstanden nachts bei gesperrtem/abgeschaltetem Bildschirm: Das Testfenster war geöffnet, aber für niemanden sichtbar; Chrome lief deshalb mit abgeschalteter Hintergrund-/Verdeckungsdrosselung. FPS-Angaben sind Momentwerte dieses Laufs, keine Dauermessung.
 - **Detailpass (zweiter Lauf, 06.10.2026 vormittags):** `redesign2-crest-*-20261006.png` (Prachtallee-Kuppe in Fahrt), `redesign2-sign-20261006.png` (Ladenschild-Nahkamera), `redesign2-hitler-*-20261006.png` (pausiertes Rennen, Nahkamera), gleiche Chrome-Bedingungen wie oben.
+## 08.10.2026 – Tripo-Offizier im Babylon-Rennen (lokaler Test)
+
+Die laufende, sichtbare Chrome-Szene auf `http://127.0.0.1:4173/` zeigte im Einzelrennen „Ewige-Führer-Allee“ den neuen Tripo-Offizier als Stalin im roten Limousinen-Kart. Die Sichtprüfung erfolgte nach Build und Vollsuite; die Fotokamera zeigte Front-/Seitenkontakt im Rennen. **Es wurde keine Laufzeitaufnahme dauerhaft gespeichert.** Die vorhandenen sechs Dateien unter `soviet-officer-inspection/` bleiben Blender-Assetvorschauen und belegen keine Babylon-Laufzeitwirkung. Offen sichtbar: statischer Umhang-/Sitzkontakt und keine dynamische Arm-/Lenkrad-IK.

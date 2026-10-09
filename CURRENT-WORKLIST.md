@@ -1,17 +1,90 @@
 # CURRENT WORKLIST – laufende Arbeit
 
-> **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Aktuelle Aufträge, Reihenfolge, Status, Blocker und nächste Schritte. Fachdateien liefern Umsetzungseinzelheiten; sie dürfen einen neueren Auftrag hier nicht still überstimmen. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
+> **Rolle und Vorrang (09.10.2026):** Dies ist zusammen mit LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md die vollständige, laufend gepflegte Projektsteuerung. Keine weitere Datei, kein GitHub-Issue und kein Board ist eine Aufgaben- oder Fortschrittsquelle. Frühere Logs, Detaildokumente und Issues bleiben historische Quellen; offene Aufgaben daraus wurden hierher übertragen. Alte Einträge nicht fortschreiben. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch.
 
 
 **Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
 
-[Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
+Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fortschrittslogs sind nur Archiv.
 
-Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Die KI aktualisiert Status während der Arbeit; Prüfdetails stehen im [technischen Fortschritt](PROGRESS-LOG.md). Neue Notizen aus TEAM-NOTES.md hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
+Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
-## Offene Probleme und Features – 08.10.2026 (Marcel)
+## Neuer Military-Offizier als Stalin-Fahrer – 09.10.2026 (Marcel)
 
-Gesamtliste mit Nummern B1–B10 (Probleme) und F1–F11 (Features): [docs/31-offene-punkte.md](docs/31-offene-punkte.md). GitHub-Issues legt der Cloud-Thread an. Claude arbeitet B1, B6, B2, B4, B5, B7, F6, F8, F7 nacheinander ab; Modellarbeit ruht.
+- [x] `C:\Users\papa\Downloads\military officer 3d model.glb` geprüft: eine ungeriggte Mesh-Datei mit 16.587 Vertices und ohne Animation. Körper, Mütze und Mantel wurden nach getrennten Geometrieinseln in drei GLB-Meshes aufgeteilt; die Download-Quelle blieb unverändert.
+- [x] Für die lokale Stalin-Anprobe ein provisorisches Humanoid-Rig erstellt, die Pose statisch gebacken und den neuen Testfahrer in `src/slice-scene.ts` aktiviert. Sichtbarer Chrome-Lauf auf der Ewige-Führer-Allee bestätigte, dass das neue Modell geladen wird.
+- **Befund/Abnahme offen:** Vorschau zeigt deutliche Verformungen/Überschneidungen am Mantel und eine schwebende Mütze; das Gesicht wirkt im Laufzeitbild sehr dunkel. Der Tausch ist ein reversibler Test, keine fertige Sitz-/Rig-Abnahme. Nach Marcels Beurteilung Rig/Teile korrigieren oder den vorherigen Fahrer wiederherstellen.
+- Assetbelege und editierbare Blender-Stände liegen ignoriert unter `.tools/raw-models/military-officer-3d-model/`; die Runtime-Datei heißt `public/assets/models/military-officer-driver-test.glb`. Marcel bestätigte die Erstellung mit seinem bezahlten Tripo-Konto; die offizielle [Tripo-Hilfe](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially) und [Nutzungsbedingungen, §5.2.2](https://www.tripo3d.ai/terms) räumen zahlenden Nutzern weitreichende Nutzungs-/Änderungs-/Verbreitungsrechte ein. Die Eingabereferenz stammt aus dem gemeinsam erstellten Konzept. Diese Prüfung ersetzt keine eigenständige Rechtsberatung.
+- **Abschlussprüfung 09.10.2026:** `npm run build` erfolgreich (Vite meldet ein Bundle über 500 kB). `git diff --check` erfolgreich. `npm test`: 99/107 bestanden; acht Fehler in `tests/team-workflow.test.mjs` prüfen noch den früheren PR-/Work-Branch-/PROGRESS-LOG-Ablauf und widersprechen dem bestätigten direkten `main`-Ablauf. Keine Laufzeit- oder Sitzabnahme behauptet.
+
+## Migrierte offene GitHub-Aufgaben – 09.10.2026
+
+Die offenen Arbeitspunkte aus den GitHub-Issues wurden in diese Markdown-Liste migriert; ab jetzt ist sie maßgeblich. Alte Issue-Nummern dienen nur zur Herkunftszuordnung. Keine neuen GitHub-Issues anlegen und keine Issue-Kommentare, Labels, Milestones oder Boards zur Fortschrittsführung verwenden.
+
+| Alter Issue | Kanonischer Stand / nächster Schritt |
+|---|---|
+| #48 Military-Uniform-GLB | Blender-Test mit Body/Cap/Cape und schwarzer Uniform/roten/silbernen Details erstellt; nächste Aktion: Marcel beurteilt die Bilder. Keine Runtime-Integration beauftragt. |
+| #47 Tripo-Offizier | Neueres `military officer 3d model.glb` ist als reversibler Stalin-Testfahrer eingebunden. Sichtbarer Lauf zeigt Mantelüberschneidungen und schwebende Mütze; Marcel beurteilt, dann korrigieren oder zurückstellen. Paid-Tripo-Nutzungsrechte anhand offizieller Bedingungen geprüft. |
+| #43 bessere Modelle | Allgemeine Modellarbeit von Marcel gestoppt; nur einzeln ausdrücklich bestätigte Modelltests. |
+| #42 Online-Mehrspieler | Langfristig; private Einladungs-Lobbys erst nach stabilem Einzelspieler. |
+| #41 Rückwärtsgeschwindigkeit | Balanceentscheidung offen: aktueller Wert 5 m/s (18 km/h); erst nach Marcels Wunsch ändern. |
+| #38 historische Sprachhupen | Entscheidung/Rechte-/Quellenprüfung offen; keine Downloads oder Integration bis Freigabe. |
+| #37 geplante Strecken | Peking/Kulturrevolutions-Schleife und Moskau/Genossen-Gerade sind als geplant markiert; Umfang vor Umsetzung mit Marcel/Sarah klären. |
+| #36 Handy/Touch | Nur echte Geräteabnahme möglich; iPhone 15 Pro benannt, Android-Gerät noch offen. |
+| #35 Gamepad | Standardbelegung implementiert; echter Controller-Test durch Team offen. |
+| #34 Stalin-/Mao-Fähigkeiten | Entscheidung nötig, wie die Satire die Täter adressiert, ohne Opfer zu verhöhnen; nicht eigenständig bauen. |
+| #32 großes Hauptbundle | Babylon-Auslagerung getestet und verworfen, weil Startdownload auf ca. 4 MB anwuchs; nur mit neuem besseren Plan wieder aufnehmen. |
+| #30 orange Haut in Fahrerkarten | Ursache liegt am CC0-Hautmaterial; Modellarbeit derzeit gestoppt. |
+| #29 deaktivierte Meshes | Analyse fertig; Optimierung wartet auf Messung auf schwacher Hardware und ist mit Draw-Call-Arbeit gekoppelt. |
+| #28 schwache Grafik | Intel UHD-Messung nach den Leistungspässen offen; menschlicher Gerätetest erforderlich. |
+| #27 Draw Calls | Analyse fertig; größere Zusammenfassung von Kart/Fahrer-Teilen erst nach der Intel-UHD-Messung entscheiden. |
+| #13 CC0-Fahrer | R67 ist aktiver Modellstand; menschliches Stil-/Ähnlichkeitsurteil sowie sichtbarer Fuß-/Pedalkontakt bleiben offen. |
+| #2 GitHub-Pilot | Historisches Pilotziel; durch diesen Beschluss ersetzt. Keine offene Produktaufgabe. |
+
+Ältere umfassendere Beschreibungen, Akzeptanzdetails und verifizierte Zwischenstände wurden auf diese Tabelle und die passenden aktuellen Abschnitte der vier Hauptdateien reduziert. [`docs/31-offene-punkte.md`](docs/31-offene-punkte.md) wird nicht mehr gepflegt.
+
+## Charaktervorlage für weitere Modell-Erstellungen – 09.10.2026 (Marcel)
+
+- [x] Die bestätigte Stalin-Konzeptansicht als wiederverwendbare Darstellungsreferenz verankert: matte, gleichmäßige Materialien ohne Glanz/Reflexionen, weiches neutrales Licht, erwachsene stimmige Proportionen und klare Ganzkörperansicht. Gesichter, Kleidung und Themenmerkmale bleiben je Charakter individuell; Stalins S&M-Details und Abzeichen werden nicht pauschal übertragen.
+- [x] Wiederverwendbarer Prompt und Grenzen der Bildreferenz in [`docs/32-character-model-visual-standard.md`](docs/32-character-model-visual-standard.md) festgehalten; Bildreferenz liegt unter [`references/visuals/stalin-matte-suit-separate-coat-cap-insignia-20261009.png`](references/visuals/stalin-matte-suit-separate-coat-cap-insignia-20261009.png).
+
+## Konzeptbild-Serie für den auswählbaren Fahrerkader – 09.10.2026 (Marcel)
+
+- [ ] Für alle sechs aktuell auswählbaren Figuren je ein eigenes Ganzkörper-Konzeptbild erstellen: Hitler, Stalin, Mussolini, Mao Zedong, Kim Jong-un und Fidel Castro. Stilvorgaben: [`docs/32-character-model-visual-standard.md`](docs/32-character-model-visual-standard.md). Historisch plausible Farben und Kleidung; Hut nur, wenn er für die jeweilige Figur passend und hilfreich ist. Keine Übernahme von Stalins S&M-Outfit auf andere Figuren.
+- **Status:** Ziel angelegt; aktuelle Auswahl in `src/cast.ts` und `docs/14-character-and-item-catalog.md` bestätigt. Die von Marcel bestätigte Stalin-Ansicht ist die verbindliche Stil-/Materialreferenz. Fünf historische Outfit-Konzepte sind erstellt und unter [`references/visuals/character-concepts/`](references/visuals/character-concepts/) gespeichert: Stalin, Mussolini, Mao Zedong, Kim Jong-un und Fidel Castro. Frühere fotorealistische/comicartige Versuche wurden verworfen.
+- **Stilkorrektur:** detailreiches, leicht stilisiertes 3D wie die Referenz, mit erwachsenen Proportionen. Gleichmäßige Kleidungsfarben ohne glänzende Reflexe oder helle Lichtflecken; nur sehr zurückhaltende diffuse Formschattierung.
+- **Blocker:** Drei Anfragen für eine Hitler-Darstellung wurden vom Bilddienst mit derselben Sicherheitsblockade zurückgewiesen. Kein Hitler-Ersatzbild erstellt oder als fertig ausgegeben.
+- **Nächster Schritt:** für Hitler einen anderen vom Nutzer gewählten Weg festlegen; danach die Serie als 6/6 vervollständigen. Die fünf gespeicherten Bilder sind Konzeptentwürfe und noch keine historische Detailabnahme oder 3D-Modelle.
+
+## Aufgaben- und Git-Ablauf vereinfachen – 09.10.2026 (Marcel)
+
+**Ziel:** Nur die vier Hauptdateien laufend pflegen und alle Aufträge als Markdown-Arbeitseinträge führen. GitHub dient ausschließlich zur Sicherung des gemeinsamen `main`.
+
+**Stand:** Die 17 zuvor offenen GitHub-Issues sind mit Status/Nächstem Schritt hierher migriert und auf GitHub geschlossen; sie bleiben als Verlauf erhalten und wurden nicht gelöscht. Alle 10 Automationen des privaten GitHub-Projects sind ausgeschaltet. Issue-Formulare, PR-Vorlage und Copilot-Anweisungen sind lokal entfernt. GitHub Actions ist für das Repository ausgeschaltet; auf `main` liegt noch die historische Workflow-Datei, lokal ist ihre Entfernung vorbereitet. Es werden keine neuen GitHub-Issues verwendet.
+
+**Projektstart 09.10.2026:** Der neueste Abruf meldete `origin/main` auf `56f9595`, ohne neue Commits seit dem lokalen Ausgangsstand. Die vorhandenen Dokumentations-, Workflow- und Offizier-Teständerungen sind als lokaler Checkpoint `1434de8` auf `main` erhalten; `main` liegt damit einen Commit vor `origin/main`. Dieser Stand ist nicht gepusht und nicht getestet. Keine Dateiüberschneidung mit neueren Remote-Änderungen wurde festgestellt; Sarahs noch nicht gepushte lokale Arbeit ist von hier aus nicht sichtbar.
+
+## Tripo-Offizier: Teile trennen, Rig und Stalin-Kart-Anprobe – 08.10.2026 (Marcel)
+
+**Auftrag:** [Issue #47](https://github.com/marceldamm/diktator-kart/issues/47). Marcel bat, seine neue Tripo-GLB aus dem Download-Ordner zu untersuchen, die drei sichtbaren Teile Figur, Schirmmütze und Umhang aufzutrennen, einen Rig-Versuch zu machen und Figur samt Mütze/Umhang im Stalin-Limousinen-Kart anzuprobieren. Am 08.10.2026 bestätigte Marcel zusätzlich ausdrücklich den lokalen Runtime-Tausch des Stalin-Fahrers, damit er das Modell selbst im Spiel testen kann. Das ist eine eng begrenzte Ausnahme zur gestoppten allgemeinen Modellarbeit.
+
+**Befund:** Die GLB enthält strukturell einen Mesh-Knoten, ein Material, 17.747 Vertices, 24.179 Flächen, 831 verbundene Flächeninseln und weder Rig noch Animation. Die Inspektion identifiziert räumlich Körper, Mütze und langen Umhang. Unveränderte lokale Sicherung liegt in der ignorierten `.tools`-Ablage. Die bezahlte Tripo-Nutzung hat Marcel angegeben; Eingabereferenz und genauer Konto-/Lizenznachweis bleiben vor einer öffentlichen Asset-Verteilung zu prüfen.
+
+**Ergebnis des ersten lokalen Passes:** Der GLB-Export enthält jetzt drei benannte Mesh-Knoten `Body`, `Cap` und `Cape`; die Quelle im Downloads-Ordner ist unverändert. Eine Blender-Anprobe mit dem tatsächlichen `hero-kart.glb` und sichtbarer Stalin-Limousinen-Karosserie ist gespeichert. Der Rigify-Mensch-Metarig wurde auf 25 Deformknochen reduziert; automatische Gewichte scheiterten an den getrennten Flächeninseln, deshalb nutzt der Prototyp nachvollziehbare nächste-Knochensegment-Gewichte. Mütze und Umhang sind separat und auf dem Fahrer platziert.
+
+**Runtime-Test:** Stalin lädt lokal `public/assets/models/tripo-officer-driver-test.glb`; die übrigen fünf Fahrer bleiben unverändert. Der sitzende Körper ist statisch gebacken, Mütze und Umhang sind separate Meshes. Sichtbarer Chrome-Lauf in der Ewigen-Führer-Allee bestätigte das Modell im roten Stalin-Kart. Textur und Gesicht waren im Spiel erkennbar und deutlich weniger ausgewaschen als unter der Blender-Studiobeleuchtung. Der Wechsel ist nur für lokale Prüfung gedacht.
+
+**Offen/ungeprüft:** Der statische Umhang überschneidet Sitz/Unterboden; die Arme folgen dem Lenkrad nicht dynamisch und Kontakt/Deformationsqualität sind nicht abgenommen. Eine menschliche Stilfreigabe und dauerhafte Runtime-Bildaufnahme fehlen. Bilder in `docs/evidence/soviet-officer-inspection/` sind **Assetbelege**, keine Babylon-Laufzeitbilder. **Nächster Schritt:** Marcel testet das Modell im geöffneten lokalen Rennen (F blendet die drehende Fotokamera ein/aus); anschließend Passform/Rig korrigieren oder Test verwerfen. Tripo-Kontostatus und Eingabereferenz vor öffentlicher Asset-Verteilung nachweisen.
+
+## Military-Uniform-GLB: zweite Blender-Anprobe – 08.10.2026 (Marcel)
+
+**Auftrag:** [Issue #48](https://github.com/marceldamm/diktator-kart/issues/48). Marcel stellte die neue Datei `military uniform 3d model.glb` bereit und beauftragte, sie in drei Teile aufzuteilen und farblich an der bisherigen Referenz auszurichten. Blender-only mit Bildern zur Beurteilung ist ausdrücklich ausreichend; Runtime-Einbau ist für diesen ersten Pass nicht erforderlich.
+
+**Kurskorrektur von Marcel:** Das angehängte Tripo-Ausgangsbild ist die konkrete Stilreferenz für diesen Kandidaten; die vorherige Farbinterpretation nach dem allgemeinen Projekt-Konzeptblatt war falsch. Eine lokale Arbeitskopie liegt unter `.tools/raw-models/military-uniform-3d-model/marcel-tripo-reference.png`. Ziel sind gleichmäßig tiefschwarzer Anzug und Mütze, kräftig roter Umhang und Mützenbund sowie zurückhaltende Metallteile. Der Stoff erhält keine prozedurale Hell-Dunkel-Farbvariation; Licht und Schatten sollen die schwarze Grundfarbe nicht grau umfärben. Historische Sternabzeichen werden gemäß Projekt-Art-Direction nicht übernommen; stattdessen bleibt ein fiktionales Paragraph-Abzeichen.
+
+**Zwischenstand:** Die unveränderte Quelle wurde nach `.tools/raw-models/military-uniform-3d-model/source-original.glb` kopiert. Der GLB-Importer lieferte 90 einzelne Meshes ohne brauchbare Farbtexturen. Daraus wurden drei logische Mesh-Objekte `Body`, `Cap` und `Cape` erstellt. Die editierbare Blender-Anprobe und GLB-Vorschau liegen ausschließlich im ignorierten `.tools`-Arbeitsordner. Die aktuelle Farb-/Materialiteration ist V8; die Bilder zeigen schwarze, glattere Lederflächen, roten Umhang/Mützenbund, silberne Beschläge und getrennte Teile.
+
+**Status/Nächster Schritt:** Der Blender-Split und die überarbeitete stehende Anprobe sind erstellt; der V8-GLB wurde erneut importiert und enthält genau drei Mesh-Objekte. Marcel beurteilt die sichtbaren Ansichten. Rig, Sitzpose, Runtime-Wechsel und Veröffentlichung sind offen und in diesem Paket nicht umgesetzt.
 
 ## Claude-Projektstart Marcel – 08.10.2026
 

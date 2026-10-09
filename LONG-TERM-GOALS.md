@@ -1,8 +1,14 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Einzelne bestätigte Modellausnahmen (08.10.2026):** Marcel hat den lokalen Teile-/Rig-/Sitztest für die Tripo-Sowjetoffizier-Figur (alter Issue-Verweis #47) und einen getrennten Blender-Sichttest der `military uniform 3d model.glb` (alter Issue-Verweis #48) freigegeben. Das hebt den allgemeinen Stopp für Fahrer-/Fahrzeugmodellarbeit nicht auf. Für den zweiten Test ist Marcels beigefügtes Tripo-Ausgangsbild die konkrete Farb-/Materialreferenz: gleichmäßig schwarzer Anzug und Mütze, roter Umhang/Mützenbund. Der Auftrag autorisiert nur Auftrennen, manuelle Farbannäherung und Blender-Vorschau; ein neuer Runtime-Fahrer ist damit nicht freigegeben. Lizenz und verwendete Eingabereferenz vor einer öffentlichen Verteilung prüfen.
+
 **Modellauftrag 07.10.2026 (Marcel):** Neue CC0-Fahrer zuerst mit Hitlers historischem Gesicht individualisieren (Alter/Haut, Wangen, Nase, Augen/Brauen, Kinn, Ohren), anschließend erkennbare Kleidung, Schuhe sowie passende Sitz-/Bein-/Handkontakte an sichtbaren Pedalen und Lenkrad ausarbeiten. Blender-Hintergrundrenderings als einzelne feste Vergleichsbilder im Chat sind der bevorzugte Iterationsweg; kein automatisches Vordergrundfenster. Runtime-Abnahme bleibt separat. Aktives Paket: [Issue #13](https://github.com/marceldamm/diktator-kart/issues/13), CURRENT-WORKLIST.md. Zwischenstand 08.10.: R67 wurde mit PR #18 (Merge `1697827`) veroeffentlicht; Feste Blender-Fotooverlays und sichtbare Chrome-Laufzeitkontrolle liegen vor. Der schwarze Lederanzug ist umgesetzt. Das Gesicht ist weiterhin stilisiert und nicht identisch; menschliche Aehnlichkeits- sowie Fuss-/Pedalabnahme bleiben offen. Stand 08.10. abends (Claude): R74 mit sichtbarem Zahnbürstenbart, kürzerer Nase, schräger Stirnsträhne, dickeren Brauen, größeren Ohren und blasserer Haut; Hände greifen und drehen mit dem Lenkrad; die übrigen fünf Fahrer haben ältere Gesichter. Offen: einzelne Haarsträhnen, glasige Augen, Porträtlicht, menschliche Ähnlichkeitsabnahme.
 
-> **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Bestätigte Langzeitziele und noch unbestätigte Vorschläge klar trennen. Bei einem neueren Nutzerwunsch Zielbeschreibung und Priorität aktualisieren; historische Ideen bleiben als solche erhalten. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
+> **Rolle und Vorrang (09.10.2026):** Diese Datei enthält Ziele und Vorschläge. Zusammen mit CURRENT-WORKLIST.md, TEAM-CHANGES.md und TEAM-NOTES.md bildet sie die einzige laufende Projektsteuerung. Frühere Fachdateien und Logs sind historische Quellen und werden nicht für den aktuellen Status fortgeschrieben.
+
+**Wiederverwendbarer Charakter-Qualitätsstandard (Marcel, 09.10.2026):** Für künftige Figuren gilt die [bestätigte Stalin-Referenz](references/visuals/stalin-matte-suit-separate-coat-cap-insignia-20261009.png) als direkter Stil-, Proportions-, Licht- und Materialmaßstab: detailreiche, leicht stilisierte 3D-Formen zwischen Foto und Comic, erwachsen und glaubwürdig. Kleidung behält eine gleichmäßige Grundfarbe ohne Glanzreflexe oder helle Lichtflecken. Identität, Outfit und Symbole werden für jede Figur eigens gestaltet. Regeln und Prompt: [docs/32-character-model-visual-standard.md](docs/32-character-model-visual-standard.md).
+
+**Konzeptbild-Serie aller auswählbaren Fahrer (Marcel, 09.10.2026):** Je ein eigenständiges, modellfreundliches Ganzkörperbild für Hitler, Stalin, Mussolini, Mao Zedong, Kim Jong-un und Fidel Castro. Kleidung und Farben sollen historisch plausibel sein; Hüte nur dann, wenn sie historisch passen und die Figur sinnvoll ergänzen. Die gemeinsame Vorlage regelt Proportionen, matte Oberflächen und neutrales Licht; Gesicht und figurspezifische Merkmale bleiben individuell. Fünf von sechs Bildkonzepten sind erstellt; Hitler wurde vom Bilddienst blockiert und braucht einen anderen Weg. Laufender Auftrag und Ergebnisse: [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
 
 
 **Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
@@ -11,7 +17,7 @@
 
 Marcels ausgewählte Antworten in [PROJECT-QUESTIONNAIRE.md](PROJECT-QUESTIONNAIRE.md) sind die aktive Grundlage für das Gesamtspiel. Die vollständige zusammenhängende Fassung steht in [docs/23-project-design-baseline.md](docs/23-project-design-baseline.md). Sie setzt Spielversprechen und Satiregrenze, Stil, Einzelspieler-Priorität, technische Ziele, Fahrer/Karts einschließlich frei kombinierbarer charakteristischer Reifen, Weltbild, Abnahme und Audio. Sarahs Originalideen und Antworten bleiben unverändert als ihre eigene Perspektive erhalten; sie blockieren die Ausführung nicht und ändern diese Grundpfeiler nicht automatisch.
 
-[Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
+Die vier Hauptdateien enthalten die laufende Projektsteuerung; frühere Fortschrittslogs bleiben Archiv.
 
 Gemeinsamer Überblick für Marcel, Sarah und jede KI-Sitzung. Die kurzfristige [Aktuelle Arbeitsliste](CURRENT-WORKLIST.md) führt die laufende Umsetzung; diese Liste hält das Gesamtziel und die nächste sinnvolle Ausbaustufe sichtbar. Verbindliche Detailentscheidungen stehen in den verlinkten Fachdateien. Historische Zwischeneinträge sind keine aktuellen Arbeitsaufträge.
 
@@ -62,16 +68,20 @@ Umsetzung in sichtbaren Paketen aus M3–M6. Laufender Panzerauftrag und flüssi
 
 ## So arbeiten wir damit
 
-### GitHub-Zusammenarbeit – Marcel, 06.10.2026
+### Versionsicherung und Dokumentation – Marcel, 09.10.2026
 
-- [x] Im Diktator-Kart-Projekt klare Aufträge über Issues, passende Vorhaben über Milestones und das Teamboard, Änderungen über Pull Requests und automatische GitHub-Checks verfolgen. Die Basis aus PR #1, der Einstieg aus PR #5 und die Board-Automation aus PR #8 sind in `main` integriert.
-- [ ] Mit Sarah den gemeinsamen Ablauf einmal praktisch erproben. Status und Kriterien stehen in [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2).
+- GitHub dient zum Sichern und Versionieren des gemeinsamen Babylon-Stands auf `main`.
+- Die vier Hauptdateien sind alleinige Quelle für Aufgaben, Ideen, Entscheidungen, Status und Fortschritt. Keine neuen GitHub-Issues anlegen; bestehende Issue-Nummern nur als historische Herkunftsverweise behalten.
+- Keine GitHub-Boards, Milestones, PR-Review-Abläufe oder Actions-Prüfungen als Arbeitsprozess. Lokale Prüfung erfolgt bei Bedarf in VS Code oder ChatGPT/Codex.
+- Projektstart synchronisiert `main`; Zwischenstand und Abschluss committen und sichern auf `main`, sobald die Branch-Regel dies zulässt.
 
-- Bei Projektstart nach Git-Synchronisierung CURRENT-WORKLIST.md, diese Liste, den kurzen [Änderungsverlauf](TEAM-CHANGES.md) und offene [Teamnotizen](TEAM-NOTES.md) lesen.
+**Historisch:** Der GitHub-Pilot aus PR #1/#5/#8 wurde technisch eingerichtet. Sein damaliges Ziel, Board/PR/Checks gemeinsam zu erproben, ist durch Marcels Beschluss vom 09.10.2026 ersetzt. Der Pilot wird nicht weitergeführt; die vollständigen Aufgaben- und Fortschrittsnotizen bleiben nur in den vier Hauptdateien.
+
+- Bei Projektstart nach Git-Synchronisierung ausschließlich die vier Hauptdateien als Projektsteuerung lesen.
 - Neue Beobachtungen und konkrete Fehler zuerst in CURRENT-WORKLIST.md aufnehmen. Größere Zukunftsideen hier als Ziel oder Vorschlag festhalten.
 - „Arbeitslisten abarbeiten“ beauftragt beide Listen: erst ausführbare kurzfristige Aufgaben, danach selbstständig bestätigte Langzeitziele in sinnvollen Paketen umsetzen. Nicht beim Vorschlagen stoppen. Blockierte Aufgaben erhalten und unabhängige Aufgaben fortsetzen; echte Entscheidungen/unbestätigte Vorschläge brauchen Klärung. Ohne diesen Umsetzungsauftrag zwei oder drei nächste Pakete vorschlagen. Budgetregel beachten.
 - Ein gewähltes Paket mit sichtbarem Ergebnis und prüfbarer Abnahme nach CURRENT-WORKLIST.md übernehmen. Erst nach tatsächlicher Prüfung abhaken. Teilumsetzung, Nutzerabnahme und Geräteabnahme auseinanderhalten.
-- Details nicht mehrfach pflegen: Roadmap = Meilenstein-/Abnahmevertrag; diese Datei = gemeinsame Aufgabenübersicht; PROGRESS-LOG.md = technische Belege; TEAM-CHANGES.md = wenige wichtige Änderungen für uns beide.
+- Details nicht mehrfach pflegen: Die vier Hauptdateien enthalten alle laufenden Ziele, Aufgaben, Status, Notizen und kurze technische Prüfergebnisse. Historische Fachdateien und PROGRESS-LOG.md nicht fortschreiben.
 
 ## Leitbild und feste Grundlage
 
@@ -218,16 +228,9 @@ Details: [06](docs/06-multiplayer.md), [09](docs/09-roadmap.md).
 
 ## Zusammenarbeit dauerhaft verbessern
 
-### GitHub-Aufgabenfluss für Marcel und Sarah
+### Historischer GitHub-Pilot
 
-- [x] Vier Markdown-Hauptdateien als kanonische Projektsteuerung behalten; Issues, PR-Vorlage und Actions-Workflow ergänzen sie.
-- [x] GitHub Actions führt `npm ci`, `npm test` und `npm run build` aus; PR #1 hat nach Korrektur des Node-22-Schalters einen erfolgreichen Check.
-- [x] `main`-Ruleset verlangt Pull Request und den Actions-Check `tests-and-build`; Force-Push und Löschen sind gesperrt. Keine Review-Stimme vorgeschrieben.
-- [x] Pilot-Issue #2, Milestone `GitHub-Workflow-Pilot` und privates GitHub Project sind angelegt; PR #1 ist mit erfolgreichem Pflichtcheck in `main` zusammengeführt. Issue #4 verfolgt die nächste konkrete Performance-Abnahme im Milestone `Redesign-Performance-Abnahme`.
-- [x] Projekt-Workflow ergänzt ab jetzt automatisch offene Issues und PRs aus dem Repository.
-- [x] Issue- und PR-Vorlagen, Actions, Copilot-Anweisungen und `main`-Ruleset stehen nach PR #1 auf `main` bereit.
-- [x] Zugriff für den Team-Pilot auf das private Projekt einrichten; Sichtbarkeit bleibt privat. Der gemeinsame Praxistest steht noch aus (Issue #2).
-- [ ] GitHub-Coding-Agent nur nutzen, wenn Konto/Tarif und Repository-Richtlinien Zugriff erlauben; andernfalls Codex-Aufträge und menschliche Review verwenden.
+Am 06.10.2026 wurden Issues, Milestones, Project-Board, PRs und Actions zum Testen des GitHub-Arbeitsablaufs eingerichtet und mehrere Änderungen damit veröffentlicht. Marcel hat diesen Ablauf am 09.10.2026 ersetzt: nur die vier Hauptdateien dokumentieren Aufgaben/Fortschritt; GitHub dient zur Versionierung/Sicherung. Die damaligen Einträge bleiben als Historie stehen. Die aktuellen Regeln stehen oben unter „Versionsicherung und Dokumentation“.
 
 - [ ] Start-/Abschlussbefehle auf Sarahs realem Checkout einmal gemeinsam prüfen; ihre lokalen unveröffentlichten Dateien erhalten.
 - [ ] Aufgabenpakete zwischen Marcel und Sarah absprechen; bei denselben Dateien Überschneidungen bewusst integrieren.

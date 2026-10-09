@@ -1,5 +1,7 @@
 # Diktator Kart – Team-Handbuch für dich und Sarah
 
+> **Historischer Leitfaden:** Seit 09.10.2026 gelten für Aufgaben und Fortschritt ausschließlich CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md. Dieser ältere Leitfaden wird nicht mehr als Prozessquelle gepflegt. Hinweise zu Issues, Boards, PRs, Actions, separaten Logs und persönlichen Arbeitsbranches sind abgelöst; GitHub dient nur der Versionierung/Sicherung auf `main`.
+
 ## Praktischer Modelltipp für unseren aktuellen Spielausbau
 
 Für unsere längere technische Umsetzung verwenden wir GPT-6.1 Sol mit hoher Denkintensität als praktische Ausgangswahl. GPT-6 Astra eignet sich für schwierige Gesamtanalysen, festgefahrene Probleme oder Architekturprüfungen; Luna für fokussierte Routine. Das ist eine Aufgabenempfehlung, keine allgemeine Rangliste oder Garantie perfekter Ergebnisse. Höhere Denkintensität kostet mehr Zeit/Nutzung; Modellverfügbarkeit und Planlimits im eigenen Konto prüfen. Quellen (03.10.2026): [OpenAI-Modellwahl](https://developers.openai.com/api/docs/guides/model-selection), [Work/Codex-Nutzung](https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex).

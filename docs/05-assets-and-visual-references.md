@@ -29,6 +29,12 @@ Der Nutzer kann künftig Bilder in [`../references/visuals/`](../references/visu
 
 Zu jedem wichtigen Bild sollte später kurz notiert werden: Was gefällt daran? Was soll nicht kopiert werden? Welche Eigenschaft ist spielrelevant? Gibt es eine Lizenz- oder Herkunftsinformation?
 
+### Charaktermodell-Vorlage – 09.10.2026
+
+Marcel bestätigte die Stalin-Konzeptansicht mit separat danebenstehenden Kleidungsstücken als Referenz für erwachsene Proportionen, matte Materialien und neutrale, reflexionsarme Beleuchtung. Für wiederverwendbare Regeln und einen Prompt für weitere Bild-/3D-Modell-KIs siehe [Charaktermodell-Vorlage](32-character-model-visual-standard.md). Identität, Kleidung und Erkennungszeichen bleiben je Figur eigenständig; Stalins Sterne, Orden und S&M-Details sind keine allgemeine Vorgabe.
+
+**Stilkorrektur (Marcel, 09.10.2026):** Die beigefügte Stalin-Ansicht ist der direkte Stilmaßstab für die Figurenserie: glaubwürdige erwachsene Formen und detailreiche 3D-Modellierung zwischen Fotorealismus und Comic. Kleidung behält eine gleichmäßige Grundfarbe ohne Glanzlichter, Reflektionen oder lichtbedingte helle Flecken. Frühere Versuche im Comicstil oder mit fotorealistischer Kleidung sind verworfen.
+
 ## Assetklassen
 
 - **Kernmodelle:** Fahrer, Karts, Itemobjekte, Streckenmodule, zentrale Landmarken.

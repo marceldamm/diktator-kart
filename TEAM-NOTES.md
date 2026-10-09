@@ -1,38 +1,53 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 09.10.2026 – Marcel: Military-Offizier als Stalin-Testfahrer
+
+Aktueller Stand: Die neuere Datei `military officer 3d model.glb` ist in Körper, Mütze und Mantel getrennt und unter `public/assets/models/military-officer-driver-test.glb` als provisorisch posierter Stalin-Testfahrer eingebunden. Der sichtbare Chrome-Lauf bestätigt das Laden; Mantelüberschneidung, schwebende Mütze und dunkles Gesicht bleiben zu beurteilen. Es ist ein reversibler Versuch ohne Rig-/Sitzabnahme. Marcel gab an, das Modell mit seinem bezahlten Tripo-Konto erzeugt zu haben; Tripo-Hilfe und Nutzungsbedingungen wurden geprüft. Build erfolgreich; acht Workflowtests sind nicht an den bestätigten direkten-main-Prozess angepasst. Details und nächster Schritt stehen in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
+
+## 08.10.2026 – Marcel: früherer Tripo-Sowjetoffizier im Stalin-Kart testen
+
+Marcel stellte eine mit seinem bezahlten Tripo-Konto erzeugte GLB bereit und bat um Prüfung, Trennung von Figur/Mütze/Umhang, einen Rig-Versuch und eine Anprobe im Auto. Der Auftrag ist in [Issue #47](https://github.com/marceldamm/diktator-kart/issues/47) geführt. Der erste Dateibefund zeigte einen Mesh-Knoten und 831 Flächeninseln, nicht drei GLB-Objekte; die drei räumlich getrennten Gruppen wurden lokal als eigene Blender-Objekte und GLB-Knoten rekonstruiert. Ein reduziertes Rig und die Anprobe im Stalin-Limousinenmodell wurden als Blender-Arbeitsdatei erstellt. Sichtbar: Mütze auf dem Kopf, Umhang am Rücken, aber statische Stoff-/Sitzüberschneidung und unfertige Körperverformung; dies ist keine Laufzeit- oder Bewegungsabnahme. Die Originaldatei bleibt unverändert in der lokalen ignorierten `.tools`-Ablage. Der Runtime-Fahrer bleibt unverändert. Vor öffentlicher Verteilung Eingabereferenz und genaue Tripo-Kontobedingungen prüfen; die offizielle [Tripo-Hilfe zu kommerzieller Nutzung](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially) beschreibt weitreichende Rechte für bezahlte Modelle und verlangt eigene Rechte an der Eingabe.
+
 ## 07.10.2026 – Marcel: Blender-Prüfung mit Einzelbildern
 
 **Aktueller bestätigter Wunsch:** Wieder Hintergrundprüfung in Blender mit getrennten Einzelbildern im Chat verwenden; Blender nicht automatisch im Vordergrund öffnen. Marcel nahm seinen kurzzeitigen Sichtbarkeitswunsch ausdrücklich zurück, nachdem die Editoransicht überlagerte Varianten zeigte. Feste Front-/Dreiviertel-/Profilbilder und korrekt ausgewählte Fahrer/Kart-Kontaktbilder bleiben der effektive Ablauf. Historische Formreferenzen wiederholt als beschriftetes Overlay mit dem Blenderbild vergleichen, Abweichungen benennen, gezielt ändern und im gleichen Kamerawinkel neu prüfen; verworfene Varianten nur als solche dokumentieren. Marcels konkrete Korrektur für die Frisur: keine einzelne Stirnlocke, sondern seitlich gescheiteltes Haar. Gezielte sichtbare Spielprüfung bleibt separat. Herkunft: Marcels Korrektur und Folgefeedback im Codex-Chat; Issue #13 und PROGRESS-LOG.md. Keine Teamnachricht versandt.
 
-> **Rolle und Vorrang (04.10.2026):** Diese Datei ist die gemeinsame Quelle für Anleitung, persönliche Notizen und Teamnachrichten. Notizen/Vorschläge sind keine Zustimmung oder Umsetzung. Erledigte Notizen erhalten einen Ergebnisverweis statt kommentarlos gelöscht zu werden. Die vier Hauptdateien sind [aktuelle Arbeit](CURRENT-WORKLIST.md), [Langzeitziele](LONG-TERM-GOALS.md), [bestätigte Teamänderungen](TEAM-CHANGES.md) und [Notizen/Anleitung](TEAM-NOTES.md). Fachdateien und Logs liefern Details/Belege, ändern diese Steuerung aber nicht stillschweigend. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch; danach werden Status und Fachtexte angepasst. Frühere Ideen, Entscheidungen und Prüfergebnisse bleiben nachvollziehbar und werden als historisch, offen oder überholt markiert – nicht gelöscht. Technische Belege und damalige Zwischenstände bleiben im [Fortschrittslog](PROGRESS-LOG.md).
+**Git-Synchronisierung bei paralleler Arbeit (09.10.2026):** Marcel und Sarah können in eigenen Checkouts parallel arbeiten. Vor jedem Push `origin/main` holen. Wenn der Remote inzwischen voraus ist, die eigenen Änderungen und `origin/main` erst normal zusammenführen und Konflikte inhaltlich prüfen. Ein normaler Push verweigert einen veralteten Stand; kein Force-Push, harter Reset oder automatisches „ours/theirs“. Das aktive Ruleset erlaubt direkte Pushes und verlangt weder PR noch Statuscheck; **Block force pushes** und **Restrict deletions** bleiben eingeschaltet.
+
+**Lokale Git-Berechtigung (09.10.2026, Marcel):** Der normale Shell-Aufruf konnte `.git/FETCH_HEAD` nicht schreiben. Der Projektstart-Abruf gelang mit erhöhtem Einzelzugriff; Berechtigungen wurden nicht geändert. ACL-/Schreibfehler später gezielt prüfen und beheben, ohne andere `.git`-Inhalte anzufassen.
+
+> **Rolle und Vorrang (09.10.2026):** Diese Datei enthält gemeinsame Anleitung und Notizen. Zusammen mit CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md bildet sie die einzige laufende Projektsteuerung. Frühere Fachdateien, Logs und Issue-Einträge sind historische Quellen und werden nicht als aktueller Status gepflegt.
 
 
 **Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
 
-[Technischer Fortschritt](PROGRESS-LOG.md) · [Projektstart](START-HERE.md)
+## Aufgaben und Git-Ablauf – Marcel, 09.10.2026
 
-## GitHub als Ergänzung zum Teamablauf – 06.10.2026 (Marcel)
+**Verbindlich:** Die vier Hauptdateien sind die einzigen laufenden Projektunterlagen. Aufgaben, Ideen, Status, Entscheidungen, Fortschritt, Prüfungen und Blocker werden nur dort gepflegt. Die Inhalte der 17 zuvor offenen GitHub-Issues sind nach CURRENT-WORKLIST.md migriert; alle 17 Issues sind geschlossen und bleiben als Historie erhalten. Alle zehn Automationen des privaten GitHub-Projects sind ausgeschaltet. GitHub Actions ist für das Repository ausgeschaltet. Alte GitHub-Kommentare, Boardkarten, Logs und Detaildokumente bleiben nur historische Quellen.
 
-**Herkunft/Status:** Marcel möchte GitHub-Funktionen automatisch in den laufenden Arbeitsablauf einbeziehen, ohne selbst Issue-, PR- oder Boardbegriffe bedienen zu müssen. Er nennt im Codex-Projekt einfach sein Ziel; Codex hält die vier Hauptdateien aktuell, ordnet konkrete bestätigte Aufgaben als Issues ein, bündelt größere Vorhaben in Milestones und reicht Änderungen als PR mit automatischen Actions-Checks ein. Das private Project-Board nimmt offene Issues und PRs automatisch auf. Die GitHub-Wiki bleibt aus, damit kein zweiter Dokumentationsort entsteht. Das `diktator-kart`-Repository ist öffentlich, das Board privat.
+Keine GitHub-Issues für Projektaufträge anlegen oder weiterpflegen. Aufgaben und Fortschritt gehören ausschließlich in die vier Hauptdateien. Keine Milestones, keine Boardpflege, keine PRs und keine Actions-Prüfung. GitHub dient für die Sicherung und Versionsgeschichte auf `main`.
 
-Copilot Cloud Agent ist im angemeldeten Konto laut GitHub nicht verfügbar („access unavailable for plan“); kein Upgrade/Testzeitraum wurde aktiviert. PR #1 und der Statusabgleich PR #5 sind mit erfolgreichen Pflichtchecks in `main` zusammengeführt; PR #5 steht auf `Done`. Issue #3 wurde durch PR #1 automatisch geschlossen; Issue #2 bleibt `In progress`, bis der gemeinsame Test mit Sarah abgeschlossen ist. Der Zugriff für den Team-Pilot ist eingerichtet; Konten- und Rollenangaben stehen nicht in öffentlichen Projekttexten. Issue #4 und der Meilenstein `Redesign-Performance-Abnahme` halten TV-Performance und sichtbare Geräteabnahme fest. GitHub Pages kann öffentlich sein, selbst wenn sein Quell-Repository privat ist.
+- **Projektstart:** lokalen Stand schützen, `origin/main` holen und den gemeinsamen Stand synchronisieren; die vier Dateien öffnen/lesen und aktuellen nächsten Schritt anzeigen.
+- **Zwischenstand sichern:** nach einem sinnvollen Paket die vier Dateien aktualisieren, Commit erstellen und nach `main` sichern.
+- **Projektabschluss:** vier Dateien und Umsetzung abschließen, passende lokale Prüfung durchführen, Commit nach `main` sichern und Remote-Commit verifizieren.
+- Lokale Tests/Builds nur nach Bedarf in VS Code oder ChatGPT/Codex starten; Ergebnis knapp in einer der vier Hauptdateien festhalten. Keine automatische GitHub-Codeprüfung.
 
-**Issue #4 – Abschlussstand (06.10.2026):** Marcel entschied, die Live-TV-Zweitkamera zu deaktivieren. PR #6 integrierte die Umsetzung samt statischem Stadionmotiv in `main` (Merge `1d015da`); Actions und lokaler Abschlusslauf bestanden. Das Issue bleibt für den Framezeitvergleich des finalen Stands und den Intel-UHD-Lauf offen. Ein früherer Feed-A/B belegt den Renderpass als Übeltäter, ersetzt jedoch nicht die Messung nach dem Entfernen.
+Das aktive Main-Ruleset erlaubt direkte Pushes und verlangt keinen PR oder Statuscheck. Force-Pushes und das Löschen von Branches bleiben gesperrt. Vor dem Push weiterhin `origin/main` holen, lokale und parallele Änderungen inhaltlich integrieren und nur einen normalen Fast-Forward-Push verwenden. GitHub Actions bleibt repositoryweit ausgeschaltet.
 
-**Board-Automation:** Review-Änderungswünsche setzen PRs automatisch auf `In progress`. Neue PRs starten zunächst im `Backlog` und werden für die Prüfung auf `In review` verschoben. PR #8 hat die Regeln erprobt und ist nach grünen Prüfungen in `main` zusammengeführt.
+## Historischer GitHub-Pilot – 06.10.2026
 
-Offizielle Doku: [Issues](https://docs.github.com/en/issues), [Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects), [Copilot Cloud Agent](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github), [Status Checks](https://docs.github.com/en/pull-requests/reference/status-checks), [Actions-Abrechnung](https://docs.github.com/en/billing/concepts/product-billing/github-actions), [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+Früher waren Issues, Milestones, Project-Board, PRs und Actions als Teamablauf eingerichtet. Diese Pilotregeln sind seit Marcels Beschluss vom 09.10.2026 abgelöst; die alten Einträge bleiben nur als nachvollziehbare GitHub-Historie bestehen. Issue #2 gilt nicht mehr als offene Produktaufgabe.
 
 ## Git für euch – der kurze gemeinsame Ablauf
 
-**Jede Person arbeitet auf einem eigenen Arbeitsbranch; `main` ist der gemeinsame, geprüfte Spielstand.** Die KI kümmert sich um Abgleich, Sicherung, Konfliktlösung und Veröffentlichung – ihr müsst keine Git-Befehle kennen.
+**Marcel und Sarah arbeiten nacheinander im Hauptordner auf dem gemeinsamen `main`.** Die KI kümmert sich um Abgleich und Sicherung; Änderungen werden nicht auf parallelen persönlichen Arbeitsbranches geführt.
 
-- **„Projekt Start“**: neuesten Stand holen, vorhandene Arbeit bewahren und einen persönlichen Arbeitsbranch vorbereiten.
-- **„Zwischenstand sichern“**: Änderungen prüfen und als wiederherstellbaren Commit auf den eigenen Branch bei GitHub sichern; `main` bleibt dabei unverändert.
-- **„Projektabschluss“**: beide Branch-Stände zusammenführen, Konflikte inhaltlich klären, Tests/Build ausführen und den geprüften Stand nach `main` veröffentlichen.
+- **„Projekt Start“**: neuesten `main`-Stand holen, vorhandene Arbeit bewahren und lokal synchronisieren.
+- **„Zwischenstand sichern“**: sinnvolles Paket und vier Hauptdateien committen und auf `main` sichern.
+- **„Projektabschluss“**: offene Arbeit abschließen, nach Bedarf lokal prüfen, committen, nach `main` sichern und Remote-Commit verifizieren.
 - **„Wo stehen wir?“**: Die KI zeigt Branch, gespeicherte/ungesicherte Änderungen, Überschneidungen und den nächsten Schritt.
 
-Ein **Branch** ist eure getrennte Arbeitslinie, ein **Commit** ein gespeicherter Zwischenstand. Erst der geprüfte Abschluss macht daraus den gemeinsamen `main`-Stand. Wenn Änderungen dieselbe Stelle betreffen, stoppt Git zum Abgleich; die KI verbindet beides, wenn es fachlich zusammenpasst. Blender-Dateien lassen sich nicht zeilenweise zusammenfügen – dieselbe `.blend` daher nicht gleichzeitig bearbeiten.
+Ein **Commit** ist ein gespeicherter Zwischenstand. Bei Änderungen derselben Stelle prüft die KI die Inhalte und bewahrt beide Seiten, wenn das fachlich passt. Blender-Dateien lassen sich nicht zeilenweise zusammenfügen – dieselbe `.blend` daher nicht gleichzeitig bearbeiten.
 
 ## Schnellhilfe – alles einfach der KI sagen
 
@@ -41,11 +56,11 @@ Ein **Branch** ist eure getrennte Arbeitslinie, ein **Commit** ein gespeicherter
 | Kurzer Befehl / Beispiel | Was die KI macht |
 |---|---|
 | **Projekt Start** | GitHub synchronisieren, lokale Arbeit bewahren, vier Tabs öffnen, Aufgaben und Nachrichten zeigen. Auch **Projektstart** funktioniert. |
-| **Zwischenstand sichern** | Diff prüfen, dokumentierten Checkpoint committen und nur den persönlichen Arbeitsbranch zu GitHub hochladen. `main` bleibt unberührt. Auch **Zwischenstand** funktioniert. |
-| **Projekt Ende** | Arbeit sichern, dokumentieren, prüfen und den geprüften Teamstand nach GitHub main hochladen. Auch **Projektabschluss** funktioniert. |
+| **Zwischenstand sichern** | Änderungen in den vier Dateien nachführen und den Checkpoint nach `main` sichern. Auch **Zwischenstand** funktioniert. |
+| **Projekt Ende** | Vier Dateien aktualisieren, lokal passend prüfen und den Stand nach `main` sichern. Auch **Projektabschluss** funktioniert. |
 | **Wo stehen wir?** | Branch, Änderungen, offene Überschneidungen und nächsten Schritt verständlich erklären. |
 | **Arbeite unsere Arbeitslisten ab** | Erst kurzfristige Aufgaben umsetzen, danach bestätigte langfristige Ziele selbstständig in Paketen bearbeiten; Fortschritt dokumentieren und Budgetreserve beachten. |
-| **Heute möchte ich …** | Als aktuellen Auftrag in CURRENT-WORKLIST.md und – wenn konkret und bestätigt – als GitHub-Issue aufnehmen, auf dem Board verfolgen und bearbeiten. |
+| **Heute möchte ich …** | Als aktuellen Auftrag ausschließlich in CURRENT-WORKLIST.md aufnehmen. Kein GitHub-Issue erstellen. |
 | **Langfristiges Ziel: …** | In LONG-TERM-GOALS.md aufnehmen. |
 | **Notiere: …** | Beobachtung/Frage mit Herkunft hier in TEAM-NOTES.md festhalten. |
 | **Nachricht an Sarah: …** / **Nachricht an Marcel: …** | Als datierte Teamnachricht hier festhalten; beim nächsten Projektstart dem angesprochenen Teammitglied zeigen. |
@@ -54,13 +69,13 @@ Ein **Branch** ist eure getrennte Arbeitslinie, ein **Commit** ein gespeicherter
 
 **Chrome bei Spielprüfungen sichtbar lassen:** Jeder Browserlauf mit dem Spiel läuft in einem für Marcel/Sarah sichtbaren Google-Chrome-Fenster. Keine Headless- oder versteckte/minimierte Ausführung. Ein CDP-Test nutzt bei Bedarf ein eigenes sichtbares Fenster; Spiel pausieren und genau diese Testinstanz nach dem Lauf schließen, normale Chrome-Fenster offen lassen. So könnt ihr den geprüften Zustand mitverfolgen.
 
-**Laufzeitbilder und Arbeitsfokus:** Sichtbare Pakete werden an sinnvollen Zwischenständen mit aktuellen Spielbildern geprüft. Wo es passt, hält ein Vorher-/Nachher-Paar dieselbe Szene und Kamera fest; Screenshots nicht für jede Kleinigkeit erstellen. Vor einer Bildbewertung erst Bestand und Zeitstempel prüfen: ältere Aufnahmen sind historische Vergleiche, kein Beleg für die aktuelle Runtime. In längeren Browser-/Build-/Blender-Läufen CPU und Speicher in Abständen prüfen, die Last dem eigenen Tab/Prozess zuordnen und nur eigene, nicht mehr benötigte Testläufe pausieren oder schließen. Nach jedem größeren Paket fragt sich die KI, ob sie noch sichtbaren Hauptfortschritt erzielt oder in unnötige Detailarbeit abdriftet. Ablauf: [Team-Workflow](docs/21-team-workflow.md), [Laufzeitbelege](docs/evidence/README.md).
+**Laufzeitbilder und Arbeitsfokus:** Sichtbare Pakete werden an sinnvollen Zwischenständen mit aktuellen Spielbildern geprüft. Prüfergebnis und offene Grenze kommen knapp in die passende Hauptdatei. Vor einer Bildbewertung erst Bestand und Zeitstempel prüfen: ältere Aufnahmen sind historische Vergleiche, kein Beleg für die aktuelle Runtime. Nach jedem größeren Paket prüfen, ob noch sichtbarer Hauptfortschritt entsteht.
 
 **Sarahs Projektleitgedanke:** Beim nächsten Projektstart soll Sarah automatisch auf [PROJECT-QUESTIONNAIRE.md](PROJECT-QUESTIONNAIRE.md) hingewiesen werden. Jede Frage zeigt Marcels gesetzte Auswahl sowie dieselben vollständigen Antworttexte mit Sarahs eigenen Kästchen. Marcels Antworten bilden die aktive initiale Projektbasis in [docs/23-project-design-baseline.md](docs/23-project-design-baseline.md) und den relevanten Fachdokumenten. Nach Sarahs Eingabe entsteht separat `PROJECT-VISION-SYNTHESIS.md` mit beiden Ursprungsantworten, Gemeinsamkeiten, Unterschieden und klar als KI-Vorschläge markierten Syntheseideen. Sarahs Antworten werden als separate Perspektive ergänzt und ändern die aktive Basis nicht automatisch. Ein Vergleich mit KI-Synthese wird separat dokumentiert; über Änderungen an Marcels Grundpfeilern entscheidet Marcel ausdrücklich. Sarahs bestehende Ideen bleiben unverändert.
 
 **Projekt-starten.cmd:** Einfachen Git-Start ausführen. **Projekt-abschliessen.cmd:** Einfachen geprüften Git-Abschluss ausführen. Bei Konflikten/ungesicherten Dateien hilft Codex; die Batches selbst sind keine KI. Der Spielstarter synchronisiert GitHub nicht.
 
-**Projekt-zwischenstand.cmd:** Sichert einen geprüften Zwischenstand auf dem eigenen Branch und lädt nur diesen Branch hoch. Es ändert `main` nicht. Vorher Codex **„Zwischenstand sichern“** sagen; die KI prüft Diff und Geheimnisse und startet dann den Checkpoint.
+**Projekt-zwischenstand.cmd:** Sichert einen sinnvollen Zwischenstand auf dem gemeinsamen `main`. Vorher Codex **„Zwischenstand sichern“** sagen, damit die KI die vier Dateien, Änderungen und mögliche Zugangsdaten prüft.
 
 **Limit-Puffer für beide:** Die KI prüft eure eigenen offiziellen Fünf-Stunden-/Wochenwerte. Ab etwa **15 % Rest** beginnt sie keine große Aufgabe mehr und schließt geordnet ab; Ziel: mindestens etwa **5 % für euch übrig**. Ohne Zugriff meldet sie das und nutzt einen vorsichtigen Puffer. Keine automatischen Resets oder Zusatzkosten. Details in [AGENTS.md](AGENTS.md).
 
@@ -102,7 +117,7 @@ Beim ersten Mal kannst du ergänzen: **„Ich bin Sarah“** beziehungsweise **�
 
 Die KI holt den neuesten gemeinsamen Babylon-Stand von GitHub, sichert lokale Änderungen, vergleicht Überschneidungen und integriert parallele Arbeit. Sie liest die Projektregeln und öffnet unsere vier Arbeitsdateien als Tabs in dieser Codex-Sitzung, soweit die App-Funktion verfügbar ist. Anschließend nennt sie aktuellen Stand und nächsten Schritt. Bei echten widersprüchlichen Entscheidungen erhält sie beide Fassungen und fragt uns.
 
-Wir müssen GitHub dafür nicht selbst beherrschen. Unveröffentlichte Dateien auf Sarahs PC sind allerdings nicht in Marcels Sicherung enthalten. Beim ersten Umstieg sichert die KI diesen lokalen Stand gesondert. Der ausführliche technische Git-Ablauf steht in [Team-Zusammenarbeit](docs/21-team-workflow.md); für den Alltag reichen diese Anleitung und die Kurzbefehle.
+Wir müssen GitHub dafür nicht selbst beherrschen. Unveröffentlichte Dateien auf Sarahs PC sind allerdings nicht in Marcels Sicherung enthalten. Beim ersten Umstieg sichert die KI diesen lokalen Stand gesondert. GitHub wird nur für die gemeinsame Versionsicherung auf `main` verwendet; Aufgaben und Fortschritt bleiben in diesen vier Dateien.
 
 ### 2. Unsere vier Dateien
 
@@ -113,7 +128,7 @@ Wir müssen GitHub dafür nicht selbst beherrschen. Unveröffentlichte Dateien a
 | [TEAM-CHANGES.md](TEAM-CHANGES.md) | Wenige wichtige besprochene Entscheidungen und sichtbare Änderungen für uns beide. |
 | [TEAM-NOTES.md](TEAM-NOTES.md) | Diese Anleitung und unsere persönlichen Beobachtungen, Fragen und Ideen weiter unten. |
 
-[PROGRESS-LOG.md](PROGRESS-LOG.md) enthält die ausführlichen technischen Ergebnisse, Tests, Grenzen und Übergaben. Die KI pflegt es; wir müssen es nicht jedes Mal komplett lesen. Es ist keine zusätzliche tägliche Aufgabenliste. Die Navigation oben bringt euch auch nach versehentlich geschlossenem Tab zurück zu den anderen Dateien.
+Frühere Detail- und Fortschrittslogs sind historische Archive und werden nicht fortgeschrieben. Die Navigation oben bringt euch auch nach versehentlich geschlossenem Tab zurück zu den anderen Dateien.
 
 ### 3. Wünsche und Notizen einbringen
 
