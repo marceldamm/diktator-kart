@@ -6,6 +6,10 @@
 
 > **Rolle und Vorrang (09.10.2026):** Diese Datei enthält Ziele und Vorschläge. Zusammen mit CURRENT-WORKLIST.md, TEAM-CHANGES.md und TEAM-NOTES.md bildet sie die einzige laufende Projektsteuerung. Frühere Fachdateien und Logs sind historische Quellen und werden nicht für den aktuellen Status fortgeschrieben.
 
+**Wiederverwendbarer Charakter-Qualitätsstandard (Marcel, 09.10.2026):** Für künftige Figuren gilt die [bestätigte Stalin-Referenz](references/visuals/stalin-matte-suit-separate-coat-cap-insignia-20261009.png) als direkter Stil-, Proportions-, Licht- und Materialmaßstab: detailreiche, leicht stilisierte 3D-Formen zwischen Foto und Comic, erwachsen und glaubwürdig. Kleidung behält eine gleichmäßige Grundfarbe ohne Glanzreflexe oder helle Lichtflecken. Identität, Outfit und Symbole werden für jede Figur eigens gestaltet. Regeln und Prompt: [docs/32-character-model-visual-standard.md](docs/32-character-model-visual-standard.md).
+
+**Konzeptbild-Serie aller auswählbaren Fahrer (Marcel, 09.10.2026):** Je ein eigenständiges, modellfreundliches Ganzkörperbild für Hitler, Stalin, Mussolini, Mao Zedong, Kim Jong-un und Fidel Castro. Kleidung und Farben sollen historisch plausibel sein; Hüte nur dann, wenn sie historisch passen und die Figur sinnvoll ergänzen. Die gemeinsame Vorlage regelt Proportionen, matte Oberflächen und neutrales Licht; Gesicht und figurspezifische Merkmale bleiben individuell. Fünf von sechs Bildkonzepten sind erstellt; Hitler wurde vom Bilddienst blockiert und braucht einen anderen Weg. Laufender Auftrag und Ergebnisse: [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
+
 
 **Arbeitsbereich:** [Aktuelle Arbeit](CURRENT-WORKLIST.md) · [Langfristige Ziele](LONG-TERM-GOALS.md) · [Teamänderungen](TEAM-CHANGES.md) · [Notizen & Anleitung](TEAM-NOTES.md)
 

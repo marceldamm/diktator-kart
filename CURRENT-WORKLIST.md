@@ -9,6 +9,14 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Neuer Military-Offizier als Stalin-Fahrer – 09.10.2026 (Marcel)
+
+- [x] `C:\Users\papa\Downloads\military officer 3d model.glb` geprüft: eine ungeriggte Mesh-Datei mit 16.587 Vertices und ohne Animation. Körper, Mütze und Mantel wurden nach getrennten Geometrieinseln in drei GLB-Meshes aufgeteilt; die Download-Quelle blieb unverändert.
+- [x] Für die lokale Stalin-Anprobe ein provisorisches Humanoid-Rig erstellt, die Pose statisch gebacken und den neuen Testfahrer in `src/slice-scene.ts` aktiviert. Sichtbarer Chrome-Lauf auf der Ewige-Führer-Allee bestätigte, dass das neue Modell geladen wird.
+- **Befund/Abnahme offen:** Vorschau zeigt deutliche Verformungen/Überschneidungen am Mantel und eine schwebende Mütze; das Gesicht wirkt im Laufzeitbild sehr dunkel. Der Tausch ist ein reversibler Test, keine fertige Sitz-/Rig-Abnahme. Nach Marcels Beurteilung Rig/Teile korrigieren oder den vorherigen Fahrer wiederherstellen.
+- Assetbelege und editierbare Blender-Stände liegen ignoriert unter `.tools/raw-models/military-officer-3d-model/`; die Runtime-Datei heißt `public/assets/models/military-officer-driver-test.glb`. Marcel bestätigte die Erstellung mit seinem bezahlten Tripo-Konto; die offizielle [Tripo-Hilfe](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially) und [Nutzungsbedingungen, §5.2.2](https://www.tripo3d.ai/terms) räumen zahlenden Nutzern weitreichende Nutzungs-/Änderungs-/Verbreitungsrechte ein. Die Eingabereferenz stammt aus dem gemeinsam erstellten Konzept. Diese Prüfung ersetzt keine eigenständige Rechtsberatung.
+- **Abschlussprüfung 09.10.2026:** `npm run build` erfolgreich (Vite meldet ein Bundle über 500 kB). `git diff --check` erfolgreich. `npm test`: 99/107 bestanden; acht Fehler in `tests/team-workflow.test.mjs` prüfen noch den früheren PR-/Work-Branch-/PROGRESS-LOG-Ablauf und widersprechen dem bestätigten direkten `main`-Ablauf. Keine Laufzeit- oder Sitzabnahme behauptet.
+
 ## Migrierte offene GitHub-Aufgaben – 09.10.2026
 
 Die offenen Arbeitspunkte aus den GitHub-Issues wurden in diese Markdown-Liste migriert; ab jetzt ist sie maßgeblich. Alte Issue-Nummern dienen nur zur Herkunftszuordnung. Keine neuen GitHub-Issues anlegen und keine Issue-Kommentare, Labels, Milestones oder Boards zur Fortschrittsführung verwenden.
@@ -16,7 +24,7 @@ Die offenen Arbeitspunkte aus den GitHub-Issues wurden in diese Markdown-Liste m
 | Alter Issue | Kanonischer Stand / nächster Schritt |
 |---|---|
 | #48 Military-Uniform-GLB | Blender-Test mit Body/Cap/Cape und schwarzer Uniform/roten/silbernen Details erstellt; nächste Aktion: Marcel beurteilt die Bilder. Keine Runtime-Integration beauftragt. |
-| #47 Tripo-Offizier | Drei Meshes, Rig-/Sitzversuch und lokaler Stalin-Fahrer-Test vorbereitet; nächster Schritt: Marcel testet im Spiel und beurteilt Sitz, Umhang und Material. Öffentliche Verteilung bleibt gesperrt bis Rechteklärung. |
+| #47 Tripo-Offizier | Neueres `military officer 3d model.glb` ist als reversibler Stalin-Testfahrer eingebunden. Sichtbarer Lauf zeigt Mantelüberschneidungen und schwebende Mütze; Marcel beurteilt, dann korrigieren oder zurückstellen. Paid-Tripo-Nutzungsrechte anhand offizieller Bedingungen geprüft. |
 | #43 bessere Modelle | Allgemeine Modellarbeit von Marcel gestoppt; nur einzeln ausdrücklich bestätigte Modelltests. |
 | #42 Online-Mehrspieler | Langfristig; private Einladungs-Lobbys erst nach stabilem Einzelspieler. |
 | #41 Rückwärtsgeschwindigkeit | Balanceentscheidung offen: aktueller Wert 5 m/s (18 km/h); erst nach Marcels Wunsch ändern. |
@@ -34,6 +42,19 @@ Die offenen Arbeitspunkte aus den GitHub-Issues wurden in diese Markdown-Liste m
 | #2 GitHub-Pilot | Historisches Pilotziel; durch diesen Beschluss ersetzt. Keine offene Produktaufgabe. |
 
 Ältere umfassendere Beschreibungen, Akzeptanzdetails und verifizierte Zwischenstände wurden auf diese Tabelle und die passenden aktuellen Abschnitte der vier Hauptdateien reduziert. [`docs/31-offene-punkte.md`](docs/31-offene-punkte.md) wird nicht mehr gepflegt.
+
+## Charaktervorlage für weitere Modell-Erstellungen – 09.10.2026 (Marcel)
+
+- [x] Die bestätigte Stalin-Konzeptansicht als wiederverwendbare Darstellungsreferenz verankert: matte, gleichmäßige Materialien ohne Glanz/Reflexionen, weiches neutrales Licht, erwachsene stimmige Proportionen und klare Ganzkörperansicht. Gesichter, Kleidung und Themenmerkmale bleiben je Charakter individuell; Stalins S&M-Details und Abzeichen werden nicht pauschal übertragen.
+- [x] Wiederverwendbarer Prompt und Grenzen der Bildreferenz in [`docs/32-character-model-visual-standard.md`](docs/32-character-model-visual-standard.md) festgehalten; Bildreferenz liegt unter [`references/visuals/stalin-matte-suit-separate-coat-cap-insignia-20261009.png`](references/visuals/stalin-matte-suit-separate-coat-cap-insignia-20261009.png).
+
+## Konzeptbild-Serie für den auswählbaren Fahrerkader – 09.10.2026 (Marcel)
+
+- [ ] Für alle sechs aktuell auswählbaren Figuren je ein eigenes Ganzkörper-Konzeptbild erstellen: Hitler, Stalin, Mussolini, Mao Zedong, Kim Jong-un und Fidel Castro. Stilvorgaben: [`docs/32-character-model-visual-standard.md`](docs/32-character-model-visual-standard.md). Historisch plausible Farben und Kleidung; Hut nur, wenn er für die jeweilige Figur passend und hilfreich ist. Keine Übernahme von Stalins S&M-Outfit auf andere Figuren.
+- **Status:** Ziel angelegt; aktuelle Auswahl in `src/cast.ts` und `docs/14-character-and-item-catalog.md` bestätigt. Die von Marcel bestätigte Stalin-Ansicht ist die verbindliche Stil-/Materialreferenz. Fünf historische Outfit-Konzepte sind erstellt und unter [`references/visuals/character-concepts/`](references/visuals/character-concepts/) gespeichert: Stalin, Mussolini, Mao Zedong, Kim Jong-un und Fidel Castro. Frühere fotorealistische/comicartige Versuche wurden verworfen.
+- **Stilkorrektur:** detailreiches, leicht stilisiertes 3D wie die Referenz, mit erwachsenen Proportionen. Gleichmäßige Kleidungsfarben ohne glänzende Reflexe oder helle Lichtflecken; nur sehr zurückhaltende diffuse Formschattierung.
+- **Blocker:** Drei Anfragen für eine Hitler-Darstellung wurden vom Bilddienst mit derselben Sicherheitsblockade zurückgewiesen. Kein Hitler-Ersatzbild erstellt oder als fertig ausgegeben.
+- **Nächster Schritt:** für Hitler einen anderen vom Nutzer gewählten Weg festlegen; danach die Serie als 6/6 vervollständigen. Die fünf gespeicherten Bilder sind Konzeptentwürfe und noch keine historische Detailabnahme oder 3D-Modelle.
 
 ## Aufgaben- und Git-Ablauf vereinfachen – 09.10.2026 (Marcel)
 

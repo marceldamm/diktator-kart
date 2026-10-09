@@ -189,7 +189,7 @@ def main():
 
     scene = bpy.context.scene
     scene["asset_status"] = "Local experimental fit; not a runtime driver"
-    scene.render.engine = "BLENDER_EEVEE"
+    scene.render.engine = "BLENDER_EEVEE_NEXT"
     scene.eevee.taa_render_samples = 24
     scene.render.resolution_x = 1200
     scene.render.resolution_y = 900
@@ -199,8 +199,11 @@ def main():
     scene.view_settings.look = "AgX - Medium High Contrast"
     world = bpy.data.worlds.new("Kart fit review")
     world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs["Color"].default_value = (.08, .10, .13, 1)
-    world.node_tree.nodes["Background"].inputs["Strength"].default_value = .5
+    background = world.node_tree.nodes.get("Background") or world.node_tree.nodes.new("ShaderNodeBackground")
+    output_node = world.node_tree.nodes.get("World Output") or world.node_tree.nodes.new("ShaderNodeOutputWorld")
+    world.node_tree.links.new(background.outputs[0], output_node.inputs["Surface"])
+    background.inputs["Color"].default_value = (.08, .10, .13, 1)
+    background.inputs["Strength"].default_value = .5
     scene.world = world
     for name, pos, power, size in (
         ("key", (2.4, -3.0, 4.5), 900, 3),

@@ -1,6 +1,10 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
-## 08.10.2026 – Marcel: Tripo-Sowjetoffizier im Stalin-Kart testen
+## 09.10.2026 – Marcel: Military-Offizier als Stalin-Testfahrer
+
+Aktueller Stand: Die neuere Datei `military officer 3d model.glb` ist in Körper, Mütze und Mantel getrennt und unter `public/assets/models/military-officer-driver-test.glb` als provisorisch posierter Stalin-Testfahrer eingebunden. Der sichtbare Chrome-Lauf bestätigt das Laden; Mantelüberschneidung, schwebende Mütze und dunkles Gesicht bleiben zu beurteilen. Es ist ein reversibler Versuch ohne Rig-/Sitzabnahme. Marcel gab an, das Modell mit seinem bezahlten Tripo-Konto erzeugt zu haben; Tripo-Hilfe und Nutzungsbedingungen wurden geprüft. Build erfolgreich; acht Workflowtests sind nicht an den bestätigten direkten-main-Prozess angepasst. Details und nächster Schritt stehen in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
+
+## 08.10.2026 – Marcel: früherer Tripo-Sowjetoffizier im Stalin-Kart testen
 
 Marcel stellte eine mit seinem bezahlten Tripo-Konto erzeugte GLB bereit und bat um Prüfung, Trennung von Figur/Mütze/Umhang, einen Rig-Versuch und eine Anprobe im Auto. Der Auftrag ist in [Issue #47](https://github.com/marceldamm/diktator-kart/issues/47) geführt. Der erste Dateibefund zeigte einen Mesh-Knoten und 831 Flächeninseln, nicht drei GLB-Objekte; die drei räumlich getrennten Gruppen wurden lokal als eigene Blender-Objekte und GLB-Knoten rekonstruiert. Ein reduziertes Rig und die Anprobe im Stalin-Limousinenmodell wurden als Blender-Arbeitsdatei erstellt. Sichtbar: Mütze auf dem Kopf, Umhang am Rücken, aber statische Stoff-/Sitzüberschneidung und unfertige Körperverformung; dies ist keine Laufzeit- oder Bewegungsabnahme. Die Originaldatei bleibt unverändert in der lokalen ignorierten `.tools`-Ablage. Der Runtime-Fahrer bleibt unverändert. Vor öffentlicher Verteilung Eingabereferenz und genaue Tripo-Kontobedingungen prüfen; die offizielle [Tripo-Hilfe zu kommerzieller Nutzung](https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially) beschreibt weitreichende Rechte für bezahlte Modelle und verlangt eigene Rechte an der Eingabe.
 

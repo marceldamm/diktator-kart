@@ -32,7 +32,7 @@ def bounds(objects):
 
 def render_review(objects, output):
     scene = bpy.context.scene
-    scene.render.engine = "BLENDER_EEVEE"
+    scene.render.engine = "BLENDER_EEVEE_NEXT"
     scene.eevee.taa_render_samples = 16
     scene.render.resolution_x = 900
     scene.render.resolution_y = 900
@@ -46,8 +46,11 @@ def render_review(objects, output):
     size = max(high[i] - low[i] for i in range(3))
     world = bpy.data.worlds.new("Officer review world")
     world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs["Color"].default_value = (.12, .14, .17, 1)
-    world.node_tree.nodes["Background"].inputs["Strength"].default_value = .6
+    background = world.node_tree.nodes.get("Background") or world.node_tree.nodes.new("ShaderNodeBackground")
+    output_node = world.node_tree.nodes.get("World Output") or world.node_tree.nodes.new("ShaderNodeOutputWorld")
+    world.node_tree.links.new(background.outputs[0], output_node.inputs["Surface"])
+    background.inputs["Color"].default_value = (.12, .14, .17, 1)
+    background.inputs["Strength"].default_value = .6
     scene.world = world
 
     for name, offset, energy, radius in (

@@ -1,24 +1,29 @@
-"""Export the staged Tripo officer as a static, posed local runtime test.
+"""Export a staged Tripo officer as a static, posed local runtime test.
 
 The source GLB and the resulting experimental asset are user-only files. This
 script reads .tools/raw-models/tripo-soviet-officer/officer-seated-test.blend
 and writes a GLB to public/assets/models for the local Vite runtime. Do not
 publish that GLB until the model's distribution rights have been confirmed.
 """
+import argparse
 import os
+import sys
 
 import bpy
 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCE = os.path.join(ROOT, ".tools", "raw-models", "tripo-soviet-officer", "officer-seated-test.blend")
-OUTPUT = os.path.join(ROOT, "public", "assets", "models", "tripo-officer-driver-test.glb")
-
-
 def main():
-    if not os.path.isfile(SOURCE):
-        raise FileNotFoundError(SOURCE)
-    bpy.ops.wm.open_mainfile(filepath=SOURCE)
+    values = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source", required=True)
+    parser.add_argument("--output", required=True)
+    options = parser.parse_args(values)
+    source_path = os.path.abspath(options.source)
+    output_path = os.path.abspath(options.output)
+    if not os.path.isfile(source_path):
+        raise FileNotFoundError(source_path)
+    bpy.ops.wm.open_mainfile(filepath=source_path)
     armature = bpy.data.objects.get("Officer Driver Rig")
     if armature is None:
         raise RuntimeError("Staged officer rig is missing")
@@ -52,9 +57,9 @@ def main():
     for obj in exported:
         obj.select_set(True)
     bpy.context.view_layer.objects.active = root
-    os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     bpy.ops.export_scene.gltf(
-        filepath=OUTPUT,
+        filepath=output_path,
         export_format="GLB",
         use_selection=True,
         export_apply=True,
@@ -62,7 +67,7 @@ def main():
         export_animations=False,
         export_image_format="AUTO",
     )
-    print(f"TEST_RUNTIME_GLB {OUTPUT} {os.path.getsize(OUTPUT)}")
+    print(f"TEST_RUNTIME_GLB {output_path} {os.path.getsize(output_path)}")
 
 
 if __name__ == "__main__":
