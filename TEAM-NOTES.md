@@ -10,6 +10,8 @@ Marcel stellte eine mit seinem bezahlten Tripo-Konto erzeugte GLB bereit und bat
 
 **Git-Synchronisierung bei paralleler Arbeit (09.10.2026):** Marcel und Sarah können in eigenen Checkouts parallel arbeiten. Vor jedem Push `origin/main` holen. Wenn der Remote inzwischen voraus ist, die eigenen Änderungen und `origin/main` erst normal zusammenführen und Konflikte inhaltlich prüfen. Ein normaler Push verweigert einen veralteten Stand; kein Force-Push, harter Reset oder automatisches „ours/theirs“. Das aktive Ruleset erlaubt direkte Pushes und verlangt weder PR noch Statuscheck; **Block force pushes** und **Restrict deletions** bleiben eingeschaltet.
 
+**Lokale Git-Berechtigung (09.10.2026, Marcel):** Der normale Shell-Aufruf konnte `.git/FETCH_HEAD` nicht schreiben. Der Projektstart-Abruf gelang mit erhöhtem Einzelzugriff; Berechtigungen wurden nicht geändert. ACL-/Schreibfehler später gezielt prüfen und beheben, ohne andere `.git`-Inhalte anzufassen.
+
 > **Rolle und Vorrang (09.10.2026):** Diese Datei enthält gemeinsame Anleitung und Notizen. Zusammen mit CURRENT-WORKLIST.md, LONG-TERM-GOALS.md und TEAM-CHANGES.md bildet sie die einzige laufende Projektsteuerung. Frühere Fachdateien, Logs und Issue-Einträge sind historische Quellen und werden nicht als aktueller Status gepflegt.
 
 

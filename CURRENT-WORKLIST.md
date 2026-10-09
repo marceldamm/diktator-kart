@@ -41,7 +41,7 @@ Die offenen Arbeitspunkte aus den GitHub-Issues wurden in diese Markdown-Liste m
 
 **Stand:** Die 17 zuvor offenen GitHub-Issues sind mit Status/Nächstem Schritt hierher migriert und auf GitHub geschlossen; sie bleiben als Verlauf erhalten und wurden nicht gelöscht. Alle 10 Automationen des privaten GitHub-Projects sind ausgeschaltet. Issue-Formulare, PR-Vorlage und Copilot-Anweisungen sind lokal entfernt. GitHub Actions ist für das Repository ausgeschaltet; auf `main` liegt noch die historische Workflow-Datei, lokal ist ihre Entfernung vorbereitet. Es werden keine neuen GitHub-Issues verwendet.
 
-**Branch-Schutz:** Im aktiven Ruleset `Require PR and passing CI on main` sind **Require a pull request before merging** und **Require status checks to pass** ausgeschaltet. **Block force pushes** und **Restrict deletions** bleiben eingeschaltet. Die Änderungen an Projektdateien und die vorbereitete Workflow-Datei-Entfernung liegen noch uncommitted auf dem Arbeitsbranch; sie sind nicht in `main` veröffentlicht.
+**Projektstart 09.10.2026:** Der neueste Abruf meldete `origin/main` auf `56f9595`, ohne neue Commits seit dem lokalen Ausgangsstand. Die vorhandenen Dokumentations-, Workflow- und Offizier-Teständerungen sind als lokaler Checkpoint `1434de8` auf `main` erhalten; `main` liegt damit einen Commit vor `origin/main`. Dieser Stand ist nicht gepusht und nicht getestet. Keine Dateiüberschneidung mit neueren Remote-Änderungen wurde festgestellt; Sarahs noch nicht gepushte lokale Arbeit ist von hier aus nicht sichtbar.
 
 ## Tripo-Offizier: Teile trennen, Rig und Stalin-Kart-Anprobe – 08.10.2026 (Marcel)
 
