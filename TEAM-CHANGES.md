@@ -1,6 +1,6 @@
 # Gemeinsamer Änderungsverlauf
 
-- **09.10.2026 – Fahrerwahl mit 3D-Präsentation (Marcel, Claude):** Kopf-Symbole unten, ein Klick zeigt den Fahrer stehend neben seinem Kart in einer zufälligen von vier geteilten Posen, Infos links. Kopfbilder sind jetzt fertige Dateien statt Browser-Renderings, dadurch keine Wartezeit mehr beim Öffnen. Details: CURRENT-WORKLIST.md.
+- **09.10.2026 – Fahrerwahl mit 3D-Präsentation (Marcel, Claude):** Kopf-Symbole unten, ein Klick zeigt den Fahrer stehend neben seinem Kart auf einer dunklen Studio-Bühne mit Spotlicht (Welt ausgeblendet) in einer zufälligen von vier geteilten Posen, Infos links. Kopfbilder sind jetzt fertige Dateien statt Browser-Renderings, dadurch keine Wartezeit mehr beim Öffnen. Details: CURRENT-WORKLIST.md.
 
 - **09.10.2026 – Neue Tripo-Fahrer für alle sechs Figuren (Marcel, Claude):** Hitler, Stalin, Mussolini, Mao, Kim und Castro sind geriggt und in ihren Karts posiert (Hände am Lenkrad, Füße auf Pedalen, Sitz auf dem Polster); Stalin ohne Mütze. Das Spiel lädt `<name>-driver.glb`, die Arme folgen beim Lenken dem Rad, die Fahrerwahl-Porträts funktionieren. Die CC0-Fahrer werden nicht mehr geladen. Marcel kann jede Pose selbst ändern: Anleitung `docs/33-fahrer-posen-in-blender.md`, Export per Doppelklick. Details: CURRENT-WORKLIST.md.
 

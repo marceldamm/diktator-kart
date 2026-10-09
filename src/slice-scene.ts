@@ -15,6 +15,7 @@ import { CubeTexture } from '@babylonjs/core/Materials/Textures/cubeTexture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
+import { SpotLight } from '@babylonjs/core/Lights/spotLight';
 import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent';
 import { GlowLayer } from '@babylonjs/core/Layers/glowLayer';
@@ -710,10 +711,45 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       scene.onDisposeObservable.add(() => { for (const c of standing.values()) void c.then((x) => x.dispose()); });
       const stage = new TransformNode('driverStage', scene); stage.parent = visuals[0].orientation;
       let shown: (() => void) | undefined, presenting = 0, lastPose = -1;
+      // Studio (Marcel, 09.10.2026): only kart and driver on a dark floor under a spotlight, the world hidden. The
+      // camera renders just the STUDIO layer while the selection is open; nothing else needs to be toggled.
+      const STUDIO = 0x10000000;
+      const spotTexture = new DynamicTexture('Studio spot', { width: 256, height: 256 }, scene, true);
+      { const c = spotTexture.getContext() as CanvasRenderingContext2D, g = c.createRadialGradient(128, 128, 8, 128, 128, 128);
+        g.addColorStop(0, 'rgba(255,236,196,.62)'); g.addColorStop(.45, 'rgba(214,183,122,.32)'); g.addColorStop(.8, 'rgba(60,64,62,.12)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+        c.fillStyle = g; c.fillRect(0, 0, 256, 256); spotTexture.hasAlpha = true; spotTexture.update(); }
+      const spotMaterial = new StandardMaterial('Studio spot', scene); spotMaterial.disableLighting = true; spotMaterial.fogEnabled = false;
+      spotMaterial.emissiveTexture = spotTexture; spotMaterial.opacityTexture = spotTexture;
+      const spot = MeshBuilder.CreateDisc('Studio spot', { radius: 4.6, tessellation: 64 }, scene);
+      spot.material = spotMaterial; spot.rotation.x = Math.PI / 2; spot.isPickable = false; spot.layerMask = STUDIO; spot.setEnabled(false);
+      const studioLight = new SpotLight('Studio light', Vector3.Zero(), Vector3.Down(), 1.2, 2, scene);
+      studioLight.intensity = 0; studioLight.diffuse = new Color3(1, .93, .82); studioLight.setEnabled(false);
+      let studioSaved: { camera: Camera; mask: number; clear: Color4; fog: number } | undefined;
+      const placeSpot = () => {
+        const k = visuals[0].root.getAbsolutePosition(), at = presentedAt ?? k;
+        spot.position.set((k.x + at.x) / 2, k.y + .015, (k.z + at.z) / 2);
+        studioLight.position.set(spot.position.x, k.y + 7, spot.position.z + .5);
+      };
+      const studio = (on: boolean) => {
+        const camera = scene.activeCamera;
+        if (on) {
+          for (const m of visuals[0].root.getChildMeshes(false)) m.layerMask |= STUDIO;
+          if (!studioSaved && camera) {
+            studioSaved = { camera, mask: camera.layerMask, clear: scene.clearColor.clone(), fog: scene.fogMode };
+            camera.layerMask = STUDIO; scene.clearColor = new Color4(.035, .045, .05, 1); scene.fogMode = Scene.FOGMODE_NONE;
+            spot.setEnabled(true); studioLight.setEnabled(true); studioLight.intensity = 60;
+          }
+          placeSpot();
+        } else if (studioSaved) {
+          studioSaved.camera.layerMask = studioSaved.mask; scene.clearColor = studioSaved.clear; scene.fogMode = studioSaved.fog; studioSaved = undefined;
+          spot.setEnabled(false); studioLight.setEnabled(false);
+        }
+      };
       presentDriver = (cast) => {
         const generation = ++presenting;
         shown?.(); shown = undefined; presentedAt = undefined;
         seats[0].holder.setEnabled(cast === null);
+        studio(cast !== null);
         if (cast === null) return;
         const id = CAST[cast].faceStyle;
         void standingModel(id).then((container) => {
@@ -722,7 +758,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const r of inst.rootNodes) r.parent = stage;
           const meshes = inst.rootNodes.flatMap((r) => r.getChildMeshes(false));
           for (const m of meshes) {
-            m.receiveShadows = true; m.isPickable = false; shadow.addShadowCaster(m);
+            m.receiveShadows = true; m.isPickable = false; m.layerMask |= STUDIO; shadow.addShadowCaster(m);
             const material = m.material;
             if (material instanceof PBRMaterial) { material.metallic = Math.min(material.metallic ?? 0, .12); material.roughness = Math.max(material.roughness ?? 0, .78); }
           }
@@ -737,7 +773,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           for (const m of meshes) { m.computeWorldMatrix(true); m.refreshBoundingInfo({ applySkeleton: true }); }
           const body = meshes.filter((m) => m.getTotalVertices() > 0).reduce((a, m) => { const b = m.getBoundingInfo().boundingBox; return { min: Vector3.Minimize(a.min, b.minimumWorld), max: Vector3.Maximize(a.max, b.maximumWorld) }; },
             { min: new Vector3(Infinity, Infinity, Infinity), max: new Vector3(-Infinity, -Infinity, -Infinity) });
-          presentedAt = body.min.add(body.max).scale(.5);
+          presentedAt = body.min.add(body.max).scale(.5); placeSpot();
           for (const other of styles) void standingModel(other);
         });
       };

@@ -123,7 +123,7 @@ def portrait(rig, id, body):
     target = Vector((head.x, head.y, (head.z + top.z) / 2 - .11))
     cam = bpy.data.objects.new('cam', bpy.data.cameras.new('cam')); sc.collection.objects.link(cam)
     cam.data.lens = 85
-    a = math.radians(18 + STAGE_TURN)
+    a = math.radians(18)
     cam.location = target + Vector((math.sin(a), math.cos(a), .04)) * 2.0
     cam.rotation_euler = (target - cam.location).to_track_quat('-Z', 'Y').to_euler()
     sc.camera = cam
@@ -144,7 +144,7 @@ def export(source):
     rig = next(o for o in bpy.data.objects if o.type == 'ARMATURE')
     # Presentation spot in the kart frame (+Y forward, +X right): beside the kart on the side the menu camera looks
     # from, turned towards that camera. The selection screen hangs this GLB on the kart like the seated driver.
-    rig.location = STAGE; rig.rotation_euler = (0, 0, math.pi - math.radians(STAGE_TURN))
+    rig.location = (0, 0, 0); rig.rotation_euler = (0, 0, math.pi)   # poses and portrait: upright at the origin, facing +Y
     bpy.context.view_layer.update()
     meshes = [o for o in bpy.data.objects if o.type == 'MESH' and o.parent == rig and not o.hide_get() and not o.hide_viewport]
     body = next(o for o in meshes if o.name.endswith('Koerper'))
@@ -153,6 +153,9 @@ def export(source):
         if img.size[0] > 1024: img.scale(1024, 1024)
     # Portrait in a neutral standing pose (rest), then the GLB.
     portrait(rig, id, body)
+    # The presentation spot only moves the whole figure; the poses live in bone space and stay valid.
+    rig.location = STAGE; rig.rotation_euler = (0, 0, math.pi - math.radians(STAGE_TURN))
+    bpy.context.view_layer.update()
     bpy.ops.object.select_all(action='DESELECT')
     rig.select_set(True)
     for o in meshes: o.select_set(True)
