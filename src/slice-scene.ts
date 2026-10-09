@@ -629,7 +629,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
       const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
-      const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(`/assets/models/cc0-driver-${id}.glb`, scene)] as const)));
+      const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(
+        id === 'stalin' ? '/assets/models/tripo-officer-driver-test.glb' : `/assets/models/cc0-driver-${id}.glb`, scene,
+      )] as const)));
       scene.onDisposeObservable.add(() => { for (const c of models.values()) c.dispose(); });
       const seats = visuals.map((v, index) => {
         // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
@@ -653,7 +655,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const inst = models.get(cast.faceStyle)!.instantiateModelsToScene((n) => `cc0-${index}/${n}`, false);
           for (const r of inst.rootNodes) r.parent = holder;
           seat.meshes = inst.rootNodes.flatMap((r) => r.getChildMeshes(false));
-          for (const m of seat.meshes) { m.receiveShadows = true; shadow.addShadowCaster(m); }
+          for (const m of seat.meshes) {
+            m.receiveShadows = true; m.isPickable = false; shadow.addShadowCaster(m);
+            // Tripo's source packs strong metallic/roughness values into its PBR texture.
+            // Reduce metallic response for this local test so highlights do not wash out the face/uniform.
+            const material = m.material;
+            if (material instanceof PBRMaterial) { material.metallic = Math.min(material.metallic ?? 0, .12); material.roughness = Math.max(material.roughness ?? 0, .78); }
+          }
           seat.head = seat.meshes.filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar|mole|top hair|cap|cigar/.test(m.name));
           seat.skull = seat.head.find((m) => /Pilot head/.test(m.name)); seat.style = cast.faceStyle;
           // Arm rig: remember the seat pose and where each wrist sits on the wheel (in the wheel's own frame).

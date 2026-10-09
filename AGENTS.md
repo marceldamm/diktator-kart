@@ -4,33 +4,31 @@
 
 1. Gearbeitet, gestartet, committet und gepusht wird nur im Hauptordner des Repositorys (Marcel: `D:\Diktator-Kart`). Die Batch `Diktator-Kart-starten.cmd` startet genau diesen Ordner.
 2. Vor jeder Änderung: `git status` und `git log -1` prüfen; mit `git fetch origin` und dem Projektstart-Ablauf auf den neuesten gemeinsamen Stand bringen. Nie auf älteren Dateien weiterarbeiten.
-3. Commits und Dokumentation gestaffelt: nicht nach jeder kleinen Änderung committen. Nach einem sinnvollen Paket oder auf ausdrücklichen Wunsch kann die KI einen Zwischenstand dokumentieren, prüfen und auf den persönlichen Arbeitsbranch committen/pushen; `main` bleibt davon unberührt. Vor riskanten Schritten, Übergaben und an der Budgetgrenze Checkpoint anlegen. Verbindlicher geprüfter Teamabschluss bleibt gesammelt. Ungesicherte fremde Änderungen nie überschreiben, sondern zuerst sichern.
-4. Immer nur eine KI arbeitet gleichzeitig im Ordner. Die nächste beginnt erst, wenn die vorige committet hat.
+3. Commits gestaffelt: nicht nach jeder kleinen Änderung committen. Nach sinnvollen Paketen, „Zwischenstand sichern“ und Projektabschluss die vier Hauptdateien aktualisieren, lokal committen und den gemeinsamen Stand nach `main` sichern. Vor Branchwechseln und riskanten Schritten ungesicherte Arbeit erhalten. GitHub-PR-, Review-, Board- und Actions-Dokumentation ist kein Arbeitsablauf.
+4. Pro lokalem Checkout arbeitet nur eine KI gleichzeitig. Marcel und Sarah dürfen in eigenen Checkouts parallel arbeiten. Vor jedem Push neuesten `origin/main` holen und prüfen. Ist der lokale Commit dahinter, Änderungen durch Merge zusammenführen und Konflikte inhaltlich lösen; erst danach normal pushen. Ein abgewiesener Push bedeutet: neu synchronisieren und erneut zusammenführen. Niemals `--force`, Reset oder blinde Überschreibung zum Auflösen verwenden.
 5. Auch Claude arbeitet direkt im Hauptordner, ohne Worktree. Der frühere Claude-Worktree wurde am 04.10.2026 entfernt.
 
 ## Kurzbefehle
 
 **Arbeitslisten abarbeiten:** Dieser Auftrag autorisiert die Umsetzung beider Listen: zuerst ausführbare offene Aufgaben aus CURRENT-WORKLIST.md, danach selbstständig bestätigte Ziele aus LONG-TERM-GOALS.md in priorisierten, prüfbaren Paketen. Gewähltes Langzeitpaket vor Beginn in CURRENT-WORKLIST.md aufnehmen, Status/Nächster Schritt sichtbar halten, prüfen und dokumentieren. Nicht nach der kurzen Liste bei bloßen Vorschlägen stoppen. Blockierte Aufgaben kennzeichnen und an unabhängigen Punkten weiterarbeiten; nur bei echter Nutzerentscheidung fragen. Unbestätigte Vorschläge/Sarah-Änderungen bleiben bestätigungspflichtig. Budgetregel, aktueller Nutzerauftrag und Umfangsbeschränkungen gelten weiter. Projektstart allein startet keinen unbegrenzten Arbeitslauf.
 
-Die Kurzbefehle **Projektstart/Projekt Start**, **Zwischenstand sichern** und **Projektabschluss/Projekt Ende** rufen sicheren Start, persönlichen Checkpoint bzw. geprüften Abschluss mit Veröffentlichung auf. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Nächstes anzeigen. Die KI erklärt Branches und Konflikte; maßgebliche Kurzhilfe: [TEAM-NOTES.md](TEAM-NOTES.md).
+Die Kurzbefehle **Projektstart/Projekt Start**, **Zwischenstand sichern** und **Projektabschluss/Projekt Ende** rufen Synchronisierung, Checkpoint bzw. geprüfte Sicherung des gemeinsamen Stands auf `main` auf. Eine angehängte Aufgabe nach der Synchronisierung ausführen; ohne Auftrag Stand/Nächstes anzeigen. Maßgebliche Kurzhilfe: [TEAM-NOTES.md](TEAM-NOTES.md).
 
 Diktierte Wünsche selbstständig in die passende Arbeitsdatei eintragen: „Heute möchte ich …“ in CURRENT-WORKLIST.md, „Langfristiges Ziel: …“ in LONG-TERM-GOALS.md, „Notiere: …“ und „Nachricht an Sarah/Marcel: …“ in TEAM-NOTES.md (Datum, Autor, Zielperson, Status). Nutzer müssen Dateien nicht selbst schreiben. Beim Projektstart offene Notizen und für den Nutzer bestimmte Teamnachrichten kurz anzeigen; Empfang/Antwort nicht erfinden.
 
-## GitHub-Issues, Coding Agents und automatische Prüfungen
+## Aufgaben, Markdown-Dokumentation und GitHub-Sicherung
 
-- Die vier Hauptdateien bleiben die kanonische Projektsteuerung. Ein GitHub Issue ergänzt sie als verlinkbare, abgrenzbare Aufgabe; es ersetzt weder bestätigte Ziele noch Nutzerentscheidungen.
-- Bei jedem klaren, bestätigten Arbeitsauftrag automatisch ein GitHub-Issue nach `.github/ISSUE_TEMPLATE/work-item.yml` anlegen oder ein vorhandenes Issue aktualisieren; Issue-Link in CURRENT-WORKLIST.md ergänzen. Herkunft, Bestätigungsstatus, Ziel, Akzeptanzkriterien, Grenzen und Belegstatus eintragen. Keine Issues für bloße Erwähnungen oder unverbindliche Ideen erzeugen.
-- Mehrteilige bestätigte Ziele als Milestone bündeln; konkrete Issues und zugehörige PRs im verfügbaren GitHub Project führen. Der Projekt-Workflow „Auto-add to project“ nimmt offene Issues und PRs aus `diktator-kart` automatisch auf. Die Board-Regel „Code changes requested“ setzt PRs bei Review-Änderungswünschen automatisch auf `In progress`; PRs werden beim Erstellen zunächst unter `Backlog` einsortiert und für die Prüfung nach `In review` verschoben. Status Board/Issue und die vier Markdown-Hauptdateien synchron halten; die Hauptdateien bleiben bei Entscheidungen maßgeblich.
-- Wenn dieses Modell keinen GitHub-Schreibzugriff oder kein autorisiertes Tool hat, ehrlich sagen und den Auftrag lokal fortsetzen; niemals eine Issue-Erstellung oder Agentenzuweisung vortäuschen. Copilot Cloud Agent ist ein separater, tarif-/richtlinienabhängiger Agent und wird nur bei vorhandener Freigabe sowie klar bestätigtem Issue verwendet.
-- Änderungen gehen standardmäßig als Pull Request in Review. Die aktive Ruleset-Regel für `main` verlangt einen PR und den erfolgreichen GitHub-Actions-Check `tests-and-build`; Force-Push und Löschen von `main` sind gesperrt. Keine Review-Stimme ist vorgeschrieben, damit Marcel den alleinigen Maintainer-Workflow fortsetzen kann. Der ausdrückliche Projektabschluss umfasst Prüfung und Zusammenführung des PR; nie Regeln umgehen.
-- `.github/workflows/validate.yml` führt auf Pull Requests `npm ci`, `npm test` und `npm run build` aus. Sichtbare Spiel-, Stil-, Audio- und Gerätetests bleiben getrennt von Headless-CI und brauchen die bestehenden menschlichen Belegregeln.
-- Das persönliche `diktator-kart`-Repository ist öffentlich, das GitHub Project „Diktator Kart – Teamarbeit“ ist privat. Keine Zugangsdaten, personenbezogenen oder vertraulichen Inhalte veröffentlichen. Repository- und Pages-Sichtbarkeit vor dem Teilen prüfen.
+- CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md sind die einzigen laufend gepflegten Projekt-, Aufgaben-, Ideen-, Entscheidungs- und Fortschrittsdokumente. Kein separates Fortschrittslog, Issue-Protokoll, Milestone oder Project-Board pflegen. Frühere Issues/Logs bleiben historische Quellen; relevante offene Inhalte daraus gehören in diese vier Dateien.
+- Jeder klare, bestätigte Auftrag wird als Markdown-Arbeitseintrag in CURRENT-WORKLIST.md geführt; Zukunftsziele und unbestätigte Ideen gehören in LONG-TERM-GOALS.md. Keine neuen GitHub-Issues anlegen oder bestehende dort fortschreiben. Alte Issue-Nummern dienen ausschließlich als historische Herkunftsverweise.
+- GitHub dient der Versionsicherung des Babylon-Projekts. Projektstart synchronisiert `origin/main`; Zwischenstand und Projektabschluss sichern sinnvolle Commits nach `main`, sobald die Main-Branch-Regel dafür angepasst ist. Die Regel blockiert derzeit direkte Pushes, bis PR-Pflicht und Pflicht-Statuscheck entfernt sind. Force-Push- und Löschschutz bleiben an. Keine PRs, Reviews, Milestones, Projects oder GitHub Actions als Arbeitsablauf verwenden.
+- Lokale Prüfungen in VS Code oder ChatGPT/Codex nur passend zur Änderung ausführen. Resultate, nicht ausgeführte Prüfungen und Grenzen knapp in einer der vier Hauptdateien festhalten. Keine automatischen GitHub-Workflows für Codeprüfung oder Build.
+- Niemals Zugangsdaten oder private Informationen in öffentliche Commits aufnehmen.
 
 ## Gemeinsame Budgetregel für autonome Arbeit
 
 Gilt für Marcel und Sarah automatisch beim Projektstart und während ausdrücklich beauftragter autonomer Arbeit. Zu Beginn und nach jedem größeren Paket die offiziellen Codex-Werte des aktuellen Kontos für Fünf-Stunden- und Wochenlimit prüfen, sofern verfügbar (get_usage_limits oder tatsächliche Usage-Anzeige). Maßgeblich ist der kleinere Restwert. Es gelten Sarahs eigene Kontowerte, nicht Marcels letzte Zahlen. Kontextgröße und geschätzte Tokens sind kein Planlimit; keine Prozentwerte erfinden.
 
-Bei ungefähr **15 % Rest** in einem der beiden Limits keine neue große Aufgabe anfangen. Laufende Änderung fertigstellen, wichtigste Prüfungen/Spielbelege sichern, vier Arbeitsdateien und PROGRESS-LOG.md aktualisieren und lokalen Git-Checkpoint erstellen. Einen bereits autorisierten Teamabschluss rechtzeitig durchführen; Upload nur mit entsprechender Freigabe, keine Budgetregel als zusätzliche Push-Erlaubnis auslegen. Mit dem Ziel stoppen, **mindestens etwa 5 % Rest** für eigene Nutzernachrichten zu lassen. Checkpoints regelmäßig bereits während der Arbeit sichern.
+Bei ungefähr **15 % Rest** in einem der beiden Limits keine neue große Aufgabe anfangen. Laufende Änderung fertigstellen, wichtigste Prüfungen/Spielbelege sichern, vier Hauptdateien aktualisieren und lokalen Git-Checkpoint erstellen. Einen bereits autorisierten Projektabschluss rechtzeitig durchführen. Mit dem Ziel stoppen, **mindestens etwa 5 % Rest** für eigene Nutzernachrichten zu lassen. Checkpoints regelmäßig bereits während der Arbeit sichern.
 
 Wenn echte Werte nicht abrufbar sind, dies früh sagen, höchstens einmal nach den angezeigten Werten fragen und vorsichtigen Abschluss-Puffer nutzen. Keine Zusatzkontingente aktivieren, keine Resets oder kostenpflichtigen Dienste auslösen. Bei unerwarteter Sperre beim nächsten Kontakt ehrlich gesicherten und ungesicherten Stand nennen. Diese Regel garantiert keinen exakten Restwert; Prüfung und Abschluss brauchen selbst Kontingent.
 
@@ -38,7 +36,7 @@ Wenn echte Werte nicht abrufbar sind, dies früh sagen, höchstens einmal nach d
 
 Beim KI-Kurzbefehl Projektstart nach erfolgreicher Git-Synchronisierung CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md als vier Dateitabs in der Codex-Windows-App öffnen (open_in_codex, sofern verfügbar, absolute Pfade des aktiven Checkouts). Die Batch meldet die Dateien; das Öffnen übernimmt die KI. Fehlt das Werkzeug, anklickbare Links und diese Grenze nennen.
 
-Die vier gemeinsamen Arbeitsdateien sind bei jedem Projektstart nach Git-Synchronisierung und beim Abschluss verbindlich: CURRENT-WORKLIST.md (laufende Aufträge, Aktuell/Nächster Schritt und Erledigt), LONG-TERM-GOALS.md (Gesamtziele und nächste Vorschläge), TEAM-CHANGES.md (wenige elementare Teamänderungen), TEAM-NOTES.md (gemeinsame Anleitung und persönliche Notizen mit Herkunft/Status). Neue konkrete Wünsche in CURRENT-WORKLIST.md, Zukunftsziele in LONG-TERM-GOALS.md; wichtige Änderungen kurz in TEAM-CHANGES.md. Notizen erhalten, offene Notizen zuordnen und Ergebnisse verlinken, keine Zustimmung erfinden. Technische Prüfbelege, Annahmen und Probleme bleiben in PROGRESS-LOG.md. Alle vier Dateien zusammen mit dem geprüften Spielstand pflegen und veröffentlichen. Nach leerer aktueller Liste passende langfristige Pakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
+Die vier gemeinsamen Arbeitsdateien sind die einzigen laufenden Projektprotokolle: CURRENT-WORKLIST.md für Aufträge, Status und Nächstes; LONG-TERM-GOALS.md für Ziele und Ideen; TEAM-CHANGES.md für wichtige bestätigte Änderungen; TEAM-NOTES.md für Anleitung, Notizen und kurze Prüfergebnisse. Fortschritte, Entscheidungen und Blocker gehören dorthin. PROGRESS-LOG.md und weitere Detailprotokolle bleiben historisch und werden nicht fortgeschrieben. Nach leerer aktueller Liste passende bestätigte Langzeitpakete vorschlagen; ausdrücklich beauftragte Ziele weiter umsetzen. Altes Projekt bleibt reine historische Referenz.
 
 ## Zweck
 
@@ -48,8 +46,8 @@ Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentw
 
 - Ausschließlich die neue Babylon-Hauptbasis von origin/main in marceldamm/diktator-kart entwickeln. Aktive Verzeichnisse: src/, public/, art-source/; Kennzeichnung und Mindestabstammung in project-state.json.
 - Alte PlayCanvas-Checkouts, Diktator-Kart-Legacy/, Legacy/, archive/* und Stände vor der gemeinsamen Babylon-Basis sind unveränderliche historische Referenzen. Dort nicht entwickeln, starten oder veröffentlichen. Änderungen ausschließlich am neuen Projekt. Keine automatische Übernahme alten Engine-Codes.
-- Vor Arbeitsbeginn Projektstart: neuesten GitHub-Stand holen, lokale Arbeit sichern, Überschneidungen vergleichen und aktuelle Babylon-Änderungen integrieren. Altcode zuerst archivieren, anschließend auf neuer Basis arbeiten. Details: docs/21-team-workflow.md.
-- Projektabschluss autorisiert nach Dokumentation/Prüfung die sichere Veröffentlichung des Arbeitsbranches und des zusammengeführten neuen main. Kein erneutes Nachfragen für diesen ausdrücklich beauftragten Ablauf. Kein Force-Push, keine Umgehung von Branchschutz, keine blinde Konfliktauswahl. Alte pauschale „kein Push/Merge“-Sitzungsregeln sind für diesen neuen Teamabschluss überholt.
+- Vor Arbeitsbeginn Projektstart: neuesten `origin/main` holen, lokale Arbeit sichern und aktuelle Babylon-Änderungen integrieren. Altcode zuerst archivieren, anschließend auf neuer Basis arbeiten. Die vier Hauptdateien und Repo-Skills enthalten den aktuellen Ablauf; docs/21-team-workflow.md ist historische Anleitung.
+- Projektabschluss autorisiert die Sicherung des geprüften gemeinsamen Stands auf `main`; keine parallelen Arbeitsbranches. Bis die Main-Branch-Einstellung geändert ist, bei einer Ablehnung nichts umgehen und den lokalen Commit erhalten.
 - Fehlende Zugänge, echte widersprüchliche Kreativentscheidungen und ungelöste Konflikte konkret melden; Arbeit erhalten. Keine Aktualität oder Veröffentlichung behaupten, die nicht geprüft wurde.
 
 ## Umgang mit dem Altprojekt
@@ -68,10 +66,10 @@ Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentw
 
 Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 
-1. Sie prüft vor jeder größeren Änderung zuerst die vier Hauptdateien: CURRENT-WORKLIST.md (aktuelle Arbeit), LONG-TERM-GOALS.md (Ziele), TEAM-CHANGES.md (bestätigte Änderungen), TEAM-NOTES.md (Notizen/offene Punkte). README.md ist die kurze Projektübersicht; danach prüft sie die betroffenen Detaildokumente.
+1. Sie prüft vor jeder größeren Änderung zuerst die vier Hauptdateien: CURRENT-WORKLIST.md (aktuelle Arbeit), LONG-TERM-GOALS.md (Ziele), TEAM-CHANGES.md (bestätigte Änderungen), TEAM-NOTES.md (Notizen/offene Punkte). Weitere Dokumente werden nicht als zusätzliche Aufgaben- oder Fortschrittssteuerung verwendet; Quellcode und technische Dateien liest sie nur, soweit die konkrete Umsetzung es erfordert.
 2. Sie erkennt Widersprüche, fehlende Entscheidungen, unrealistische Annahmen und fehlende Abnahmekriterien selbstständig.
 3. Sie ergänzt wichtige Fragen, wenn eine Entscheidung für Qualität, Performance, Umfang oder Machbarkeit fehlt.
-4. Sie hält die vier Hauptdateien und betroffene Detaildateien synchron. Änderungen an einem Grundpfeiler lösen eine Prüfung aller abhängigen Dokumente aus; der aktuelle Auftrag/Status wird in den vier Hauptdateien nachgeführt.
+4. Sie hält die vier Hauptdateien synchron. Der aktuelle Auftrag und Status werden ausschließlich dort nachgeführt. Technische Detaildokumente werden nur geändert, wenn der Auftrag eine konkrete technische Anleitung oder Referenz betrifft.
 5. Sie trennt verbindliche Entscheidungen, Vorschläge, offene Fragen und verifizierte Ergebnisse klar.
 6. Sie senkt Qualitäts- oder Performanceziele nicht stillschweigend ab. Ein Ziel darf nur nach bewusster Entscheidung geändert werden.
 7. Sie benennt Blocker konkret, arbeitet an unabhängigen Punkten weiter und fragt nur dann nach, wenn eine echte Nutzerentscheidung nötig ist.
@@ -80,33 +78,31 @@ Die KI soll nicht nur direkte Anweisungen ausführen, sondern aktiv mitdenken:
 10. Sichtbare Laufzeitziele werden in sinnvollen Paket-Zwischenständen mit aktuellen Spielbildern belegt. Für einen Paketvergleich möglichst eine passende Vorher- und Nachher-Ansicht unter gleichen Spiel-/Kamerabedingungen sichern; nicht für jede Kleinigkeit einen Screenshot erzeugen. Tests/Build allein sind keine visuelle Abnahme.
 11. Vor einer Bildbewertung vorhandene Belege sichten und zeitlich einordnen: Änderungsdatum, Dateiname/Eintrag, dargestellte Szene und zugehörigen Branch-/Commit-/Runtime-Stand prüfen. Ältere Bilder bleiben historische Vergleiche und dürfen nicht als aktueller Spielstand ausgegeben werden. Bei Unsicherheit einen neuen Laufzeitbeleg aus der tatsächlich aktuellen sichtbaren Chrome-Sitzung erstellen oder die Bildaussage als ungeprüft kennzeichnen.
 12. Bei längeren Browser-, Blender- oder Build-Arbeiten Auslastung in sinnvollen Abständen und nach auffälligen Verzögerungen kontrollieren. Hohe CPU-/Speicherlast einem Prozess/Tab und der eigenen Prüfinstanz zuordnen, bevor gehandelt wird. Eigene Prüfläufe pausieren/beenden, wenn sie nicht gebraucht werden; Nutzerfenster, fremde Prozesse und Server ohne eindeutige Eigentümerschaft nicht schließen.
-13. Marcels beantwortete [PROJECT-QUESTIONNAIRE.md](PROJECT-QUESTIONNAIRE.md) und das aktive [Projektgrundgerüst](docs/23-project-design-baseline.md) bestimmen die initialen Ziele und Grundpfeiler. Beim Projektstart mit bekanntem Owner Sarah nach der Synchronisierung den Fragebogen als zusätzlichen Dateitab öffnen, wenn möglich; ihre Antworten eigenständig erfassen und keine ihrer Originalideen umschreiben. Sarahs Zustimmung ist keine Voraussetzung für die Umsetzung von Marcels Basis. Ihre abweichenden Antworten werden als separate Sicht festgehalten und ändern die Basis nicht automatisch; die Grundpfeiler ändert nur Marcel durch eine ausdrückliche neue Entscheidung.
+13. Die historischen Fragebögen und das Projektgrundgerüst können bei einer konkreten Rückfrage als Referenz dienen. Sie sind keine zusätzlichen Starttabs oder laufenden Aufgabenlisten. Sarahs ursprüngliche Ideen werden bei Bedarf kenntlich erhalten; ausdrückliche aktuelle Nutzerentscheidungen haben Vorrang.
 
 ## Dokumentationspflege
 
 - Verbindlicher Arbeitsordner auf diesem PC ist `D:\Diktator-Kart`. Das neue Projekt liegt direkt dort; `Diktator-Kart-Legacy/` ist ausschließlich Altarchiv. Der ChatGPT-Projektspiegel ist keine zweite aktive Projektbasis.
-- Für den Babylon-Neustart gelten eigene Arbeitsbranches und der geprüfte Teamabschluss aus docs/21-team-workflow.md. Die ausdrückliche Abschlussanweisung autorisiert die Übernahme; keine ungeprüften direkten Änderungen an main.
+- Für die aktuelle Zusammenarbeit gilt ausschließlich der vereinfachte Ablauf in den vier Hauptdateien und den Repo-Skills: nacheinander auf dem gemeinsamen `main`, mit geprüftem Commit und Sicherung. Ältere Branch-/PR-Anweisungen in Detaildokumenten sind historisch.
 - Derzeit nur vorhandene oder kostenlose Werkzeuge und Assets einsetzen; keine Käufe, kostenpflichtigen Dienste oder zusätzlichen Abonnements voraussetzen.
-- Änderungen an Sarahs ursprünglichen Ideen als Vorschlag mit Originalidee und Begründung dokumentieren; erst nach gemeinsamer Bestätigung durch beide als beschlossen behandeln. Unklare Herkunft ehrlich kennzeichnen.
-- Die bestätigten 15 Designentscheidungen aus `docs/10-open-questions.md` nicht erneut als unbeantwortete Grundsatzfragen stellen. Technische Detailentscheidungen und vorläufige Balancewerte selbstständig begründet treffen.
+- Änderungen an Sarahs ursprünglichen Ideen als Vorschlag mit Originalidee und Begründung in den vier Hauptdateien dokumentieren; erst nach gemeinsamer Bestätigung durch beide als beschlossen behandeln. Unklare Herkunft ehrlich kennzeichnen.
 
-- Die vier Hauptdateien sind die maßgebliche aktuelle Steuerung für Aufträge, Ziele, bestätigte Entscheidungen und Notizen. `README.md` ist die kurze Projektübersicht und verweist auf Fachdetails.
-- `docs/` enthält die ausformulierten Fachentscheidungen.
+- Die vier Hauptdateien sind die einzige laufend gepflegte Steuerung für Aufträge, Ziele, bestätigte Änderungen und Notizen. Ältere Fach- und Fortschrittsdokumente bleiben historische Referenzen.
 - `references/visuals/` enthält künftige Nutzerbilder für die Art Direction; Bilder werden nicht automatisch als technische Anforderungen interpretiert.
-- Bei jeder Änderung eines Grundpfeilers sind die vier Hauptdateien sowie `docs/09-roadmap.md`, `docs/10-open-questions.md` und alle betroffenen Fachdateien zu prüfen. Alte Ideen/Begründungen bleiben erhalten und werden nötigenfalls als historisch, offen oder überholt gekennzeichnet.
-- Neue Entscheidungen kommen in `docs/12-decision-log.md` mit Datum, Begründung und betroffenen Dokumenten.
-- Laufzeitbilder, Vergleichsbedingungen, Aktualitätsprüfung und Prozesshygiene sind Teil der Abnahme; der verbindliche Ablauf steht in `docs/21-team-workflow.md` und `docs/evidence/README.md`.
+- Bei Änderungen an einem Grundpfeiler werden die vier Hauptdateien aktualisiert. Ältere Detaildokumente werden nur bei konkretem Bedarf geändert und gelten nicht als laufende Projektlisten.
+- Neue Entscheidungen und ihre Begründung kommen mit Datum in die passende der vier Hauptdateien.
+- Laufzeitbilder und Vergleichsbedingungen werden bei passenden Aufgaben als Belege gesichert; ältere Prozessdokumente sind dafür keine aktive Arbeitsanweisung.
 
 ## Reihenfolge vor der eigentlichen Entwicklung
 
-Zuerst die priorisierte Checkliste in `docs/10-open-questions.md` gemeinsam bearbeiten. Erst danach technische Prototypen, Assetproduktion und eigentliche Spielentwicklung beginnen. Die Roadmap in `docs/09-roadmap.md` ist die Arbeitsreihenfolge, kein Freibrief, offene Grundsatzfragen zu überspringen.
+Die aktuelle Arbeitsreihenfolge ergibt sich aus CURRENT-WORKLIST.md und den bestätigten Zielen in LONG-TERM-GOALS.md. Ältere Checklisten und Roadmaps sind historische Quellen und blockieren ausdrücklich beauftragte Arbeit nicht.
 
 ## Beginn und Ende längerer Arbeitssitzungen
 
 - `START-HERE.md` ist die operative Einstiegsdatei für den Nutzer und jede neue Arbeitssitzung.
-- `TEAM-HANDBOOK.md` erklärt dir und Sarah Modellwahl, Work/Codex-Nutzung, Berechtigungen und GitHub-Zusammenarbeit.
-- Zu Beginn `README.md`, `docs/00-project-framework.md`, `docs/16-production-blueprint.md` und `PROGRESS-LOG.md` lesen.
+- `TEAM-HANDBOOK.md` ist ein historischer Leitfaden; bei Widersprüchen gelten die vier Hauptdateien und Repo-Skills.
+- Zu Beginn die vier Hauptdateien lesen; weitere Dateien nur öffnen, wenn die konkrete Aufgabe sie benötigt.
 - Eine Sitzung arbeitet auf einen benannten Meilenstein oder eine klar abgegrenzte Aufgabe hin.
-- Am Ende müssen verifizierte Ergebnisse, nicht verifizierte Annahmen, geänderte Dateien, offene Probleme und der nächste Schritt in `PROGRESS-LOG.md` stehen.
+- Am Ende müssen verifizierte Ergebnisse, offene Punkte und der nächste Schritt in den vier Hauptdateien stehen. `PROGRESS-LOG.md` bleibt historisch.
 - Das empfohlene Modell wird nach Aufgabenrisiko gewählt: Luna für Routine, Sol für zusammenhängende Architektur/Kernsysteme, Astra für schwierige Gesamtanalysen und festgefahrene Probleme.
 - Längere autonome Arbeit darf nicht stillschweigend den Umfang erweitern. Neue Ideen kommen zunächst in die Wissensbasis und werden erst nach Abgleich mit den Grundpfeilern geplant.

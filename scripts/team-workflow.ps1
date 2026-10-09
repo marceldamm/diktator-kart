@@ -39,17 +39,6 @@ function NewArchive([string]$Ref, [string]$Reason) {
     Write-Host "Lokale Sicherung: $name"
     return $name
 }
-function EnsureDependencies {
-    if (-not (Test-Path -LiteralPath 'package-lock.json')) { return }
-    $hash = (Get-FileHash -LiteralPath 'package-lock.json' -Algorithm SHA256).Hash
-    $saved = if (Test-Path -LiteralPath '.tools/dependency-lock.sha256') { (Get-Content '.tools/dependency-lock.sha256' -Raw).Trim() } else { '' }
-    if (-not (Test-Path -LiteralPath 'node_modules') -or $saved -ne $hash) {
-        & npm.cmd ci
-        if ($LASTEXITCODE -ne 0) { throw 'npm ci failed; no publication.' }
-        $null = New-Item -ItemType Directory -Force -Path '.tools'
-        Set-Content -LiteralPath '.tools/dependency-lock.sha256' -Value $hash -Encoding ASCII
-    }
-}
 function ShowWorkLists {
     $activeState = ReadState 'HEAD'
     if (-not $activeState.teamLists) { return } # Older marker/isolated fixtures remain compatible.
@@ -60,7 +49,7 @@ function ShowWorkLists {
         }
     }
     Write-Host 'Gemeinsame Arbeitsdateien: CURRENT-WORKLIST.md / LONG-TERM-GOALS.md / TEAM-CHANGES.md / TEAM-NOTES.md.'
-    Write-Host 'Codex: diese vier Dateien als App-Tabs oeffnen und lesen, Status/Naechstes aktualisieren; technische Belege nur in PROGRESS-LOG.md.'
+    Write-Host 'Codex: diese vier Dateien als App-Tabs oeffnen und lesen; Status, Naechstes und kurze Pruefergebnisse nur hier pflegen.'
 }
 
 try {
@@ -107,8 +96,7 @@ try {
     if (-not $ownerSlug) { $ownerSlug = 'team' }
     $stamp = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss-fff')
     if ($Action -eq 'Checkpoint') {
-        if (-not $isNew -or $branch -eq 'main' -or $branch -match '^(archive/|legacy-)') { throw 'Zwischenstände werden nur auf einem aktiven Babylon-Arbeitsbranch gesichert. main und Archive bleiben unangetastet.' }
-        if (-not $branch.StartsWith("codex/team-$ownerSlug-")) { throw "Zwischenstände werden nur im eigenen Arbeitsbranch codex/team-$ownerSlug-* gesichert; aktueller Branch: $branch" }
+        if (-not $isNew -or $branch -ne 'main') { throw 'Zwischenstaende werden auf dem gemeinsamen Babylon-main gesichert. Erst Projektstart ausfuehren; Archive/andere Branches bleiben unveraendert.' }
         if ($dirty) {
             $changedPaths = Git @('status', '--porcelain') -split "`n"
             $sensitiveNames = @($changedPaths | Where-Object { $_ -match '(?i)(\.env|secret|credential|token|\.pem|\.pfx|\.p12|\.key)' })
@@ -123,63 +111,46 @@ try {
         $remoteBranchHead = Git @('rev-parse', "refs/remotes/origin/$branch")
         if ($remoteBranchHead -ne $savedHead) { throw 'Der Arbeitsbranch wurde nicht bytegenau auf GitHub bestätigt; lokaler Commit bleibt erhalten.' }
         if (Git @('status', '--porcelain')) { throw 'Nach dem Zwischenstand sind noch ungesicherte Dateien vorhanden; der Branch bleibt erhalten.' }
-        Write-Host "ZWISCHENSTAND GESICHERT: $branch = $savedHead. GitHub main wurde nicht veraendert."
+        Write-Host "ZWISCHENSTAND GESICHERT: main = $savedHead"
         exit 0
     }
     if ($dirty) { throw 'Local changes exist. Codex must preserve/review/commit them first. Nothing was overwritten. See .tools/team-status.json.' }
     if ($Action -eq 'Start') {
-        if (-not $isNew) {
-            $archive = NewArchive 'HEAD' 'before-babylon'
-            Write-Host 'Alter Stand gesichert; alter Engine-Code wird NICHT migriert.'
-        }
-        if (-not $isNew -or (Ancestor 'HEAD' 'origin/main') -or $branch -match '^(archive/|legacy-)') {
-            $workBranch = "codex/team-$ownerSlug-$stamp"
-            $null = Git @('switch', '-c', $workBranch, 'origin/main')
-        } else {
-            if (-not $branch.StartsWith("codex/team-$ownerSlug-")) {
-                $workBranch = "codex/team-$ownerSlug-$stamp"
-                $null = Git @('switch', '-c', $workBranch)
+        if ($dirty) { throw 'Ungesicherte Dateien vorhanden. Codex muss sie einzeln erhalten und pruefen, bevor der Branch gewechselt wird.' }
+        if (-not $isNew) { throw 'Der lokale Stand ist nicht von der aktiven Babylon-Basis abgeleitet. Er bleibt erhalten; Migration zuerst pruefen.' }
+        if ($branch -match '^(archive/|legacy-)') { throw 'Ein Archiv-/Legacy-Branch bleibt historisch und wird nicht migriert.' }
+        if ($branch -ne 'main') {
+            if (-not (Ancestor 'HEAD' 'origin/main') -and -not (Ancestor 'origin/main' 'HEAD')) { throw 'Lokaler Branch und origin/main sind auseinander gelaufen. Beide Staende bleiben erhalten; Codex muss sie fachlich zusammenfuehren.' }
+            $localMain = GitResult @('show-ref', '--verify', '--quiet', 'refs/heads/main')
+            if ($localMain.Code -eq 0) {
+                $null = Git @('switch', 'main')
+            } else {
+                $null = Git @('switch', '-c', 'main', 'origin/main')
             }
-            if (-not (Ancestor 'origin/main' 'HEAD')) {
-                $null = Git @('branch', "archive/before-sync-$ownerSlug-$stamp", 'HEAD')
-                $merge = GitResult @('merge', '--no-edit', 'origin/main')
-                if ($merge.Code -ne 0) { throw "Merge requires Codex help. Both sides preserved; do not choose one globally. $($merge.Text)" }
-            }
+            if (-not (Ancestor 'HEAD' 'origin/main')) { throw 'Lokales main ist origin/main voraus oder abgezweigt; keine automatische Ruecksetzung. Codex muss den Stand sichern.' }
+            if ((Git @('rev-parse', 'HEAD')) -ne $remote) { $null = Git @('merge', '--ff-only', 'origin/main') }
+            if (Ancestor 'origin/main' $branch) { $null = Git @('merge', '--ff-only', $branch) }
         }
-        $session = [ordered]@{ owner = $Owner; branch = (Git @('branch', '--show-current')); startingHead = (Git @('rev-parse', 'HEAD')); remoteAtStart = $remote; startedUtc = [DateTime]::UtcNow.ToString('o') }
+        $session = [ordered]@{ owner = $Owner; branch = 'main'; startingHead = (Git @('rev-parse', 'HEAD')); remoteAtStart = $remote; startedUtc = [DateTime]::UtcNow.ToString('o') }
         $session | ConvertTo-Json | Set-Content -LiteralPath '.tools/team-session.json' -Encoding UTF8
         ShowWorkLists
-        Write-Host "Bereit: $($session.branch). Read START-HERE.md, CURRENT-WORKLIST.md, LONG-TERM-GOALS.md, TEAM-CHANGES.md, TEAM-NOTES.md and the latest progress entry. Develop only this Babylon project."
+        Write-Host 'Bereit auf main. Nur die vier Hauptdateien als laufende Aufgaben-/Fortschrittssteuerung lesen und pflegen.'
         exit 0
     }
-    if (-not $isNew -or $branch -eq 'main' -or $branch -match '^(archive/|legacy-)') { throw 'Publication requires a new Babylon work branch. Old/main/archive work is refused.' }
-    $null = Git @('branch', "archive/before-publish-$ownerSlug-$stamp", 'HEAD')
+    if (-not $isNew -or $branch -ne 'main') { throw 'Sicherung erfordert den aktiven Babylon-main. Andere Branches bleiben unveraendert und muessen zuerst sicher integriert werden.' }
     if (-not (Ancestor 'origin/main' 'HEAD')) {
         $merge = GitResult @('merge', '--no-edit', 'origin/main')
         if ($merge.Code -ne 0) { throw "Concurrent work needs Codex conflict resolution; no main push. $($merge.Text)" }
     }
-    $logChanged = Git @('diff', '--name-only', 'origin/main..HEAD', '--', 'PROGRESS-LOG.md')
-    if (-not $logChanged) { throw 'Add a verified handoff entry to PROGRESS-LOG.md and commit before publishing.' }
     ShowWorkLists
-    EnsureDependencies
-    & npm.cmd test
-    if ($LASTEXITCODE -ne 0) { throw 'Tests failed; main unchanged.' }
-    & npm.cmd run build
-    if ($LASTEXITCODE -ne 0) { throw 'Build failed; main unchanged.' }
-    if (Git @('status', '--porcelain')) { throw 'Tests/build left tracked/untracked changes; review and commit them before publication.' }
+    if (Git @('status', '--porcelain')) { throw 'Nach dem lokalen Abschluss sind noch ungesicherte Dateien vorhanden; pruefen und committen.' }
     $null = Git @('fetch', 'origin', '--prune')
     if ((Git @('rev-parse', 'origin/main')) -ne $remote) { throw 'main advanced during verification. Run Projektabschluss again to merge and recheck. No main push.' }
-    $null = Git @('push', '-u', 'origin', "HEAD:refs/heads/$branch")
+    $null = Git @('push', 'origin', 'main')
     $null = Git @('fetch', 'origin', '--prune')
     $savedHead = Git @('rev-parse', 'HEAD')
-    if ((Git @('rev-parse', "refs/remotes/origin/$branch")) -ne $savedHead) { throw 'The reviewed work branch was not confirmed byte-for-byte on GitHub; local commit remains preserved.' }
-    if ((Git @('rev-parse', 'origin/main')) -ne $remote) { throw 'main advanced during verification. Keep the uploaded work branch, integrate current main with Codex, and rerun checks before opening the PR.' }
-    $repositoryUrl = ([string]$remoteState.repositoryUrl -replace '\.git$', '').TrimEnd('/')
-    $encodedBranch = [Uri]::EscapeDataString($branch)
-    $compareUrl = "$repositoryUrl/compare/main...${encodedBranch}?expand=1"
-    Write-Host "GEPRUEFTER BRANCH AUF GITHUB: $branch = $savedHead"
-    Write-Host "Pull-Request-Vergleich: $compareUrl"
-    throw 'The batch does not create or merge pull requests. Do not push main directly. Continue in Codex: create/update this PR, wait for the required Actions check, merge under the explicit Projektabschluss authorization, and verify origin/main.'
+    if ((Git @('rev-parse', 'origin/main')) -ne $savedHead) { throw 'Der Commit wurde auf origin/main nicht bytegenau bestaetigt; lokaler Stand bleibt erhalten.' }
+    Write-Host "STAND AUF GITHUB GESICHERT: main = $savedHead"
 } catch {
     Write-Host "TEAM-WORKFLOW: $($_.Exception.Message)" -ForegroundColor Red
     exit 1

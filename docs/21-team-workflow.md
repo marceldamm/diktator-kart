@@ -1,5 +1,7 @@
 # Gemeinsamer Arbeitsablauf fuer Marcel und Sarah
 
+> **Historisch, durch Beschluss vom 09.10.2026 abgelöst:** Die folgenden Abschnitte beschreiben den früheren Issue-/Board-/PR-/Actions-Prozess und sind keine aktuellen Arbeitsanweisungen. Aktuell sind ausschließlich die vier Hauptdateien plus Repo-Skills: Aufgaben/Status/Fortschritt nur dort, GitHub nur zur Versionsicherung auf `main`. Issues dürfen höchstens Titel und einen Link zum Eintrag in CURRENT-WORKLIST.md enthalten. Keine Board-/Milestone-/PR-/Actions-Pflege. Zwischenstands- und Abschlussregeln siehe TEAM-NOTES.md.
+
 ## Blender-Modellprüfung mit Einzelbildern – 07.10.2026 (Marcel, korrigiert)
 
 Feste Front-, Dreiviertel-, Profil- und bei Bedarf Sitzansichten unter gleichem Licht als Blender-Hintergrundrenderings erstellen und einzeln im Chat zeigen. Für Anatomie/Sitzkontakte den aktuellen Fahrer und das tatsächliche Runtime-Kart gemeinsam laden und übrige Varianten korrekt ausblenden. Blender nicht automatisch im Vordergrund öffnen: Marcel nahm den kurzzeitigen Vordergrundwunsch nach der überlagerten Editoransicht ausdrücklich zurück. Blender-Renderings als Assetbeleg kennzeichnen; eine gezielte sichtbare Chrome-Prüfung belegt anschließend Babylon-Materialien, Animation und Runtime-Integration. Eigene Prüfprozesse zuordnen; Nutzerfenster erhalten.

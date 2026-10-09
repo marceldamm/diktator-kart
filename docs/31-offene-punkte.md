@@ -36,6 +36,7 @@ Der Cloud-Thread „Stand auf main bringen“ hat die GitHub-Issues angelegt (Sp
 | F9 | [#42](https://github.com/marceldamm/diktator-kart/issues/42) | Online-Mehrspieler | Private Lobbys per Einladung, erst nach stabilem Einzelspieler. | später |
 | F10 | [#2](https://github.com/marceldamm/diktator-kart/issues/2) [#13](https://github.com/marceldamm/diktator-kart/issues/13) | Menschliche Abnahmen | Fahr-, Stil- und Hörprobe aller vier Strecken, Team-Praxistest (Issue #2), Ähnlichkeit der Fahrer (Issue #13). | nur menschlich prüfbar |
 | F11 | [#43](https://github.com/marceldamm/diktator-kart/issues/43) | Bessere Modelle (Fahrer, Karts, Gebäude) | Langzeitziel aus LONG-TERM-GOALS.md; von Marcel am 08.10.2026 gestoppt. | gestoppt |
+| F12 | [#47](https://github.com/marceldamm/diktator-kart/issues/47) | Tripo-Offizier aufteilen, riggen und lokal im Spiel testen | Von Marcel am 08.10.2026 als einzelner Modelltest beauftragt; im selben Chat bestätigte er den lokalen Runtime-Tausch, damit er den Offizier als Stalin selbst testen kann. | in Arbeit; statischer Sitztest aktiv; keine Veröffentlichungsfreigabe |
 
 ## Arbeitsreihenfolge (Claude, selbstständig)
 
