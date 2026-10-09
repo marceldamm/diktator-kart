@@ -9,6 +9,14 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Stalin sitzt richtig im Kart: Blender-Pose zum Selbstbearbeiten – 09.10.2026 (Marcel, Claude)
+
+- [x] Military-Offizier als Stalin in `art-source/stalin-im-kart.blend` mit eigenem Skelett ins rote Limousinen-Kart gesetzt: Größe wie die CC0-Fahrer (2,0 m stehend), Gesäß auf dem Polster, Hände am Lenkrad an der Spielposition, Füße auf Pedalen, Mütze auf dem Kopf. Hände/Füße über rote Ziel-Knochen im Pose-Modus verschiebbar. Mantel liegt ausgeblendet bei (nicht fürs Sitzen angepasst).
+- [x] Einsteiger-Anleitung: [`docs/33-stalin-pose-in-blender.md`](docs/33-stalin-pose-in-blender.md). Export per Doppelklick auf `art-source/Stalin-Pose-ins-Spiel-exportieren.cmd` → `public/assets/models/stalin-driver.glb`; `src/slice-scene.ts` lädt diese Datei für Stalin. Reproduzierbar: `art-source/build_stalin_kart_pose.py`.
+- [x] Prüfung: Blender-Renderbilder Seite/vorne/oben/Pedale/Hände/Dreiviertel in [`docs/evidence/stalin-kart-pose-20261009/`](docs/evidence/stalin-kart-pose-20261009/). Im Spiel (lokaler Vite-Server, Claude-Browserfenster) Einzelrennen mit Stalin: sitzende Pose sichtbar, Arme folgen beim Lenken dem Rad, Fahrerwahl-Porträt zeigt Stalin wieder (vorher leer). Keine Konsolenfehler. `npm run build` erfolgreich, `tests/cc0-driver-assets.test.mjs` 2/2. Vollsuite nicht ausgeführt.
+- **Grenzen:** Die Spiel-Pedale der Limousine liegen unerreichbar im geschlossenen Bodenblech; nur in der Blender-Datei sitzen sie unter den Füßen, im Spiel verschwinden die Fußspitzen unter dem Armaturenbrett. Mantel nicht im Spiel. Marcels Stilurteil zur Pose offen.
+- **Nächster Schritt:** Marcel prüft die Bilder/das Spiel und korrigiert bei Bedarf in Blender; optional Spiel-Pedale der Limousine sichtbar nach oben versetzen.
+
 ## Neuer Military-Offizier als Stalin-Fahrer – 09.10.2026 (Marcel)
 
 - [x] `C:\Users\papa\Downloads\military officer 3d model.glb` geprüft: eine ungeriggte Mesh-Datei mit 16.587 Vertices und ohne Animation. Körper, Mütze und Mantel wurden nach getrennten Geometrieinseln in drei GLB-Meshes aufgeteilt; die Download-Quelle blieb unverändert.

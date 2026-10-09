@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 09.10.2026 – Marcel: Stalin-Pose selbst in Blender ändern
+
+`art-source/stalin-im-kart.blend` öffnen (startet im Pose-Modus), rote Ziel-Knochen mit **G** verschieben, **Strg+S**, dann `art-source/Stalin-Pose-ins-Spiel-exportieren.cmd` doppelklicken und im Spiel **F5**. Schritt für Schritt: [docs/33-stalin-pose-in-blender.md](docs/33-stalin-pose-in-blender.md). Vergleichsbilder: `docs/evidence/stalin-kart-pose-20261009/`.
+
 ## 09.10.2026 – Marcel: Military-Offizier als Stalin-Testfahrer
 
 Aktueller Stand: Die neuere Datei `military officer 3d model.glb` ist in Körper, Mütze und Mantel getrennt und unter `public/assets/models/military-officer-driver-test.glb` als provisorisch posierter Stalin-Testfahrer eingebunden. Der sichtbare Chrome-Lauf bestätigt das Laden; Mantelüberschneidung, schwebende Mütze und dunkles Gesicht bleiben zu beurteilen. Es ist ein reversibler Versuch ohne Rig-/Sitzabnahme. Marcel gab an, das Modell mit seinem bezahlten Tripo-Konto erzeugt zu haben; Tripo-Hilfe und Nutzungsbedingungen wurden geprüft. Build erfolgreich; acht Workflowtests sind nicht an den bestätigten direkten-main-Prozess angepasst. Details und nächster Schritt stehen in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).

@@ -630,7 +630,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
       const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
       const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(
-        id === 'stalin' ? '/assets/models/military-officer-driver-test.glb' : `/assets/models/cc0-driver-${id}.glb`, scene,
+        id === 'stalin' ? '/assets/models/stalin-driver.glb' : `/assets/models/cc0-driver-${id}.glb`, scene,
       )] as const)));
       scene.onDisposeObservable.add(() => { for (const c of models.values()) c.dispose(); });
       const seats = visuals.map((v, index) => {

@@ -1,5 +1,9 @@
 # Editierbare Art-Pipeline des Stadion-Slices
 
+## Stalin (Tripo-Offizier) im Limousinen-Kart (09.10.2026)
+
+`build_stalin_kart_pose.py` baut `stalin-im-kart.blend` aus Marcels lokaler Tripo-Quelle (`.tools/raw-models/military-officer-3d-model/soviet-officer-parts-separated.glb`) und `public/assets/models/hero-kart.glb`: Skelett mit Laufzeit-Knochennamen, IK-Ziele für Hände/Füße, Sitzpose. Achtung, überschreibt die `.blend` samt Marcels Posenänderungen. `export_stalin_kart_pose.py` (Doppelklick: `Stalin-Pose-ins-Spiel-exportieren.cmd`) backt die gespeicherte Pose und schreibt `public/assets/models/stalin-driver.glb`. Anleitung: [docs/33](../docs/33-stalin-pose-in-blender.md).
+
 ## Pausierter lokaler Vergleichszweig: Wolfenstein (07.10.2026)
 
 Historischer, pausierter Versuch nach Marcels Modellwechsel zurück zu Quaternius-CC0. Die heruntergeladenen Quelldateien, Modellierungs-Skripte und Bilder liegen lokal unter `.tools/paused-wolfenstein-20261007/` und sind kein Teil des aktiven Runtime-Exports oder dieser Veröffentlichung. Die Sketchfab-Seite führt AkhdanLA und CC BY an; Rechte an der kommerziellen Wolfenstein-Ausgangsfigur sind nicht verifiziert.
