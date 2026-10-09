@@ -28,7 +28,9 @@ def _outer_cluster(xs, gap=.012):
     return out
 
 
-def measure_joints(points):
+def measure_joints(points, z_override=None):
+    """z_override: joint heights that differ from Stalin's (source units, e.g. a lower wrist)."""
+    Z = {**globals()['Z'], **(z_override or {})}
     pts = list(points)
     H = max(p.z for p in pts)
     k = H / REF_H

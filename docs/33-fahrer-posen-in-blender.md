@@ -6,17 +6,18 @@ Stand 09.10.2026 (Claude). Diese Anleitung setzt keine Blender-Kenntnisse voraus
 
 | Datei | Wofür |
 |---|---|
+| `art-source/hitler-im-kart.blend` | Hitler im roten „Größenwahn-Mobil“ |
 | `art-source/stalin-im-kart.blend` | Stalin im roten Limousinen-Kart „Fünfjahresplan 3000“ (ohne Mütze) |
 | `art-source/mussolini-im-kart.blend` | Mussolini im blauen „Il Duce GT“ |
 | `art-source/mao-im-kart.blend` | Mao im roten „Kultur-Kart“ |
 | `art-source/kim-im-kart.blend` | Kim Jong-un in der blauen „Propaganda-Rakete“ |
 | `art-source/castro-im-kart.blend` | Castro im grünen „Revolutions-Cabrio“ |
-| `art-source/Fahrer-Posen-ins-Spiel-exportieren.cmd` | Doppelklick schreibt alle gespeicherten Posen ins Spiel |
+| `art-source/Fahrer-Posen-ins-Spiel-exportieren.cmd` | Doppelklick schreibt alle sechs gespeicherten Posen ins Spiel |
 | `public/assets/models/<name>-driver.glb` | Die Dateien, die das Spiel lädt (werden vom Export überschrieben) |
 | `art-source/tripo/` | Die Original-Modelle aus deinem Download-Ordner, nach Figur umbenannt |
-| `docs/evidence/fahrer-kart-pose-20261009/` | Vergleichsbilder aller fünf (Seite, vorne, oben, Pedale, Hände, Dreiviertel) und Spielbilder |
+| `docs/evidence/fahrer-kart-pose-20261009/` | Vergleichsbilder aller sechs (Seite, vorne, oben, Pedale, Hände, Dreiviertel) und Spielbilder |
 
-Hitler bleibt vorerst der bisherige CC0-Fahrer. Alle fünf Dateien funktionieren gleich; die Beispiele unten nennen Stalin.
+Alle sechs Dateien funktionieren gleich; die Beispiele unten nennen Stalin.
 
 ## 1. Datei öffnen
 
@@ -77,7 +78,7 @@ Tipp: Oben rechts im Pose-Modus gibt es ein Symbol mit Schmetterling/„X“ (**
 
 1. In Blender gespeichert? (**Strg+S**)
 2. Im Windows-Explorer `D:\Diktator-Kart\art-source\` öffnen und **`Fahrer-Posen-ins-Spiel-exportieren.cmd` doppelklicken**.
-3. Ein schwarzes Fenster erscheint und exportiert alle fünf Fahrer. Bei Erfolg steht am Ende „Fertig: Fahrer in public\assets\models\*-driver.glb geschrieben“. Taste drücken, Fenster schließt.
+3. Ein schwarzes Fenster erscheint und exportiert alle sechs Fahrer. Bei Erfolg steht am Ende „Fertig: Fahrer in public\assets\models\*-driver.glb geschrieben“. Taste drücken, Fenster schließt.
 4. Im Spiel (Browser) **F5** drücken. Die Fahrer erscheinen mit der neuen Pose. Im Rennen bewegt das Spiel die Arme beim Lenken selbst; deine Pose ist die Geradeaus-Haltung.
 
 Der Export ändert die `.blend`-Dateien nicht. Nur sichtbare Teile kommen ins Spiel.
@@ -93,8 +94,8 @@ Stalins Mütze ist entfernt (Marcel, 09.10.2026). Der lange Mantel liegt in `sta
 
 ## Technischer Hintergrund (für Claude/Codex)
 
-- Quellen: Marcels bezahlte Tripo-Modelle in `art-source/tripo/`. Zuordnung der Download-Namen vom 09.10.2026: „military officer 3d model (1)“ = Mussolini, „military uniformed man“ = Mao, „military commander“ = Kim, „military soldier“ = Castro; Stalin = früheres „military officer 3d model“ als `stalin-parts.glb` (Körper/Mütze/Mantel getrennt). Kart: `public/assets/models/hero-kart.glb` mit Karosserie und Lack aus `src/cast.ts`.
-- Aufbau: `art-source/build_driver_kart_pose.py -- <id|all>`; Gelenke per Querschnitt-Messung in `art-source/driver_joints.py` (Stalin: von Hand geprüft). Export: `art-source/export_driver_kart_pose.py` (Texturen auf 1024 px).
+- Quellen: Marcels bezahlte Tripo-Modelle in `art-source/tripo/`. Zuordnung der Download-Namen vom 09.10.2026: „military officer 3d model (1)“ = Mussolini, „military uniformed man“ = Mao, „military commander“ = Kim, „military soldier“ = Castro, „wwii german officer“ = Hitler (zuletzt am 09.10.2026); Stalin = früheres „military officer 3d model“ als `stalin-parts.glb` (Körper/Mütze/Mantel getrennt). Kart: `public/assets/models/hero-kart.glb` mit Karosserie und Lack aus `src/cast.ts`.
+- Aufbau: `art-source/build_driver_kart_pose.py -- <id|all>`; Gelenke per Querschnitt-Messung in `art-source/driver_joints.py` (Stalin: von Hand geprüft; Hitler: tiefere Hände per `Z_OVERRIDE`, Mantelteile neben den Händen ohne Unterarm-Gewichte per `ARM_CLEAN`). Export: `art-source/export_driver_kart_pose.py` (Texturen auf 1024 px).
 - Kart-Rahmen wie bei den CC0-Fahrern: Blender +Y = vorne, +Z = oben, Ursprung am Boden. Sitzpolster oben z 0,85 m, Lehne vorne y −0,81 m. Das Lenkrad steht wie im Spiel (`slice-scene.ts` zieht es 0,22 m zum Fahrer und 0,03 m hoch, Lenksäule ×1,41).
 - Skelett: Deform-Knochen tragen die Laufzeitnamen (`upperarm_l`, `lowerarm_l`, `hand_l` …), damit die Lenkrad-Arm-IK im Spiel weiter greift. Gewichte: Bone-Heat auf einer geschlossenen Metaball-Puppe um die Knochen, dann positionsbasiert (Gauß über die nächsten Puppenpunkte) auf die vielen offenen Tripo-Inseln übertragen, damit Nahtstellen nicht aufreißen.
 - Pedale: Im Spiel liegen die Pedale bei den Karosserien unsichtbar im geschlossenen Bodenblech (y 0,8, z 0,5) und sind für die Beine nicht erreichbar. In den Blender-Dateien sitzen sie deshalb unter den Fußballen (Bodenpedal, Neigung 25°). Das Spiel-Kart selbst ist unverändert; dort verschwinden die Fußspitzen unter dem Armaturenbrett, bei Mao und Kim die Unterschenkel in der höheren Karosserie.

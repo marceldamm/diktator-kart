@@ -22,6 +22,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KART = os.path.join(ROOT, 'public', 'assets', 'models', 'hero-kart.glb')
 # id: display name, kart name, body variant and kit from src/cast.ts, paint colour.
 DRIVERS = {
+    'hitler':    ('Hitler', 'Groessenwahn-Mobil', 'grandprix', None, '#8e2635'),
     'stalin':    ('Stalin', 'Fuenfjahresplan 3000', 'limousine', None, '#6f2424'),
     'mussolini': ('Mussolini', 'Il Duce GT', 'racer', 'radio', '#31557a'),
     'mao':       ('Mao', 'Kultur-Kart', 'rounded', None, '#b72f2b'),
@@ -29,6 +30,9 @@ DRIVERS = {
     'castro':    ('Castro', 'Revolutions-Cabrio', 'jeep', None, '#315d42'),
 }
 ID = 'stalin'
+# Hands that sit lower than Stalin's (cuff edge, knuckles, fingertips measured from close-up renders).
+ARM_CLEAN = {'hitler'}   # drivers whose coat hangs beside the hands
+Z_OVERRIDE = {'hitler': {'wrist': .502, 'knuckle': .447, 'fingertip': .405}}
 
 S = 2.04            # source models are 0.98 m tall; 2.0 m matches the cc0 drivers' size in the kart
 CX = -0.198         # source body centre line (x); measured per driver
@@ -150,7 +154,7 @@ def import_driver():
             bpy.ops.object.select_all(action='DESELECT')
             for o in parts: o.select_set(True)
             bpy.context.view_layer.objects.active = body; bpy.ops.object.join()
-        CX, J = measure_joints([v.co for v in body.data.vertices])
+        CX, J = measure_joints([v.co for v in body.data.vertices], Z_OVERRIDE.get(ID))
         print('JOINTS', ID, round(CX, 3), {k: tuple(round(x, 3) for x in v) for k, v in J.items()})
     # Centre the body on x = 0 (feet stay on z = 0), then scale to 2 m.
     for o in [body] + ([coat] if coat else []):
@@ -252,6 +256,9 @@ def weight(rig, body, coat):
             for co, i, d in near:
                 k = math.exp(-((d - d0) / .02) ** 2)
                 for n, w in pw[i].items(): acc[n] = acc.get(n, 0) + w * k
+            if ID in ARM_CLEAN and v.co.z < P('elbow').z and abs(v.co.x) < .85 * P('wrist').x:
+                # Long coat panels hang next to the hands: keep them on the body, not on the forearms.
+                acc = {n: w for n, w in acc.items() if not n.startswith(('lowerarm', 'hand', 'fingers'))} or acc
             top = sorted(acc.items(), key=lambda kv: -kv[1])[:4]
             total = sum(w for _, w in top) or 1
             for n, w in top:

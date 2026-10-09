@@ -1,6 +1,6 @@
 # Editierbare Art-Pipeline des Stadion-Slices
 
-## Tripo-Fahrer im Kart: Stalin, Mussolini, Mao, Kim, Castro (09.10.2026)
+## Tripo-Fahrer im Kart: alle sechs Figuren (09.10.2026)
 
 `build_driver_kart_pose.py -- <id|all>` baut `<id>-im-kart.blend` aus Marcels Tripo-Quellen in `tripo/` und `public/assets/models/hero-kart.glb` (Karosserie und Lack laut `src/cast.ts`): Skelett mit Laufzeit-Knochennamen, IK-Ziele für Hände/Füße, die von Marcel bestätigte Sitzpose. Gelenke misst `driver_joints.py` aus Querschnitten (Stalin von Hand). Achtung, überschreibt die `.blend` samt Marcels Posenänderungen. `export_driver_kart_pose.py` (Doppelklick: `Fahrer-Posen-ins-Spiel-exportieren.cmd`) backt die gespeicherten Posen und schreibt `public/assets/models/<id>-driver.glb`. Anleitung: [docs/33](../docs/33-fahrer-posen-in-blender.md).
 
