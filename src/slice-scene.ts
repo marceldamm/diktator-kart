@@ -627,10 +627,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     };
     // CC0 drivers (07.10.2026, Marcel's method switch): Quaternius-based bodies from art-source/build_cc0_driver.py
     // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
+    // 09.10.2026: all but Hitler are Marcel's Tripo models, posed in art-source/<id>-im-kart.blend (build_driver_kart_pose.py).
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
       const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
       const models = new Map(await Promise.all(styles.map(async (id) => [id, await LoadAssetContainerAsync(
-        id === 'stalin' ? '/assets/models/stalin-driver.glb' : `/assets/models/cc0-driver-${id}.glb`, scene,
+        id === 'hitler' ? '/assets/models/cc0-driver-hitler.glb' : `/assets/models/${id}-driver.glb`, scene,
       )] as const)));
       scene.onDisposeObservable.add(() => { for (const c of models.values()) c.dispose(); });
       const seats = visuals.map((v, index) => {

@@ -1,8 +1,8 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
-## 09.10.2026 – Marcel: Stalin-Pose selbst in Blender ändern
+## 09.10.2026 – Marcel: Fahrer-Posen selbst in Blender ändern
 
-`art-source/stalin-im-kart.blend` öffnen (startet im Pose-Modus), rote Ziel-Knochen mit **G** verschieben, **Strg+S**, dann `art-source/Stalin-Pose-ins-Spiel-exportieren.cmd` doppelklicken und im Spiel **F5**. Schritt für Schritt: [docs/33-stalin-pose-in-blender.md](docs/33-stalin-pose-in-blender.md). Vergleichsbilder: `docs/evidence/stalin-kart-pose-20261009/`.
+`art-source/<name>-im-kart.blend` öffnen (stalin, mussolini, mao, kim, castro; startet im Pose-Modus), rote Ziel-Knochen mit **G** verschieben, **Strg+S**, dann `art-source/Fahrer-Posen-ins-Spiel-exportieren.cmd` doppelklicken und im Spiel **F5**. Schritt für Schritt: [docs/33-fahrer-posen-in-blender.md](docs/33-fahrer-posen-in-blender.md). Vergleichsbilder: `docs/evidence/fahrer-kart-pose-20261009/`.
 
 ## 09.10.2026 – Marcel: Military-Offizier als Stalin-Testfahrer
 

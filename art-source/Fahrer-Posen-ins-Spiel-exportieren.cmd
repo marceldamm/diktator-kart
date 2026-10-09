@@ -1,6 +1,6 @@
 @echo off
 setlocal
-rem Exportiert die gespeicherte Pose aus art-source\stalin-im-kart.blend nach public\assets\models\stalin-driver.glb.
+rem Exportiert die gespeicherten Posen aus art-source\*-im-kart.blend nach public\assets\models\<name>-driver.glb.
 rem Vorher in Blender speichern (Strg+S). Danach im Spiel neu laden (F5).
 set "BLENDER="
 for /d %%D in ("%ProgramFiles%\Blender Foundation\Blender*") do if exist "%%~D\blender.exe" set "BLENDER=%%~D\blender.exe"
@@ -10,7 +10,7 @@ if not defined BLENDER (
   exit /b 1
 )
 echo Verwende %BLENDER%
-"%BLENDER%" --background --factory-startup --python "%~dp0export_stalin_kart_pose.py"
+"%BLENDER%" --background --factory-startup --python "%~dp0export_driver_kart_pose.py" -- all
 if errorlevel 1 (
   echo.
   echo Export fehlgeschlagen. Bitte das Fenster an Claude oder Codex schicken.
@@ -18,5 +18,5 @@ if errorlevel 1 (
   exit /b 1
 )
 echo.
-echo Fertig: public\assets\models\stalin-driver.glb wurde geschrieben. Im Spiel F5 druecken.
+echo Fertig: Fahrer in public\assets\models\*-driver.glb geschrieben. Im Spiel F5 druecken.
 pause
