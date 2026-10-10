@@ -1,5 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
+- **10.10.2026 – Fahrer-/Kamera-/Sprungkorrektur (Marcel, Codex):** Export bereinigt falsche Armgewichte an Mantelflächen und vereinheitlicht UV-Nahtgewichte; sechs Fahrer erneut exportiert/komprimiert, Sitz-.blend unverändert. Gesten im Schulterbereich, Blickbewegung und beide Hände bei Treffer. Cockpit versteckt Kopf explizit. Sprung dreht vollständiges Kart um erhöhtes gemeinsames Zentrum. Sechs Jubel-/Cockpitbilder und drei Sprungphasen im sichtbaren Chrome, vier gezielte Tests und Build bestanden. Vollständiger Fahrtest/Stilabnahme offen.
+
 - **10.10.2026 – Spielfeedback-Paket UI (Marcel, Codex):** Größere responsive Streckenkarten mit eigener Kartenfläche und Rundenlänge aus derselben Kurve wie im Rennen. Status-/Fähigkeits-/Streckenansagen kompakter, Orden und Tempobonus separat und umbrechend; Abwehranzeige verdeckt keine Menütexte mehr. Sichtbare Chrome-Prüfung aller sechs Karten normal/640 × 800 und Peking-HUD bei 0 Orden; Build bestanden. Volle Ordenanzeige/Ereignistexte noch gezielt prüfen.
 
 - **10.10.2026 – Marcels Fahrtest als vorrangiger autonomer Auftrag:** Streckenauswahl/HUD, Armreaktionen, Cockpit-/Sprungdarstellung und Abkürzungsobjekte zuerst korrigieren; Licht/Nachtlampen, Schadenswirkung, Fahrerleben und aggressivere faire Gegner ausbauen. Streckenbezogene Musik, Baumassets und Bodentexturen folgen. Danach die bisherigen Ziele eigenständig fortsetzen. Vollständiges Feedback mit Abnahmen steht oben in CURRENT-WORKLIST.md; noch keine Fertigmeldung dieser Aufgaben.

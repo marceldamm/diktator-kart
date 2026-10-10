@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-10T10:58:33.673Z",
+  "date": "2026-10-10T11:55:45.260Z",
   "tool": "glTF Transform 4.5.1 + meshoptimizer 0.25; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps, EXT_meshopt_compression",
   "results": [
     {
@@ -63,19 +63,9 @@
       "runtimeBytes": 178604
     },
     {
-      "name": "castro-driver",
-      "originalBytes": 1760592,
-      "runtimeBytes": 526800
-    },
-    {
       "name": "castro-stand",
       "originalBytes": 1807092,
       "runtimeBytes": 566060
-    },
-    {
-      "name": "hitler-driver",
-      "originalBytes": 1546468,
-      "runtimeBytes": 447676
     },
     {
       "name": "hitler-stand",
@@ -83,19 +73,9 @@
       "runtimeBytes": 485024
     },
     {
-      "name": "kim-driver",
-      "originalBytes": 1760536,
-      "runtimeBytes": 530772
-    },
-    {
       "name": "kim-stand",
       "originalBytes": 1808400,
       "runtimeBytes": 571024
-    },
-    {
-      "name": "mao-driver",
-      "originalBytes": 1639592,
-      "runtimeBytes": 473728
     },
     {
       "name": "mao-stand",
@@ -103,19 +83,9 @@
       "runtimeBytes": 512380
     },
     {
-      "name": "mussolini-driver",
-      "originalBytes": 1991352,
-      "runtimeBytes": 688820
-    },
-    {
       "name": "mussolini-stand",
       "originalBytes": 2038500,
       "runtimeBytes": 728284
-    },
-    {
-      "name": "stalin-driver",
-      "originalBytes": 1057068,
-      "runtimeBytes": 366032
     },
     {
       "name": "stalin-stand",
@@ -131,6 +101,36 @@
       "name": "city-kit",
       "originalBytes": 22534396,
       "runtimeBytes": 7528948
+    },
+    {
+      "name": "hitler-driver",
+      "originalBytes": 1546468,
+      "runtimeBytes": 445928
+    },
+    {
+      "name": "stalin-driver",
+      "originalBytes": 1057068,
+      "runtimeBytes": 365344
+    },
+    {
+      "name": "mussolini-driver",
+      "originalBytes": 1991352,
+      "runtimeBytes": 687044
+    },
+    {
+      "name": "mao-driver",
+      "originalBytes": 1639592,
+      "runtimeBytes": 471504
+    },
+    {
+      "name": "kim-driver",
+      "originalBytes": 1760536,
+      "runtimeBytes": 529736
+    },
+    {
+      "name": "castro-driver",
+      "originalBytes": 1760592,
+      "runtimeBytes": 525756
     }
   ]
 }

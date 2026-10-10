@@ -51,7 +51,7 @@ export interface TestScene {
   setRoster?(order: number[]): void;
   /** Driver selection: the CAST member stands beside the player kart in a random pose; null puts him back in the seat. */
   presentDriver?(cast: number | null): void;
-  /** Short driver gesture in kart slot kart: cheer (waving arm), fist (shaken fist after an overtake), angry (head shake). */
+  /** Short driver gesture: cheer, fist after an overtake, or angry head shake with both hands raised. */
   driverReaction?(kart: number, kind: DriverReaction): void;
   /** Spectators react: 'wave' = La-Ola through the stands, 'cheer' = bouncing plus paper rain beside kart kart. */
   crowdReact?(kind: 'wave' | 'cheer', kart?: number): void;

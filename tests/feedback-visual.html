@@ -1,0 +1,10 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Diktator Kart · Grafikprüfung</title>
+<style>html,body{margin:0;background:#11232a;color:#eee;font:14px Arial}canvas{width:100vw;height:100vh;display:block}aside{position:absolute;left:12px;top:12px;background:#11232aee;padding:12px;max-width:480px}button,select,input{margin:3px;padding:6px}output{display:block;font-size:12px}label{display:inline-block}</style>
+<canvas id="canvas"></canvas><aside><strong>Grafikprüfung · tatsächliche Laufzeitmodelle</strong><br>
+<select aria-label="Fahrer" id="driver"></select><select aria-label="Strecke" id="track"></select>
+<select aria-label="Ansicht" id="view"><option>Dreiviertel</option><option>Front</option><option>Profil</option><option>Hinten</option><option>Cockpit</option></select><br>
+<button id="cheer">Jubel</button><button id="fist">Faust</button><button id="angry">Wütend</button><button id="pause">Bild einfrieren</button><br>
+<label>Sprungphase <input id="jump" type="range" min="0" max="1" step=".05" value="0"></label>
+<label>Licht <input id="night" type="range" min="0" max="1" step=".5" value="0"></label>
+<label>Karosserie <input id="health" type="range" min="0" max="100" step="25" value="100"></label>
+<output id="status">Lädt …</output></aside><script type="module" src="./feedback-visual.ts"></script></html>

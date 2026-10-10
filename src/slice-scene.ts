@@ -653,6 +653,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
     // 09.10.2026: all six are now Marcel's Tripo models, posed in art-source/<id>-im-kart.blend (build_driver_kart_pose.py).
     let presentDriver: ((cast: number | null) => void) | undefined;
+    let cockpitHeadHidden = false;
     let reactDriver: ((kart: number, kind: DriverReaction) => void) | undefined;
     let presentedAt: Vector3 | undefined;
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
@@ -722,7 +723,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         return seat;
       });
       // Driver reactions (Marcel, 10.10.2026): after the wheel grip, the right arm can leave the rim to wave (cheer) or
-      // shake a fist (overtake); 'angry' shakes the head. A short envelope blends in and out, the kart keeps driving.
+      // shake a fist (overtake); 'angry' shakes the head and raises both hands. A short envelope blends in and out, the kart keeps driving.
       const reactUp = new Vector3(), reactQ = new Quaternion(), reactInv = new Matrix();
       const react = (seat: (typeof seats)[number], onWheel: boolean) => {
         const r = seat.react!; r.t += Math.min(.05, scene.getEngine().getDeltaTime() / 1000);
@@ -735,18 +736,23 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const angle = r.kind === 'angry' ? Math.sin(r.t * 17) * .32 * w : r.kind === 'cheer' ? Math.sin(r.t * 3) * .12 * w : 0;
           Quaternion.RotationAxisToRef(reactUp.normalize(), angle, reactQ); reactQ.multiplyToRef(seat.headRest, head.rotationQuaternion); head.computeWorldMatrix(true);
         }
-        if (r.kind === 'angry') return;
-        const arm = seat.arms.find((a) => a.side === 'r'), other = seat.arms.find((a) => a.side === 'l'); if (!arm || !other) return;
-        refreshChain(arm.hand); refreshChain(other.upper);
-        const shoulder = arm.upper.getAbsolutePosition().clone(), elbow = arm.lower.getAbsolutePosition().clone(), hand = arm.hand.getAbsolutePosition().clone();
-        const outward = shoulder.subtract(other.upper.getAbsolutePosition()).normalize(), reach = (Vector3.Distance(shoulder, elbow) + Vector3.Distance(elbow, hand)) * .97;
-        const shake = r.kind === 'cheer' ? Math.sin(r.t * 8) * .14 : Math.sin(r.t * 15) * .05;
-        const raised = shoulder.add(Vector3.Up().scale(reach * (r.kind === 'fist' ? .8 : .9))).add(outward.scale(.12 + shake));
-        const target = Vector3.Lerp(hand, raised, w);
-        const bent = twoBoneElbow(shoulder, elbow, hand, target);
-        swing(arm.upper, elbow.subtract(shoulder), bent.subtract(shoulder)); arm.lower.computeWorldMatrix(true); arm.hand.computeWorldMatrix(true);
-        const elbowNow = arm.lower.getAbsolutePosition().clone();
-        swing(arm.lower, arm.hand.getAbsolutePosition().subtract(elbowNow), target.subtract(elbowNow)); arm.hand.computeWorldMatrix(true);
+        for (const arm of seat.arms.filter(a => r.kind === 'angry' || a.side === 'r')) {
+          const other = seat.arms.find((a) => a.side !== arm.side); if (!other) continue;
+          refreshChain(arm.hand); refreshChain(other.upper);
+          const shoulder = arm.upper.getAbsolutePosition().clone(), elbow = arm.lower.getAbsolutePosition().clone(), hand = arm.hand.getAbsolutePosition().clone();
+          const outward = shoulder.subtract(other.upper.getAbsolutePosition()).normalize(), reach = (Vector3.Distance(shoulder, elbow) + Vector3.Distance(elbow, hand)) * .97;
+          const shake = r.kind === 'cheer' ? Math.sin(r.t * 8) * .14 : Math.sin(r.t * 15) * .05;
+          // These textured uniforms have stiff shoulder/coat panels: keep gestures in front of the chest instead of
+          // stretching the whole sleeve over the head. The hand still clearly leaves the steering rim.
+          const forward = hand.subtract(shoulder); forward.y = 0; forward.normalize();
+          const raised = shoulder.add(Vector3.Up().scale(reach * (r.kind === 'cheer' ? .1 : r.kind === 'fist' ? 0 : -.1)))
+            .add(forward.scale(.24)).add(outward.scale(.12 + shake));
+          const target = Vector3.Lerp(hand, raised, w);
+          const bent = twoBoneElbow(shoulder, elbow, hand, target);
+          swing(arm.upper, elbow.subtract(shoulder), bent.subtract(shoulder)); arm.lower.computeWorldMatrix(true); arm.hand.computeWorldMatrix(true);
+          const elbowNow = arm.lower.getAbsolutePosition().clone();
+          swing(arm.lower, arm.hand.getAbsolutePosition().subtract(elbowNow), target.subtract(elbowNow)); arm.hand.computeWorldMatrix(true);
+        }
       };
       reactDriver = (kart, kind) => { const seat = seats[kart]; if (seat && (!seat.react || seat.react.kind !== kind)) seat.react = { kind, t: 0 }; };
       scene.onBeforeRenderObservable.add(() => {
@@ -758,11 +764,20 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const onWheel = d.position.y <= .05;
           if (onWheel) refreshChain(visuals[i].steering);
           for (const arm of seat.arms) poseArm(arm, onWheel ? visuals[i].steering : undefined);
+          const head = seat.headBone;
+          if (head?.rotationQuaternion && head.parent) {
+            const state = lastStates[i];
+            const yaw = state ? (state.steer ?? 0) * .24 + Math.sin(state.heading - state.travelHeading) * .2 : 0;
+            (head.parent as TransformNode).getWorldMatrix().invertToRef(reactInv);
+            Vector3.TransformNormalToRef(Vector3.UpReadOnly, reactInv, reactUp);
+            Quaternion.RotationAxisToRef(reactUp.normalize(), yaw + Math.sin(performance.now() / 1000 * 1.4 + i) * .018, reactQ);
+            reactQ.multiplyToRef(seat.headRest, head.rotationQuaternion); head.computeWorldMatrix(true);
+          }
           if (seat.react) react(seat, onWheel);
           // Cockpit camera: the eye sits inside the head, so head, hair and face parts hide while the camera is that close.
           if (!cam || !seat.skull) return;
           const b = seat.skull.getBoundingInfo().boundingSphere;
-          const inside = Vector3.Distance(cam.globalPosition, b.centerWorld) < b.radiusWorld * 2.2;
+          const inside = (i === 0 && cockpitHeadHidden) || Vector3.Distance(cam.globalPosition, b.centerWorld) < b.radiusWorld * 2.2;
           for (const m of seat.head) if (m.isEnabled() === inside) m.setEnabled(!inside);
         });
       });
@@ -988,6 +1003,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         configurePipeline(); configureHigh();
       },
       setPlayerVisible(visible) {
+        cockpitHeadHidden = !visible;
         // First person uses the real model; hide only the head/body, keep cockpit and wheels.
         visuals[0].head.setEnabled(visible);
         for (const mesh of visuals[0].bodyMeshes) mesh.isVisible = visible;
@@ -1137,6 +1153,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const trickRoll = airTrickRoll(s.trick, s.jumpRemaining, s.jumpDuration);
           v.orientation.rotation.z += trickRoll;
           v.wheelFrame.rotation.z = trickRoll;
+          // Both imported frames face -Z. Compensate their ground-level origin to rotate about the same 0.9 m centre.
+          // Leaving the authored pivot intact also preserves the wheel reparenting and steering matrices.
+          const trickX = -.9 * Math.sin(trickRoll), trickY = .9 * (1 - Math.cos(trickRoll));
+          v.orientation.position.x = trickX; v.orientation.position.y += trickY;
+          v.wheelFrame.position.set(trickX, trickY, 0);
           v.rotation += s.speed * dt / .33;
           v.pivots.forEach((p, i) => { p.position.y = .34 + (s.grounded ? s.wheelGroundHeights[i] - s.suspensionOffset : 0); p.rotation.y = i < 2 ? (s.steer ?? 0) * .42 - Math.sin(s.heading - s.travelHeading) * .35 : 0; });
           v.spins.forEach((p) => p.rotation.x = v.rotation);
