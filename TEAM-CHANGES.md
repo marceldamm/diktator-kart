@@ -1,5 +1,11 @@
 # Gemeinsamer Änderungsverlauf
 
+## 10.10.2026 – Claude: Leistungspass, Beinfreiheit, Ehrenregister
+
+- Schattenwerfer auf die Sonnen-Schattenbox begrenzt, ein Schattenobjekt pro Stadtkachel, Leuchteffekt nur mit Kart-/Fahrerverdeckern, leichtere Baumrinde, Detail-LOD für Karts, Menü-/Pause-Bildratenbegrenzung, nur ein aktives Spielfenster. Speicher ~-60 %, Zeichenaufrufe ~-50 %.
+- Armaturenbrett deckt den Fußraum ab, Cockpitöffnung reicht darunter; Posen-Blends aktualisiert.
+- Ehrenregister mit Pokalen je Fahrer (dauerhaft gespeichert, einmal pro Grand Prix).
+
 ## 10.10.2026 – Codex: Klima-Bäume und streckenbezogene Böden
 
 Quaternius-Laub-/Nadel-/Birkenmodelle und Kenney-Palmen als kostenlose CC0-Assets übernommen; ausgewählte Originalquellen und Lizenztexte erhalten. Alpha-Test-Laub, PNG bis 512 px, Meshopt; Palmen mit beleuchteten grünen/braunen Materialien. Klimamapping, räumliche Materialbatches und Platzierungsgrenzen integriert. Sechs eigene Platzpflaster/Rasenpaletten, verbesserte Pjöngjang-/Moskau-/Peking-Fahrbahnen, korrekte Kachelung pro Teilfläche und Regenreaktion. 16 gezielte Tests und Produktionsbuild bestanden; menschliche Stil-/Geräteabnahmen bleiben offen.

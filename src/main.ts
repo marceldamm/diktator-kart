@@ -17,6 +17,7 @@ import { RAMP_LENGTH, RAMP_LIPS, TRACKS, TRACK_INFO, sampleTrack, type TrackId }
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
 import { pickQuality } from './auto-quality';
+import { describeRecord, loadProgress, recordCup, resetProgress, saveProgress } from './cup-progress';
 import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
 import { MeshoptCompression } from '@babylonjs/core/Meshes/Compression/meshoptCompression';
 
@@ -148,6 +149,8 @@ class App {
   private lastRenderAt=0;
   /** Another window of the game is active; this one draws nothing until the player resumes it here. */
   private parked=false;
+  /** Ehrenregister: finished Grand Prix and trophies per driver, kept across sessions. */
+  private cup=loadProgress();
   private padButtons=new Map<string,boolean>();
   private gamepadSeen=false;
   /** Action waiting for its new key in the options (null = not listening). */
@@ -266,6 +269,13 @@ class App {
     this.audio.setMusicVolume(Number(musicVolume.value)/100);
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
+    { // Two clicks reset the Ehrenregister, so a stray click cannot wipe it.
+      const reset = document.querySelector<HTMLButtonElement>('#cup-reset'); let armed = 0;
+      reset?.addEventListener('click', () => {
+        if (performance.now() - armed > 4000) { armed = performance.now(); reset.textContent = 'Wirklich löschen?'; window.setTimeout(() => { if (performance.now() - armed >= 4000) reset.textContent = 'Ehrenregister löschen'; }, 4100); return; }
+        this.cup = resetProgress(); armed = 0; reset.textContent = 'Ehrenregister gelöscht';
+      });
+    }
     document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.autoQuality = false; this.quality = (this.quality + 1) % 3; this.applyQuality(); });
     try { const asked = new URLSearchParams(location.search).get('weather') ?? localStorage.getItem('dk-weather-choice'); if (asked === 'sun' || asked === 'rain' || asked === 'snow' || asked === 'random') this.weatherChoice = asked; } catch { /* storage optional */ }
     document.querySelector('#weather-toggle')?.addEventListener('click', () => {
@@ -593,7 +603,8 @@ class App {
     const next = document.createElement('button'); next.type = 'button'; next.textContent = '▶'; next.addEventListener('click', () => this.cycleTires(1));
     const label = document.createElement('span'); label.innerHTML = '<em>Reifen:</em> '; label.append(`${set.name} (${set.owner})${this.tireChoice === 'auto' ? ' · eigene' : ''}`);
     tires.append(prev, label, next);
-    detail.append(title, kartLine, line, ability, rival, tires);
+    const record = document.createElement('div'); record.className = 'driver-record'; record.textContent = describeRecord(this.cup.drivers[this.chosen]);
+    detail.append(title, kartLine, line, ability, rival, tires, record);
   }
 
   private async beginRace(): Promise<void> {
@@ -884,8 +895,12 @@ class App {
     table.append(list); table.hidden = false;
     if (last) {
       const champion = rows[0].driver, won = champion === me;
+      // Ehrenregister: the final standing counts once per cup (a second finish screen or reload adds nothing).
+      const place = rows.findIndex((row) => row.driver === me) + 1, trophy = DEMO ? null : recordCup(this.cup, gp.id, me, place);
+      if (trophy !== null) saveProgress(this.cup);
+      const award = trophy === null ? '' : trophy === 'none' ? ` · Ehrenregister: Grand Prix Nr. ${this.cup.drivers[me]?.cups ?? 1} eingetragen` : ` · Ehrenregister: ${{ gold: 'Gold', silver: 'Silber', bronze: 'Bronze' }[trophy]}-Pokal für ${CAST[me].name}`;
       document.querySelector('#finish-title')!.textContent = won ? 'Grand-Prix-Sieg · amtlich bestätigt' : `Grand Prix an ${CAST[champion].name}`;
-      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.filter((r) => r.order.length).map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}`;
+      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.filter((r) => r.order.length).map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}${award}`;
       const podium = document.querySelector<HTMLImageElement>('#finish-portrait');
       if (podium) { const shot = this.portraits?.[champion]; podium.hidden = !shot; if (shot) { podium.src = shot; podium.alt = `Grand-Prix-Sieger ${CAST[champion].name}`; } }
       this.startCeremony(rows.slice(0, 3).map((row) => this.order.indexOf(row.driver)));

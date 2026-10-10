@@ -211,6 +211,7 @@ body.parked #parked-card { display: flex; flex-direction: column; align-items: c
 #driver-detail > div { margin-top:6px; }
 #driver-detail b { display:block;color:#f0cf86;font:24px/1.1 Georgia,serif; }
 #driver-detail .driver-kart { margin-top:2px;color:#d9bf7e;font-size:10px;letter-spacing:.08em;text-transform:uppercase; }
+#driver-detail .driver-record { margin-top:6px;padding-top:6px;border-top:1px solid #c2a66944;color:#d9bf7e;font-size:11px; }
 #driver-detail em { color:#e0bf79;font-style:normal; }
 .driver-actions { position:absolute;right:28px;bottom:26px;display:flex;flex-direction:column;gap:8px; }
 .driver-actions button { padding:12px 18px;font-size:12px; }
