@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 10.10.2026 – Marcel: Umsetzung planen und Spieltest begleiten
+
+Marcel beauftragt, die Erkenntnisse der Klärungsrunde als konkrete Aufgaben und Umsetzungsziele zu planen. Schwerpunkt bleibt Grafik und Modelle, zuerst Fahrer, Karts und Cockpit; danach folgen Kart-Abstimmung, alternative Fahrlinien und Cup-Fortschritt/Freischaltungen. Die frühere Beschränkung dieser drei Ideen auf Prüfung ist durch diesen Auftrag abgelöst. Marcel spielt parallel und liefert Feedback. Die KI trägt Beobachtungen ohne erfundene Testergebnisse in CURRENT-WORKLIST.md ein, priorisiert Spielblocker und ergänzt die passenden Ziele. Plan und Abnahme stehen dort; neue Meldungen sind seit dieser Freigabe noch nicht eingegangen.
+
+**Prüfung des Planungspakets:** Gemeinsamer Checkout zu Beginn sauber auf `da99147`; origin/main abgerufen und identisch. Vier Hauptdateien gelesen und ein priorisierter Paketplan mit Status, nächstem Schritt und Abnahme angelegt; `git diff --check` sauber. Spielcode, Modelle und Laufzeit in diesem Planungspaket nicht geändert; kein Build-/Browserlauf dafür erforderlich. Neue Spielbeobachtungen werden erst bei Meldung als Feedback erfasst.
+
 ## 10.10.2026 – Claude: Modelle komprimiert
 
 Alle Laufzeitmodelle sind jetzt meshopt-komprimiert. Nach einem Neubau immer `node art-source/optimize_assets.mjs <name>` ausführen (ohne Namen: alle, `drivers` für Fahrer/Standfiguren); der Fahrer-Doppelklick-Export macht das selbst. Das Spiel lädt den Decoder lokal aus `public/vendor/meshopt_decoder.js` (meshoptimizer, MIT). Unkomprimierte Modelle laufen weiterhin.
