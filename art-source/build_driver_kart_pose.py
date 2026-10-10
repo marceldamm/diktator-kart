@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from driver_joints import measure_joints
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-KART = os.path.join(ROOT, 'public', 'assets', 'models', 'hero-kart.glb')
+KART = os.environ.get('DK_KART_GLB') or os.path.join(ROOT, 'public', 'assets', 'models', 'hero-kart.glb')  # Blender cannot read the meshopt runtime file: pass .tools/raw-models/hero-kart.glb
 # id: display name, kart name, body variant and kit from src/cast.ts, paint colour.
 DRIVERS = {
     'hitler':    ('Hitler', 'Groessenwahn-Mobil', 'grandprix', None, '#8e2635'),
