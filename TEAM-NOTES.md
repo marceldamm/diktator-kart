@@ -18,6 +18,8 @@ Der zweite defensive Itemslot ist umgesetzt: Bei bereits belegtem E-Slot füllt 
 
 Marcel bestätigt: Das vorhandene Orden-System genügt als Sammel-/Tempoziel; optionale riskante Abkürzungen sind erwünscht; knappe Ausweichmanöver sollen einen kleinen Präzisionsbonus geben; der lokale Zeitfahrgeist bleibt; wenige angekündigte Streckenereignisse sind erwünscht. Der Beinahetrefferbonus ist umgesetzt und getestet. Moskau enthält eine erste riskante Querung. Havannas bestehende Welle wird beim Rundenwechsel angekündigt, aber noch nicht mit ausreichendem Vorlauf; Moskau hat noch kein Ereignis. Ein seltenes Item gegen den Führenden bleibt ausdrücklich unerwünscht. Die fünf danach gestellten Zusatzfragen (Kart-Abstimmung, Fahrlinien, Fahrerreaktionen, Cup-Freischaltungen, Publikumsreaktionen) sind bislang unbeantwortet und daher keine bestätigten Ziele.
 
+**Aktualisierung 10.10.2026:** Der vorherige Absatz beschreibt einen historischen Zwischenstand: Moskau hat nun ein Ereignis mit Vorlauf, und Fahrer- sowie Publikumsreaktionen wurden später beauftragt und umgesetzt. Kart-Abstimmung, alternative Fahrlinien und Cup-Freischaltungen bleiben Vorschläge. Die Stalin-/Mao-Mechaniken bleiben nach Marcels Entscheidung vom 09.10. Vorschläge ohne Bauauftrag.
+
 ## 09.10.2026 – Marcel: Fahrer-Posen selbst in Blender ändern
 
 `art-source/<name>-im-kart.blend` öffnen (hitler, stalin, mussolini, mao, kim, castro; startet im Pose-Modus), rote Ziel-Knochen mit **G** verschieben, **Strg+S**, dann `art-source/Fahrer-Posen-ins-Spiel-exportieren.cmd` doppelklicken und im Spiel **F5**. Schritt für Schritt: [docs/33-fahrer-posen-in-blender.md](docs/33-fahrer-posen-in-blender.md). Vergleichsbilder: `docs/evidence/fahrer-kart-pose-20261009/`.
@@ -198,11 +200,15 @@ Hier hält die KI diktierte Nachrichten fest: **Datum · von · an · Nachricht 
 
 ### 06.10.2026 – Nachricht von Sarah an Marcel: Streckenauswahl und Startbild
 
-**Von:** Sarah. **An:** Marcel. **Status:**
+**Von:** Sarah. **An:** Marcel. **Status:** von Marcel am 10.10.2026 als gelesen bestätigt; Antwort unten notiert, nicht versandt.
 
 Ich habe vor Grand Prix, Zeitfahren und erneutem Rennstart eine Streckenauswahl ergänzt. Damals blieb der Stadionring die einzige spielbare Strecke. Die fünf Planungsstrecken zeigten auch ihre Orte: Ewige-Führer-Allee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom) und Genossen-Gerade (Moskau). Außerdem wurde der Fehler behoben, durch den die Strecke während der Fahrerporträt-Aufnahmen kurz vor dem Start verschwand. Das Ruckeln auf Intel UHD ist weiterhin offen und wird nicht durch eine unbelegte Grafikabsenkung kaschiert.
 
 **Nachtrag 07.10.2026:** Die Ewige-Führer-Allee in Pjöngjang ist inzwischen als vierte Strecke spielbar; der Drei-Strecken-Planungsstand oben in dieser Nachricht ist historisch.
+
+**Abgleich 10.10.2026 (Codex):** Die ursprüngliche Nachricht bleibt unverändert; Marcel hat den Empfang am 10.10. bestätigt. In der aktuellen Babylon-Basis sind inzwischen alle sechs genannten Strecken spielbar und die Streckenauswahl ist in `src/main.ts` vorhanden. Sarahs Hinweis auf Intel-UHD-Ruckeln bleibt offen, bis ein Lauf auf der betroffenen Hardware nach aktuellem Stand gemessen ist. Der damalige Porträt-/Streckenfehler wurde hier nicht erneut im Browser geprüft.
+
+**Antwort von Marcel an Sarah, 10.10.2026 – zum Weitergeben, Status: notiert, nicht versandt:** Danke für die Streckenauswahl und deinen Hinweis zum Startbild. Auf unserem gemeinsamen Stand sind inzwischen alle sechs Themenstrecken spielbar. Das Intel-UHD-Ruckeln bleibt offen; wir wollen es auf dem betroffenen Gerät messen und die Grafik nicht ohne Vergleich herunterstellen. Als nächsten gemeinsamen Schwerpunkt verbessern wir zuerst Fahrer, Karts und Cockpit. Deine ursprünglichen Beiträge bleiben dabei kenntlich. Sag bitte Bescheid, wenn du zum jetzigen Stand weitere Beobachtungen hast.
 
 ### 04.10.2026 – Nachricht von Marcel an Sarah: unser gemeinsamer Neustart
 
