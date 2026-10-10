@@ -140,7 +140,7 @@ export function shortcutPoint(u: number, lane = 0): { x: number; z: number; head
 }
 
 /** Nearest shortcut position: distance along it, signed lateral offset and mapped race progress. */
-export function shortcutLocate(x: number, z: number): { u: number; lane: number; s: number } {
+export function shortcutLocate(x: number, z: number): { u: number; lane: number; s: number; distance: number } {
   const { pts, u: cum } = SHORTCUT_PATH; let best = { u: 0, lane: Infinity, d: Infinity };
   for (let i = 0; i < pts.length - 1; i++) {
     const a = pts[i], b = pts[i + 1], ex = b.x - a.x, ez = b.z - a.z, len2 = ex * ex + ez * ez || 1;
@@ -148,20 +148,33 @@ export function shortcutLocate(x: number, z: number): { u: number; lane: number;
     const px = a.x + ex * t, pz = a.z + ez * t, d = Math.hypot(x - px, z - pz);
     if (d < best.d) best = { u: cum[i] + Math.sqrt(len2) * t, lane: ((x - px) * ez - (z - pz) * ex) / Math.sqrt(len2), d };
   }
-  return { u: best.u, lane: best.lane, s: wrap(SHORTCUT.from + (SHORTCUT.to - SHORTCUT.from) * best.u / SHORTCUT_PATH.length) };
+  return { u: best.u, lane: best.lane, distance: best.d, s: wrap(SHORTCUT.from + (SHORTCUT.to - SHORTCUT.from) * best.u / SHORTCUT_PATH.length) };
 }
 
 /** True while a kart is in the backyard alley rather than on the circuit itself. */
 export function inShortcut(x: number, z: number): boolean {
   if (Math.abs(trackLocate(x, z).lane) <= TRACK.halfWidth + .3) return false;
-  return Math.abs(shortcutLocate(x, z).lane) <= SHORTCUT.halfWidth + .3;
+  return shortcutLocate(x, z).distance <= SHORTCUT.halfWidth + .3;
+}
+
+/** Open a circuit edge only where the actual shortcut reaches it at driving height. */
+export function shortcutEdgeGaps(lane: number): [number, number][] {
+  const gaps: [number, number][] = []; let open: number | null = null;
+  for (let s = 0; s <= TRACK.length; s += .5) {
+    const p = trackPoint(s, lane), alley = shortcutLocate(p.x, p.z);
+    const inside = alley.distance <= SHORTCUT.halfWidth + .9 && Math.abs(shortcutElevationAt(alley.u) - elevationAt(s)) < 2.5;
+    if (inside && open === null) open = s;
+    if (!inside && open !== null) { gaps.push([open - .5, s + .5]); open = null; }
+  }
+  if (open !== null) gaps.push([open - .5, TRACK.length]);
+  return gaps;
 }
 
 export function trackProgress(x: number, z: number): number {
   const main = trackLocate(x, z);
   if (Math.abs(main.lane) <= TRACK.halfWidth + .3) return main.s;
   const alley = shortcutLocate(x, z);
-  return Math.abs(alley.lane) <= SHORTCUT.halfWidth + .3 ? alley.s : main.s;
+  return alley.distance <= SHORTCUT.halfWidth + .3 ? alley.s : main.s;
 }
 
 export type DrivingSurface = 'cobble' | 'gravel' | 'grass';
@@ -310,8 +323,8 @@ export const projectTrack: WorldProjection = (x, z) => {
   if (hazard && Math.abs(lane) <= TRACK.halfWidth + hazard.basin - KART_SIDE) return { x, z, normalX: 0, normalZ: 0, kind: null };
   // The alley corridor is open ground too; outside both corridors, push back to the nearer wall.
   const alley = shortcutLocate(x, z), alleySafe = SHORTCUT.halfWidth - KART_TUNING.collisionRadius * .8;
-  if (Math.abs(alley.lane) <= alleySafe + 1e-6) return { x, z, normalX: 0, normalZ: 0, kind: null };
-  const alleyExcess = Math.abs(alley.lane) - alleySafe, mainExcess = Math.abs(lane) - safe;
+  if (alley.distance <= alleySafe + 1e-6) return { x, z, normalX: 0, normalZ: 0, kind: null };
+  const alleyExcess = alley.distance - alleySafe, mainExcess = Math.abs(lane) - safe;
   if (alleyExcess < mainExcess && alley.u > .5 && alley.u < SHORTCUT_PATH.length - .5) {
     const sign = Math.sign(alley.lane), p = shortcutPoint(alley.u, sign * alleySafe);
     return { x: p.x, z: p.z, normalX: -sign * Math.cos(p.heading), normalZ: sign * Math.sin(p.heading), kind: 'boundary' };

@@ -1,5 +1,7 @@
 # Gemeinsamer Änderungsverlauf
 
+- **10.10.2026 – Freie Abkürzungskorridore (Marcel, Codex):** Tatsächliche Assetgrenzen mit vollständiger Skalierung prüfen; störende Bäume versetzen und Möbel/Ufermodule/Lampen fernhalten. Beide Streckenseiten öffnen Barrieren, Promenaden und Randstreifen an höhengleichen Querungen. Endliche Abkürzungsdistanz und aktuelle Moskauer Straßenbreite korrigiert. Sichtbare Kurs-Stichproben, Build und 17 gezielte Tests bestanden; vollständige Fahrabnahme offen.
+
 - **10.10.2026 – Tages-/Nachtlicht (Marcel, Codex):** Helleres neutrales Fülllicht und weniger Kontrast; Nacht dimmt Umgebungsreflexionen. Echte Straßen-PointLights und Kart-SpotLights in festem Pool, normal vier lokale/insgesamt sechs, schwach zwei lokale/insgesamt vier aktive Lichter; keine zusätzlichen Schattenkarten. Berlin A/B und Peking-Nacht bei schwacher Grafik sichtbar geprüft, Build bestanden. Fahr-/Geräteleistung bleibt zu prüfen.
 
 - **10.10.2026 – Fahrer-/Kamera-/Sprungkorrektur (Marcel, Codex):** Export bereinigt falsche Armgewichte an Mantelflächen und vereinheitlicht UV-Nahtgewichte; sechs Fahrer erneut exportiert/komprimiert, Sitz-.blend unverändert. Gesten im Schulterbereich, Blickbewegung und beide Hände bei Treffer. Cockpit versteckt Kopf explizit. Sprung dreht vollständiges Kart um erhöhtes gemeinsames Zentrum. Sechs Jubel-/Cockpitbilder und drei Sprungphasen im sichtbaren Chrome, vier gezielte Tests und Build bestanden. Vollständiger Fahrtest/Stilabnahme offen.

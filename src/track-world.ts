@@ -10,7 +10,7 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, shortcutElevationAt, SHORTCUT_LENGTH } from './track';
+import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, shortcutElevationAt, shortcutEdgeGaps as alleyGaps, SHORTCUT_LENGTH } from './track';
 import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, TRACK_INFO, raisedSpans } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import {addPeriodDetails} from './period-details';
@@ -21,7 +21,6 @@ const trackLocateS = (x: number, z: number) => trackLocate(x, z).s;
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
 export interface TrackWorld { animate(time: number): void; breakStartFence(): void; glowMeshes: Mesh[]; lampPositions: Vector3[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
-const W = TRACK.halfWidth;
 
 function pbr(scene: Scene, name: string, hex: string, metal = 0, roughness = .7): PBRMaterial {
   const m = new PBRMaterial(name, scene); m.albedoColor = Color3.FromHexString(hex);
@@ -86,15 +85,6 @@ export function paintEmblem(c: CanvasRenderingContext2D, cx: number, cy: number,
   c.restore();
 }
 
-/** Progress ranges on the inner (left) side where the backyard alley opens the circuit edge. */
-function alleyGaps(lane: number): [number, number][] {
-  const gaps: [number, number][] = []; let open: number | null = null;
-  for (let s = SHORTCUT.from - 20; s <= SHORTCUT.to + 20; s += .5) {
-    const p = trackPoint(s, lane), inside = Math.abs(shortcutLocate(p.x, p.z).lane) <= SHORTCUT.halfWidth + .9;
-    if (inside && open === null) open = s; if (!inside && open !== null) { gaps.push([open - .5, s + .5]); open = null; }
-  }
-  return gaps;
-}
 /** Splits [from, to] around gap ranges. */
 function without(from: number, to: number, gaps: [number, number][]): [number, number][] {
   let parts: [number, number][] = [[from, to]];
@@ -103,6 +93,7 @@ function without(from: number, to: number, gaps: [number, number][]): [number, n
 }
 
 export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld {
+  const W = TRACK.halfWidth;
   /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
   const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
   const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
@@ -111,7 +102,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const startFenceParts: Mesh[] = [], startFenceDebris: FenceDebris[] = [];
   let startFenceBroken = false, startFenceClock = 0, startFenceBreakTime = 0;
   if (TRACK_INFO.theme === 'berlin') addPeriodDetails(scene,shadow);
-  const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
+  const wallGaps = [-1, 1].map((side) => alleyGaps(side * (W + 1.2)));
+  const edgeGaps = [-1, 1].map((side) => alleyGaps(side * (W + .5)));
+  const promenadeGaps = [-1, 1].map((side) => {
+    const gaps: [number, number][] = [], outer = W + 1.45 + LANDMARKS.promenade + .3;
+    const samples = Math.max(1, Math.ceil((outer - W - 1.45) / 1.5));
+    for (let i = 0; i <= samples; i++) gaps.push(...alleyGaps(side * (W + 1.45 + (outer - W - 1.45) * i / samples)));
+    return gaps;
+  });
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
   const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : pyongyang ? 'Pyongyang granite boulevard' : moscow ? 'Moscow parade paving' : beijing ? 'Peking grey brick paving' : 'Cobblestone boulevard', pyongyang ? '#c3c5c2' : moscow ? '#c7c0b3' : beijing ? '#b9b8b2' : '#d8d2c2', 0, 1);
   if (havana) {
@@ -255,7 +253,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#0003'; c.fillRect(0, 28, 256, 4);
   });
   const kerb = pbr(scene, 'Painted kerb', '#ffffff', 0, .55); kerb.albedoTexture = kerbTexture;
-  for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(0, TRACK.length, edgeGaps) : [[0, TRACK.length]]) sweep(scene, `Kerb ${side}`, side < 0 ? [[-W - .95, .08], [-W - .1, .05], [-W, .025]] : [[W, .025], [W + .1, .05], [W + .95, .08]], kerb, { uScale: 2.4, step: .6, from, to });
+  for (const side of [-1, 1]) for (const [from, to] of without(0, TRACK.length, edgeGaps[side < 0 ? 0 : 1])) sweep(scene, `Kerb ${side}`, side < 0 ? [[-W - .95, .08], [-W - .1, .05], [-W, .025]] : [[W, .025], [W + .1, .05], [W + .95, .08]], kerb, { uScale: 2.4, step: .6, from, to });
   if (pyongyang) {
     const pylonTexture = canvasTexture(scene, 'Shortcut approach pylon bands', 128, 128, (c) => {
       c.fillStyle = '#d8732b'; c.fillRect(0, 0, 128, 128);
@@ -350,7 +348,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   let cursor = 0;
   for (const [a, b] of BOARD_RANGES) { ranges.push({ from: cursor, to: a, boards: false }, { from: a, to: b, boards: true }); cursor = b; }
   ranges.push({ from: cursor, to: TRACK.length, boards: false });
-  for (const range of ranges) for (const side of [-1, 1]) for (const [from, to] of side < 0 ? without(range.from, range.to, wallGaps) : without(range.from, range.to, HARBOUR_GAP)) {
+  for (const range of ranges) for (const side of [-1, 1]) for (const [from, to] of without(range.from, range.to, [...wallGaps[side < 0 ? 0 : 1], ...(side > 0 ? HARBOUR_GAP : [])])) {
     const profile = side < 0 ? wall(-1).reverse() : wall(1);
     // Only the face toward the road (first two profile points) carries the stripes; v is normalised.
     const mesh = sweep(scene, `Barrier ${side}`, profile, range.boards ? board : barrier, { uScale: range.boards ? 32 : 4.8, vScale: 2.4, step: .8, from, to });
@@ -371,7 +369,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   for (const side of [-1, 1]) {
     const outer = W + 1.45 + LANDMARKS.promenade;
     const lanes: [number, number][] = side < 0 ? [[-outer, .14], [-W - 1.45, .14]] : [[W + 1.45, .14], [outer, .14]];
-    for (const [from, to] of side < 0 ? without(0, TRACK.length, promenadeGaps) : without(0, TRACK.length, HARBOUR_GAP)) {
+    for (const [from, to] of without(0, TRACK.length, [...promenadeGaps[side < 0 ? 0 : 1], ...(side > 0 ? HARBOUR_GAP : [])])) {
       sweep(scene, `Promenade ${side}`, lanes, paving, { uScale: 3, vScale: 3, step: 1.2, from, to });
       sweep(scene, `Promenade edge ${side}`, side < 0 ? [[-outer - .3, 0], [-outer, .14]] : [[outer, .14], [outer + .3, 0]], kerbStone, { uScale: 1, step: 2, from, to });
     }
@@ -620,7 +618,9 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   });
 
   const verge = pbr(scene, 'Gravel verge', '#6f6550', 0, .95);
-  for (const side of [-1, 1]) sweep(scene, `Verge ${side}`, side < 0 ? [[-W - 1, .022], [-W - .95, .08]] : [[W + .95, .08], [W + 1, .022]], verge, { uScale: 2, step: 2 });
+  for (const side of [-1, 1]) for (const [from, to] of without(0, TRACK.length, alleyGaps(side * (W + .975)))) {
+    sweep(scene, `Verge ${side}`, side < 0 ? [[-W - 1, .022], [-W - .95, .08]] : [[W + .95, .08], [W + 1, .022]], verge, { uScale: 2, step: 2, from, to });
+  }
 
   // Lantern posts with hanging banners; thin instances keep this to a few draw calls.
   const iron = pbr(scene, 'Lantern cast iron', '#1b2427', .75, .38);
@@ -665,6 +665,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     if (side > 0 && HAZARDS.some((h) => s >= h.from - 1 && s <= h.to + 1)) continue; // no lamps standing in a basin or pit
     if (Math.abs(s - TRACK.start) < 6) continue;
     const at = s + (side > 0 ? spacing / 2 : 0), p = trackPoint(at, side * (W + 2.6));
+    if (shortcutLocate(p.x, p.z).distance < SHORTCUT.halfWidth + 1.2) continue;
     // Local -x arm reaches over the barrier toward the road.
     const m = Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading + (side < 0 ? Math.PI : 0), 0), new Vector3(p.x, .14 + elevationAt(at), p.z));
     lampMatrices.push(m);

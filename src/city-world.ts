@@ -14,6 +14,7 @@ import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
 import { Color4 } from '@babylonjs/core/Maths/math.color';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import { TRACK, trackPoint, trackLocate, shortcutLocate, shortcutPoint, trackCrossingsAtZ, SHORTCUT_LENGTH, elevationAt } from './track';
+import { footprintPoints, type Footprint } from './world-placement';
 import { GROUND, HAZARDS, LANDMARKS, RIVER, SHORTCUT, TRACK_INFO } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import { CrowdWavePlugin } from './crowd-wave';
@@ -30,7 +31,6 @@ export interface CityWorld { glowMeshes: Mesh[]; meshes: Mesh[]; animate(time: n
 
 
 type Placement = { m: string; x: number; z: number; yaw: number; tint?: Color3; s?: number; y?: number; sx?: number; sc?: number };
-interface Footprint { u0: number; u1: number; v0: number; v1: number }
 /** Local footprints: u along the street (x), v away from the street (front at v=0, body toward +v). */
 const DIMS: Record<string, Footprint> = {
   'kit-house-a': { u0: -7.5, u1: 7.5, v0: -1.7, v1: 13 }, 'kit-house-b': { u0: -7, u1: 7, v0: -1.8, v1: 13 },
@@ -120,6 +120,17 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     parts.get(module)!.push(mesh);
   }
   for (const node of kit.transformNodes) node.setEnabled(false);
+  // Validate the exported geometry too: e.g. palm crowns extend far beyond their old 1 m placement proxy.
+  const footprints = new Map<string, Footprint>();
+  for (const [name, meshes] of parts) {
+    const f = { ...(DIMS[name] ?? { u0: Infinity, u1: -Infinity, v0: Infinity, v1: -Infinity }) };
+    for (const mesh of meshes) {
+      mesh.refreshBoundingInfo(); const b = mesh.getBoundingInfo().boundingBox;
+      f.u0 = Math.min(f.u0, b.minimum.x - .15); f.u1 = Math.max(f.u1, b.maximum.x + .15);
+      f.v0 = Math.min(f.v0, b.minimum.z - .15); f.v1 = Math.max(f.v1, b.maximum.z + .15);
+    }
+    footprints.set(name, f);
+  }
 
   // Shared material finish: grain textures on top of the authored vertex tones.
   const stone = surfaceTextures(scene, 'Kit stone', 'stone'), plaster = surfaceTextures(scene, 'Kit plaster', 'stone');
@@ -211,17 +222,13 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const { s, lane } = trackLocate(x, z);
     if (!skipMainRoute && Math.abs(lane) < need(s, Math.sign(lane) || 1) + extra) return false;
     const a = shortcutLocate(x, z);
-    if (a.u > -4 && a.u < SHORTCUT_LENGTH + 4 && Math.abs(a.lane) < SHORTCUT.halfWidth + 6 + extra) return false;
+    if (a.distance < SHORTCUT.halfWidth + 6 + extra) return false;
     return true;
   };
-  const corners = (p: Placement, f: Footprint, step = 2.2) => {
-    const out: [number, number][] = []; const c = Math.cos(p.yaw), sn = Math.sin(p.yaw), sx = (p.sx ?? 1) * (p.sc ?? 1);
-    for (let u = f.u0 * sx; u <= f.u1 * sx + .01; u += Math.min(step, (f.u1 - f.u0) * sx)) for (let v = f.v0; v <= f.v1 + .01; v += Math.min(step, f.v1 - f.v0)) out.push([p.x + u * c + v * sn, p.z - u * sn + v * c]);
-    return out;
-  };
+  const corners = footprintPoints;
   const placements: Placement[] = [];
   const tryPlace = (p: Placement, opts: { lawnOk?: boolean; riverOk?: boolean; extra?: number; skipCircuit?: boolean } = {}) => {
-    const f = DIMS[p.m] ?? { u0: -1, u1: 1, v0: -1, v1: 1 };
+    const f = footprints.get(p.m) ?? DIMS[p.m] ?? { u0: -1, u1: 1, v0: -1, v1: 1 };
     const pts = corners(p, f);
     for (const [x, z] of pts) {
       const cell = cellOf(x, z);
@@ -387,9 +394,10 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (!district || (side < 0 ? district.left : district.right) === 'stands') continue;
     const m = furniture[fk++ % furniture.length];
     const p = trackPoint(s, side * (W + 4.6));
-    const a = shortcutLocate(p.x, p.z); if (a.u > -6 && a.u < SHORTCUT_LENGTH + 6 && Math.abs(a.lane) < 8) continue;
+    const f = footprints.get(m), yaw = facing(p.x, p.z) + (m === 'kit-flag' || m.startsWith('kit-oldtimer') ? Math.PI / 2 : 0);
+    if (f && footprintPoints({ x: p.x, z: p.z, yaw }, f, 1).some(([x, z]) => shortcutLocate(x, z).distance < SHORTCUT.halfWidth + 1.2)) continue;
     if (reserved.some((r) => Math.hypot(r.x - p.x, r.z - p.z) < r.r)) continue;
-    placements.push({ m, x: p.x, z: p.z, y: elevationAt(s) + .14, yaw: facing(p.x, p.z) + (m === 'kit-flag' || m.startsWith('kit-oldtimer') ? Math.PI / 2 : 0) });
+    placements.push({ m, x: p.x, z: p.z, y: elevationAt(s) + .14, yaw });
   }
   // Peking: lantern garlands across the road on the square, the hutong avenue and the serpentine.
   if (beijing) for (const s of [40, 250, 440, 560, 870, 1010, 1170, 1480]) {
@@ -428,6 +436,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const buckets = new Map<string, { material: Mesh['material']; items: { d: Source; m: Matrix; tint: Color3 | null }[]; module: string }>();
   for (const p of placements) {
     const sources = parts.get(p.m); if (!sources) continue;
+    // Quays bypass the occupancy grid; leave the complete alley crossing open too.
+    if (p.m === 'kit-quay' && footprintPoints(p, footprints.get(p.m)!, 1).some(([x, z]) => shortcutLocate(x, z).distance < SHORTCUT.halfWidth + .7)) continue;
     const m = Matrix.Compose(new Vector3((p.sx ?? 1) * (p.sc ?? 1), p.sc ?? 1, p.sc ?? 1), Quaternion.RotationYawPitchRoll(p.yaw, 0, 0), new Vector3(p.x, p.y ?? 0, p.z));
     const tile = `${Math.floor(p.x / CHUNK)},${Math.floor(p.z / CHUNK)}`;
     for (const source of sources) {

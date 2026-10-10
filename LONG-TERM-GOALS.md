@@ -1,5 +1,7 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Fortschritt Abkürzungen 10.10.2026:** Tatsächliche Dekogrenzen, Baumversetzung und höhengleiche Querungsöffnungen an beiden Streckenseiten integriert. Moskauer Baum und Peking-Barriere/Randstreifen reproduziert und sichtbar beseitigt; Kurs-Stichproben und Prüfgrenzen in CURRENT-WORKLIST.md. Kontinuierliche Fahrabnahme bleibt offen. Nächstes bestätigtes Paket: stärkere Schadenswirkung.
+
 **Fortschritt Licht 10.10.2026:** Lesbareres Tages-Fülllicht, mildere Kontraste, Nacht-Umgebungsreflexion gedimmt und echte begrenzte Straßen-/Fahrzeuglichtquellen integriert. Berlin A/B-Lichtflächen und Peking bei schwacher Grafik sichtbar geprüft; Geräte-/Fahrtabnahme offen. Weiter mit Deko in Abkürzungen und Schaden; übrige bestätigte Ziele bleiben aktiv.
 
 **Fortschritt Fahrer/Animation 10.10.2026:** Sechs Exporte mit korrigierten Arm-/Nahtgewichten, kürzere saubere Schultergesten, Kopfbewegungen und beidseitige Trefferreaktion; explizite Kopf-Ausblendung im Cockpit und gemeinsames Sprung-Drehzentrum umgesetzt. Aktuelle Bildbelege und Grenzen stehen in CURRENT-WORKLIST.md. Echte Mimik ohne vorhandenes Gesichtsrig, vollständige Fahrabnahme und Gesamtstil bleiben offen. Licht/Nachtlampen folgen als nächstes Paket.

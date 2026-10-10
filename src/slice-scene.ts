@@ -28,8 +28,8 @@ import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
 import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
-import { TRACK, drivingSurfaceAt, elevationAt, trackLocate, trackPoint } from './track';
-import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, TRACK_INFO } from './track-layout';
+import { TRACK, drivingSurfaceAt, elevationAt, trackLocate, trackPoint, shortcutLocate, shortcutPoint } from './track';
+import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, TRACK_INFO, SHORTCUT } from './track-layout';
 import { addCityWorld } from './city-world';
 import { addTrackWorld } from './track-world';
 import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
@@ -130,6 +130,19 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const root = new TransformNode(`Park tree ${x} ${z}`, scene); instance.rootNodes.forEach((n) => n.parent = root);
       const bounds = root.getHierarchyBoundingVectors(); const height = bounds.max.y - bounds.min.y;
       root.scaling.setAll((9 + (x * 7 + z) % 3) / Math.max(1, height)); root.position.set(x, -bounds.min.y * root.scaling.y, z); root.rotation.y = z * .19;
+      const radius = Math.hypot(bounds.max.x - bounds.min.x, bounds.max.z - bounds.min.z) * root.scaling.x / 2 + .4;
+      const clear = (at: { x: number; z: number }) => Math.abs(trackLocate(at.x, at.z).lane) > TRACK.halfWidth + radius + 1
+        && shortcutLocate(at.x, at.z).distance > SHORTCUT.halfWidth + radius + 1
+        && !LANDMARKS.fountains.some(([fx, fz]) => Math.hypot(at.x - fx, at.z - fz) < radius + 8);
+      if (!clear({ x, z })) {
+        const alley = shortcutLocate(x, z), main = trackLocate(x, z), candidates: { x: number; z: number }[] = [];
+        for (const extra of [1.5, 4, 8, 14, 24]) for (const side of [-1, 1]) {
+          candidates.push(shortcutPoint(alley.u, side * (SHORTCUT.halfWidth + radius + extra)), trackPoint(main.s, side * (TRACK.halfWidth + radius + extra)));
+        }
+        const at = candidates.filter(clear).sort((a, b) => Math.hypot(a.x - x, a.z - z) - Math.hypot(b.x - x, b.z - z))[0];
+        if (at) { root.position.x = at.x; root.position.z = at.z; }
+        else { root.dispose(); continue; }
+      }
       const meshes=root.getChildMeshes().filter((m):m is Mesh=>m instanceof Mesh);
       for (const mesh of meshes) { mesh.receiveShadows = true; mesh.isPickable = false; }
       treeShadows.push({root,meshes});
