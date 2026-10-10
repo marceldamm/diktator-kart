@@ -383,9 +383,15 @@ export function setBotStyles(styles: (BotStyle | undefined)[]): void { botStyles
 export const botStyleOf = (index: number): BotStyle | undefined => botStyles[index];
 
 /** Shared bot driver: racing lane choice, corner braking, traffic and drift-boost through tight bends. */
-/** Bot pace offset per difficulty (m/s on the base pace; never above the shared kart top speed). */
-let botSkill = 0;
-export function setBotSkill(level: 0 | 1 | 2): void { botSkill = [-1.3, 0, 1.2][level]; }
+/** Difficulty changes controller choices; the kart physics and available speed limits stay shared. */
+export const BOT_DIFFICULTY = [
+  { pace: .8, corner: -.6, reaction: 12, gap: 2.6, passing: .8, defense: false, patience: 1.4 },
+  { pace: .94, corner: 0, reaction: 16, gap: 2.2, passing: 1.15, defense: true, patience: 1 },
+  { pace: 1, corner: .6, reaction: 20, gap: 1.8, passing: 1.5, defense: true, patience: .72 },
+] as const;
+let botLevel: 0 | 1 | 2 = 1;
+export function setBotSkill(level: 0 | 1 | 2): void { botLevel = level; }
+export const botDifficulty = () => BOT_DIFFICULTY[botLevel];
 
 export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {
   const main = trackLocate(state.x, state.z);
@@ -395,21 +401,33 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const shortcut = alley ? shortcutLocate(state.x, state.z) : null;
   const { s, lane: currentLane } = shortcut ?? main;
   const speed = Math.abs(state.speed);
+  const difficulty = botDifficulty();
   const corner = alley ? shortcutCurvatureAhead(shortcut!.u + 2, 10 + speed * 1.1) : curvatureAhead(s + 2, 10 + speed * 1.1);
   const radius = 1 / Math.max(corner.curvature, 1e-3);
   // Five racing lanes give room to pick a real passing line.
-  const lanes = alley ? [0] : [-3.6, -1.8, 0, 1.8, 3.6];
+  const outerLane = Math.min(5.6, TRACK.halfWidth - 2.4);
+  const lanes = alley ? [0] : [-outerLane, -outerLane / 2, 0, outerLane / 2, outerLane];
   const traffic = others.filter((other) => other !== state).map((other) => {
     const otherAlley = inShortcut(other.x, other.z), p = otherAlley ? shortcutLocate(other.x, other.z) : trackLocate(other.x, other.z);
-    return { ahead: wrap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
-  }).filter((other) => other.sameRoute && other.ahead > .05 && other.ahead < 14);
+    return { ahead: signedGap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
+  }).filter((other) => other.sameRoute && other.ahead > -12 && other.ahead < difficulty.reaction);
+  const ahead = traffic.filter((t) => t.ahead > .05);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
-  const preferred = radius < 30 ? corner.sign * 2.8 : style ? style.lane : [-2.8, 0, 2.8][index % 3];
-  const eagerness = style?.pass ?? 1;
+  let preferred = radius < 30 ? corner.sign * 2.8 : style ? style.lane : [-2.8, 0, 2.8][index % 3];
+  const pursuer = traffic.filter((t) => t.ahead < -4 && t.speed > speed + .4).sort((a, b) => b.ahead - a.ahead)[0];
+  let defending = false;
+  // One gradual defensive lane choice on a straight; no move across a kart already alongside.
+  if (difficulty.defense && !alley && radius > 45 && pursuer && !traffic.some((t) => Math.abs(t.ahead) < 4)) {
+    defending = true;
+    preferred = Math.max(-outerLane, Math.min(outerLane, currentLane + Math.max(-1.8, Math.min(1.8, pursuer.lane - currentLane))));
+  }
+  const eagerness = (style?.pass ?? 1) * difficulty.passing;
   // Overtaking: lanes holding a slower kart ahead are strongly avoided, so a faster bot commits to a passing line.
-  const slower = traffic.filter((t) => t.speed < speed + .5);
-  const score = (lane: number) => Math.abs(lane - currentLane) * .3 + Math.abs(lane - preferred) * (slower.length ? .05 : .14) +
-    traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < 2.2 ? (14 - t.ahead) * (t.speed < speed + .5 ? 3.2 * eagerness : 1.2) : 0), 0);
+  const slower = ahead.filter((t) => t.speed < speed + .5);
+  const score = (lane: number) => Math.abs(lane - currentLane) * .3 + Math.abs(lane - preferred) * (slower.length ? .05 : defending ? .7 : .2) +
+    traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < difficulty.gap
+      ? t.ahead > 0 ? (difficulty.reaction - t.ahead) * (t.speed < speed + .5 ? 3.2 * eagerness : 1.2)
+        : Math.abs(t.ahead) < 4 ? (4 - Math.abs(t.ahead)) * 7 : 0 : 0), 0);
   const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
   const target = alley
     ? shortcutPoint(shortcut!.u + 6.5 + speed * .38, 0)
@@ -418,12 +436,13 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const error = Math.atan2(Math.sin(desired - state.heading), Math.cos(desired - state.heading));
   const steering = Math.max(-1, Math.min(1, error * 2.3));
   // Same base pace for every rival (07.10.2026): differences come only from visible style choices, not hidden speed.
-  const pace = 13.9 + botSkill;
-  const cornerSpeed = radius >= 11 ? pace : Math.max(8.5, radius * 1.05 + 2.5 + botSkill * .5);
-  let desiredSpeed = Math.min(pace, cornerSpeed) - Math.abs(error) * 2.5;
+  const basePace = (KART_TUNING.maxForwardSpeed + (state.topSpeedBonus ?? 0)) * difficulty.pace;
+  const pace = state.turboRemaining > 0 ? KART_TUNING.maxTurboSpeed : basePace;
+  const cornerSpeed = radius >= 24 ? pace : radius >= 11 ? basePace : Math.max(8.5, radius * 1.05 + 2.5 + difficulty.corner);
+  let desiredSpeed = Math.min(pace, cornerSpeed) - Math.abs(error) * (botLevel === 2 ? 1.8 : 2.5);
   // Only lift when the chosen passing line itself is blocked right ahead.
-  for (const t of traffic) if (t.ahead < 5 && Math.abs(t.lane - currentLane) < 2 && Math.abs(t.lane - lane) < 2) desiredSpeed = Math.min(desiredSpeed, Math.max(1, t.speed - 1));
-  const throttle = speed > desiredSpeed + .5 ? -.12 : .9;
+  for (const t of ahead) if (t.ahead < 5 && Math.abs(t.lane - currentLane) < 2 && Math.abs(t.lane - lane) < 2) desiredSpeed = Math.min(desiredSpeed, Math.max(1, t.speed - .5));
+  const throttle = speed > desiredSpeed + .5 ? -.2 : 1;
   // Facing a barrier at walking pace: back out with reversed steering instead of pushing into it.
   const centre = trackPoint(s), towardWall = Math.sin(state.heading - centre.heading) * Math.sign(currentLane);
   if (towardWall > .4 && speed < 4 && Math.abs(currentLane) > 3.2 && !state.drifting)

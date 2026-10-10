@@ -72,6 +72,11 @@ driver.onchange = () => { world.setRoster?.([Number(driver.value)]); render(); s
 el('lamps').onchange = () => { render(); status(); };
 el('shortcut').onchange = () => { render(); status(); };
 el('quality').onchange = () => { world.setQuality?.(Number(el<HTMLSelectElement>('quality').value), false); render(); status(); };
+el('wreck').onclick = () => {
+  health = 0; el<HTMLInputElement>('health').value = '0'; world.wreck?.(0);
+  if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); }
+  render(); status();
+};
 track.onchange = () => void load(); view.onchange = () => { render(); status(); };
 for (const kind of ['cheer', 'fist', 'angry'] as const) el(kind).onclick = () => { world.driverReaction?.(0, kind); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } };
 el('pause').onclick = () => { paused = !paused; el('pause').textContent = paused ? 'Animation weiter' : 'Bild einfrieren'; if (paused) engine.stopRenderLoop(); else engine.runRenderLoop(render); status(); };

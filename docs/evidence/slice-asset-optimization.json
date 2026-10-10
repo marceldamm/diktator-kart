@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-10T11:55:45.260Z",
+  "date": "2026-10-10T12:45:04.007Z",
   "tool": "glTF Transform 4.5.1 + meshoptimizer 0.25; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps, EXT_meshopt_compression",
   "results": [
     {
@@ -46,11 +46,6 @@
       "name": "cc0-driver-hitler",
       "originalBytes": 4660072,
       "runtimeBytes": 1110400
-    },
-    {
-      "name": "hero-kart",
-      "originalBytes": 10066248,
-      "runtimeBytes": 3525600
     },
     {
       "name": "items",
@@ -131,6 +126,11 @@
       "name": "castro-driver",
       "originalBytes": 1760592,
       "runtimeBytes": 525756
+    },
+    {
+      "name": "hero-kart",
+      "originalBytes": 10060500,
+      "runtimeBytes": 3530700
     }
   ]
 }

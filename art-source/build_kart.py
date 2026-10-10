@@ -989,16 +989,18 @@ def cockpit_cut():
 cockpit_cut()
 
 # Detachable parts: damage stages hide these groups in the game and throw a copy off the kart
-# (src/slice-scene.ts; health < 66: 'detach-1', < 33: 'detach-2'); the repair respawn puts them back.
+# Four shared damage stages; wheels, steering and the cockpit remain intact. Repair refits every group.
 def detachables():
-    stages = {'detach-1': [], 'detach-2': []}
+    stages = {f'detach-{i}': [] for i in range(1, 5)}
     for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.parent == kart]:
         base = o.name.split('.')[0]
         c = sum((o.matrix_world @ Vector(v) for v in o.bound_box), Vector()) / 8
         if base in ('Mirror stalk', 'Mirror housing', 'Mirror glass'): stages['detach-1' if c.x < 0 else 'detach-2'].append(o)
         elif base == 'Number plate': stages['detach-1'].append(o)
-        elif base == 'Rear bumper': stages['detach-2'].append(o)
-        elif base in ('Wheel fender', 'Fender brass edge') and c.x < 0 and c.y > 0: stages['detach-2'].append(o)
+        elif base in ('Rear bumper', 'Rear cowl', 'Cowl brass seam'): stages['detach-3'].append(o)
+        elif base in ('Wheel fender', 'Fender brass edge'):
+            stage = (1 if c.x < 0 else 2) + (0 if c.y > 0 else 2)
+            stages[f'detach-{stage}'].append(o)
     for name, objects in stages.items():
         holder = empty(name, (0, 0, 0), kart)
         for o in objects:

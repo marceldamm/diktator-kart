@@ -4,10 +4,10 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
-import {createItems,stepItems,botUsesItem,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
+import {createItems,stepItems,botUsesItem,botItemDirection,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
 import { DAMAGE_RULES, createDamage, stepDamage, type DamageWorld } from './damage';
@@ -1087,8 +1087,8 @@ class App {
           if(down&&(this.input.isDown('itemBackward')||frame.pressed.has('itemBackward')))this.itemDirection='backward';
           else if(down&&(this.input.isDown('itemForward')||frame.pressed.has('itemForward')))this.itemDirection='forward';
           this.items.shield=all.map((_,i)=>i===0?down&&!!this.items.slots[0]:!!this.items.slots[i]&&this.items.heldFor[i]>.5);
-          const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all,botStyleOf(i)?.itemPatience));
-          const directions=all.map((_,i)=>i===0?this.itemDirection:'forward');
+          const use=all.map((_,i)=>i===0?release||tap||buttonUse||(DEMO&&botUsesItem(this.items,i,all)):botUsesItem(this.items,i,all,(botStyleOf(i)?.itemPatience??1)*botDifficulty().patience));
+          const directions=all.map((_,i)=>i===0?this.itemDirection:botItemDirection(this.items,i,all));
           const defensePressed=this.queuedDefenseUse||frame.pressed.has('defend');this.queuedDefenseUse=false;
           const defenseActivations=all.map((kart,i)=>i===0?defensePressed:!!this.items.defenseSlots[i]&&this.items.objects.some(o=>o.kind!=='trap'&&Math.hypot(o.x-kart.x,o.z-kart.z)<10));
           this.items.seekers=all.map((_,i)=>this.castOf(i).projectile==='dog');

@@ -133,16 +133,32 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
   world.objects=world.objects.filter(o=>o.remaining>0);return result;
 }
 
+/** Aim behind only at a nearby aligned pursuer; the same backward launch is available to the player. */
+export function botItemDirection(world:ItemWorld,index:number,karts:KartState[]): 'forward' | 'backward' {
+  if(world.slots[index]!=='direct'&&world.slots[index]!=='homing')return 'forward';
+  const k=karts[index];let front=Infinity,rear=Infinity;
+  karts.forEach((other,i)=>{
+    if(i===index)return;
+    const dx=other.x-k.x,dz=other.z-k.z,d=Math.hypot(dx,dz);
+    const angle=Math.atan2(Math.sin(Math.atan2(dx,dz)-k.heading),Math.cos(Math.atan2(dx,dz)-k.heading));
+    const alignment=world.slots[index]==='direct'?.22:.65;
+    if(Math.abs(angle)<alignment&&wrap(trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<50)front=Math.min(front,d);
+    if(Math.abs(Math.PI-Math.abs(angle))<alignment&&wrap(trackProgress(k.x,k.z)-trackProgress(other.x,other.z))<24)rear=Math.min(rear,d);
+  });
+  return rear<22&&rear<front?'backward':'forward';
+}
+
 export function botUsesItem(world:ItemWorld,index:number,karts:KartState[],patience=1):boolean {
   const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2*patience)return false;
   const k=karts[index];
-  if(kind==='trap')return world.heldFor[index]>2;
+  if(kind==='trap')return world.heldFor[index]>4*patience||karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<16&&wrap(trackProgress(k.x,k.z)-trackProgress(other.x,other.z))<18);
   if(kind==='boost')return world.heldFor[index]>1.6*patience&&(karts[index].speed??0)>6;
   if(kind==='censor')return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<65)||world.heldFor[index]>5;
+  const backward=botItemDirection(world,index,karts)==='backward';
   if(kind==='direct')return karts.some((other,i)=>{
     if(i===index||Math.hypot(other.x-k.x,other.z-k.z)>38)return false;
-    const desired=Math.atan2(other.x-k.x,other.z-k.z),angle=Math.atan2(Math.sin(desired-k.heading),Math.cos(desired-k.heading));
-    return Math.abs(angle)<.2&&wrap(trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<34;
+    const desired=Math.atan2(other.x-k.x,other.z-k.z),heading=k.heading+(backward?Math.PI:0),angle=Math.atan2(Math.sin(desired-heading),Math.cos(desired-heading));
+    return Math.abs(angle)<.2&&wrap(backward?trackProgress(k.x,k.z)-trackProgress(other.x,other.z):trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<34;
   });
-  return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<45&&wrap(trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<50)||world.heldFor[index]>6;
+  return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<45&&wrap(backward?trackProgress(k.x,k.z)-trackProgress(other.x,other.z):trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<50)||world.heldFor[index]>6*patience;
 }
