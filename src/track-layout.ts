@@ -3,7 +3,7 @@
  * positive lane offsets lie on the driver's right.
  *
  * Playable circuits (09.10.2026): Berlin's "Stadionring", Sarah's Rome/Havana/Pyongyang selections,
- * and the Moscow "Genossen-Gerade" with broad parade straights.
+ * the Moscow "Genossen-Gerade" with broad parade straights and the Peking "Kulturrevolutions-Schleife".
  * The active circuit is chosen with `setTrackLayout` (called through `selectTrack` in track.ts); all layout
  * exports below are live ES-module bindings that switch with it, so the simulation, world builders, bots,
  * minimap and items always read the circuit that is currently loaded.
@@ -12,7 +12,7 @@
 export const MAP_SCALE = 1.5;
 const S = MAP_SCALE;
 
-export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang' | 'moscow';
+export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang' | 'moscow' | 'beijing';
 export type HazardKind = 'water' | 'lava' | 'cliff';
 export interface Hazard { from: number; to: number; side: 1 | -1; basin: number; kind: HazardKind }
 /** City district along the circuit: what lines each side between two progress values. */
@@ -23,7 +23,7 @@ export interface HeroPlacement { m: string; s?: number; lane?: number; x?: numbe
 export interface TrackObstacle { s: number; lane: number; radius: number }
 
 export interface TrackDefinition {
-  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang' | 'moscow';
+  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang' | 'moscow' | 'beijing';
   /** Short German line for the track card and the loading caption. */
   tagline: string;
   controlPoints: readonly (readonly [number, number])[];
@@ -298,8 +298,59 @@ const MOSCOW: TrackDefinition = {
   obstacles: [{ s:1050,lane:-7.5,radius:.38 },{ s:1050,lane:7.5,radius:.38 }],
 };
 
-export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE, moscow: MOSCOW };
-export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang' || id === 'moscow';
+/**
+ * Kulturrevolutions-Schleife (Peking): name and place from the planned circuit list; route and world are Claude's
+ * elaboration (10.10.2026). Clockwise around a walled palace: Platz der Planerfüllung (start), hutong quarter with the
+ * Tor des ewigen Fortschritts, a narrow hutong-alley shortcut through the north-west corner, the Regelheft serpentine,
+ * a plateau jump on the east avenue and the palace moat. Satire of dogma and plan statistics, never of victims.
+ */
+const BEIJING: TrackDefinition = {
+  id: 'beijing', name: 'Kulturrevolutions-Schleife', city: 'Peking', theme: 'beijing',
+  tagline: 'Platz der Planerfüllung, Hutong-Gasse, Regelheft-Serpentine und Palastgraben',
+  controlPoints: [
+    [100, -204], [0, -208], [-100, -208], [-200, -205], [-232, -185], [-250, -145],    // Platz der Planerfüllung, westbound
+    [-254, -80], [-255, -10], [-254, 60], [-250, 125], [-222, 160],                    // hutong avenue through the gate
+    [-165, 170], [-110, 168], [-60, 148], [-10, 170], [40, 150], [95, 168],            // Regelheft serpentine
+    [150, 160], [195, 135], [220, 90], [228, 30], [228, -40], [224, -100],             // east avenue with the plateau jump
+    [208, -152], [165, -190],                                                          // along the palace moat, back to the square
+  ],
+  halfWidth: 6, start: 70, bump: -1,
+  /** Hutong-Gasse: narrow gravel alley across the north-west corner, past washing lines and tea houses. */
+  shortcut: { from: 590, to: 790, halfWidth: 3, speedCap: 10.5, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [1, 0]], boostPads: [] },
+  canal: { from: -1000, length: 0 },
+  rampLips: [1296],
+  boostPads: [[120, 0], [470, 0], [1000, 0], [1235, 0], [1505, 1.5]],
+  craters: [], grassVerges: [],
+  /** Plateau on the east avenue: climb, a short flat top and a jump off its lip. */
+  elevation: [[1225, 0], [1262, 3.8], [1300, 3.8], [1340, 0]],
+  hazards: [{ from: 1348, to: 1430, side: 1, basin: 9, kind: 'water' }],
+  itemBoxes: [150, 480, 905, 1190, 1470],
+  landmarks: {
+    palace: null, fountains: [], trees: [[-40, 60], [40, -20], [-150, 40]],
+    column: [-150, -120], gateProgress: 520, lawns: [[-200, -40, -90, 110]], promenade: 5,
+  },
+  river: { north: 278, south: 228, west: -360, east: 340, level: -1.15 },
+  ground: { west: -360, east: 340, north: 340, south: -300 },
+  dressing: {
+    boardRanges: [[10, 150], [1230, 1330]], flagRange: [880, 1000], pennants: [30, 230, 470, 1010, 1500], screenProgress: 240,
+    districts: [
+      { from: 0, to: 300, left: 'stands', right: 'plaza' }, { from: 300, to: 420, left: 'hutong', right: 'hutong' },
+      { from: 420, to: 650, left: 'hutong', right: 'avenue' }, { from: 650, to: 780, left: 'park', right: 'hutong' },
+      { from: 780, to: 1060, left: 'hutong', right: 'park' }, { from: 1060, to: 1220, left: 'park', right: 'hutong' },
+      { from: 1220, to: 1340, left: 'avenue', right: 'plaza' }, { from: 1340, to: 1450, left: 'hutong', right: 'plaza' },
+      { from: 1450, to: 99999, left: 'stands', right: 'plaza' },
+    ],
+    heroes: [
+      { m: 'kit-cn-hall', x: 95, z: -55 }, { m: 'kit-pagoda', x: -60, z: 30 }, { m: 'kit-rulebook', s: 190, lane: 22 },
+      ...[1352, 1390, 1428].map((s) => ({ m: 'kit-cn-wall', s, lane: 22.5 })),
+      { m: 'kit-pagoda', x: -300, z: -250 },
+    ],
+    bridges: [-140, 80], cathedral: null, petals: [10, 260],
+  },
+};
+
+export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE, moscow: MOSCOW, beijing: BEIJING };
+export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang' || id === 'moscow' || id === 'beijing';
 
 export interface TrackSample { x: number; z: number; heading: number; s: number; curvature: number }
 

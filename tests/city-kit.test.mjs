@@ -26,14 +26,17 @@ test('city kit exposes every module the runtime city places, one mesh per shared
     'kit-grandstand', 'kit-gate', 'kit-finish', 'kit-bridge', 'kit-quay', 'kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-lamp', 'kit-bench',
     'kit-litfass', 'kit-flag', 'kit-kiosk', 'kit-urn', 'kit-hedge', 'kit-linden', 'kit-cypress', 'kit-fountain', 'kit-statue',
     // Duce-Drom (Rome) modules
-    'kit-insula-a', 'kit-insula-b', 'kit-insula-c', 'kit-balcony-palace', 'kit-arch', 'kit-obelisk', 'kit-pine', 'kit-pine-b', 'kit-aqueduct', 'kit-ruin']) {
+    'kit-insula-a', 'kit-insula-b', 'kit-insula-c', 'kit-balcony-palace', 'kit-arch', 'kit-obelisk', 'kit-pine', 'kit-pine-b', 'kit-aqueduct', 'kit-ruin',
+    // Kulturrevolutions-Schleife (Peking) modules
+    'kit-cn-house-a', 'kit-cn-house-b', 'kit-cn-house-c', 'kit-cn-hall', 'kit-cn-gate', 'kit-pagoda', 'kit-cn-wall', 'kit-loudspeaker', 'kit-rulebook', 'kit-lantern-span']) {
     assert.ok(nodes.has(module), `expected module root ${module}`);
     assert.ok([...nodes].some(name => name.startsWith(`${module}|`)), `expected material meshes under ${module}`);
   }
   const materials = new Set(document.materials.map(m => m.name));
   for (const name of ['Kit plaster', 'Kit stone limestone', 'Kit roof copper patina', 'Kit window glass', 'Kit banner cloth', 'Kit lamp glass'])
     assert.ok(materials.has(name), `expected shared material ${name}`);
-  assert.ok(document.materials.length <= 24, 'the shared art system keeps a small material palette');
+  // Peking (10.10.2026) added glazed tile, lacquer and lantern silk to the palette.
+  assert.ok(document.materials.length <= 27, `the shared art system keeps a small material palette (${document.materials.length})`);
   const colored = document.meshes.filter(mesh => mesh.primitives.some(p => 'COLOR_0' in p.attributes));
   assert.ok(colored.length / document.meshes.length > .9, 'vertex colours carry grime, stripes and tonal variation');
 });

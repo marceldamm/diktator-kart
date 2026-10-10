@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 10.10.2026 – Claude: Prüfstand nach dem Projektstart-Block
+
+TypeScript-Check und Produktionsbuild erfolgreich (Vite meldet weiter den übergroßen Hauptchunk), `npm test` 112/112. Sichtbare Chrome-Prüfung im eigenen CDP-Profil (Port 9231): Peking mit Bots gefahren, Vorankündigung und Ereignis in Peking und Moskau ausgelöst, Teileverlust per gesetzter Karosseriewerte und Reparatur geprüft, Mao/Kim in der Fahrerwahl und am Start. Keine Konsolenfehler. Nicht geprüft: menschliches Fahrgefühl, Handy/Gamepad, schwache Grafik. Die sechs `*-im-kart.blend` zeigen das neue Kart; die alten Stände liegen lokal unter `.tools/claude/pose-blend-backup-20261010/`. Den Stadtbaukasten erneuert `art-source/build_city_kit.py` (Blender, danach `node art-source/optimize_assets.mjs city-kit`), das Kart `art-source/build_kart.py` (danach `... hero-kart`).
+
 ## Bestätigte Fahrmechaniken und Streckenwünsche – Marcel, 09.10.2026
 
 Marcel bestätigte Windschatten-Schub, getimte Sprungtricks mit Landeschub, Item-Roulette und Starttiming. Ein neues seltenes Item gegen den Führenden ist ausdrücklich nicht gewünscht. Bereits vorhandene Umsetzung wurde geprüft: Windschatten, Tricklandung, Startschub, Orden als begrenztes Tempo-/Sammelziel mit Verlust bei Treffern sowie lokal gespeicherter Zeitfahrgeist. Das Orden-System deckt den gewünschten Sammel-/Tempopunkt ab; keine zweite Münzwährung anlegen. Zusätzlich freigegeben: optionale riskante Abkürzungen, ein kleiner Beinahetrefferbonus und seltene angekündigte Streckenereignisse. Moskau wurde als fünfte Strecke mit breiten Geraden und einer riskanten Querung spielbar ergänzt. Menschliche Fahr- und Sichtabnahmen bleiben offen.

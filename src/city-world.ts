@@ -57,6 +57,10 @@ const DIMS: Record<string, Footprint> = {
   'kit-colonial-a': { u0: -6.2, u1: 6.2, v0: -2.8, v1: 12 }, 'kit-colonial-b': { u0: -8.2, u1: 8.2, v0: -2.8, v1: 12 }, 'kit-colonial-c': { u0: -4.7, u1: 4.7, v0: -2.8, v1: 12 },
   'kit-palm': { u0: -1, u1: 1, v0: -1, v1: 1 }, 'kit-palm-b': { u0: -1, u1: 1, v0: -1, v1: 1 },
   'kit-lighthouse': { u0: -17, u1: 17, v0: -11, v1: 11 }, 'kit-beard-ministry': { u0: -17.5, u1: 17.5, v0: -3, v1: 14 }, 'kit-tribune': { u0: -7.5, u1: 7.5, v0: -4, v1: 3.5 },
+  // Kulturrevolutions-Schleife (art-source/beijing_modules.py)
+  'kit-cn-house-a': { u0: -7.5, u1: 7.5, v0: -1.8, v1: 12 }, 'kit-cn-house-b': { u0: -8.5, u1: 8.5, v0: -1.8, v1: 12 }, 'kit-cn-house-c': { u0: -6.5, u1: 6.5, v0: -1.8, v1: 12 },
+  'kit-cn-hall': { u0: -24.5, u1: 24.5, v0: -1, v1: 26 }, 'kit-pagoda': { u0: -7.2, u1: 7.2, v0: -7.2, v1: 7.2 }, 'kit-cn-wall': { u0: -12.5, u1: 12.5, v0: -.6, v1: 3 },
+  'kit-loudspeaker': { u0: -.6, u1: .6, v0: -.6, v1: .6 }, 'kit-rulebook': { u0: -6, u1: 6, v0: -4, v1: 4 },
 };
 const BERLIN_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c7c9a6', '#d49d7c', '#e8d3b0'];
 /** Roman ochre, sienna, terracotta and pale travertine plasters. */
@@ -67,12 +71,31 @@ const HAVANA_TINTS = ['#86c9c1', '#e7a7b2', '#efd27e', '#a3c5e4', '#bfe0b2', '#f
 const PYONGYANG_TINTS = ['#b9bfbc', '#a8b0ae', '#d0d0c8', '#929c9d', '#c4c3ba', '#a9ada6', '#d8d2c6'];
 /** Pale limestone, muted brick and restrained parade red for Moscow's broad civic avenues. */
 const MOSCOW_TINTS = ['#d7c8aa', '#c8b99e', '#e0d5bd', '#9c6e5e', '#d0c2aa', '#b7a58c', '#e3d9c5'];
+/** Hutong grey brick plaster, a few ochre and faded red walls for Peking's courtyard lanes. */
+const BEIJING_TINTS = ['#a7a59f', '#9d9f9e', '#b2aca1', '#a39c90', '#b8b2a6', '#c09a7c', '#a8706a'];
+
+/** Glazed barrel-tile texture pair for the Peking roofs; the planar kit UVs run 0.5 per metre. */
+function glazedTiles(scene: Scene): { color: DynamicTexture; normal: DynamicTexture } {
+  const make = (name: string, paint: (c: CanvasRenderingContext2D) => void) => {
+    const t = new DynamicTexture(name, { width: 64, height: 64 }, scene, true); paint(t.getContext() as CanvasRenderingContext2D); t.update();
+    t.uScale = 3.6; t.vScale = 5.6; t.wrapU = t.wrapV = 1; return t;
+  };
+  const color = make('Glazed tile shading', (c) => {
+    for (let x = 0; x < 64; x++) { const a = Math.sin(x / 64 * Math.PI), v = Math.round(120 + 135 * a ** .6); c.fillStyle = `rgb(${v},${v},${v})`; c.fillRect(x, 0, 1, 64); }
+    c.fillStyle = 'rgba(0,0,0,.28)'; c.fillRect(0, 54, 64, 10);
+  });
+  const normal = make('Glazed tile relief', (c) => {
+    for (let x = 0; x < 64; x++) { const nx = Math.round(128 - 100 * Math.cos(x / 64 * Math.PI)); c.fillStyle = `rgb(${nx},128,235)`; c.fillRect(x, 0, 1, 64); }
+    c.fillStyle = 'rgb(128,70,220)'; c.fillRect(0, 54, 64, 4);
+  });
+  return { color, normal };
+}
 
 function rng(seed: number) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
 export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promise<CityWorld> {
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow';
-  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : pyongyang ? PYONGYANG_TINTS : moscow ? MOSCOW_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow', beijing = TRACK_INFO.theme === 'beijing';
+  const PLASTER_TINTS = (havana ? HAVANA_TINTS : rome ? ROME_TINTS : pyongyang ? PYONGYANG_TINTS : moscow ? MOSCOW_TINTS : beijing ? BEIJING_TINTS : BERLIN_TINTS).map((h) => Color3.FromHexString(h).toLinearSpace());
   /** Pale travertine tones for the rationalist blocks of the Duce-Drom. */
   const TRAVERTINE = ['#f1ebdd', '#e8dfcc', '#f5f1e6', '#e2d8c2'].map((h) => Color3.FromHexString(h).toLinearSpace());
   const kit = await LoadAssetContainerAsync('/assets/models/city-kit.glb', scene);
@@ -115,11 +138,13 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const names = havana ? ['ZIGARREN VOLKSEIGEN', 'RUM & REDE', 'ERSATZTEILE (1958)', 'BÄRTE NACH NORM', 'REDEZEIT-VERLÄNGERUNG', 'EIS DER REVOLUTION', 'MIKROFON-REPARATUR', 'ZUCKERQUOTE 104 %']
       : rome ? ['CAFFÈ DEL BALCONE', 'MARMOR & PATHOS', 'GELATO GENEHMIGT', 'BÜSTEN NACH MASS', 'TRIUMPHBOGEN-VERLEIH', 'APPLAUS-AGENTUR', 'SCHÄRPEN & ORDEN', 'TOGA-REINIGUNG']
       : pyongyang ? ['PLANERFÜLLUNG (FAST)', 'APPLAUS IM TAKT', 'JUBELBEDARF OST', 'PARADENORM 08/15', 'LAUTSPRECHER & PLAN', 'EWIGER BAUBEDARF', 'SIEG MELDEPFLICHTIG', 'STATISTIK NACH MASS']
+      // Peking rows 0/1 title the palace hall and the gate (art-source/beijing_modules.py), the rest label hutong shops.
+      : beijing ? ['HALLE DER PLANERFÜLLUNG', 'TOR DES EWIGEN FORTSCHRITTS', 'TEEHAUS DER EINHEIT', 'REGELHEFT-DRUCKEREI', 'FAHRRAD NACH NORM', 'NUDELN NACH PLAN', 'LOSUNGEN EN GROS', 'LAUTSPRECHER-REPARATUR']
       : moscow ? ['PARADE-UNIFORMEN', 'ROTER-PLATZ-KIOSK', 'ORDEN AUF VORBESTELLUNG', 'PLANERFÜLLUNG 101 %', 'BANNER & BRONZE', 'SAMOWAR MIT STEMPEL', 'FEIERABEND AUF ANTRAG', 'DURCHFAHRT GENEHMIGT']
       : ['KAFFEEHAUS EITELKEIT', 'ORDENSMANUFAKTUR', 'JUBELBEDARF', 'STEMPEL & FORMULARE', 'HOFBÄCKEREI', 'UNIFORMSCHNEIDEREI', 'BALKON-APOTHEKE', 'FAHNEN & BANNER'];
     names.forEach((name, k) => {
       const y = k * 64;
-      c.fillStyle = ['#1f3b30', '#5c1a22', '#1d2a3c', '#2b2b26'][k % 4]; c.fillRect(0, y, 512, 64);
+      c.fillStyle = beijing ? ['#7a1712', '#8a1d16'][k % 2] : ['#1f3b30', '#5c1a22', '#1d2a3c', '#2b2b26'][k % 4]; c.fillRect(0, y, 512, 64);
       c.strokeStyle = '#d9b25e'; c.lineWidth = 3; c.strokeRect(5, y + 5, 502, 54);
       c.fillStyle = '#ecd08a'; c.font = `bold ${name.length > 16 ? 30 : 36}px Georgia`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(name, 256, y + 34);
     });
@@ -152,6 +177,9 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (/glass/.test(m.name) && !/lamp/.test(m.name)) { m.roughness = .08; m.metallic = .35; m.environmentIntensity = 1.4; }
     if (/gilded/.test(m.name)) { m.clearCoat.isEnabled = true; m.clearCoat.intensity = .4; }
     if (/fountain water/.test(m.name)) { m.alpha = .85; }
+    // Peking roofs: barrel tiles (u, about 55 cm) in overlapping courses (v); colour comes from the vertex tones.
+    if (/glazed tile/.test(m.name)) { const t = glazedTiles(scene); m.albedoTexture = t.color; m.bumpTexture = t.normal; m.bumpTexture.level = .8; }
+    if (/lantern silk/.test(m.name)) { m.emissiveIntensity = 1.6; }
   }
 
   // --- Placement checks -----------------------------------------------------------------------------
@@ -207,7 +235,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   const gateAt = trackPoint(LANDMARKS.gateProgress, 0), finishAt = trackPoint(TRACK.start, 0);
   if (pyongyang) placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
   else {
-    placements.push({ m: rome ? 'kit-arch' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
+    placements.push({ m: rome ? 'kit-arch' : beijing ? 'kit-cn-gate' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
     placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
   }
   if (LANDMARKS.palace) tryPlace({ m: 'kit-palace', x: LANDMARKS.palace[0], z: LANDMARKS.palace[1], yaw: 0 }, { lawnOk: true });
@@ -259,6 +287,13 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   } : rome ? {
     insula: ['kit-rational-a', 'kit-insula-a', 'kit-rational-b', 'kit-insula-c', 'kit-rational-c', 'kit-insula-b'],
     avenue: ['kit-rational-b', 'kit-colonnade', 'kit-rational-a', 'kit-colonnade'],
+  } : moscow ? {
+    // Moscow: limestone avenues punctuated by the onion-domed corner towers.
+    avenue: ['kit-house-d', 'kit-corner', 'kit-house-d', 'kit-house-a', 'kit-corner'],
+    city: ['kit-house-a', 'kit-corner', 'kit-house-d', 'kit-house-b'],
+  } : beijing ? {
+    hutong: ['kit-cn-house-a', 'kit-cn-house-b', 'kit-cn-house-c', 'kit-cn-house-a', 'kit-cn-house-c'],
+    avenue: ['kit-cn-house-b', 'kit-cn-house-a', 'kit-cn-house-b'],
   } : pyongyang ? {
     city: ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-house-d'],
     riverfront: ['kit-sky-a', 'kit-house-d', 'kit-sky-b'],
@@ -331,7 +366,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
   }
   // Promenade furniture between the existing lamps (lamps every 24 m at lane W+2.6).
   // Havana: the cruisers of 1958 are parked along the kerb for good (no spare parts).
-  const furniture = havana ? ['kit-oldtimer-a', 'kit-bench', 'kit-oldtimer-b', 'kit-kiosk', 'kit-oldtimer-c', 'kit-bench'] : pyongyang ? ['kit-flag', 'kit-kiosk', 'kit-flag', 'kit-bench', 'kit-flag'] : ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
+  const furniture = havana ? ['kit-oldtimer-a', 'kit-bench', 'kit-oldtimer-b', 'kit-kiosk', 'kit-oldtimer-c', 'kit-bench'] : pyongyang ? ['kit-flag', 'kit-kiosk', 'kit-flag', 'kit-bench', 'kit-flag'] : beijing ? ['kit-loudspeaker', 'kit-bench', 'kit-kiosk', 'kit-loudspeaker', 'kit-bench'] : ['kit-bench', 'kit-bench', 'kit-litfass', 'kit-flag', 'kit-bench', 'kit-kiosk', 'kit-flag'];
   let fk = 0;
   for (let s = 14; s < TRACK.length - 8; s += 12) for (const side of [-1, 1]) {
     if (HAZARDS.some((h) => side === h.side && s >= h.from - 6 && s <= h.to + 6)) continue;
@@ -344,12 +379,16 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (reserved.some((r) => Math.hypot(r.x - p.x, r.z - p.z) < r.r)) continue;
     placements.push({ m, x: p.x, z: p.z, y: elevationAt(s) + .14, yaw: facing(p.x, p.z) + (m === 'kit-flag' || m.startsWith('kit-oldtimer') ? Math.PI / 2 : 0) });
   }
+  // Peking: lantern garlands across the road on the square, the hutong avenue and the serpentine.
+  if (beijing) for (const s of [40, 250, 440, 560, 870, 1010, 1170, 1480]) {
+    const p = trackPoint(s, 0); placements.push({ m: 'kit-lantern-span', x: p.x, z: p.z, y: elevationAt(s), yaw: p.heading });
+  }
   // Second line and distant city: taller blocks fill every free plot so no street ends in a void.
   for (let x = GROUND.west + 30; x < GROUND.east - 30; x += 30) for (let z = GROUND.south + 30; z < GROUND.north - 30; z += 30) {
     const px = x + (random() - .5) * 10, pz = z + (random() - .5) * 10;
     const { lane } = trackLocate(px, pz);
     if (Math.abs(lane) < 34) continue;
-    const m = pick(havana ? ['kit-colonial-b', 'kit-colonial-a', 'kit-colonial-b', 'kit-colonial-c'] : rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : pyongyang ? ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-house-d'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
+    const m = pick(havana ? ['kit-colonial-b', 'kit-colonial-a', 'kit-colonial-b', 'kit-colonial-c'] : rome ? ['kit-rational-a', 'kit-rational-c', 'kit-insula-c', 'kit-rational-b'] : pyongyang ? ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-house-d'] : beijing ? ['kit-cn-house-b', 'kit-cn-house-a', 'kit-sky-c', 'kit-cn-house-c', 'kit-cn-house-b'] : ['kit-sky-a', 'kit-sky-b', 'kit-sky-c', 'kit-sky-a']);
     const towardCentre = Math.atan2(-(60 - px), -(-20 - pz));
     const yaw = Math.abs(lane) < 70 ? facing(px, pz) : Math.round(towardCentre / (Math.PI / 2)) * Math.PI / 2;
     tryPlace({ m, x: px, z: pz, yaw, tint: m.startsWith('kit-rational') ? pick(TRAVERTINE) : tint() }, { extra: 18, skipCircuit: Math.abs(lane) > 70 });
@@ -407,8 +446,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const data = new VertexData(); data.positions = pos; data.normals = nor; data.uvs = uv; data.colors = col; data.indices = idx; data.applyToMesh(mesh, false);
     mesh.material = bucket.material; mesh.hasVertexAlpha = false; mesh.isPickable = false; mesh.receiveShadows = true;
     const name = bucket.material?.name ?? '';
-    if (!/glass|lamp|water|crowd skin/.test(name)) shadow.addShadowCaster(mesh);
-    if (/lamp glass/.test(name)) glowMeshes.push(mesh);
+    if (!/glass|lamp|water|crowd skin|lantern/.test(name)) shadow.addShadowCaster(mesh);
+    if (/lamp glass|lantern silk/.test(name)) glowMeshes.push(mesh);
     mesh.freezeWorldMatrix(); mesh.doNotSyncBoundingInfo = true;
     meshes.push(mesh);
   }

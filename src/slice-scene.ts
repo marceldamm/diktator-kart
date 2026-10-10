@@ -186,6 +186,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const rememberKimPaint=()=>{kimPaintBase.clear();for(const part of recolourable)if(part.kind==='paint'||part.kind==='uniform'||part.kind==='cape')if(!kimPaintBase.has(part.material))kimPaintBase.set(part.material,{color:part.material.albedoColor.clone(),metallic:part.material.metallic??0,roughness:part.material.roughness??0,emissive:part.material.emissiveColor.clone()});};
       const scarf = nodes.find((n) => n.name === `kart${index}/scarfFlap`) as TransformNode;
       const pedals = ['gas', 'brake'].map((p) => nodes.find((n) => n.name === `kart${index}/pedal-${p}`) as TransformNode | undefined);
+      // Detachable part groups from art-source/build_kart.py: lost at 66 % and 33 % body health, refitted by the repair.
+      const detach = ['detach-1', 'detach-2'].map((p) => nodes.find((n) => n.name === `kart${index}/${p}`) as TransformNode | undefined);
       for (const p of pedals) if (p) p.rotationQuaternion = null;
       const steering = nodes.find((n) => n.name === `kart${index}/steeringWheel`) as TransformNode;
       const arms = ['L', 'R'].map((side) => nodes.find((n) => n.name === `kart${index}/armPose-${side}`) as TransformNode | undefined);
@@ -251,7 +253,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if(v.kimPolish===active)return;v.kimPolish=active;kimCarPolish.setEnabled(active);kimHeadPolish.setEnabled(active);
           for(const [material,base] of kimPaintBase){if(active){material.albedoColor=Color3.Lerp(base.color,Color3.FromHexString('#d2ac57'),.58);material.metallic=Math.max(base.metallic,.68);material.roughness=Math.min(base.roughness,.28);material.emissiveColor=new Color3(.045,.025,.004);}else{material.albedoColor.copyFrom(base.color);material.metallic=base.metallic;material.roughness=base.roughness;material.emissiveColor.copyFrom(base.emissive);}}
         }, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
-        paintColour: Color3.Black(), soot: -1, wreckAge: -1,
+        paintColour: Color3.Black(), soot: -1, wreckAge: -1, detach, detachLost: [false, false],
         /** Shows exactly one tyre set on all four wheels. */
         setTires(set: string) { for (const [id, list] of wheelStyles) for (const node of list) node?.setEnabled(id === set); },
         paints: () => recolourable.filter((r) => r.kind === 'paint').map((r) => r.material),
@@ -502,6 +504,19 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       holder.getChildMeshes().forEach((m) => { m.isPickable = false; shadow.addShadowCaster(m); });
       holder.setEnabled(false); return { mesh: holder, life: 0, vx: 0, vy: 0, vz: 0 }; });
     let nextDebris = 0;
+    // Loose kart parts (10.10.2026): a copy of the lost group tumbles off the kart, bounces and lies on the road for a while.
+    const looseParts: { holder: TransformNode; v: Vector3; spin: Vector3; life: number }[] = [];
+    const throwPart = (node: TransformNode, at: KartState) => {
+      const meshes = node.getChildMeshes(false); if (!meshes.length) return;
+      let min = new Vector3(Infinity, Infinity, Infinity), max = min.scale(-1);
+      for (const m of meshes) { m.computeWorldMatrix(true); const b = m.getBoundingInfo().boundingBox; min = Vector3.Minimize(min, b.minimumWorld); max = Vector3.Maximize(max, b.maximumWorld); }
+      const holder = new TransformNode(`Loose ${node.name}`, scene); holder.position = min.add(max).scale(.5);
+      for (const m of meshes) { const c = (m as Mesh).clone(`loose ${m.name}`, null); if (!c) continue; c.setParent(null); c.position.copyFrom(m.getAbsolutePosition()); c.rotationQuaternion = Quaternion.FromRotationMatrix(m.getWorldMatrix().getRotationMatrix()); c.scaling.copyFrom(m.absoluteScaling); c.setParent(holder); c.setEnabled(true); c.isVisible = true; }
+      const side = Math.random() < .5 ? -1 : 1, f = at.speed * .55;
+      const v = new Vector3(Math.sin(at.heading) * f + Math.cos(at.heading) * side * 2.4, 3.4 + Math.random() * 1.6, Math.cos(at.heading) * f - Math.sin(at.heading) * side * 2.4);
+      looseParts.push({ holder, v, spin: new Vector3(Math.random() * 9 - 4.5, Math.random() * 6 - 3, Math.random() * 9 - 4.5), life: 7 });
+      if (looseParts.length > 18) looseParts.shift()!.holder.dispose(false, false);
+    };
     let salvageNow: number[] = []; let botsShownForGhost = false; const salvageDepth: number[] = [];
     // Propaganda zeppelin: announced lap-2 flyover with a slogan banner (purely decorative).
     const zeppelin = new TransformNode('Propaganda zeppelin', scene); zeppelin.setEnabled(false);
@@ -953,6 +968,15 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             if (p.life > 0) { p.life -= dt; p.mesh.position.x += p.vx * dt; p.mesh.position.z += p.vz * dt; p.mesh.position.y = .25 + Math.abs(Math.sin(p.life * 2.3)) * .9;
               p.mesh.rotation.x += p.spin * dt; p.mesh.rotation.y += p.spin * .6 * dt; if (p.life <= 0) p.mesh.setEnabled(false); }
           }
+          for (let k = looseParts.length - 1; k >= 0; k--) {
+            const p = looseParts[k], h = p.holder; p.life -= dt;
+            const ground = elevationAt(trackLocate(h.position.x, h.position.z).s) + .12;
+            p.v.y -= 12 * dt; h.position.addInPlace(p.v.scale(dt));
+            if (h.position.y < ground) { h.position.y = ground; p.v.y = Math.abs(p.v.y) > 1.5 ? -p.v.y * .3 : 0; p.v.x *= .55; p.v.z *= .55; p.spin.scaleInPlace(.45); }
+            h.rotation.addInPlace(p.spin.scale(dt));
+            if (p.life < .8) h.scaling.setAll(Math.max(.01, p.life / .8));
+            if (p.life <= 0) { h.dispose(false, false); looseParts.splice(k, 1); }
+          }
           for (const d of debris) if (d.life > 0) {
             d.life -= dt; d.vy -= 12 * dt; d.mesh.position.x += d.vx * dt; d.mesh.position.z += d.vz * dt; d.mesh.position.y = Math.max(.03, d.mesh.position.y + d.vy * dt);
             if (d.mesh.position.y <= .03) { d.vx *= .9; d.vz *= .9; d.vy = 0; } else { d.mesh.rotation.x += dt * 8; d.mesh.rotation.z += dt * 5; }
@@ -1111,6 +1135,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const health = healthNow[index] ?? 100, wrecked = (wreckedNow[index] ?? 0) > 0;
           const soot = wrecked ? .85 : health < 66 ? (66 - health) / 66 * .65 : 0;
           if (Math.abs(soot - v.soot) > .02) { v.soot = soot; const c = Color3.Lerp(v.paintColour, SOOT, soot); for (const m of v.paints()) m.albedoColor = c; }
+          // Detachable parts: the first group comes off below 66 %, the second below 33 % (or in a wreck); the repair refits both.
+          [health < 66 || wrecked, health < 33 || wrecked].forEach((gone, k) => {
+            const node = v.detach[k]; if (!node || gone === v.detachLost[k]) return;
+            v.detachLost[k] = gone; if (gone && node.isEnabled()) throwPart(node, s); node.setEnabled(!gone);
+          });
           const smoke = engineSmoke[index]; smoke.emitter = new Vector3(s.x - Math.sin(s.heading) * 1.2, .9 + s.height, s.z - Math.cos(s.heading) * 1.2);
           smoke.emitRate = wrecked ? (reducedEffects ? 12 : 40) : health < 33 ? (reducedEffects ? 6 : 22) : health < 66 ? (reducedEffects ? 3 : 9) : 0;
           const dark = wrecked || health < 33; smoke.color1 = dark ? new Color4(.1, .09, .08, .65) : new Color4(.55, .54, .52, .45); smoke.color2 = smoke.color1; smoke.colorDead = new Color4(.3, .3, .3, 0);

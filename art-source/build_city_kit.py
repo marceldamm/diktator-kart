@@ -847,6 +847,8 @@ exec(open(os.path.join(ROOT, 'art-source', 'rome_monuments.py'), encoding='utf-8
 modules += monument_modules()
 exec(open(os.path.join(ROOT, 'art-source', 'havana_modules.py'), encoding='utf-8').read())
 modules += havana_modules()
+exec(open(os.path.join(ROOT, 'art-source', 'beijing_modules.py'), encoding='utf-8').read())
+modules += beijing_modules()
 x = 0
 for M in modules:
     to_blender(M, x); x += 120

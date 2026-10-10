@@ -29,6 +29,11 @@ const LINES = {
   'announcer-balcony': ['announcer', 'Achtung, der Balkon spricht. Rosen auf der Prunkstraße. Bitte weiterfahren.'],
   'announcer-havana': ['announcer', 'Willkommen am Havanna-Revolutionsring. Die Eröffnungsrede läuft noch. Wir starten trotzdem.'],
   'announcer-wave': ['announcer', 'Achtung, Welle über dem Malecón! Langsam durch die Gischt.'],
+  // Moskau and Peking (Claude, 10.10.2026)
+  'announcer-moscow': ['announcer', 'Willkommen an der Genossen-Geraden. Die Parade ist breit, die Vorschrift ist schmal. Bitte eine Spur pro Genosse.'],
+  'announcer-parade': ['announcer', 'Achtung, Ehrenparade! Rückenwind auf der Parade-Geraden, für alle gleichmäßig verteilt.'],
+  'announcer-beijing': ['announcer', 'Willkommen an der Kulturrevolutions-Schleife. Jede Kurve steht im Regelheft. Welche, entscheiden wir später.'],
+  'announcer-loudspeaker': ['announcer', 'Durchsage! Die Planerfüllung liegt bei vierhundert Prozent. Bitte jubeln Sie jetzt.'],
   'announcer-gp-standings': ['announcer', 'Die Zwischenwertung ist amtlich. Einsprüche nur schriftlich und nach dem Rennen.'],
   'announcer-gp-champion': ['announcer', 'Der Große Preis ist entschieden. Der Pokal war schon graviert. Diesmal stimmt sogar der Name.'],
   'announcer-grid': ['announcer', 'Alle bereit? Dann ab an den Start!'],

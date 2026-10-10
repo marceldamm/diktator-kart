@@ -29,6 +29,26 @@
     "text": "Achtung, Welle über dem Malecón! Langsam durch die Gischt.",
     "emotion": null
   },
+  "announcer-moscow": {
+    "voice": "announcer",
+    "text": "Willkommen an der Genossen-Geraden. Die Parade ist breit, die Vorschrift ist schmal. Bitte eine Spur pro Genosse.",
+    "emotion": null
+  },
+  "announcer-parade": {
+    "voice": "announcer",
+    "text": "Achtung, Ehrenparade! Rückenwind auf der Parade-Geraden, für alle gleichmäßig verteilt.",
+    "emotion": null
+  },
+  "announcer-beijing": {
+    "voice": "announcer",
+    "text": "Willkommen an der Kulturrevolutions-Schleife. Jede Kurve steht im Regelheft. Welche, entscheiden wir später.",
+    "emotion": null
+  },
+  "announcer-loudspeaker": {
+    "voice": "announcer",
+    "text": "Durchsage! Die Planerfüllung liegt bei vierhundert Prozent. Bitte jubeln Sie jetzt.",
+    "emotion": null
+  },
   "announcer-gp-standings": {
     "voice": "announcer",
     "text": "Die Zwischenwertung ist amtlich. Einsprüche nur schriftlich und nach dem Rennen.",

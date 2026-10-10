@@ -965,5 +965,45 @@ for sd in [-1, 1]:
     ellipsoid('Eye highlight', (sd * .088, .284, .145), (.004, .002, .004), eye_white, brows, 6)
 
 apply_all()
+
+# --- Leg room and detachable parts (Claude, 10.10.2026) -------------------------------------------------
+# Marcel: the drivers' legs lay inside the closed body shells (Mao, Kim, partly Hitler). Every body shell now has
+# an open cockpit pocket from the seat back to just behind the windscreen/dashboard, floored at z 0.62, so thighs
+# and knees sit visibly in the kart. Shins still run under the dashboard into the closed nose like a real footwell.
+def cockpit_cut():
+    fronts = {'Grand Prix enamel body': .2, 'Sculpted enamel body': .44, 'Limousine enamel body': .3, 'Limousine sculpted bonnet': .3,
+              'Racer enamel body': .28, 'Rounded enamel body': .44, 'Rocket enamel body': .44, 'Jeep tub': .44}
+    for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.name.split('.')[0] in fronts]:
+        front = fronts[o.name.split('.')[0]]
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        cutter = bpy.context.object; cutter.name = 'Cockpit cutter'
+        cutter.scale = (.74, front + .95, 2.4); cutter.location = (0, (front - .95) / 2, .62 + 1.2)
+        bpy.ops.object.transform_apply(location=True, scale=True)
+        mod = o.modifiers.new('Cockpit', 'BOOLEAN'); mod.operation = 'DIFFERENCE'; mod.object = cutter
+        try: mod.solver = 'EXACT'
+        except TypeError: pass
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(cutter, do_unlink=True)
+        print('COCKPIT_CUT', o.name, len(o.data.polygons))
+cockpit_cut()
+
+# Detachable parts: damage stages hide these groups in the game and throw a copy off the kart
+# (src/slice-scene.ts; health < 66: 'detach-1', < 33: 'detach-2'); the repair respawn puts them back.
+def detachables():
+    stages = {'detach-1': [], 'detach-2': []}
+    for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.parent == kart]:
+        base = o.name.split('.')[0]
+        c = sum((o.matrix_world @ Vector(v) for v in o.bound_box), Vector()) / 8
+        if base in ('Mirror stalk', 'Mirror housing', 'Mirror glass'): stages['detach-1' if c.x < 0 else 'detach-2'].append(o)
+        elif base == 'Number plate': stages['detach-1'].append(o)
+        elif base == 'Rear bumper': stages['detach-2'].append(o)
+        elif base in ('Wheel fender', 'Fender brass edge') and c.x < 0 and c.y > 0: stages['detach-2'].append(o)
+    for name, objects in stages.items():
+        holder = empty(name, (0, 0, 0), kart)
+        for o in objects:
+            m = o.matrix_world.copy(); o.parent = holder; o.matrix_world = m
+        print('DETACH', name, sorted(o.name for o in objects))
+detachables()
 save('hero-kart')
 print('KART_COMPLETE')

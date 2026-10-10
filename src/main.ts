@@ -129,6 +129,10 @@ class App {
   private tireChoice:string='auto';
   /** Malecón wave (Havanna, lap 2): the flooded seafront stretch slows everyone alike until this race time. */
   private waveUntil=0;
+  /** Moscow lap-2 event: tailwind on the first parade straight until this race time. */
+  private paradeUntil=0;
+  /** The lap-2 track event is announced once late in lap 1, so everyone can prepare. */
+  private eventAnnounced=false;
   private medals:MedalWorld={medals:[],counts:[],events:[]};
   /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
   private autoQuality=false;
@@ -591,7 +595,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.paradeUntil=0;this.eventAnnounced=false;this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -815,6 +819,7 @@ class App {
       havanna: ['Die Eröffnungsrede läuft seit gestern. Bitte leise starten.', 'Ersatzteile sind bestellt – seit 1958.'],
       pyongyang: ['Die Parade fährt im Gleichschritt. Die Stoppuhr widerspricht.', 'Hundert Prozent Zustimmung – laut Lautsprecher.'],
       moscow: ['Die Parade ist breit genug für sechs Karts. Die Vorschrift verlangt trotzdem eine Spur.', 'Der Rote Platz ist geöffnet. Der Antrag auf Abkürzung wird während der Fahrt geprüft.'],
+      beijing: ['Jede Kurve steht im Regelheft. Welche, wird nach dem Rennen festgelegt.', 'Die Planerfüllung liegt bei 400 Prozent. Die Ziellinie bleibt vorerst bei einer.'],
     };
     const [title, detail] = lines[TRACK.id];
     document.querySelector('#gp-intro-kicker')!.textContent = this.mode === 'gp' && this.gp ? `GROSSER PREIS DER EITELKEIT · RENNEN ${this.gp.round + 1}/${this.gp.tracks.length} · ${TRACK_INFO.city.toUpperCase()}` : this.mode === 'timetrial' ? `ZEITFAHREN · ${TRACK.name.toUpperCase()}` : `EINZELRENNEN · ${TRACK.name.toUpperCase()} · ${TRACK_INFO.city.toUpperCase()}`;
@@ -990,6 +995,11 @@ class App {
           this.kart = wade(this.kart); this.loadKarts = this.loadKarts.map(wade);
         }
         if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
+        if (!LAB_WORLD && this.raceTime < this.paradeUntil) {
+          // Moscow honour parade: a gentle tailwind on the first parade straight, up to 6 % above normal top speed, for every kart.
+          const tailwind = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 520 && k.grounded && k.speed > 4 ? { ...k, speed: Math.max(k.speed, Math.min(k.speed + 1.6 * FIXED_STEP, 17)) } : k; };
+          this.kart = tailwind(this.kart); this.loadKarts = this.loadKarts.map(tailwind);
+        }
         if (!LAB_WORLD && this.raceTime < this.waveUntil) {
           // Malecón wave: water on the seafront stretch costs speed and a little grip, identical for every kart.
           const soak = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 330 && k.grounded ? { ...k, speed: k.speed * (1 - .9 * FIXED_STEP), yawRate: k.yawRate * (1 - 1.5 * FIXED_STEP) } : k; };
@@ -1101,6 +1111,8 @@ class App {
             if(this.mode==='gp'&&this.gp&&this.gp.round===0)this.audio.voice('announcer-gp-intro',{force:true});
             else if(TRACK.id==='duce-drom')this.audio.voice('announcer-rome',{force:true});
             else if(TRACK.id==='havanna')this.audio.voice('announcer-havana',{force:true});
+            else if(TRACK.id==='moscow')this.audio.voice('announcer-moscow',{force:true});
+            else if(TRACK.id==='beijing')this.audio.voice('announcer-beijing',{force:true});
           }
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
@@ -1110,6 +1122,12 @@ class App {
             this.startFenceBroken = true; this.testScene?.breakStartFence?.();
             this.itemMessage = 'Startzaun durchbrochen · Trümmer am Straßenrand'; this.itemMessageUntil = this.items.time + 3;
           }
+          // Early notice (worklist 10.10.2026): the lap-2 event is announced in the last quarter of lap 1.
+          if(!this.eventAnnounced&&this.racePhase==='race'&&this.lapTimes.length===0&&this.progress[0].distance>TRACK.length*.75){
+            this.eventAnnounced=true;
+            const notice:Record<string,string>={havana:'Vorankündigung: Nächste Runde rollt die Malecón-Welle über die Uferstraße',rome:'Vorankündigung: Nächste Runde spricht der Balkon',moscow:'Vorankündigung: Nächste Runde Ehrenparade mit Rückenwind',beijing:'Vorankündigung: Nächste Runde Pflichtjubel-Durchsage',pyongyang:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin die Strecke',berlin:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin das Stadion'};
+            this.itemMessage=notice[TRACK_INFO.theme]??notice.berlin;this.itemMessageUntil=this.items.time+4;this.audio.cue('lap');
+          }
           if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore){
             const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
@@ -1118,6 +1136,8 @@ class App {
             if(this.lapTimes.length===1){
               if(TRACK_INFO.theme==='havana'){this.testScene?.trackEvent?.('wave');this.itemMessage='Achtung: Malecón-Welle! Gischt über der Uferstraße';this.audio.cheer(.7);this.waveUntil=this.raceTime+14;window.setTimeout(()=>this.audio.voice('announcer-wave',{force:true}),900);}
               else if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
+              else if(TRACK_INFO.theme==='moscow'){this.testScene?.trackEvent?.('parade');this.itemMessage='Ehrenparade! Rückenwind auf der Parade-Geraden für alle';this.audio.cheer(1);this.paradeUntil=this.raceTime+15;window.setTimeout(()=>this.audio.voice('announcer-parade',{force:true}),900);}
+              else if(TRACK_INFO.theme==='beijing'){this.testScene?.trackEvent?.('loudspeaker');this.itemMessage='Durchsage: Planerfüllung 400 %! Pflichtjubel über der Serpentine';this.audio.cheer(1.2);window.setTimeout(()=>this.audio.voice('announcer-loudspeaker',{force:true}),900);}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}
           }

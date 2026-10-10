@@ -106,14 +106,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
   const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
   const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow';
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow', beijing = TRACK_INFO.theme === 'beijing';
   type FenceDebris = { mesh: Mesh; origin: Vector3; heading: number; vx: number; vy: number; vz: number; spin: number };
   const startFenceParts: Mesh[] = [], startFenceDebris: FenceDebris[] = [];
   let startFenceBroken = false, startFenceClock = 0, startFenceBreakTime = 0;
   if (TRACK_INFO.theme === 'berlin') addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
-  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : pyongyang ? 'Pyongyang granite boulevard' : moscow ? 'Moscow parade paving' : 'Cobblestone boulevard', pyongyang ? '#c3c5c2' : moscow ? '#c7c0b3' : '#d8d2c2', 0, 1);
+  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : pyongyang ? 'Pyongyang granite boulevard' : moscow ? 'Moscow parade paving' : beijing ? 'Peking grey brick paving' : 'Cobblestone boulevard', pyongyang ? '#c3c5c2' : moscow ? '#c7c0b3' : beijing ? '#b9b8b2' : '#d8d2c2', 0, 1);
   if (havana) {
     // Havana: sun-bleached, patched asphalt with tar seams (procedural, original).
     let seed = 1959; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
@@ -150,18 +150,18 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     });
     road.bumpTexture.level = .6; road.roughness = .78;
     for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
-  } else if (pyongyang || moscow) {
-    road.albedoTexture = canvasTexture(scene, moscow ? 'Moscow pale parade slabs' : 'Pyongyang granite slabs', 512, 512, (c) => {
-      c.fillStyle = moscow ? '#a29a8c' : '#858984'; c.fillRect(0, 0, 512, 512);
+  } else if (pyongyang || moscow || beijing) {
+    road.albedoTexture = canvasTexture(scene, moscow ? 'Moscow pale parade slabs' : beijing ? 'Peking grey slabs' : 'Pyongyang granite slabs', 512, 512, (c) => {
+      c.fillStyle = moscow ? '#a29a8c' : beijing ? '#8d8c87' : '#858984'; c.fillRect(0, 0, 512, 512);
       for (let y = 0; y < 512; y += 128) {
         const offset = (y / 128) % 2 ? 128 : 0;
         for (let x = -128 + offset; x < 512; x += 256) {
-          c.fillStyle = moscow ? '#a29a8c' : '#858984'; c.fillRect(x + 2, y + 2, 252, 124);
+          c.fillStyle = moscow ? '#a29a8c' : beijing ? '#8d8c87' : '#858984'; c.fillRect(x + 2, y + 2, 252, 124);
           c.strokeStyle = moscow ? 'rgba(91,54,49,.35)' : 'rgba(43,48,46,.42)'; c.lineWidth = 2; c.strokeRect(x + 2, y + 2, 252, 124);
         }
       }
     });
-    road.bumpTexture = canvasTexture(scene, moscow ? 'Moscow parade joints' : 'Pyongyang granite joints', 512, 512, (c) => {
+    road.bumpTexture = canvasTexture(scene, moscow ? 'Moscow parade joints' : beijing ? 'Peking slab joints' : 'Pyongyang granite joints', 512, 512, (c) => {
       c.fillStyle = '#8080ff'; c.fillRect(0, 0, 512, 512); c.strokeStyle = '#6666ef'; c.lineWidth = 5;
       for (let y = 0; y <= 512; y += 128) { const offset = (y / 128) % 2 ? 128 : 0; c.beginPath(); c.moveTo(0, y); c.lineTo(512, y); c.stroke(); for (let x = offset; x <= 512; x += 256) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 128); c.stroke(); } }
     });
@@ -328,7 +328,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-    const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : moscow ? ['PARADE AUF GANZER BREITE', 'DURCHFAHRT NUR MIT STEMPEL', 'PLANERFÜLLUNG 101 %', 'ABKÜRZUNG NOCH IN PRÜFUNG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+    const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : moscow ? ['PARADE AUF GANZER BREITE', 'DURCHFAHRT NUR MIT STEMPEL', 'PLANERFÜLLUNG 101 %', 'ABKÜRZUNG NOCH IN PRÜFUNG'] : beijing ? ['LENKEN NACH DEM REGELHEFT', 'JEDE KURVE IST KORREKT', 'PLANERFÜLLUNG 400 %', 'FORTSCHRITT IM KREIS'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {
@@ -577,10 +577,19 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const puddleMaterial = pbr(scene, 'Rain puddle water', '#1c2226', 0, .04); puddleMaterial.alpha = .88;
   const puddles: { x: number; z: number; r: number }[] = [];
   const puddleMeshes: Mesh[] = [];
-  for (const [s, lane, r] of [[40, -2.2, 1.6], [96, 1.8, 1.3], [150, -.6, 1.8], [205, 2.4, 1.2], [300, -1.5, 2], [326, 2, 1.4], [372, .5, 1.5], [470, -2, 1.4], [512, 1.2, 1.9], [560, -.8, 1.3]] as const) {
+  // Rain refinement (10.10.2026): puddles spread over the whole lap of every circuit (they used to sit only in the first 560 m),
+  // on the real road height and clear of ramps, boost pads, the start grid and open hazard edges.
+  const puddleLanes = [-2.2, 1.8, -.6, 2.4, -1.5, 2, .5, -2, 1.2, -.8], puddleRadii = [1.6, 1.3, 1.8, 1.2, 2, 1.4, 1.5, 1.4, 1.9, 1.3];
+  const puddleCount = Math.max(8, Math.min(18, Math.round(TRACK.length / 120))), puddleSpots: [number, number, number][] = [];
+  for (let k = 0; k < puddleCount; k++) {
+    let s = (TRACK.start + 45 + k * TRACK.length / puddleCount) % TRACK.length;
+    for (let tries = 0; tries < 6 && (RAMP_LIPS.some((lip) => Math.abs(s - lip) < RAMP_LENGTH + 8) || BOOST_PADS.some(([b]) => s > b - 4 && s < b + 10) || Math.abs(s - TRACK.start) < 30); tries++) s = (s + 9) % TRACK.length;
+    puddleSpots.push([s, puddleLanes[k % puddleLanes.length], puddleRadii[k % puddleRadii.length]]);
+  }
+  for (const [s, lane, r] of puddleSpots) {
     const p = trackPoint(s, lane);
     const disc = MeshBuilder.CreateDisc('Rain puddle', { radius: r, tessellation: 28 }, scene);
-    disc.rotation.x = Math.PI / 2; disc.scaling.y = 1.6; disc.rotation.y = p.heading; disc.position.set(p.x, .05, p.z);
+    disc.rotation.x = Math.PI / 2; disc.scaling.y = 1.6; disc.rotation.y = p.heading; disc.position.set(p.x, trackHeightAt(p.x, p.z) + .05, p.z);
     disc.material = puddleMaterial; disc.isPickable = false; disc.setEnabled(false); puddleMeshes.push(disc); puddles.push({ x: p.x, z: p.z, r: r * 1.2 });
   }
 
@@ -732,13 +741,16 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const pennantMaterial = pbr(scene, 'Pennant cloth', '#ffffff', 0, .9); pennantMaterial.backFaceCulling = false; pennants.material = pennantMaterial;
   pennants.isPickable = false;
 
+  // Dry looks per circuit (Pyongyang granite, Moscow and Peking slabs, Havana asphalt): rain darkens these instead of
+  // swapping in the Berlin cobble colour, and the sun brings exactly them back.
+  const roadDry = { colour: road.albedoColor.clone(), rough: road.roughness ?? 1 }, pavingDry = { colour: paving.albedoColor.clone(), rough: paving.roughness ?? 1 };
   return {
     glowMeshes: [globe, ...boostPads, ...hazardGlow],
     puddles,
     setWet(wet) {
       // Wet cobbles: darker, much smoother (rain film) and more reflective; puddles appear.
-      road.albedoColor = Color3.FromHexString(wet ? '#8d897f' : '#d8d2c2'); road.roughness = wet ? .32 : 1;
-      paving.albedoColor = Color3.FromHexString(wet ? '#8c8270' : '#cbbda0'); paving.roughness = wet ? .4 : 1;
+      road.albedoColor = wet ? roadDry.colour.scale(.64) : roadDry.colour.clone(); road.roughness = wet ? .32 : roadDry.rough;
+      paving.albedoColor = wet ? pavingDry.colour.scale(.69) : pavingDry.colour.clone(); paving.roughness = wet ? .4 : pavingDry.rough;
       for (const m of puddleMeshes) m.setEnabled(wet);
       for (const shadow of cloudShadows) shadow.mesh.setEnabled(wet);
     },

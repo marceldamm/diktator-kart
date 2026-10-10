@@ -96,6 +96,10 @@ Stalins Mütze ist entfernt (Marcel, 09.10.2026). Der lange Mantel liegt in `sta
 
 Der Doppelklick-Export erneuert auch die stehenden Figuren für die Fahrerwahl und die Kopf-Symbole. Die vier Posen dort (Hände in den Hüften, Hände auf dem Rücken, eine Hand am Rücken, lässig) stehen in `art-source/export_driver_stand.py` und gelten für alle Fahrer; deine Sitzpose ändert sie nicht.
 
+## 10. Neues Kart in den Posen-Dateien (10.10.2026)
+
+Die Karosserien haben jetzt eine offene Cockpitwanne für die Beine. Die sechs Posen-Dateien wurden mit `art-source/update_kart_in_pose_blends.py` auf dieses Kart umgestellt; nur die Sammlung „Kart …“ wurde ersetzt, deine Fahrerposen und die Pedale unter den Füßen blieben gleich. Nach einem neuen Kart-Bau (`art-source/build_kart.py`) dieses Skript erneut ausführen lassen.
+
 ## Technischer Hintergrund (für Claude/Codex)
 
 - Quellen: Marcels bezahlte Tripo-Modelle in `art-source/tripo/`. Zuordnung der Download-Namen vom 09.10.2026: „military officer 3d model (1)“ = Mussolini, „military uniformed man“ = Mao, „military commander“ = Kim, „military soldier“ = Castro, „wwii german officer“ = Hitler (zuletzt am 09.10.2026); Stalin = früheres „military officer 3d model“ als `stalin-parts.glb` (Körper/Mütze/Mantel getrennt). Kart: `public/assets/models/hero-kart.glb` mit Karosserie und Lack aus `src/cast.ts`.
