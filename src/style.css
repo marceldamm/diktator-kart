@@ -92,7 +92,7 @@ button:disabled { opacity: .5; cursor: default; }
 #finish-results strong { font-weight:500; }
 #finish-results small { margin-left:auto;color:#a6bcb5; }
 #finish-results .player-result { background:#d8bd7930;color:#f7e2b4; }
-#lap-notice { position:absolute;top:155px;left:50%;transform:translateX(-50%);padding:12px 20px;background:#102b32df;border:1px solid #d5b579;color:#f0daac;font-size:15px;letter-spacing:.12em;white-space:nowrap; }
+#lap-notice { position:absolute;top:128px;left:50%;transform:translateX(-50%);max-width:min(460px,calc(100vw - 32px));padding:7px 12px;background:#102b32df;border:1px solid #d5b579;color:#f0daac;font-size:12px;line-height:1.35;letter-spacing:.03em;text-align:center;overflow-wrap:anywhere; }
 .drift-meter { height:4px;margin:8px 0;background:#284951;overflow:hidden; }
 #drift-fill { height:100%;background:#55cee5; }
 .drift-meter.charged #drift-fill { background:#efc66e;box-shadow:0 0 10px #efc66e; }
@@ -125,14 +125,15 @@ button:disabled { opacity: .5; cursor: default; }
 .defense-card strong { display:block;font-size:11px; }
 .defense-card small { display:block;margin-top:3px;font-size:9px;color:#b6c8c4; }
 .defense-card button { margin-left:auto;min-width:38px;font-size:10px;touch-action:manipulation; }
+.menu-open .defense-card,.photo-mode .defense-card { display:none !important; }
 #item-warning { position:absolute;top:160px;left:50%;transform:translateX(-50%);padding:9px 14px;color:#f5d59c;background:#742c28dc;font-size:12px; }
 .photo-mode .item-card,.photo-mode #item-warning { display:none !important; }
 #censor-banner[hidden] { display:none !important; }
 #ability-announcement[hidden] { display:none !important; }
-.ability-announcement { position:fixed;z-index:81;top:145px;left:50%;width:min(680px,86vw);padding:13px 18px;transform:translateX(-50%);border:2px solid #d2ac57;background:#111a20f2;box-shadow:0 0 0 5px #8e2635,0 10px 30px #000a;color:#f5e5bb;text-align:center;pointer-events:none;animation:censor-stamp .24s cubic-bezier(.15,.85,.25,1.25); }
+.ability-announcement { position:fixed;z-index:81;top:128px;left:50%;width:min(450px,86vw);padding:8px 12px;transform:translateX(-50%);border:1px solid #d2ac57;background:#111a20ed;box-shadow:0 0 0 2px #8e2635,0 6px 18px #0008;color:#f5e5bb;text-align:center;pointer-events:none;animation:censor-stamp .24s cubic-bezier(.15,.85,.25,1.25); }
 .ability-announcement span,.ability-announcement strong,.ability-announcement small { display:block; }
 .ability-announcement span { font-size:9px;font-weight:800;color:#e4c475; }
-.ability-announcement strong { margin:5px 0;font-size:21px; }
+.ability-announcement strong { margin:3px 0;font-size:14px;line-height:1.3; }
 .ability-announcement small { font-size:10px;color:#d5c9ac; }
 .menu-open .ability-announcement,.race-finished .ability-announcement,.photo-mode .ability-announcement { display:none !important; }
 .censor-banner { position:fixed;z-index:80;top:42%;left:50%;width:min(700px,86vw);padding:10px 18px 11px;transform:translate(-50%,-50%) rotate(-1deg);border:2px solid #c6a054;background:#172126f2;box-shadow:0 0 0 5px #8e2635,0 12px 34px #000a;color:#ead7aa;text-align:center;pointer-events:none;animation:censor-stamp .24s cubic-bezier(.15,.85,.25,1.25); }
@@ -142,7 +143,7 @@ button:disabled { opacity: .5; cursor: default; }
 .censor-banner small { display:block;font-size:9px;color:#d5c9ac; }
 .photo-mode .censor-banner,.menu-open .censor-banner,.race-finished .censor-banner { display:none !important; }
 @keyframes censor-stamp { from { opacity:0;transform:translate(-50%,-50%) rotate(5deg) scale(1.18); } to { opacity:1;transform:translate(-50%,-50%) rotate(-1deg) scale(1); } }
-@media(max-width:600px) { .ability-announcement { top:118px;width:84vw;padding:10px; } .ability-announcement strong { font-size:16px; } .censor-banner { width:84vw;padding:9px 10px; } .censor-ink strong { font-size:16px; } .censor-banner small { font-size:8px; } }
+@media(max-width:600px) { .ability-announcement { top:108px;width:84vw;padding:7px 10px; } .ability-announcement strong { font-size:12px; } .censor-banner { width:84vw;padding:9px 10px; } .censor-ink strong { font-size:16px; } .censor-banner small { font-size:8px; } }
 @media(prefers-reduced-motion:reduce) { .ability-announcement,.censor-banner { animation:none; } }
 #touch-controls { display:none; }
 @media(pointer:coarse) {
@@ -217,27 +218,28 @@ button:disabled { opacity: .5; cursor: default; }
 /* Course selection keeps future routes visible without implying they are playable. */
 #track-select { display:none; }
 .track-select-open .start-menu { display:none !important; }
-.track-select-open #track-select { display:block;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;padding:26px 28px 20px;background:linear-gradient(130deg,#0c242ef2,#1a2f33ea);border-top:2px solid #c2a669;box-shadow:0 22px 70px #0007;color:#efdbaf; }
+.track-select-open #track-select { display:block;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1080px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;padding:26px 28px 20px;background:linear-gradient(130deg,#0c242ef2,#1a2f33ea);border-top:2px solid #c2a669;box-shadow:0 22px 70px #0007;color:#efdbaf; }
 #track-select h2 { font:30px/1.1 Georgia,serif;margin:10px 0 18px; }
 #track-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px; }
-.track-card { position:relative;display:flex;min-width:0;min-height:142px;flex-direction:column;align-items:flex-start;justify-content:flex-end;overflow:hidden;padding:12px;border:1px solid #c2a66955;background:#0a1c22;color:inherit;text-align:left; }
+.track-card { position:relative;display:flex;min-width:0;min-height:238px;flex-direction:column;align-items:flex-start;overflow:hidden;padding:12px;border:1px solid #c2a66955;background:#0a1c22;color:inherit;text-align:left; }
 .track-card.playable { cursor:pointer; }
 .track-card.playable:hover { border-color:#f0cf86;transform:translateY(-2px); }
 .track-card.selected { outline:2px solid #f0cf86;outline-offset:-3px; }
 .track-card.planned { border-color:#82908b44;background:#101c20;color:#9fa9a2; }
-.track-map { position:absolute;inset:0 0 35px;background:radial-gradient(ellipse at 52% 55%,#bd9d5933 0 13%,transparent 14%),linear-gradient(145deg,transparent 43%,#9d875333 44% 46%,transparent 47%),repeating-linear-gradient(25deg,transparent 0 17px,#ffffff08 18px 19px); }
+.track-map { display:block;flex:0 0 112px;width:100%;margin-bottom:12px;border-bottom:1px solid #c2a66933;background:repeating-linear-gradient(25deg,transparent 0 17px,#ffffff06 18px 19px); }
 .track-card.planned .track-map { opacity:.25;filter:grayscale(1); }
 .track-status,.track-card strong,.track-card small { position:relative; }
 .track-status { margin-bottom:7px;color:#d9bf7e;font-size:9px;font-weight:700;text-transform:uppercase; }
 .track-card.planned .track-status { color:#a4aaa2; }
 .track-card strong { max-width:100%;font:17px/1.2 Georgia,serif;overflow-wrap:anywhere; }
 .track-card small { margin-top:5px;color:#b9c4bc;font-size:10px; }
+.track-length { margin-top:auto;padding-top:9px;color:#e2c27f;font-size:11px; }
 .track-actions { display:flex;gap:10px;justify-content:space-between;margin-top:16px; }
 .track-actions button { min-width:132px;padding:12px 18px;font-size:12px; }
 #track-go { background:#d6b77a;color:#152a30;font-weight:700; }
 #track-go span { float:right;margin-left:14px; }
-@media(max-width:720px) { #track-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:8px; } .track-card { min-height:126px;padding:9px; } .track-card strong { font-size:15px; } #track-select { padding:20px 16px 16px; } #track-select h2 { font-size:22px; } }
-@media(max-height:620px) { .track-card { min-height:108px; } .track-map { inset:0 0 28px; } #track-select h2 { margin:6px 0 10px;font-size:22px; } }
+@media(max-width:720px) { #track-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:8px; } .track-card { min-height:222px;padding:9px; } .track-map { flex-basis:92px; } .track-card strong { font-size:15px; } .track-select-open #track-select { padding:20px 16px 16px; } #track-select h2 { font-size:22px; } }
+@media(max-height:620px) { .track-card { min-height:194px; } .track-map { flex-basis:72px;margin-bottom:8px; } #track-select h2 { margin:6px 0 10px;font-size:22px; } }
 
 /* Podium: winner portrait and small driver portraits in the result list. */
 #finish-portrait { float:right;width:96px;height:108px;object-fit:cover;margin:0 0 8px 14px;border:2px solid #f0cf86;box-shadow:0 6px 18px #0007; }
@@ -283,11 +285,11 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 .reduced-motion .ranking li { transition:none; }
 
 /* Grand Prix intro card during the countdown and the first seconds of a race. */
-.gp-intro { position:absolute;top:118px;left:50%;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));padding:12px 20px;text-align:center;background:linear-gradient(100deg,#142a30ee,#2a1418dd);border-top:2px solid #ddbd7a;color:#f0dcb0;pointer-events:none; }
+.gp-intro { position:absolute;top:128px;left:50%;transform:translateX(-50%);width:min(450px,calc(100vw - 32px));padding:7px 12px;text-align:center;background:linear-gradient(100deg,#142a30ee,#2a1418dd);border-top:1px solid #ddbd7a;color:#f0dcb0;pointer-events:none; }
 .gp-intro[hidden] { display:none !important; }
 .gp-intro span { display:block;font-size:9px;letter-spacing:.22em;color:#d7bc86; }
-.gp-intro strong { display:block;margin-top:6px;font:italic 19px/1.25 Georgia,serif; }
-.gp-intro small { display:block;margin-top:4px;font-size:11px;color:#bacbc7; }
+.gp-intro strong { display:block;margin-top:4px;font:italic 14px/1.3 Georgia,serif; }
+.gp-intro small { display:block;margin-top:3px;font-size:10px;color:#bacbc7; }
 .menu-open .gp-intro,.photo-mode .gp-intro { display:none !important; }
 
 /* Championship table on the finish card. */
@@ -304,7 +306,9 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 .keymap button { font-size:10px; }
 
 /* Orden (medals) counter under the speed display. */
-#medal-count { margin:0 0 .2rem;font-size:11px;letter-spacing:.04em;color:#e2b65c;white-space:nowrap; }
+#medal-count { margin:0 0 .2rem;font-size:11px;line-height:1.5;letter-spacing:.02em;color:#e2b65c;overflow-wrap:anywhere; }
+#medal-count span { display:block; }
+#medal-count .medal-bonus { font-size:10px;letter-spacing:0;color:#c8c6b7; }
 #medal-count.full { color:#ffd98a;text-shadow:0 0 8px #e7c06a88; }
 #medal-count[hidden] { display:none; }
 

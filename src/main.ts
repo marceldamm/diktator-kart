@@ -492,13 +492,17 @@ class App {
       const id = card.dataset.trackId; if (!isTrackId(id)) return;
       const holder = card.querySelector<HTMLElement>('.track-map'); if (!holder || holder.querySelector('canvas')) return;
       const canvas = document.createElement('canvas'); canvas.width = 260; canvas.height = 120; const c = canvas.getContext('2d'); if (!c) return;
-      const pts = sampleTrack(TRACKS[id].controlPoints, 4).samples, xs = pts.map((p) => p.x), zs = pts.map((p) => p.z);
+      const route = sampleTrack(TRACKS[id].controlPoints);
+      const length = document.createElement('span'); length.className = 'track-length';
+      length.textContent = `${Math.round(route.length).toLocaleString('de-DE')} m pro Runde`;
+      card.append(length);
+      const pts = route.samples.filter((_, i) => i % 8 === 0), xs = pts.map((p) => p.x), zs = pts.map((p) => p.z);
       const minX = Math.min(...xs), maxX = Math.max(...xs), minZ = Math.min(...zs), maxZ = Math.max(...zs), k = Math.min(220 / (maxX - minX), 92 / (maxZ - minZ));
       const at = (p: { x: number; z: number }) => [130 + (p.x - (minX + maxX) / 2) * k, 58 - (p.z - (minZ + maxZ) / 2) * k] as const;
       c.lineJoin = 'round';
       for (const [w, col] of [[9, '#0b1a1ecc'], [4, '#e2c27f']] as const) { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); pts.forEach((p, i) => { const [x, y] = at(p); if (i) c.lineTo(x, y); else c.moveTo(x, y); }); c.closePath(); c.stroke(); }
-      const start = pts[Math.round(TRACKS[id].start / 4) % pts.length]; const [sx, sy] = at(start); c.fillStyle = '#f3eee0'; c.beginPath(); c.arc(sx, sy, 4, 0, Math.PI * 2); c.fill();
-      canvas.style.cssText = 'position:absolute;inset:6px 8px auto 8px;width:calc(100% - 16px);height:auto;opacity:.92';
+      const start = route.samples.reduce((best, p) => Math.abs(p.s - TRACKS[id].start) < Math.abs(best.s - TRACKS[id].start) ? p : best); const [sx, sy] = at(start); c.fillStyle = '#f3eee0'; c.beginPath(); c.arc(sx, sy, 4, 0, Math.PI * 2); c.fill();
+      canvas.style.cssText = 'width:100%;height:100%;object-fit:contain;opacity:.92';
       holder.append(canvas);
     });
   }
@@ -1280,7 +1284,7 @@ class App {
       this.commentary();
       if (!LAB_WORLD) { const leader = rankRace(this.progress)[0]; this.testScene.broadcast?.(leader, this.racePhase === 'practice' ? `STAATSFERNSEHEN · Freies Training · ${{ sun: 'Sonnenschein genehmigt', rain: 'Regen angeordnet', snow: 'Schneefall verordnet' }[this.weather]}` : `FÜHRUNG: ${this.castOf(leader).name.toUpperCase()} · RUNDE ${Math.min(3, 1 + Math.floor(Math.max(0, this.progress[leader].distance) / TRACK.length))}/3`); }
       speedDisplay.textContent = `${Math.round(Math.abs(this.kart.speed) * 3.6)} km/h${this.kart.speed < 0 ? ' rückwärts' : ''}`;
-      { const el=document.querySelector<HTMLElement>('#medal-count'); if(el){const n=this.medals.counts[0]??0;el.textContent=`${'✪'.repeat(n)}${'·'.repeat(MEDAL_RULES.max-n)} ${n}/${MEDAL_RULES.max} Orden${n?` · +${Math.round(n*MEDAL_RULES.topSpeedPerMedal*3.6)} km/h Spitze`:''}`;el.hidden=this.racePhase==='practice';el.classList.toggle('full',n===MEDAL_RULES.max);} }
+      { const el=document.querySelector<HTMLElement>('#medal-count'); if(el){const n=this.medals.counts[0]??0;el.querySelector('.medal-total')!.textContent=`${'✪'.repeat(n)}${'·'.repeat(MEDAL_RULES.max-n)} ${n}/${MEDAL_RULES.max} Orden`;el.querySelector('.medal-bonus')!.textContent=n?`+${Math.round(n*MEDAL_RULES.topSpeedPerMedal*3.6)} km/h Spitze`:'Sammeln erhöht dein Spitzentempo';el.hidden=this.racePhase==='practice';el.classList.toggle('full',n===MEDAL_RULES.max);} }
       { const health=Math.round(this.damage.health[0]),meter=document.querySelector<HTMLElement>('#health')!;
         meter.classList.toggle('worn',health<66);meter.classList.toggle('critical',health<33);meter.classList.toggle('wrecked',this.damage.wrecked[0]>0);meter.classList.toggle('shown',this.racePhase==='practice');
         meter.setAttribute('aria-valuenow',String(health));meter.setAttribute('aria-valuetext',health===0?'Totalschaden':`${health} Prozent Fahrzeugzustand`);

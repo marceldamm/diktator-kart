@@ -1,5 +1,13 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 10.10.2026 – Codex: UI-Paket und Prüfgrenzen
+
+Überlagerung der Streckenzeichnung im aktuellen sichtbaren Chrome reproduziert; nach räumlicher Trennung auf allen sechs Karten und bei 640 × 800 verschwunden. Kartenlänge nutzt die Standardabtastung der Simulation (gröbere Zeichnungsabtastung liefert abweichende Längen und wird dafür nicht verwendet). Peking-HUD zeigt Orden und Bonus in getrennten umbrechenden Zeilen. Bilder unter docs/evidence/2026-10-10-feedback/. TypeScript und Produktionsbuild bestanden; bekannte Vite-Chunkwarnung bleibt. Full-Orden-/Ereignistest noch offen. Eigene Testfahrt per Esc pausiert; Nutzerfenster nicht bedient. Der gemeinsame Vite-Server lädt Quelländerungen automatisch in Spieltabs neu; Marcel ist darüber informiert. Offizielle Budgetwerte: 69 % Fünfstunden- und 80 % Wochenrest; kein Reset aktiviert.
+
+## 10.10.2026 – Marcel: laufender Fahrtest und autonome Abarbeitung
+
+Marcels neue Beobachtungen wurden vollständig als vorrangige Aufgaben in CURRENT-WORKLIST.md erfasst: Text-/Streckenüberlappung, Länge, HUD/Orden, dunkle Fahrer, Fäden bei Armreaktionen, Deko in Abkürzungen, mehr Schaden, Kopf im Cockpit, Reifen allein beim Sprung, neue Streckenmusik, thematische Baum-/Bodenassets, aktivere Gegner mit drei Stufen, echte Nachtbeleuchtung und Blick/Mimik/Trefferreaktionen. Marcel beauftragt ausdrücklich, zuerst diese Punkte und danach die zuvor bestätigten Ziele eigenständig abzuarbeiten. Noch unbekannte Figur-/Streckenzuordnungen bleiben unbekannt; einzelne Beobachtungen werden vor Korrektur reproduziert. Keine Abnahme aus seiner bloßen Meldung erfinden.
+
 ## 10.10.2026 – Marcel: Umsetzung planen und Spieltest begleiten
 
 Marcel beauftragt, die Erkenntnisse der Klärungsrunde als konkrete Aufgaben und Umsetzungsziele zu planen. Schwerpunkt bleibt Grafik und Modelle, zuerst Fahrer, Karts und Cockpit; danach folgen Kart-Abstimmung, alternative Fahrlinien und Cup-Fortschritt/Freischaltungen. Die frühere Beschränkung dieser drei Ideen auf Prüfung ist durch diesen Auftrag abgelöst. Marcel spielt parallel und liefert Feedback. Die KI trägt Beobachtungen ohne erfundene Testergebnisse in CURRENT-WORKLIST.md ein, priorisiert Spielblocker und ergänzt die passenden Ziele. Plan und Abnahme stehen dort; neue Meldungen sind seit dieser Freigabe noch nicht eingegangen.
