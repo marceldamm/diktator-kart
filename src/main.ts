@@ -145,6 +145,9 @@ class App {
   private medals:MedalWorld={medals:[],counts:[],events:[]};
   /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
   private autoQuality=false;
+  private lastRenderAt=0;
+  /** Another window of the game is active; this one draws nothing until the player resumes it here. */
+  private parked=false;
   private padButtons=new Map<string,boolean>();
   private gamepadSeen=false;
   /** Action waiting for its new key in the options (null = not listening). */
@@ -196,6 +199,15 @@ class App {
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ react: (kart: number, kind: 'cheer'|'fist'|'angry') => this.testScene?.driverReaction?.(kart, kind), crowd: (kind: 'wave'|'cheer', kart?: number) => this.testScene?.crowdReact?.(kind, kart), startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    // Performance 10.10.2026: every start of the game batch opens another Chrome window and older windows kept drawing
+    // the full 3D scene (and playing sound). The newest window takes over; older ones park until "Hier weiterspielen".
+    try {
+      const channel = new BroadcastChannel('diktator-kart-window'), id = `${Date.now()}-${Math.random()}`;
+      channel.onmessage = (event: MessageEvent<{ type?: string; id?: string }>) => { if (event.data?.type === 'active' && event.data.id !== id) this.park(true); };
+      const claim = () => { channel.postMessage({ type: 'active', id }); this.park(false); };
+      document.querySelector('#parked-resume')?.addEventListener('click', claim);
+      claim();
+    } catch { /* BroadcastChannel unavailable: single window only */ }
     try { this.autoQuality = localStorage.getItem('dk-quality') === null && !LAB_WORLD && !new URLSearchParams(location.search).has('demo'); } catch { /* storage optional */ }
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
@@ -886,6 +898,15 @@ class App {
     }
   }
 
+  private park(on: boolean): void {
+    if (this.parked === on) return;
+    this.parked = on;
+    document.body.classList.toggle('parked', on);
+    if (on && this.state === 'running' && this.racePhase !== 'practice') this.togglePause();
+    this.input.reset();
+    this.audio.park(on);
+  }
+
   private togglePause(): void {
     if (this.state === 'running') {
       this.queuedHopPress = false;
@@ -898,6 +919,7 @@ class App {
 
   private frame(): void {
     const now = performance.now();
+    if (this.parked) return;
     if (this.state === 'running' && !document.hidden && this.lastFrameAt > 0) {
       const elapsed = now - this.lastFrameAt;
       if (elapsed > 0 && elapsed < 500) {
@@ -1317,6 +1339,17 @@ class App {
       const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);
       this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness, rollSurface);
     }
+    // Performance 10.10.2026: menus, driver/track selection and the pause screen only need ~30/15 frames per second;
+    // the race itself always renders every frame. Skipped frames hand their time to the next render, so particles,
+    // crowd and animations keep their real speed.
+    // While the automatic quality choice still samples frame times, every frame renders.
+    // Behind other windows (no keyboard focus) menus and pause drop to 10 frames per second.
+    const idle = (this.camera?.introMode || this.selecting || this.selectingTrack) ? 32 : this.state === 'paused' && !this.camera?.photoMode ? 66 : 0;
+    const calm = this.autoQuality || !idle ? 0 : document.hasFocus() ? idle : 100;
+    const sinceRender = now - this.lastRenderAt;
+    if (this.testScene && calm && sinceRender < calm - 4) return;
+    if (this.engine && this.lastRenderAt > 0 && sinceRender < 200 && sinceRender > this.engine.getDeltaTime() + 1) (this.engine as unknown as { _deltaTime: number })._deltaTime = sinceRender;
+    this.lastRenderAt = now;
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();

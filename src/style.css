@@ -82,6 +82,12 @@ button:disabled { opacity: .5; cursor: default; }
 .showcase-controls b { color: #f1ddb0; font-size: 10px; }
 .showcase #debug { position: fixed; top: 105px; left: 30px; width: 365px; max-height: calc(100dvh - 135px); margin: 0; background: #071c22f2; border: 1px solid #d5b87855; font-size: 11px; }
 #countdown { position: absolute; top: 40%; left: 50%; transform: translate(-50%,-50%); font: italic bold 130px Georgia,serif; color: #ffe4a8; text-shadow: 0 6px 30px #000c; }
+#parked-card { display: none; }
+body.parked #parked-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; position: fixed; inset: 0; z-index: 50; padding: 16px; text-align: center; background: #08151df2; }
+#parked-card span { color: #d7bc86; letter-spacing: .2em; font-size: 10px; }
+#parked-card h2 { margin: 0; font: 30px Georgia,serif; color: #f0dfb7; }
+#parked-card p { margin: 0 0 8px; color: #b5c5bf; font-size: 13px; }
+#parked-card button { padding: 12px 22px; background: #d6b77a; color: #152a30; font-weight: 700; border: 0; cursor: pointer; }
 #finish-card { position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); width: min(560px,90vw); padding: 32px; text-align: center; background: #10262eee; border: 1px solid #d3b477; box-shadow: 0 24px 80px #0008; }
 #finish-card span { color: #d7bc86; letter-spacing: .2em; font-size: 10px; }
 #finish-card h2 { font: 32px Georgia,serif; color: #f0dfb7; }

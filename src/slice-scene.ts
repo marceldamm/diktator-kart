@@ -19,6 +19,7 @@ import { SpotLight } from '@babylonjs/core/Lights/spotLight';
 import { PointLight } from '@babylonjs/core/Lights/pointLight';
 import { Light } from '@babylonjs/core/Lights/light';
 import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
+import { Frustum } from '@babylonjs/core/Maths/math.frustum';
 import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent';
 import { GlowLayer } from '@babylonjs/core/Layers/glowLayer';
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem';
@@ -166,6 +167,16 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       if (glowing.has(mesh) && emissive) result.set(emissive.r, emissive.g, emissive.b, 1); else result.set(0, 0, 0, 1);
     };
     glow.addExcludedMesh(sky);
+    // Performance 10.10.2026: as occluders only the big kart silhouettes and the drivers draw into the glow map, not
+    // every city tile and kart rivet (saved ~450 draw calls per glow refresh). Lamps behind buildings may glow faintly through.
+    const occluderCache = new Map<number, boolean>();
+    const glowThin = (glow as unknown as { _thinEffectLayer?: { _shouldRenderMesh: (mesh: AbstractMesh) => boolean } })._thinEffectLayer;
+    if (glowThin) glowThin._shouldRenderMesh = (mesh) => {
+      if (glowing.has(mesh)) return true;
+      let occludes = occluderCache.get(mesh.uniqueId);
+      if (occludes === undefined) { occludes = /^cc0-|^kart\d+\/.*(Petrol enamel|Tire rubber|Uniform racing suit|Cape cloth|Hat cloth)/.test(mesh.name); occluderCache.set(mesh.uniqueId, occludes); }
+      return occludes;
+    };
     for(const mesh of trackWorld.glowMeshes) markGlow(mesh);
     for(const mesh of city.glowMeshes) markGlow(mesh);
     const container = await LoadAssetContainerAsync('/assets/models/hero-kart.glb', scene);
@@ -298,6 +309,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           v.shadowMeshes=root.getChildMeshes().filter(mesh=>mesh.isEnabled()&&/Petrol enamel|Tire rubber|driverPose \/ Uniform racing suit|Cape cloth|Hat cloth/.test(mesh.name));
         } };
       v.dress(CAST[index % CAST.length]);
+      // Performance 10.10.2026: pedals, hub caps, goggles and other small parts vanish beyond 30 m (a few pixels there),
+      // roughly halving the draw calls of every distant kart.
+      for (const mesh of root.getChildMeshes()) if (mesh instanceof Mesh && mesh.getTotalIndices() > 0 && !glowing.has(mesh)) {
+        mesh.computeWorldMatrix(true);
+        // The pedals sit in the dark footwell: only the cockpit view and close-ups (under 3.5 m) can see them.
+        if (pedals.some((pedal) => pedal && mesh.isDescendantOf(pedal))) mesh.addLODLevel(3.5, null);
+        else if (mesh.getBoundingInfo().boundingSphere.radiusWorld < .45) mesh.addLODLevel(30, null);
+      }
       return v;
     });
     const contactTexture = new DynamicTexture('Soft grounded contact', 128, scene, false);
@@ -782,7 +801,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             const bracket = pedalBrackets[index]?.[k]; if (bracket) { bracket.position.set(pedal.position.x, (at[1] + .6) / 2, pedal.position.z); bracket.scaling.y = Math.max(.01, at[1] - .6); } });
         };
         const pedalBrackets: Mesh[][] = [];
-        pedalBrackets[index] = v.pedals.map((pedal) => { const m = MeshBuilder.CreateCylinder(`Pedal floor bracket ${index}`, { diameter: .03, height: 1, tessellation: 6 }, scene); m.material = pedalSteel; m.parent = pedal?.parent ?? v.orientation; m.isPickable = false; return m; });
+        pedalBrackets[index] = v.pedals.map((pedal) => { const m = MeshBuilder.CreateCylinder(`Pedal floor bracket ${index}`, { diameter: .03, height: 1, tessellation: 6 }, scene); m.material = pedalSteel; m.parent = pedal?.parent ?? v.orientation; m.isPickable = false; m.addLODLevel(3.5, null); return m; });
         const dress = v.dress; v.dress = (cast: CastMember) => { dress(cast); sit(cast); placePedals(cast); };
         sit(CAST[(roster[index] ?? index) % CAST.length]); placePedals(CAST[(roster[index] ?? index) % CAST.length]);
         return seat;
@@ -1301,7 +1320,11 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         });
         const map=shadow.getShadowMap();
         if(map&&shouldRefreshShadowCasters(time,lastShadowCasterRefresh)) {
-          map.renderList=[...staticShadowMeshes,
+          // Performance 10.10.2026: Babylon draws every caster in the list into the shadow map without culling, so the
+          // whole city (~900 draws, 3.7 M triangles) went in each frame. Keep only the static casters that touch the
+          // sun's shadow box (8 m margin covers the kart moving until the next refresh).
+          const planes = Frustum.GetPlanes(shadow.getTransformMatrix());
+          map.renderList=[...staticShadowMeshes.filter((mesh) => { const sphere = mesh.getBoundingInfo().boundingSphere; return planes.every((plane) => plane.dotCoordinate(sphere.centerWorld) > -sphere.radiusWorld - 8); }),
             ...treeShadows.filter(t=>Math.hypot(t.root.position.x-state.x,t.root.position.z-state.z)<44).flatMap(t=>t.meshes),
             ...visuals.filter(v=>Math.hypot(v.root.position.x-state.x,v.root.position.z-state.z)<45).flatMap(v=>v.shadowMeshes),
             ...itemShadowMeshes.filter(mesh=>mesh.isEnabled())];

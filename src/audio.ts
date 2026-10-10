@@ -167,8 +167,23 @@ export class KartAudio {
   thunder():void { const b=this.tankCues.get('thunder'); window.setTimeout(()=>this.play(b,.8,.85+Math.random()*.3),500+Math.random()*1200); }
   /** Parade tank: transform clank and hiss, revert, heavy run-over thud. */
   ability(kind:'transform'|'revert'|'crush'):void { this.play(this.tankCues.get(kind==='crush'?'tank-crush':'tank-transform'),kind==='crush'?.75:.7,kind==='revert'?1.25:1); }
+  /** Another game window took over (10.10.2026): fall silent until this window is resumed. */
+  private parkedMusic=false;
+  park(on:boolean):void {
+    if(on){this.parkedMusic=!this.music.paused;this.music.pause();void this.context?.suspend();}
+    else{void this.context?.resume();if(this.parkedMusic)void this.music.play().catch(()=>{});this.parkedMusic=false;}
+  }
   dispose():void {this.music.pause();this.music.src='';void this.context?.close();this.context=undefined;}
   /** crowdNearness 0..1: how close the player is to the grandstands. */
+  /** Performance 10.10.2026: schedule a ramp only when the target really moves; calling setTargetAtTime every frame for
+   * ten parameters piled up automation events on the audio thread. */
+  private readonly glideTargets = new WeakMap<AudioParam, number>();
+  private glide(param: AudioParam | undefined, value: number, t: number, constant: number): void {
+    if (!param) return;
+    const last = this.glideTargets.get(param);
+    if (last !== undefined && Math.abs(last - value) < .002) return;
+    this.glideTargets.set(param, value); param.setTargetAtTime(value, t, constant);
+  }
   update(state: KartState, running: boolean, crowdNearness = 0, surface: 'cobble' | 'gravel' | 'grass' | 'water' = 'cobble'): void {
     const dt = 1 / 60;
     this.duck = Math.max(0, this.duck - dt); this.crowdSwell = Math.max(0, this.crowdSwell - dt * .45);
@@ -182,25 +197,25 @@ export class KartAudio {
     this.lastGear = gear; this.shiftDip = Math.max(0, this.shiftDip - dt);
     const turbo = state.turboRemaining > 0 ? .12 : 0;
     const rate = .62 + Math.min(1, band) * .58 + gear * .05 + turbo - this.shiftDip * 1.6;
-    this.engine.playbackRate.setTargetAtTime(Math.max(.5, rate), t, this.shiftDip > 0 ? .02 : .06);
-    this.engineGain.gain.setTargetAtTime(running ? (.13 + Math.min(1, band) * .07 + gear * .012) * (this.shiftDip > 0 ? .7 : 1) : 0, t, .08);
-    this.tireGain.gain.setTargetAtTime(running && state.drifting ? .28 : 0, t, .08);
+    this.glide(this.engine.playbackRate, Math.max(.5, rate), t, this.shiftDip > 0 ? .02 : .06);
+    this.glide(this.engineGain.gain, running ? (.13 + Math.min(1, band) * .07 + gear * .012) * (this.shiftDip > 0 ? .7 : 1) : 0, t, .08);
+    this.glide(this.tireGain.gain, running && state.drifting ? .28 : 0, t, .08);
     // Rolling noise follows the surface under the wheels; pitch and level rise with speed.
     const rolling = running && state.grounded && speed > .6 ? Math.min(1, speed / 14) : 0;
     for (const [kind, roll] of this.rolls) {
       const level = kind === surface ? (kind === 'cobble' ? .15 : kind === 'gravel' ? .22 : .13) * rolling : 0;
-      roll.gain.gain.setTargetAtTime(level, t, .12); roll.source.playbackRate.setTargetAtTime(.62 + Math.min(1.1, speed / 20), t, .1);
+      this.glide(roll.gain.gain, level, t, .12); this.glide(roll.source.playbackRate, .62 + Math.min(1.1, speed / 20), t, .1);
     }
     if (running && surface === 'water' && this.lastSurface !== 'water') this.play(this.splash, .7, .9 + Math.random() * .2);
     this.lastSurface = surface;
-    this.scrapeGain?.gain.setTargetAtTime(running && state.scrapeRemaining > 0 && state.scrapeKind === 'wall' && speed > 2 ? .16 + Math.min(.2, speed * .012) : 0, t, .04);
+    this.glide(this.scrapeGain?.gain, running && state.scrapeRemaining > 0 && state.scrapeKind === 'wall' && speed > 2 ? .16 + Math.min(.2, speed * .012) : 0, t, .04);
     // Kart-to-kart bumps: a soft body thud instead of the metal scrape.
     const bump = state.scrapeKind === 'kart' && state.scrapeRemaining > .2;
     if (running && bump && !this.lastBump) this.play(this.impact, .3, 1.35);
     this.lastBump = bump;
-    this.crowdGain?.gain.setTargetAtTime(running ? (.035 + crowdNearness * .16 + this.crowdSwell * .22) * (this.duck > 0 ? .7 : 1) : .02, t, .3);
-    this.rainGain?.gain.setTargetAtTime(this.raining ? (running ? .32 : .2) : 0, t, .4);
-    this.tankGain?.gain.setTargetAtTime(running && (state.tankRemaining ?? 0) > 0 ? .3 + Math.min(.2, speed * .012) : 0, t, .15);
+    this.glide(this.crowdGain?.gain, running ? (.035 + crowdNearness * .16 + this.crowdSwell * .22) * (this.duck > 0 ? .7 : 1) : .02, t, .3);
+    this.glide(this.rainGain?.gain, this.raining ? (running ? .32 : .2) : 0, t, .4);
+    this.glide(this.tankGain?.gain, running && (state.tankRemaining ?? 0) > 0 ? .3 + Math.min(.2, speed * .012) : 0, t, .15);
     const impact = state.impactRemaining > 0, boost = state.turboRemaining > 0;
     if (running && impact && !this.lastImpact) this.play(this.impact, .65);
     if (running && boost && !this.lastBoost) this.play(this.boost, .45);
