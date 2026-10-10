@@ -10,10 +10,10 @@ export const GP_TRACKS: readonly TrackId[] = ['stadionring', 'duce-drom', 'havan
 export const GP_POINTS = [10, 7, 5, 3, 2, 1] as const;
 
 export interface GrandPrixResult { track: TrackId; /** Roster (CAST) indices in finishing order. */ order: number[]; points: number[]; time: number }
-export interface GrandPrix { tracks: TrackId[]; round: number; results: GrandPrixResult[] }
+export interface GrandPrix { tracks: TrackId[]; round: number; results: GrandPrixResult[]; /** Counts this cup once in the Ehrenregister. */ id: string }
 
 export function createGrandPrix(tracks: readonly TrackId[] = GP_TRACKS): GrandPrix {
-  return { tracks: [...tracks], round: 0, results: [] };
+  return { tracks: [...tracks], round: 0, results: [], id: `gp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}` };
 }
 
 /** Records the finish of the current round once; a repeated call for the same round is ignored. */

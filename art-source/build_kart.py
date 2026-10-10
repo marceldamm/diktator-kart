@@ -295,7 +295,9 @@ for x in [-.18, 0, .18]:
     tube('Seat upholstery vertical seam', [(x, -.881, .86), (x, -.881, 1.0), (x, -.881, 1.16)], .0018, seat_thread, kart)
 for z in [.91, 1.105]:
     tube('Seat upholstery cross seam', [(-.235, -.881, z), (0, -.881, z), (.235, -.881, z)], .0018, seat_thread, kart)
-box('Dashboard', (0, .5, 1.06), (.74, .14, .18), paint, .05, kart)
+# Leg room 10.10.2026 (second pass): the dashboard reaches down and forward as a scuttle over the footwell, so feet
+# and lower shins disappear under it instead of standing on or poking through the bonnet (Mussolini, Stalin, Kim).
+box('Dashboard', (0, .56, 1.0), (.74, .28, .3), paint, .05, kart)
 for x, r in [(-.2, .06), (0, .085), (.2, .06)]:
     cyl('Gauge brass bezel', (x, .42, 1.1), r, .025, trim, kart, 'Y')
     cyl('Gauge face', (x, .405, 1.1), r * .85, .008, ivory, kart, 'Y')
@@ -971,8 +973,9 @@ apply_all()
 # an open cockpit pocket from the seat back to just behind the windscreen/dashboard, floored at z 0.62, so thighs
 # and knees sit visibly in the kart. Shins still run under the dashboard into the closed nose like a real footwell.
 def cockpit_cut():
-    fronts = {'Grand Prix enamel body': .2, 'Sculpted enamel body': .44, 'Limousine enamel body': .3, 'Limousine sculpted bonnet': .3,
-              'Racer enamel body': .28, 'Rounded enamel body': .44, 'Rocket enamel body': .44, 'Jeep tub': .44}
+    # Second pass 10.10.2026: every pocket reaches under the deeper dashboard (y 0.42-0.70), where the feet rest.
+    fronts = {'Grand Prix enamel body': .68, 'Sculpted enamel body': .68, 'Limousine enamel body': .68, 'Limousine sculpted bonnet': .68,
+              'Racer enamel body': .68, 'Rounded enamel body': .68, 'Rocket enamel body': .68, 'Jeep tub': .68}
     for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.name.split('.')[0] in fronts]:
         front = fronts[o.name.split('.')[0]]
         bpy.ops.mesh.primitive_cube_add(size=1)

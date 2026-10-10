@@ -7,6 +7,8 @@ import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { VertexBuffer } from '@babylonjs/core/Buffers/buffer';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
+import { SubMesh } from '@babylonjs/core/Meshes/subMesh';
+import { BoundingInfo } from '@babylonjs/core/Culling/boundingInfo';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
@@ -467,31 +469,69 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     }
   }
   const v = new Vector3(), out = new Vector3();
-  for (const [key, bucket] of buckets) {
+  // Performance 10.10.2026: all material batches of one tile share a single vertex buffer. Each material mesh draws
+  // its own index range as before, and one extra shadow-only mesh draws every opaque caster of the tile in a single
+  // call (the shadow map does not need materials): ~200 shadow draws per frame became ~10, without extra memory.
+  const SHADOW_ONLY = 0x20000000;
+  const tiles = new Map<string, [string, typeof buckets extends Map<string, infer B> ? B : never][]>();
+  for (const entry of buckets) { const tile = entry[0].split('|')[0]; if (!tiles.has(tile)) tiles.set(tile, []); tiles.get(tile)!.push(entry); }
+  const castsShadow = (name: string) => !/glass|lamp|water|crowd skin|lantern/.test(name);
+  for (const [tile, entries] of tiles) {
+    // Opaque casters first, so the shadow mesh covers one contiguous index range.
+    const opaque = (bucket: (typeof entries)[number][1]) => castsShadow(bucket.material?.name ?? '') && !bucket.material?.needAlphaTesting() && !bucket.material?.needAlphaBlending();
+    entries.sort((a, b) => Number(opaque(b[1])) - Number(opaque(a[1])));
     let vertices = 0, indices = 0;
-    for (const it of bucket.items) { vertices += it.d.pos.length / 3; indices += it.d.idx.length; }
+    for (const [, bucket] of entries) for (const it of bucket.items) { vertices += it.d.pos.length / 3; indices += it.d.idx.length; }
     const pos = new Float32Array(vertices * 3), nor = new Float32Array(vertices * 3), uv = new Float32Array(vertices * 2), col = new Float32Array(vertices * 4), idx = new Uint32Array(indices);
-    let vo = 0, io = 0;
-    for (const { d, m, tint } of bucket.items) {
-      const n = d.pos.length / 3;
-      for (let i = 0; i < n; i++) {
-        Vector3.TransformCoordinatesFromFloatsToRef(d.pos[i * 3], d.pos[i * 3 + 1], d.pos[i * 3 + 2], m, out); const o3 = (vo + i) * 3; pos[o3] = out.x; pos[o3 + 1] = out.y; pos[o3 + 2] = out.z;
-        v.set(d.nor[i * 3], d.nor[i * 3 + 1], d.nor[i * 3 + 2]); Vector3.TransformNormalToRef(v, m, out); out.normalize(); nor[o3] = out.x; nor[o3 + 1] = out.y; nor[o3 + 2] = out.z;
-        if (d.uv) { uv[(vo + i) * 2] = d.uv[i * 2]; uv[(vo + i) * 2 + 1] = d.uv[i * 2 + 1]; }
-        const r = d.col ? d.col[i * 4] : 1, g = d.col ? d.col[i * 4 + 1] : 1, b = d.col ? d.col[i * 4 + 2] : 1;
-        const o4 = (vo + i) * 4; col[o4] = tint ? r * tint.r : r; col[o4 + 1] = tint ? g * tint.g : g; col[o4 + 2] = tint ? b * tint.b : b; col[o4 + 3] = 1;
+    let vo = 0, io = 0, shadowIndices = 0, shadowVertices = 0;
+    const ranges: { key: string; bucket: (typeof entries)[number][1]; v0: number; i0: number; vn: number; in: number; min: Vector3; max: Vector3 }[] = [];
+    for (const [key, bucket] of entries) {
+      const range = { key, bucket, v0: vo, i0: io, vn: 0, in: 0, min: new Vector3(Infinity, Infinity, Infinity), max: new Vector3(-Infinity, -Infinity, -Infinity) };
+      for (const { d, m, tint } of bucket.items) {
+        const n = d.pos.length / 3;
+        for (let i = 0; i < n; i++) {
+          Vector3.TransformCoordinatesFromFloatsToRef(d.pos[i * 3], d.pos[i * 3 + 1], d.pos[i * 3 + 2], m, out); const o3 = (vo + i) * 3; pos[o3] = out.x; pos[o3 + 1] = out.y; pos[o3 + 2] = out.z;
+          range.min.minimizeInPlace(out); range.max.maximizeInPlace(out);
+          v.set(d.nor[i * 3], d.nor[i * 3 + 1], d.nor[i * 3 + 2]); Vector3.TransformNormalToRef(v, m, out); out.normalize(); nor[o3] = out.x; nor[o3 + 1] = out.y; nor[o3 + 2] = out.z;
+          if (d.uv) { uv[(vo + i) * 2] = d.uv[i * 2]; uv[(vo + i) * 2 + 1] = d.uv[i * 2 + 1]; }
+          const r = d.col ? d.col[i * 4] : 1, g = d.col ? d.col[i * 4 + 1] : 1, b = d.col ? d.col[i * 4 + 2] : 1;
+          const o4 = (vo + i) * 4; col[o4] = tint ? r * tint.r : r; col[o4 + 1] = tint ? g * tint.g : g; col[o4 + 2] = tint ? b * tint.b : b; col[o4 + 3] = 1;
+        }
+        for (let k = 0; k < d.idx.length; k++) idx[io + k] = d.idx[k] + vo;
+        vo += n; io += d.idx.length;
       }
-      for (let k = 0; k < d.idx.length; k++) idx[io + k] = d.idx[k] + vo;
-      vo += n; io += d.idx.length;
+      range.vn = vo - range.v0; range.in = io - range.i0;
+      if (opaque(bucket)) { shadowIndices = io; shadowVertices = vo; }
+      ranges.push(range);
     }
-    const mesh = new Mesh(`City ${key}`, scene);
-    const data = new VertexData(); data.positions = pos; data.normals = nor; data.uvs = uv; data.colors = col; data.indices = idx; data.applyToMesh(mesh, false);
-    mesh.material = bucket.material; mesh.hasVertexAlpha = false; mesh.isPickable = false; mesh.receiveShadows = true;
-    const name = bucket.material?.name ?? '';
-    if (!/glass|lamp|water|crowd skin|lantern/.test(name)) shadow.addShadowCaster(mesh);
-    if (/lamp glass|lantern silk/.test(name)) glowMeshes.push(mesh);
-    mesh.freezeWorldMatrix(); mesh.doNotSyncBoundingInfo = true;
-    meshes.push(mesh);
+    const data = new VertexData(); data.positions = pos; data.normals = nor; data.uvs = uv; data.colors = col; data.indices = idx;
+    let geometry: Mesh['geometry'] = null;
+    const share = (mesh: Mesh, v0: number, vn: number, i0: number, n: number, min: Vector3, max: Vector3) => {
+      if (!geometry) { data.applyToMesh(mesh, false); geometry = mesh.geometry; } else geometry.applyToMesh(mesh);
+      mesh.subMeshes = []; new SubMesh(0, v0, vn, i0, n, mesh);
+      mesh.setBoundingInfo(new BoundingInfo(min, max));
+      mesh.isPickable = false; mesh.freezeWorldMatrix(); mesh.doNotSyncBoundingInfo = true;
+    };
+    for (const range of ranges) {
+      const mesh = new Mesh(`City ${range.key}`, scene);
+      share(mesh, range.v0, range.vn, range.i0, range.in, range.min, range.max);
+      mesh.material = range.bucket.material; mesh.hasVertexAlpha = false; mesh.receiveShadows = true;
+      const name = range.bucket.material?.name ?? '';
+      if (castsShadow(name) && !opaque(range.bucket)) shadow.addShadowCaster(mesh);
+      if (/lamp glass|lantern silk/.test(name)) glowMeshes.push(mesh);
+      meshes.push(mesh);
+    }
+    if (shadowIndices > 0) {
+      const opaqueRanges = ranges.filter((range) => range.i0 < shadowIndices);
+      const min = opaqueRanges.reduce((a, r) => a.minimizeInPlace(r.min), new Vector3(Infinity, Infinity, Infinity)), max = opaqueRanges.reduce((a, r) => a.maximizeInPlace(r.max), new Vector3(-Infinity, -Infinity, -Infinity));
+      const caster = new Mesh(`City shadow ${tile}`, scene);
+      share(caster, 0, shadowVertices, 0, shadowIndices, min, max);
+      caster.layerMask = SHADOW_ONLY; caster.receiveShadows = false; shadow.addShadowCaster(caster);
+      meshes.push(caster);
+    }
+    // The GPU keeps its copy; the JavaScript copy of ~4.5 M merged triangles cost ~250 MB of heap (10.10.2026).
+    // These tiles are never picked or re-measured, so the CPU-side vertex data can go.
+    (geometry as Mesh['geometry'])?.clearCachedData();
   }
   for (const list of parts.values()) for (const mesh of list) mesh.dispose(false, false);
 

@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 10.10.2026 – Claude: Leistungsmessung
+
+- Messwerkzeuge (lokal, ignoriert): `.tools/claude/perf-ab.mjs` (Menü/Rennen/Pause), `menu-rt.mjs` (synchrone Renderzeit), `g.js` (Zeichenaufrufe je Pass). Messungen schwanken auf dem Laptop stark (Takt, andere Chrome-Fenster); nur A/B im selben Lauf vergleichen.
+- Babylon-Schattenkarten frustum-cullen nicht: Schattenwerfer-Listen immer selbst begrenzen. Kart-Meshes sind jetzt der größte Einzelposten (~9 ms im Menü).
+- Pose-Blends mit Blender 5.2 öffnen (mit 5.2 gespeichert); `DK_KART_GLB=.tools/raw-models/hero-kart.glb` für den Kart-Tausch, da Blender die meshopt-Laufzeitdatei nicht lesen kann.
+
 ## 10.10.2026 – Codex: Umweltprüfung und Abschlussreserve
 
 **Korrektur vor Sicherung:** Die erste Thin-Instance-Variante verlor in der finalen Berliner Hauptansicht die Bäume. Für Stadtbäume daher den vorhandenen räumlichen Materialbatch-Pfad beibehalten; Parkbäume teilen weiterhin ihre Geometrie. Die finale Berliner Baumansicht wurde nach dieser Korrektur erneut aufgenommen und mit sichtbaren Laubbäumen kontrolliert. Die übrigen fünf Umweltbilder dokumentieren Boden-/Kurs-Stichproben vor diesem letzten Batchingwechsel; keine finale Rundum-Baumabnahme daraus ableiten. Keine Behauptung einer bestandenen Fern-LOD- oder Geräteprüfung.

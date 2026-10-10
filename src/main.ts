@@ -17,6 +17,7 @@ import { RAMP_LENGTH, RAMP_LIPS, TRACKS, TRACK_INFO, sampleTrack, type TrackId }
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
 import { pickQuality } from './auto-quality';
+import { describeRecord, loadProgress, recordCup, resetProgress, saveProgress } from './cup-progress';
 import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
 import { MeshoptCompression } from '@babylonjs/core/Meshes/Compression/meshoptCompression';
 
@@ -145,6 +146,11 @@ class App {
   private medals:MedalWorld={medals:[],counts:[],events:[]};
   /** True until the automatic start value for the graphics level has been chosen (no saved choice yet). */
   private autoQuality=false;
+  private lastRenderAt=0;
+  /** Another window of the game is active; this one draws nothing until the player resumes it here. */
+  private parked=false;
+  /** Ehrenregister: finished Grand Prix and trophies per driver, kept across sessions. */
+  private cup=loadProgress();
   private padButtons=new Map<string,boolean>();
   private gamepadSeen=false;
   /** Action waiting for its new key in the options (null = not listening). */
@@ -196,6 +202,15 @@ class App {
 
   constructor() {
     Object.defineProperty(window, '__DK', { get: () => ({ react: (kart: number, kind: 'cheer'|'fist'|'angry') => this.testScene?.driverReaction?.(kart, kind), crowd: (kind: 'wave'|'cheer', kart?: number) => this.testScene?.crowdReact?.(kind, kart), startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    // Performance 10.10.2026: every start of the game batch opens another Chrome window and older windows kept drawing
+    // the full 3D scene (and playing sound). The newest window takes over; older ones park until "Hier weiterspielen".
+    try {
+      const channel = new BroadcastChannel('diktator-kart-window'), id = `${Date.now()}-${Math.random()}`;
+      channel.onmessage = (event: MessageEvent<{ type?: string; id?: string }>) => { if (event.data?.type === 'active' && event.data.id !== id) this.park(true); };
+      const claim = () => { channel.postMessage({ type: 'active', id }); this.park(false); };
+      document.querySelector('#parked-resume')?.addEventListener('click', claim);
+      claim();
+    } catch { /* BroadcastChannel unavailable: single window only */ }
     try { this.autoQuality = localStorage.getItem('dk-quality') === null && !LAB_WORLD && !new URLSearchParams(location.search).has('demo'); } catch { /* storage optional */ }
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
@@ -254,6 +269,13 @@ class App {
     this.audio.setMusicVolume(Number(musicVolume.value)/100);
     musicVolume.addEventListener('input',()=>{this.audio.setMusicVolume(Number(musicVolume.value)/100);try{localStorage.setItem('dk-music-volume',musicVolume.value);}catch{}});
     document.querySelector('#motion-toggle')?.addEventListener('click',()=>{this.reducedMotion=!this.reducedMotion;this.applyMotion();});
+    { // Two clicks reset the Ehrenregister, so a stray click cannot wipe it.
+      const reset = document.querySelector<HTMLButtonElement>('#cup-reset'); let armed = 0;
+      reset?.addEventListener('click', () => {
+        if (performance.now() - armed > 4000) { armed = performance.now(); reset.textContent = 'Wirklich löschen?'; window.setTimeout(() => { if (performance.now() - armed >= 4000) reset.textContent = 'Ehrenregister löschen'; }, 4100); return; }
+        this.cup = resetProgress(); armed = 0; reset.textContent = 'Ehrenregister gelöscht';
+      });
+    }
     document.querySelector('#quality-toggle')?.addEventListener('click', () => { this.autoQuality = false; this.quality = (this.quality + 1) % 3; this.applyQuality(); });
     try { const asked = new URLSearchParams(location.search).get('weather') ?? localStorage.getItem('dk-weather-choice'); if (asked === 'sun' || asked === 'rain' || asked === 'snow' || asked === 'random') this.weatherChoice = asked; } catch { /* storage optional */ }
     document.querySelector('#weather-toggle')?.addEventListener('click', () => {
@@ -581,7 +603,8 @@ class App {
     const next = document.createElement('button'); next.type = 'button'; next.textContent = '▶'; next.addEventListener('click', () => this.cycleTires(1));
     const label = document.createElement('span'); label.innerHTML = '<em>Reifen:</em> '; label.append(`${set.name} (${set.owner})${this.tireChoice === 'auto' ? ' · eigene' : ''}`);
     tires.append(prev, label, next);
-    detail.append(title, kartLine, line, ability, rival, tires);
+    const record = document.createElement('div'); record.className = 'driver-record'; record.textContent = describeRecord(this.cup.drivers[this.chosen]);
+    detail.append(title, kartLine, line, ability, rival, tires, record);
   }
 
   private async beginRace(): Promise<void> {
@@ -872,8 +895,12 @@ class App {
     table.append(list); table.hidden = false;
     if (last) {
       const champion = rows[0].driver, won = champion === me;
+      // Ehrenregister: the final standing counts once per cup (a second finish screen or reload adds nothing).
+      const place = rows.findIndex((row) => row.driver === me) + 1, trophy = DEMO ? null : recordCup(this.cup, gp.id, me, place);
+      if (trophy !== null) saveProgress(this.cup);
+      const award = trophy === null ? '' : trophy === 'none' ? ` · Ehrenregister: Grand Prix Nr. ${this.cup.drivers[me]?.cups ?? 1} eingetragen` : ` · Ehrenregister: ${{ gold: 'Gold', silver: 'Silber', bronze: 'Bronze' }[trophy]}-Pokal für ${CAST[me].name}`;
       document.querySelector('#finish-title')!.textContent = won ? 'Grand-Prix-Sieg · amtlich bestätigt' : `Grand Prix an ${CAST[champion].name}`;
-      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.filter((r) => r.order.length).map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}`;
+      document.querySelector('#finish-detail')!.textContent = `${won ? 'Ergebnis ausnahmsweise korrekt gezählt.' : 'Der Pokal wurde bereits graviert. Diesmal stimmt sogar der Name.'} · Rennen: ${gp.results.filter((r) => r.order.length).map((r) => `${TRACKS[r.track].name} P${r.order.indexOf(me) + 1}`).join(' · ')}${award}`;
       const podium = document.querySelector<HTMLImageElement>('#finish-portrait');
       if (podium) { const shot = this.portraits?.[champion]; podium.hidden = !shot; if (shot) { podium.src = shot; podium.alt = `Grand-Prix-Sieger ${CAST[champion].name}`; } }
       this.startCeremony(rows.slice(0, 3).map((row) => this.order.indexOf(row.driver)));
@@ -884,6 +911,15 @@ class App {
       retry.innerHTML = `Nächstes Rennen: ${next.name} <span>↵</span>`;
       this.finishAction = () => { if (!this.gp) return; this.gp.round++; this.startGpRound(); };
     }
+  }
+
+  private park(on: boolean): void {
+    if (this.parked === on) return;
+    this.parked = on;
+    document.body.classList.toggle('parked', on);
+    if (on && this.state === 'running' && this.racePhase !== 'practice') this.togglePause();
+    this.input.reset();
+    this.audio.park(on);
   }
 
   private togglePause(): void {
@@ -898,6 +934,7 @@ class App {
 
   private frame(): void {
     const now = performance.now();
+    if (this.parked) return;
     if (this.state === 'running' && !document.hidden && this.lastFrameAt > 0) {
       const elapsed = now - this.lastFrameAt;
       if (elapsed > 0 && elapsed < 500) {
@@ -1317,6 +1354,17 @@ class App {
       const rollSurface = LAB_WORLD ? 'cobble' : overCanal(this.kart.x, this.kart.z) || hazardAt(this.kart.x, this.kart.z) === 'water' ? 'water' : drivingSurfaceAt(this.kart.x, this.kart.z);
       this.audio.update(this.kart, this.state === 'running' && this.racePhase !== 'countdown' && this.racePhase !== 'finished', nearness, rollSurface);
     }
+    // Performance 10.10.2026: menus, driver/track selection and the pause screen only need ~30/15 frames per second;
+    // the race itself always renders every frame. Skipped frames hand their time to the next render, so particles,
+    // crowd and animations keep their real speed.
+    // While the automatic quality choice still samples frame times, every frame renders.
+    // Behind other windows (no keyboard focus) menus and pause drop to 10 frames per second.
+    const idle = (this.camera?.introMode || this.selecting || this.selectingTrack) ? 32 : this.state === 'paused' && !this.camera?.photoMode ? 66 : 0;
+    const calm = this.autoQuality || !idle ? 0 : document.hasFocus() ? idle : 100;
+    const sinceRender = now - this.lastRenderAt;
+    if (this.testScene && calm && sinceRender < calm - 4) return;
+    if (this.engine && this.lastRenderAt > 0 && sinceRender < 200 && sinceRender > this.engine.getDeltaTime() + 1) (this.engine as unknown as { _deltaTime: number })._deltaTime = sinceRender;
+    this.lastRenderAt = now;
     this.testScene?.scene.render();
     if (!debug.hidden && performance.now() - this.lastDebugUpdate > 250) {
       this.lastDebugUpdate = performance.now();
