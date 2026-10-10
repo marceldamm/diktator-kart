@@ -19,6 +19,7 @@ import { GROUND, HAZARDS, LANDMARKS, RIVER, SHORTCUT, TRACK_INFO } from './track
 import { surfaceTextures } from './surface-textures';
 import { CrowdWavePlugin } from './crowd-wave';
 import { paintEmblem } from './track-world';
+import { CLIMATE_TREES } from './climate-trees';
 
 /**
  * Redesigned city (06.10.2026): modules from art-source/build_city_kit.py placed along the shared centreline as
@@ -120,6 +121,25 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     parts.get(module)!.push(mesh);
   }
   for (const node of kit.transformNodes) node.setEnabled(false);
+  // Replace selected avenue modules with climate variants before measuring placement footprints.
+  // Source meshes are baked once, then use the same spatial material batches as the city kit.
+  for(const [module,variant] of Object.entries(CLIMATE_TREES[TRACK.id])) {
+    const trees=await LoadAssetContainerAsync(`/assets/models/tree-${variant}.glb`,scene);trees.addAllToScene();
+    scene.onDisposeObservable.add(()=>trees.dispose());
+    const meshes=trees.meshes.filter((m):m is Mesh=>m instanceof Mesh&&m.getTotalVertices()>0);
+    const min=new Vector3(Infinity,Infinity,Infinity),max=new Vector3(-Infinity,-Infinity,-Infinity);
+    for(const mesh of meshes){mesh.computeWorldMatrix(true);const b=mesh.getBoundingInfo().boundingBox;min.minimizeInPlace(b.minimumWorld);max.maximizeInPlace(b.maximumWorld);}
+    const target=variant.startsWith('palm')?9:variant==='pine'?10:8;
+    const scale=target/Math.max(.1,max.y-min.y);
+    const normalize=Matrix.Translation(-(min.x+max.x)/2,-min.y,-(min.z+max.z)/2).multiply(Matrix.Scaling(scale,scale,scale));
+    for(const mesh of meshes){
+      const world=mesh.computeWorldMatrix(true).clone();mesh.parent=null;mesh.position.setAll(0);mesh.rotationQuaternion=null;mesh.rotation.setAll(0);mesh.scaling.setAll(1);
+      mesh.bakeTransformIntoVertices(world.multiply(normalize));mesh.setEnabled(false);mesh.isPickable=false;
+      if(mesh.material instanceof PBRMaterial){mesh.material.roughness=.9;mesh.material.metallic=0;}
+    }
+    for(const node of trees.transformNodes)node.setEnabled(false);
+    parts.set(module,meshes);
+  }
   // Validate the exported geometry too: e.g. palm crowns extend far beyond their old 1 m placement proxy.
   const footprints = new Map<string, Footprint>();
   for (const [name, meshes] of parts) {

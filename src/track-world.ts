@@ -3,6 +3,7 @@ import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
 import { Matrix, Quaternion, Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
+import { VertexBuffer } from '@babylonjs/core/Buffers/buffer';
 import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData';
 import '@babylonjs/core/Meshes/thinInstanceMesh';
 import { PBRMaterial } from '@babylonjs/core/Materials/PBR/pbrMaterial';
@@ -13,6 +14,7 @@ import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGener
 import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, shortcutElevationAt, shortcutEdgeGaps as alleyGaps, SHORTCUT_LENGTH } from './track';
 import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, TRACK_INFO, raisedSpans } from './track-layout';
 import { surfaceTextures } from './surface-textures';
+import { COURSE_GROUND, paintCourseGround } from './course-ground';
 import {addPeriodDetails} from './period-details';
 import { canalFoamBands } from './environment-effects';
 
@@ -149,22 +151,11 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     road.bumpTexture.level = .6; road.roughness = .78;
     for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
   } else if (pyongyang || moscow || beijing) {
-    road.albedoTexture = canvasTexture(scene, moscow ? 'Moscow pale parade slabs' : beijing ? 'Peking grey slabs' : 'Pyongyang granite slabs', 512, 512, (c) => {
-      c.fillStyle = moscow ? '#a29a8c' : beijing ? '#8d8c87' : '#858984'; c.fillRect(0, 0, 512, 512);
-      for (let y = 0; y < 512; y += 128) {
-        const offset = (y / 128) % 2 ? 128 : 0;
-        for (let x = -128 + offset; x < 512; x += 256) {
-          c.fillStyle = moscow ? '#a29a8c' : beijing ? '#8d8c87' : '#858984'; c.fillRect(x + 2, y + 2, 252, 124);
-          c.strokeStyle = moscow ? 'rgba(91,54,49,.35)' : 'rgba(43,48,46,.42)'; c.lineWidth = 2; c.strokeRect(x + 2, y + 2, 252, 124);
-        }
-      }
-    });
-    road.bumpTexture = canvasTexture(scene, moscow ? 'Moscow parade joints' : beijing ? 'Peking slab joints' : 'Pyongyang granite joints', 512, 512, (c) => {
-      c.fillStyle = '#8080ff'; c.fillRect(0, 0, 512, 512); c.strokeStyle = '#6666ef'; c.lineWidth = 5;
-      for (let y = 0; y <= 512; y += 128) { const offset = (y / 128) % 2 ? 128 : 0; c.beginPath(); c.moveTo(0, y); c.lineTo(512, y); c.stroke(); for (let x = offset; x <= 512; x += 256) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 128); c.stroke(); } }
-    });
-    road.bumpTexture.level = .45; road.roughness = .9;
-    for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
+    road.albedoColor=Color3.White();
+    road.roughness=.9;
+    road.albedoTexture=canvasTexture(scene,COURSE_GROUND[TRACK.id].name+' road',512,512,c=>paintCourseGround(c,TRACK.id,false,true));
+    road.bumpTexture=canvasTexture(scene,COURSE_GROUND[TRACK.id].name+' road relief',512,512,c=>paintCourseGround(c,TRACK.id,true));
+    road.bumpTexture.level=.35;
   } else {
   road.albedoTexture = new Texture('/assets/textures/cobble-color.jpg', scene);
   road.bumpTexture = new Texture('/assets/textures/cobble-normal.jpg', scene);
@@ -197,14 +188,20 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
 
   // City ground: a paved square everywhere; lawn only on the bounded park islands.
   const square = pbr(scene, 'City square paving', pyongyang ? '#929791' : '#b9ab8f', 0, 1);
-  square.albedoTexture = new Texture('/assets/textures/herringbone-diff.jpg', scene);
-  square.bumpTexture = new Texture('/assets/textures/herringbone-nor_gl.jpg', scene);
-  for (const t of [square.albedoTexture, square.bumpTexture] as Texture[]) { t.uScale = (GROUND.east - GROUND.west) / 4; t.vScale = (GROUND.north - RIVER.north) / 4; t.anisotropicFilteringLevel = 8; }
+  square.albedoColor=Color3.White();
+  square.albedoTexture=canvasTexture(scene,COURSE_GROUND[TRACK.id].name,512,512,c=>paintCourseGround(c,TRACK.id));
+  square.bumpTexture=canvasTexture(scene,COURSE_GROUND[TRACK.id].name+' relief',512,512,c=>paintCourseGround(c,TRACK.id,true));
+  square.bumpTexture.level=.35;
+  // Four metre texture repeat on every separate ground patch, independent of patch size.
+  const groundUV=(ground:Mesh,width:number,height:number)=>{
+    const uv=ground.getVerticesData(VertexBuffer.UVKind);if(uv){for(let i=0;i<uv.length;i+=2){uv[i]*=width/4;uv[i+1]*=height/4;}ground.setVerticesData(VertexBuffer.UVKind,uv);}
+  };
   // Redesign 06.10.2026: the larger city floor leaves a gap for the River Spree (src/city-world.ts).
   const groundPatch = (west: number, east: number, south: number, north: number) => {
     if (east - west < .2 || north - south < .2) return;
     const ground = MeshBuilder.CreateGround('Park and city terrain', { width: east - west, height: north - south }, scene);
     ground.position.set((east + west) / 2, 0, (north + south) / 2);
+    groundUV(ground,east-west,north-south);
     ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
   };
   if (!pyongyang) {
@@ -223,7 +220,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       };
       for (let z = 0; z <= nz; z++) for (let x = 0; x <= nx; x++) {
         const px = cut.west + (cut.east - cut.west) * x / nx, pz = south + (north - south) * z / nz;
-        positions.push(px, 0, pz); uvs.push(x / nx, z / nz);
+        positions.push(px, 0, pz); uvs.push((px-cut.west)/4,(pz-south)/4);
       }
       for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
         const px = cut.west + (x + .5) * (cut.east - cut.west) / nx, pz = south + (z + .5) * (north - south) / nz;
@@ -237,7 +234,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
     }
   }
-  const lawn = pbr(scene, 'Park lawn', '#4d5f3a', 0, .95);
+  const lawn = pbr(scene, 'Park lawn', COURSE_GROUND[TRACK.id].lawn, 0, .95);
   const lawnMaps = surfaceTextures(scene, 'Lawn', 'grass'); lawn.albedoTexture = lawnMaps.color; lawn.bumpTexture = lawnMaps.normal;
   lawnMaps.color.uScale = lawnMaps.color.vScale = 18; lawnMaps.normal.uScale = lawnMaps.normal.vScale = 18;
   for (const [x0, z0, x1, z1] of LANDMARKS.lawns) {
@@ -746,6 +743,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   // Dry looks per circuit (Pyongyang granite, Moscow and Peking slabs, Havana asphalt): rain darkens these instead of
   // swapping in the Berlin cobble colour, and the sun brings exactly them back.
   const roadDry = { colour: road.albedoColor.clone(), rough: road.roughness ?? 1 }, pavingDry = { colour: paving.albedoColor.clone(), rough: paving.roughness ?? 1 };
+  const squareDry={colour:square.albedoColor.clone(),rough:square.roughness??1};
   return {
     glowMeshes: [globe, ...boostPads, ...hazardGlow],
     lampPositions,
@@ -754,12 +752,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
       // Wet cobbles: darker, much smoother (rain film) and more reflective; puddles appear.
       road.albedoColor = wet ? roadDry.colour.scale(.64) : roadDry.colour.clone(); road.roughness = wet ? .32 : roadDry.rough;
       paving.albedoColor = wet ? pavingDry.colour.scale(.69) : pavingDry.colour.clone(); paving.roughness = wet ? .4 : pavingDry.rough;
+      square.albedoColor=wet?squareDry.colour.scale(.72):squareDry.colour.clone();square.roughness=wet?.42:squareDry.rough;
       for (const m of puddleMeshes) m.setEnabled(wet);
       for (const shadow of cloudShadows) shadow.mesh.setEnabled(wet);
     },
     setSnow(snow) {
       // Light snow cover: pale, slightly glossy cobbles and paving (no grip change, rules stay identical).
       const cover = snow ? new Color3(.3, .31, .34) : Color3.Black(); road.emissiveColor = cover; paving.emissiveColor = cover;
+      square.emissiveColor=cover;
       if (snow) { road.albedoColor = Color3.FromHexString('#f4f5f7'); road.roughness = .62; paving.albedoColor = Color3.FromHexString('#f6f7f9'); paving.roughness = .7; for (const m of puddleMeshes) m.setEnabled(false); }
       else this.setWet(false);
     },

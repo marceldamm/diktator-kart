@@ -1,5 +1,7 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Fortschritt Klima/Boden 10.10.2026:** Sechs kostenlose CC0-Baumvarianten integriert und klimatisch verteilt, Roms mediterrane Originale erhalten; räumliche Materialbatches, begrenzte Texturen und tatsächliche Kronengrenzen. Sechs eigene Platzpflaster/Rasenpaletten, drei verbesserte Fahrbahntexturen und maßstäbliche Bodenkachelung. Prüfung/Belege in CURRENT-WORKLIST.md. Die älteren Ziele bleiben beauftragt; nach dem Umweltcheckpoint greift die Budgetreserve, kein Gesamtabschluss behauptet.
+
 **Fortschritt Musik 10.10.2026:** Sechs eigene thematische Schleifen mit erhaltenem Grundklang integriert; Kompositionsquelle, Datei-/Audiosteuerungstests und sichtbare Wiedergabe vorhanden. Menschliche Hör-/Mischungsabnahme offen. Als Nächstes Klima-Bäume und differenzierte Böden; danach ältere bestätigte Ziele.
 
 **Fortschritt Schaden/Rivalen 10.10.2026:** Vier größere Teileverluststufen mit Reparatur und begrenzten Effekten; drei deutlichere faire Gegnerstufen mit aktivem Linien-/Itemeinsatz implementiert. Sichtbarer Schadenvergleich und reproduzierbare Drei-Runden-Vergleiche aller sechs Kurse stehen in CURRENT-WORKLIST.md. Menschen-/Geräteabnahmen bleiben offen; Streckenmusik, klimatische Bäume/Böden und die älteren bestätigten Spielvertiefungen folgen.

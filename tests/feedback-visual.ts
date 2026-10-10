@@ -33,7 +33,7 @@ function frameCamera() {
   const side = new Vector3(Math.cos(p.heading), 0, -Math.sin(p.heading));
   const ground = trackHeightAt(p.x, p.z), center = new Vector3(p.x, ground + (jump ? 1.4 : 0), p.z);
   const eye = view.value === 'Cockpit';
-  const offset = eye ? f.scale(-.42).add(new Vector3(0, 1.97, 0)) :
+  const offset = view.value === 'Umgebung' ? f.scale(24).add(side.scale(18)).add(new Vector3(0, 12, 0)) : eye ? f.scale(-.42).add(new Vector3(0, 1.97, 0)) :
     view.value === 'Front' ? f.scale(4.5).add(new Vector3(0, 2.4, 0)) :
     view.value === 'Profil' ? side.scale(4.5).add(new Vector3(0, 2.1, 0)) :
     view.value === 'Hinten' ? f.scale(-5).add(new Vector3(0, 2.6, 0)) :

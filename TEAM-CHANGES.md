@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 10.10.2026 – Codex: Klima-Bäume und streckenbezogene Böden
+
+Quaternius-Laub-/Nadel-/Birkenmodelle und Kenney-Palmen als kostenlose CC0-Assets übernommen; ausgewählte Originalquellen und Lizenztexte erhalten. Alpha-Test-Laub, PNG bis 512 px, Meshopt; Palmen mit beleuchteten grünen/braunen Materialien. Klimamapping, räumliche Materialbatches und Platzierungsgrenzen integriert. Sechs eigene Platzpflaster/Rasenpaletten, verbesserte Pjöngjang-/Moskau-/Peking-Fahrbahnen, korrekte Kachelung pro Teilfläche und Regenreaktion. 16 gezielte Tests und Produktionsbuild bestanden; menschliche Stil-/Geräteabnahmen bleiben offen.
+
 ## 10.10.2026 – Codex: sechs eigene Streckenmusiken
 
 Originale synthetische 32-Takt-Schleifen für alle sechs Kurse erzeugt und in Start/Kurswechsel integriert. Instrumentierung und Harmonik unterscheiden die Themen; vorhandene Lautstärke-/Stumm-/Ansagen- und Schlussrundensteuerung erhalten. Generator art-source/build_track_music.mjs, Metadaten src/music-themes.ts, sechs WAVs unter public/assets/audio/. Keine fremden Aufnahmen oder Samples. Zwei gezielte Tests und Produktionsbuild bestanden; alle Dateien im sichtbaren Chrome-Musikprüfstand wiedergegeben. Menschliche Hör-/Mischungsabnahme offen.

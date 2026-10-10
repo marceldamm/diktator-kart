@@ -1,5 +1,14 @@
 # Assetherkunft – Stadion der Eitelkeit
 
+## Klima-Bäume und Boden – 10.10.2026
+
+- tree-broadleaf.glb, tree-broadleafB.glb und tree-pine.glb: Quaternius, Stylized Nature MegaKit Standard, CommonTree_1/CommonTree_3/Pine_1. Offizielle Quelle https://quaternius.com/packs/stylizednaturemegakit.html ; vom Autor veröffentlichtes Gratisarchiv https://opengameart.org/content/stylized-nature-megakit . CC0 1.0 laut beiliegender License_Standard.txt.
+- tree-birch.glb: Quaternius, Ultimate Stylized Nature Pack, BirchTree_1. Offizielle Quelle https://quaternius.com/packs/ultimatestylizednature.html und dort verlinkter öffentlicher Google-Drive-Ordner. CC0 1.0 laut Assetseite und mitgelieferter License.txt. Die unveränderte Lizenzdatei trägt versehentlich die Überschrift „Ultimate Platformer Pack“; die Naturpack-Seite bestätigt die Nutzungsgrundlage separat.
+- tree-palm.glb und tree-palmB.glb: Kenney Nature Kit, tree_palmDetailedTall/tree_palmDetailedShort, https://kenney.nl/assets/nature-kit ; CC0 laut Original-Lizenz. Vorhandene mediterrane Schirmkiefern/Zypressen in Rom bleiben die originalen Projektmodelle.
+- Ausgewählte Original-glTF/GLB, Binärdaten, Texturen und Lizenztexte unter art-source/climate-trees/. Reproduzierbarer Export art-source/build_climate_trees.mjs: Meshopt, PNG mit höchstens 512 px und erhaltenem Blattalpha; transparente Blattflächen als beidseitiger Alpha-Test statt Alpha-Blending. Keine fremden Shader übernommen.
+- Kenney-Palmen: originales türkisfarbenes Unlit-Laub auf natürliches Grün und braune Rinde abgestimmt; Unlit entfernt, damit Tag-/Nachtlicht tatsächlich wirkt. Originaldownload unverändert erhalten.
+- Eigene streckenbezogene Pflasterpaletten/Fugen/Normalatlanten in src/course-ground.ts. Berlin Ziegelhof, Rom Travertin, Havanna Korallenkalkstein, Pjöngjang kühler Granit, Moskau rötlicher Granit, Peking blaugrauer Ziegel. Keine heruntergeladenen Bodentexturen in diesem Paket.
+
 ## Streckenmusik – 10.10.2026
 
 audio/music-berlin.wav, music-rome.wav, music-havana.wav, music-pyongyang.wav, music-moscow.wav und music-beijing.wav: eigene originale synthetische Kompositionen für dieses Projekt, keine Fremdaufnahmen/Samples oder Hymnenzitate. Reproduzierbare Partituren/Synthese: art-source/build_track_music.mjs; Titel/Tempo in src/music-themes.ts. 32 Takte 2/4 je Schleife, PCM16/22.050 Hz mono. An den Klang der bisherigen eigenen march.wav angelehnt; menschliche Hörabnahme offen.
@@ -61,3 +70,5 @@ Sprachupdate: eigene freundliche kurze Sprechertexte und sechs eigene Parodie-Sp
 | `models/cc0-debris.glb`, `art-source/cc0-debris.blend` | Kenney, Car Kit 3.1 (debris-bumper, debris-door, debris-door-window, debris-tire, debris-spoiler-a, debris-plate-a, debris-drivetrain), https://kenney.nl/assets/car-kit . Lizenz CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), laut beiliegender License.txt; Nennung freiwillig, Änderungen erlaubt. Über `art-source/import_cc0_pack.py` zusammengeführt, als Totalschaden-Trümmer verwendet (07.10.2026). |
 
 | `models/cc0-driver-hitler.glb`, `art-source/build_cc0_driver.py`, `art-source/hitler_face.py` | Quaternius, Universal Base Characters (Standard/Free), Superhero_Male_FullBody + Hair_SimpleParted, https://quaternius.itch.io/universal-base-characters . Lizenz CC0 1.0 laut beiliegender License_Standard.txt. In Sitzpose gebracht, Gesicht iteriert und schwarzer Ledersuit ergänzt (07.10.2026). |
+
+Lizenztexte der Klima-Bäume: nur Zeilenenden und abschließende Leerzeichen für die Git-Prüfung normalisiert; Lizenzinhalt erhalten.

@@ -40,6 +40,7 @@ import type { KartState } from './kart-model';
 import type { DriverReaction, TestScene } from './scene';
 import { crowdReact, stepCrowd } from './crowd-wave';
 import { surfaceTextures } from './surface-textures';
+import { PARK_TREE } from './climate-trees';
 import { SceneInstrumentation } from '@babylonjs/core/Instrumentation/sceneInstrumentation';
 import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineInstrumentation';
 import '@babylonjs/core/Engines/Extensions/engine.query';
@@ -119,10 +120,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const staticShadowMeshes=[...(shadow.getShadowMap()?.renderList??[])];
     let lastShadowCasterRefresh = Number.NaN;
     const treeShadows: {root:TransformNode;meshes:Mesh[]}[]=[];
-    const treeContainer = await LoadAssetContainerAsync('/assets/models/park-tree.glb', scene);
+    const treeContainer = await LoadAssetContainerAsync(`/assets/models/tree-${PARK_TREE[TRACK.id]}.glb`, scene);
     report?.('trees');
     for(const material of treeContainer.materials) if(material instanceof PBRMaterial && material.name.includes('leaves')) {
-      material.transparencyMode=PBRMaterial.PBRMATERIAL_OPAQUE;
       material.backFaceCulling=false;
     }
     for (const [x, z] of LANDMARKS.trees) {
