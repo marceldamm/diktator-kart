@@ -2,6 +2,7 @@ param(
     [ValidateSet('Status', 'Start', 'Checkpoint', 'Finish')][string]$Action = 'Status',
     [string]$Owner = '',
     [string]$ProjectRoot = '',
+    [string[]]$Paths = @(),
     [switch]$AsJson
 )
 $ErrorActionPreference = 'Stop'
@@ -98,19 +99,33 @@ try {
     if ($Action -eq 'Checkpoint') {
         if (-not $isNew -or $branch -ne 'main') { throw 'Zwischenstaende werden auf dem gemeinsamen Babylon-main gesichert. Erst Projektstart ausfuehren; Archive/andere Branches bleiben unveraendert.' }
         if ($dirty) {
-            $changedPaths = Git @('status', '--porcelain') -split "`n"
-            $sensitiveNames = @($changedPaths | Where-Object { $_ -match '(?i)(\.env|secret|credential|token|\.pem|\.pfx|\.p12|\.key)' })
+            if (-not $Paths.Count) { throw 'Zwischenstand abgebrochen: Bitte nur die ausdrücklich geprüften eigenen Dateien mit -Paths angeben. So werden parallele Änderungen anderer Personen/KIs nicht versehentlich mitgestaged.' }
+            $preStaged = @(Git @('diff', '--cached', '--name-only') -split "`n" | Where-Object { $_ })
+            if ($preStaged.Count) { throw "Zwischenstand abgebrochen: Der gemeinsame Git-Index enthält bereits vorgemerkte Dateien ($($preStaged -join ', ')). Erst mit der anderen Person/KI abstimmen; nichts wird committed." }
+            $sensitiveNames = @($Paths | Where-Object { $_ -match '(?i)(^|[/\\])(\.env|[^/\\]*(secret|credential|token)[^/\\]*|[^/\\]*\.(pem|pfx|p12|key))($|[/\\])' })
             if ($sensitiveNames.Count) { throw "Dateinamen sehen nach Zugangsdaten/Geheimnissen aus; bitte erst einzeln prüfen und ausschließen: $($sensitiveNames -join '; ')" }
-            $null = Git @('add', '-A')
+            foreach ($path in $Paths) {
+                if ([IO.Path]::IsPathRooted($path) -or $path -match '(^|[/\\])\.\.([/\\]|$)') { throw "Nur Repository-relative Pfade ohne '..' sind zulässig: $path" }
+            }
+            $null = Git (@('add', '--') + $Paths)
+            $staged = Git @('diff', '--cached', '--name-only') -split "`n" | Where-Object { $_ }
+            if (-not $staged.Count) { throw 'Keine angegebenen Änderungen zum Sichern gefunden.' }
+            $null = Git @('diff', '--cached', '--check')
             $message = "Zwischenstand: $Owner $([DateTime]::UtcNow.ToString('yyyy-MM-dd HH:mm')) UTC"
             $null = Git @('commit', '-m', $message)
+        }
+        $null = Git @('fetch', 'origin', '--prune')
+        if (-not (Ancestor 'origin/main' 'HEAD')) {
+            $merge = GitResult @('merge', '--no-edit', 'origin/main')
+            if ($merge.Code -ne 0) { throw "Parallele main-Aenderungen brauchen inhaltliche Konfliktloesung; lokaler Commit bleibt erhalten und es wurde nichts gepusht. $($merge.Text)" }
         }
         $null = Git @('push', '-u', 'origin', "HEAD:refs/heads/$branch")
         $null = Git @('fetch', 'origin', '--prune')
         $savedHead = Git @('rev-parse', 'HEAD')
         $remoteBranchHead = Git @('rev-parse', "refs/remotes/origin/$branch")
         if ($remoteBranchHead -ne $savedHead) { throw 'Der Arbeitsbranch wurde nicht bytegenau auf GitHub bestätigt; lokaler Commit bleibt erhalten.' }
-        if (Git @('status', '--porcelain')) { throw 'Nach dem Zwischenstand sind noch ungesicherte Dateien vorhanden; der Branch bleibt erhalten.' }
+        $remaining = Git @('status', '--porcelain')
+        if ($remaining) { Write-Host 'Weitere ungesicherte Änderungen bleiben unangetastet:'; Write-Host $remaining }
         Write-Host "ZWISCHENSTAND GESICHERT: main = $savedHead"
         exit 0
     }
@@ -130,6 +145,15 @@ try {
             if (-not (Ancestor 'HEAD' 'origin/main')) { throw 'Lokales main ist origin/main voraus oder abgezweigt; keine automatische Ruecksetzung. Codex muss den Stand sichern.' }
             if ((Git @('rev-parse', 'HEAD')) -ne $remote) { $null = Git @('merge', '--ff-only', 'origin/main') }
             if (Ancestor 'origin/main' $branch) { $null = Git @('merge', '--ff-only', $branch) }
+        } else {
+            if (-not (Ancestor 'HEAD' 'origin/main') -and -not (Ancestor 'origin/main' 'HEAD')) {
+                throw 'Lokales main und origin/main sind auseinander gelaufen. Beide Staende bleiben erhalten; erst parallele Commits inhaltlich zusammenfuehren.'
+            }
+            if (Ancestor 'HEAD' 'origin/main') {
+                if ((Git @('rev-parse', 'HEAD')) -ne $remote) { $null = Git @('merge', '--ff-only', 'origin/main') }
+            } else {
+                Write-Host 'Lokales main enthaelt eigene, noch nicht veroeffentlichte Commits; sie bleiben erhalten.'
+            }
         }
         $session = [ordered]@{ owner = $Owner; branch = 'main'; startingHead = (Git @('rev-parse', 'HEAD')); remoteAtStart = $remote; startedUtc = [DateTime]::UtcNow.ToString('o') }
         $session | ConvertTo-Json | Set-Content -LiteralPath '.tools/team-session.json' -Encoding UTF8

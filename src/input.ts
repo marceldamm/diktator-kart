@@ -1,6 +1,6 @@
 export type Action =
   | 'accelerate' | 'brake' | 'steerLeft' | 'steerRight' | 'hopDrift'
-  | 'camera' | 'item' | 'itemForward' | 'itemBackward' | 'special' | 'pause' | 'restart' | 'debug' | 'photo' | 'recover' | 'menu' | 'lookBack' | 'horn';
+  | 'camera' | 'item' | 'defend' | 'itemForward' | 'itemBackward' | 'special' | 'pause' | 'restart' | 'debug' | 'photo' | 'recover' | 'menu' | 'lookBack' | 'horn';
 
 export interface InputFrame {
   throttle: number;
@@ -14,7 +14,7 @@ export const DEFAULT_BINDINGS: Readonly<Record<string, Action>> = {
   ArrowDown: 'brake', KeyS: 'brake',
   ArrowLeft: 'steerLeft', KeyA: 'steerLeft',
   ArrowRight: 'steerRight', KeyD: 'steerRight',
-  Space: 'hopDrift', KeyC: 'camera', KeyE: 'item', KeyQ: 'special',
+  Space: 'hopDrift', KeyC: 'camera', KeyE: 'item', KeyZ: 'defend', KeyQ: 'special',
   KeyP: 'pause', KeyR: 'restart', F3: 'debug', KeyF: 'photo', KeyV: 'itemForward', KeyH: 'itemBackward', KeyB: 'recover',Escape:'menu',
   KeyX: 'lookBack',
 };
@@ -22,7 +22,7 @@ const bindings: Record<string, Action> = { ...DEFAULT_BINDINGS };
 /** Driving actions the options menu lets players rebind (07.10.2026; arrow keys stay as a second layout). */
 export const REBINDABLE: readonly { action: Action; label: string }[] = [
   { action: 'accelerate', label: 'Gas' }, { action: 'brake', label: 'Bremse' }, { action: 'steerLeft', label: 'Links' }, { action: 'steerRight', label: 'Rechts' },
-  { action: 'hopDrift', label: 'Hop/Drift' }, { action: 'item', label: 'Item' }, { action: 'special', label: 'Fähigkeit' }, { action: 'camera', label: 'Kamera' },
+  { action: 'hopDrift', label: 'Hop/Drift' }, { action: 'item', label: 'Item' }, { action: 'defend', label: 'Abwehrschild' }, { action: 'special', label: 'Fähigkeit' }, { action: 'camera', label: 'Kamera' },
   { action: 'lookBack', label: 'Rückblick' }, { action: 'recover', label: 'Rücksetzen' },
 ];
 const PROTECTED = new Set(['Escape', 'F3', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', 'Tab']);
@@ -192,7 +192,7 @@ export function attachTouch(input:InputHub,root:HTMLElement):()=>void {
 export function pollGamepads(input: InputHub, menuOpen: boolean, menuKey: (code: string) => void, previous: Map<string, boolean>): boolean {
   const pads = typeof navigator !== 'undefined' && navigator.getGamepads ? navigator.getGamepads() : [];
   let any = false, throttle = 0, steering = 0;
-  const map: [number, Action][] = [[0, 'hopDrift'], [2, 'item'], [3, 'camera'], [1, 'lookBack'], [5, 'special'], [4, 'recover'], [12, 'itemForward'], [13, 'itemBackward'], [9, 'menu'], [8, 'pause'], [11, 'horn']];
+  const map: [number, Action][] = [[0, 'hopDrift'], [2, 'item'], [3, 'camera'], [1, 'lookBack'], [5, 'special'], [4, 'recover'], [12, 'itemForward'], [13, 'itemBackward'], [14, 'defend'], [9, 'menu'], [8, 'pause'], [11, 'horn']];
   for (const pad of pads) {
     if (!pad || !pad.connected) continue;
     any = true;

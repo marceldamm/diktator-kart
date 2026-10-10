@@ -1,8 +1,36 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
-## 09.10.2026 – Marcel: Military-Offizier als Stalin-Testfahrer
+## Bestätigte Fahrmechaniken und Streckenwünsche – Marcel, 09.10.2026
 
-Aktueller Stand: Die neuere Datei `military officer 3d model.glb` ist in Körper, Mütze und Mantel getrennt und unter `public/assets/models/military-officer-driver-test.glb` als provisorisch posierter Stalin-Testfahrer eingebunden. Der sichtbare Chrome-Lauf bestätigt das Laden; Mantelüberschneidung, schwebende Mütze und dunkles Gesicht bleiben zu beurteilen. Es ist ein reversibler Versuch ohne Rig-/Sitzabnahme. Marcel gab an, das Modell mit seinem bezahlten Tripo-Konto erzeugt zu haben; Tripo-Hilfe und Nutzungsbedingungen wurden geprüft. Build erfolgreich; acht Workflowtests sind nicht an den bestätigten direkten-main-Prozess angepasst. Details und nächster Schritt stehen in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
+Marcel bestätigte Windschatten-Schub, getimte Sprungtricks mit Landeschub, Item-Roulette und Starttiming. Ein neues seltenes Item gegen den Führenden ist ausdrücklich nicht gewünscht. Bereits vorhandene Umsetzung wurde geprüft: Windschatten, Tricklandung, Startschub, Orden als begrenztes Tempo-/Sammelziel mit Verlust bei Treffern sowie lokal gespeicherter Zeitfahrgeist. Das Orden-System deckt den gewünschten Sammel-/Tempopunkt ab; keine zweite Münzwährung anlegen. Zusätzlich freigegeben: optionale riskante Abkürzungen, ein kleiner Beinahetrefferbonus und seltene angekündigte Streckenereignisse. Moskau wurde als fünfte Strecke mit breiten Geraden und einer riskanten Querung spielbar ergänzt. Menschliche Fahr- und Sichtabnahmen bleiben offen.
+
+Der zweite defensive Itemslot ist umgesetzt: Bei bereits belegtem E-Slot füllt eine weitere Kiste den Abwehrschild. Z/Gamepad-D-pad links aktiviert zeitlich begrenzten Schutz; Bots können denselben Schild regelbasiert einsetzen. UI und Itemregression vorhanden. Abschlussprüfung am 10.10.2026: TypeScript-Check und Produktionsbuild erfolgreich; alle 110 Tests bestanden. Vite meldet weiterhin einen übergroßen Hauptchunk (2.112,44 kB nach Minifizierung). Der sichtbare Chrome-Tab steht im Hauptmenü; menschliche Fahr-/Stilabnahme der Moskau-Strecke bleibt offen.
+
+### Nachtrag 10.10.2026 – weitere fünf Spielentscheidungen (Marcel)
+
+Marcel bestätigt: Das vorhandene Orden-System genügt als Sammel-/Tempoziel; optionale riskante Abkürzungen sind erwünscht; knappe Ausweichmanöver sollen einen kleinen Präzisionsbonus geben; der lokale Zeitfahrgeist bleibt; wenige angekündigte Streckenereignisse sind erwünscht. Der Beinahetrefferbonus ist umgesetzt und getestet. Moskau enthält eine erste riskante Querung. Havannas bestehende Welle wird beim Rundenwechsel angekündigt, aber noch nicht mit ausreichendem Vorlauf; Moskau hat noch kein Ereignis. Ein seltenes Item gegen den Führenden bleibt ausdrücklich unerwünscht. Die fünf danach gestellten Zusatzfragen (Kart-Abstimmung, Fahrlinien, Fahrerreaktionen, Cup-Freischaltungen, Publikumsreaktionen) sind bislang unbeantwortet und daher keine bestätigten Ziele.
+
+## 09.10.2026 – Marcel: Fahrer-Posen selbst in Blender ändern
+
+`art-source/<name>-im-kart.blend` öffnen (hitler, stalin, mussolini, mao, kim, castro; startet im Pose-Modus), rote Ziel-Knochen mit **G** verschieben, **Strg+S**, dann `art-source/Fahrer-Posen-ins-Spiel-exportieren.cmd` doppelklicken und im Spiel **F5**. Schritt für Schritt: [docs/33-fahrer-posen-in-blender.md](docs/33-fahrer-posen-in-blender.md). Vergleichsbilder: `docs/evidence/fahrer-kart-pose-20261009/`.
+
+## 09.10.2026 – Marcel: Satiregrenze und neue Fahrer
+
+Marcel bestätigte, dass alle sechs Fahrer bereits neue Tripo-Runtime-Modelle haben; eine fehlende Konzeptgrafik muss nicht ergänzt werden. Fähigkeiten und Witze richten sich gegen Eitelkeit, Propaganda und Bürokratie der Diktatoren. Opfer und historische Gewalt sind weder Ziel noch Belohnung. Die alten Namen „Große Säuberung“ und „Kulturrevolution“ gelten nicht als aktive Fähigkeitsnamen. Konkrete Stalin-/Mao-Mechaniken werden erst nach Auswahl eines Vorschlags umgesetzt; Rückfrage vom 09.10. ist offen.
+
+## 09.10.2026 – Marcel: Military-Offizier als Stalin-Testfahrer (historisch, durch Sechser-Kader ersetzt)
+
+Der Test mit `military officer 3d model.glb` ist historisch. Marcel stellte danach sechs neue Charaktermodelle bereit, die jetzt den aktiven Kader bilden; der separate Testfahrer ist kein Produktionsmodell. Früherer sichtbarer Test bestätigte Laden, aber Mantelüberschneidung, schwebende Mütze und dunkles Gesicht. Tripo-Hilfe und Nutzungsbedingungen wurden geprüft. Aktuelle lokale Prüfung 09.10.2026: 106/106 Tests bestanden, Produktionsbuild erfolgreich (Vite weist weiter auf einen Hauptchunk über 500 kB hin). Details/Assethistorie in [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
+
+## 09.10.2026 – Marcel: Vorgaben für Charakterkonzeptbilder
+
+Die Stalin-Konzeptreferenz gilt für Modellqualität, Material und Licht, aber nicht als Uniformvorlage für den gesamten Kader. Jede Person erhält eigens passende Farben, Kleidungsschnitt, Details und Rollen-Gimmicks. Modellgenerator-Referenzen zeigen eine einzelne gerade Frontansicht, die ganze Figur, leicht abgesetzte Arme und leere Hände; keine Mäntel oder Mehrfachansichten. Kleidung soll ihre Grundfarbe gleichmäßig behalten. Neue Stalin-Frontansicht als Entwurf: `references/visuals/character-concepts/character-concept-stalin-front-model-reference-20261009.png`. Vollständige Richtlinie und Arbeitsstatus: [docs/32-character-model-visual-standard.md](docs/32-character-model-visual-standard.md) und [CURRENT-WORKLIST.md](CURRENT-WORKLIST.md).
+
+Am 09.10.2026 wurden passend dazu einzelne Frontkonzepte für Mussolini, Mao, Kim Jong-un und Fidel Castro erstellt. Alle vier halten die Hände für die spätere Lenkradpose frei; Details und Dateien stehen im aktuellen Charakterbild-Auftrag. Hitler war zuvor vom Bilddienst abgelehnt worden. Keine Wiederholungsversuche mit dem Ziel, die Sperre zu umgehen.
+
+Der einmalige neue Adolf/Hitler-Bildversuch am 09.10.2026 wurde vom Bilddienst bei der Ausgabe erneut sicherheitsbedingt abgelehnt. Das sagt nichts über die rechtliche Zulässigkeit aus. Keine Umgehung durch Lookalikes oder wiederholte Varianten; der Charakterplatz ist offen.
+
+Marcel bestätigte anschließend einen eigenständigen fiktiven Satirecharakter als separate Konzeptalternative: „Der Erlassmeister“, mit Formular-Thema. Auf Wunsch erhielt die nächste Fassung ein älteres Gesicht, Seitenscheitel und einen breiten geschwungenen Schnäuzer. Beide Entwürfe stehen in `references/visuals/character-concepts/`. Sie sind keine realistischen Porträtkopien und ändern weder `src/cast.ts` noch die Spielauswahl.
 
 ## 08.10.2026 – Marcel: früherer Tripo-Sowjetoffizier im Stalin-Kart testen
 
@@ -38,12 +66,18 @@ Das aktive Main-Ruleset erlaubt direkte Pushes und verlangt keinen PR oder Statu
 
 Früher waren Issues, Milestones, Project-Board, PRs und Actions als Teamablauf eingerichtet. Diese Pilotregeln sind seit Marcels Beschluss vom 09.10.2026 abgelöst; die alten Einträge bleiben nur als nachvollziehbare GitHub-Historie bestehen. Issue #2 gilt nicht mehr als offene Produktaufgabe.
 
+## Parallele KI-Arbeit im gemeinsamen Ordner – Marcel, 09.10.2026
+
+Marcel hebt die frühere Regel „nur eine KI gleichzeitig pro Checkout“ auf. Mehrere KIs und Sarah dürfen gleichzeitig im selben Repository-Hauptordner arbeiten, auch wenn sich Aufgaben oder Dateien berühren. Marcel koordiniert die Aufgaben so, dass sie sich nach Möglichkeit nicht in die Quere kommen. Gemeinsamer Dateizugriff ist erlaubt; ein gemeinsamer Git-Index macht nur zeitgleiche Stage-/Commit-/Push-Aktionen unsicher.
+
+Jede KI prüft vor Änderungen den aktuellen Git-Status und Diff, erkennt bereits laufende Änderungen und bewahrt fremde Arbeit. Dateien/Teilaufgaben nach Möglichkeit kurz zuweisen; dieselbe Datei darf parallel bearbeitet werden, wenn beide Änderungen anschließend gemeinsam abgeglichen werden. Bei nicht eindeutiger Überschneidung kurz abstimmen, währenddessen an unabhängigen Stellen weiterarbeiten. Vor Commit/Push den gemeinsamen Gesamtdiff erneut prüfen und nur eigene klar zugeordnete, vollständig geprüfte Pfade stagen. Während des kurzen Stage-/Commit-Fensters die betreffenden Pfade nicht parallel weiterschreiben; andere, unabhängige Dateien können weiterbearbeitet werden. Git-Index-, Commit- und Push-Schritte müssen zeitlich nacheinander laufen: kurz koordinieren, nach jedem Commit den gemeinsamen Stand abgleichen. Der Checkpoint-Befehl verlangt explizite Pfade (`-Paths`) und bricht ab, wenn der gemeinsame Index bereits vorgemerkte Dateien enthält; so committet er keine fremd gestagten Arbeiten. Regressionstest am 09.10.2026: 9/9 Teamworkflow-/Startertests bestanden. Konflikte inhaltlich zusammenführen, niemals `--force`, Reset oder blinde „ours/theirs“-Auswahl. Dieselbe Blender-/GLB-Binärdatei parallel zu exportieren bleibt besonders konfliktanfällig; Änderungen abstimmen oder separate Varianten verwenden.
+
 ## Git für euch – der kurze gemeinsame Ablauf
 
-**Marcel und Sarah arbeiten nacheinander im Hauptordner auf dem gemeinsamen `main`.** Die KI kümmert sich um Abgleich und Sicherung; Änderungen werden nicht auf parallelen persönlichen Arbeitsbranches geführt.
+**Marcel und Sarah arbeiten im Hauptordner auf dem gemeinsamen `main`; mehrere KIs dürfen dabei parallel mitarbeiten.** Marcel koordiniert Aufgabe und Dateien. Die KIs prüfen und bewahren Änderungen der jeweils anderen und führen Git-Schreibschritte nacheinander aus.
 
 - **„Projekt Start“**: neuesten `main`-Stand holen, vorhandene Arbeit bewahren und lokal synchronisieren.
-- **„Zwischenstand sichern“**: sinnvolles Paket und vier Hauptdateien committen und auf `main` sichern.
+- **„Zwischenstand sichern“**: sinnvolles, geprüftes Paket und die dazugehörigen Hauptdateien committen und auf `main` sichern. Die KI gibt dem Checkpoint ausdrücklich nur die eigenen geprüften Pfade mit.
 - **„Projektabschluss“**: offene Arbeit abschließen, nach Bedarf lokal prüfen, committen, nach `main` sichern und Remote-Commit verifizieren.
 - **„Wo stehen wir?“**: Die KI zeigt Branch, gespeicherte/ungesicherte Änderungen, Überschneidungen und den nächsten Schritt.
 

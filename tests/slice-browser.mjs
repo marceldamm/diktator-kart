@@ -30,10 +30,10 @@ try{
     assert.equal(await evaluate(`document.body.classList.contains('track-select-open')`),true,'Race start opens track selection');
     await evaluate(`document.querySelector('#track-go').click()`);await delay(300);
     assert.equal(await evaluate(`document.body.classList.contains('select-open')`),true,'Track selection continues to driver selection');
-    assert.equal(await evaluate(`document.querySelector('#driver-go').disabled`),true,'Race start waits for driver portraits');
+    assert.equal(await evaluate(`document.querySelector('#driver-go').disabled`),false,'Pre-rendered portraits: race start is ready at once');
     await evaluate(`document.querySelectorAll('.driver-card')[1].click()`);await delay(350);
     for(let i=0;i<60;i++){if(await evaluate(`document.querySelectorAll('.driver-card img').length===6`))break;await delay(500);}
-    assert.equal(await evaluate(`document.querySelectorAll('.driver-card img').length`),6,'All six live Babylon portraits finish rendering');
+    assert.equal(await evaluate(`document.querySelectorAll('.driver-card img').length`),6,'All six pre-rendered head portraits are shown');
     const selected=await evaluate(`JSON.stringify({name:document.querySelector('#driver-detail h3')?.textContent,card:document.querySelector('.driver-card.selected strong')?.textContent})`);
     assert.ok(JSON.parse(selected).card?.includes('Stalin'),`Stalin portrait selected: ${selected}`);
     await shot('slice-stalin-driver-selection');console.log(`STALIN_DRIVER_SELECTION ${selected}`);

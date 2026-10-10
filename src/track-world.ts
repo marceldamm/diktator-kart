@@ -106,14 +106,14 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   /** Progress ranges dressed with slogan boards instead of plain striped barriers. */
   const BOARD_RANGES = TRACK_INFO.dressing.boardRanges;
   const HARBOUR_GAP: [number, number][] = HAZARDS.map((h) => [h.from, h.to] as [number, number]);
-  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang';
+  const rome = TRACK_INFO.theme === 'rome', havana = TRACK_INFO.theme === 'havana', pyongyang = TRACK_INFO.theme === 'pyongyang', moscow = TRACK_INFO.theme === 'moscow';
   type FenceDebris = { mesh: Mesh; origin: Vector3; heading: number; vx: number; vy: number; vz: number; spin: number };
   const startFenceParts: Mesh[] = [], startFenceDebris: FenceDebris[] = [];
   let startFenceBroken = false, startFenceClock = 0, startFenceBreakTime = 0;
   if (TRACK_INFO.theme === 'berlin') addPeriodDetails(scene,shadow);
   const wallGaps = alleyGaps(-(W + 1.2)), edgeGaps = alleyGaps(-(W + .5)), promenadeGaps = [...alleyGaps(-(W + 3)), ...alleyGaps(-(W + 5.5))];
   // Cobbles at their real 2 m tile scale; slow tonal variation hides tiling and marks a worn racing line.
-  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : pyongyang ? 'Pyongyang granite boulevard' : 'Cobblestone boulevard', pyongyang ? '#c3c5c2' : '#d8d2c2', 0, 1);
+  const road = pbr(scene, havana ? 'Sun-bleached asphalt' : rome ? 'Travertine parade slabs' : pyongyang ? 'Pyongyang granite boulevard' : moscow ? 'Moscow parade paving' : 'Cobblestone boulevard', pyongyang ? '#c3c5c2' : moscow ? '#c7c0b3' : '#d8d2c2', 0, 1);
   if (havana) {
     // Havana: sun-bleached, patched asphalt with tar seams (procedural, original).
     let seed = 1959; const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
@@ -150,18 +150,18 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     });
     road.bumpTexture.level = .6; road.roughness = .78;
     for (const t of [road.albedoTexture, road.bumpTexture]) { t.wrapU = t.wrapV = Texture.WRAP_ADDRESSMODE; t.anisotropicFilteringLevel = 8; }
-  } else if (pyongyang) {
-    road.albedoTexture = canvasTexture(scene, 'Pyongyang granite slabs', 512, 512, (c) => {
-      c.fillStyle = '#858984'; c.fillRect(0, 0, 512, 512);
+  } else if (pyongyang || moscow) {
+    road.albedoTexture = canvasTexture(scene, moscow ? 'Moscow pale parade slabs' : 'Pyongyang granite slabs', 512, 512, (c) => {
+      c.fillStyle = moscow ? '#a29a8c' : '#858984'; c.fillRect(0, 0, 512, 512);
       for (let y = 0; y < 512; y += 128) {
         const offset = (y / 128) % 2 ? 128 : 0;
         for (let x = -128 + offset; x < 512; x += 256) {
-          c.fillStyle = '#858984'; c.fillRect(x + 2, y + 2, 252, 124);
-          c.strokeStyle = 'rgba(43,48,46,.42)'; c.lineWidth = 2; c.strokeRect(x + 2, y + 2, 252, 124);
+          c.fillStyle = moscow ? '#a29a8c' : '#858984'; c.fillRect(x + 2, y + 2, 252, 124);
+          c.strokeStyle = moscow ? 'rgba(91,54,49,.35)' : 'rgba(43,48,46,.42)'; c.lineWidth = 2; c.strokeRect(x + 2, y + 2, 252, 124);
         }
       }
     });
-    road.bumpTexture = canvasTexture(scene, 'Pyongyang granite joints', 512, 512, (c) => {
+    road.bumpTexture = canvasTexture(scene, moscow ? 'Moscow parade joints' : 'Pyongyang granite joints', 512, 512, (c) => {
       c.fillStyle = '#8080ff'; c.fillRect(0, 0, 512, 512); c.strokeStyle = '#6666ef'; c.lineWidth = 5;
       for (let y = 0; y <= 512; y += 128) { const offset = (y / 128) % 2 ? 128 : 0; c.beginPath(); c.moveTo(0, y); c.lineTo(512, y); c.stroke(); for (let x = offset; x <= 512; x += 256) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 128); c.stroke(); } }
     });
@@ -328,7 +328,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     c.fillStyle = '#c9a25a'; c.fillRect(0, 150, 512, 14); c.fillStyle = '#e9e0cc'; c.fillRect(0, 164, 512, 50);
     c.fillStyle = '#6b6355'; c.fillRect(0, 214, 512, 42); c.fillStyle = '#0002'; c.fillRect(0, 0, 512, 10);
   });
-  const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
+    const slogans = havana ? ['DIE REDE DAUERT NOCH', 'PLANERFÜLLUNG 104 %', 'ERSATZTEILE: 1958 BESTELLT', 'APPLAUS NICHT EINSTELLEN'] : rome ? ['DER BALKON HAT RECHT', 'APPLAUS NACH VORSCHRIFT', 'ZÜGE PÜNKTLICH (LAUT AMT)', 'MARMOR NUR AUF ANTRAG'] : pyongyang ? ['PARADE NACH PLAN', 'APPLAUS IM GLEICHSCHRITT', 'ERFOLG WIRD NACHGEMELDET', 'STATISTIK OHNE ABWEICHUNG'] : moscow ? ['PARADE AUF GANZER BREITE', 'DURCHFAHRT NUR MIT STEMPEL', 'PLANERFÜLLUNG 101 %', 'ABKÜRZUNG NOCH IN PRÜFUNG'] : ['ANTRAG GENEHMIGT', 'JUBEL IST PFLICHT', 'FORMULAR 08/15', 'ÜBERHOLEN NUR MIT STEMPEL'];
   const boards = canvasTexture(scene, 'Slogan boards', 2048, 256, (c) => {
     c.fillStyle = '#e9e0cc'; c.fillRect(0, 0, 2048, 256);
     slogans.forEach((text, i) => {

@@ -7,18 +7,18 @@ export type ItemKind = 'direct' | 'homing' | 'trap' | 'censor' | 'boost';
 export type ItemDirection = 'forward' | 'backward';
 export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Suchauftrag',trap:'Stempelfalle',censor:'Zensurbalken',boost:'Eilerlass'};
 export interface ItemBox { id:number; x:number; z:number; readyIn:number }
-export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; direction?:ItemDirection; bounces?:number }
-export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'; kart:number; item:ItemKind; owner?:number }
+export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; direction?:ItemDirection; bounces?:number; nearMissed?:number[] }
+export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'|'defense-pickup'|'defense-use'|'near-miss'; kart:number; item:ItemKind|'shield'; owner?:number }
 export interface ItemWorld { /** Karts holding their item behind them as a shield this step (set by the caller). */ shield?:boolean[];
   /** Owners whose straight projectile seeks targets on its own (Hitler's shepherd, 07.10.2026). */ seekers?:boolean[];
-  slots:(ItemKind|null)[];heldFor:number[];immune:number[];censorRemaining:number[];censorBannerRemaining:number[];objects:ItemObject[];boxes:ItemBox[];
+  slots:(ItemKind|null)[];defenseSlots:boolean[];defenseRemaining:number[];nearMissCooldown:number[];heldFor:number[];immune:number[];censorRemaining:number[];censorBannerRemaining:number[];objects:ItemObject[];boxes:ItemBox[];
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
-export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,homingTurnRate:2.4,maxBounces:3,censorDuration:2.6,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:4};
+export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,nearMissMargin:.55,nearMissCooldown:2.4,nearMissBoost:.6,homingTurnRate:2.4,maxBounces:3,censorDuration:2.6,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:4,defenseDuration:1.35};
 /** Dispatch box rows come from the active circuit (track-layout.ts). */
 export function createItems(count:number,seed=921):ItemWorld {
-  return {slots:Array(count).fill(null),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
+  return {slots:Array(count).fill(null),defenseSlots:Array(count).fill(false),defenseRemaining:Array(count).fill(0),nearMissCooldown:Array(count).fill(0),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
     boxes:ITEM_BOX_PROGRESS.flatMap((s,row)=>[-3,0,3].map((lane,col)=>({id:row*3+col,...trackPoint(s,lane),readyIn:0}))),events:[],random:seed,nextId:1,time:0,
     stats:{direct:{collected:0,launched:0,hits:0},homing:{collected:0,launched:0,hits:0},trap:{collected:0,launched:0,hits:0},censor:{collected:0,launched:0,hits:0},boost:{collected:0,launched:0,hits:0}}};
 }
@@ -52,16 +52,20 @@ const sweptDistance=(x:number,z:number,ax:number,az:number,bx:number,bz:number)=
   return Math.hypot(x-ax-t*dx,z-az-t*dz);
 };
 /** Identical collection, allocation, launch, collision and immunity for all participants. */
-export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[],ranks:number[],dt:number,directions:ItemDirection[]=[]):KartState[] {
-  world.events=[];world.time+=dt;world.immune=world.immune.map(n=>Math.max(0,n-dt));world.censorRemaining=world.censorRemaining.map(n=>Math.max(0,n-dt));world.censorBannerRemaining=world.censorBannerRemaining.map(n=>Math.max(0,n-dt));
+export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[],ranks:number[],dt:number,directions:ItemDirection[]=[],defenseActivations:boolean[]=[]):KartState[] {
+  world.events=[];world.time+=dt;world.immune=world.immune.map(n=>Math.max(0,n-dt));world.defenseRemaining=world.defenseRemaining.map(n=>Math.max(0,n-dt));world.nearMissCooldown=world.nearMissCooldown.map(n=>Math.max(0,n-dt));world.censorRemaining=world.censorRemaining.map(n=>Math.max(0,n-dt));world.censorBannerRemaining=world.censorBannerRemaining.map(n=>Math.max(0,n-dt));
   world.heldFor=world.heldFor.map((n,i)=>world.slots[i]?n+dt:0);
   const result=karts.slice();
   for(const box of world.boxes) {
     box.readyIn=Math.max(0,box.readyIn-dt);if(box.readyIn>0)continue;
-    for(let i=0;i<karts.length;i++)if(!world.slots[i]&&Math.hypot(karts[i].x-box.x,karts[i].z-box.z)<1.65) {
-      const kind=roll(world,ranks[i],karts.length);world.slots[i]=kind;world.heldFor[i]=0;box.readyIn=ITEM_RULES.boxRespawn;world.events.push({kind:'pickup',kart:i,item:kind});world.stats[kind].collected++;break;
+    for(let i=0;i<karts.length;i++)if((!world.slots[i]||!world.defenseSlots[i])&&Math.hypot(karts[i].x-box.x,karts[i].z-box.z)<1.65) {
+      box.readyIn=ITEM_RULES.boxRespawn;
+      if(world.slots[i]){world.defenseSlots[i]=true;world.events.push({kind:'defense-pickup',kart:i,item:'shield'});}
+      else {const kind=roll(world,ranks[i],karts.length);world.slots[i]=kind;world.heldFor[i]=0;world.events.push({kind:'pickup',kart:i,item:kind});world.stats[kind].collected++;}
+      break;
     }
   }
+  for(let i=0;i<karts.length;i++)if(defenseActivations[i]&&world.defenseSlots[i]){world.defenseSlots[i]=false;world.defenseRemaining[i]=ITEM_RULES.defenseDuration;world.events.push({kind:'defense-use',kart:i,item:'shield'});}
   for(let i=0;i<karts.length;i++)if(activations[i]&&world.slots[i]) {
     const kind=world.slots[i]!;
     if(kind==='boost') {
@@ -108,7 +112,17 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
     if(o.remaining<=0)continue;
     for(let i=0;i<karts.length;i++) {
       if((i===o.owner&&o.age<.8)||world.immune[i]>0||karts[i].height>.7)continue;
-      if(sweptDistance(karts[i].x,karts[i].z,ax,az,o.x,o.z)>ITEM_RULES.hitRadius)continue;
+      const distance=sweptDistance(karts[i].x,karts[i].z,ax,az,o.x,o.z);
+      if(distance>ITEM_RULES.hitRadius){
+        const passed=(karts[i].x-o.x)*Math.sin(o.heading)+(karts[i].z-o.z)*Math.cos(o.heading)<0;
+        if(passed&&distance<=ITEM_RULES.hitRadius+ITEM_RULES.nearMissMargin&&world.nearMissCooldown[i]<=0&&!o.nearMissed?.includes(i)){
+          o.nearMissed=[...(o.nearMissed??[]),i];world.nearMissCooldown[i]=ITEM_RULES.nearMissCooldown;
+          const k=result[i];result[i]={...k,speed:Math.min(20,Math.max(0,k.speed)+ITEM_RULES.nearMissBoost),turboRemaining:Math.max(k.turboRemaining,.28)};
+          world.events.push({kind:'near-miss',kart:i,item:o.kind,owner:o.owner});
+        }
+        continue;
+      }
+      if(world.defenseRemaining[i]>0){world.defenseRemaining[i]=0;o.remaining=0;world.events.push({kind:'block',kart:i,item:'shield',owner:o.owner});break;}
       // Countermeasure: an item held behind the kart blocks one projectile arriving from behind (same rule for all).
       if(world.shield?.[i]&&world.slots[i]){const k=karts[i],fwd=(o.x-k.x)*Math.sin(k.heading)+(o.z-k.z)*Math.cos(k.heading);
         if(fwd<.6){world.slots[i]=null;world.heldFor[i]=0;o.remaining=0;world.events.push({kind:'block',kart:i,item:o.kind,owner:o.owner});break;}}

@@ -19,7 +19,9 @@ Verbindlich seit 03.10.2026, ausdruecklicher Nutzerauftrag. Ziel: dieselbe neue 
 
 ## Ein Arbeitsordner für alle – verbindlich seit 04.10.2026
 
-Spiel, Batch, ChatGPT-/Codex-App und Claude-App arbeiten ausschließlich im Hauptordner des Repositorys (bei Marcel `D:\Diktator-Kart`, bei Sarah ihr eigener Repository-Ordner). Auch Claude arbeitet direkt in diesem Hauptordner (keine Worktrees; der frühere Claude-Worktree wurde am 04.10.2026 entfernt). Getestet wird gegen den Server von `Diktator-Kart-starten.cmd`. Nie zwei KIs gleichzeitig im selben Ordner arbeiten lassen.
+Spiel, Batch, ChatGPT-/Codex-App und Claude-App arbeiten ausschließlich im Hauptordner des Repositorys (bei Marcel `D:\Diktator-Kart`, bei Sarah ihr eigener Repository-Ordner). Auch Claude arbeitet direkt in diesem Hauptordner (keine Worktrees; der frühere Claude-Worktree wurde am 04.10.2026 entfernt). Getestet wird gegen den Server von `Diktator-Kart-starten.cmd`.
+
+**Parallel-KI-Regel (Marcel, 09.10.2026):** Die frühere Beschränkung auf eine KI pro Ordner ist aufgehoben. Mehrere KIs dürfen gleichzeitig im selben Checkout arbeiten; Marcel koordiniert ihre Aufgaben. Vor Änderungen Status/Diff prüfen und vorhandene Arbeit erhalten. Überlappende Dateien abstimmen, nur eigene Änderungen stagen und vor Veröffentlichung den Gesamtdiff prüfen. Index-, Commit- und Push-Schritte zeitlich nacheinander ausführen. Binäre Modellquellen nicht unbemerkt überschreiben; bei gleichzeitiger Bearbeitung Varianten getrennt halten.
 
 ## Welche Version gilt?
 
@@ -45,7 +47,7 @@ Am Ende:
 Projektabschluss. Pruefe, dokumentiere und veroeffentliche meine Aenderungen im gemeinsamen main.
 ```
 
-Fuer eine Sicherung mitten in der Arbeit reicht **„Zwischenstand sichern.“** Alternativ `Projekt-zwischenstand.cmd` starten. Dieser Befehl legt einen Commit an und laedt ausschliesslich den persoenlichen Arbeitsbranch hoch; er veraendert `main` nicht. Die KI prueft vorher den Diff und dokumentiert den Zwischenstand.
+Fuer eine Sicherung mitten in der Arbeit reicht **„Zwischenstand sichern.“** Die KI prueft den gemeinsamen Diff, dokumentiert den Stand und gibt dem Checkpoint nur die eigenen geprüften Pfade mit. Parallele Änderungen bleiben unstaged. Alle arbeiten im gemeinsamen Hauptordner und Checkout.
 
 Alternativ `$diktator-projektabschluss`. Dieser ausdrueckliche Abschlussauftrag autorisiert Branch-Push und die getestete Zusammenfuehrung nach main in diesem Repository. Die KI braucht dafuer keine wiederholte Freigabe. Force-Push, fremde Repositories, kostenpflichtige Dienste oder bewusstes Verwerfen fremder Arbeit sind nicht umfasst.
 
@@ -61,35 +63,34 @@ Copilot Cloud Agent ist für das derzeit angemeldete Konto nicht verfügbar („
 
 Der Pilot verwendet [Issue #2](https://github.com/marceldamm/diktator-kart/issues/2), [PR #1](https://github.com/marceldamm/diktator-kart/pull/1), [Milestone](https://github.com/marceldamm/diktator-kart/milestone/1) und das private [Project-Board](https://github.com/users/marceldamm/projects/1/views/1). PR #1 ist mit erfolgreichen Actions zusammengeführt. Das persönliche Repository ist öffentlich, das Project privat; der Teamzugriff für den Pilot ist eingerichtet. Der gemeinsame Praxistest ist noch offen. Konten- und Rollenangaben für das private Project gehören nicht in das öffentliche Repository.
 
-## Was beim Projektstart passiert
+## Aktueller Projektstart und parallele Arbeit – 09.10.2026
 
-1. Repository, origin, Branch, Worktrees und ungesicherte Dateien pruefen. Keine parallelen Agenten im selben Checkout. Vorhandene aktive Git-Operationen zuerst klaeren.
-2. `git fetch origin --prune`: aktuelle Daten holen, ohne lokale Arbeit zu ersetzen.
-3. Gemeinsame Basis und seitdem geaenderte Dateien auf beiden Seiten vergleichen; Überschneidungen samt uncommitteten Dateien melden. Statusbericht in `.tools/team-status.json` (lokal/ignoriert).
-4. Ungesicherte Arbeit **vor jedem Wechsel** bewahren: betroffene Dateien pruefen, insbesondere Geheimnisse/ignorierte Tools ausschliessen; benannten Sicherungsbranch/Checkpoint anlegen. Keine pauschalen Reset-/Clean-Befehle. Ein Stash ist nur mit eindeutiger Zuordnung und dokumentierter Rueckholung ausreichend; Altcode-Stashes nicht auf das neue Projekt anwenden.
-5. Falls der lokale Stand vor der neuen Babylon-Basis liegt: vollstaendig als Archiv sichern; neuen Arbeitsbranch auf `origin/main` beginnen. Alte technische Aenderungen werden nicht automatisch migriert. Ideen/Inhalte bei Bedarf als Herkunft-markierten Vorschlag in den neuen Dokumenten bewahren.
-6. Aktuelle Babylon-Arbeit: neuesten main normal zusammenfuehren. Bei Konflikten analysiert die KI beide Intentionen und integriert sie. Kein globales `ours/theirs`, keine blinde Auswahl einer Datei. Binaere .blend/GLB-/Audio-/Bildkonflikte brauchen Quellen-/Versionsvergleich; Assets nach Moeglichkeit aus der gewaelten Quelle neu exportieren. Bei echter Kreativentscheidung Nutzer fragen.
-7. Auf eigenem `codex/team-<person>-<zeit>`-Branch arbeiten; Fortschrittslog und relevante Dokumente lesen. Veraenderte Abhaengigkeiten/Assetvertraege/Settings bewusst migrieren und pruefen. Dann erst neue Entwicklung.
+1. Mehrere Personen und KIs dürfen denselben Hauptordner und Checkout gleichzeitig bearbeiten. Vor Änderungen `git status`, `git diff` und laufende Git-Operationen prüfen. Bereits begonnene Arbeit bleibt erhalten.
+2. Dateien/Teilaufgaben nach Möglichkeit kurz zuweisen. Auch dieselbe Datei darf parallel bearbeitet werden; vor dem Commit beide Änderungen im Gesamtdiff vergleichen. Bei echtem fachlichem Widerspruch Arbeit erhalten und nachfragen.
+3. `origin/main` holen. Bei sauberer lokaler Arbeitskopie aktualisiert `Projektstart` ein lokales `main` per Fast-Forward. Bei uncommittierten Änderungen stoppt die Synchronisierung, ohne etwas zu wechseln oder zu überschreiben. Unabhängige Arbeit kann weiterlaufen; dieselbe Datei erst nach kurzem Abgleich bearbeiten und vor dem nächsten Sync die vorhandenen Änderungen mit den Beteiligten integrieren.
+4. Alle Entwickler und KIs arbeiten im normalen Ablauf direkt auf `main`. Der Projektstart selbst committet oder pusht nicht. Kein Reset, Force-Push oder pauschales `ours/theirs`.
+5. Gemeinsam auf dasselbe Git-Verzeichnis bedeutet: Stage-/Commit-/Push-Aktionen kurz abstimmen und nacheinander ausführen. Während ein Pfad gestaged/committet wird, diesen Pfad kurz nicht parallel verändern; unabhängige Dateien können weiterlaufen. Vor einem Commit nur eigene, vollständig geprüfte Pfade stagen. `Zwischenstand sichern` nutzt dafür `scripts/team-workflow.ps1 -Action Checkpoint -Paths <Datei> [weitere Dateien]`; ohne explizite Pfade oder bei bereits vorgemerkten Index-Dateien wird abgebrochen, statt fremde Änderungen mitzucommitten.
+6. Bei neuen Remote-Commits Änderungen normal zusammenführen. Textkonflikte inhaltlich lösen und beide Intentionen erhalten. Blender-/GLB-/Audio-/Bilddateien können nicht textuell gemergt werden: Versionen/Quellen vergleichen und nötigenfalls als getrennte Varianten erhalten.
 
-Die Batch `Projekt-starten.cmd` erledigt den einfachen Fall. Bei ungesicherten Dateien oder Konflikten stoppt sie mit erhaltenem Zustand und verweist auf den KI-Befehl. Sie kann keine inhaltliche Konfliktloesung selbst erfinden.
+Die Batch `Projekt-starten.cmd` aktualisiert den sauberen lokalen Hauptstand. Bei parallelen uncommittierten Änderungen oder Konflikten stoppt sie mit erhaltenem Zustand; die KI gleicht die Inhalte ab und setzt danach fort.
 
-## Was beim Projektabschluss passiert
+## Aktueller Projektabschluss
 
-1. Arbeitsdiff pruefen, notwendige Tests/Browserprobe machen, beobachtete Ergebnisse dokumentieren. `PROGRESS-LOG.md` muss Ergebnisse, Annahmen, betroffene Dateien, Probleme und naechsten Schritt enthalten. Neue Quellen/Lizenzen dokumentieren.
-2. Funktionierenden lokalen Commit erstellen; alle benoetigten Laufzeitassets und editierbaren Quellen einschliessen, keine .tools/node_modules/Worktrees oder Zugangsdaten.
-3. Aktuellen main erneut holen und Aenderungen der anderen Person integrieren. Nach Konfliktloesung Tests erneut pruefen. Der Hauptstand bleibt bis zum erfolgreichen Abschluss erhalten.
-4. `scripts/team-workflow.ps1 -Action Finish`: Sicherungsbranch, neuesten Teamstand integrieren, Unit-Tests und Produktionsbuild. Den geprüften Arbeitsbranch nach GitHub pushen und einen Pull Request nach `main` öffnen oder aktualisieren. GitHub Actions muss `tests-and-build` erfolgreich melden; bei Fehlern korrigieren und erneut prüfen.
-5. Der ausdrückliche Projektabschluss autorisiert nach erfolgreicher Prüfung den Merge des PR über GitHub. `main` wird nie direkt gepusht und Rulesets werden nie umgangen. Danach `origin/main` erneut abrufen und den enthaltenen Commit verifizieren. Ohne verfügbares GitHub-Schreibwerkzeug Arbeitsbranch und PR-Link sichern, aber den Abschluss als noch offen melden.
+1. Gesamtdiff prüfen, passende lokale Tests/Builds oder sichtbare Spielprobe ausführen und nur tatsächlich verifizierte Ergebnisse in den vier Hauptdateien festhalten. Quellen/Lizenzen für neue Assets dokumentieren.
+2. Die eigene Änderung klar abgrenzen. Nur geprüfte und zugeordnete Dateien stagen; keine pauschale `git add -A`-Aktion bei paralleler Arbeit. Andere uncommittierte Änderungen bleiben erhalten.
+3. Stage-/Commit-/Push-Schritte mit gleichzeitig arbeitenden KIs kurz koordinieren und nacheinander ausführen. Vor dem Push `origin/main` erneut holen, neue Commits normal integrieren und Konflikte inhaltlich lösen. Nach Konfliktlösung relevante Prüfungen wiederholen.
+4. Auf `main` normal committen und pushen. Kein PR-/Actions-Prozess ist hierfür vorgesehen. Ein Push, der wegen neuer Remote-Arbeit abgelehnt wird, heißt: erneut holen, integrieren, prüfen und normal pushen.
+5. Nach dem Push Remote-Commit abrufen und gegen lokalen Commit verifizieren. Bei Netzwerk-/Berechtigungsfehler den lokalen Commit erhalten und den Remote-Stand als noch nicht gesichert melden.
 
-Die Batch `Projekt-abschliessen.cmd` prüft und sichert den dokumentierten Commit, pusht aber nie direkt nach `main`. Da `gh` auf Marcels aktuellem PC nicht installiert ist, gibt sie den Branch-/PR-Vergleichslink aus und übergibt das Öffnen, Abwarten des Pflichtchecks und den Merge an Codex im angemeldeten GitHub-Browser. Ein reiner Batchlauf gilt bis zum verifizierten PR-Merge nicht als veröffentlichter Abschluss. Für eine bewusste Sicherung zwischendurch ist `Projekt-zwischenstand.cmd` da: Codex **„Zwischenstand sichern“** sagen, damit die KI Dateien/Geheimnisse prüft und erst dann den Checkpoint ausführt. Der Befehl sichert nur auf dem persönlichen Branch und pusht nie nach `main`.
+`Projekt-abschliessen.cmd` führt den dokumentierten Abschluss aus. `Projekt-zwischenstand.cmd` allein hat keine KI-gestützte Dateiauswahl; für parallele Änderungen zuerst die KI prüfen lassen und Checkpoint mit ausdrücklich benannten `-Paths` aufrufen.
 
 ### Git in drei einfachen Begriffen
 
 - **`main`** ist die gemeinsame, getestete Version.
-- Ein **Arbeitsbranch** ist Marcels oder Sarahs getrennte Arbeitslinie. Beide beginnen nach `Projekt Start` auf dem aktuellen Stand und bearbeiten nicht gleichzeitig denselben Branch.
-- Ein **Commit** ist ein gespeicherter Stand. **„Zwischenstand sichern“** legt ihn lokal an und sichert den Branch auf GitHub; **„Projektabschluss“** integriert beide Arbeitslinien, löst Konflikte fachlich, prüft Tests/Build und veröffentlicht nach `main`.
+- Marcel, Sarah und KIs bearbeiten den gemeinsamen Checkout auf `main`; Dateien/Teilaufgaben werden nach Möglichkeit abgestimmt.
+- Ein **Commit** ist ein gespeicherter Stand. „Zwischenstand sichern“ committet nur ausdrücklich geprüfte Pfade; der Abschluss integriert neue Remote-Commits, prüft passend und sichert normal nach `main`.
 
-Git kombiniert unabhängige Änderungen automatisch. Bei Änderungen derselben Code-/Dokumentstelle stoppt der automatische Merge; die KI prüft beide Fassungen und führt sie zusammen, wenn die Absicht kompatibel ist. Eine unvereinbare Kreativentscheidung bleibt zur Klärung offen. `.blend`, GLB und andere Binärdateien kann Git nicht inhaltlich zusammensetzen: dieselbe Quelldatei nur nacheinander bearbeiten oder getrennte Varianten erhalten und später vergleichen.
+Git kombiniert unabhängige Änderungen automatisch. Bei Änderungen derselben Code-/Dokumentstelle stoppt der automatische Merge; die KI prüft beide Fassungen und führt sie zusammen, wenn die Absicht kompatibel ist. Eine unvereinbare Kreativentscheidung bleibt zur Klärung offen. `.blend`, GLB und andere Binärdateien kann Git nicht inhaltlich zusammensetzen: bei paralleler Bearbeitung Änderungen abstimmen oder getrennte Varianten erhalten und später vergleichen.
 
 ## Spiel starten
 

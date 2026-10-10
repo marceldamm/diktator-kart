@@ -47,9 +47,9 @@ Die folgende Zwölferliste bewahrt Originalideen. Namen und Wirkungen sind keine
 | Fahrer | Arbeitstitel-Kart | Kreativer Kern | Spezialfähigkeit / ironischer Nachteil |
 |---|---|---|---|
 | Adolf Hitler | Größenwahn-Mobil | schwer, pompös, hohe Endgeschwindigkeit, schwache Beschleunigung und Handhabung | **Endlose Rede:** Gegner werden kurz durch eine Ansprache behindert; die eigene Figur redet zu lange weiter und verliert kurz Geschwindigkeit. |
-| Josef Stalin | Fünfjahresplan 3000 | massiv, industriell, schwer | **Große Säuberung:** Mehrere Hindernisse oder Items verschwinden; als Eigennachteil verschwindet auch etwas Eigenes. |
+| Josef Stalin | Fünfjahresplan 3000 | massiv, industriell, schwer | **Historischer, verworfener Arbeitstitel:** Mehrere Hindernisse oder Items verschwinden; als Eigennachteil verschwindet auch etwas Eigenes. Eine neue bürokratiesatirische Benennung/Mechanik bleibt offen. |
 | Benito Mussolini | Il Duce GT | sportlich, elegant, selbstgefällig | **Große Pose:** starker kurzer Turbo nach einer übertriebenen dramatischen Pose. |
-| Mao Zedong | Kultur-Kart | leicht, gute Beschleunigung und Handhabung | **Kulturrevolution:** gegnerische Steuerung wird kurz beeinflusst oder vertauscht; danach trifft ein kürzerer Nachteil den eigenen Fahrer. |
+| Mao Zedong | Kultur-Kart | leicht, gute Beschleunigung und Handhabung | **Historischer, verworfener Arbeitstitel:** gegnerische Steuerung wird kurz beeinflusst oder vertauscht; danach trifft ein kürzerer Nachteil den eigenen Fahrer. Eine neue bürokratiesatirische Benennung/Mechanik bleibt offen. |
 | Kim Jong-un | Propaganda-Rakete | Raketen-/Paradeästhetik | **Propaganda-Sieg (Babylon, 05.10.):** zehn Sekunden goldene Paradeveredelung, kurzer Triumphschub, anschließender Motoraussetzer und satirische Platz-1-Meldung; die echte Rangliste bleibt sichtbar und unverändert. Historische Frühfassung: 20-Sekunden-Meldung plus erfundener Acht-Runden-Vorsprung, ohne echten Rangwechsel. |
 | Muammar al-Gaddafi | Wüstenkreuzer | Wüstenfahrzeug, staubige Silhouette | **Wüstensturm:** Sand und Staub erschweren Sicht oder Strecke; die eigene Figur bleibt nicht vollständig verschont. |
 | Fidel Castro | Revolutions-Cabrio | leichtes, gut lenkbares Cabrio | **Blockade:** Eine Streckenbarriere entsteht und kann auch den eigenen Fahrer behindern. |
@@ -58,6 +58,12 @@ Die folgende Zwölferliste bewahrt Originalideen. Namen und Wirkungen sind keine
 | Idi Amin | Chaos-Mobil | bewusst unberechenbare Werte, zusammengewürfelte Form | **Unberechenbarer Befehl:** zufälliger positiver oder negativer Renneffekt; auch der Spieler kann verlieren. |
 | Augusto Pinochet | Ordnungs-Kart | militärisch geordnet, karikiert | **Ausgangssperre:** Andere Fahrer können kurz keine Items nutzen; der eigene Itemzugriff wird ebenfalls eingeschränkt. |
 | Francisco Franco | Traditions-Tourer | altmodisch, schwerfällig | **Stillstand der Tradition:** Alle Fahrer werden vorübergehend verlangsamt. |
+
+### Aktive Satiregrenze für Fähigkeiten – Marcel, 09.10.2026
+
+Bestätigte Gestaltungsregel: Witze und Spielmechaniken richten sich gegen Eitelkeit, Propaganda und Bürokratie der Diktatoren. Opfer und historische Gewalt sind weder Ziel noch Belohnung. Die historischen Arbeitstitel **„Große Säuberung“** und **„Kulturrevolution“** werden daher nicht als aktive Fähigkeitsnamen verwendet. Die Katalogwirkungen sind nur Ausgangsideen; neue Namen und genaue Mechaniken müssen diese Grenze einhalten. Nicht gebaute Fähigkeiten bleiben bis zur Bestätigung als Vorschläge gekennzeichnet.
+
+Für neue Arbeitstitel sind „Fünfjahresplan-Korrektur“ (Stalin) und „Einheitslenkung“ (Mao) mögliche satirische Richtungen. Mechanik und Balance sind damit noch nicht beschlossen.
 
 ## Details der sechs bisherigen Fahrer
 

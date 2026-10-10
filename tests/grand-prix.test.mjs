@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { GP_POINTS, GP_TRACKS, awardPoints, createGrandPrix, standings } from '../src/grand-prix.ts';
 
-test('Grand Prix covers both playable circuits and awards points once per round from the finishing order', () => {
+test('Grand Prix covers every playable circuit and awards points once per round from the finishing order', () => {
   const gp = createGrandPrix();
-  assert.deepEqual(gp.tracks, ['stadionring', 'duce-drom', 'havanna', 'pyongyang']);
-  assert.equal(GP_TRACKS.length, 4);
+  assert.deepEqual(gp.tracks, ['stadionring', 'duce-drom', 'havanna', 'pyongyang', 'moscow']);
+  assert.equal(GP_TRACKS.length, 5);
   assert.ok(awardPoints(gp, 'stadionring', [2, 0, 1, 3, 4, 5], 300));
   assert.equal(awardPoints(gp, 'stadionring', [0, 1, 2, 3, 4, 5], 290), false, 'a repeated finish must not add points');
   assert.deepEqual(gp.results[0].points, [7, 5, 10, 3, 2, 1]);

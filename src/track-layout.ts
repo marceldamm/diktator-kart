@@ -2,8 +2,8 @@
  * Circuit definitions. Game coordinates: x east, z north (Blender X / Y). Heading 0 drives toward +z;
  * positive lane offsets lie on the driver's right.
  *
- * Playable circuits (07.10.2026): the original "Stadionring" (Berlin), Sarah's "Duce-Drom" (Rome),
- * "Havanna-Revolutionsring" (Havana), and "Ewige-Führer-Allee" (Pyongyang).
+ * Playable circuits (09.10.2026): Berlin's "Stadionring", Sarah's Rome/Havana/Pyongyang selections,
+ * and the Moscow "Genossen-Gerade" with broad parade straights.
  * The active circuit is chosen with `setTrackLayout` (called through `selectTrack` in track.ts); all layout
  * exports below are live ES-module bindings that switch with it, so the simulation, world builders, bots,
  * minimap and items always read the circuit that is currently loaded.
@@ -12,7 +12,7 @@
 export const MAP_SCALE = 1.5;
 const S = MAP_SCALE;
 
-export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang';
+export type TrackId = 'stadionring' | 'duce-drom' | 'havanna' | 'pyongyang' | 'moscow';
 export type HazardKind = 'water' | 'lava' | 'cliff';
 export interface Hazard { from: number; to: number; side: 1 | -1; basin: number; kind: HazardKind }
 /** City district along the circuit: what lines each side between two progress values. */
@@ -23,7 +23,7 @@ export interface HeroPlacement { m: string; s?: number; lane?: number; x?: numbe
 export interface TrackObstacle { s: number; lane: number; radius: number }
 
 export interface TrackDefinition {
-  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang';
+  id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang' | 'moscow';
   /** Short German line for the track card and the loading caption. */
   tagline: string;
   controlPoints: readonly (readonly [number, number])[];
@@ -265,8 +265,41 @@ const EWIGE_FUEHRER_ALLEE: TrackDefinition = {
   ],
 };
 
-export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE };
-export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang';
+/** Genossen-Gerade (Sarah's Moscow selection; Marcel 09.10.2026): long parade straights around a broad civic square. */
+const MOSCOW: TrackDefinition = {
+  ...EWIGE_FUEHRER_ALLEE,
+  id: 'moscow', name: 'Genossen-Gerade', city: 'Moskau', theme: 'moscow',
+  tagline: 'Breite Parade-Geraden, Roter Platz und riskante Platzquerung',
+  controlPoints: [
+    [-300,-240],[-150,-240],[0,-240],[150,-240],[285,-240],[335,-205],[350,-130],[350,0],[350,130],[335,205],[285,240],
+    [150,240],[0,240],[-150,240],[-285,240],[-335,205],[-350,130],[-350,0],[-350,-130],[-335,-205],
+  ],
+  halfWidth: 8, start: 95, bump: -1,
+  shortcut: { from: 650, to: 1900, halfWidth: 4.2, speedCap: 11.2,
+    points: [[318,-178],[270,-132],[200,-88],[110,-32],[10,28],[-105,78],[-235,92],[-322,73]],
+    elevation: [[0,0],[1,0]], boostPads: [] },
+  canal: { from: -1000, length: 0 }, rampLips: [1050],
+  boostPads: [[230,0],[1210,0],[2340,0]], craters: [[850,-5,1.8],[860,4,1.8]],
+  grassVerges: [], elevation: [], hazards: [],
+  itemBoxes: [150,590,1070,1680,2280],
+  landmarks: { palace: null, fountains: [[0,0]], trees: [[-60,60],[60,-60]], column: [0,0], gateProgress: 2240, lawns: [], promenade: 7 },
+  river: { north: 365, south: 325, west: -480, east: 480, level: -1.15 },
+  ground: { west: -500, east: 500, north: 420, south: -340 },
+  dressing: {
+    boardRanges: [[0,260],[980,1320],[2130,2470]], flagRange: [620,980], pennants: [45,220,1160,2240,2460], screenProgress: 310,
+    districts: [
+      { from:0,to:520,left:'avenue',right:'avenue' }, { from:520,to:990,left:'plaza',right:'plaza' },
+      { from:990,to:1500,left:'plaza',right:'avenue' }, { from:1500,to:2050,left:'avenue',right:'plaza' },
+      { from:2050,to:99999,left:'avenue',right:'avenue' },
+    ],
+    heroes: [{ m:'kit-palace',s:760,lane:24 },{ m:'kit-obelisk',s:1200,lane:-24 },{ m:'kit-grandstand',s:2200,lane:18 }],
+    bridges: [320,2240], cathedral: null, petals: [650,850],
+  },
+  obstacles: [{ s:1050,lane:-7.5,radius:.38 },{ s:1050,lane:7.5,radius:.38 }],
+};
+
+export const TRACKS: Record<TrackId, TrackDefinition> = { stadionring: STADIONRING, 'duce-drom': DUCE_DROM, havanna: HAVANNA, pyongyang: EWIGE_FUEHRER_ALLEE, moscow: MOSCOW };
+export const isTrackId = (id: unknown): id is TrackId => id === 'stadionring' || id === 'duce-drom' || id === 'havanna' || id === 'pyongyang' || id === 'moscow';
 
 export interface TrackSample { x: number; z: number; heading: number; s: number; curvature: number }
 

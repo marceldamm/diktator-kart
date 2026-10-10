@@ -1,11 +1,11 @@
 # AGENTS.md – Arbeitsregeln für Diktator Kart: Babylon-Neustart
 
-## Ein Arbeitsordner, ein Stand – gilt für ChatGPT/Codex und Claude
+## Gemeinsamer Arbeitsordner und Stand – gilt für ChatGPT/Codex und Claude
 
 1. Gearbeitet, gestartet, committet und gepusht wird nur im Hauptordner des Repositorys (Marcel: `D:\Diktator-Kart`). Die Batch `Diktator-Kart-starten.cmd` startet genau diesen Ordner.
-2. Vor jeder Änderung: `git status` und `git log -1` prüfen; mit `git fetch origin` und dem Projektstart-Ablauf auf den neuesten gemeinsamen Stand bringen. Nie auf älteren Dateien weiterarbeiten.
+2. Vor neuer Arbeit: `git status` und `git log -1` prüfen; `origin/main` abrufen und den Projektstart-Ablauf verwenden. In einem gemeinsamen Checkout können Änderungen anderer Personen/KIs noch uncommittet sein: nichts überschreiben oder wegwechseln. Unabhängige Aufgaben dürfen weiterlaufen; vor Änderungen an denselben Dateien Intentionen abgleichen. Erst wenn lokale Änderungen sicher zusammengeführt/committet sind, einen nötigen Remote-Fast-Forward ausführen.
 3. Commits gestaffelt: nicht nach jeder kleinen Änderung committen. Nach sinnvollen Paketen, „Zwischenstand sichern“ und Projektabschluss die vier Hauptdateien aktualisieren, lokal committen und den gemeinsamen Stand nach `main` sichern. Vor Branchwechseln und riskanten Schritten ungesicherte Arbeit erhalten. GitHub-PR-, Review-, Board- und Actions-Dokumentation ist kein Arbeitsablauf.
-4. Pro lokalem Checkout arbeitet nur eine KI gleichzeitig. Marcel und Sarah dürfen in eigenen Checkouts parallel arbeiten. Vor jedem Push neuesten `origin/main` holen und prüfen. Ist der lokale Commit dahinter, Änderungen durch Merge zusammenführen und Konflikte inhaltlich lösen; erst danach normal pushen. Ein abgewiesener Push bedeutet: neu synchronisieren und erneut zusammenführen. Niemals `--force`, Reset oder blinde Überschreibung zum Auflösen verwenden.
+4. Mehrere KIs dürfen gleichzeitig im selben lokalen Checkout und Hauptordner arbeiten, auch an derselben Datei. Marcel koordiniert nach Möglichkeit klare Aufgaben-/Dateizuständigkeiten; wenn sich Änderungen berühren, werden beide Intentionen erhalten und zusammengeführt. Vor Änderungen `git status` und `git diff` prüfen. Niemals fremde oder parallel entstandene Änderungen überschreiben, verwerfen oder ungeprüft stagen. Vor Commit/Push den Gesamt-Diff erneut prüfen und nur die ausdrücklich geprüften, eigenen Pfade stagen. Gleichzeitige Git-Schreibaktionen (Index, Commit, Push) müssen kurz koordiniert nacheinander laufen, weil alle KIs dasselbe Git-Verzeichnis und denselben Index verwenden. Vor jedem Push neuesten `origin/main` holen und Änderungen normal zusammenführen. Ein abgewiesener Push bedeutet: neu synchronisieren und erneut zusammenführen. Niemals `--force`, Reset oder blinde Überschreibung zum Auflösen verwenden.
 5. Auch Claude arbeitet direkt im Hauptordner, ohne Worktree. Der frühere Claude-Worktree wurde am 04.10.2026 entfernt.
 
 ## Kurzbefehle
@@ -46,8 +46,8 @@ Dieser Ordner ist die neue Projekt- und Wissensbasis für die Babylon.js-Neuentw
 
 - Ausschließlich die neue Babylon-Hauptbasis von origin/main in marceldamm/diktator-kart entwickeln. Aktive Verzeichnisse: src/, public/, art-source/; Kennzeichnung und Mindestabstammung in project-state.json.
 - Alte PlayCanvas-Checkouts, Diktator-Kart-Legacy/, Legacy/, archive/* und Stände vor der gemeinsamen Babylon-Basis sind unveränderliche historische Referenzen. Dort nicht entwickeln, starten oder veröffentlichen. Änderungen ausschließlich am neuen Projekt. Keine automatische Übernahme alten Engine-Codes.
-- Vor Arbeitsbeginn Projektstart: neuesten `origin/main` holen, lokale Arbeit sichern und aktuelle Babylon-Änderungen integrieren. Altcode zuerst archivieren, anschließend auf neuer Basis arbeiten. Die vier Hauptdateien und Repo-Skills enthalten den aktuellen Ablauf; docs/21-team-workflow.md ist historische Anleitung.
-- Projektabschluss autorisiert die Sicherung des geprüften gemeinsamen Stands auf `main`; keine parallelen Arbeitsbranches. Bis die Main-Branch-Einstellung geändert ist, bei einer Ablehnung nichts umgehen und den lokalen Commit erhalten.
+- Vor Arbeitsbeginn Projektstart: neuesten `origin/main` holen, lokale Arbeit erhalten und aktuelle Babylon-Änderungen integrieren. In einem gemeinsam bearbeiteten Checkout darf bei lokalen Änderungen unabhängig weitergearbeitet werden; synchronisiert wird nach dem Abgleich. Altcode zuerst archivieren, anschließend auf neuer Basis arbeiten. Die vier Hauptdateien, Repo-Skills und docs/21-team-workflow.md enthalten den aktuellen Ablauf.
+- Projektabschluss autorisiert die Sicherung des geprüften gemeinsamen Stands auf `main`. Mehrere Personen/KIs dürfen parallel im selben Checkout arbeiten; Stage-/Commit-/Push-Schritte werden kurz koordiniert und nacheinander ausgeführt. Bei einer Ablehnung lokalen Commit erhalten und neu synchronisieren.
 - Fehlende Zugänge, echte widersprüchliche Kreativentscheidungen und ungelöste Konflikte konkret melden; Arbeit erhalten. Keine Aktualität oder Veröffentlichung behaupten, die nicht geprüft wurde.
 
 ## Umgang mit dem Altprojekt

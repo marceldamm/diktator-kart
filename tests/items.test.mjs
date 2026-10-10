@@ -16,7 +16,7 @@ test('swept projectiles hit one target, consume the object and protect from chai
   const karts=[gridKart(0),gridKart(1),gridKart(2)];karts[1]={...karts[0],z:karts[0].z+7,speed:12};karts[2]={...karts[1],z:karts[1].z+4,speed:12};
   let next=karts;
   for(let i=0;i<20;i++)next=stepItems(world,next,[i===0,false,false],[1,2,3],1/60);
-  assert.equal(next[1].speed,12*ITEM_RULES.hitSpeedFactor);assert.equal(next[2].speed,12);assert.equal(world.objects.length,0);assert.ok(world.immune[1]>0);
+  assert.equal(next[1].speed,12*ITEM_RULES.hitSpeedFactor);assert.ok(next[2].speed>=12&&next[2].speed<=12+ITEM_RULES.nearMissBoost);assert.equal(next[2].spinRemaining??0,0);assert.equal(world.objects.length,0);assert.ok(world.immune[1]>0);
   world.objects.push({id:99,kind:'trap',owner:0,x:next[1].x,z:next[1].z,heading:0,age:1,remaining:2,target:null});
   next=stepItems(world,next,[false,false,false],[1,2,3],1/60);assert.equal(next[1].speed,12*ITEM_RULES.hitSpeedFactor);
 });
@@ -42,6 +42,31 @@ test('an item held behind as a shield blocks one projectile from behind, consumi
   const after = step(world, [target, shooter], [false, false], [1, 2], 1 / 60);
   assert.ok(world.events.some((e) => e.kind === 'block' && e.kart === 0));
   assert.equal(world.slots[0], null); assert.equal(after[0].spinRemaining ?? 0, 0);
+});
+
+test('a second item box grants a distinct defensive slot that activates and blocks one projectile', () => {
+  const world=createItems(2);const target={...gridKart(0),...trackPoint(100,0),speed:12},rival={...gridKart(1),...trackPoint(80,0)};
+  world.slots[0]='trap';world.boxes=[{id:1,x:target.x,z:target.z,readyIn:0}];
+  stepItems(world,[target,rival],[false,false],[1,2],1/60);
+  assert.equal(world.slots[0],'trap','the occupied offensive item must not be overwritten');
+  assert.equal(world.defenseSlots[0],true);assert.ok(world.events.some(e=>e.kind==='defense-pickup'&&e.kart===0));
+  world.boxes=[];stepItems(world,[target,rival],[false,false],[1,2],1/60,[],[true,false]);
+  assert.equal(world.defenseSlots[0],false);assert.ok(world.defenseRemaining[0]>0);
+  world.objects.push({id:99,kind:'direct',owner:1,x:target.x,z:target.z,heading:target.heading,age:1,remaining:2,target:null});
+  const after=stepItems(world,[target,rival],[false,false],[1,2],1/60);
+  assert.ok(world.events.some(e=>e.kind==='block'&&e.kart===0&&e.item==='shield'));
+  assert.equal(world.defenseRemaining[0],0);assert.equal(after[0].speed,target.speed);
+});
+
+test('near misses reward one close dodge once per projectile with a small cooldown-protected boost', () => {
+  const world=createItems(2);world.boxes=[];const p=trackPoint(100,0),sideX=Math.cos(p.heading),sideZ=-Math.sin(p.heading);
+  const target={...gridKart(0),x:p.x,z:p.z,heading:p.heading,speed:10,turboRemaining:0},rival=gridKart(1);
+  world.objects.push({id:99,kind:'direct',owner:1,x:p.x+sideX*1.65-.2*Math.sin(p.heading),z:p.z+sideZ*1.65-.2*Math.cos(p.heading),heading:p.heading,age:1,remaining:2,target:null});
+  const first=stepItems(world,[target,rival],[false,false],[1,2],1/60);
+  assert.ok(world.events.some(e=>e.kind==='near-miss'&&e.kart===0));assert.ok(first[0].speed>target.speed);assert.ok(first[0].turboRemaining>0);
+  const speed=first[0].speed;stepItems(world,first,[false,false],[1,2],1/60);
+  assert.equal(world.events.some(e=>e.kind==='near-miss'&&e.kart===0),false,'one projectile cannot trigger repeated near-miss rewards');
+  assert.ok(world.nearMissCooldown[0]>0);assert.ok(speed>target.speed);
 });
 
 test('backward projectiles launch behind and homing selects a rival behind the owner', () => {

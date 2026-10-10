@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import http from 'node:http';
 
@@ -53,8 +53,7 @@ for(const missing of ['TEAM-CHANGES.md','TEAM-NOTES.md'])test(`team: missing ${m
   put(f.Bob,'project-state.json',JSON.stringify({...f.state,teamLists:['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md','TEAM-NOTES.md']}));
   for(const file of ['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md','TEAM-NOTES.md'])if(file!==missing)put(f.Bob,file,'# Shared work file\n');
   commit(f.Bob,'new work-list contract but missing '+missing);git(f.Bob,'push','origin','main');
-  git(f.Alice,'fetch','origin');git(f.Alice,'switch','-c','codex/team-alice-list-test','origin/main');
-  put(f.Alice,'PROGRESS-LOG.md','# Progress\nVerified draft\n');commit(f.Alice,'documented work');
+  put(f.Alice,'draft.txt','# Verified draft\n');commit(f.Alice,'documented work');
   const before=remoteHead(f),result=run(f.Alice,'Finish',false);
   assert.notEqual(result.status,0);assert.ok(result.stdout.includes(missing));assert.equal(remoteHead(f),before);
 });
@@ -68,74 +67,51 @@ test('team: dirty local work is preserved and cannot be switched or published', 
   assert.equal(readFileSync(join(f.Alice, 'draft.txt'), 'utf8'), 'do not lose me');
   assert.equal(remoteHead(f), before);
 });
-test('team: checkpoint commits and uploads only the named work branch', { skip: !windows }, () => {
+test('team: checkpoint requires explicit paths and saves only the selected files to main', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
-  const mainBefore = remoteHead(f);
-  const branch = git(f.Alice, 'branch', '--show-current');
   put(f.Alice, 'checkpoint.txt', 'recoverable work');
-  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\ncheckpoint saved\n');
-  const result = run(f.Alice, 'Checkpoint');
+  put(f.Alice, 'parallel-draft.txt', 'leave for the other worker');
+  assert.notEqual(run(f.Alice, 'Checkpoint', false).status, 0, 'must not stage every concurrent edit implicitly');
+  const result = command(root, 'powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', workflow, '-Action', 'Checkpoint', '-ProjectRoot', f.Alice, '-Paths', 'checkpoint.txt']);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /ZWISCHENSTAND GESICHERT/);
-  assert.equal(remoteHead(f), mainBefore, 'checkpoint must not publish to main');
-  const branchHead = git(f.remote, 'rev-parse', `refs/heads/${branch}`);
-  assert.equal(branchHead, git(f.Alice, 'rev-parse', 'HEAD'));
-  assert.equal(git(f.Alice, 'status', '--porcelain'), '');
-  assert.equal(git(f.Alice, 'show', `${branchHead}:checkpoint.txt`), 'recoverable work');
+  assert.equal(git(f.Alice, 'branch', '--show-current'), 'main');
+  assert.equal(git(f.remote, 'show', 'main:checkpoint.txt'), 'recoverable work');
+  assert.notEqual(command(f.remote, 'git', ['cat-file', '-e', 'main:parallel-draft.txt'], false).status, 0);
+  assert.equal(readFileSync(join(f.Alice, 'parallel-draft.txt'), 'utf8'), 'leave for the other worker');
 });
-test('team: disjoint parallel changes integrate, verify and upload branch for PR handoff', { skip: !windows }, () => {
+test('team: clean main project start fast-forwards remote work', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
-  assert.match(git(f.Alice, 'branch', '--show-current'), /^codex\/team-alice-/);
-  put(f.Alice, 'alice.txt', 'Alice'); commit(f.Alice, 'Alice change');
   put(f.Bob, 'bob.txt', 'Bob'); commit(f.Bob, 'Bob change'); git(f.Bob, 'push', 'origin', 'main');
-  const bob = remoteHead(f); run(f.Alice, 'Start');
-  assert.equal(readFileSync(join(f.Alice, 'alice.txt'), 'utf8'), 'Alice');
+  run(f.Alice, 'Start');
   assert.equal(readFileSync(join(f.Alice, 'bob.txt'), 'utf8'), 'Bob');
-  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nAlice verified both\n'); commit(f.Alice, 'verified handoff');
-  const result = run(f.Alice, 'Finish', false);
-  assert.notEqual(result.status, 0, 'Finish returns a handoff sentinel until Codex creates/checks/merges the PR');
-  const branch = git(f.Alice, 'branch', '--show-current');
-  assert.ok(result.stdout.includes(`/compare/main...${encodeURIComponent(branch)}?expand=1`), 'Finish prints an exact compare URL for the uploaded branch');
-  assert.match(result.stdout, /Continue in Codex: create\/update this PR/);
-  assert.equal(remoteHead(f), bob, 'Finish must not push directly to main');
-  assert.equal(git(f.remote, 'rev-parse', `refs/heads/${branch}`), git(f.Alice, 'rev-parse', 'HEAD'));
-  assert.equal(command(f.remote, 'git', ['merge-base', '--is-ancestor', bob, `refs/heads/${branch}`], false).status, 0);
+  assert.equal(git(f.Alice, 'branch', '--show-current'), 'main');
 });
 test('team: overlapping conflicting edits are reported and remote main stays intact', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   put(f.Alice, 'shared.txt', 'Alice intention\n'); commit(f.Alice, 'Alice shared change');
   put(f.Bob, 'shared.txt', 'Bob intention\n'); commit(f.Bob, 'Bob shared change'); git(f.Bob, 'push', 'origin', 'main');
   const before = remoteHead(f); const result = run(f.Alice, 'Start', false);
-  assert.notEqual(result.status, 0); assert.match(result.stdout, /shared.txt/);
-  const conflict = readFileSync(join(f.Alice, 'shared.txt'), 'utf8');
-  assert.match(conflict, /Alice intention/); assert.match(conflict, /Bob intention/);
+  assert.notEqual(result.status, 0); assert.match(result.stdout, /auseinander gelaufen/);
+  assert.equal(readFileSync(join(f.Alice, 'shared.txt'), 'utf8'), 'Alice intention\n');
   assert.equal(remoteHead(f), before);
 });
-test('team: pre-baseline legacy work is archived, not copied into new project', { skip: !windows }, () => {
+test('team: an unrelated or historical branch is preserved and never switched automatically', { skip: !windows }, () => {
   const f = fixture(); git(f.Alice, 'switch', '-c', 'old-session', f.minimum);
   put(f.Alice, 'legacy-only.txt', 'old implementation'); commit(f.Alice, 'old local work');
-  const old = git(f.Alice, 'rev-parse', 'HEAD'); run(f.Alice, 'Start');
-  assert.ok(!existsSync(join(f.Alice, 'legacy-only.txt')));
-  const archive = git(f.Alice, 'for-each-ref', '--format=%(refname:short)', 'refs/heads/archive/local-before-babylon-*');
-  assert.equal(git(f.Alice, 'rev-parse', archive), old);
-  assert.equal(git(f.Alice, 'show', `${archive}:legacy-only.txt`), 'old implementation');
-  assert.equal(git(f.Alice, 'rev-parse', 'HEAD'), remoteHead(f));
+  const old = git(f.Alice, 'rev-parse', 'HEAD'); assert.notEqual(run(f.Alice, 'Start', false).status, 0);
+  assert.equal(git(f.Alice, 'rev-parse', 'HEAD'), old);
+  assert.equal(git(f.Alice, 'branch', '--show-current'), 'old-session');
+  assert.equal(git(f.Alice, 'show', 'HEAD:legacy-only.txt'), 'old implementation');
 });
-test('team: concurrent update during build prevents an outdated main push', { skip: !windows }, () => {
+test('team: finish integrates a disjoint remote commit before normal main push', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
-  put(f.Bob, 'concurrent.txt', 'new remote work'); commit(f.Bob, 'concurrent work');
-  put(f.Alice, 'race-build.mjs', `import{execFileSync}from'node:child_process';execFileSync('git',['-C',${JSON.stringify(f.Bob)},'push','origin','main']);`);
-  put(f.Alice, 'package.json', JSON.stringify({ scripts: { test: 'node -e "process.exit(0)"', build: 'node race-build.mjs' } }));
-  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nAlice handoff\n'); commit(f.Alice, 'ready for publication');
-  const local = git(f.Alice, 'rev-parse', 'HEAD'); const result = run(f.Alice, 'Finish', false);
-  assert.notEqual(result.status, 0); assert.match(result.stdout, /advanced during verification/);
-  assert.equal(remoteHead(f), git(f.Bob, 'rev-parse', 'HEAD'));
-  assert.notEqual(remoteHead(f), local); assert.equal(git(f.Alice, 'rev-parse', 'HEAD'), local);
-});
-test('team: failed verification cannot publish', { skip: !windows }, () => {
-  const f = fixture(); run(f.Alice, 'Start'); const before = remoteHead(f);
-  put(f.Alice, 'package.json', JSON.stringify({ scripts: { test: 'node -e "process.exit(1)"', build: 'node -e "process.exit(0)"' } }));
-  put(f.Alice, 'PROGRESS-LOG.md', '# Progress\nbase\nnot verified\n'); commit(f.Alice, 'failing change');
-  assert.notEqual(run(f.Alice, 'Finish', false).status, 0); assert.equal(remoteHead(f), before);
+  put(f.Alice, 'alice.txt', 'Alice'); commit(f.Alice, 'Alice change');
+  put(f.Bob, 'bob.txt', 'Bob'); commit(f.Bob, 'Bob change'); git(f.Bob, 'push', 'origin', 'main');
+  run(f.Alice, 'Finish');
+  assert.equal(remoteHead(f), git(f.Alice, 'rev-parse', 'HEAD'));
+  assert.equal(git(f.remote, 'show', 'main:alice.txt'), 'Alice');
+  assert.equal(git(f.remote, 'show', 'main:bob.txt'), 'Bob');
 });
 
 async function fakeServer(payload) {
