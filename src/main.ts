@@ -205,6 +205,7 @@ class App {
       try{if(!isTrackId(wanted))wanted=localStorage.getItem('dk-track');}catch{}
       if(isTrackId(wanted))selectTrack(wanted);
       this.selectedTrackId=TRACK.id;
+      this.audio.setTrackMusic(TRACK.id);
       this.drawTrackCards();
     }
     try{const t=localStorage.getItem('dk-tires');if(t&&(t==='auto'||TIRE_SETS.some(s=>s.id===t)))this.tireChoice=t;}catch{}
@@ -482,6 +483,7 @@ class App {
   /** Rebuilds the scene for another circuit and continues with `then` once it renders. */
   private async loadTrack(id: TrackId, then: () => void): Promise<void> {
     selectTrack(id); this.selectedTrackId = id;
+    this.audio.setTrackMusic(id);
     try { localStorage.setItem('dk-track', id); } catch { /* storage optional */ }
     this.drawTrackCards();
     await this.restart(then);

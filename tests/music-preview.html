@@ -1,0 +1,15 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><title>Diktator Kart · Streckenmusik</title>
+<style>body{background:#11232a;color:#eee;font:18px Arial;padding:2rem}select,audio{display:block;margin:1rem 0;width:min(36rem,90vw)}output{display:block}</style>
+<h1>Sechs eigene Streckenmusiken</h1><label>Strecke <select id="course"></select></label>
+<audio id="music" controls loop preload="metadata"></audio><output id="status">Lädt …</output>
+<button id="play">Abspielen</button> <button id="pause">Anhalten</button>
+<p>Originalkompositionen mit synthetischen Instrumenten. Die Schleife wiederholt sich automatisch.</p>
+<script type="module">
+import {MUSIC_THEMES} from '../src/music-themes.ts';
+const course=document.querySelector('#course'),music=document.querySelector('#music'),status=document.querySelector('#status');
+course.replaceChildren(...Object.entries(MUSIC_THEMES).map(([id,m])=>new Option(m.title,id)));
+function show(){const m=MUSIC_THEMES[course.value];status.textContent=`${m.title} · ${m.bpm} BPM · ${music.paused?'angehalten':'spielt'} · ${music.currentTime.toFixed(1)} / ${(music.duration||0).toFixed(2)} s · ${m.file}`;}
+function load(){const resume=!music.paused;music.src='/assets/audio/'+MUSIC_THEMES[course.value].file;if(resume)music.play().catch(()=>{});show();}
+document.querySelector('#play').onclick=()=>music.play();document.querySelector('#pause').onclick=()=>music.pause();
+course.onchange=load;for(const event of ['loadedmetadata','timeupdate','play','pause','error'])music.addEventListener(event,show);load();
+</script></html>

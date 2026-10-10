@@ -1,4 +1,6 @@
 import type { KartState } from './kart-model';
+import type { TrackId } from './track-layout';
+import { MUSIC_THEMES } from './music-themes.ts';
 
 /** Gear bands in m/s for the virtual gearbox that shapes the engine note. */
 const GEARS = [0, 4.2, 8, 11.8, 15.2, 22];
@@ -45,6 +47,7 @@ export class KartAudio {
   private lastHorn = -Infinity;
   private readonly music = new Audio('/assets/audio/march.wav');
   private musicVolume=.14;
+  private musicTrack: TrackId | undefined;
   enabled = true;
   constructor() { this.music.loop = true; this.music.volume = .14; }
 
@@ -141,6 +144,14 @@ export class KartAudio {
   /** Final lap: the march hurries a little (pitch-preserving where the browser supports it). */
   setMusicTempo(rate:number):void {this.music.playbackRate=rate;(this.music as HTMLAudioElement&{preservesPitch?:boolean}).preservesPitch=true;}
   setMusicVolume(volume:number):void {this.musicVolume=Math.max(0,Math.min(1,volume));this.music.volume=this.musicVolume;}
+  /** One selected course file, keeping volume, mute, final-lap tempo and browser gesture handling. */
+  setTrackMusic(track:TrackId):void {
+    if(this.musicTrack===track)return;
+    this.musicTrack=track;const resume=!this.music.paused,rate=this.music.playbackRate;
+    this.music.pause();this.music.src=`/assets/audio/${MUSIC_THEMES[track].file}`;
+    this.music.loop=true;this.music.preload='metadata';this.music.playbackRate=rate;
+    if(resume&&this.enabled)void this.music.play().catch(()=>{/* Next unlock gesture retries playback. */});
+  }
   itemEvent(kind:'pickup'|'launch'|'hit'):void { this.play(kind==='pickup'?this.pickup:kind==='launch'?this.launch:this.impact,.65); }
   dogBark():void { this.play(this.bark,.85); }
   /** Original temporary parody, not an authentic historical recording. No key-repeat spam. */

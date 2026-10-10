@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 10.10.2026 – Codex: Musikprüfung
+
+Sechs eigene Stücke, 108–120 BPM, 32–35,56 Sekunden, mono PCM16/22.050 Hz; 1,41–1,57 MB je Kurs. Datei-Peaks 0,84, RMS 0,282–0,298; musikalische Form und Schleifensprung ohne isolierten größeren Sampleimpuls geprüft. Kein auditives Urteil aus diesen Werten ableiten. Audio-Steuerungstest prüft Quellenwechsel, unveränderte Lautstärke/Stumm/Tempo und kein automatisches Abspielen aus bloßer Kurswahl. Sichtbarer Chrome: alle sechs Dateien geladen und laufende Zeit/Wiedergabe bestätigt; Berlin-Schleife weitergelaufen. Hörqualität, Wahrnehmbarkeit von Übergängen und echte Renn-/Ansagenmischung brauchen menschliches Urteil. Produktionsbuild bestanden, bekannte Chunkwarnung. Offizielle Budgetwerte zuletzt 37 % Fünfstunden-/66 % Wochenrest; keine Resets aktiviert. Weiter mit kostenlosen Baumassets und Bodenmaterialien.
+
 ## 10.10.2026 – Codex: Schaden und Gegner geprüft
 
 Schaden: vier Assetgruppen statt zwei, echte Kotflügel-/Heckverluste, Reparatur refittet alle. Blender im Hintergrund beendet, hero-kart.glb allein neu optimiert (3.530.700 Bytes; übrige Assets unverändert). Vorher/Nachher bei 25 % und gleichen Berlin-/Hitler-/Dreiviertelbedingungen: damage-25-before/after.jpg; zusätzlich damage-wreck-after.jpg und damage-repaired-after.jpg. Diese Bilder zeigen ausgespielte Teileverluste, keine Momentaufnahme der Funken-/Explosionsphase. Keine sechs Karosserie-Sichtabnahmen oder schwache-Geräte-Messung behauptet. Assettest schützt Lenkung/Räder/Pedale/Fahrer und alle Körpervarianten.

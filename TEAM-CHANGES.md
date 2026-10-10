@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 10.10.2026 – Codex: sechs eigene Streckenmusiken
+
+Originale synthetische 32-Takt-Schleifen für alle sechs Kurse erzeugt und in Start/Kurswechsel integriert. Instrumentierung und Harmonik unterscheiden die Themen; vorhandene Lautstärke-/Stumm-/Ansagen- und Schlussrundensteuerung erhalten. Generator art-source/build_track_music.mjs, Metadaten src/music-themes.ts, sechs WAVs unter public/assets/audio/. Keine fremden Aufnahmen oder Samples. Zwei gezielte Tests und Produktionsbuild bestanden; alle Dateien im sichtbaren Chrome-Musikprüfstand wiedergegeben. Menschliche Hör-/Mischungsabnahme offen.
+
 - **10.10.2026 – Stärkerer Schaden und aktivere Rivalen (Marcel, Codex):** Vier ablösbare Karosseriestufen, stärkerer begrenzter Teile-/Rauch-/Funken-/Trümmereffekt, Reparatur refittet alle Teile. Kartquelle/komprimiertes GLB erneuert; sichtbare Hitler-Schadens-/Reparaturbilder. Drei deutlichere Gegnerstufen, bessere Tempo-/Turboausnutzung, Verkehr/Überholen und behutsame Verteidigung, gezielter rückwärtiger Itemeinsatz. Alle sechs Kurse × drei Stufen mit drei Bots simuliert; Details, aktuelle Prüfungen und Grenzen in CURRENT-WORKLIST.md.
 
 - **10.10.2026 – Freie Abkürzungskorridore (Marcel, Codex):** Tatsächliche Assetgrenzen mit vollständiger Skalierung prüfen; störende Bäume versetzen und Möbel/Ufermodule/Lampen fernhalten. Beide Streckenseiten öffnen Barrieren, Promenaden und Randstreifen an höhengleichen Querungen. Endliche Abkürzungsdistanz und aktuelle Moskauer Straßenbreite korrigiert. Sichtbare Kurs-Stichproben, Build und 17 gezielte Tests bestanden; vollständige Fahrabnahme offen.

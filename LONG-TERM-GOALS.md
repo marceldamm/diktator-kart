@@ -1,5 +1,7 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Fortschritt Musik 10.10.2026:** Sechs eigene thematische Schleifen mit erhaltenem Grundklang integriert; Kompositionsquelle, Datei-/Audiosteuerungstests und sichtbare Wiedergabe vorhanden. Menschliche Hör-/Mischungsabnahme offen. Als Nächstes Klima-Bäume und differenzierte Böden; danach ältere bestätigte Ziele.
+
 **Fortschritt Schaden/Rivalen 10.10.2026:** Vier größere Teileverluststufen mit Reparatur und begrenzten Effekten; drei deutlichere faire Gegnerstufen mit aktivem Linien-/Itemeinsatz implementiert. Sichtbarer Schadenvergleich und reproduzierbare Drei-Runden-Vergleiche aller sechs Kurse stehen in CURRENT-WORKLIST.md. Menschen-/Geräteabnahmen bleiben offen; Streckenmusik, klimatische Bäume/Böden und die älteren bestätigten Spielvertiefungen folgen.
 
 **Fortschritt Abkürzungen 10.10.2026:** Tatsächliche Dekogrenzen, Baumversetzung und höhengleiche Querungsöffnungen an beiden Streckenseiten integriert. Moskauer Baum und Peking-Barriere/Randstreifen reproduziert und sichtbar beseitigt; Kurs-Stichproben und Prüfgrenzen in CURRENT-WORKLIST.md. Kontinuierliche Fahrabnahme bleibt offen. Nächstes bestätigtes Paket: stärkere Schadenswirkung.

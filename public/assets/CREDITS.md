@@ -1,5 +1,9 @@
 # Assetherkunft – Stadion der Eitelkeit
 
+## Streckenmusik – 10.10.2026
+
+audio/music-berlin.wav, music-rome.wav, music-havana.wav, music-pyongyang.wav, music-moscow.wav und music-beijing.wav: eigene originale synthetische Kompositionen für dieses Projekt, keine Fremdaufnahmen/Samples oder Hymnenzitate. Reproduzierbare Partituren/Synthese: art-source/build_track_music.mjs; Titel/Tempo in src/music-themes.ts. 32 Takte 2/4 je Schleife, PCM16/22.050 Hz mono. An den Klang der bisherigen eigenen march.wav angelehnt; menschliche Hörabnahme offen.
+
 ## Schäferhund – 03.10.2026
 
 models/shepherd.glb und art-source/shepherd.blend: eigene originale Geometrie mit vier getrennten Beinpivots, Schwanz/Kopf, schwarz-brauner Schäferhundsilhouette; keine fremden Meshes/Fotos kopiert. Quelle art-source/build_shepherd.py, Blender 4.5.3 LTS, optimiertes Runtime-GLB 208.808 Bytes. audio/shepherd-bark.wav: eigener deterministischer synthetischer Doppelbelllaut, art-source/build_shepherd_audio.mjs, kein historischer Mitschnitt. Klang-/Realismusabnahme noch offen.
