@@ -14,10 +14,11 @@ const driver = el<HTMLSelectElement>('driver'), track = el<HTMLSelectElement>('t
 driver.replaceChildren(...CAST.map((c, i) => new Option(c.name, String(i))));
 track.replaceChildren(...Object.entries(TRACKS).map(([id, c]) => new Option(c.name, id)));
 const engine = new Engine(el<HTMLCanvasElement>('canvas'), true);
-let world: TestScene, camera: FreeCamera, paused = false, jump = 0, night = 0, health = 100;
+let world: TestScene, camera: FreeCamera, paused = false, jump = 0, night = 0, health = 100, coursePosition = 0;
+const currentPoint = () => trackPoint(TRACK.start + coursePosition * TRACK.length);
 let state = initialKartState();
 function frameCamera() {
-  const p = trackPoint(TRACK.start), f = new Vector3(Math.sin(p.heading), 0, Math.cos(p.heading));
+  const p = currentPoint(), f = new Vector3(Math.sin(p.heading), 0, Math.cos(p.heading));
   const side = new Vector3(Math.cos(p.heading), 0, -Math.sin(p.heading));
   const ground = elevationAt(p.x, p.z), center = new Vector3(p.x, ground + (jump ? 1.4 : 0), p.z);
   const eye = view.value === 'Cockpit';
@@ -31,28 +32,34 @@ function frameCamera() {
   world.setPlayerVisible(!eye);
 }
 function render() {
-  const p = trackPoint(TRACK.start);
+  const p = currentPoint();
   state = { ...state, x: p.x, z: p.z, heading: p.heading, travelHeading: p.heading,
     height: elevationAt(p.x, p.z) + (jump ? 1.4 : 0), grounded: !jump, trick: !!jump, jumpDuration: 1, jumpRemaining: jump ? 1 - jump : 0 };
   world.setDamage?.([health], [health === 0 ? 1 : 0]); world.setTimeOfDay?.(night);
-  world.present(state, []); frameCamera(); world.scene.render();
+  world.present(state, []); frameCamera();
+  for (const light of world.scene.lights) if (/Nearby street lantern|Kart headlight beam/.test(light.name)) {
+    light.setEnabled(el<HTMLInputElement>('lamps').checked && (el<HTMLSelectElement>('quality').value !== '0' || light.name.endsWith(' 0')));
+  }
+  world.scene.render();
 }
-function status() { el('status').textContent = `${CAST[Number(driver.value)].name} · ${TRACK.name} · ${view.value} · Sprung ${jump} · Nacht ${night} · Karosserie ${health} %`; }
+function status() { el('status').textContent = `${CAST[Number(driver.value)].name} · ${TRACK.name} · ${view.value} · Sprung ${jump} · Nacht ${night} · Karosserie ${health} % · Position ${coursePosition}`; }
 async function load() {
   engine.stopRenderLoop(); world?.scene.dispose(); selectTrack(track.value as TrackId);
   el('status').textContent = 'Lädt tatsächliche Spielszene …';
   world = await createSliceScene(engine, 0, 1);
   world.scene.blockMaterialDirtyMechanism = false;
   camera = new FreeCamera('Prüfkamera', Vector3.Zero(), world.scene); camera.minZ = .05;
-  world.attachCamera?.(camera); world.setWeather?.('sun'); world.setRoster?.([Number(driver.value)]);
+  world.attachCamera?.(camera); world.setWeather?.('sun'); world.setRoster?.([Number(driver.value)]); world.setQuality?.(Number(el<HTMLSelectElement>('quality').value), false);
   render(); status(); if (!paused) engine.runRenderLoop(render);
 }
 driver.onchange = () => { world.setRoster?.([Number(driver.value)]); render(); status(); };
+el('lamps').onchange = () => { render(); status(); };
+el('quality').onchange = () => { world.setQuality?.(Number(el<HTMLSelectElement>('quality').value), false); render(); status(); };
 track.onchange = () => void load(); view.onchange = () => { render(); status(); };
 for (const kind of ['cheer', 'fist', 'angry'] as const) el(kind).onclick = () => { world.driverReaction?.(0, kind); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } };
 el('pause').onclick = () => { paused = !paused; el('pause').textContent = paused ? 'Animation weiter' : 'Bild einfrieren'; if (paused) engine.stopRenderLoop(); else engine.runRenderLoop(render); };
-for (const id of ['jump', 'night', 'health']) el<HTMLInputElement>(id).oninput = () => {
-  const value = Number(el<HTMLInputElement>(id).value); if (id === 'jump') jump = value; else if (id === 'night') night = value; else health = value;
+for (const id of ['jump', 'night', 'health', 'position']) el<HTMLInputElement>(id).oninput = () => {
+  const value = Number(el<HTMLInputElement>(id).value); if (id === 'jump') jump = value; else if (id === 'night') night = value; else if (id === 'position') coursePosition = value; else health = value;
   render(); status();
 };
 window.addEventListener('resize', () => engine.resize());

@@ -6,5 +6,8 @@
 <button id="cheer">Jubel</button><button id="fist">Faust</button><button id="angry">Wütend</button><button id="pause">Bild einfrieren</button><br>
 <label>Sprungphase <input id="jump" type="range" min="0" max="1" step=".05" value="0"></label>
 <label>Licht <input id="night" type="range" min="0" max="1" step=".5" value="0"></label>
+<label>Lichtflächen <input id="lamps" type="checkbox" checked></label>
+<select aria-label="Qualität" id="quality"><option value="1">Normal</option><option value="0">Schwach</option></select>
+<label>Rundenposition <input id="position" type="range" min="0" max="1" step=".05" value="0"></label>
 <label>Karosserie <input id="health" type="range" min="0" max="100" step="25" value="100"></label>
 <output id="status">Lädt …</output></aside><script type="module" src="./feedback-visual.ts"></script></html>

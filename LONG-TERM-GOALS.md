@@ -1,5 +1,7 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Fortschritt Licht 10.10.2026:** Lesbareres Tages-Fülllicht, mildere Kontraste, Nacht-Umgebungsreflexion gedimmt und echte begrenzte Straßen-/Fahrzeuglichtquellen integriert. Berlin A/B-Lichtflächen und Peking bei schwacher Grafik sichtbar geprüft; Geräte-/Fahrtabnahme offen. Weiter mit Deko in Abkürzungen und Schaden; übrige bestätigte Ziele bleiben aktiv.
+
 **Fortschritt Fahrer/Animation 10.10.2026:** Sechs Exporte mit korrigierten Arm-/Nahtgewichten, kürzere saubere Schultergesten, Kopfbewegungen und beidseitige Trefferreaktion; explizite Kopf-Ausblendung im Cockpit und gemeinsames Sprung-Drehzentrum umgesetzt. Aktuelle Bildbelege und Grenzen stehen in CURRENT-WORKLIST.md. Echte Mimik ohne vorhandenes Gesichtsrig, vollständige Fahrabnahme und Gesamtstil bleiben offen. Licht/Nachtlampen folgen als nächstes Paket.
 
 **Fortschritt 10.10.2026, Spielfeedback:** Erster UI-Korrekturpass umgesetzt: räumlich getrennte Streckenkarten mit Simulationslänge, kompaktere Rennansagen und umbrechende Ordenanzeige. Aktuelle Prüfgrenzen und nächstes Animations-/Kamerapaket stehen in CURRENT-WORKLIST.md; weitere Grafik-, Gegner-, Strecken- und Spielvertiefungsziele bleiben aktiv.

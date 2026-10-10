@@ -19,7 +19,7 @@ import { canalFoamBands } from './environment-effects';
 const trackLocateS = (x: number, z: number) => trackLocate(x, z).s;
 
 /** Track furniture generated from the shared centreline: one mesh per material wherever possible. */
-export interface TrackWorld { animate(time: number): void; breakStartFence(): void; glowMeshes: Mesh[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
+export interface TrackWorld { animate(time: number): void; breakStartFence(): void; glowMeshes: Mesh[]; lampPositions: Vector3[]; setWet(wet: boolean): void; setSnow(snow: boolean): void; puddles: { x: number; z: number; r: number }[] }
 
 const W = TRACK.halfWidth;
 
@@ -659,7 +659,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   bannerTexture.hasAlpha = false;
   const banner = MeshBuilder.CreatePlane('Parade banner', { width: .95, height: 2.85, sideOrientation: Mesh.DOUBLESIDE }, scene);
   banner.material = bannerMaterial;
-  const lampMatrices: Matrix[] = [], bannerBase: { s: number; side: number; m: Matrix; phase: number }[] = [];
+  const lampMatrices: Matrix[] = [], lampPositions: Vector3[] = [], bannerBase: { s: number; side: number; m: Matrix; phase: number }[] = [];
   const spacing = 24;
   for (let s = 8; s < TRACK.length - 6; s += spacing) for (const side of [-1, 1]) {
     if (side > 0 && HAZARDS.some((h) => s >= h.from - 1 && s <= h.to + 1)) continue; // no lamps standing in a basin or pit
@@ -668,6 +668,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     // Local -x arm reaches over the barrier toward the road.
     const m = Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading + (side < 0 ? Math.PI : 0), 0), new Vector3(p.x, .14 + elevationAt(at), p.z));
     lampMatrices.push(m);
+    lampPositions.push(Vector3.TransformCoordinates(new Vector3(0, 5.55, 0), m));
     const hang = trackPoint(at, side * (W + 1.62));
     bannerBase.push({ s, side, m: Matrix.Compose(Vector3.One(), Quaternion.FromEulerAngles(0, p.heading, 0), new Vector3(hang.x, 3.62 + elevationAt(at), hang.z)), phase: s * .37 + side });
   }
@@ -746,6 +747,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   const roadDry = { colour: road.albedoColor.clone(), rough: road.roughness ?? 1 }, pavingDry = { colour: paving.albedoColor.clone(), rough: paving.roughness ?? 1 };
   return {
     glowMeshes: [globe, ...boostPads, ...hazardGlow],
+    lampPositions,
     puddles,
     setWet(wet) {
       // Wet cobbles: darker, much smoother (rain film) and more reflective; puddles appear.

@@ -16,6 +16,8 @@ import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTextur
 import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { SpotLight } from '@babylonjs/core/Lights/spotLight';
+import { PointLight } from '@babylonjs/core/Lights/pointLight';
+import { Light } from '@babylonjs/core/Lights/light';
 import { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
 import '@babylonjs/core/Lights/Shadows/shadowGeneratorSceneComponent';
 import { GlowLayer } from '@babylonjs/core/Layers/glowLayer';
@@ -74,13 +76,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     scene.clearColor = new Color4(.62, .72, .84, 1);
     scene.fogMode = Scene.FOGMODE_EXP2; scene.fogDensity = TRACK_INFO.theme === 'pyongyang' ? .0012 : .0024; scene.fogColor = new Color3(.86, .80, .70); // warm golden haze over the larger city; Pyongyang half as dense (Marcel 08.10.2026: the far city read washed out)
     scene.environmentTexture = CubeTexture.CreateFromPrefilteredData('/assets/textures/studio.env', scene);
-    scene.environmentIntensity = .55;
+    scene.environmentIntensity = .7;
     scene.imageProcessingConfiguration.toneMappingEnabled = true;
     scene.imageProcessingConfiguration.toneMappingType = 1;
     scene.imageProcessingConfiguration.exposure = 1.12;
-    scene.imageProcessingConfiguration.contrast = 1.22;
+    scene.imageProcessingConfiguration.contrast = 1.12;
     const hemisphere = new HemisphericLight('Blue sky fill', new Vector3(0, 1, 0), scene);
-    hemisphere.diffuse = new Color3(.64, .74, 1); hemisphere.groundColor = new Color3(.5, .36, .22); hemisphere.intensity = .46;
+    hemisphere.diffuse = new Color3(.78, .84, 1); hemisphere.groundColor = new Color3(.58, .49, .38); hemisphere.intensity = .72;
     const sunDirection = new Vector3(.42, -.52, .74).normalize();
     const sun = new DirectionalLight('Late afternoon sun', sunDirection, scene);
     sun.diffuse = new Color3(1, .77, .5); sun.intensity = 3.9;
@@ -363,7 +365,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       pipeline.bloomEnabled = full && !reducedEffects; pipeline.bloomThreshold = .82; pipeline.bloomWeight = .32; pipeline.bloomKernel = 48; pipeline.bloomScale = .5;
       pipeline.imageProcessingEnabled = true;
       const ip = pipeline.imageProcessing;
-      ip.toneMappingEnabled = true; ip.toneMappingType = 1; ip.exposure = 1.12; ip.contrast = 1.22;
+      ip.toneMappingEnabled = true; ip.toneMappingType = 1; ip.exposure = 1.12; ip.contrast = 1.12;
       ip.vignetteEnabled = full; ip.vignetteWeight = 1.6; ip.vignetteStretch = .35; ip.vignetteCameraFov = .9; ip.vignetteColor = new Color4(.12, .07, .04, 0);
       ip.colorCurvesEnabled = full;
       if (ip.colorCurves) { ip.colorCurves.globalSaturation = 18; ip.colorCurves.highlightsHue = 40; ip.colorCurves.highlightsDensity = 18; ip.colorCurves.highlightsSaturation = 20; ip.colorCurves.shadowsHue = 210; ip.colorCurves.shadowsDensity = 12; ip.colorCurves.shadowsSaturation = 15; }
@@ -469,8 +471,51 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     snow.color1 = new Color4(1, 1, 1, .95); snow.color2 = new Color4(.9, .94, 1, .85); snow.colorDead = new Color4(1, 1, 1, 0); snow.start();
 
     // Time of day (0 day → .5 dusk → 1 night): sky overlay, stars, moon, moonlight shadows, birds by day and bats by night.
-    let timeOfDay = 0, weatherBase = { sun: sun.intensity, sunColor: sun.diffuse.clone(), hemi: hemisphere.intensity, fogDensity: scene.fogDensity, fogColor: scene.fogColor.clone(), sky: 1 };
-    const snapshotWeather = () => { weatherBase = { sun: sun.intensity, sunColor: sun.diffuse.clone(), hemi: hemisphere.intensity, fogDensity: scene.fogDensity, fogColor: scene.fogColor.clone(), sky: skyMaterial.emissiveTexture!.level }; };
+    let timeOfDay = 0, weatherBase = { sun: sun.intensity, sunColor: sun.diffuse.clone(), hemi: hemisphere.intensity, env: scene.environmentIntensity, fogDensity: scene.fogDensity, fogColor: scene.fogColor.clone(), sky: 1 };
+    // A bounded light pool follows the visible race, lighting the actual lamp positions and the road ahead of karts.
+    // No shadow maps per lamp: low quality uses one street lamp and the player's headlights (four total lights).
+    const streetLights = Array.from({ length: 2 }, (_, i) => {
+      const light = new PointLight(`Nearby street lantern ${i}`, Vector3.Zero(), scene);
+      light.diffuse = new Color3(1, .79, .48); light.specular = new Color3(.35, .28, .18);
+      light.range = 24; light.falloffType = Light.FALLOFF_STANDARD; light.intensity = 0;
+      light.setEnabled(i === 0 || quality > 0);
+      return light;
+    });
+    const headLights = Array.from({ length: 2 }, (_, i) => {
+      const light = new SpotLight(`Kart headlight beam ${i}`, Vector3.Zero(), new Vector3(0, -.18, 1), 1.05, 2, scene);
+      light.diffuse = new Color3(1, .91, .72); light.specular = new Color3(.3, .28, .22);
+      light.range = 32; light.falloffType = Light.FALLOFF_STANDARD; light.intensity = 0;
+      light.setEnabled(i === 0 || quality > 0);
+      return light;
+    });
+    const updateNightLights = (state: KartState, others: KartState[], night: number) => {
+      const strength = Math.max(0, Math.min(1, (timeOfDay - .28) / .42));
+      let first: Vector3 | undefined, second: Vector3 | undefined, firstDistance = Infinity, secondDistance = Infinity;
+      for (const position of trackWorld.lampPositions) {
+        const distance = (position.x - state.x) ** 2 + (position.z - state.z) ** 2;
+        if (distance < firstDistance) { second = first; secondDistance = firstDistance; first = position; firstDistance = distance; }
+        else if (distance < secondDistance) { second = position; secondDistance = distance; }
+      }
+      streetLights.forEach((light, i) => {
+        const lamp = i === 0 ? first : second, distance = Math.sqrt(i === 0 ? firstDistance : secondDistance);
+        if (lamp) light.position.copyFrom(lamp);
+        light.intensity = lamp && (pipelineLevel > 0 || i === 0) ? strength * 2.8 * Math.max(0, Math.min(1, (24 - distance) / 6)) : 0;
+      });
+      let nearestBot: KartState | undefined, botDistance = 24 ** 2;
+      for (const [i, bot] of others.entries()) {
+        const distance = (bot.x - state.x) ** 2 + (bot.z - state.z) ** 2;
+        if (visuals[i + 1]?.root.isEnabled() && distance < botDistance) { nearestBot = bot; botDistance = distance; }
+      }
+      headLights.forEach((light, i) => {
+        const kart = i === 0 ? state : nearestBot;
+        if (!kart || (i > 0 && pipelineLevel === 0)) { light.intensity = 0; return; }
+        const forward = new Vector3(Math.sin(kart.heading), 0, Math.cos(kart.heading));
+        light.position.set(kart.x + forward.x * 1.65, kart.height + .72, kart.z + forward.z * 1.65);
+        light.direction.copyFrom(forward).addInPlace(new Vector3(0, -.17, 0)).normalize();
+        light.intensity = kart.grounded ? strength * (3.4 + night * .6) : 0;
+      });
+    };
+    const snapshotWeather = () => { weatherBase = { sun: sun.intensity, sunColor: sun.diffuse.clone(), hemi: hemisphere.intensity, env: scene.environmentIntensity, fogDensity: scene.fogDensity, fogColor: scene.fogColor.clone(), sky: skyMaterial.emissiveTexture!.level }; };
     const skyTint = MeshBuilder.CreateSphere('Sky time-of-day tint', { diameter: 860, segments: 16, sideOrientation: Mesh.BACKSIDE }, scene);
     const tintMaterial = new StandardMaterial('Sky tint', scene); tintMaterial.disableLighting = true; tintMaterial.fogEnabled = false; tintMaterial.backFaceCulling = false;
     tintMaterial.emissiveColor = new Color3(1, .5, .2); tintMaterial.alpha = 0; skyTint.material = tintMaterial; skyTint.infiniteDistance = true; skyTint.isPickable = false; skyTint.alphaIndex = 1;
@@ -917,7 +962,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         raining = on; trackWorld.setWet(on);
         if (!on) for (const spray of roadSprays) spray.emitRate = 0;
         sun.intensity = on ? baseLight.sun * .28 : baseLight.sun; hemisphere.intensity = on ? .62 : baseLight.hemi;
-        hemisphere.diffuse = on ? new Color3(.62, .68, .78) : new Color3(.66, .76, 1);
+        hemisphere.diffuse = on ? new Color3(.62, .68, .78) : new Color3(.78, .84, 1);
         scene.fogDensity = on ? .0105 : baseLight.fog; scene.fogColor = on ? new Color3(.46, .5, .55) : baseLight.fogColor;
         scene.environmentIntensity = on ? .85 : baseLight.env; skyMaterial.emissiveColor = Color3.Black();
         skyMaterial.emissiveTexture!.level = on ? .42 : 1; rain.emitRate = on ? (reducedEffects ? 900 : 3600) : 0; snapshotWeather();
@@ -993,6 +1038,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); roseTime = -1; roses.emitRate = 0; roses.reset(); waveTime = -1; waveSpray.emitRate = 0; waveSpray.reset(); },
       setQuality(level, reduced) {
         pipelineLevel = level;
+        streetLights[1].setEnabled(level > 0); headLights[1].setEnabled(level > 0);
         if(level!==skyQuality) {
           const old=skyTexture;skyTexture=new Texture(`/assets/textures/sky-afternoon-${level?'4k':'2k'}.jpg`,scene,false,false);skyTexture.wrapV=Texture.CLAMP_ADDRESSMODE;
           skyMaterial.emissiveTexture=skyTexture;old.dispose();skyQuality=level;
@@ -1023,12 +1069,14 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if (flash <= 0) {
             sun.intensity = weatherBase.sun * (1 - .88 * night) * (1 - .3 * dusk);
             sun.diffuse = Color3.Lerp(Color3.Lerp(weatherBase.sunColor, new Color3(1, .55, .3), dusk * .8), new Color3(.55, .65, 1), night);
-            hemisphere.intensity = weatherBase.hemi * (1 - .72 * night); skyMaterial.emissiveTexture!.level = weatherBase.sky * (1 - .85 * night) * (1 - .2 * dusk);
+            hemisphere.intensity = weatherBase.hemi * (1 - .58 * night); skyMaterial.emissiveTexture!.level = weatherBase.sky * (1 - .85 * night) * (1 - .2 * dusk);
+            scene.environmentIntensity = weatherBase.env * (1 - .65 * night);
           }
           scene.fogColor = Color3.Lerp(Color3.Lerp(weatherBase.fogColor, new Color3(.75, .5, .38), dusk * .5), new Color3(.06, .08, .14), night);
           tintMaterial.emissiveColor = Color3.Lerp(new Color3(1, .45, .2), new Color3(.02, .04, .12), night); tintMaterial.alpha = Math.min(.82, dusk * .38 + night * .78);
           starMaterial.alpha = night * (raining || snowing ? .25 : 1); moonMaterial.alpha = night * (raining ? .35 : 1);
           glow.intensity = .45 + night * 1.1;
+          updateNightLights(state, others, night);
           flyerMaterial.emissiveColor = night > .5 ? new Color3(.02, .02, .03) : new Color3(.1, .09, .08);
           for (const f of flyers) { const a = time * f.speed * (night > .5 ? 2.2 : 1) + f.phase, wob = night > .5 ? Math.sin(time * 7 + f.phase) * 3 : 0;
             f.mesh.position.set(state.x + Math.cos(a) * f.radius + wob, f.height + Math.sin(time * 1.3 + f.phase) * 1.5 - night * 8, state.z + Math.sin(a) * f.radius);
@@ -1251,6 +1299,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         sparks.maxSize = .055 + tier * .02;
       },
     };
+    // Imported and generated surfaces need room for sun, fill and the four local lamps in normal quality.
+    for (const material of scene.materials) if (material instanceof PBRMaterial || material instanceof StandardMaterial) material.maxSimultaneousLights = 6;
     return api;
   } catch (error) { scene.dispose(); throw error; }
 }
