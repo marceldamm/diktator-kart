@@ -16,6 +16,7 @@ import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGener
 import { TRACK, trackPoint, trackLocate, shortcutLocate, shortcutPoint, trackCrossingsAtZ, SHORTCUT_LENGTH, elevationAt } from './track';
 import { GROUND, HAZARDS, LANDMARKS, RIVER, SHORTCUT, TRACK_INFO } from './track-layout';
 import { surfaceTextures } from './surface-textures';
+import { CrowdWavePlugin } from './crowd-wave';
 import { paintEmblem } from './track-world';
 
 /**
@@ -61,6 +62,10 @@ const DIMS: Record<string, Footprint> = {
   'kit-cn-house-a': { u0: -7.5, u1: 7.5, v0: -1.8, v1: 12 }, 'kit-cn-house-b': { u0: -8.5, u1: 8.5, v0: -1.8, v1: 12 }, 'kit-cn-house-c': { u0: -6.5, u1: 6.5, v0: -1.8, v1: 12 },
   'kit-cn-hall': { u0: -24.5, u1: 24.5, v0: -1, v1: 26 }, 'kit-pagoda': { u0: -7.2, u1: 7.2, v0: -7.2, v1: 7.2 }, 'kit-cn-wall': { u0: -12.5, u1: 12.5, v0: -.6, v1: 3 },
   'kit-loudspeaker': { u0: -.6, u1: .6, v0: -.6, v1: .6 }, 'kit-rulebook': { u0: -6, u1: 6, v0: -4, v1: 4 },
+  // Own start areas and Moscow landmarks (art-source/city_start_modules.py)
+  'kit-stand-moscow': { u0: -12, u1: 12, v0: -1.6, v1: 10.6 }, 'kit-stand-beijing': { u0: -12, u1: 12, v0: -1.6, v1: 10.6 },
+  'kit-stand-havana': { u0: -12, u1: 12, v0: -1.6, v1: 10.6 }, 'kit-stand-pyongyang': { u0: -12, u1: 12, v0: -1.6, v1: 10.6 },
+  'kit-kremlin-wall': { u0: -12.1, u1: 12.1, v0: -.1, v1: 3.1 }, 'kit-kremlin-tower': { u0: -5.2, u1: 5.2, v0: -5.2, v1: 5.2 }, 'kit-onion-church': { u0: -14, u1: 14, v0: -10, v1: 10 },
 };
 const BERLIN_TINTS = ['#dcb57f', '#e4cda4', '#d9a891', '#bcc3c1', '#ece1c6', '#c7c9a6', '#d49d7c', '#e8d3b0'];
 /** Roman ochre, sienna, terracotta and pale travertine plasters. */
@@ -180,6 +185,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     // Peking roofs: barrel tiles (u, about 55 cm) in overlapping courses (v); colour comes from the vertex tones.
     if (/glazed tile/.test(m.name)) { const t = glazedTiles(scene); m.albedoTexture = t.color; m.bumpTexture = t.normal; m.bumpTexture.level = .8; }
     if (/lantern silk/.test(m.name)) { m.emissiveIntensity = 1.6; }
+    // Spectators bounce and do the La-Ola in the vertex shader (src/crowd-wave.ts).
+    if (/Kit crowd/.test(m.name)) new CrowdWavePlugin(m);
   }
 
   // --- Placement checks -----------------------------------------------------------------------------
@@ -233,10 +240,15 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
 
   // --- Hero buildings and fixed civic pieces ---------------------------------------------------------
   const gateAt = trackPoint(LANDMARKS.gateProgress, 0), finishAt = trackPoint(TRACK.start, 0);
-  if (pyongyang) placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
+  // Own start area per city (Marcel, 10.10.2026): grandstands and start/finish gantry in the local architecture.
+  const cityStand = moscow ? 'kit-stand-moscow' : beijing ? 'kit-stand-beijing' : havana ? 'kit-stand-havana' : pyongyang ? 'kit-stand-pyongyang' : 'kit-grandstand';
+  const cityFinish = moscow ? 'kit-finish-moscow' : beijing ? 'kit-finish-beijing' : havana ? 'kit-finish-havana' : pyongyang ? 'kit-finish-pyongyang' : 'kit-finish';
+  if (pyongyang) placements.push({ m: cityFinish, x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
   else {
-    placements.push({ m: rome ? 'kit-arch' : beijing ? 'kit-cn-gate' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
-    placements.push({ m: 'kit-finish', x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
+    // Moscow: two wall towers flank the parade road instead of a spanning gate.
+    if (moscow) for (const side of [-1, 1]) { const p = trackPoint(LANDMARKS.gateProgress, side * 24); tryPlace({ m: 'kit-kremlin-tower', x: p.x, z: p.z, yaw: gateAt.heading }, { lawnOk: true }); }
+    else placements.push({ m: rome ? 'kit-arch' : beijing ? 'kit-cn-gate' : 'kit-gate', x: gateAt.x, z: gateAt.z, y: elevationAt(LANDMARKS.gateProgress), yaw: gateAt.heading });
+    placements.push({ m: cityFinish, x: finishAt.x, z: finishAt.z, y: elevationAt(TRACK.start), yaw: finishAt.heading });
   }
   if (LANDMARKS.palace) tryPlace({ m: 'kit-palace', x: LANDMARKS.palace[0], z: LANDMARKS.palace[1], yaw: 0 }, { lawnOk: true });
   tryPlace({ m: rome ? 'kit-obelisk' : 'kit-column', x: LANDMARKS.column[0], z: LANDMARKS.column[1], yaw: 0 }, { lawnOk: true });
@@ -312,7 +324,7 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     if (kind === 'stands') {
       for (let s = d.from; s < d.to; s += 1) {
         const p = trackPoint(s, side * (PROMENADE + 2.4)), yaw = facing(p.x, p.z);
-        if (tryPlace({ m: rome ? 'kit-marble-terrace' : 'kit-grandstand', x: p.x, z: p.z, yaw, s }, { lawnOk: true })) {
+        if (tryPlace({ m: rome ? 'kit-marble-terrace' : cityStand, x: p.x, z: p.z, yaw, s }, { lawnOk: true })) {
           // Duce-Drom: identical oversized athletes on every other terrace parapet (same bald head, same pose).
           if (rome && Math.round(s) % 2 === 0) { const q = trackPoint(s, side * (PROMENADE + 2.4 + 8.2)); placements.push({ m: 'kit-athlete', x: q.x, z: q.z, y: 6.42, yaw }); }
           s += rome ? 21 : 23;
@@ -433,11 +445,11 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     for (const { d, m, tint } of bucket.items) {
       const n = d.pos.length / 3;
       for (let i = 0; i < n; i++) {
-        Vector3.TransformCoordinatesFromFloatsToRef(d.pos[i * 3], d.pos[i * 3 + 1], d.pos[i * 3 + 2], m, out); pos.set([out.x, out.y, out.z], (vo + i) * 3);
-        v.set(d.nor[i * 3], d.nor[i * 3 + 1], d.nor[i * 3 + 2]); Vector3.TransformNormalToRef(v, m, out); out.normalize(); nor.set([out.x, out.y, out.z], (vo + i) * 3);
+        Vector3.TransformCoordinatesFromFloatsToRef(d.pos[i * 3], d.pos[i * 3 + 1], d.pos[i * 3 + 2], m, out); const o3 = (vo + i) * 3; pos[o3] = out.x; pos[o3 + 1] = out.y; pos[o3 + 2] = out.z;
+        v.set(d.nor[i * 3], d.nor[i * 3 + 1], d.nor[i * 3 + 2]); Vector3.TransformNormalToRef(v, m, out); out.normalize(); nor[o3] = out.x; nor[o3 + 1] = out.y; nor[o3 + 2] = out.z;
         if (d.uv) { uv[(vo + i) * 2] = d.uv[i * 2]; uv[(vo + i) * 2 + 1] = d.uv[i * 2 + 1]; }
         const r = d.col ? d.col[i * 4] : 1, g = d.col ? d.col[i * 4 + 1] : 1, b = d.col ? d.col[i * 4 + 2] : 1;
-        col.set(tint ? [r * tint.r, g * tint.g, b * tint.b, 1] : [r, g, b, 1], (vo + i) * 4);
+        const o4 = (vo + i) * 4; col[o4] = tint ? r * tint.r : r; col[o4 + 1] = tint ? g * tint.g : g; col[o4 + 2] = tint ? b * tint.b : b; col[o4 + 3] = 1;
       }
       for (let k = 0; k < d.idx.length; k++) idx[io + k] = d.idx[k] + vo;
       vo += n; io += d.idx.length;

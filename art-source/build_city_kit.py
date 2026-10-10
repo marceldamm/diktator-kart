@@ -849,6 +849,8 @@ exec(open(os.path.join(ROOT, 'art-source', 'havana_modules.py'), encoding='utf-8
 modules += havana_modules()
 exec(open(os.path.join(ROOT, 'art-source', 'beijing_modules.py'), encoding='utf-8').read())
 modules += beijing_modules()
+exec(open(os.path.join(ROOT, 'art-source', 'city_start_modules.py'), encoding='utf-8').read())
+modules += city_start_modules()
 x = 0
 for M in modules:
     to_blender(M, x); x += 120

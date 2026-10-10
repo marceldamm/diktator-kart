@@ -18,6 +18,11 @@ import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } fr
 import { RankingBoard } from './ranking-hud';
 import { pickQuality } from './auto-quality';
 import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
+import { MeshoptCompression } from '@babylonjs/core/Meshes/Compression/meshoptCompression';
+
+// Load time (10.10.2026): models are meshopt-compressed (art-source/optimize_assets.mjs); decode with the local copy
+// of the meshoptimizer decoder instead of Babylon's CDN, so the game also starts offline.
+MeshoptCompression.Configuration = { decoder: { url: '/vendor/meshopt_decoder.js' } };
 
 type AppState = 'loading' | 'running' | 'paused' | 'error';
 interface AssetManifest { schemaVersion: number; name: string; files: string[] }
@@ -131,6 +136,10 @@ class App {
   private waveUntil=0;
   /** Moscow lap-2 event: tailwind on the first parade straight until this race time. */
   private paradeUntil=0;
+  /** Driver reactions: last ranks (overtakes), per-kart cooldown and finish reactions already shown. */
+  private lastRanks:number[]=[];
+  private reactUntil:number[]=[];
+  private finishReacted:boolean[]=[];
   /** The lap-2 track event is announced once late in lap 1, so everyone can prepare. */
   private eventAnnounced=false;
   private medals:MedalWorld={medals:[],counts:[],events:[]};
@@ -186,7 +195,7 @@ class App {
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ react: (kart: number, kind: 'cheer'|'fist'|'angry') => this.testScene?.driverReaction?.(kart, kind), crowd: (kind: 'wave'|'cheer', kart?: number) => this.testScene?.crowdReact?.(kind, kart), startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     try { this.autoQuality = localStorage.getItem('dk-quality') === null && !LAB_WORLD && !new URLSearchParams(location.search).has('demo'); } catch { /* storage optional */ }
     try { { const q = Number(localStorage.getItem('dk-quality') ?? '1'); this.quality = q === 0 || q === 2 ? q : 1; } this.reducedEffects = localStorage.getItem('dk-reduced-effects') === '1'; } catch { /* Storage may be disabled by the browser. */ }
     try{const saved=localStorage.getItem('dk-reduced-motion');if(saved!==null)this.reducedMotion=saved==='1';}catch{}
@@ -396,6 +405,7 @@ class App {
       this.applyMotion();
       this.testScene.present(this.kart, this.loadKarts);
       this.testScene.presentItems?.(this.items,[this.kart,...this.loadKarts]);
+      this.testScene.scene.blockMaterialDirtyMechanism = false;
       await this.testScene.scene.whenReadyAsync();
       if(generation!==this.generation)return;
       this.testScene.scene.render();
@@ -595,7 +605,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.paradeUntil=0;this.eventAnnounced=false;this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.paradeUntil=0;this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -702,6 +712,11 @@ class App {
   /** Welcome announcement once per page load, after the first gesture unlocked audio. */
   private welcome(): void { if (this.welcomed || LAB_WORLD) return; this.welcomed = this.audio.voice('announcer-welcome'); }
   /** A caricature's own line; the player's driver speaks louder than the field. */
+  /** Shows a driver gesture at most every 3.5 s per kart unless forced (hits, finish). */
+  private react(kart:number,kind:'cheer'|'fist'|'angry',force=false):void{
+    if(!force&&(this.reactUntil[kart]??0)>this.raceTime)return;
+    this.reactUntil[kart]=this.raceTime+3.5;this.testScene?.driverReaction?.(kart,kind);
+  }
   private say(kart: number, kind: 'hit' | 'pass' | 'win' | 'boost', volume = 1): void {
     const cast = this.castOf(kart);
     const id = kind === 'boost' && cast.voice !== 'general' ? `${cast.voice}-pass` : `${cast.voice}-${kind}`;
@@ -712,7 +727,7 @@ class App {
     if (this.racePhase !== 'race') return;
     const rank = rankRace(this.progress).indexOf(0) + 1;
     if (rank < this.lastRank && this.raceTime > 4) {
-      if (rank === 1 && this.leadCooldown === 0) { this.audio.voice('announcer-lead'); this.audio.cheer(1); this.leadCooldown = 20; }
+      if (rank === 1 && this.leadCooldown === 0) { this.audio.voice('announcer-lead'); this.audio.cheer(1); this.leadCooldown = 20; this.testScene?.crowdReact?.('cheer', 0); }
       else if (this.voiceCooldown === 0) { this.say(0, 'pass'); this.voiceCooldown = 9; }
     }
     if (this.kart.turboRemaining > KART_TUNING.turboDuration - .05 && this.voiceCooldown === 0 && Math.random() < .35) { this.say(0, 'boost'); this.voiceCooldown = 12; }
@@ -808,7 +823,7 @@ class App {
     all.forEach((k, slot) => { if (!slots.includes(slot)) { const p = trackPoint(TRACK.start - 6 - slot * 3.5, slot % 2 ? 4 : -4); all[slot] = { ...k, x: p.x, z: p.z, heading: p.heading, speed: 0 }; } });
     this.kart = all[0]; this.loadKarts = all.slice(1); this.resetRenderState();
     this.camera?.setCeremony(spot); document.body.classList.add('ceremony');
-    this.testScene?.celebrate?.('finish'); this.audio.cheer(1.4);
+    this.testScene?.celebrate?.('finish');this.testScene?.crowdReact?.('wave');this.testScene?.crowdReact?.('cheer',0); this.audio.cheer(1.4);
   }
   private endCeremony(): void { this.testScene?.ceremony?.(null); this.camera?.setCeremony(null); document.body.classList.remove('ceremony'); }
   private showGpIntro(): void {
@@ -949,7 +964,7 @@ class App {
             if(good){this.kart={...this.kart,turboRemaining:KART_TUNING.turboDuration,speed:KART_TUNING.turboSpeedBonus+2};this.itemMessage='Perfekter Start · Startschub!';this.itemMessageUntil=this.items.time+1.8;}
             else if(t!==null){this.itemMessage='Zu früh Gas gegeben · kein Startschub';this.itemMessageUntil=this.items.time+1.8;}
             this.loadKarts=this.loadKarts.map((k,i)=>(i*7+Math.floor(this.raceTime*13))%3===0?{...k,turboRemaining:KART_TUNING.turboDuration*.8,speed:KART_TUNING.turboSpeedBonus}:k);
-            this.racePhase='race';this.audio.cue('start');this.audio.voice('announcer-go',{force:true});this.audio.cheer(1);this.testScene?.celebrate?.('start');}
+            this.racePhase='race';this.audio.cue('start');this.audio.voice('announcer-go',{force:true});this.audio.cheer(1);this.testScene?.celebrate?.('start');this.testScene?.crowdReact?.('wave');}
           else if(this.countdown>.4&&Math.ceil(this.countdown-.4)!==before){this.audio.cue('countdown');this.audio.voice(`announcer-${Math.ceil(this.countdown-.4)}`,{force:true});}
         }
         if (!countdown && (this.racePhase !== 'finished' || this.afterRace)) {
@@ -1058,6 +1073,10 @@ class App {
         if (!LAB_WORLD && (this.racePhase === 'race' || this.afterRace)) {
           const all=[this.kart,...this.loadKarts];
           const ranks=this.progress.map(p=>1+this.progress.filter(other=>other.distance>p.distance).length);
+          // Driver reactions (10.10.2026): fist after an overtake, cheer or head shake at the finish (purely visual).
+          if(this.racePhase==='race'&&this.raceTime>4&&this.lastRanks.length===ranks.length) ranks.forEach((rank,i)=>{ if(rank<this.lastRanks[i]&&!this.progress[i].finished) this.react(i,'fist'); });
+          this.progress.forEach((p,i)=>{ if(p.finished&&!this.finishReacted[i]){ this.finishReacted[i]=true; this.react(i,ranks[i]<=3?'cheer':'angry',true); } });
+          this.lastRanks=ranks;
           // Hold E: the item trails behind as a shield; release E: throw it. Bots shield while they wait to use theirs.
           const actionPressed=frame.pressed.has('item'),down=this.input.isDown('item'),release=this.itemHeld&&!down,tap=actionPressed&&!down;this.itemHeld=down;
           const buttonUse=this.queuedItemUse;this.queuedItemUse=false;
@@ -1077,7 +1096,7 @@ class App {
             if(event.kart===0||Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<35)this.audio.thunder();
           }this.kart=itemResult[0];this.loadKarts=itemResult.slice(1);
           if(release)this.itemDirection='forward';
-          for(const event of this.items.events) if(event.kind==='hit') loseMedals(this.medals,event.kart);
+          for(const event of this.items.events) if(event.kind==='hit') { if(event.owner===0&&event.kart!==0)this.testScene?.crowdReact?.('cheer',event.kart); loseMedals(this.medals,event.kart); this.react(event.kart,'angry',true); if(event.owner!==undefined&&event.owner!==event.kart) this.react(event.owner,'cheer'); }
           { const medalled=stepMedals(this.medals,[this.kart,...this.loadKarts],FIXED_STEP);this.kart=medalled[0];this.loadKarts=medalled.slice(1);
             for(const event of this.medals.events) if(event.kart===0){
               if(event.kind==='pickup'){this.audio.itemEvent('pickup');this.testScene?.abilityEvent?.('pose-applause',0);if(this.medals.counts[0]===MEDAL_RULES.max){this.itemMessage='Brust voller Orden · Höchsttempo';this.itemMessageUntil=this.items.time+1.6;}}
@@ -1132,7 +1151,7 @@ class App {
             const elapsed=this.lapTimes.reduce((sum,t)=>sum+t,0);this.lapTimes.push(this.raceTime-elapsed);
             this.lapNotice=`${this.lapTimes.length===2?'LETZTE RUNDE':'RUNDE 2'} · ${this.lapTimes.at(-1)!.toFixed(2)} s`;
             this.lapNoticeUntil=this.raceTime+3;
-            if(!this.progress[0].finished){this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);if(this.lapTimes.length===2)this.audio.setMusicTempo(1.07);}
+            if(!this.progress[0].finished){this.testScene?.crowdReact?.('wave');this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);if(this.lapTimes.length===2)this.audio.setMusicTempo(1.07);}
             if(this.lapTimes.length===1){
               if(TRACK_INFO.theme==='havana'){this.testScene?.trackEvent?.('wave');this.itemMessage='Achtung: Malecón-Welle! Gischt über der Uferstraße';this.audio.cheer(.7);this.waveUntil=this.raceTime+14;window.setTimeout(()=>this.audio.voice('announcer-wave',{force:true}),900);}
               else if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
@@ -1150,7 +1169,7 @@ class App {
           if (this.progress[0].finished && this.racePhase !== 'finished') {
             this.racePhase = 'finished'; this.afterRace = this.mode !== 'timetrial'; this.afterRaceTime = 0;
             if(this.lapTimes.length<3)this.lapTimes.push(this.raceTime-this.lapTimes.reduce((sum,t)=>sum+t,0));
-            this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.audio.cheer(1.4);
+            this.audio.cue('finish');this.testScene?.celebrate?.('finish');this.testScene?.crowdReact?.('wave');this.testScene?.crowdReact?.('cheer',0);this.audio.cheer(1.4);
             {const won=rankRace(this.progress).indexOf(0)===0;this.audio.voice(won?'announcer-win':'announcer-finish',{force:true});const champion=rankRace(this.progress)[0];window.setTimeout(()=>this.say(won?0:champion,'win',won?1:.85),1400);}
             const place=rankRace(this.progress).indexOf(0)+1;
             document.querySelector('#finish-kicker')!.textContent=this.mode==='gp'&&this.gp?`GRAND PRIX · RENNEN ${this.gp.round+1}/${this.gp.tracks.length} · ${TRACK.name.toUpperCase()}`:this.mode==='timetrial'?`ZEITFAHREN · ${TRACK.name.toUpperCase()}`:`EINZELRENNEN · ${TRACK.name.toUpperCase()}`;
@@ -1232,7 +1251,7 @@ class App {
           for(const event of this.damage.events){
             if(event.kind==='repaired'){if(event.kart===0){this.itemMessage='Repariert · Staatliche Werkstatt stempelt ab';this.itemMessageUntil=this.items.time+2;}continue;}
             if(event.kind!=='wreck')continue;
-            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);loseMedals(this.medals,event.kart,MEDAL_RULES.lossOnWreck);
+            this.recoveryRemaining[event.kart]=DAMAGE_RULES.wreckDuration;this.testScene?.wreck?.(event.kart);this.react(event.kart,'angry',true);loseMedals(this.medals,event.kart,MEDAL_RULES.lossOnWreck);
             const at=[this.kart,...this.loadKarts][event.kart],near=Math.hypot(at.x-this.kart.x,at.z-this.kart.z)<40;
             if(event.kart===0||near){this.audio.itemEvent('hit');this.audio.thunder();this.audio.cheer(.9);}
             if(event.kart===0){this.itemMessage='Totalschaden! Die Staatliche Werkstatt rückt an';this.itemMessageUntil=this.items.time+3;}

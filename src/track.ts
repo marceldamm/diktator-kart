@@ -87,7 +87,13 @@ export function trackLocate(x: number, z: number): { s: number; lane: number } {
       }
     }
   }
-  if (best < 0) SAMPLES.forEach((p, i) => { const d = (p.x - x) ** 2 + (p.z - z) ** 2; if (d < bestDistance) { bestDistance = d; best = i; } });
+  if (best < 0) {
+    // Far from the road (distant city plots): coarse scan over every 8th sample, then refine around the winner (load time).
+    const n = SAMPLES.length;
+    for (let i = 0; i < n; i += 8) { const d = (SAMPLES[i].x - x) ** 2 + (SAMPLES[i].z - z) ** 2; if (d < bestDistance) { bestDistance = d; best = i; } }
+    const coarse = best;
+    for (let k = -8; k <= 8; k++) { const i = (coarse + k + n) % n, d = (SAMPLES[i].x - x) ** 2 + (SAMPLES[i].z - z) ** 2; if (d < bestDistance) { bestDistance = d; best = i; } }
+  }
   let result = { s: SAMPLES[best].s, lane: 0 }; let closest = Infinity;
   for (const i of [(best - 1 + SAMPLES.length) % SAMPLES.length, best]) {
     const a = SAMPLES[i], b = SAMPLES[(i + 1) % SAMPLES.length];

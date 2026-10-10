@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 10.10.2026 – Claude: Modelle komprimiert
+
+Alle Laufzeitmodelle sind jetzt meshopt-komprimiert. Nach einem Neubau immer `node art-source/optimize_assets.mjs <name>` ausführen (ohne Namen: alle, `drivers` für Fahrer/Standfiguren); der Fahrer-Doppelklick-Export macht das selbst. Das Spiel lädt den Decoder lokal aus `public/vendor/meshopt_decoder.js` (meshoptimizer, MIT). Unkomprimierte Modelle laufen weiterhin.
+
 ## 10.10.2026 – Claude: Prüfstand nach dem Projektstart-Block
 
 TypeScript-Check und Produktionsbuild erfolgreich (Vite meldet weiter den übergroßen Hauptchunk), `npm test` 112/112. Sichtbare Chrome-Prüfung im eigenen CDP-Profil (Port 9231): Peking mit Bots gefahren, Vorankündigung und Ereignis in Peking und Moskau ausgelöst, Teileverlust per gesetzter Karosseriewerte und Reparatur geprüft, Mao/Kim in der Fahrerwahl und am Start. Keine Konsolenfehler. Nicht geprüft: menschliches Fahrgefühl, Handy/Gamepad, schwache Grafik. Die sechs `*-im-kart.blend` zeigen das neue Kart; die alten Stände liegen lokal unter `.tools/claude/pose-blend-backup-20261010/`. Den Stadtbaukasten erneuert `art-source/build_city_kit.py` (Blender, danach `node art-source/optimize_assets.mjs city-kit`), das Kart `art-source/build_kart.py` (danach `... hero-kart`).

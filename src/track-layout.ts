@@ -288,11 +288,15 @@ const MOSCOW: TrackDefinition = {
   dressing: {
     boardRanges: [[0,260],[980,1320],[2130,2470]], flagRange: [620,980], pennants: [45,220,1160,2240,2460], screenProgress: 310,
     districts: [
-      { from:0,to:520,left:'avenue',right:'avenue' }, { from:520,to:990,left:'plaza',right:'plaza' },
+      { from:0,to:300,left:'stands',right:'avenue' }, { from:300,to:520,left:'avenue',right:'avenue' }, { from:520,to:990,left:'plaza',right:'plaza' },
       { from:990,to:1500,left:'plaza',right:'avenue' }, { from:1500,to:2050,left:'avenue',right:'plaza' },
       { from:2050,to:99999,left:'avenue',right:'avenue' },
     ],
-    heroes: [{ m:'kit-palace',s:760,lane:24 },{ m:'kit-obelisk',s:1200,lane:-24 },{ m:'kit-grandstand',s:2200,lane:18 }],
+    // 10.10.2026: Kremlin-like wall with towers along the north side of the square and the onion-domed cathedral.
+    heroes: [{ m:'kit-palace',s:760,lane:24 },{ m:'kit-obelisk',s:1200,lane:-24 },{ m:'kit-stand-moscow',s:2200,lane:19 },
+      { m:'kit-kremlin-tower', x:-200, z:200 }, { m:'kit-kremlin-tower', x:0, z:200 }, { m:'kit-kremlin-tower', x:200, z:200 },
+      ...[20,46,72,98,124,150,175].flatMap((x) => [{ m:'kit-kremlin-wall', x, z:205 }, { m:'kit-kremlin-wall', x:-x, z:205 }]),
+      { m:'kit-onion-church', x:-150, z:150 }],
     bridges: [320,2240], cathedral: null, petals: [650,850],
   },
   obstacles: [{ s:1050,lane:-7.5,radius:.38 },{ s:1050,lane:7.5,radius:.38 }],

@@ -9,6 +9,18 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Fünf Zusatzpunkte 10.10.2026 – Startbereiche, Fahrer- und Publikumsreaktionen, Pedale, Ladezeit (Marcel, Claude)
+
+Marcel: „Setze Punkte 1 bis 5 um.“
+
+- [x] **1 Stadtbilder:** Jede Stadt außer Berlin hat eigene Tribünen und ein eigenes Start-/Zieltor (`art-source/city_start_modules.py`): Moskau rote Granitstufen mit Zinnenmauer und Turmtor mit grünen Zeltdächern, Peking rote Lackwand unter gelbem Ziegeldach mit Laternen, Havanna Arkadenwand mit gestreifter Markise und Palmenstämmen, Pjöngjang Betontribüne mit großem roten Feld. Moskau bekommt eine Kremlmauer mit drei Türmen an der Nordseite, zwei Türme statt des Berliner Tors und die fiktive „Kathedrale der Planerfüllung“ mit gestreiften Zwiebelkuppeln; Moskau-Start mit Tribünen. Keine Herrschaftssymbole (Turmspitzen mit Goldkugel).
+- [x] **2 Fahrerreaktionen:** Faust beim Überholen, winkender Jubel nach eigenem Treffer und bei Zielankunft unter den ersten drei, Kopfschütteln nach Treffern, Totalschaden oder schlechter Platzierung. Der rechte Arm verlässt kurz das Lenkrad; Abklingzeit 3,5 s je Fahrer; rein optisch, alle Fahrer gleich.
+- [x] **3 Publikum:** Zuschauer hüpfen und machen eine La-Ola durch alle Tribünen (Vertex-Shader, `src/crowd-wave.ts`) beim Start, Rundenwechsel und Ziel; Führungswechsel und eigene Treffer lösen Hüpfen plus Papierregen über den Tribünen neben dem Kart aus. Nebenbefund behoben: Die Zuschauerkleidung trug wegen zusammengelegter Materialien bisher das Bannermuster.
+- [x] **4 Pedale:** Gas- und Bremspedal sitzen jetzt unter den Füßen wie in den Blender-Posen, mit kurzer Halterung zum Wannenboden; sie bewegen sich weiter mit Gas und Bremse.
+- [x] **5 Ladezeit:** Alle Modelle meshopt-komprimiert (Decoder lokal unter `public/vendor/`): Startdownload der Modelle 35 → 17 MB (Stadtbaukasten 11,4 → 7,5 MB trotz neuer Bausteine, Kart 6,5 → 3,4 MB, Fahrer ca. 70 % kleiner). Weltaufbau ohne Speicherverschwendung, Materialänderungen während des Ladens gebündelt: lokal 15 → 12 s bis spielbereit. Der Doppelklick-Export der Fahrerposen komprimiert automatisch mit.
+- Prüfung: TypeScript, Build, `npm test` 112/112; sichtbarer Chrome-Lauf: alle sechs Strecken laden, Peking-Demo 45 s ohne Fehler (44 fps), Startbereiche, Moskau-Runde, Reaktionen, La-Ola, Pedale. Bilder: [`docs/evidence/punkte-1-5-20261010/`](docs/evidence/punkte-1-5-20261010/).
+- **Offen:** Marcels Urteil; Reaktionen sind in der Verfolgerkamera nur kurz sichtbar.
+
 ## Projektstart-Block 10.10.2026 – Peking, Streckenereignisse, Regen, Kartteile, Beinfreiheit (Marcel, Claude)
 
 Marcels Auftrag: offene Änderungen und definierte Ziele selbstständig umsetzen, eigene Ideen erlaubt; zuerst Stehposen und Sitzposition nur kurz prüfen; zum Schluss die Beinfreiheit der Karts.

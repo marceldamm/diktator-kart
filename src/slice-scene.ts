@@ -35,7 +35,8 @@ import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } fr
 import { airTrickRoll, armGripPose, twoBoneElbow } from './kart-visuals';
 import { canalSurfaceSprayRate, looseSurfaceDustRate } from './environment-effects';
 import type { KartState } from './kart-model';
-import type { TestScene } from './scene';
+import type { DriverReaction, TestScene } from './scene';
+import { crowdReact, stepCrowd } from './crowd-wave';
 import { surfaceTextures } from './surface-textures';
 import { SceneInstrumentation } from '@babylonjs/core/Instrumentation/sceneInstrumentation';
 import { EngineInstrumentation } from '@babylonjs/core/Instrumentation/engineInstrumentation';
@@ -58,9 +59,16 @@ function glowMaterial(scene: Scene, name: string, color: string): StandardMateri
 
 function particleTexture(scene: Scene): DynamicTexture { return softParticleTexture(scene); }
 
+/** Pedal hinge [Blender y, z] per driver from the pose files (x = ±0.16); every pad is tilted like there. */
+const PEDAL_HINGES: Record<string, [number, number]> = { hitler: [.2236, .713], stalin: [.2773, .7416], mussolini: [.243, .7233], mao: [.2577, .7306], kim: [.2655, .7336], castro: [.2571, .7294] };
+const PEDAL_TILT = -1.1345;
+
 export async function createSliceScene(engine: Engine, loadKartCount: number, quality=1, report?: LoadingReporter): Promise<TestScene> {
   const scene = new Scene(engine);
   scene.skipPointerMovePicking=true;
+  // Load time: material edits while the world is built would re-flag every sub-mesh each time; main.ts unblocks once
+  // before compiling (one full dirty pass instead of thousands).
+  scene.blockMaterialDirtyMechanism=true;
   try {
     // Warm late-afternoon look (G/J): low sun from the south-west, cool sky fill, light aerial haze.
     scene.clearColor = new Color4(.62, .72, .84, 1);
@@ -320,6 +328,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     puff.color1 = new Color4(.62, .57, .48, .35); puff.color2 = new Color4(.72, .69, .6, .28); puff.colorDead = new Color4(.7, .66, .58, 0); puff.start();
     const burst = (system: ParticleSystem, s: KartState, count: number) => { system.emitter = new Vector3(s.x, .5 + s.height + elevationAt(trackLocate(s.x, s.z).s), s.z); system.manualEmitCount = count; };
     const confetti = createConfetti(scene);
+    scene.onBeforeRenderObservable.add(() => stepCrowd(Math.min(.1, scene.getEngine().getDeltaTime() / 1000)));
     // Finish fireworks over the main stand: additive bursts in gold, red, white and green (capped pool).
     const fireworks = new ParticleSystem('Finish fireworks', 1200, scene); fireworks.particleTexture = particleTexture(scene);
     fireworks.blendMode = ParticleSystem.BLENDMODE_ADD; fireworks.minSize = .7; fireworks.maxSize = 1.25; fireworks.minLifeTime = 1.1; fireworks.maxLifeTime = 1.9;
@@ -598,7 +607,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       return { blimp, hook };
     });
     const baseLight = { sun: sun.intensity, hemi: hemisphere.intensity, fog: scene.fogDensity, fogColor: scene.fogColor.clone(), env: scene.environmentIntensity };
-    type PilotArm = { upper: TransformNode; lower: TransformNode; hand: TransformNode; rest: Quaternion[]; grip: Matrix };
+    type PilotArm = { upper: TransformNode; lower: TransformNode; hand: TransformNode; rest: Quaternion[]; grip: Matrix; side?: 'l' | 'r' };
     const refreshChain = (node: TransformNode) => {
       const chain: TransformNode[] = [];
       for (let n: SceneNode | null = node; n; n = n.parent) if (n instanceof TransformNode) chain.unshift(n);
@@ -644,6 +653,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     // replace the procedural drivers in every kart; ?pilot=0 shows the old code-built drivers for comparison.
     // 09.10.2026: all six are now Marcel's Tripo models, posed in art-source/<id>-im-kart.blend (build_driver_kart_pose.py).
     let presentDriver: ((cast: number | null) => void) | undefined;
+    let reactDriver: ((kart: number, kind: DriverReaction) => void) | undefined;
     let presentedAt: Vector3 | undefined;
     if (new URLSearchParams(location.search).get('pilot') !== '0') {
       const styles = ['hitler', 'stalin', 'mussolini', 'mao', 'kim', 'castro'] as const;
@@ -651,6 +661,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         `/assets/models/${id}-driver.glb`, scene,
       )] as const)));
       scene.onDisposeObservable.add(() => { for (const c of models.values()) c.dispose(); });
+      const pedalSteel = new PBRMaterial('Pedal bracket steel', scene); pedalSteel.albedoColor = new Color3(.32, .33, .34); pedalSteel.metallic = .8; pedalSteel.roughness = .35;
       const seats = visuals.map((v, index) => {
         // Every mesh of the procedural driver (body, head, hair, arms, gloves, cast parts, cape) stays hidden, also after dress().
         const old = new Set<AbstractMesh>([v.driver, v.head, ...v.arms.filter((x): x is TransformNode => !!x)].flatMap((n) => n.getChildMeshes(false)));
@@ -665,7 +676,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         v.steering.rotation.z = turn;
         // The holder follows the old driver node: lean in corners, rise into the tank hatch, ejection after a wreck.
         const holder = new TransformNode(`cc0Driver-${index}`, scene); holder.parent = v.orientation;
-        const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined, arms: [] as PilotArm[] };
+        const seat = { old, holder, style: '', meshes: [] as AbstractMesh[], head: [] as AbstractMesh[], skull: undefined as AbstractMesh | undefined, arms: [] as PilotArm[],
+          headBone: undefined as TransformNode | undefined, headRest: new Quaternion(), react: undefined as { kind: DriverReaction; t: number } | undefined };
         const sit = (cast: CastMember) => {
           if (seat.style === cast.faceStyle) return;
           for (const m of seat.meshes) { shadow.removeShadowCaster(m); }
@@ -681,9 +693,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             if (material instanceof PBRMaterial) { material.metallic = Math.min(material.metallic ?? 0, .12); material.roughness = Math.max(material.roughness ?? 0, .78); }
           }
           seat.head = seat.meshes.filter((m) => /Pilot head|Hair|Eyebrows|Eyes|moustache|forelock|collar|mole|top hair|cap|cigar/.test(m.name));
-          seat.skull = seat.head.find((m) => /Pilot head/.test(m.name)); seat.style = cast.faceStyle;
+          seat.skull = seat.head.find((m) => /Pilot head/.test(m.name)); seat.style = cast.faceStyle; seat.react = undefined;
           // Arm rig: remember the seat pose and where each wrist sits on the wheel (in the wheel's own frame).
           const bones = new Map(holder.getDescendants(false).map((n) => [n.name.slice(n.name.indexOf('/') + 1), n as TransformNode]));
+          seat.headBone = bones.get('Head'); if (seat.headBone?.rotationQuaternion) seat.headRest.copyFrom(seat.headBone.rotationQuaternion);
           const v = visuals[index], wheelTurn = v.steering.rotation.z, lean = [holder.position.y, holder.rotation.x, holder.rotation.z] as const;
           v.steering.rotation.z = 0; holder.position.y = 0; holder.rotation.x = 0; holder.rotation.z = 0;
           seat.arms = (['l', 'r'] as const).flatMap((sd) => {
@@ -691,14 +704,51 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
             if (!upper?.rotationQuaternion || !lower?.rotationQuaternion || !hand?.rotationQuaternion) return [];
             refreshChain(hand); refreshChain(v.steering);
             const grip = hand.getWorldMatrix().multiply(v.steering.getWorldMatrix().clone().invert());
-            return [{ upper, lower, hand, rest: [upper.rotationQuaternion.clone(), lower.rotationQuaternion.clone(), hand.rotationQuaternion.clone()], grip }];
+            return [{ upper, lower, hand, rest: [upper.rotationQuaternion.clone(), lower.rotationQuaternion.clone(), hand.rotationQuaternion.clone()], grip, side: sd }];
           });
           v.steering.rotation.z = wheelTurn; [holder.position.y, holder.rotation.x, holder.rotation.z] = lean;
         };
-        const dress = v.dress; v.dress = (cast: CastMember) => { dress(cast); sit(cast); };
-        sit(CAST[(roster[index] ?? index) % CAST.length]);
+        // Pedals under the feet (10.10.2026): the hinge positions Marcel's pose files use (art-source/<id>-im-kart.blend, read
+        // 10.10.2026), converted from Blender (x, y, z) to the kart's glTF frame (x, z, -y); a short bracket reaches the floor.
+        const placePedals = (cast: CastMember) => {
+          const at = PEDAL_HINGES[cast.faceStyle]; if (!at) return;
+          v.pedals.forEach((pedal, k) => { if (!pedal) return; pedal.position.set(k === 0 ? .16 : -.16, at[1], -at[0]); pedal.rotation.x = PEDAL_TILT; pedal.metadata = { tilt: PEDAL_TILT };
+            const bracket = pedalBrackets[index]?.[k]; if (bracket) { bracket.position.set(pedal.position.x, (at[1] + .6) / 2, pedal.position.z); bracket.scaling.y = Math.max(.01, at[1] - .6); } });
+        };
+        const pedalBrackets: Mesh[][] = [];
+        pedalBrackets[index] = v.pedals.map((pedal) => { const m = MeshBuilder.CreateCylinder(`Pedal floor bracket ${index}`, { diameter: .03, height: 1, tessellation: 6 }, scene); m.material = pedalSteel; m.parent = pedal?.parent ?? v.orientation; m.isPickable = false; return m; });
+        const dress = v.dress; v.dress = (cast: CastMember) => { dress(cast); sit(cast); placePedals(cast); };
+        sit(CAST[(roster[index] ?? index) % CAST.length]); placePedals(CAST[(roster[index] ?? index) % CAST.length]);
         return seat;
       });
+      // Driver reactions (Marcel, 10.10.2026): after the wheel grip, the right arm can leave the rim to wave (cheer) or
+      // shake a fist (overtake); 'angry' shakes the head. A short envelope blends in and out, the kart keeps driving.
+      const reactUp = new Vector3(), reactQ = new Quaternion(), reactInv = new Matrix();
+      const react = (seat: (typeof seats)[number], onWheel: boolean) => {
+        const r = seat.react!; r.t += Math.min(.05, scene.getEngine().getDeltaTime() / 1000);
+        const duration = r.kind === 'cheer' ? 2.2 : r.kind === 'fist' ? 1.4 : 1.1;
+        if (r.t >= duration || !onWheel) { seat.react = undefined; seat.headBone?.rotationQuaternion?.copyFrom(seat.headRest); return; }
+        const w = Math.max(0, Math.min(1, r.t / .2, (duration - r.t) / .3));
+        const head = seat.headBone;
+        if (head?.rotationQuaternion && head.parent) {
+          (head.parent as TransformNode).getWorldMatrix().invertToRef(reactInv); Vector3.TransformNormalToRef(Vector3.UpReadOnly, reactInv, reactUp);
+          const angle = r.kind === 'angry' ? Math.sin(r.t * 17) * .32 * w : r.kind === 'cheer' ? Math.sin(r.t * 3) * .12 * w : 0;
+          Quaternion.RotationAxisToRef(reactUp.normalize(), angle, reactQ); reactQ.multiplyToRef(seat.headRest, head.rotationQuaternion); head.computeWorldMatrix(true);
+        }
+        if (r.kind === 'angry') return;
+        const arm = seat.arms.find((a) => a.side === 'r'), other = seat.arms.find((a) => a.side === 'l'); if (!arm || !other) return;
+        refreshChain(arm.hand); refreshChain(other.upper);
+        const shoulder = arm.upper.getAbsolutePosition().clone(), elbow = arm.lower.getAbsolutePosition().clone(), hand = arm.hand.getAbsolutePosition().clone();
+        const outward = shoulder.subtract(other.upper.getAbsolutePosition()).normalize(), reach = (Vector3.Distance(shoulder, elbow) + Vector3.Distance(elbow, hand)) * .97;
+        const shake = r.kind === 'cheer' ? Math.sin(r.t * 8) * .14 : Math.sin(r.t * 15) * .05;
+        const raised = shoulder.add(Vector3.Up().scale(reach * (r.kind === 'fist' ? .8 : .9))).add(outward.scale(.12 + shake));
+        const target = Vector3.Lerp(hand, raised, w);
+        const bent = twoBoneElbow(shoulder, elbow, hand, target);
+        swing(arm.upper, elbow.subtract(shoulder), bent.subtract(shoulder)); arm.lower.computeWorldMatrix(true); arm.hand.computeWorldMatrix(true);
+        const elbowNow = arm.lower.getAbsolutePosition().clone();
+        swing(arm.lower, arm.hand.getAbsolutePosition().subtract(elbowNow), target.subtract(elbowNow)); arm.hand.computeWorldMatrix(true);
+      };
+      reactDriver = (kart, kind) => { const seat = seats[kart]; if (seat && (!seat.react || seat.react.kind !== kind)) seat.react = { kind, t: 0 }; };
       scene.onBeforeRenderObservable.add(() => {
         const cam = scene.activeCamera;
         seats.forEach((seat, i) => {
@@ -708,6 +758,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           const onWheel = d.position.y <= .05;
           if (onWheel) refreshChain(visuals[i].steering);
           for (const arm of seat.arms) poseArm(arm, onWheel ? visuals[i].steering : undefined);
+          if (seat.react) react(seat, onWheel);
           // Cockpit camera: the eye sits inside the head, so head, hair and face parts hide while the camera is that close.
           if (!cam || !seat.skull) return;
           const b = seat.skull.getBoundingInfo().boundingSphere;
@@ -911,6 +962,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         visuals.forEach((v)=>v.setKimPolish(false));for (const m of tankPaint) m.albedoColor = Color3.FromHexString(CAST[0].paint).toLinearSpace();
       },
       presentDriver(cast) { presentDriver?.(cast); },
+      driverReaction(kart, kind) { reactDriver?.(kart, kind); },
+      crowdReact(kind, kart) {
+        crowdReact(kind);
+        // Paper rain over the stands beside the kart that caused the cheer (capped confetti pool).
+        const at = kart === undefined ? undefined : lastStates[kart];
+        if (at) { const side = Math.sin(at.heading + Math.PI / 2), fwd = Math.cos(at.heading + Math.PI / 2); for (const sd of [-1, 1]) confetti.burst(new Vector3(at.x + side * sd * 14, 9 + elevationAt(trackLocate(at.x, at.z).s), at.z + fwd * sd * 14), reducedEffects ? 30 : 110); }
+      },
       presentedAt() { return presentedAt ? { x: presentedAt.x, z: presentedAt.z } : undefined; },
       celebrate(kind) {
         const p = trackPoint(TRACK.start, 0);
@@ -1101,7 +1159,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           if (v.scarf) { v.scarf.rotation.x = -Math.min(.2, Math.abs(s.speed) * .012) - Math.sin(time * 9 + index) * Math.abs(s.speed) * .0035; v.scarf.rotation.z = Math.sin(time * 6.5 + index) * .04; }
           // Pedals follow what the driver is doing: gas while gaining speed, brake while slowing hard.
           v.gas += ((longitudinal > .4 && s.speed > 0 ? 1 : 0) - v.gas) * Math.min(1, dt * 14); v.brake += ((longitudinal < -3 ? 1 : 0) - v.brake) * Math.min(1, dt * 14);
-          if (v.pedals[0]) v.pedals[0].rotation.x = -v.gas * .45; if (v.pedals[1]) v.pedals[1].rotation.x = -v.brake * .45;
+          if (v.pedals[0]) v.pedals[0].rotation.x = (v.pedals[0].metadata?.tilt ?? 0) - v.gas * .4; if (v.pedals[1]) v.pedals[1].rotation.x = (v.pedals[1].metadata?.tilt ?? 0) - v.brake * .4;
           v.previousSpeed = s.speed;
           v.flames.forEach((f) => { f.setEnabled(s.turboRemaining > 0); f.scaling.z = 3 + Math.sin(time * 40); });
           { // Hands stay on the rim: aim each arm from the (leaning) shoulder at its glove on the turning wheel.

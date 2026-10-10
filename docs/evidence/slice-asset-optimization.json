@@ -1,16 +1,11 @@
 {
-  "date": "2026-10-10T07:57:36.360Z",
-  "tool": "glTF Transform 4.5.1; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps",
+  "date": "2026-10-10T10:58:33.673Z",
+  "tool": "glTF Transform 4.5.1 + meshoptimizer 0.25; lossless welding/deduplication, 16-bit positions, 12-bit normals, 14-bit UV, JPEG88 maps, EXT_meshopt_compression",
   "results": [
     {
       "name": "shepherd",
       "originalBytes": 293452,
       "runtimeBytes": 208808
-    },
-    {
-      "name": "parade-tank",
-      "originalBytes": 511748,
-      "runtimeBytes": 322012
     },
     {
       "name": "stadium-world",
@@ -53,14 +48,89 @@
       "runtimeBytes": 1110400
     },
     {
-      "name": "city-kit",
-      "originalBytes": 15136964,
-      "runtimeBytes": 11991976
-    },
-    {
       "name": "hero-kart",
       "originalBytes": 10066248,
-      "runtimeBytes": 6787796
+      "runtimeBytes": 3525600
+    },
+    {
+      "name": "items",
+      "originalBytes": 232736,
+      "runtimeBytes": 105024
+    },
+    {
+      "name": "parade-tank",
+      "originalBytes": 511748,
+      "runtimeBytes": 178604
+    },
+    {
+      "name": "castro-driver",
+      "originalBytes": 1760592,
+      "runtimeBytes": 526800
+    },
+    {
+      "name": "castro-stand",
+      "originalBytes": 1807092,
+      "runtimeBytes": 566060
+    },
+    {
+      "name": "hitler-driver",
+      "originalBytes": 1546468,
+      "runtimeBytes": 447676
+    },
+    {
+      "name": "hitler-stand",
+      "originalBytes": 1593204,
+      "runtimeBytes": 485024
+    },
+    {
+      "name": "kim-driver",
+      "originalBytes": 1760536,
+      "runtimeBytes": 530772
+    },
+    {
+      "name": "kim-stand",
+      "originalBytes": 1808400,
+      "runtimeBytes": 571024
+    },
+    {
+      "name": "mao-driver",
+      "originalBytes": 1639592,
+      "runtimeBytes": 473728
+    },
+    {
+      "name": "mao-stand",
+      "originalBytes": 1686588,
+      "runtimeBytes": 512380
+    },
+    {
+      "name": "mussolini-driver",
+      "originalBytes": 1991352,
+      "runtimeBytes": 688820
+    },
+    {
+      "name": "mussolini-stand",
+      "originalBytes": 2038500,
+      "runtimeBytes": 728284
+    },
+    {
+      "name": "stalin-driver",
+      "originalBytes": 1057068,
+      "runtimeBytes": 366032
+    },
+    {
+      "name": "stalin-stand",
+      "originalBytes": 1105684,
+      "runtimeBytes": 407264
+    },
+    {
+      "name": "park-tree",
+      "originalBytes": 5715164,
+      "runtimeBytes": 4379348
+    },
+    {
+      "name": "city-kit",
+      "originalBytes": 22534396,
+      "runtimeBytes": 7528948
     }
   ]
 }

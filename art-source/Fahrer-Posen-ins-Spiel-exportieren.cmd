@@ -13,6 +13,8 @@ if not defined BLENDER (
 echo Verwende %BLENDER%
 "%BLENDER%" --background --factory-startup --python "%~dp0export_driver_kart_pose.py" -- all
 if not errorlevel 1 "%BLENDER%" --background --factory-startup --python "%~dp0export_driver_stand.py" -- all
+rem Kleinere Dateien, schnellerer Spielstart (meshopt-Kompression, siehe art-source\optimize_assets.mjs).
+if not errorlevel 1 node "%~dp0optimize_assets.mjs" drivers
 if errorlevel 1 (
   echo.
   echo Export fehlgeschlagen. Bitte das Fenster an Claude oder Codex schicken.
