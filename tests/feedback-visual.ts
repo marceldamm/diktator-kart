@@ -8,6 +8,7 @@ import { CAST } from '../src/cast';
 import { TRACK, selectTrack, trackPoint, trackHeightAt, shortcutPoint, SHORTCUT_LENGTH } from '../src/track';
 import { TRACKS, type TrackId } from '../src/track-layout';
 import type { TestScene } from '../src/scene';
+import { FreeFlight } from '../src/free-camera';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 MeshoptCompression.Configuration = { decoder: { url: '/vendor/meshopt_decoder.js' } };
 const driver = el<HTMLSelectElement>('driver'), track = el<HTMLSelectElement>('track'), view = el<HTMLSelectElement>('view');
@@ -47,7 +48,7 @@ function render() {
   state = { ...state, x: p.x, z: p.z, heading: p.heading, travelHeading: p.heading,
     height: trackHeightAt(p.x, p.z) + (jump ? 1.4 : 0), grounded: !jump, trick: !!jump, jumpDuration: 1, jumpRemaining: jump ? 1 - jump : 0 };
   world.setDamage?.([health], [health === 0 ? 1 : 0]); world.setTimeOfDay?.(night);
-  world.present(state, []); frameCamera();
+  world.present(state, []); if (free.active) free.update(Math.min(engine.getDeltaTime() / 1000, .1)); else frameCamera();
   for (const light of world.scene.lights) if (/Nearby street lantern|Kart headlight beam/.test(light.name)) {
     light.setEnabled(el<HTMLInputElement>('lamps').checked && (el<HTMLSelectElement>('quality').value !== '0' || light.name.endsWith(' 0')));
   }
@@ -83,6 +84,12 @@ el('pause').onclick = () => { paused = !paused; el('pause').textContent = paused
 for (const id of ['jump', 'night', 'health', 'position']) el<HTMLInputElement>(id).oninput = () => {
   const value = Number(el<HTMLInputElement>(id).value); if (id === 'jump') jump = value; else if (id === 'night') night = value; else if (id === 'position') coursePosition = value; else health = value;
   render(); status();
+};
+// Freie Kamera (Marcel 11.10.2026): fly through the loaded course; Esc returns to the chosen view.
+const free = new FreeFlight(() => world?.scene, el<HTMLCanvasElement>('canvas'));
+el('freecam').onclick = () => {
+  free.start(() => { if (paused) engine.stopRenderLoop(); render(); });
+  if (paused) engine.runRenderLoop(render);
 };
 window.addEventListener('resize', () => engine.resize());
 window.addEventListener('pagehide', () => { engine.stopRenderLoop(); world?.scene.dispose(); engine.dispose(); });

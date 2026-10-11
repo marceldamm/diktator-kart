@@ -8,6 +8,7 @@ import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as t
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
+import { FreeFlight } from './free-camera';
 import {createItems,stepItems,botUsesItem,botItemDirection,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
@@ -196,6 +197,7 @@ class App {
   private selectedTrackId:TrackId='stadionring';
   private selectingTrack=false;
   private readonly flood=new DocumentFlood();
+  private readonly freeFlight=new FreeFlight(()=>this.testScene?.scene,canvas);
   /** Centreline progress and lane of karts on a state-visit autopilot (items.escortRemaining). */
   private escortRoute:({s:number;lane:number}|null)[]=[];
   private selecting=false;
@@ -205,7 +207,7 @@ class App {
   private castOf(i: number) { return CAST[this.order[i] ?? i]; }
 
   constructor() {
-    Object.defineProperty(window, '__DK', { get: () => ({ react: (kart: number, kind: 'cheer'|'fist'|'angry') => this.testScene?.driverReaction?.(kart, kind), crowd: (kind: 'wave'|'cheer', kart?: number) => this.testScene?.crowdReact?.(kind, kart), startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
+    Object.defineProperty(window, '__DK', { get: () => ({ react: (kart: number, kind: 'cheer'|'fist'|'angry') => this.testScene?.driverReaction?.(kart, kind), crowd: (kind: 'wave'|'cheer', kart?: number) => this.testScene?.crowdReact?.(kind, kart), startPress: this.startPress, startFenceBroken: this.startFenceBroken, damage: this.damage, abilityStats: this.abilityStats, trackLength: TRACK.length, selectedTrack: this.selectedTrackId, voices: this.audio.voiceCount, spoken: this.audio.spoken, scene: this.testScene?.scene, kart: this.kart, bots: this.loadKarts, phase: this.racePhase, progress: this.progress,items:this.items,state:this.state,view:this.camera?.viewName,menu:this.camera?.introMode,free:this.freeFlight,render:{kart:this.renderKart,alpha:this.accumulator/FIXED_STEP,steps:this.renderSteps} }) });
     // Performance 10.10.2026: every start of the game batch opens another Chrome window and older windows kept drawing
     // the full 3D scene (and playing sound). The newest window takes over; older ones park until "Hier weiterspielen".
     try {
@@ -249,6 +251,7 @@ class App {
       this.renderKeymap();
     },true);
     document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection(true));
+    document.querySelector('#menu-freecam')?.addEventListener('click',()=>{if(this.state!=='loading'&&this.camera?.introMode)this.freeFlight.start(()=>this.input.reset());});
     document.querySelector('#track-go')?.addEventListener('click',()=>this.confirmTrackSelection());
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>card.addEventListener('click',()=>{
       const id=card.dataset.trackId;if(isTrackId(id)){this.audio.previewTrackMusic(id);if(id===this.selectedTrackId)this.confirmTrackSelection();else{this.selectedTrackId=id;this.renderTrackSelection();}}
@@ -982,6 +985,8 @@ class App {
         console.info(`[Diktator Kart] ${this.lastAction} – in den Optionen änderbar`);
       }
     }
+    // Freie Kamera: the game ignores its own input and only renders the flight.
+    if (this.freeFlight.active && this.testScene) { this.input.read(); this.freeFlight.update(Math.min((this.engine?.getDeltaTime() ?? 16) / 1000, .1)); this.lastRenderAt = now; this.testScene.scene.render(); return; }
     const frame = this.input.read();
     this.camera?.setLookBack(this.state === 'running' && !this.camera.introMode && this.input.isDown('lookBack'));
     if(frame.pressed.has('menu')&&!this.selecting&&!document.body.classList.contains('select-open')){if(this.camera?.introMode)this.closeMenu();else this.openMenu();}

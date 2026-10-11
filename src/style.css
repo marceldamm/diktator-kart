@@ -348,3 +348,10 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 @keyframes flood-burst { from { transform:translate(-50%,0) rotate(0deg) scale(.4); } to { transform:translate(calc(-50% + var(--x)),var(--y)) rotate(var(--r)) scale(1); } }
 @keyframes flood-drift { from { translate:0 0;rotate:0deg; } to { translate:1.5vw 2.5vh;rotate:calc(var(--spin) * .05); } }
 @media(prefers-reduced-motion:reduce) { .flood-sheet { animation:flood-burst .01s both; } }
+
+/* Prüfwerkzeuge im Startmenü (11.10.2026): freie Kamera und Grafik-Prüfansicht, oben rechts. */
+.menu-tools { display:none; }
+.menu-open:not(.select-open):not(.track-select-open) .menu-tools { display:flex;gap:8px;position:absolute;z-index:30;top:18px;right:18px; }
+.menu-tools button,.menu-tools a { padding:8px 14px;background:#0c242ee6;border:1px solid #d2ac57;color:#f5e5bb;font:600 13px system-ui,sans-serif;text-decoration:none;cursor:pointer; }
+.menu-tools button:hover,.menu-tools a:hover { background:#17353b; }
+body.free-camera #app > :not(#render-canvas) { visibility:hidden !important; }
