@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
-import { TRACK, selectTrack, atSecondLapTrackEvent, berlinZeppelinWindAt, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
+import { TRACK, selectTrack, atSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
 import { SHORTCUT } from '../src/track-layout.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
@@ -47,6 +47,12 @@ test('Berlin Zeppelin tailwind rewards the outer grandstand line and leaves a co
   assert.equal(berlinZeppelinWindAt(182,4),false,'wind stops at the end of the stadium straight');
   assert.equal(berlinZeppelinWindAt(100,2.4),false,'inner line stays free');
   assert.equal(berlinZeppelinWindAt(44.99,4),false,'wind has a fixed start');
+});
+test('course events belong only to their named course across every circuit theme',()=>{
+  const routes={zeppelin:'berlin',wave:'havana',balcony:'rome',jubel:'beijing',parade:'moscow',column:'pyongyang'};
+  const themes=Object.values(routes);
+  for(const [event,home] of Object.entries(routes))for(const theme of themes)
+    assert.equal(eventBelongsToTrackTheme(theme,event),theme===home,`${event} must stay on ${home}, not ${theme}`);
 });
 test('canal rescue places a fallen kart beyond the water without awarding progress',()=>{
   const fallen={...gridKart(0),...trackPoint(CANAL_FROM+CANAL_LENGTH/2)};

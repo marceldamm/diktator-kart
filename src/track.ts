@@ -1,9 +1,16 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, ELEVATION, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, TRACK_INFO, isTrackId, sampleTrack, setTrackLayout, type TrackId, type TrackSample } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, ELEVATION, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, TRACK_INFO, isTrackId, sampleTrack, setTrackLayout, type TrackDefinition, type TrackId, type TrackSample } from './track-layout.ts';
 
 let SAMPLES: TrackSample[] = [];
 /** Inner face of the barrier wall (lane metres); karts may use the kerbs right up to it. Mutated in place by `selectTrack`. */
 export const TRACK = { halfWidth: TRACK_HALF_WIDTH, wall: TRACK_HALF_WIDTH + 1, length: 0, start: START_PROGRESS, samples: SAMPLES, id: TRACK_INFO.id as TrackId, name: TRACK_INFO.name };
+export type CourseEvent = 'zeppelin' | 'wave' | 'balcony' | 'jubel' | 'parade' | 'column';
+const COURSE_EVENT_THEME: Record<CourseEvent, TrackDefinition['theme']> = {
+  zeppelin: 'berlin', wave: 'havana', balcony: 'rome', jubel: 'beijing', parade: 'moscow', column: 'pyongyang',
+};
+export function eventBelongsToTrackTheme(theme: TrackDefinition['theme'], event: CourseEvent): boolean {
+  return COURSE_EVENT_THEME[event] === theme;
+}
 /** Half the visual kart width (rear tyre outer edge). */
 const KART_SIDE = 1.15;
 export const wrap = (s: number) => ((s % TRACK.length) + TRACK.length) % TRACK.length;

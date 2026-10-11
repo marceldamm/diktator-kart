@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, atSecondLapTrackEvent, berlinZeppelinWindAt, trackEventLap, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, atSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -1119,7 +1119,7 @@ class App {
         }
         if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
         setParadeClock(this.raceTime);
-        if (!LAB_WORLD && this.raceTime < this.zeppelinWindUntil) {
+        if (!LAB_WORLD && eventBelongsToTrackTheme(TRACK_INFO.theme, 'zeppelin') && this.raceTime < this.zeppelinWindUntil) {
           const wind = (k: typeof this.kart) => {
             const { s, lane } = trackLocate(k.x, k.z), cap = KART_TUNING.maxForwardSpeed + (k.topSpeedBonus ?? 0) + 1.2;
             return berlinZeppelinWindAt(s, lane) && k.grounded && k.speed > 4 && k.turboRemaining <= 0 && k.speed < cap
@@ -1128,21 +1128,21 @@ class App {
           };
           this.kart = wind(this.kart); this.loadKarts = this.loadKarts.map(wind);
         }
-        if (!LAB_WORLD && this.raceTime < this.paradeUntil) {
+        if (!LAB_WORLD && eventBelongsToTrackTheme(TRACK_INFO.theme, 'parade') && this.raceTime < this.paradeUntil) {
           // Moscow honour parade: a gentle tailwind on the first parade straight, up to 6 % above normal top speed, for every kart.
           const tailwind = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 520 && k.grounded && k.speed > 4 ? { ...k, speed: Math.max(k.speed, Math.min(k.speed + 1.6 * FIXED_STEP, 17)) } : k; };
           this.kart = tailwind(this.kart); this.loadKarts = this.loadKarts.map(tailwind);
         }
-        if (!LAB_WORLD && this.raceTime < this.waveUntil) {
+        if (!LAB_WORLD && eventBelongsToTrackTheme(TRACK_INFO.theme, 'wave') && this.raceTime < this.waveUntil) {
           // The wave reaches the exposed seaward line; the inland line remains a clear counterplay choice.
           const soak = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return maleconWavePatchAt(s, lane) && k.grounded ? { ...k, ...applyMaleconWaveDrag(k.speed, k.yawRate, FIXED_STEP) } : k; };
           this.kart = soak(this.kart); this.loadKarts = this.loadKarts.map(soak);
         }
-        if (!LAB_WORLD && this.raceTime < this.jubelUntil) {
+        if (!LAB_WORLD && eventBelongsToTrackTheme(TRACK_INFO.theme, 'jubel') && this.raceTime < this.jubelUntil) {
           const echo = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return policyJubelPatchAt(s, lane) && k.grounded ? { ...k, ...applyPolicyJubelDrag(k.speed, k.yawRate, FIXED_STEP) } : k; };
           this.kart = echo(this.kart); this.loadKarts = this.loadKarts.map(echo);
         }
-        if (!LAB_WORLD && this.raceTime < this.balconyUntil) {
+        if (!LAB_WORLD && eventBelongsToTrackTheme(TRACK_INFO.theme, 'balcony') && this.raceTime < this.balconyUntil) {
           // Balcony roses collect in the centre of the start-side avenue; a clean outer line avoids the brief drag.
           const rosePatch = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return balconyRosePatchAt(s, lane) && k.grounded ? { ...k, speed: Math.max(0, k.speed - .45 * FIXED_STEP), yawRate: k.yawRate * (1 - .3 * FIXED_STEP) } : k; };
           this.kart = rosePatch(this.kart); this.loadKarts = this.loadKarts.map(rosePatch);
@@ -1280,7 +1280,7 @@ class App {
               this.crowdReactionLap = lap; this.testScene?.crowdReact?.(crowdMarker.kind);
             }
           }
-          if (!this.paradeTriggered && TRACK_INFO.theme === 'moscow' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+          if (!this.paradeTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'parade') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s } = trackLocate(kart.x, kart.z);
             return atSecondLapTrackEvent(this.progress[i].distance, s, 95, 520);
           })) {
@@ -1288,7 +1288,7 @@ class App {
             this.testScene?.trackEvent?.('parade'); this.itemMessage = 'Ehrenparade! Rückenwind auf der Parade-Geraden für alle'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(1); window.setTimeout(() => this.audio.voice('announcer-parade', { force: true }), 900);
           }
-          if (!this.columnTriggered && TRACK_INFO.theme === 'pyongyang' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+          if (!this.columnTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'column') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const s = trackProgressAt(kart.x, kart.z);
             return !inShortcut(kart.x, kart.z) && atSecondLapTrackEvent(this.progress[i].distance, s, 1372, 1400);
           })) {
@@ -1296,7 +1296,7 @@ class App {
             this.itemMessage = 'Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(1); this.audio.cue('lap');
           }
-          if (!this.zeppelinTriggered && TRACK_INFO.theme === 'berlin' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+          if (!this.zeppelinTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'zeppelin') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const s = trackProgressAt(kart.x, kart.z);
             return atSecondLapTrackEvent(this.progress[i].distance, s, 45, 182);
           })) {
@@ -1304,7 +1304,7 @@ class App {
             this.itemMessage = 'Propaganda-Zeppelin! Rückenwind auf der Tribünenspur · innen bleibt freie Fahrt'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(.8);
           }
-          if (!this.jubelTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+          if (!this.jubelTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'jubel') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s, lane } = trackLocate(kart.x, kart.z);
             return atSecondLapTrackEvent(this.progress[i].distance, s, 880, 1040) && policyJubelPatchAt(s, lane);
           })) {
@@ -1312,7 +1312,7 @@ class App {
             this.testScene?.trackEvent?.('loudspeaker'); this.itemMessage = 'Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(1.2); window.setTimeout(() => this.audio.voice('announcer-loudspeaker', { force: true }), 900);
           }
-          if (!this.waveTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+          if (!this.waveTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'wave') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s, lane } = trackLocate(kart.x, kart.z);
             return atSecondLapTrackEvent(this.progress[i].distance, s, 105, 330) && maleconWavePatchAt(s, lane);
           })) {
@@ -1320,7 +1320,7 @@ class App {
             this.testScene?.trackEvent?.('wave'); this.itemMessage = 'Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(.7); window.setTimeout(() => this.audio.voice('announcer-wave', { force: true }), 900);
           }
-          if (!this.balconyTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => atSecondLapTrackEvent(this.progress[i].distance, trackProgressOf(kart), 970, 1125))) {
+          if (!this.balconyTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'balcony') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => atSecondLapTrackEvent(this.progress[i].distance, trackProgressOf(kart), 970, 1125))) {
             this.balconyTriggered = true; this.balconyUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('balcony'); this.itemMessage = 'Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt'; this.audio.cheer(1.1);
             window.setTimeout(() => this.audio.voice('announcer-balcony', { force: true }), 1400);
