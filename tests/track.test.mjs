@@ -1,10 +1,9 @@
-import { HAZARDS } from '../src/track-layout.ts';
+import { BOOST_PADS, HAZARDS, SHORTCUT, TRACKS } from '../src/track-layout.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
-import { TRACK, selectTrack, atSecondLapTrackEvent, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
-import { SHORTCUT } from '../src/track-layout.ts';
+import { TRACK, selectTrack, atSecondLapTrackEvent, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, hazardAt, recoverKart, boostPadAt } from '../src/track.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
@@ -47,6 +46,30 @@ test('Berlin Zeppelin tailwind rewards the outer grandstand line and leaves a co
   assert.equal(berlinZeppelinWindAt(182,4),false,'wind stops at the end of the stadium straight');
   assert.equal(berlinZeppelinWindAt(100,2.4),false,'inner line stays free');
   assert.equal(berlinZeppelinWindAt(44.99,4),false,'wind has a fixed start');
+});
+test('fixed boosts are reachable on all six routes and each authored shortcut pad',()=>{
+  const routeCounts = [];
+  try {
+    for (const id of Object.keys(TRACKS)) {
+      selectTrack(id);
+      assert.ok(BOOST_PADS.length >= 4, `${id}: enough main-route boost choices to shape its rhythm`);
+      routeCounts.push(BOOST_PADS.length);
+      for (const [index, [from, lane]] of BOOST_PADS.entries()) {
+        assert.ok(from >= 0 && from + 6 <= TRACK.length, `${id}: pad ${index} sits within the authored course`);
+        const point = trackPoint(from + 3, lane);
+        assert.equal(boostPadAt(point.x, point.z), index, `${id}: main-route pad ${index} is physically reachable`);
+        assert.equal(hazardAt(point.x, point.z), null, `${id}: boost pad ${index} does not sit in a fall zone`);
+      }
+      for (const [index, [start, lane]] of SHORTCUT.boostPads.entries()) {
+        const point = shortcutPoint(start * SHORTCUT_LENGTH + 3, lane);
+        assert.ok(inShortcut(point.x, point.z), `${id}: shortcut pad ${index} stays inside its alternate route`);
+        assert.ok(boostPadAt(point.x, point.z) >= BOOST_PADS.length, `${id}: shortcut pad ${index} is reachable and classified separately`);
+      }
+    }
+    assert.ok(new Set(routeCounts).size > 1, 'courses retain distinct fixed boost counts instead of a copied pattern');
+  } finally {
+    selectTrack('stadionring');
+  }
 });
 test('course events belong only to their named course across every circuit theme',()=>{
   const routes={zeppelin:'berlin',wave:'havana',balcony:'rome',jubel:'beijing',parade:'moscow',column:'pyongyang'};

@@ -193,7 +193,7 @@ const HAVANNA: TrackDefinition = {
   ] as const).map(([x, z]) => [x * HV, z * HV] as const),
   halfWidth: 6, start: 40, bump: 1240,
   /** Zigarrenfabrik: gravel passage through the factory yard, straight across the old-town dip. */
-  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 17, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [[.2, 0], [.68, 0]] },
+  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 17, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [[.3, 0], [.68, 0]] },
   canal: { from: -1000, length: 0 },
   rampLips: [380, 1146],
   boostPads: [[100, 0], [500, 0], [800, 0], [1120, 0], [1300, 1.5]],

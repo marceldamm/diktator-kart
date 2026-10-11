@@ -8,7 +8,9 @@ A24 verbindet jetzt alle sechs echten `TestScene.trackEvent`-Aufrufe mit einer z
 
 Die erste A25-Probe stand versehentlich bei 85 % des Kurses statt bei der Berliner Startgeraden. Am passenden Ereignisabschnitt zeigte die Prüfansicht nach dem Trigger cyanfarbene Flächen nahe der äußeren Fahrspur; vorhandene Boostflächen erschweren die Zuordnung. Ein Reload mit aktualisiertem Testcode blieb anschließend bei „Lädt tatsächliche Spielszene …“ stehen, deshalb wurde A27 im Browser nicht erneut abgenommen. A28–A30 sind neu angelegte, aus Marcels bestätigten Wünschen abgeleitete Pakete: feste Boostverteilung, durchgängige Rampen-/Tricklandung und abgestimmte Ereigniswirkung in Normal-/Schwachgrafik.
 
-**Budget nach A27:** offizielle Codex-Werte 41 % Fünf-Stundenverbrauch / 21 % Wochenverbrauch (59 % / 79 % Rest).
+A28-Prüfung: sechs Hauptwege enthalten 4/5/5/4/4/5 Booststreifen; Abkürzungen 0/1/2/2/0/1. Fester Standort, physische Erreichbarkeit und freie Sturzsicherheit der Hauptstreifen sind regressionsgeprüft. Der Test fing den nicht auslösenden ersten Boost in Havannas Gasse auf; nach Verlagerung vom 20-%- auf den 30-%-Punkt ist er zusammen mit dem späteren Streifen erreichbar. Noch keine separaten Botzeitmessungen mit/ohne Boost und kein menschlicher Fahrtest.
+
+**Budget nach A28:** offizielle Codex-Werte 43 % Fünf-Stundenverbrauch / 22 % Wochenverbrauch (57 % / 78 % Rest).
 
 ## 11.10.2026 – A22/A23: Berliner Zeppelin im Szenenfokus und Bannerlesbarkeit
 

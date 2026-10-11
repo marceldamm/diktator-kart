@@ -12,6 +12,10 @@ A25 erhielt zehn kurzzeitig aktivierte, cyanfarbene Fahrbahnmarkierungen auf der
 
 A27 richtet die Grafikprüfansicht beim direkten Event-Trigger auf die bekannte Abschnittsmitte des Ereignisses aus. Während die Szene lädt, bleibt der Trigger deaktiviert, wodurch ein vorzeitiger Zugriff auf `world` vermieden wird. `npm run build` und `npm test` 126/126 bestanden; Vollsuite `npm run test:full` 143/143 bestanden. Die letzte erneute Browserladung blieb im Status „Lädt tatsächliche Spielszene …“ und konnte die A27-Steuerung daher nach der Änderung nicht nochmals runtime-bestätigen.
 
+### A28 – Booststreifen auf sechs Kursen auditieren (11.10.2026)
+
+Ein neuer Querschnittstest sucht jeden festen Hauptweg-Boost per Weltposition, prüft den Abstand zu Sturzbereichen und überprüft jeden Shortcut-Boost auf der tatsächlich gefahrenen Nebenroute. Er fand, dass Havannas erster Gassenboost bei Fortschritt 0,2 noch auf der Hauptstraße lag und deshalb durch die Abzweigpriorität nie auslösen konnte. Der Start liegt jetzt bei 0,3; die verbleibenden Hauptweg-/Shortcut-Streifen (je Kurs 4–6 / 0–2) sind erreichbar und keine Hauptstreifen stehen in einer Sturzfläche. Testdatei deckt alle sechs Tracks ab. `npm test` 127/127, `npm run test:full` 144/144, TypeScript und Produktionsbuild bestanden. Buildausgabe: 2.165,35 KB / 535,41 KB gzip, bekannte Chunkwarnung. Es gab keine neuen gleichen Bot-/Zeitversuche und keine menschliche Fahrabnahme; der Balance-Teil von A28 bleibt offen.
+
 ### A22–A23 – Ereignisfokus und Berliner Zeppelinbanner (11.10.2026)
 
 Die Grafikprüfansicht verfolgt den aktivierten Zeppelin-Knoten nun aus einer seitlichen Kameraperspektive und erlaubt das Umschalten zwischen den Außenseiten. Der sichtbare Vergleich zeigte, dass der Slogan auf einer Seite spiegelverkehrt war. Beide Bannerflächen werden jetzt horizontal gespiegelt; die verdeckte Ansicht zeigte den Slogan von beiden Seiten in gleicher Leserichtung.
