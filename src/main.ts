@@ -1,7 +1,7 @@
 import { Engine } from '@babylonjs/core/Engines/engine';
 import { KartCamera } from './camera';
 import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, exportBindings, importBindings, keyLabel, pollGamepads, primaryKey, rebind, resetBindings, type Action } from './input';
-import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
+import { advanceKart, awardLandingBoost, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
 import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
@@ -1404,7 +1404,8 @@ class App {
               // Trick: Space in the air (player) or a confident bot spins the kart for a bigger landing boost.
               if(i===0&&this.rampTrickQueued&&(allKarts[0].jumpRemaining??0)>.05&&!allKarts[0].trick){allKarts[0]={...allKarts[0],trick:true};this.rampTrickQueued=false;}
               if((k.jumpRemaining??0)>.15&&!k.trick&&((i===0&&frame.pressed.has('hopDrift'))||(i>0&&(k.jumpRemaining??0)<(k.jumpDuration??1)-.2&&i%2===1)))allKarts[i]={...allKarts[i],trick:true};
-              if(k.landedClean){const trick=!!k.trick;allKarts[i]={...k,trick:false,landedClean:false,turboRemaining:Math.max(k.turboRemaining,trick?1.1:.7),speed:Math.min(KART_TUNING.maxTurboSpeed,k.speed+(trick?3.6:2.5))};if(i===0){this.itemMessage=trick?'Trick gestanden · Großer Schub!':'Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(trick?1:.6);}}
+              const landing=awardLandingBoost(k);
+              if(landing){allKarts[i]=landing.state;if(i===0){const trick=landing.kind==='trick';this.itemMessage=trick?'Trick gestanden · Großer Schub!':'Saubere Landung · Schub!';this.itemMessageUntil=this.items.time+1.4;this.audio.cheer(trick?1:.6);}}
               else if(k.trick&&(k.jumpRemaining??0)===0)allKarts[i]={...allKarts[i],trick:false};
             });
             this.kart=allKarts[0];this.loadKarts=allKarts.slice(1); }

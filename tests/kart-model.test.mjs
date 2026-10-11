@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, terrainHeightAt } from '../src/kart-model.ts';
+import { advanceKart, awardLandingBoost, initialKartState, KART_TUNING, resolveKartContacts, TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, terrainHeightAt } from '../src/kart-model.ts';
 
 const step = 1 / 60;
 const openRoad = (x, z) => ({ x, z, normalX: 0, normalZ: 0 });
@@ -229,6 +229,22 @@ test('one-sided contact rolls the body; hop clears wheels and landing compresses
   const reset = initialKartState();
   assert.equal(reset.suspensionOffset, 0);
   assert.deepEqual(reset.wheelGroundHeights, [0, 0, 0, 0]);
+});
+
+test('a clean ramp landing gives a bounded boost; a landed trick earns more', () => {
+  const base = { ...initialKartState(), speed: 12, landedClean: true, turboRemaining: .2 };
+  const clean = awardLandingBoost(base);
+  const trick = awardLandingBoost({ ...base, trick: true });
+  assert.equal(clean.kind, 'clean');
+  assert.equal(clean.state.speed, 14.5);
+  assert.equal(clean.state.turboRemaining, .7);
+  assert.equal(trick.kind, 'trick');
+  assert.equal(trick.state.speed, 15.6);
+  assert.equal(trick.state.turboRemaining, 1.1);
+  assert.equal(trick.state.trick, false);
+  assert.equal(trick.state.landedClean, false);
+  assert.equal(awardLandingBoost({ ...base, speed: KART_TUNING.maxTurboSpeed - 1 }).state.speed, KART_TUNING.maxTurboSpeed);
+  assert.equal(awardLandingBoost({ ...base, landedClean: false }), null);
 });
 
 test('sliding along a barrier keeps most speed; only the first touch costs a little', () => {

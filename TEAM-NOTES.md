@@ -12,6 +12,10 @@ A28-Prüfung: sechs Hauptwege enthalten 4/5/5/4/4/5 Booststreifen; Abkürzungen 
 
 **Budget nach A28:** offizielle Codex-Werte 43 % Fünf-Stundenverbrauch / 22 % Wochenverbrauch (57 % / 78 % Rest).
 
+A29-Prüfgrenze: Modell und Strecken bieten nun automatische Rampe, Lufttrick und größere Tricklandung für Spieler/Bots; Kameracode reagiert auf Sprunghöhe und Turbo. Kein aktueller sichtbarer Fahrbeleg verfügbar, da der letzte versteckte QA-Neustart bei „Lädt tatsächliche Spielszene …“ hängen blieb. Für Abschluss bleibt eine echte Runde mit Rampe, Außen-/Fahreransicht sowie dem Vergleich Trick-/Normallandung nötig.
+
+**Budget nach A29:** offizielle Codex-Werte 44 % Fünf-Stundenverbrauch / 22 % Wochenverbrauch (56 % / 78 % Rest).
+
 ## 11.10.2026 – A22/A23: Berliner Zeppelin im Szenenfokus und Bannerlesbarkeit
 
 Aus der A21-Prüfansicht wurde der echte Zeppelin-Knoten aktiviert und anschließend mit der Seitenkamera verfolgt. Die erste Motivansicht zeigte das tatsächliche Modell vor der Berliner Stadt: silberner Rumpf, Gondel, Banner und Flossen. Beim Seitenwechsel war ein Bannertext spiegelverkehrt. Beide Banner-Meshes erhielten dieselbe horizontale UV-/Meshspiegelung, danach waren auf beiden Außenansichten die sichtbaren Textteile in Leserichtung. `npm run build` mit TypeScript bestanden; Bundles 2.164,54 KB / 535,10 KB gzip und bekannte Chunkwarnung.

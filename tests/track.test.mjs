@@ -1,9 +1,9 @@
-import { BOOST_PADS, HAZARDS, SHORTCUT, TRACKS } from '../src/track-layout.ts';
+import { BOOST_PADS, HAZARDS, RAMP_LIPS, SHORTCUT, TRACKS } from '../src/track-layout.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
-import { TRACK, selectTrack, atSecondLapTrackEvent, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, hazardAt, recoverKart, boostPadAt } from '../src/track.ts';
+import { TRACK, selectTrack, atRampLip, atSecondLapTrackEvent, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, hazardAt, recoverKart, boostPadAt } from '../src/track.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
@@ -70,6 +70,19 @@ test('fixed boosts are reachable on all six routes and each authored shortcut pa
   } finally {
     selectTrack('stadionring');
   }
+});
+test('every course ramp lip remains drivable and clear of fall volumes',()=>{
+  for (const id of Object.keys(TRACKS)) {
+    selectTrack(id);
+    assert.ok(RAMP_LIPS.length >= 1, `${id}: at least one authored ramp`);
+    for (const lip of RAMP_LIPS) {
+      const point = trackPoint(lip);
+      assert.equal(atRampLip(point.x, point.z), true, `${id}: take-off detector covers lip ${lip}`);
+      assert.equal(projectTrack(point.x, point.z).kind, null, `${id}: ramp lip ${lip} is drivable`);
+      assert.equal(hazardAt(point.x, point.z), null, `${id}: ramp lip ${lip} does not force a fall`);
+    }
+  }
+  selectTrack('stadionring');
 });
 test('course events belong only to their named course across every circuit theme',()=>{
   const routes={zeppelin:'berlin',wave:'havana',balcony:'rome',jubel:'beijing',parade:'moscow',column:'pyongyang'};

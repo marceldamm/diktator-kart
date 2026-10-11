@@ -152,6 +152,22 @@ export function initialKartState(): KartState {
   };
 }
 
+/** Convert one clean landing into the same fair boost for players and bots, with a larger reward for a completed air trick. */
+export function awardLandingBoost(state: KartState): { state: KartState; kind: 'clean' | 'trick' } | null {
+  if (!state.landedClean) return null;
+  const trick = !!state.trick;
+  return {
+    kind: trick ? 'trick' : 'clean',
+    state: {
+      ...state,
+      trick: false,
+      landedClean: false,
+      turboRemaining: Math.max(state.turboRemaining, trick ? 1.1 : .7),
+      speed: Math.min(KART_TUNING.maxTurboSpeed, state.speed + (trick ? 3.6 : 2.5)),
+    },
+  };
+}
+
 function approachZero(value: number, amount: number): number {
   if (value > 0) return Math.max(0, value - amount);
   return Math.min(0, value + amount);
