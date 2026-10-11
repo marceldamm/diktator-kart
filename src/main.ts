@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, atSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -1289,47 +1289,34 @@ class App {
               this.crowdReactionLap = lap; this.testScene?.crowdReact?.(crowdMarker.kind);
             }
           }
-          if (!this.paradeTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'parade') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
-            const { s } = trackLocate(kart.x, kart.z);
-            return atSecondLapTrackEvent(this.progress[i].distance, s, 95, 520);
-          })) {
+          const playerCourseProgress = trackProgressAt(this.kart.x, this.kart.z);
+          const { s: playerCourseS, lane: playerCourseLane } = trackLocate(this.kart.x, this.kart.z);
+          if (!this.paradeTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'parade') && this.racePhase === 'race' && playerAtSecondLapTrackEvent(this.progress[0].distance, playerCourseS, 95, 520)) {
             this.paradeTriggered = true; this.paradeUntil = this.raceTime + 15;
             this.testScene?.trackEvent?.('parade'); this.announceCourseEvent('Ehrenparade! Rückenwind auf der Parade-Geraden für alle');
             this.audio.cheer(1); window.setTimeout(() => this.audio.voice('announcer-parade', { force: true }), 900);
           }
-          if (!this.columnTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'column') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
-            const s = trackProgressAt(kart.x, kart.z);
-            return !inShortcut(kart.x, kart.z) && atSecondLapTrackEvent(this.progress[i].distance, s, 1372, 1400);
-          })) {
+          if (!this.columnTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'column') && this.racePhase === 'race' && !inShortcut(this.kart.x, this.kart.z) && playerAtSecondLapTrackEvent(this.progress[0].distance, playerCourseProgress, 1372, 1400)) {
             this.columnTriggered = true; startParade(this.raceTime); this.testScene?.trackEvent?.('column');
             this.announceCourseEvent('Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei');
             this.audio.cheer(1); this.audio.cue('lap');
           }
-          if (!this.zeppelinTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'zeppelin') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
-            const s = trackProgressAt(kart.x, kart.z);
-            return atSecondLapTrackEvent(this.progress[i].distance, s, 45, 182);
-          })) {
+          if (!this.zeppelinTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'zeppelin') && this.racePhase === 'race' && playerAtSecondLapTrackEvent(this.progress[0].distance, playerCourseProgress, 45, 182)) {
             this.zeppelinTriggered = true; this.zeppelinWindUntil = this.raceTime + 14; this.testScene?.trackEvent?.('zeppelin');
             this.announceCourseEvent('Propaganda-Zeppelin! Rückenwind auf der Tribünenspur · innen bleibt freie Fahrt');
             this.audio.cheer(.8);
           }
-          if (!this.jubelTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'jubel') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
-            const { s, lane } = trackLocate(kart.x, kart.z);
-            return atSecondLapTrackEvent(this.progress[i].distance, s, 880, 1040) && policyJubelPatchAt(s, lane);
-          })) {
+          if (!this.jubelTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'jubel') && this.racePhase === 'race' && playerAtSecondLapTrackEvent(this.progress[0].distance, playerCourseS, 880, 1040) && policyJubelPatchAt(playerCourseS, playerCourseLane)) {
             this.jubelTriggered = true; this.jubelUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('loudspeaker'); this.announceCourseEvent('Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt');
             this.audio.cheer(1.2); window.setTimeout(() => this.audio.voice('announcer-loudspeaker', { force: true }), 900);
           }
-          if (!this.waveTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'wave') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
-            const { s, lane } = trackLocate(kart.x, kart.z);
-            return atSecondLapTrackEvent(this.progress[i].distance, s, 105, 330) && maleconWavePatchAt(s, lane);
-          })) {
+          if (!this.waveTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'wave') && this.racePhase === 'race' && playerAtSecondLapTrackEvent(this.progress[0].distance, playerCourseS, 105, 330) && maleconWavePatchAt(playerCourseS, playerCourseLane)) {
             this.waveTriggered = true; this.waveUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('wave'); this.announceCourseEvent('Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip');
             this.audio.cheer(.7); window.setTimeout(() => this.audio.voice('announcer-wave', { force: true }), 900);
           }
-          if (!this.balconyTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'balcony') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => atSecondLapTrackEvent(this.progress[i].distance, trackProgressOf(kart), 970, 1125))) {
+          if (!this.balconyTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'balcony') && this.racePhase === 'race' && playerAtSecondLapTrackEvent(this.progress[0].distance, playerCourseProgress, 970, 1125)) {
             this.balconyTriggered = true; this.balconyUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('balcony'); this.announceCourseEvent('Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt'); this.audio.cheer(1.1);
             window.setTimeout(() => this.audio.voice('announcer-balcony', { force: true }), 1400);

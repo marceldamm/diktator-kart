@@ -338,6 +338,11 @@ export function atSecondLapTrackEvent(distance: number, s: number, from: number,
   return distance >= TRACK.length + from - TRACK.start && s >= from && s < to;
 }
 
+/** Course-wide event activation is anchored to the human player's own lap-two arrival. */
+export function playerAtSecondLapTrackEvent(playerDistance: number, playerProgress: number, from: number, to: number): boolean {
+  return atSecondLapTrackEvent(playerDistance, playerProgress, from, to);
+}
+
 /** The lap-two Zeppelin gives a small tailwind only to the outer grandstand lane. */
 export function berlinZeppelinWindAt(s: number, lane: number): boolean {
   return s >= 45 && s < 182 && lane > 2.4;

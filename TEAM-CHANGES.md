@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+### A20 – Runde-zwei-Kursereignisse am Spielerfortschritt auslösen (11.10.2026)
+
+Alle sechs großen Kursereignisse starten nun nur anhand des eigenen Spielerfortschritts am passenden Abschnitt. Botführer können das einmalige Ereignis nicht mehr vorzeitig verbrauchen; der ausgelöste Wind, Jubel oder Streckeneffekt gilt weiterhin für alle Karts im aktiven Bereich. Regression für Bot-vor-Spieler, Runde-1-Sperre und Runde-2-Freigabe; Vollsuite 140/140 und TypeScript/Build bestanden. Bundle 2.164,53 KB / 535,07 KB gzip (bekannte Chunkwarnung). Im versteckten Berlinlauf blieb der Toast bis Spieler-Runde 1 bei 1:19 aus. Runde 2 begann bei 1:48, jedoch wurde das kurze Fenster nicht eng genug abgetastet; visueller Start/Zeppelin bleiben offen.
+
 ### A19 – Kursereignisse behalten ihren Anzeigevorrang (11.10.2026)
 
 Sechs ortsgebundene Kursmomente verwenden jetzt ein eigenes viersekündiges Meldungsfenster im Itemfeld. Normale Item-/Trefferhinweise bleiben gespeichert und erscheinen nach Ablauf wieder, können aber den Streckenmoment währenddessen nicht verdecken. Regression prüft Überlagerung, exakte Ablaufgrenze und regulären Slottext. Vollsuite 139/139 außerhalb der Sandbox, TypeScript und Build bestanden; Bundle 2.164,82 KB / 535,06 KB gzip (bestehende Chunkwarnung). Der neue Anzeigevorrang wurde noch nicht in einer Runtime-Situation mit gleichzeitigem Itemereignis visuell abgenommen.
