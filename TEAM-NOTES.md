@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Berliner Zeppelin erreicht die Stadiongerade in Runde 2
+
+Berlin verwendet denselben `atSecondLapTrackEvent`-Check wie die übrigen fünf Kursereignisse: `TRACK.length + s - TRACK.start` muss mindestens erreicht sein und die aktuelle Streckenposition muss zwischen s=45 und s=182 liegen. Der Bereich liegt auf der langen Zuschauer-/Tribünengeraden. Der Runde-eins-Hinweis spät in der Runde bleibt. Ein gemeinsamer Regressionstest prüft jetzt alle sechs Kurszonen gegen falschen Rundenstand, falschen Ort, Eintritt und Zonenende. Gezielte Streckentests 30/30, Typprüfung, Build und Vollsuite 133/133 bestehen. Der Zeppelin wurde im aktuellen Lauf nicht bis zum Ereignis beobachtet; keine Runtime-Sichtabnahme behauptet.
+
+Verborgener Runtimeversuch: eigenes GP auf Stadionring gestartet, bis Anzeige 2/3 und 1:32 Renndauer. Rangfolge wechselte sichtbar; HUD/Minimap und 68–83 km/h wurden gezeigt. Keine Lenkeingaben erzeugten schwere Kontakte; Zustand fiel auf 2 %. Die Zugänglichkeit meldete Runde 2, aber das vier Sekunden lange Ereignisfenster war bei der Screenshotkontrolle möglicherweise bereits vorbei, und der Zeppelin war im Kamerabild nicht eindeutig sichtbar. Daher Trigger-/VFX-Abnahme weiter offen. Prüf-Tab nach Escape geschlossen, eigener Server beendet. Offizielle Codex-Nutzung nach dem Paket: 18 % Fünf-Stunden- und 18 % Wochenverbrauch (82 %/82 % Rest).
+
 ## 11.10.2026 – Codex: Sechs-Kurse-Abgleich, Shortcut-Vergleich und Ereignisorte
 
 Metriken und Grenzwerte sind in CURRENT-WORKLIST.md unter „Technischer Vergleich und erster Ausgleich“ festgehalten. Alle Kurse wurden mit derselben 2-m-Abtastung ausgewertet; gerade Anteil gilt als |Krümmung| < 1/150 m. Dreistufige Bot-Medianzeiten über drei Runden: Stadionring 231/210/204 s, Rom 241/213/206 s, Havanna 252/221/216 s, Pjöngjang 336/286/277 s, Moskau 437/373/360 s, Peking 288/251/244 s (leicht/mittel/schwer). Das bestätigt funktionierende Runden/Schwierigkeit, nicht menschlichen Fahrspaß oder FPS.

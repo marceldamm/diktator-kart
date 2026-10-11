@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Berliner Zeppelin ortsgebunden ausgelöst
+
+Der Runde-zwei-Hinweis zum Berliner Zeppelin bleibt in Runde 1 bestehen. Der Zeppelin startet jetzt erst, wenn ein Kart die Stadiongerade (s=45–182) in Runde 2 erreicht; `lapTimes.length === 1` löst ihn nicht mehr direkt am Start-/Rundenwechsel aus. Die gemeinsame Ereignisregression umfasst damit alle sechs Kurse. Gezielte Tests 30/30, TypeScript, Build und Vollsuite 133/133 bestanden. Der Build meldet unverändert das große Hauptbundle. Ein versteckter GP-Lauf erreichte Anzeige 2/3, konnte Trigger und Zeppelinbild aber nicht bestätigen; die Runtime-Abnahme und der A4-Ausbau kleiner Rundenreaktionen bleiben offen.
+
 ## 11.10.2026 – Codex: integrierter Sechs-Kurse-Technikpass und Shortcut-Ausgleich
 
 Ereignisse auf Rom, Havanna, Moskau, Pjöngjang und Peking starten nun nur in Runde 2 beim Eintritt in die passende Kurszone; die Pjöngjang-Parade ignoriert die Unterführung als Auslöser. Moskaus Paradeeffekt setzt lokalen Konfettiimpuls statt versehentlich den Zeppelin zu aktivieren. Ein gemeinsamer Streckentest prüft falsche Runde, falschen Ort, Start und Zonenende.

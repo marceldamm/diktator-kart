@@ -19,7 +19,7 @@ test('track progress is continuous around the complete course; inner and outer b
   }
 });
 test('second-lap track events need both lap progress and the announced location',()=>{
-  const zones = [['duce-drom', 970, 1125], ['havanna', 105, 330], ['moscow', 95, 520], ['pyongyang', 1372, 1400], ['beijing', 880, 1040]];
+  const zones = [['stadionring', 45, 182], ['duce-drom', 970, 1125], ['havanna', 105, 330], ['moscow', 95, 520], ['pyongyang', 1372, 1400], ['beijing', 880, 1040]];
   for (const [id, from, to] of zones) {
     selectTrack(id); const lapTwoEntry = TRACK.length + from - TRACK.start;
     assert.equal(atSecondLapTrackEvent(lapTwoEntry - .01, from, from, to), false, `${id}: first-lap progress cannot trigger`);

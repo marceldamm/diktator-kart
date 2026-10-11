@@ -143,6 +143,7 @@ class App {
   private jubelTriggered=false;
   private paradeTriggered=false;
   private columnTriggered=false;
+  private zeppelinTriggered=false;
   /** Balcony speech (Rome, lap 2): petals slow the centre line for a short window; either outer line stays clear. */
   private balconyUntil=0;
   private balconyTriggered=false;
@@ -665,7 +666,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.paradeTriggered=false;this.columnTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.paradeTriggered=false;this.columnTriggered=false;this.zeppelinTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -1268,6 +1269,14 @@ class App {
             this.itemMessage = 'Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(1); this.audio.cue('lap');
           }
+          if (!this.zeppelinTriggered && TRACK_INFO.theme === 'berlin' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+            const s = trackProgressAt(kart.x, kart.z);
+            return atSecondLapTrackEvent(this.progress[i].distance, s, 45, 182);
+          })) {
+            this.zeppelinTriggered = true; this.testScene?.trackEvent?.('zeppelin');
+            this.itemMessage = 'Propaganda-Zeppelin über der Stadiongeraden!'; this.itemMessageUntil = this.items.time + 4;
+            this.audio.cheer(.8);
+          }
           if (!this.jubelTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s, lane } = trackLocate(kart.x, kart.z);
             return atSecondLapTrackEvent(this.progress[i].distance, s, 880, 1040) && policyJubelPatchAt(s, lane);
@@ -1311,7 +1320,7 @@ class App {
               else if(TRACK_INFO.theme==='moscow'){/* The parade triggers when a kart reaches the Red Square straight on lap two. */}
               else if(TRACK_INFO.theme==='pyongyang'){/* The parade column triggers when a kart reaches the gate boulevard on lap two. */}
               else if(TRACK_INFO.theme==='beijing'){/* The Peking broadcast triggers inside the lap-two serpentine, not at the start line. */}
-              else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
+              else{/* Berlin's Zeppelin flies over the grandstand straight when a kart reaches it on lap two. */}
               this.itemMessageUntil=this.items.time+3;}
           }
           if (this.afterRace) {
