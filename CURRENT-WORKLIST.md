@@ -107,18 +107,29 @@ Messregel für gerade Strecken: 2-m-Stichprobe, |Krümmung| < 1/150 m. Shortcut-
 - [x] **Dreistufige Botläufe:** alle sechs Strecken beenden drei Runden mit fairem, unterschiedlich schnellem Schwierigkeitsverlauf. Medianzeiten einfach/mittel/schwer: Stadionring 231/210/204 s; Rom 241/213/206 s; Havanna 252/221/216 s; Pjöngjang 336/286/277 s; Moskau 437/373/360 s; Peking 288/251/244 s. Diese Suite misst Feld-/Rundenfunktion, nicht eine aktuelle Hauptweg-gegen-Abkürzungs-Zeit.
 - [x] **Verborgene Laufzeitstichprobe:** aktuelle sechs Streckenkarten zeigten die richtigen Namen/Längen (1.366–2.354 m). Stadionring lud mit sechs Karts; anschließend wurde auf Havanna ein GP gestartet. Nach rund vier Sekunden standen Spieler und Bots auf unterschiedlichen Positionen, 66–67 km/h im HUD, sechs Karts und Minimap sichtbar. Escape pausierte über die Rückkehr ins Menü; eigene Prüftabs und Vite-Server danach geschlossen. Kein vollständiger Lauf, keine Runde-zwei-Ereignisauslösung, kein gespeicherter Bildbeleg, keine FPS- oder Konsolenprüfung.
 - [ ] **Menschliche Abnahme bleibt offen:** Ein verborgener Karten-/Startansichtscheck ist kein echter Drei-Runden-Fahrbeleg. Für alle sechs Kurse Spielgefühl, Ereignis-VFX, Sicht, Botaufholverhalten, Bildrate sowie Marcels und Sarahs Fahrurteil erfassen; Sarahs weitere Originalideen gemeinsam besprechen.
-- [x] **A4 begonnen:** Die räumlichen Auslöser der Runde-zwei-Ereignisse auf allen sechs Kursen sind vereinheitlicht und technisch geprüft. Kleine wiederkehrende Streckenreaktionen und A5 Botaufholverhalten folgen als getrennte Teilpakete.
+- [x] **A4-Teilpakete:** Runde-zwei-Auslöser sind auf allen sechs Kursen an Ort und Rundenfortschritt gebunden; kleine Publikumsreaktionen laufen einmal je Runde an sechs festen Landmarken. Der nächste A4-Teil ist eine faire Gameplay-/Positionsreaktion.
 
-## Aktives Paket – A4 Berlin-Ereignis an den Streckenort binden (11.10.2026)
+## A4 – Runde-zwei-Hauptmomente und kleine Streckenreaktionen (technischer Teilstand, 11.10.2026)
 
-**Ziel:** Der Zeppelin bleibt Berlins Hauptmotiv und wird erst in Runde 2 ausgelöst, wenn ein Kart die Zuschauergerade erreicht. Warnung in Runde 1 bleibt erhalten; kein Start mehr direkt am Rundenwechsel. Der Auslöser muss dieselben Lap-/Ortsbedingungen wie die übrigen Kursereignisse erfüllen und mit einer Regression gesichert werden. Dies ist der erste Teil des größeren A4-Ziels; kleine wiederkehrende Reaktionen und sichere Positionswechsel bleiben offen.
+**Ziel:** Der Zeppelin bleibt Berlins Hauptmotiv und wird erst in Runde 2 ausgelöst, wenn ein Kart die Zuschauergerade erreicht. Warnung in Runde 1 bleibt erhalten; kein Start mehr direkt am Rundenwechsel. Der Auslöser muss dieselben Lap-/Ortsbedingungen wie die übrigen Kursereignisse erfüllen und mit einer Regression gesichert werden. Die kleinen Publikumsreaktionen sind ergänzt; spürbare Positions-/Linieneffekte und die sichtbare Laufzeitabnahme bleiben offen.
 
 - [x] **Umsetzung:** Berlin hat jetzt einen eigenen einmaligen Runden-zwei-Auslöser für die Stadiongerade (s=45–182). Das HUD meldet den Zeppelin, wenn Spieler oder Bot die Strecke dort tatsächlich erreicht; der Rundenwechsel startet ihn nicht mehr.
 - [x] **Regressionsabdeckung:** Der gemeinsame Ort-/Rundentest umfasst nun alle sechs Kurse; falscher Rundenstand, falscher Ort, korrekter Eintritt und Zonenende werden geprüft.
-- [x] **Prüfung:** gezielte Strecken-/Ereignistests 30/30; `npm run typecheck`, `npm run build` und `npm run test:full` 133/133 bestanden. Build-Warnung zum bestehenden großen Hauptbundle (2.162,55 KB / 534,35 KB gzip).
+- [x] **Prüfung Berliner Auslöser:** gezielte Strecken-/Ereignistests 30/30; `npm run typecheck`, `npm run build` und `npm run test:full` 133/133 bestanden. Build-Warnung zum bestehenden großen Hauptbundle (2.162,55 KB / 534,35 KB gzip).
 - [ ] **Laufzeitbeleg offen:** Ein versteckter GP-Lauf erreichte Runde 2 und zeigte Rangwechsel, HUD/Minimap und 68–83 km/h. Wegen fehlender Lenkkorrekturen hatte das Testkart am Ende 2 % Karosserie; Toast und Zeppelinüberflug konnten nicht sicher als ausgelöst bestätigt werden. Kein vollständiger Lauf und keine FPS-/Konsolenprüfung; Details in TEAM-NOTES.md. Der Sichtbeleg des Überflugs bleibt offen.
 - **Budget nach Paket:** offizielle Codex-Werte 18 % Fünf-Stundenverbrauch / 18 % Wochenverbrauch (82 % / 82 % Rest). Keine Resets oder Zusatzkontingente verwendet.
-- [ ] **Nächster Teil A4:** kleine wiederkehrende Reaktionen auf festen Streckenorten pro Runde ergänzen und pro Kurs auf Wirkung, Warnung, sichere Linie und Botbehandlung prüfen; keine Zufallskurse oder überraschende Treffer.
+- [x] **Nächster Teil A4:** kleine wiederkehrende Publikumsreaktionen auf festen Streckenorten pro Runde sind umgesetzt; Runtime-Sichtabnahme bleibt offen.
+
+### A4-Unterpaket – kleine Publikumsreaktionen an sechs festen Streckenorten
+
+Jeder Kurs erhält einen unaufdringlichen Publikumsimpuls auf einem eigenen Landmarkenabschnitt, einmal je Runde: Berlin s≈300, Rom s≈520, Havanna s≈600, Pjöngjang s≈600, Moskau s≈1200, Peking s≈300. Die Reaktionen bleiben visuell, verändern keine Physik oder Positionierung, brauchen keinen HUD-Text und wiederholen sich nicht mehrfach innerhalb einer Runde. Der größere Runde-zwei-Kurseffekt bleibt davon getrennt. Bot und Spieler lösen dieselbe Reaktion durch den tatsächlichen Streckenfortschritt aus.
+
+- [x] **Umsetzung:** Die festen Marker lösen pro Runde genau einmal aus; Berlin/Havanna/Moskau verwenden die Publikumsjubelreaktion, Rom/Pjöngjang/Peking die Publikumswelle. Ein Kart muss Landmarke und tatsächlichen Rundenfortschritt erreichen.
+- [x] **Regression:** dreimalige Runde, einmal-pro-Runde-Grenze, Position außerhalb der Zone und Ende nach Runde 3 sind abgedeckt.
+- [x] **Prüfung:** gezielte Strecken-/Bottests 16/16, `npm run typecheck`, `npm run build` und `npm run test:full` 134/134 bestanden. Hauptbundle 2.163,27 KB / 534,62 KB gzip; bestehende Chunkwarnung.
+- [ ] **Sichtabnahme:** Die neue Publikumswellen-/Jubelanimation wurde in diesem Paket nicht in einer passenden Fahrt beobachtet. Keine gespeicherten Bilder oder FPS-Messung.
+- **Budget nach Paket:** offizielle Codex-Werte 19 % Fünf-Stundenverbrauch / 18 % Wochenverbrauch (81 % / 82 % Rest).
+- [ ] **Nächster A4-Teil:** eine spürbare, klar angekündigte und von allen betroffenen Karts geteilte Positions-/Linienreaktion auf einem festen Kursort entwickeln; sichere Gegenlinie und Botverhalten testen. A5 taktisches Aufholen und Itemeinsatz folgt danach.
 
 ## Erledigtes Paket – Testläufe verkürzen (Marcel, 11.10.2026; Codex-Fortsetzung)
 

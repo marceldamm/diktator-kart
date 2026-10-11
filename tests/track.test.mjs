@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
-import { TRACK, selectTrack, atSecondLapTrackEvent, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
+import { TRACK, selectTrack, atSecondLapTrackEvent, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
 import { SHORTCUT } from '../src/track-layout.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
@@ -27,6 +27,18 @@ test('second-lap track events need both lap progress and the announced location'
     assert.equal(atSecondLapTrackEvent(lapTwoEntry, from, from, to), true, `${id}: lap-two entry triggers at its location`);
     assert.equal(atSecondLapTrackEvent(lapTwoEntry + 1, to, from, to), false, `${id}: event stops at the end of its district`);
   }
+  selectTrack('stadionring');
+});
+test('small crowd reactions trigger once at their landmark in each of the three laps',()=>{
+  selectTrack('stadionring'); const from=295,to=325, s=from+1;
+  const lapDistance=(lap)=>lap*TRACK.length+from-TRACK.start;
+  assert.equal(trackEventLap(lapDistance(0),s,from,to),0);
+  assert.equal(trackEventLap(lapDistance(0),s,from,to,0),null,'same lap cannot trigger twice');
+  assert.equal(trackEventLap(lapDistance(1),s,from,to,0),1);
+  assert.equal(trackEventLap(lapDistance(2),s,from,to,1),2);
+  assert.equal(trackEventLap(lapDistance(3),s,from,to,2),null,'no extra lap after the finish');
+  assert.equal(trackEventLap(lapDistance(1),from-1,from,to,0),null,'off-landmark progress cannot trigger');
+  assert.equal(trackEventLap(lapDistance(1),to,from,to,0),null,'end of the landmark is exclusive');
   selectTrack('stadionring');
 });
 test('canal rescue places a fallen kart beyond the water without awarding progress',()=>{

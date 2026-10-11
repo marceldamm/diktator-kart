@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, atSecondLapTrackEvent, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, atSecondLapTrackEvent, trackEventLap, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -22,6 +22,15 @@ import { pickQuality } from './auto-quality';
 import { describeRecord, loadProgress, recordCup, resetProgress, saveProgress } from './cup-progress';
 import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
 import { MeshoptCompression } from '@babylonjs/core/Meshes/Compression/meshoptCompression';
+
+const TRACK_CROWD_REACTIONS: Record<string, { from: number; to: number; kind: 'wave' | 'cheer' }> = {
+  berlin: { from: 295, to: 325, kind: 'cheer' },
+  rome: { from: 505, to: 535, kind: 'wave' },
+  havana: { from: 585, to: 615, kind: 'cheer' },
+  pyongyang: { from: 585, to: 615, kind: 'wave' },
+  moscow: { from: 1185, to: 1215, kind: 'cheer' },
+  beijing: { from: 285, to: 315, kind: 'wave' },
+};
 
 // Load time (10.10.2026): models are meshopt-compressed (art-source/optimize_assets.mjs); decode with the local copy
 // of the meshoptimizer decoder instead of Babylon's CDN, so the game also starts offline.
@@ -144,6 +153,7 @@ class App {
   private paradeTriggered=false;
   private columnTriggered=false;
   private zeppelinTriggered=false;
+  private crowdReactionLap=-1;
   /** Balcony speech (Rome, lap 2): petals slow the centre line for a short window; either outer line stays clear. */
   private balconyUntil=0;
   private balconyTriggered=false;
@@ -666,7 +676,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.paradeTriggered=false;this.columnTriggered=false;this.zeppelinTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.paradeTriggered=false;this.columnTriggered=false;this.zeppelinTriggered=false;this.crowdReactionLap=-1;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -1253,6 +1263,13 @@ class App {
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          const crowdMarker = TRACK_CROWD_REACTIONS[TRACK_INFO.theme];
+          if (crowdMarker && this.racePhase === 'race') {
+            const lap = [this.kart, ...this.loadKarts].map((kart, i) => trackEventLap(this.progress[i].distance, trackProgressAt(kart.x, kart.z), crowdMarker.from, crowdMarker.to, this.crowdReactionLap)).find((candidate) => candidate !== null);
+            if (lap !== undefined && lap !== null) {
+              this.crowdReactionLap = lap; this.testScene?.crowdReact?.(crowdMarker.kind);
+            }
+          }
           if (!this.paradeTriggered && TRACK_INFO.theme === 'moscow' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s } = trackLocate(kart.x, kart.z);
             return atSecondLapTrackEvent(this.progress[i].distance, s, 95, 520);

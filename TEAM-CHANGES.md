@@ -2,7 +2,9 @@
 
 ## 11.10.2026 – Codex: Berliner Zeppelin ortsgebunden ausgelöst
 
-Der Runde-zwei-Hinweis zum Berliner Zeppelin bleibt in Runde 1 bestehen. Der Zeppelin startet jetzt erst, wenn ein Kart die Stadiongerade (s=45–182) in Runde 2 erreicht; `lapTimes.length === 1` löst ihn nicht mehr direkt am Start-/Rundenwechsel aus. Die gemeinsame Ereignisregression umfasst damit alle sechs Kurse. Gezielte Tests 30/30, TypeScript, Build und Vollsuite 133/133 bestanden. Der Build meldet unverändert das große Hauptbundle. Ein versteckter GP-Lauf erreichte Anzeige 2/3, konnte Trigger und Zeppelinbild aber nicht bestätigen; die Runtime-Abnahme und der A4-Ausbau kleiner Rundenreaktionen bleiben offen.
+Der Runde-zwei-Hinweis zum Berliner Zeppelin bleibt in Runde 1 bestehen. Der Zeppelin startet jetzt erst, wenn ein Kart die Stadiongerade (s=45–182) in Runde 2 erreicht; `lapTimes.length === 1` löst ihn nicht mehr direkt am Start-/Rundenwechsel aus. Die gemeinsame Ereignisregression umfasst damit alle sechs Kurse. Gezielte Tests 30/30, TypeScript, Build und Vollsuite 133/133 bestanden. Der Build meldet unverändert das große Hauptbundle. Ein versteckter GP-Lauf erreichte Anzeige 2/3, konnte Trigger und Zeppelinbild aber nicht bestätigen; seine Runtime-Abnahme und die Sichtprüfung der Publikumsreaktionen bleiben offen.
+
+Ergänzung im selben A4-Paket: Spieler- und Botfortschritt lösen an je einem festen Landmarkenabschnitt eine sichtbare Publikumswelle oder einen Jubelimpuls aus, höchstens einmal pro Runde und nur in den drei Rennrunden. Berlin 295–325 (Jubel), Rom 505–535 (Welle), Havanna 585–615 (Jubel), Pjöngjang 585–615 (Welle), Moskau 1185–1215 (Jubel), Peking 285–315 (Welle). Der Impuls verändert keine Physik oder Rangfolge. Runden-/Ortsregression inklusive Wiederholungsgrenze; gezielte Tests 16/16, Vollsuite 134/134, TypeScript und Build bestanden. Die Animation wurde noch nicht im Runtime-Bild geprüft.
 
 ## 11.10.2026 – Codex: integrierter Sechs-Kurse-Technikpass und Shortcut-Ausgleich
 

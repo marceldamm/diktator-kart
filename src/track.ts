@@ -331,6 +331,13 @@ export function atSecondLapTrackEvent(distance: number, s: number, from: number,
   return distance >= TRACK.length + from - TRACK.start && s >= from && s < to;
 }
 
+/** Returns the zero-based race lap for a course landmark, or null outside its zone/race. */
+export function trackEventLap(distance: number, s: number, from: number, to: number, lastTriggeredLap = -1): number | null {
+  if (!Number.isFinite(distance) || !Number.isFinite(s) || distance < 0 || s < from || s >= to) return null;
+  const lap = Math.floor((distance + TRACK.start) / TRACK.length);
+  return lap >= 0 && lap < 3 && lap > lastTriggeredLap ? lap : null;
+}
+
 /** A kart beyond the open quay edge drops into the harbour basin. */
 export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | null {
   const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);
