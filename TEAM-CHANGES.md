@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Bot-Itemtaktik regressionsgesichert
+
+Eine neue Regression bindet die vorhandene Offensivlogik an erkennbare Rennlagen: direkte Geschosse benötigen einen ausgerichteten Rivalen, die Falle einen nahen Verfolger und Boostitems tatsächliche Fahrt. Easy und Hard dürfen unterschiedlich lange auf ein nutzbares Fenster warten; bei falscher Ausrichtung wird nicht blind geschossen. Gezielter Test bestanden; `npm run test:full` 137/137, TypeScript und Produktionsbuild bestanden. Build: 2.164,19 KB / 534,87 KB gzip; bekannte Chunkwarnung. Die Änderung sichert vorhandene Taktik regressionsseitig; sie ist noch keine menschliche Laufzeitabnahme.
+
 ## 11.10.2026 – Codex: Bot-Abwehrslot sagt Treffer voraus
 
 Der Bot-Abwehrslot zündete bisher für jedes nicht-Fallen-Objekt im 10-m-Umkreis. `botShouldUseDefense` sagt nun mit relativer Geschwindigkeit von Kart und Projektil voraus, ob der kleinste Abstand in den nächsten 0,65 Sekunden bis an den Trefferbereich heranreicht. Ein auf den Bot gelocktes Homing-Geschoss wird zusätzlich trotz seitlich abweichender aktueller Gerade erkannt. Fremde aktive Projektile zählen; eigene, abgelaufene und Fallenobjekte nicht. `main.ts` nutzt die Funktion für alle Bots, die gemeinsame Itemwirkung bleibt unverändert. Sechs gezielte Fälle und Vollsuite 136/136 bestanden; TypeScript und Build bestanden. Sichtabnahme in einer längeren Itemfahrt bleibt offen.

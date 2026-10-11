@@ -54,3 +54,20 @@ test('bots save the defensive slot for predicted projectile hits, not traps or f
  world.defenseSlots[1]=false;world.objects[0]={...world.objects[0],kind:'direct'};
  assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'empty reserve slot cannot activate');
 });
+
+test('bots use offensive items for a target, a pursuer or a moving kart, with different patience',()=>{
+ selectTrack('stadionring');const world=createItems(2),p=trackPoint(100),front={...gridKart(0),...p,speed:10};
+ const forward={x:front.x+Math.sin(p.heading)*24,z:front.z+Math.cos(p.heading)*24};
+ let rival={...front,...forward,speed:9};world.slots[0]='direct';world.heldFor[0]=1.3;
+ assert.equal(botUsesItem(world,0,[front,rival],1.4),false,'easy bot waits for its longer aim window');
+ assert.equal(botUsesItem(world,0,[front,rival],.72),true,'hard bot fires when the rival is aligned');
+ rival={...rival,x:rival.x+Math.cos(p.heading)*8,z:rival.z-Math.sin(p.heading)*8};
+ assert.equal(botUsesItem(world,0,[front,rival],.72),false,'an unaligned rival is not a blind shot');
+ world.slots[0]='trap';world.heldFor[0]=1.3;rival={...front,...trackPoint(90)};
+ assert.equal(botUsesItem(world,0,[front,rival]),true,'a close pursuer justifies a trap');
+ rival={...front,...trackPoint(60)};
+ assert.equal(botUsesItem(world,0,[front,rival]),false,'a distant pursuer does not justify an early trap');
+ world.slots[0]='boost';world.heldFor[0]=2;
+ assert.equal(botUsesItem(world,0,[{...front,speed:5},rival]),false,'boost waits while nearly stopped');
+ assert.equal(botUsesItem(world,0,[{...front,speed:8},rival]),true,'boost is spent during a moving race');
+});
