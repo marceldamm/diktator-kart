@@ -12,6 +12,7 @@ import { FreeFlight } from '../src/free-camera';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const EVENT_NAMES = { zeppelin: 'Berlin · Zeppelin', wave: 'Havanna · Welle', balcony: 'Rom · Balkonrede', loudspeaker: 'Peking · Pflichtjubel', parade: 'Moskau · Ehrenparade', column: 'Pjöngjang · Kolonne' } as const;
 const EVENT_TRACKS = { zeppelin: 'stadionring', wave: 'havanna', balcony: 'duce-drom', loudspeaker: 'beijing', parade: 'moscow', column: 'pyongyang' } as const;
+const EVENT_PROGRESS = { zeppelin: 110, wave: 218, balcony: 1048, loudspeaker: 960, parade: 308, column: 1386 } as const;
 MeshoptCompression.Configuration = { decoder: { url: '/vendor/meshopt_decoder.js' } };
 const driver = el<HTMLSelectElement>('driver'), track = el<HTMLSelectElement>('track'), view = el<HTMLSelectElement>('view');
 driver.replaceChildren(...CAST.map((c, i) => new Option(c.name, String(i))));
@@ -75,13 +76,13 @@ function status() {
     jump, night, health, position: coursePosition, paused })); } catch { /* Storage is optional in the QA page. */ }
 }
 async function load() {
-  engine.stopRenderLoop(); world?.scene.dispose(); triggeredEvent = null; focusZeppelin = false; focusSide = 1; selectTrack(track.value as TrackId);
+  engine.stopRenderLoop(); el<HTMLButtonElement>('trigger-event').disabled = true; world?.scene.dispose(); triggeredEvent = null; focusZeppelin = false; focusSide = 1; selectTrack(track.value as TrackId);
   el('status').textContent = 'Lädt tatsächliche Spielszene …';
   world = await createSliceScene(engine, 0, 1);
   world.scene.blockMaterialDirtyMechanism = false;
   camera = new FreeCamera('Prüfkamera', Vector3.Zero(), world.scene); camera.minZ = .05;
   world.attachCamera?.(camera); world.setWeather?.('sun'); world.setRoster?.([Number(driver.value)]); world.setQuality?.(Number(el<HTMLSelectElement>('quality').value), false);
-  render(); await world.scene.whenReadyAsync(); render(); status(); if (!paused) engine.runRenderLoop(render);
+  render(); await world.scene.whenReadyAsync(); render(); status(); el<HTMLButtonElement>('trigger-event').disabled = false; if (!paused) engine.runRenderLoop(render);
 }
 driver.onchange = () => { world.setRoster?.([Number(driver.value)]); render(); status(); };
 el('lamps').onchange = () => { render(); status(); };
@@ -102,7 +103,15 @@ el<HTMLSelectElement>('track-event').onchange = () => {
   track.value = EVENT_TRACKS[event]; void load();
 };
 view.onchange = () => { focusZeppelin = false; world.setPlayerVisible(true); render(); status(); };
-el('trigger-event').onclick = () => { const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_NAMES; triggeredEvent = event; world.trackEvent?.(event); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } render(); status(); };
+el('trigger-event').onclick = () => {
+  const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_NAMES;
+  // Put the free preview camera on the event section so visual checks inspect the same road segment as the effect.
+  coursePosition = ((EVENT_PROGRESS[event] - TRACK.start + TRACK.length) % TRACK.length) / TRACK.length;
+  el<HTMLInputElement>('position').value = String(coursePosition);
+  triggeredEvent = event; world.trackEvent?.(event);
+  if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); }
+  render(); status();
+};
 el('focus-event').onclick = () => { if (!world.scene.getTransformNodeByName('Propaganda zeppelin')?.isEnabled()) return; if (focusZeppelin) focusSide *= -1; else focusZeppelin = true; world.setPlayerVisible(false); render(); status(); };
 for (const kind of ['cheer', 'fist', 'angry'] as const) el(kind).onclick = () => { world.driverReaction?.(0, kind); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } };
 el('pause').onclick = () => { paused = !paused; el('pause').textContent = paused ? 'Animation weiter' : 'Bild einfrieren'; if (paused) engine.stopRenderLoop(); else engine.runRenderLoop(render); status(); };

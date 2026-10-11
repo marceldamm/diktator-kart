@@ -1,6 +1,6 @@
-import { MaterialPluginBase } from '@babylonjs/core/Materials/materialPluginBase';
-import type { Material } from '@babylonjs/core/Materials/material';
-import type { UniformBuffer } from '@babylonjs/core/Materials/uniformBuffer';
+import { MaterialPluginBase } from '@babylonjs/core/Materials/materialPluginBase.js';
+import type { Material } from '@babylonjs/core/Materials/material.js';
+import type { UniformBuffer } from '@babylonjs/core/Materials/uniformBuffer.js';
 
 /**
  * Crowd reactions (Marcel, 10.10.2026): the spectators in every grandstand are batched static meshes, so they react in
@@ -13,6 +13,11 @@ export const crowdState = { wave: 0, excite: 0 };
 export function crowdReact(kind: 'wave' | 'cheer'): void {
   if (kind === 'wave') crowdState.wave = Math.max(crowdState.wave, 8);
   crowdState.excite = Math.max(crowdState.excite, kind === 'wave' ? 3 : 2.5);
+}
+
+/** Each major course moment gets an audience response with its own scale. */
+export function reactToTrackEvent(kind: 'zeppelin' | 'balcony' | 'wave' | 'parade' | 'loudspeaker' | 'column'): void {
+  crowdReact(kind === 'zeppelin' || kind === 'wave' || kind === 'parade' || kind === 'column' ? 'wave' : 'cheer');
 }
 
 /** Called once per frame: both reactions fade out over their duration. */

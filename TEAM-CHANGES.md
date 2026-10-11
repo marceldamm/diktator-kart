@@ -1,5 +1,17 @@
 # Gemeinsamer Änderungsverlauf
 
+### A24 – Hauptstreckenereignisse bewegen das Publikum passend (11.10.2026)
+
+Die echte Szenenroutine ordnet jedem der sechs `trackEvent`-Momente jetzt eine Publikumsreaktion zu. Zeppelin, Malecón-Welle, Ehrenparade und Paradekolonne starten eine La-Ola; Balkonrede und Pflichtjubel eine kürzere Jubelbewegung. Die Animation bleibt rein visuell und läuft über den vorhandenen Effektzustand aus, ohne Fahrphysik oder Position zu ändern. `crowd-wave.ts` ist mit expliziten Babylon-`.js`-Imports zugleich direkt im Node-Testlauf ladbar.
+
+Gezielte Reaktionstests 2/2, `npm test` 126/126, `npm run test:full` außerhalb der Sandbox 143/143 und `npm run build` mit TypeScript bestanden. Produktionsbundle 2.164,64 KB / 535,15 KB gzip; bestehende Chunkwarnung. Die eigentliche La-Ola im bewegten Rennbild ist noch nicht eindeutig angesehen.
+
+### A25/A27 – Berliner Außenlinienwind und passende Ereignisvorschau (11.10.2026)
+
+A25 erhielt zehn kurzzeitig aktivierte, cyanfarbene Fahrbahnmarkierungen auf der Berliner Außenlinie. Sie nutzen das direkte Höhenprofil `elevationAt(s)`, da `trackHeightAt(x,z)` am überlagerten Startbereich die tiefere Wegpunkt-Ebene auswählte. Der 14-Sekunden-Timer schaltet Markierungen und Zeppelin zusammen. Im verdeckten Screenshot am richtigen Kursabschnitt waren zwei cyanfarbene Streifen sichtbar; ihre eindeutige Zuordnung zu den neuen Windmarkierungen ist wegen bereits vorhandener Boostfelder im selben Motiv noch nicht isoliert belegt. Die laufende Rennkamera/Innenlinie bleibt offen.
+
+A27 richtet die Grafikprüfansicht beim direkten Event-Trigger auf die bekannte Abschnittsmitte des Ereignisses aus. Während die Szene lädt, bleibt der Trigger deaktiviert, wodurch ein vorzeitiger Zugriff auf `world` vermieden wird. `npm run build` und `npm test` 126/126 bestanden; Vollsuite `npm run test:full` 143/143 bestanden. Die letzte erneute Browserladung blieb im Status „Lädt tatsächliche Spielszene …“ und konnte die A27-Steuerung daher nach der Änderung nicht nochmals runtime-bestätigen.
+
 ### A22–A23 – Ereignisfokus und Berliner Zeppelinbanner (11.10.2026)
 
 Die Grafikprüfansicht verfolgt den aktivierten Zeppelin-Knoten nun aus einer seitlichen Kameraperspektive und erlaubt das Umschalten zwischen den Außenseiten. Der sichtbare Vergleich zeigte, dass der Slogan auf einer Seite spiegelverkehrt war. Beide Bannerflächen werden jetzt horizontal gespiegelt; die verdeckte Ansicht zeigte den Slogan von beiden Seiten in gleicher Leserichtung.

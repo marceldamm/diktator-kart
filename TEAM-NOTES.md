@@ -1,5 +1,15 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – A4-Rennstichprobe und A24–A30 Folgepakete
+
+Im verborgenen In-App-Browser startete ich den Berliner GP mit sechs Karts bei Regen. Zwischen 0:02 und 2:16 änderten sich die Rangplätze; Hitler lag in Runde 2 zuletzt auf Rang 4 und etwa 71 km/h. Das HUD zeigte Items, den zweiten Abwehrslot, Orden und 72 % Karosseriezustand; ein Schäferhund-Item lag bereit. Der Zeppelin-Toast lag nicht in einem erfassten Stichprobenbild, ebenso war kein Wind auf der äußeren Spur sicher zu sehen. Rennen über Escape beendet; Auto-Gas/Lenkhilfe beide auf „aus“. Der Browserlauf speicherte keine Bilddatei.
+
+A24 verbindet jetzt alle sechs echten `TestScene.trackEvent`-Aufrufe mit einer zurücklaufenden Zuschauerbewegung: La-Ola bei Zeppelin, Malecón-Welle, Ehrenparade und Paradekolonne; kurze Jubelbewegung bei Balkonrede und Pflichtjubel. 2/2 gezielte Reaktionstests, `npm test` 126/126, Vollsuite außerhalb der Sandbox 143/143 und TypeScript-/Produktionsbuild bestanden. Die Animation muss im Rennen noch sichtbar abgenommen werden. Neue konkrete Folgeziele: A25 sichtbare Spurmarkierung für den Berliner Rückenwind; A26 Kursmotive aus der tatsächlichen Rennkamera verlässlich lesbar machen.
+
+Die erste A25-Probe stand versehentlich bei 85 % des Kurses statt bei der Berliner Startgeraden. Am passenden Ereignisabschnitt zeigte die Prüfansicht nach dem Trigger cyanfarbene Flächen nahe der äußeren Fahrspur; vorhandene Boostflächen erschweren die Zuordnung. Ein Reload mit aktualisiertem Testcode blieb anschließend bei „Lädt tatsächliche Spielszene …“ stehen, deshalb wurde A27 im Browser nicht erneut abgenommen. A28–A30 sind neu angelegte, aus Marcels bestätigten Wünschen abgeleitete Pakete: feste Boostverteilung, durchgängige Rampen-/Tricklandung und abgestimmte Ereigniswirkung in Normal-/Schwachgrafik.
+
+**Budget nach A27:** offizielle Codex-Werte 41 % Fünf-Stundenverbrauch / 21 % Wochenverbrauch (59 % / 79 % Rest).
+
 ## 11.10.2026 – A22/A23: Berliner Zeppelin im Szenenfokus und Bannerlesbarkeit
 
 Aus der A21-Prüfansicht wurde der echte Zeppelin-Knoten aktiviert und anschließend mit der Seitenkamera verfolgt. Die erste Motivansicht zeigte das tatsächliche Modell vor der Berliner Stadt: silberner Rumpf, Gondel, Banner und Flossen. Beim Seitenwechsel war ein Bannertext spiegelverkehrt. Beide Banner-Meshes erhielten dieselbe horizontale UV-/Meshspiegelung, danach waren auf beiden Außenansichten die sichtbaren Textteile in Leserichtung. `npm run build` mit TypeScript bestanden; Bundles 2.164,54 KB / 535,10 KB gzip und bekannte Chunkwarnung.
