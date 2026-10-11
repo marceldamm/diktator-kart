@@ -2,7 +2,7 @@
 
 ### A20 – Runde-zwei-Kursereignisse am Spielerfortschritt auslösen (11.10.2026)
 
-Alle sechs großen Kursereignisse starten nun nur anhand des eigenen Spielerfortschritts am passenden Abschnitt. Botführer können das einmalige Ereignis nicht mehr vorzeitig verbrauchen; der ausgelöste Wind, Jubel oder Streckeneffekt gilt weiterhin für alle Karts im aktiven Bereich. Regression für Bot-vor-Spieler, Runde-1-Sperre und Runde-2-Freigabe; Vollsuite 140/140 und TypeScript/Build bestanden. Bundle 2.164,53 KB / 535,07 KB gzip (bekannte Chunkwarnung). Im versteckten Berlinlauf blieb der Toast bis Spieler-Runde 1 bei 1:19 aus. Runde 2 begann bei 1:48, jedoch wurde das kurze Fenster nicht eng genug abgetastet; visueller Start/Zeppelin bleiben offen.
+Alle sechs großen Kursereignisse starten nun nur anhand des eigenen Spielerfortschritts am passenden Abschnitt. Botführer können das einmalige Ereignis nicht mehr vorzeitig verbrauchen; der ausgelöste Wind, Jubel oder Streckeneffekt gilt weiterhin für alle Karts im aktiven Bereich. Regression für Bot-vor-Spieler, Runde-1-Sperre und Runde-2-Freigabe; Vollsuite 140/140 und TypeScript/Build bestanden. Bundle 2.164,53 KB / 535,07 KB gzip (bekannte Chunkwarnung). Zweiter versteckter Berlinlauf bestätigte den Zeppelin-Hinweis bei 1:17.82, Spieler Runde 2/3, Platz 3; in Runde 1 blieb er aus. A20 ist im Code und Laufzeitstart geprüft. Das Modell und der Außenlinienwind sind in A4 noch nicht visuell eindeutig abgenommen.
 
 ### A19 – Kursereignisse behalten ihren Anzeigevorrang (11.10.2026)
 
