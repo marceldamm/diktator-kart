@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Standardtests verkürzt, vollständige Rennprüfung erhalten
+
+Marcels offenen Wunsch nach kürzeren Tests aus Claudes Übergabe übernommen. `npm test` führt 111 kurze Fälle aus; `npm run test:full` führt alle 128 aus, `npm run test:slow` die 17 mit `slow:` markierten langen Renn-/Parade-/Team-Workflow-Fälle. Drei Fünf-Bot-Simulationen stoppen nach dem tatsächlichen Zieleinlauf aller Bots. Schneller Lauf 111/111 in 6,4 s Wandzeit; vollständiger Lauf 128/128 in 83 s Node-Testdauer außerhalb der eingeschränkten Sandbox. Keine Spielmechanik oder Assets geändert. Details und nächste Aufgabe in CURRENT-WORKLIST.md; Umgebungsgrenze in TEAM-NOTES.md.
+
 ## 11.10.2026 – Claude: Projektabschluss nach Pjöngjang und Moskau
 
 Auf Marcels Wunsch beendet. Gesichert sind die beiden Streckenumbauten; ein erster Tempo-Versuch (Höchsttempo 19,5 m/s) wurde wegen roter Bot-/Fahrmodell-Tests verworfen und ist mit Werten und Ursachen als nächster Schritt in CURRENT-WORKLIST.md dokumentiert.

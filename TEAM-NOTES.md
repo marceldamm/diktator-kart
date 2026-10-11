@@ -1,5 +1,9 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: kurze und vollständige Testläufe
+
+`npm test` ist der schnelle Standardlauf (111/111, 6,4 s Wandzeit auf diesem Rechner). `npm run test:full` prüft alle 128 Fälle (83 s Node-Testdauer); nach Änderungen an Strecken, Bots, Fahrmodell oder Team-Workflow zusätzlich ausführen. `npm run test:slow` ist für die 17 benannten Langläufe eingerichtet, wurde nicht separat ausgeführt. Keine Testfälle gelöscht; nur die drei Fünf-Bot-Rennen in Rom, Havanna und Pjöngjang beenden ihre Simulation nach dem Zieleinlauf aller Bots. Vorheriger ungeteilter `npm test`: 47 s Node-Testdauer, neun Git-Fixture-Fehler wegen Sandbox-Sperre `NtCreateDirectoryObject` im MSYS-Git-Unterprozess. Der vollständige Lauf außerhalb dieser Sperre bestand 128/128; kein Produktfehler aus den neun Sandbox-Fehlern ableiten. Kein Browser- oder Hörtest nötig, da nur Testorganisation geändert wurde.
+
 ## 11.10.2026 – Claude: Prüfnotizen Pjöngjang-Pilot
 
 - Test-Chrome: eigenes Profil `.tools/claude-chrome-profile`, Port 9231, mit den Anti-Drosselungs-Flags; Marcels Vite-Server auf 4173 mitbenutzt. Der eingebaute Browser der Claude-App drosselt verdeckt und lieferte keine Bilder.

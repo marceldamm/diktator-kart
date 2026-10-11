@@ -24,7 +24,7 @@ test('Havanna-Revolutionsring: own route along the sea, continuous progress, bar
   assert.ok(q.z < layout.RIVER.south, 'quay basin stays south of the sea wall');
 }));
 
-test('Havanna hill and jump, lawn clear of the road, five bots finish three laps', onHavana(() => {
+test('slow: Havanna hill and jump, lawn clear of the road, five bots finish three laps', onHavana(() => {
   assert.equal(elevationAt(1128), 4);
   const lip = trackPoint(layout.RAMP_LIPS[0] - .5); assert.ok(atRampLip(lip.x, lip.z));
   const clear = TRACK.halfWidth + 1.45 + layout.LANDMARKS.promenade + .5;
@@ -34,7 +34,7 @@ test('Havanna hill and jump, lawn clear of the road, five bots finish three laps
   }
   let states = Array.from({ length: 5 }, (_, i) => gridKart(i + 1));
   const races = states.map(createRaceProgress);
-  for (let step = 0; step < 60 * 270 * TRACK.length / 891; step++) {
+  for (let step = 0; step < 60 * 270 * TRACK.length / 891 && !races.every((race) => race.finished); step++) {
     states = states.map((s, i) => advanceKart(s, botInput(s, i + 1, states), 1 / 60, projectTrack, trackHeightAt));
     states = resolveKartContacts(states, projectTrack);
     states = states.map((s) => hazardAt(s.x, s.z) ? recoverKart(s, states) : s);

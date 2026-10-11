@@ -4,7 +4,7 @@ import {advanceKart,resolveKartContacts} from '../src/kart-model.ts';
 import {TRACK,selectTrack,setBotSkill,setBotStyles,BOT_STYLES,botInput,gridKart,createRaceProgress,advanceRace,projectTrack,trackHeightAt,applySurfaceDrag,trackPoint} from '../src/track.ts';
 import {createItems,botUsesItem,botItemDirection,stepItems} from '../src/items.ts';
 
-test('all difficulty levels complete six courses and produce distinct real race times',()=>{
+test('slow: all difficulty levels complete six courses and produce distinct real race times',()=>{
  const result=[];
  try{
   for(const id of ['stadionring','duce-drom','havanna','pyongyang','moscow','beijing']){

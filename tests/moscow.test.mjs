@@ -26,7 +26,7 @@ test('Moscow selection builds a distinct long course with parade straights and a
   }
 }));
 
-test('Moscow bot completes three laps using the shared race and recovery rules', withMoscow(() => {
+test('slow: Moscow bot completes three laps using the shared race and recovery rules', withMoscow(() => {
   let state = gridKart(3), sawShortcut = false; const race = createRaceProgress(state);
   for (let step = 0; step < 60 * 270 * TRACK.length / 891 && !race.finished; step++) {
     state = advanceKart(state, botInput(state, 3, [state]), 1/60, projectTrack);

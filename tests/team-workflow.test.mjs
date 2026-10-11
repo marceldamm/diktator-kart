@@ -48,7 +48,7 @@ function fixture() {
 const run = (cwd, action, good = true) => command(root, 'powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', workflow, '-Action', action, '-ProjectRoot', cwd], good);
 const remoteHead = f => git(f.remote, 'rev-parse', 'main');
 
-for(const missing of ['TEAM-CHANGES.md','TEAM-NOTES.md'])test(`team: missing ${missing} prevents publication`, { skip: !windows }, () => {
+for(const missing of ['TEAM-CHANGES.md','TEAM-NOTES.md'])test(`slow: team: missing ${missing} prevents publication`, { skip: !windows }, () => {
   const f=fixture();
   put(f.Bob,'project-state.json',JSON.stringify({...f.state,teamLists:['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md','TEAM-NOTES.md']}));
   for(const file of ['CURRENT-WORKLIST.md','LONG-TERM-GOALS.md','TEAM-CHANGES.md','TEAM-NOTES.md'])if(file!==missing)put(f.Bob,file,'# Shared work file\n');
@@ -58,7 +58,7 @@ for(const missing of ['TEAM-CHANGES.md','TEAM-NOTES.md'])test(`team: missing ${m
   assert.notEqual(result.status,0);assert.ok(result.stdout.includes(missing));assert.equal(remoteHead(f),before);
 });
 
-test('team: dirty local work is preserved and cannot be switched or published', { skip: !windows }, () => {
+test('slow: team: dirty local work is preserved and cannot be switched or published', { skip: !windows }, () => {
   const f = fixture(); const before = git(f.Alice, 'rev-parse', 'HEAD');
   put(f.Alice, 'draft.txt', 'do not lose me');
   assert.notEqual(run(f.Alice, 'Start', false).status, 0);
@@ -67,7 +67,7 @@ test('team: dirty local work is preserved and cannot be switched or published', 
   assert.equal(readFileSync(join(f.Alice, 'draft.txt'), 'utf8'), 'do not lose me');
   assert.equal(remoteHead(f), before);
 });
-test('team: checkpoint requires explicit paths and saves only the selected files to main', { skip: !windows }, () => {
+test('slow: team: checkpoint requires explicit paths and saves only the selected files to main', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   put(f.Alice, 'checkpoint.txt', 'recoverable work');
   put(f.Alice, 'parallel-draft.txt', 'leave for the other worker');
@@ -80,14 +80,14 @@ test('team: checkpoint requires explicit paths and saves only the selected files
   assert.notEqual(command(f.remote, 'git', ['cat-file', '-e', 'main:parallel-draft.txt'], false).status, 0);
   assert.equal(readFileSync(join(f.Alice, 'parallel-draft.txt'), 'utf8'), 'leave for the other worker');
 });
-test('team: clean main project start fast-forwards remote work', { skip: !windows }, () => {
+test('slow: team: clean main project start fast-forwards remote work', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   put(f.Bob, 'bob.txt', 'Bob'); commit(f.Bob, 'Bob change'); git(f.Bob, 'push', 'origin', 'main');
   run(f.Alice, 'Start');
   assert.equal(readFileSync(join(f.Alice, 'bob.txt'), 'utf8'), 'Bob');
   assert.equal(git(f.Alice, 'branch', '--show-current'), 'main');
 });
-test('team: overlapping conflicting edits are reported and remote main stays intact', { skip: !windows }, () => {
+test('slow: team: overlapping conflicting edits are reported and remote main stays intact', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   put(f.Alice, 'shared.txt', 'Alice intention\n'); commit(f.Alice, 'Alice shared change');
   put(f.Bob, 'shared.txt', 'Bob intention\n'); commit(f.Bob, 'Bob shared change'); git(f.Bob, 'push', 'origin', 'main');
@@ -96,7 +96,7 @@ test('team: overlapping conflicting edits are reported and remote main stays int
   assert.equal(readFileSync(join(f.Alice, 'shared.txt'), 'utf8'), 'Alice intention\n');
   assert.equal(remoteHead(f), before);
 });
-test('team: an unrelated or historical branch is preserved and never switched automatically', { skip: !windows }, () => {
+test('slow: team: an unrelated or historical branch is preserved and never switched automatically', { skip: !windows }, () => {
   const f = fixture(); git(f.Alice, 'switch', '-c', 'old-session', f.minimum);
   put(f.Alice, 'legacy-only.txt', 'old implementation'); commit(f.Alice, 'old local work');
   const old = git(f.Alice, 'rev-parse', 'HEAD'); assert.notEqual(run(f.Alice, 'Start', false).status, 0);
@@ -104,7 +104,7 @@ test('team: an unrelated or historical branch is preserved and never switched au
   assert.equal(git(f.Alice, 'branch', '--show-current'), 'old-session');
   assert.equal(git(f.Alice, 'show', 'HEAD:legacy-only.txt'), 'old implementation');
 });
-test('team: finish integrates a disjoint remote commit before normal main push', { skip: !windows }, () => {
+test('slow: team: finish integrates a disjoint remote commit before normal main push', { skip: !windows }, () => {
   const f = fixture(); run(f.Alice, 'Start');
   put(f.Alice, 'alice.txt', 'Alice'); commit(f.Alice, 'Alice change');
   put(f.Bob, 'bob.txt', 'Bob'); commit(f.Bob, 'Bob change'); git(f.Bob, 'push', 'origin', 'main');
@@ -131,7 +131,7 @@ async function checkLauncher(cwd, port) {
     child.on('error', reject); child.on('exit', status => resolve({ status, stdout, stderr }));
   });
 }
-test('launcher: old title, other worktree and static preview are never reused; own dev checkout is reused', { skip: !windows }, async () => {
+test('slow: launcher: old title, other worktree and static preview are never reused; own dev checkout is reused', { skip: !windows }, async () => {
   const f = fixture();
   for (const [payload, reuse] of [[null, false], [{ ...f.state, root: f.Bob, mode: 'dev' }, false], [{ ...f.state, root: f.Alice, mode: 'preview' }, false], [{ ...f.state, root: f.Alice }, false], [{ ...f.state, root: f.Alice, mode: 'dev' }, true]]) {
     const server = await fakeServer(payload);

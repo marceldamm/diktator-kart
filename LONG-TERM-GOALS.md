@@ -1,6 +1,8 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
-**Übergabestand 11.10.2026:** Die folgenden neuen Renn- und Streckenziele sind für spätere lokale oder Cloud-Sitzungen bestätigt, **noch nicht umgesetzt**. Pjöngjang ist der erste Pilot; danach weitere Kurse und Systempakete. Die älteren bestätigten Modell-/Kart-/Cup-Ziele bleiben offen. Für Cloud-Arbeit gelten weiterhin AGENTS.md und die vier Hauptdateien als aktuelle Steuerung; Sarahs nicht gemeinsam geklärte Detailideen und menschliche Abnahmen bleiben offen. Abschlussstatus und nächster Schritt in CURRENT-WORKLIST.md.
+**Fortsetzung 11.10.2026, Testzeiten:** Marcels Wunsch nach kürzeren Tests ist als erstes übernommenes offenes Paket umgesetzt: schneller Standardlauf und weiterhin vollständige Langlaufprüfung; Ergebnisse in CURRENT-WORKLIST.md. Pjöngjang- und Moskau-Umbau sind auf `main`; die übrigen Kurs- und Tempo-/Item-/Bot-/Audio-/Kartziele bleiben offen. Bei Änderungen an Rennlogik oder Strecken stets den vollständigen Lauf zusätzlich zum schnellen Standardtest verwenden.
+
+**Historischer Übergabestand vor dem Streckenumbau, 11.10.2026:** Die folgenden Renn- und Streckenziele wurden für spätere lokale oder Cloud-Sitzungen bestätigt. Pjöngjang war als erster Pilot gewählt; Pjöngjang und Moskau wurden danach umgesetzt. Die älteren bestätigten Modell-/Kart-/Cup-Ziele bleiben offen. Für Cloud-Arbeit gelten weiterhin AGENTS.md und die vier Hauptdateien als aktuelle Steuerung; Sarahs nicht gemeinsam geklärte Detailideen und menschliche Abnahmen bleiben offen. Aktueller Status und nächster Schritt in CURRENT-WORKLIST.md.
 
 ## Bestätigte Renn- und Streckenziele – Marcels Antworten vom 11.10.2026
 

@@ -45,10 +45,10 @@ test('Duce-Drom hill: serpentine climbs to a 6 m Belvedere plateau with a take-o
   assert.ok(elevationAt(700) < 6 && elevationAt(745) === 0);
 }));
 
-test('Duce-Drom: five bots finish three laps over the hill with the shared controller', onRome(() => {
+test('slow: Duce-Drom: five bots finish three laps over the hill with the shared controller', onRome(() => {
   let states = Array.from({ length: 5 }, (_, i) => gridKart(i + 1));
   const races = states.map(createRaceProgress);
-  for (let step = 0; step < 60 * 270 * TRACK.length / 891; step++) {
+  for (let step = 0; step < 60 * 270 * TRACK.length / 891 && !races.every((race) => race.finished); step++) {
     states = states.map((s, i) => advanceKart(s, botInput(s, i + 1, states), 1 / 60, projectTrack, trackHeightAt));
     states = resolveKartContacts(states, projectTrack);
     states = states.map((s) => hazardAt(s.x, s.z) ? recoverKart(s, states) : s);

@@ -18,7 +18,7 @@ test('Peking builds a closed clockwise loop with hutong shortcut, plateau and mo
   }
 }));
 
-test('Peking bots finish three laps, one of them through the hutong alley', withBeijing(() => {
+test('slow: Peking bots finish three laps, one of them through the hutong alley', withBeijing(() => {
   for (const kart of [1, 3]) {
     let state = gridKart(kart), sawShortcut = false; const race = createRaceProgress(state);
     for (let step = 0; step < 60 * 270 * TRACK.length / 891 && !race.finished; step++) {

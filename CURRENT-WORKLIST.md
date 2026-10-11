@@ -9,6 +9,14 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Aktives Paket – Testläufe verkürzen (Marcel, 11.10.2026; Codex-Fortsetzung)
+
+**Auftrag:** Marcels in der jüngsten Übergabe offener Wunsch „Verkürze die Tests, die brauchen zu lange“. Vor Änderung auf `main`/`origin/main` bei `70ef0d2` sauber synchronisiert; keine aktive zweite Codex-Aufgabe im Checkout gefunden. Standardlauf gemessen: 47 s, davon allein der Sechs-Kurse-/Drei-Schwierigkeitsstufen-Bottest 19 s, Pjöngjang-Rennen/Kolonne weitere rund 8 s. Neun Git-Workflow-Fixtures scheiterten in der Sandbox am MSYS-Namespace-Zugriff; das ist getrennt von der Laufzeitmessung zu bewerten.
+
+- [x] **Schneller Standardlauf eingerichtet:** `npm test` führt 111 kurze Tests aus; 17 längere Drei-Runden-/Parade-/Git-Workflow-Tests sind als `slow:` benannt und bleiben über `npm run test:slow` bzw. `npm run test:full` erhalten. Die drei Fünf-Bot-Rennen in Rom, Havanna und Pjöngjang stoppen nun nach dem Zieleinlauf aller Bots statt bis zum starren Zeitlimit weiterzusimulieren. Für Änderungen an Strecke, Bots oder Git-Workflow den vollständigen Lauf ausführen.
+- [x] **Prüfung:** `npm test` 111/111 in 6,4 s Wandzeit (Node-Testdauer 2,4 s). `npm run test:full` außerhalb der eingeschränkten Sandbox 128/128 in 83 s Node-Testdauer. Vorheriger ungeteilter Sandbox-Lauf: 119/128 in 47 s Node-Testdauer; neun Workflow-Fixtures scheiterten ausschließlich an `NtCreateDirectoryObject`/Git-Unterprozessrechten und bestanden im vollen Lauf außerhalb der Sandbox. Kein Spielcode geändert, daher kein neuer Build oder Browserlauf. `test:slow` als Einzelkommando noch nicht separat ausgeführt.
+- [ ] **Nächster eigenständiger Block:** Tempo-Neuansatz aus der jüngsten Übergabe mit Bot-Vorausschau und aktualisierten Fahrmodellgrenzen in einem begrenzten Paket umsetzen; danach echte sichtbare Rennprobe, vollständige Tests und Leistungsabgleich. Marcels eigener Fahrtest Pjöngjang/Moskau sowie Sarahs Rückmeldung bleiben menschliche Abnahmen und werden nicht erfunden.
+
 ## Projektabschluss und Übergabe – 11.10.2026, 12:45 (Marcel, Claude)
 
 **Stand auf `main`:** Pjöngjang-Pilot (`2a9d508`) und Moskau-Umbau (`51e0a3b`) sind fertig, geprüft und gesichert; Details im Abschnitt „Arbeitsblock Strecken und Systempakete“ direkt darunter. Danach kein weiterer Spielcode. `npm test` 128/128, Typprüfung und Build grün.
@@ -21,7 +29,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 3. Übrige Kurse nach dem Pilotmuster umbauen: gerade Anteile heute Berlin 24 %, Rom 55 %, Havanna 47 %, Peking 58 % – Rom, Havanna, Peking zuerst. Pro Kurs eigene Abkürzung mit fairem Gewinn (Ziel 60–140 m bzw. nur mit Turbo lohnend), ein Ereignis mit sichtbarer sicherer Alternative.
 4. Danach Items/Bots/Klang/HUD/Kart-Abstimmung (Paket 3/4 in LONG-TERM-GOALS.md).
 5. Sarahs Sicht auf die geänderten Kurse (Pjöngjang, Moskau) einholen; ihre Zustimmung ist nicht unterstellt.
-6. **Offener Wunsch Marcel (11.10.2026, 11:36):** „Verkürze die Tests, die brauchen zu lange.“ Noch nicht umgesetzt. `npm test` dauert rund 80 s; die langen Läufe sind die Drei-Runden-Bot-Simulationen je Kurs (z. B. Pjöngjang-Bots ~4–5 s, Paradekolonne ~4 s, bot-racing). Vorschlag: kürzere Simulationsdauer bzw. eine schnelle Standard-Suite und eine separate lange Suite.
+6. **Damals offener Wunsch Marcel (11.10.2026, 11:36; inzwischen erledigt, siehe oberes Paket):** „Verkürze die Tests, die brauchen zu lange.“ Im damaligen Stand dauerte `npm test` rund 80 s; die langen Läufe waren Drei-Runden-Bot-Simulationen und Git-Workflow-Fixtures.
 
 **Werkzeuge für die Fortsetzung:** Grundriss-/Kurvenanalyse und Rennaufnahmen liefen mit kleinen Skripten im Sitzungs-Scratchpad (nicht im Repo): Plot per `sampleTrack`/`trackPoint` als SVG→PNG mit `sharp`, Rennen per CDP auf Port 9231 (Ablauf in TEAM-NOTES.md, Eintrag „Prüfnotizen Pjöngjang-Pilot“). Prüfregel „gerade Anteile“: 2-m-Abtastung, |Krümmung| < 1/150 m.
 

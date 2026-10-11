@@ -79,10 +79,10 @@ test('Ewige-Führer-Allee underpass allows steering in both directions without w
   assert.ok(Math.abs(difference) > .15, `steering directions converged (${difference})`);
 }));
 
-test('Ewige-Führer-Allee bots complete three laps on the shared driving and recovery rules', onPyongyang(() => {
+test('slow: Ewige-Führer-Allee bots complete three laps on the shared driving and recovery rules', onPyongyang(() => {
   let states = Array.from({ length: 5 }, (_, i) => gridKart(i + 1));
   const races = states.map(createRaceProgress);
-  for (let step = 0; step < 60 * 270 * TRACK.length / 891; step++) {
+  for (let step = 0; step < 60 * 270 * TRACK.length / 891 && !races.every((race) => race.finished); step++) {
     states = states.map((state, i) => advanceKart(state, botInput(state, i + 1, states), 1 / 60, projectTrack, trackHeightAt));
     states = resolveKartContacts(states, projectTrack);
     states = states.map((state) => hazardAt(state.x, state.z) ? recoverKart(state, states) : state);
@@ -160,7 +160,7 @@ test('Taedong north-bank decorative railing opens exactly at road crossings, not
   assert.deepEqual(trackCrossingsAtZ(south, 4), []);
 }));
 
-test('Pyongyang parade column blocks only the right boulevard lane, for every kart, and bots still finish around it', onPyongyang(() => {
+test('slow: Pyongyang parade column blocks only the right boulevard lane, for every kart, and bots still finish around it', onPyongyang(() => {
   startParade(0); setParadeClock(20);
   try {
     const vehicles = paradeVehicles();

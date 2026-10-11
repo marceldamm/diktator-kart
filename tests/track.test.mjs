@@ -56,7 +56,7 @@ test('air trick supplies one shared body and wheel roll over the jump duration',
   assert.equal(airTrickRoll(true,0,1),0); // the completed full turn resets to the same forward pose.
   assert.equal(airTrickRoll(true,.5,0),0);
 });
-test('five bots complete three laps using the shared kart controller without teleportation',()=>{
+test('slow: five bots complete three laps using the shared kart controller without teleportation',()=>{
   let states=Array.from({length:5},(_,i)=>gridKart(i+1));
   const races=states.map(createRaceProgress);
   for(let step=0;step<60*270*TRACK.length/891;step++){ // time budget scales with lap length (891 m base)
