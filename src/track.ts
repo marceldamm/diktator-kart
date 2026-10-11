@@ -305,6 +305,17 @@ export function balconyRosePatchAt(s: number, lane: number): boolean {
   return s >= 970 && s < 1125 && Math.abs(lane) < 2.4;
 }
 
+/** The announced Havana wave washes across the seaward Malecón line only. */
+export function maleconWavePatchAt(s: number, lane: number): boolean {
+  return s >= 105 && s < 330 && lane > 0.65;
+}
+
+/** A short, bounded speed and grip cost for a kart caught on the exposed line. */
+export function applyMaleconWaveDrag(speed: number, yawRate: number, dt: number): { speed: number; yawRate: number } {
+  const step = Math.max(0, dt);
+  return { speed: Math.max(0, speed - .22 * step), yawRate: yawRate * Math.max(0, 1 - .025 * step) };
+}
+
 /** A kart beyond the open quay edge drops into the harbour basin. */
 export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | null {
   const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);

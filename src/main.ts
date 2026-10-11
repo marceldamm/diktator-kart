@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, balconyRosePatchAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -135,8 +135,9 @@ class App {
   private gpTrackChosen=false;
   /** Player's tyre set: 'auto' = the driver's own design, otherwise any set id from TIRE_SETS. */
   private tireChoice:string='auto';
-  /** Malecón wave (Havanna, lap 2): the flooded seafront stretch slows everyone alike until this race time. */
+  /** Malecón wave (Havanna, lap 2): seaward-line drag remains active for this short race-time window. */
   private waveUntil=0;
+  private waveTriggered=false;
   /** Balcony speech (Rome, lap 2): petals slow the centre line for a short window; either outer line stays clear. */
   private balconyUntil=0;
   private balconyTriggered=false;
@@ -659,7 +660,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -1107,8 +1108,8 @@ class App {
           this.kart = tailwind(this.kart); this.loadKarts = this.loadKarts.map(tailwind);
         }
         if (!LAB_WORLD && this.raceTime < this.waveUntil) {
-          // Malecón wave: water on the seafront stretch costs speed and a little grip, identical for every kart.
-          const soak = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 330 && k.grounded ? { ...k, speed: k.speed * (1 - .9 * FIXED_STEP), yawRate: k.yawRate * (1 - 1.5 * FIXED_STEP) } : k; };
+          // The wave reaches the exposed seaward line; the inland line remains a clear counterplay choice.
+          const soak = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return maleconWavePatchAt(s, lane) && k.grounded ? { ...k, ...applyMaleconWaveDrag(k.speed, k.yawRate, FIXED_STEP) } : k; };
           this.kart = soak(this.kart); this.loadKarts = this.loadKarts.map(soak);
         }
         if (!LAB_WORLD && this.raceTime < this.balconyUntil) {
@@ -1242,6 +1243,14 @@ class App {
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          if (!this.waveTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+            const { s, lane } = trackLocate(kart.x, kart.z);
+            return this.progress[i].distance >= TRACK.length + 105 - TRACK.start && maleconWavePatchAt(s, lane);
+          })) {
+            this.waveTriggered = true; this.waveUntil = this.raceTime + 14;
+            this.testScene?.trackEvent?.('wave'); this.itemMessage = 'Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip'; this.itemMessageUntil = this.items.time + 4;
+            this.audio.cheer(.7); window.setTimeout(() => this.audio.voice('announcer-wave', { force: true }), 900);
+          }
           if (!this.balconyTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => this.progress[i].distance >= TRACK.length + 970 - TRACK.start && trackProgressOf(kart) >= 970 && trackProgressOf(kart) < 1125)) {
             this.balconyTriggered = true; this.balconyUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('balcony'); this.itemMessage = 'Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt'; this.audio.cheer(1.1);
@@ -1264,7 +1273,7 @@ class App {
             this.lapNoticeUntil=this.raceTime+3;
             if(!this.progress[0].finished){this.testScene?.crowdReact?.('wave');this.audio.cue('lap');this.audio.voice(this.lapTimes.length===2?'announcer-final':'announcer-lap2',{force:true});this.audio.cheer(.6);if(this.lapTimes.length===2)this.audio.setMusicTempo(1.07);}
             if(this.lapTimes.length===1){
-              if(TRACK_INFO.theme==='havana'){this.testScene?.trackEvent?.('wave');this.itemMessage='Achtung: Malecón-Welle! Gischt über der Uferstraße';this.audio.cheer(.7);this.waveUntil=this.raceTime+14;window.setTimeout(()=>this.audio.voice('announcer-wave',{force:true}),900);}
+              if(TRACK_INFO.theme==='havana'){/* The wave triggers on lap two at the Malecón and leaves an inland counterline. */}
               else if(TRACK_INFO.theme==='rome'){/* The spoken balcony event triggers on lap two at the palace, not at the start line. */}
               else if(TRACK_INFO.theme==='moscow'){this.testScene?.trackEvent?.('parade');this.itemMessage='Ehrenparade! Rückenwind auf der Parade-Geraden für alle';this.audio.cheer(1);this.paradeUntil=this.raceTime+15;window.setTimeout(()=>this.audio.voice('announcer-parade',{force:true}),900);}
               else if(TRACK_INFO.theme==='pyongyang'){startParade(this.raceTime);this.testScene?.trackEvent?.('column');this.itemMessage='Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei';this.audio.cheer(1);this.audio.cue('lap');}

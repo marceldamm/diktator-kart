@@ -1,5 +1,13 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Havanna-Streckenpass, Prüfung und Grenzen
+
+Zweiter Havanna-Pass: 1.422,6 m statt 1.411,3 m; 2-m-Abtastung mit |Krümmung| < 1/150 m ergibt 46,1 → 26,6 % annähernd gerade Strecke. Die Küsten-S-Kurven bringen zusätzliche Linienwechsel. Neuer kleiner Kicker bei s=380 m; die Rampe bei s=1.146 m führt weiterhin auf den 4-m-Hügel. Zigarrenfabrik-Abkürzung bleibt eine feste kürzere Schotterlinie mit 10,5-m/s-Limit. Die Malecón-Welle wird Ende Runde 1 angekündigt und beim Eintritt des ersten Karts in die Küstenzone der zweiten Runde ausgelöst. 14 Sekunden: nur die seewärtige Spur verliert leicht Tempo und Lenkgrip; Mittel-/Landseite bleiben frei. Dieselbe Logik gilt für Spieler und Bots.
+
+Havanna-Tests, `npm run typecheck`, `npm run build` und `npm run test:full` außerhalb der Sandbox bestanden: 132/132 Tests. Innerhalb der Sandbox scheiterten Git-Fixtures mit `NtCreateDirectoryObject ... 0xC0000022`; außerhalb liefen Team-/Launcher-Tests ebenfalls durch. Build-Ausgabe: 2.160 KB, 533,90 KB gzip, vorhandene Chunkwarnung. Vorher-/Nachher-Routengrundrisse liegen in `docs/evidence/2026-10-11-havana-pilot/`.
+
+Eigener verborgener Codex-In-App-Browser: Spielstand auf Havanna geladen, bis Runde 2 gefahren, Malecón-Ereignismeldung beobachtet. Die Partikelwolke wurde nach dem ersten Lauf lokalisiert/verkleinert, aber der neue Effekt nicht erneut im ausgelösten Zustand angesehen; deshalb keine finale VFX-Abnahme behaupten. Kein vollständiges Drei-Runden-Rennen, FPS- oder menschlicher Fahr-/Stiltest. Sarahs zusätzliche Originalideen nicht erfunden. Nächster Kursblock: Peking.
+
 ## 11.10.2026 – Codex: Duce-Drom-Streckenpass, Abschluss und Grenzen
 
 Die Romroute ist auf 1.367 m verlängert (vorher 1.238 m). 2-m-Abtastung mit |Krümmung| < 1/150 m: gerade Anteile 55 → 38 %. Neu sind zwei zusätzliche Aventin-Richtungswechsel, verschlungene Tiber-Anfahrt, S-Bogen am Triumphbogen, kleiner Tiber-Kicker sowie die im Belvedere-Plateau verbleibende 6-m-Rampe. Die Stallgasse taucht bis zu 1,6 m ab und bietet einen festen Schubstreifen. Balkonrede: Trigger bei Eintritt ins Balkonviertel der zweiten Runde, 14 Sekunden, Rosenwirbel bremst auf der Mittellinie; zwei Außenlinien sind frei. Im selben Lauf werden alle Karts gleich behandelt.

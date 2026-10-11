@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import * as layout from '../src/track-layout.ts';
-import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, elevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, hazardAt, recoverKart, atRampLip } from '../src/track.ts';
+import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, elevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, hazardAt, recoverKart, atRampLip, maleconWavePatchAt, applyMaleconWaveDrag } from '../src/track.ts';
 
 const onHavana = (fn) => () => { selectTrack('havanna'); try { fn(); } finally { selectTrack('stadionring'); } };
 
@@ -26,7 +26,8 @@ test('Havanna-Revolutionsring: own route along the sea, continuous progress, bar
 
 test('slow: Havanna hill and jump, lawn clear of the road, five bots finish three laps', onHavana(() => {
   assert.equal(elevationAt(1128), 4);
-  const lip = trackPoint(layout.RAMP_LIPS[0] - .5); assert.ok(atRampLip(lip.x, lip.z));
+  const lip = trackPoint(layout.RAMP_LIPS[1] - .5); assert.ok(atRampLip(lip.x, lip.z));
+  const smallLip = trackPoint(layout.RAMP_LIPS[0] - .5); assert.ok(atRampLip(smallLip.x, smallLip.z));
   const clear = TRACK.halfWidth + 1.45 + layout.LANDMARKS.promenade + .5;
   for (const p of TRACK.samples) for (const [x0, z0, x1, z1] of layout.LANDMARKS.lawns) {
     const dx = Math.max(x0 - p.x, 0, p.x - x1), dz = Math.max(z0 - p.z, 0, p.z - z1);
@@ -50,4 +51,25 @@ test('Havanna Zigarrenfabrik shortcut is open, monotonic and shorter', onHavana(
     const s = trackProgress(p.x, p.z); assert.ok(s >= last - .5, `progress went back at ${u}`); last = s;
   }
   assert.ok(SHORTCUT_LENGTH < layout.SHORTCUT.to - layout.SHORTCUT.from);
+}));
+
+test('Havanna coastal S-bends shorten the long straight and the lap-two wave leaves an inland line', onHavana(() => {
+  let straight = 0;
+  for (let s = 0; s < TRACK.length; s += 2) {
+    const a = trackPoint(s), b = trackPoint(Math.min(TRACK.length, s + 2)); let turn = b.heading - a.heading;
+    while (turn > Math.PI) turn -= Math.PI * 2; while (turn < -Math.PI) turn += Math.PI * 2;
+    const ds = Math.min(2, TRACK.length - s);
+    if (Math.abs(turn / ds) < 1 / 150) straight += ds;
+  }
+  assert.ok(straight / TRACK.length < .4, `near-straight route share ${(100 * straight / TRACK.length).toFixed(1)}%`);
+  assert.equal(maleconWavePatchAt(200, 3), true, 'the exposed sea-side lane is affected');
+  assert.equal(maleconWavePatchAt(200, 0), false, 'the middle line stays clear');
+  assert.equal(maleconWavePatchAt(200, -3), false, 'the inland lane stays clear');
+  assert.equal(maleconWavePatchAt(330, 3), false, 'the wave stays inside its event district');
+  const oneSecond = applyMaleconWaveDrag(18, 1, 1);
+  assert.ok(oneSecond.speed > 17.7 && oneSecond.speed < 18, 'the sea-side line loses only a little speed per second');
+  assert.ok(oneSecond.yawRate > .97 && oneSecond.yawRate < 1, 'wet grip loss stays small enough to steer');
+  const fullWindow = applyMaleconWaveDrag(18, 1, 14);
+  assert.ok(fullWindow.speed > 14 && fullWindow.speed < 18, 'even the full event window does not stop the kart');
+  assert.ok(fullWindow.yawRate > .6, 'steering stays usable through the whole event');
 }));

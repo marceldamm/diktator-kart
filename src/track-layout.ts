@@ -183,7 +183,8 @@ const HAVANNA: TrackDefinition = {
   id: 'havanna', name: 'Havanna-Revolutionsring', city: 'Havanna', theme: 'havana',
   tagline: 'Malecón am offenen Meer, Prado, Kapitol-Kreisel, Altstadtgassen und Redner-Hügel',
   controlPoints: ([
-    [300, 205], [200, 214], [100, 210], [0, 200], [-100, 206], [-180, 196],   // Malecón, open sea on the right
+    [300, 205], [265, 213], [230, 218], [195, 214], [160, 202], [125, 192], [90, 191],
+    [55, 201], [20, 215], [-15, 220], [-50, 211], [-85, 196], [-120, 190], [-150, 196], [-180, 196], // Malecón S-bends, open sea on the right
     [-232, 172], [-252, 135], [-256, 85], [-258, 30],                          // into the Prado, palms
     [-274, -10], [-270, -55], [-240, -80], [-205, -68], [-195, -35], [-172, -12], // Kapitol-Kreisel around the column
     [-130, -22], [-100, -46], [-62, -62], [-40, -92], [-2, -94], [28, -66], [70, -52], // old-town lanes, cigar-factory shortcut
@@ -194,7 +195,7 @@ const HAVANNA: TrackDefinition = {
   /** Zigarrenfabrik: gravel passage through the factory yard, straight across the old-town dip. */
   shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 10.5, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [] },
   canal: { from: -1000, length: 0 },
-  rampLips: [1146],
+  rampLips: [380, 1146],
   boostPads: [[100, 0], [500, 0], [800, 0], [1120, 0], [1300, 1.5]],
   craters: [], grassVerges: [],
   elevation: [[1060, 0], [1105, 4], [1150, 4], [1195, 0]],
