@@ -2,6 +2,8 @@
 
 **Stand:** 08.10.2026 · **Name und Ort:** Sarahs Streckenliste. Route, Kulisse und Fahrmechaniken wurden als Umsetzung des beauftragten Streckenpakets ausgearbeitet; konkrete Layoutdetails sind keine zusätzlichen historischen Behauptungen.
 
+> **Zweites Layout (Claude, 11.10.2026, Marcels Streckenpilot):** Die Abschnitte „Route und Abkürzung“ sowie die Lage von Monumenttor und Paradebrücken unten beschreiben das erste Layout und sind historisch. Aktuell: 1.829 m mit Monument-Schikanen, Triumph-Anstieg (4,5 m) und Rampe bei s=930, Fackelturm-Kehre um den Juche-Turm (x 119, z 100), Monumenttor bei s=1.390, Paradebrücken bei s=1.500/1.600, Kai-Rampe bei s=232. Unterführung von s=1.200 (Kehrenausfahrt) unter dem Paradeplatz bis s=1.760 (West-Allee), 440 m Weg, spart 120 m. Ab Runde 2 rollt eine Paradekolonne auf der rechten Spur der Tor-Allee (s 1.372–1.625). Start, Kai und rotes Startgatter unverändert. Prüfung und Belege: CURRENT-WORKLIST.md, `docs/evidence/2026-10-11-pyongyang-pilot/`.
+
 ## Leitbild
 
 Eine verdichtete Pjöngjang-inspirierte Monumentalstadt mit Taedong-Ufer, breiten Steinachsen, grauen Großbauten, Statuenpaar und Paradeplatz. Juche-Turm und pyramidenförmige Hotelsilhouette dienen als entfernte Orientierungspunkte. Originalparolen und Regimezeichen werden nicht übernommen. Die Parade mit drei stilisierten Panzern und einem Raketentransporter ist eine inaktive Kulisse; der satirische Blick richtet sich auf Planungswahn, Pflichtapplaus und Selbstdarstellung.

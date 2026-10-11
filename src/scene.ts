@@ -70,7 +70,7 @@ export interface TestScene {
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
   /** Announced decorative track event (lap 2 propaganda zeppelin flyover). */
-  trackEvent?(kind: 'zeppelin' | 'balcony' | 'wave' | 'parade' | 'loudspeaker'): void;
+  trackEvent?(kind: 'zeppelin' | 'balcony' | 'wave' | 'parade' | 'loudspeaker' | 'column'): void;
   /** Dirt burst when a kart drops into a shell crater. */
   craterHit?(kart: number): void;
   /** Time trial: hide the five bots; show the translucent ghost of the best run (null hides it). */

@@ -1,5 +1,12 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Claude: Prüfnotizen Pjöngjang-Pilot
+
+- Test-Chrome: eigenes Profil `.tools/claude-chrome-profile`, Port 9231, mit den Anti-Drosselungs-Flags; Marcels Vite-Server auf 4173 mitbenutzt. Der eingebaute Browser der Claude-App drosselt verdeckt und lieferte keine Bilder.
+- Einzelrennen per CDP: `#menu-single` → Streckenkarte → „Rennen starten“; `?demo=1&weather=sun`, Tag durch kurzzeitig festgelegtes `Math.random` beim Start erzwungen (reiner Prüfhilfsgriff, nicht im Spiel).
+- Freie Kamera auch nach Rennende per `window.__DK.free.start()` nutzbar, Kamera über `free.camera.position`, `free.yaw`, `free.pitch` setzbar – so entstanden die Übersichts- und Kolonnenbilder.
+- **Hinweis an Marcel:** Während der Umbauten lief dein Vite-Server; ein offenes Spielfenster hat dadurch mehrfach neu geladen.
+
 ## 11.10.2026 – Abschlussprüfung und Hinweis für die Cloud-Fortsetzung
 
 Die Cloud-Fortsetzung soll den neuesten gemeinsamen Babylon-`main` von `marceldamm/diktator-kart` verwenden, AGENTS.md und die vier Hauptdateien lesen und bestätigte offene Arbeit in überprüfbaren Paketen ausführen. Die priorisierte neue Zielrichtung steht oben in LONG-TERM-GOALS.md; der aktuelle nächste Schritt in CURRENT-WORKLIST.md. Alte PlayCanvas-Basis und historische Logs sind nur Referenz. Cloud-Zugriff, Rechte und Sichtprüfung müssen dort tatsächlich geprüft werden; ein hier formulierter Prompt ist keine bereits gestartete Cloud-Aufgabe. Die heute neue Änderung ist reine Dokumentation; vor dem Abschluss waren Git-Status sauber, `main` und `origin/main` identisch, Babylon-Mindestabstammung geprüft. Kein Build oder Spieltest für dieses Dokumentationspaket.

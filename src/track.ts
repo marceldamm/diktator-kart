@@ -31,7 +31,7 @@ function rebuild(): void {
 /** Switches the whole simulation to another circuit (layout bindings, centreline, shortcut). */
 export function selectTrack(id: TrackId): void {
   if (TRACK.length > 0 && TRACK.id === id) return;
-  setTrackLayout(id); rebuild();
+  setTrackLayout(id); rebuild(); stopParade();
 }
 export { isTrackId };
 
@@ -306,8 +306,38 @@ export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | nul
 }
 export const inHarbour = (x: number, z: number) => hazardAt(x, z) !== null;
 
+/**
+ * Pyongyang lap-2 event (Claude, 11.10.2026): a parade column of display tanks and a rocket transporter rolls at walking
+ * pace along the right half of the gate boulevard until the race ends. The left half always stays open; the same
+ * collision applies to every kart and bots plan around the column like slow traffic.
+ */
+export const PARADE_COLUMN = { from: 1372, to: 1625, speed: 5.2, lane: 3.4, radius: 1.75, gaps: [0, 9, 18, 28] as const };
+let paradeStart: number | null = null, paradeClock = 0;
+export function startParade(time: number): void { paradeStart = TRACK_INFO.theme === 'pyongyang' ? time : null; paradeClock = time; }
+export function stopParade(): void { paradeStart = null; }
+export function setParadeClock(time: number): void { paradeClock = time; }
+export const paradeActive = () => paradeStart !== null;
+/** Centre progress and lane of each parade vehicle currently on the boulevard (each spans two collision circles). */
+export function paradeVehicles(): { s: number; lane: number; index: number }[] {
+  if (paradeStart === null) return [];
+  const { from, to, speed, lane, gaps } = PARADE_COLUMN, cycle = to - from + gaps[gaps.length - 1] + 8;
+  const head = from + ((paradeClock - paradeStart) * speed) % cycle;
+  return gaps.map((gap, index) => ({ s: head - gap, lane, index })).filter((v) => v.s >= from && v.s <= to);
+}
+function paradeContact(x: number, z: number): ReturnType<WorldProjection> | null {
+  for (const vehicle of paradeVehicles()) for (const offset of [-1.6, 1.6]) {
+    const centre = trackPoint(vehicle.s + offset, vehicle.lane), dx = x - centre.x, dz = z - centre.z, distance = Math.hypot(dx, dz);
+    const clearance = PARADE_COLUMN.radius + KART_TUNING.collisionRadius;
+    if (distance >= clearance) continue;
+    const normalX = distance > 1e-6 ? dx / distance : -Math.cos(centre.heading), normalZ = distance > 1e-6 ? dz / distance : Math.sin(centre.heading);
+    return { x: centre.x + normalX * clearance, z: centre.z + normalZ * clearance, normalX, normalZ, kind: 'obstacle' };
+  }
+  return null;
+}
+
 export const projectTrack: WorldProjection = (x, z) => {
   const { s, lane } = trackLocate(x, z);
+  if (paradeStart !== null) { const contact = paradeContact(x, z); if (contact) return contact; }
   for (const obstacle of TRACK_INFO.obstacles ?? []) {
     const centre = trackPoint(obstacle.s, obstacle.lane), dx = x - centre.x, dz = z - centre.z, distance = Math.hypot(dx, dz);
     const clearance = obstacle.radius + KART_TUNING.collisionRadius;
@@ -410,7 +440,8 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const traffic = others.filter((other) => other !== state).map((other) => {
     const otherAlley = inShortcut(other.x, other.z), p = otherAlley ? shortcutLocate(other.x, other.z) : trackLocate(other.x, other.z);
     return { ahead: signedGap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
-  }).filter((other) => other.sameRoute && other.ahead > -12 && other.ahead < difficulty.reaction);
+  }).concat(alley ? [] : paradeVehicles().flatMap((v) => [v.lane - 1.2, v.lane + 1.2].map((lane) => ({ ahead: signedGap(v.s - s), lane, speed: PARADE_COLUMN.speed * .5, sameRoute: true }))))
+    .filter((other) => other.sameRoute && other.ahead > -12 && other.ahead < difficulty.reaction + (other.speed < 4 ? 14 : 0));
   const ahead = traffic.filter((t) => t.ahead > .05);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
   let preferred = radius < 30 ? corner.sign * 2.8 : style ? style.lane : [-2.8, 0, 2.8][index % 3];

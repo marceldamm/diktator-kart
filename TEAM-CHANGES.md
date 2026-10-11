@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Claude: Pjöngjang-Streckenpilot (zweites Layout) und Paradekolonne
+
+Ewige-Führer-Allee umgebaut: Monument-Schikanen, Triumph-Anstieg mit Sprungrampe, Fackelturm-Kehre um den Juche-Turm, Monumenttor auf der Tor-Allee, kleine Kai-Rampe; Kai, Start und Startgatter unverändert. Unterführung von der Kehre unter dem Paradeplatz zur West-Allee neu geführt (Gewinn 120 statt 213 m). Ab Runde 2 rollt eine Paradekolonne auf der rechten Spur der Tor-Allee, die linke Spur bleibt frei. Länge 1.829 m, gerade Anteile 92 → 58 %. Route und Ereignis sind Claudes Ausarbeitung; Sarahs Rückmeldung steht aus. Details und Prüfung in CURRENT-WORKLIST.md.
+
 ## 11.10.2026 – Codex: Projektabschluss und Cloud-Übergabe vorbereitet
 
 Den bereits auf `main` gesicherten Dokumentationsstand (`56fd462`) als saubere Babylon-Basis geprüft: keine lokalen Änderungen oder unversionierten Dateien, `origin/main` gleichauf, Mindestabstammung aus `project-state.json` erfüllt. Übergabe für eine spätere Cloud-Sitzung in den vier Hauptdateien ergänzt; neue Renn-/Streckenziele bleiben als **offene Umsetzung** gekennzeichnet. Diese Änderung betrifft nur Dokumentation; kein Build, Spieltest oder Modelltest erforderlich. Abschließender Commit/Push und Remote-Hash werden im Abschlussbericht verifiziert.

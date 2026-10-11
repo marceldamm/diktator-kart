@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -656,7 +656,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.paradeUntil=0;this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -1097,6 +1097,7 @@ class App {
           this.kart = wade(this.kart); this.loadKarts = this.loadKarts.map(wade);
         }
         if (!LAB_WORLD) { this.kart = applySurfaceDrag(this.kart, FIXED_STEP); this.loadKarts = this.loadKarts.map((k) => applySurfaceDrag(k, FIXED_STEP)); }
+        setParadeClock(this.raceTime);
         if (!LAB_WORLD && this.raceTime < this.paradeUntil) {
           // Moscow honour parade: a gentle tailwind on the first parade straight, up to 6 % above normal top speed, for every kart.
           const tailwind = (k: typeof this.kart) => { const s = trackProgressOf(k); return s > 95 && s < 520 && k.grounded && k.speed > 4 ? { ...k, speed: Math.max(k.speed, Math.min(k.speed + 1.6 * FIXED_STEP, 17)) } : k; };
@@ -1241,7 +1242,7 @@ class App {
           // Early notice (worklist 10.10.2026): the lap-2 event is announced in the last quarter of lap 1.
           if(!this.eventAnnounced&&this.racePhase==='race'&&this.lapTimes.length===0&&this.progress[0].distance>TRACK.length*.75){
             this.eventAnnounced=true;
-            const notice:Record<string,string>={havana:'Vorankündigung: Nächste Runde rollt die Malecón-Welle über die Uferstraße',rome:'Vorankündigung: Nächste Runde spricht der Balkon',moscow:'Vorankündigung: Nächste Runde Ehrenparade mit Rückenwind',beijing:'Vorankündigung: Nächste Runde Pflichtjubel-Durchsage',pyongyang:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin die Strecke',berlin:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin das Stadion'};
+            const notice:Record<string,string>={havana:'Vorankündigung: Nächste Runde rollt die Malecón-Welle über die Uferstraße',rome:'Vorankündigung: Nächste Runde spricht der Balkon',moscow:'Vorankündigung: Nächste Runde Ehrenparade mit Rückenwind',beijing:'Vorankündigung: Nächste Runde Pflichtjubel-Durchsage',pyongyang:'Vorankündigung: Nächste Runde rollt die Paradekolonne über die rechte Spur der Tor-Allee',berlin:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin das Stadion'};
             this.itemMessage=notice[TRACK_INFO.theme]??notice.berlin;this.itemMessageUntil=this.items.time+4;this.audio.cue('lap');
           }
           if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore){
@@ -1253,6 +1254,7 @@ class App {
               if(TRACK_INFO.theme==='havana'){this.testScene?.trackEvent?.('wave');this.itemMessage='Achtung: Malecón-Welle! Gischt über der Uferstraße';this.audio.cheer(.7);this.waveUntil=this.raceTime+14;window.setTimeout(()=>this.audio.voice('announcer-wave',{force:true}),900);}
               else if(TRACK_INFO.theme==='rome'){this.testScene?.trackEvent?.('balcony');this.itemMessage='Achtung: Balkonrede! Rosenregen über der Prunkstraße';this.audio.cheer(1.1);window.setTimeout(()=>this.audio.voice('announcer-balcony',{force:true}),1400);}
               else if(TRACK_INFO.theme==='moscow'){this.testScene?.trackEvent?.('parade');this.itemMessage='Ehrenparade! Rückenwind auf der Parade-Geraden für alle';this.audio.cheer(1);this.paradeUntil=this.raceTime+15;window.setTimeout(()=>this.audio.voice('announcer-parade',{force:true}),900);}
+              else if(TRACK_INFO.theme==='pyongyang'){startParade(this.raceTime);this.testScene?.trackEvent?.('column');this.itemMessage='Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei';this.audio.cheer(1);this.audio.cue('lap');}
               else if(TRACK_INFO.theme==='beijing'){this.testScene?.trackEvent?.('loudspeaker');this.itemMessage='Durchsage: Planerfüllung 400 %! Pflichtjubel über der Serpentine';this.audio.cheer(1.2);window.setTimeout(()=>this.audio.voice('announcer-loudspeaker',{force:true}),900);}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}

@@ -221,47 +221,60 @@ const HAVANNA: TrackDefinition = {
 };
 
 const PY = 1.05;
+/**
+ * Ewige-Führer-Allee, second layout (Claude, 11.10.2026 – Marcel's track pilot): the river quay and the start with its
+ * breakable start gate stay; the east side becomes the Monument esses, a climb to the Triumph ramp jumps toward the torch
+ * tower, a hairpin wraps around the tower and the parade underpass now cuts under the parade square from the hairpin exit
+ * to the west boulevard (it used to skip half the lap). Name and place: Sarah's track list; the route is Claude's design.
+ */
 const EWIGE_FUEHRER_ALLEE: TrackDefinition = {
   id: 'pyongyang', name: 'Ewige-Führer-Allee', city: 'Pjöngjang', theme: 'pyongyang',
-  tagline: 'Taedong-Ufer, Monumentalplatz, Parade und Unterführungs-Abkürzung',
+  tagline: 'Taedong-Kai, Monument-Schikanen, Triumphsprung, Fackelturm-Kehre und Parade-Unterführung',
   controlPoints: ([
-    [-230, -90], [-215, -145], [-165, -190], [-90, -215], [0, -222], [90, -218],
-    [165, -190], [215, -145], [238, -88], [245, -20], [238, 55], [212, 120],
-    [165, 170], [95, 205], [15, 218], [-65, 210], [-135, 178], [-190, 132],
+    [-230, -90], [-215, -145], [-165, -190], [-90, -215], [0, -222], [90, -218],      // Taedong quay, start gate
+    [165, -190], [215, -145],
+    [256, -104], [266, -56], [244, -16], [246, 28], [278, 66], [272, 118], [236, 152], // Monument esses, climb to the Triumph ramp
+    [188, 168], [154, 154], [145, 128], [143, 100], [135, 78], [113, 68], [91, 78], [83, 100], [81, 128], [76, 164], [56, 196], // torch-tower hairpin
+    [15, 218], [-65, 210], [-135, 178], [-190, 132],                                   // parade boulevard through the monument gate
     [-225, 75], [-240, 10], [-235, -50],
   ] as const).map(([x, z]) => [x * PY, z * PY] as const),
   halfWidth: 6, start: 30, bump: -1,
-  /** Underpass through the parade plaza: a lower concrete cut with two painted boost strips. */
+  /** Parade underpass: from the hairpin exit under the parade square to the west boulevard; lower concrete cut with two boost strips. */
   shortcut: {
-    from: 460, to: 1320, halfWidth: 6, speedCap: 10.5,
-    points: [[178 * PY, -177 * PY], [205 * PY, -128 * PY], [190 * PY, -74 * PY], [142 * PY, -25 * PY], [78 * PY, 31 * PY], [0, 87 * PY], [-78 * PY, 136 * PY], [-145 * PY, 159 * PY], [-178 * PY, 140 * PY]],
+    from: 1200, to: 1760, halfWidth: 6, speedCap: 10.5,
+    points: [[76, 146], [56, 170], [20, 176], [-30, 152], [-80, 118], [-130, 82], [-175, 52], [-215, 30], [-240, 8]],
     elevation: [[0, 0], [.18, 0], [.28, -3.6], [.72, -3.6], [.82, 0], [1, 0]], boostPads: [[.32, 0], [.65, 0]],
   },
   canal: { from: -1000, length: 0 },
-  rampLips: [],
-  boostPads: [[70, 0], [262, 0], [906, 0], [1148, 1.5]],
+  /** A small kicker on the quay straight and the Triumph ramp at the top of the climb. */
+  rampLips: [232, 930],
+  boostPads: [[70, 0], [262, 0], [872, 0], [1450, 1.5]],
   craters: [], grassVerges: [],
-  elevation: [],
+  /** Triumph climb on the north-east: up 4.5 m, a short crest and the ramp lip, landing on the way down toward the hairpin. */
+  elevation: [[830, 0], [892, 4.5], [930, 4.5], [978, 0]],
   hazards: [{ from: 34, to: 205, side: 1, basin: 18, kind: 'water' }],
-  itemBoxes: [130, 310, 905, 1190],
+  itemBoxes: [130, 310, 560, 1180, 1500],
   landmarks: {
-    palace: null, fountains: [], trees: [[-75, 36], [82, 92], [-118, -35]].map(([x, z]) => [x * PY, z * PY]),
-    column: [0, 48 * PY], gateProgress: 965, lawns: [], promenade: 5,
+    palace: null, fountains: [], trees: [[-75, 36], [150, 20], [-118, -35]].map(([x, z]) => [x * PY, z * PY]),
+    column: [0, 48 * PY], gateProgress: 1390, lawns: [], promenade: 5,
   },
   river: { north: -151, south: -240, west: -470, east: 480, level: -1.15 },
   ground: { west: -470, east: 480, north: 310, south: -310 },
   dressing: {
-    boardRanges: [[16, 124], [270, 360], [930, 1020]], flagRange: [900, 1080], pennants: [24, 105, 300, 925, 1070], screenProgress: 348,
+    boardRanges: [[16, 124], [270, 360], [1360, 1450]], flagRange: [1360, 1560], pennants: [24, 105, 300, 1380, 1540], screenProgress: 348,
     districts: [
       { from: 0, to: 225, left: 'avenue', right: 'quay' }, { from: 225, to: 380, left: 'avenue', right: 'plaza' },
-      { from: 380, to: 720, left: 'plaza', right: 'stands' }, { from: 720, to: 920, left: 'city', right: 'park' },
-      { from: 920, to: 1110, left: 'stands', right: 'stands' }, { from: 1110, to: 99999, left: 'riverfront', right: 'avenue' },
+      { from: 380, to: 600, left: 'plaza', right: 'city' }, { from: 600, to: 830, left: 'park', right: 'city' },
+      { from: 830, to: 1000, left: 'city', right: 'stands' }, { from: 1000, to: 1230, left: 'plaza', right: 'park' },
+      { from: 1230, to: 1360, left: 'park', right: 'city' }, { from: 1360, to: 1560, left: 'stands', right: 'stands' },
+      { from: 1560, to: 99999, left: 'riverfront', right: 'avenue' },
     ],
-    heroes: [], bridges: [-360, 360], cathedral: null, petals: [900, 1070], breakableFence: 88,
+    heroes: [], bridges: [-360, 360], cathedral: null, petals: [1360, 1540], breakableFence: 88,
   },
+  /** Two decorative parade bridges over the boulevard; their piers stand in the outer lanes. */
   obstacles: [
-    { s: 640, lane: -5.65, radius: .35 }, { s: 640, lane: 5.65, radius: .35 },
-    { s: 760, lane: -5.65, radius: .35 }, { s: 760, lane: 5.65, radius: .35 },
+    { s: 1500, lane: -5.65, radius: .35 }, { s: 1500, lane: 5.65, radius: .35 },
+    { s: 1600, lane: -5.65, radius: .35 }, { s: 1600, lane: 5.65, radius: .35 },
   ],
 };
 

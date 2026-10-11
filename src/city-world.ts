@@ -231,6 +231,8 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     ...LANDMARKS.fountains.map(([x, z]) => ({ x, z, r: 10 })), ...LANDMARKS.trees.map(([x, z]) => ({ x, z, r: 6 })),
   ];
   const tv = trackPoint(TRACK_INFO.dressing.screenProgress, -(W + 11)); reserved.push({ x: tv.x, z: tv.z, r: 13 });
+  // Pyongyang torch tower (inside the hairpin) and hotel silhouette are built separately below; keep blocks off them.
+  if (pyongyang) reserved.push({ x: 119, z: 100, r: 8 }, { x: 11, z: -16, r: 27 });
   const inLawn = (x: number, z: number) => LANDMARKS.lawns.some(([x0, z0, x1, z1]) => x >= x0 - 2 && x <= x1 + 2 && z >= z0 - 2 && z <= z1 + 2);
   const inRiver = (_x: number, z: number) => z < RIVER.north + 1 && z > RIVER.south - 1;
   /** Lateral room the circuit needs at progress s on one side (corridor, promenade, open hazard basins, video wall, gate). */
@@ -656,11 +658,11 @@ export async function addCityWorld(scene: Scene, shadow: ShadowGenerator): Promi
     const board = MeshBuilder.CreatePlane('Parade satire sign', { width: 25, height: 6, sideOrientation: Mesh.DOUBLESIDE }, scene);
     const boardAt = along(0, -49); board.position.set(boardAt.x, 7.4, boardAt.z); board.rotation.y = centre.heading; board.material = banner; board.isPickable = false; meshes.push(board);
 
-    // A simplified torch tower and stepped hotel silhouette anchor the distant skyline.
-    const towerAt = along(76, 18), tower = MeshBuilder.CreateCylinder('Juche torch tower stylized', { diameterTop: 1.8, diameterBottom: 5.2, height: 44, tessellation: 10 }, scene);
+    // A simplified torch tower and stepped hotel silhouette anchor the skyline; the torch-tower hairpin wraps around the tower (11.10.2026).
+    const towerAt = { x: 119, z: 100 }, tower = MeshBuilder.CreateCylinder('Juche torch tower stylized', { diameterTop: 1.8, diameterBottom: 5.2, height: 44, tessellation: 10 }, scene);
     tower.position.set(towerAt.x, 22, towerAt.z); tower.material = stone; decorate(tower);
     const towerTorch = MeshBuilder.CreateSphere('Juche torch abstract flame', { diameter: 7, segments: 8 }, scene); towerTorch.position.set(towerAt.x, 45, towerAt.z); towerTorch.material = red; decorate(towerTorch);
-    const hotelAt = along(-82, 30), hotel = MeshBuilder.CreateCylinder('Triangular hotel silhouette', { diameterTop: 0, diameterBottom: 42, height: 52, tessellation: 4 }, scene);
+    const hotelAt = { x: 11, z: -16 }, hotel = MeshBuilder.CreateCylinder('Triangular hotel silhouette', { diameterTop: 0, diameterBottom: 42, height: 52, tessellation: 4 }, scene);
     hotel.position.set(hotelAt.x, 26, hotelAt.z); hotel.rotation.y = Math.PI / 4; hotel.material = stone; decorate(hotel);
   }
 

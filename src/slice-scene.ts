@@ -29,7 +29,7 @@ import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
 import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
-import { TRACK, drivingSurfaceAt, elevationAt, trackHeightAt, trackLocate, trackPoint, shortcutLocate, shortcutPoint } from './track';
+import { TRACK, drivingSurfaceAt, elevationAt, trackHeightAt, trackLocate, trackPoint, shortcutLocate, shortcutPoint, paradeVehicles } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, TRACK_INFO, SHORTCUT } from './track-layout';
 import { addCityWorld } from './city-world';
 import { addTrackWorld, tunnelParkSpots } from './track-world';
@@ -633,6 +633,41 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     let zeppelinTime = -1;
+    // Pyongyang parade column (11.10.2026): three display tanks and a rocket transporter that roll along the right lane
+    // of the gate boulevard from lap 2 (positions and collisions come from paradeVehicles in track.ts).
+    const column: TransformNode[] = [];
+    if (TRACK_INFO.theme === 'pyongyang') {
+      const olive = new PBRMaterial('Parade column olive', scene); olive.albedoColor = Color3.FromHexString('#5f6652').toLinearSpace(); olive.metallic = .25; olive.roughness = .6;
+      const steel = new PBRMaterial('Parade column track steel', scene); steel.albedoColor = Color3.FromHexString('#3a3c3a').toLinearSpace(); steel.metallic = .6; steel.roughness = .55;
+      const red = new PBRMaterial('Parade column flag red', scene); red.albedoColor = Color3.FromHexString('#a3202d').toLinearSpace(); red.roughness = .7; red.backFaceCulling = false;
+      const part = (root: TransformNode, name: string, w: number, h: number, d: number, x: number, y: number, z: number, material: PBRMaterial) => { const m = MeshBuilder.CreateBox(name, { width: w, height: h, depth: d }, scene); m.parent = root; m.position.set(x, y, z); m.material = material; m.isPickable = false; shadow.addShadowCaster(m); m.receiveShadows = true; return m; };
+      for (let i = 0; i < 4; i++) {
+        const root = new TransformNode('Parade column vehicle ' + i, scene); root.setEnabled(false); column.push(root);
+        if (i < 3) {
+          part(root, 'Column tank hull', 3.2, 1.0, 5.8, 0, .95, 0, olive);
+          for (const side of [-1, 1]) part(root, 'Column tank track', .7, 1.05, 6.2, side * 1.6, .55, 0, steel);
+          part(root, 'Column tank turret', 2.3, .8, 2.8, 0, 1.85, -.3, olive);
+          part(root, 'Column tank inert barrel', .3, .3, 3.2, 0, 1.9, 2.4, steel);
+          part(root, 'Column tank pennant pole', .08, 2.4, .08, -1, 3.1, -1.5, steel);
+          part(root, 'Column tank pennant', .04, .9, 1.4, -1, 3.8, -.8, red);
+        } else {
+          part(root, 'Column transporter cab', 3.1, 2.1, 3.2, 0, 1.45, 3.4, olive);
+          part(root, 'Column transporter trailer', 3.3, 1.1, 8.4, 0, .9, -2.6, steel);
+          const rocket = MeshBuilder.CreateCylinder('Column inert display rocket', { diameterTop: .7, diameterBottom: 1.1, height: 8.6, tessellation: 10 }, scene);
+          rocket.parent = root; rocket.position.set(0, 2.1, -2.4); rocket.rotation.x = Math.PI / 2 - .08; rocket.material = olive; rocket.isPickable = false; shadow.addShadowCaster(rocket);
+          part(root, 'Column rocket red nose band', 1.0, 1.0, .5, 0, 2.4, 1.6, red);
+        }
+      }
+    }
+    const placeColumn = () => {
+      if (!column.length) return;
+      const shown = new Set<number>();
+      for (const v of paradeVehicles()) {
+        const root = column[v.index], p = trackPoint(v.s, v.lane); shown.add(v.index);
+        root.setEnabled(true); root.position.set(p.x, elevationAt(v.s), p.z); root.rotation.y = p.heading;
+      }
+      column.forEach((root, i) => { if (!shown.has(i)) root.setEnabled(false); });
+    };
     // Grand-Prix podium (07.10.2026): three stepped blocks with gold/silver/bronze fronts, placed on the road after the finish line.
     const podium = new TransformNode('Grand Prix podium', scene); podium.setEnabled(false);
     {
@@ -1044,6 +1079,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       trackEvent(kind) {
         if (kind === 'balcony') { roseTime = 0; roses.emitRate = 70; }
         else if (kind === 'wave') { waveTime = 0; waveSpray.emitRate = reducedEffects ? 160 : 420; }
+        else if (kind === 'column') placeColumn();
         else { zeppelinTime = 0; zeppelin.setEnabled(true); }
       },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
@@ -1110,6 +1146,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         trackWorld.animate(time); city.animate(time);
         if (roseTime >= 0) { roseTime += dt; if (roseTime > 16) { roseTime = -1; roses.emitRate = 0; } }
         if (waveTime >= 0) { waveTime += dt; waveSpray.emitRate = waveTime > 13 ? 0 : (reducedEffects ? 160 : 420) * (.6 + .4 * Math.abs(Math.sin(waveTime * 1.7))); if (waveTime > 15) waveTime = -1; }
+        placeColumn();
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;
           if (u >= 1) { zeppelinTime = -1; zeppelin.setEnabled(false); } }
