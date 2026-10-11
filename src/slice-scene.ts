@@ -716,12 +716,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     { const c = roseTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 12, 8, .4, 0, Math.PI * 2); c.fill(); roseTexture.hasAlpha = true; roseTexture.update(); }
     const roses = new ParticleSystem('Balcony rose shower', 420, scene); roses.particleTexture = roseTexture;
     { const a = trackPoint(TRACK_INFO.dressing.heroes[0]?.s ?? 0, 0), b = trackPoint((TRACK_INFO.dressing.heroes[0]?.s ?? 0) + 90, 0);
-      roses.emitter = new Vector3((a.x + b.x) / 2, 15, (a.z + b.z) / 2);
+      roses.emitter = new Vector3((a.x + b.x) / 2, 11, (a.z + b.z) / 2);
       const hx = Math.max(10, Math.abs(b.x - a.x) / 2), hz = Math.max(10, Math.abs(b.z - a.z) / 2);
       roses.minEmitBox = new Vector3(-hx, 0, -hz); roses.maxEmitBox = new Vector3(hx, 4, hz); }
     roses.direction1 = new Vector3(-.5, -.5, -.4); roses.direction2 = new Vector3(.5, -.2, .4); roses.gravity = new Vector3(.3, -.9, .1);
     roses.minEmitPower = .3; roses.maxEmitPower = .8; roses.minLifeTime = 7; roses.maxLifeTime = 11; roses.emitRate = 0;
-    roses.minSize = .12; roses.maxSize = .22; roses.minAngularSpeed = -4; roses.maxAngularSpeed = 4;
+    roses.minSize = .3; roses.maxSize = .48; roses.minAngularSpeed = -4; roses.maxAngularSpeed = 4;
     roses.color1 = new Color4(.86, .12, .2, 1); roses.color2 = new Color4(.95, .5, .55, 1); roses.colorDead = new Color4(.7, .1, .15, 0);
     roses.blendMode = ParticleSystem.BLENDMODE_STANDARD; roses.start();
     let roseTime = -1;

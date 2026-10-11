@@ -10,7 +10,7 @@ Gezielte Reaktionstests 2/2, `npm test` 126/126, `npm run test:full` außerhalb 
 
 A25 erhielt zehn kurzzeitig aktivierte, cyanfarbene Fahrbahnmarkierungen auf der Berliner Außenlinie. Sie nutzen das direkte Höhenprofil `elevationAt(s)`, da `trackHeightAt(x,z)` am überlagerten Startbereich die tiefere Wegpunkt-Ebene auswählte. Der 14-Sekunden-Timer schaltet Markierungen und Zeppelin zusammen. Im verdeckten Screenshot am richtigen Kursabschnitt waren zwei cyanfarbene Streifen sichtbar; ihre eindeutige Zuordnung zu den neuen Windmarkierungen ist wegen bereits vorhandener Boostfelder im selben Motiv noch nicht isoliert belegt. Die laufende Rennkamera/Innenlinie bleibt offen.
 
-A27 richtet die Grafikprüfansicht beim direkten Event-Trigger auf die bekannte Abschnittsmitte des Ereignisses aus. Während die Szene lädt, bleibt der Trigger deaktiviert, wodurch ein vorzeitiger Zugriff auf `world` vermieden wird. `npm run build` und `npm test` 126/126 bestanden; Vollsuite `npm run test:full` 143/143 bestanden. Die letzte erneute Browserladung blieb im Status „Lädt tatsächliche Spielszene …“ und konnte die A27-Steuerung daher nach der Änderung nicht nochmals runtime-bestätigen.
+A27 richtet die Grafikprüfansicht beim direkten Event-Trigger auf die bekannte Abschnittsmitte des Ereignisses aus. Während die Szene lädt, bleibt der Trigger deaktiviert, wodurch ein vorzeitiger Zugriff auf `world` vermieden wird. `npm run build` und `npm test` 126/126 bestanden; Vollsuite `npm run test:full` 143/143 bestanden. Nach längerer Ladezeit zeigte eine aktuelle verdeckte Runtimeprüfung den Zeppelin samt Banner und bestätigte den Triggerstatus. Der Havanna-Kurswechsel und Wellenstoß funktionierten ebenfalls; dort erschienen große helle Partikel. Eine dauerhafte Ladesperre ließ sich nicht reproduzieren. Systematische Sechs-Ereignis-/Effektstufen- und Tonprüfung bleibt A31.
 
 ### A28 – Booststreifen auf sechs Kursen auditieren (11.10.2026)
 
@@ -23,6 +23,8 @@ Die einmalige Landungsbelohnung liegt nun in `awardLandingBoost` und gilt unver�
 ### A30 – Ereigniseffekte im Schwachgrafikmodus begrenzen (11.10.2026)
 
 Wenn während eines Zeppelin-Ereignisses die reduzierte Stufe aktiv ist, bleiben fünf von zehn Außenlinienbändern an. Die Balkonrosen sinken dynamisch von 70 auf 28 Partikel/s, der Wellenstoß von 160 auf 65/s, Parade-/Pflichtjubel-Konfetti von 140 auf 45. Umgekehrtes Umschalten stellt die normale Menge während laufender Effekte wieder her. Publikum und Physik bleiben wirksam; der shaderbasierte Publikumsschub hängt nicht an Partikelsystemen. Tests decken sechs Eventtypen, Begrenzung wiederholter Reaktionen und Rücklauf ab. `npm test` 130/130, gezielte Szenen-/Tracktests 22/22 und TypeScript-/Build bestanden. Browser-Vorschauszene war nicht geladen; Sicht-/Hörabnahme offen.
+
+Die spätere verdeckte Laufzeitprüfung konnte Berliner Zeppelin/Banner und Havanna-Wellenstoß auslösen. Ein überlappender zweiter Wellenstoß verhindert einen visuellen Ratevergleich. Die Balkonrosen waren aus dem gewählten Fahrer-/Profilbild kaum zu sehen; als gezielte Nachbesserung stehen Emitterhöhe 11 m und Partikelgröße 0,30–0,48 m im Code. Build nach der Änderung bestanden. Die aktuelle Vorschaukamera zeigte damit noch keinen sicheren Rosenregen; A31 bleibt offen.
 
 ### A22–A23 – Ereignisfokus und Berliner Zeppelinbanner (11.10.2026)
 
