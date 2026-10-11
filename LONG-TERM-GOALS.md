@@ -1,5 +1,7 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Übergabestand 11.10.2026:** Die folgenden neuen Renn- und Streckenziele sind für spätere lokale oder Cloud-Sitzungen bestätigt, **noch nicht umgesetzt**. Pjöngjang ist der erste Pilot; danach weitere Kurse und Systempakete. Die älteren bestätigten Modell-/Kart-/Cup-Ziele bleiben offen. Für Cloud-Arbeit gelten weiterhin AGENTS.md und die vier Hauptdateien als aktuelle Steuerung; Sarahs nicht gemeinsam geklärte Detailideen und menschliche Abnahmen bleiben offen. Abschlussstatus und nächster Schritt in CURRENT-WORKLIST.md.
+
 ## Bestätigte Renn- und Streckenziele – Marcels Antworten vom 11.10.2026
 
 **Priorität und Umfang:** Marcel empfindet derzeit alle sechs Kurse als zu langweilig und überträgt die Pilot- und Reihenfolgeentscheidung an Codex. Zuerst wird **Pjöngjang als Streckenpilot** geplant: Der dokumentierte nahezu gerade Kurvenverlauf (94 % nach der Audit-Messregel) bietet den deutlichsten Hebel. Danach werden die Erkenntnisse auf die übrigen fünf Kurse übertragen. Diese Zielklärung ist noch keine Streckenänderung. Sarahs ursprüngliche Motive und konkrete Streckenideen werden vor einer Änderung einzeln mit ihrer Herkunft abgeglichen und gemeinsam bestätigt. Die bisher bestätigten Modell-, Kart-Abstimmungs- und Cup-Ziele bleiben bestehen; die neue Streckenarbeit erhält für künftige Pakete Vorrang. Jeder Umbau braucht eine Vorher-/Nachher-Fahrt mit derselben Kamera, drei vollständige Runden, Bot-/Rundenwertungs- und Leistungsprüfung sowie Marcels Fahrurteil.

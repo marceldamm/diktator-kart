@@ -9,6 +9,12 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Projektabschluss und Cloud-Übergabe – 11.10.2026 (Marcel, Codex)
+
+**Abschlussumfang:** Die zwei Antwortserien und die bestätigten Renn-/Streckenziele sind in den vier Hauptdateien dokumentiert. Vor dem Abschluss war `main` sauber und mit `origin/main` identisch (`56fd462`); `project-state.json` bezeichnet die Babylon-Hauptbasis und der Mindest-Commit ist Vorfahr von HEAD. Dieser Abschluss ergänzt nur Dokumentation; es gab keine neue Spielcode-, Modell- oder Assetänderung. Deshalb kein neuer Build, Testlauf oder sichtbarer Spieltest. Git-Diff und Remote-Gleichstand vor dem Abschluss geprüft; endgültigen Push-Stand beim Abschlusscommit erneut verifizieren.
+
+**Nächster Schritt für eine spätere Cloud-Arbeitssitzung:** Neueste `main`-Version holen, AGENTS.md und zuerst diese vier Arbeitsdateien lesen. Ausführbare offene Aufgaben in dieser Liste, danach die bestätigten Ziele in LONG-TERM-GOALS.md in priorisierten, prüfbaren Paketen umsetzen. Streckenrhythmus/Pjöngjang ist der neue Pilot; Sarahs noch nicht gemeinsam bestätigte Detailänderungen bleiben offen. Nach jedem Paket tatsächliche Code-/Laufzeitbelege, Grenzen und nächsten Schritt in diesen Dateien nachführen. Cloud-Zugang, sichtbare Spielprüfung und direkte Push-Rechte sind erst in der jeweiligen Umgebung zu prüfen, nicht hier behauptet.
+
 ## Zielklärung Strecken und Renngefühl – 11.10.2026 (Marcel, Codex)
 
 **Auftrag dieser Sitzung:** Marcels Antworten auf die 30 Fragen als Ziele für spätere Arbeitssitzungen dokumentieren; anschließend Sarahs ursprüngliche Streckenideen anhand belegter Quellen betrachten und Marcel dazu befragen. **Status:** Beide Antwortserien und der priorisierte Zielplan stehen in LONG-TERM-GOALS.md und TEAM-NOTES.md; keine Gameplay-Umsetzung beauftragt. Pjöngjang wurde als erster Entwurfspilot gewählt. Sarahs eigene Sicht auf die Kursdetails steht aus und darf nicht aus Marcels Antworten abgeleitet werden.

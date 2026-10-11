@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Projektabschluss und Cloud-Übergabe vorbereitet
+
+Den bereits auf `main` gesicherten Dokumentationsstand (`56fd462`) als saubere Babylon-Basis geprüft: keine lokalen Änderungen oder unversionierten Dateien, `origin/main` gleichauf, Mindestabstammung aus `project-state.json` erfüllt. Übergabe für eine spätere Cloud-Sitzung in den vier Hauptdateien ergänzt; neue Renn-/Streckenziele bleiben als **offene Umsetzung** gekennzeichnet. Diese Änderung betrifft nur Dokumentation; kein Build, Spieltest oder Modelltest erforderlich. Abschließender Commit/Push und Remote-Hash werden im Abschlussbericht verifiziert.
+
 ## 11.10.2026 – Codex: Marcels Antworten zu Sarahs Kursideen dokumentiert
 
 Sarahs fünf belegte Kursnamen/Orte bleiben als bestätigte Zielvorgabe erhalten. Marcel möchte Parade und Startgatter in Pjöngjang bewahren, spannende Varianten für Rom/Havanna vergleichen, die älteren fünf Hauptstadtzonen inhaltlich umsetzen und die siebte verbindende Strecke als späteres Ziel behalten. Für Moskau/Peking und die genaue Zuordnung der Altzonen ist nichts Konkretes entschieden; die diktierte Unterführung bleibt ungeklärt. Kursereignisse dürfen innerhalb der bestehenden Grenzen kreativ entworfen werden. Sarahs eigene Rückmeldung und die gemeinsame Klärung ihrer weitergehenden Ideen stehen aus; keine Kontaktaufnahme oder Zustimmung behauptet. Nur die vier Hauptdateien geändert, kein Spielcode oder Laufzeittest.

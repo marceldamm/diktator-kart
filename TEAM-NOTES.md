@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Abschlussprüfung und Hinweis für die Cloud-Fortsetzung
+
+Die Cloud-Fortsetzung soll den neuesten gemeinsamen Babylon-`main` von `marceldamm/diktator-kart` verwenden, AGENTS.md und die vier Hauptdateien lesen und bestätigte offene Arbeit in überprüfbaren Paketen ausführen. Die priorisierte neue Zielrichtung steht oben in LONG-TERM-GOALS.md; der aktuelle nächste Schritt in CURRENT-WORKLIST.md. Alte PlayCanvas-Basis und historische Logs sind nur Referenz. Cloud-Zugriff, Rechte und Sichtprüfung müssen dort tatsächlich geprüft werden; ein hier formulierter Prompt ist keine bereits gestartete Cloud-Aufgabe. Die heute neue Änderung ist reine Dokumentation; vor dem Abschluss waren Git-Status sauber, `main` und `origin/main` identisch, Babylon-Mindestabstammung geprüft. Kein Build oder Spieltest für dieses Dokumentationspaket.
+
+**Weiter offene Teamkommunikation:** Marcels Antwort an Sarah vom 10.10. steht unten weiterhin als „notiert, nicht versandt“. Sarahs Sicht auf ihre fünf Kursideen/Pjöngjang ist nicht eingeholt. Der ältere Hinweis von Claude an Marcel und Sarah zum eigenen Fahr-/Sicht-/Hörtest von Spree-Kai, Säulen-Haarnadel, Hitler-Nahansicht und Motor bleibt offen; hieraus wurde keine Abnahme abgeleitet.
+
 ## 11.10.2026 – Marcels Antworten zu Sarahs Streckenideen (Sarah-Gespräch offen)
 
 Antworten auf die neun Fragen im unmittelbar folgenden Quellenabgleich; Marcels Perspektive wird von Sarahs noch ausstehender Rückmeldung getrennt. Keine Nachricht an Sarah wurde versandt und keine Zustimmung von ihr behauptet.
