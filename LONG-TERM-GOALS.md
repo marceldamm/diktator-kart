@@ -63,7 +63,15 @@ Die fünf Hauptstadtzonen und die siebte verbindende Strecke bleiben bestätigte
 
 **Neues Ziel A21 – Streckenereignisse reproduzierbar visuell prüfen (aus der A4-Sichtabnahme abgeleitet, 11.10.2026):** Eine Prüfansicht soll die sechs tatsächlichen Spielereignisse direkt und unabhängig vom Renn-Timing auslösen können. So lassen sich Modell, Partikel und räumliche Wirkung mit festen Kurs-/Kamerabedingungen untersuchen. Abnahme: jedes auswählbare Ereignis ruft dieselbe Szenenfunktion wie im Rennen auf; die Prüfansicht zeigt Kurs und ausgewähltes Ereignis; der Helfer bleibt außerhalb des Produktionsspiels.
 
-**Fortschritt A21:** `tests/feedback-visual.html` bietet jetzt einen Ereigniswähler und Auslöser für Zeppelin, Welle, Balkonrede, Pflichtjubel, Ehrenparade und Kolonne. Ereigniswahl und Heimstrecke sind gekoppelt; Szenenneuladen löscht den vorherigen Triggerstatus. Die Vorschau ruft `TestScene.trackEvent` direkt auf und zeigt das zuletzt ausgelöste Ereignis sowie den aktiven Zeppelin-Knoten. `npm run build` (TypeScript + Vite) bestanden. Verborgener Browser lud die Prüfansicht; Zeppelin-Knoten wurde aktiv bestätigt und Peking-Trigger ausgelöst. Das Zeppelinmodell und der Papiereffekt waren aus den geprüften Kamerabildern nicht eindeutig sichtbar; A4-Sichtabnahme bleibt offen.
+**Fortschritt A21:** `tests/feedback-visual.html` bietet jetzt einen Ereigniswähler und Auslöser für Zeppelin, Welle, Balkonrede, Pflichtjubel, Ehrenparade und Kolonne. Ereigniswahl und Heimstrecke sind gekoppelt; Szenenneuladen löscht den vorherigen Triggerstatus. Die Vorschau ruft `TestScene.trackEvent` direkt auf und zeigt das zuletzt ausgelöste Ereignis sowie den aktiven Zeppelin-Knoten. `npm run build` (TypeScript + Vite) bestanden. Verborgener Browser lud die Prüfansicht; Zeppelin-Knoten wurde aktiv bestätigt und Peking-Trigger ausgelöst.
+
+**Neues Ziel A22 – Kursmotiv in der Prüfszene verfolgen (aus A21-Sichtbefund, 11.10.2026):** Aktive Ereignismodelle ohne unbestimmte freie Kamerasuche aus mehreren Winkeln sichtbar abnehmen können. Abnahme: Motivfokus folgt dem echten Szenenknoten, verhindert den Spielerwagen vor dem Motiv und erlaubt einen Vergleich beider Objektseiten.
+
+**Fortschritt A22:** Der Button „Zeppelin ansehen / Seite wechseln“ ist bis zum aktivierten `Propaganda zeppelin`-Knoten deaktiviert. Danach verfolgt eine seitliche Kamera das echte bewegte Modell und wechselt mit erneutem Klick auf die gegenüberliegende Seite. Verborgener Browser zeigte Zeppelinrumpf, Gondel, Banner und die Berliner Stadtszene.
+
+**Neues Ziel A23 – Berliner Ereignisbanner von beiden Seiten lesbar machen (aus A22-Modellprüfung, 11.10.2026):** Der Zeppelintext „SIEG IST PFLICHT · ZUSCHAUEN AUCH“ muss von beiden Außenseiten in derselben Leserichtung erscheinen.
+
+**Fortschritt A23:** Der Sichttest deckte gespiegelt lesbare Schrift auf einer Seite auf. Beide Bannerflächen erhalten jetzt eine horizontale Spiegelung im Mesh; der verdeckte Seitenschalter zeigte den Schriftzug danach auf beiden Seiten lesbar. `npm run build` (TypeScript + Vite) bestanden; bekannte Chunkwarnung. Dauerhafte Bilddatei im Repository bleibt offen.
 
 ## Frühere Kandidaten aus dem Spielgefühl-Abgleich – 11.10.2026 (historischer Entwurf)
 

@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – A22/A23: Berliner Zeppelin im Szenenfokus und Bannerlesbarkeit
+
+Aus der A21-Prüfansicht wurde der echte Zeppelin-Knoten aktiviert und anschließend mit der Seitenkamera verfolgt. Die erste Motivansicht zeigte das tatsächliche Modell vor der Berliner Stadt: silberner Rumpf, Gondel, Banner und Flossen. Beim Seitenwechsel war ein Bannertext spiegelverkehrt. Beide Banner-Meshes erhielten dieselbe horizontale UV-/Meshspiegelung, danach waren auf beiden Außenansichten die sichtbaren Textteile in Leserichtung. `npm run build` mit TypeScript bestanden; Bundles 2.164,54 KB / 535,10 KB gzip und bekannte Chunkwarnung.
+
+Das CUA-Bild wurde im verdeckten Prüflauf angesehen, aber nicht als lokale Datei exportiert; kein dauerhaftes Bild in `docs/evidence/`. Die Grafikprüfung bestätigt weder den spielenden Kameraausschnitt noch Windwirkung, Publikumsreaktion, Rennleistung oder menschliche Abnahme. A4 bleibt dafür offen. Offizielle Codex-Werte nach diesem Paket: 37 % Fünf-Stundenverbrauch / 21 % Wochenverbrauch (63 % / 79 % Rest).
+
 ## 11.10.2026 – Neues A21 aus der offenen A4-Sichtprüfung
 
 Der bisherige verborgene Berlinlauf hat den Runde-zwei-Toast belegt, aber den Zeppelin im Kamerabild nicht eindeutig gezeigt. Die Grafikprüfansicht in `tests/feedback-visual.html` hat jetzt direkte Auswahl für alle sechs Rennereignisse; Auswahl und Heimstrecke bleiben gekoppelt. Nach Auslösung zeigt der Status das Ereignis, beim Zeppelin auch `Propaganda zeppelin`-Knoten aktiviert/inaktiv. `npm run build` bestand. Im versteckten In-App-Browser lud die echte Berliner Szene; der Zeppelin-Knoten war nach dem Trigger aktiv. In der festen Umgebungsansicht und der freien Übersicht war das Modell selbst nicht klar zu sehen. Peking lud nach Auswahl automatisch die Kulturrevolutions-Schleife und der Pflichtjubel-Trigger ließ sich auslösen; Partikel waren im Bild nicht eindeutig. Deshalb ist dies ein reproduzierbarer Steuerungs-/Knotenstatusbeleg, keine visuelle Ereignisabnahme. Der vorherige Rennlauf wurde pausiert; Auto-Gas und Lenkhilfe wurden ausgeschaltet.

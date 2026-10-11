@@ -630,7 +630,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const bannerTexture = new DynamicTexture('Zeppelin banner', { width: 1024, height: 128 }, scene, true);
       { const c = bannerTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#7a1820'; c.fillRect(0, 0, 1024, 128); c.fillStyle = '#f3e3b8'; c.font = 'bold 64px Georgia'; c.textAlign = 'center'; c.fillText('SIEG IST PFLICHT · ZUSCHAUEN AUCH', 512, 88); bannerTexture.update(); }
       const bannerMaterial = new StandardMaterial('Zeppelin banner', scene); bannerMaterial.diffuseTexture = bannerTexture; bannerMaterial.emissiveColor = new Color3(.35, .35, .35); bannerMaterial.backFaceCulling = false;
-      for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; }
+      for (const side of [-1, 1]) { const banner = MeshBuilder.CreatePlane('Zeppelin banner', { width: 22, height: 2.8 }, scene); banner.material = bannerMaterial; banner.parent = zeppelin; banner.position.set(side * 4.62, 0, 0); banner.rotation.y = side * Math.PI / 2; banner.scaling.x = -1; }
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     let zeppelinTime = -1;
     // Pyongyang parade column (11.10.2026): three display tanks and a rocket transporter that roll along the right lane

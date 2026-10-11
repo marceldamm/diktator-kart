@@ -1,5 +1,11 @@
 # Gemeinsamer Änderungsverlauf
 
+### A22–A23 – Ereignisfokus und Berliner Zeppelinbanner (11.10.2026)
+
+Die Grafikprüfansicht verfolgt den aktivierten Zeppelin-Knoten nun aus einer seitlichen Kameraperspektive und erlaubt das Umschalten zwischen den Außenseiten. Der sichtbare Vergleich zeigte, dass der Slogan auf einer Seite spiegelverkehrt war. Beide Bannerflächen werden jetzt horizontal gespiegelt; die verdeckte Ansicht zeigte den Slogan von beiden Seiten in gleicher Leserichtung.
+
+`npm run build` (TypeScript und Vite) bestanden. Das Hauptbundle ist 2.164,54 KB / 535,10 KB gzip; die bestehende Chunkwarnung bleibt. Windlinienbonus, Passagier-/Publikumsreaktion und die tatsächlich fahrende Runde wurden nicht verändert oder in diesem Paket abgenommen.
+
 ### A21 – Ereignisvorschau in der Grafikprüfansicht (11.10.2026)
 
 Die bestehende Laufzeit-Grafikprüfansicht kann alle sechs Rennereignisse direkt auslösen: Berliner Zeppelin, Havanna-Welle, Rom-Balkonrede, Peking-Pflichtjubel, Moskauer Ehrenparade und Pjöngjang-Kolonne. Die Eventwahl lädt jeweils automatisch die Heimstrecke, ein Streckenwechsel passt die Eventauswahl an. Der Aufruf nutzt `TestScene.trackEvent`, dieselbe Szenenschnittstelle wie die Rennlogik. Der Status zeigt den letzten Trigger und beim Zeppelin dessen aktiven Szenenknoten.
