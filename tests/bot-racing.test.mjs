@@ -55,6 +55,21 @@ test('bots save the defensive slot for predicted projectile hits, not traps or f
  assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'empty reserve slot cannot activate');
 });
 
+test('a bot prediction activates its reserve in time to block the arriving shot',()=>{
+ selectTrack('stadionring');const world=createItems(2),owner=gridKart(0),point=trackPoint(100),defender={...gridKart(1),...point,travelHeading:point.heading,speed:0};
+ world.defenseSlots[1]=true;
+ world.objects=[{id:1,kind:'direct',owner:0,x:defender.x-Math.sin(point.heading)*6,z:defender.z-Math.cos(point.heading)*6,heading:point.heading,age:.1,remaining:2,target:null}];
+ let karts=[owner,defender];const events=[];
+ for(let tick=0;tick<20;tick++){
+   const defense=[false,botShouldUseDefense(world,1,karts)];
+   karts=stepItems(world,karts,[false,false],[1,2],1/60,[],defense);
+   events.push(...world.events);
+ }
+ assert.ok(events.some(event=>event.kind==='defense-use'&&event.kart===1),'the bot spends its second slot for the predicted hit');
+ assert.ok(events.some(event=>event.kind==='block'&&event.kart===1&&event.owner===0),'the shield catches the incoming owner’s projectile');
+ assert.equal(world.objects.length,0);
+});
+
 test('bots use offensive items for a target, a pursuer or a moving kart, with different patience',()=>{
  selectTrack('stadionring');const world=createItems(2),p=trackPoint(100),front={...gridKart(0),...p,speed:10};
  const forward={x:front.x+Math.sin(p.heading)*24,z:front.z+Math.cos(p.heading)*24};
