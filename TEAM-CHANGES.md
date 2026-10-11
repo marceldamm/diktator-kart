@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+### A19 – Kursereignisse behalten ihren Anzeigevorrang (11.10.2026)
+
+Sechs ortsgebundene Kursmomente verwenden jetzt ein eigenes viersekündiges Meldungsfenster im Itemfeld. Normale Item-/Trefferhinweise bleiben gespeichert und erscheinen nach Ablauf wieder, können aber den Streckenmoment währenddessen nicht verdecken. Regression prüft Überlagerung, exakte Ablaufgrenze und regulären Slottext. Vollsuite 139/139 außerhalb der Sandbox, TypeScript und Build bestanden; Bundle 2.164,82 KB / 535,06 KB gzip (bestehende Chunkwarnung). Der neue Anzeigevorrang wurde noch nicht in einer Runtime-Situation mit gleichzeitigem Itemereignis visuell abgenommen.
+
 ### A18 – Kurszuordnung der Streckenereignisse (11.10.2026)
 
 Eine zentrale Zuordnung bindet Zeppelin/Berlin, Malecón/Havanna, Balkon/Rom, Pflichtjubel/Peking, Ehrenparade/Moskau und Kolonne/Pjöngjang an ihre Heimstrecke. Trigger und aktive Physikeffekte fragen dieselbe Zuordnung ab. Die Regression prüft alle 36 Ereignis-/Theme-Kombinationen. Vollsuite 138/138, TypeScript und Build bestanden; Bundle 2.164,51 KB / 534,95 KB gzip (bestehende Chunkwarnung). Verborgene Berliner Runde-zwei-Stichproben 1:22–1:53 zeigten keine falsche Malecón-Meldung. Eine klare Bestätigung des Zeppelinbilds steht aus.

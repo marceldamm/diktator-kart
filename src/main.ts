@@ -18,6 +18,7 @@ import { interpolateKart } from './render-state';
 import { RAMP_LENGTH, RAMP_LIPS, TRACKS, TRACK_INFO, sampleTrack, type TrackId } from './track-layout';
 import { GP_TRACKS, awardPoints, createGrandPrix, standings, type GrandPrix } from './grand-prix';
 import { RankingBoard } from './ranking-hud';
+import { selectRaceInfoNotice } from './race-notices';
 import { pickQuality } from './auto-quality';
 import { describeRecord, loadProgress, recordCup, resetProgress, saveProgress } from './cup-progress';
 import { MEDAL_RULES, createMedals, loseMedals, stepMedals, type MedalWorld } from './medals';
@@ -197,6 +198,8 @@ class App {
   private abilityStats:Record<AbilityEvent['kind'],number>={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
   private itemMessage='';
   private itemMessageUntil=0;
+  private courseEventMessage='';
+  private courseEventMessageUntil=0;
   /** UI-only reveal animation; the item itself is allocated immediately by deterministic race logic. */
   private itemRouletteUntil=0;
   private abilityAnnouncementUntil=0;
@@ -422,7 +425,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.escortRoute=[];this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.escortRoute=[];this.itemMessage='';this.itemMessageUntil=0;this.courseEventMessage='';this.courseEventMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
     this.queuedItemUse=false;this.queuedDefenseUse=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
@@ -669,7 +672,7 @@ class App {
     this.testScene.setGhost?.(null);
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.escortRoute=[];this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
+    this.items=createItems(LOAD_KART_COUNT+1);this.escortRoute=[];this.itemMessage='';this.itemMessageUntil=0;this.courseEventMessage='';this.courseEventMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
     this.queuedItemUse=false;this.queuedDefenseUse=false;this.itemHeld=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
@@ -688,6 +691,11 @@ class App {
   private resetRenderState(): void {
     this.previousKart = this.kart; this.previousLoadKarts = this.loadKarts;
     this.renderKart = this.kart; this.accumulator = 0; this.renderSteps = 0;
+  }
+
+  private announceCourseEvent(message:string):void {
+    this.courseEventMessage=message;this.courseEventMessageUntil=this.items.time+4;
+    this.itemMessage=message;this.itemMessageUntil=this.courseEventMessageUntil;
   }
 
   private updateRaceHud(): void {
@@ -722,7 +730,8 @@ class App {
     const itemButton=document.querySelector<HTMLButtonElement>('#item-use')!;
     itemButton.disabled=!item||this.racePhase!=='race';itemButton.textContent=item?'WERFEN':'E';
     itemButton.setAttribute('aria-label',item?`${itemName} werfen`:'Kein Item verfügbar');
-    document.querySelector('#item-info')!.textContent=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E/Touch halten: Schild · loslassen oder antippen: werfen'):this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
+    const regularItemInfo=this.items.time<this.itemMessageUntil?this.itemMessage:item?(this.items.shield?.[0]?'Schild hinten · loslassen = werfen':'E/Touch halten: Schild · loslassen oder antippen: werfen'):this.racePhase==='practice'?'Im Rennen leuchtende Postkisten sammeln':'Leuchtende Postkisten auf der Strecke';
+    document.querySelector('#item-info')!.textContent=selectRaceInfoNotice(this.items.time,this.courseEventMessage,this.courseEventMessageUntil,regularItemInfo);
     const defenseReady=!!this.items.defenseSlots[0],defenseActive=(this.items.defenseRemaining[0]??0)>0;
     const defenseCard=document.querySelector<HTMLElement>('#defense-card')!,defenseButton=document.querySelector<HTMLButtonElement>('#defense-use')!;
     defenseCard.dataset.state=defenseReady||defenseActive?'ready':'empty';defenseCard.classList.toggle('active',defenseActive);
@@ -1285,7 +1294,7 @@ class App {
             return atSecondLapTrackEvent(this.progress[i].distance, s, 95, 520);
           })) {
             this.paradeTriggered = true; this.paradeUntil = this.raceTime + 15;
-            this.testScene?.trackEvent?.('parade'); this.itemMessage = 'Ehrenparade! Rückenwind auf der Parade-Geraden für alle'; this.itemMessageUntil = this.items.time + 4;
+            this.testScene?.trackEvent?.('parade'); this.announceCourseEvent('Ehrenparade! Rückenwind auf der Parade-Geraden für alle');
             this.audio.cheer(1); window.setTimeout(() => this.audio.voice('announcer-parade', { force: true }), 900);
           }
           if (!this.columnTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'column') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
@@ -1293,7 +1302,7 @@ class App {
             return !inShortcut(kart.x, kart.z) && atSecondLapTrackEvent(this.progress[i].distance, s, 1372, 1400);
           })) {
             this.columnTriggered = true; startParade(this.raceTime); this.testScene?.trackEvent?.('column');
-            this.itemMessage = 'Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei'; this.itemMessageUntil = this.items.time + 4;
+            this.announceCourseEvent('Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei');
             this.audio.cheer(1); this.audio.cue('lap');
           }
           if (!this.zeppelinTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'zeppelin') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
@@ -1301,7 +1310,7 @@ class App {
             return atSecondLapTrackEvent(this.progress[i].distance, s, 45, 182);
           })) {
             this.zeppelinTriggered = true; this.zeppelinWindUntil = this.raceTime + 14; this.testScene?.trackEvent?.('zeppelin');
-            this.itemMessage = 'Propaganda-Zeppelin! Rückenwind auf der Tribünenspur · innen bleibt freie Fahrt'; this.itemMessageUntil = this.items.time + 4;
+            this.announceCourseEvent('Propaganda-Zeppelin! Rückenwind auf der Tribünenspur · innen bleibt freie Fahrt');
             this.audio.cheer(.8);
           }
           if (!this.jubelTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'jubel') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
@@ -1309,7 +1318,7 @@ class App {
             return atSecondLapTrackEvent(this.progress[i].distance, s, 880, 1040) && policyJubelPatchAt(s, lane);
           })) {
             this.jubelTriggered = true; this.jubelUntil = this.raceTime + 14;
-            this.testScene?.trackEvent?.('loudspeaker'); this.itemMessage = 'Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt'; this.itemMessageUntil = this.items.time + 4;
+            this.testScene?.trackEvent?.('loudspeaker'); this.announceCourseEvent('Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt');
             this.audio.cheer(1.2); window.setTimeout(() => this.audio.voice('announcer-loudspeaker', { force: true }), 900);
           }
           if (!this.waveTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'wave') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
@@ -1317,12 +1326,12 @@ class App {
             return atSecondLapTrackEvent(this.progress[i].distance, s, 105, 330) && maleconWavePatchAt(s, lane);
           })) {
             this.waveTriggered = true; this.waveUntil = this.raceTime + 14;
-            this.testScene?.trackEvent?.('wave'); this.itemMessage = 'Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip'; this.itemMessageUntil = this.items.time + 4;
+            this.testScene?.trackEvent?.('wave'); this.announceCourseEvent('Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip');
             this.audio.cheer(.7); window.setTimeout(() => this.audio.voice('announcer-wave', { force: true }), 900);
           }
           if (!this.balconyTriggered && eventBelongsToTrackTheme(TRACK_INFO.theme, 'balcony') && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => atSecondLapTrackEvent(this.progress[i].distance, trackProgressOf(kart), 970, 1125))) {
             this.balconyTriggered = true; this.balconyUntil = this.raceTime + 14;
-            this.testScene?.trackEvent?.('balcony'); this.itemMessage = 'Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt'; this.audio.cheer(1.1);
+            this.testScene?.trackEvent?.('balcony'); this.announceCourseEvent('Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt'); this.audio.cheer(1.1);
             window.setTimeout(() => this.audio.voice('announcer-balcony', { force: true }), 1400);
           }
           const fenceProgress = TRACK_INFO.dressing.breakableFence;

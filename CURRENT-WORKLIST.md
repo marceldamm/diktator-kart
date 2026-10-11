@@ -1,5 +1,11 @@
 # CURRENT WORKLIST – laufende Arbeit
 
+## Aktives Zielpaket – Streckenereignisse lesbar halten (A19, 11.10.2026)
+
+- [x] **A19 – Kursereignis-Meldung gegen Item-Toast-Überlagerung schützen:** Sechs Kursereignisse schreiben jetzt in einen eigenen, viersekündigen Meldungskanal. Er hat im Itemfeld Vorrang vor normalen Items, Treffern und Kollisionshinweisen; danach übernimmt der aktuelle Item-/Steuerungshinweis wieder. Überlagerung, Ablaufgrenze und leeres Ereignis sind regressionsgeprüft. Vollsuite 139/139 außerhalb der Sandbox, `npm run build` (inkl. TypeScript) bestanden. Bundle: 2.164,82 KB / 535,06 KB gzip, bestehende Chunkwarnung. Ein eigener Runtime-Beleg für den sichtbaren Zeppelin-Toast steht noch aus.
+- **Budget nach A19:** offizielle Codex-Werte 28 % Fünf-Stundenverbrauch / 19 % Wochenverbrauch (72 % / 81 % Rest).
+- **Nächster Schritt:** A4-Sichtabnahme in einer präzise getimten Berliner Runde-zwei-Fahrt; danach offene A5 Botabwehr- und Botitem-Runtime-Stichproben.
+
 > **Rolle und Vorrang (09.10.2026):** Dies ist zusammen mit LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md die vollständige, laufend gepflegte Projektsteuerung. Keine weitere Datei, kein GitHub-Issue und kein Board ist eine Aufgaben- oder Fortschrittsquelle. Frühere Logs, Detaildokumente und Issues bleiben historische Quellen; offene Aufgaben daraus wurden hierher übertragen. Alte Einträge nicht fortschreiben. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch.
 
 
