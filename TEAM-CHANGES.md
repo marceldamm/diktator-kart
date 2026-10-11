@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Bot-Spurwertung vor globalem Tempo-Paket korrigiert
+
+Langsamer Verkehr im erweiterten Sichtfenster erzeugt keine negative Spurstrafe mehr; bei höherer tatsächlicher Geschwindigkeit sehen Bots weiter voraus. Für die Pjöngjang-Paradekolonne normal und mit zusätzlichem Kart-Höchsttempo simuliert, jeweils fünf Bots und begrenzte Kontakte. `npm test` 111/111, TypeScript und vollständige Suite 128/128 bestanden. Globale Tempoerhöhung und sichtbare Rennabnahme bleiben offen; 14 % Fünf-Stunden-Rest erzwingen nach AGENTS.md den Paketabschluss statt eines neuen großen Umbaus. Details in CURRENT-WORKLIST.md und TEAM-NOTES.md.
+
 ## 11.10.2026 – Codex: Standardtests verkürzt, vollständige Rennprüfung erhalten
 
 Marcels offenen Wunsch nach kürzeren Tests aus Claudes Übergabe übernommen. `npm test` führt 111 kurze Fälle aus; `npm run test:full` führt alle 128 aus, `npm run test:slow` die 17 mit `slow:` markierten langen Renn-/Parade-/Team-Workflow-Fälle. Drei Fünf-Bot-Simulationen stoppen nach dem tatsächlichen Zieleinlauf aller Bots. Schneller Lauf 111/111 in 6,4 s Wandzeit; vollständiger Lauf 128/128 in 83 s Node-Testdauer außerhalb der eingeschränkten Sandbox. Keine Spielmechanik oder Assets geändert. Details und nächste Aufgabe in CURRENT-WORKLIST.md; Umgebungsgrenze in TEAM-NOTES.md.

@@ -1,5 +1,7 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+**Tempo-Vorbereitung 11.10.2026:** Die Bot-Spurwertung für langsamen Verkehr wurde gegen negative Werte im erweiterten Sichtfenster korrigiert; ein Pjöngjang-Langlauf mit höherem individuellen Höchsttempo-Bonus bestand. Das eigentliche Ziel eines höheren **globalen** Fahrtempos bleibt offen und erfordert neue Fahrmodellgrenzen, Kurvenvorausschau und sichtbare Abnahme. Wegen 14 % offiziellem Fünf-Stunden-Rest nach diesem Paket kein neues großes Paket begonnen; nächster Schritt in CURRENT-WORKLIST.md.
+
 **Fortsetzung 11.10.2026, Testzeiten:** Marcels Wunsch nach kürzeren Tests ist als erstes übernommenes offenes Paket umgesetzt: schneller Standardlauf und weiterhin vollständige Langlaufprüfung; Ergebnisse in CURRENT-WORKLIST.md. Pjöngjang- und Moskau-Umbau sind auf `main`; die übrigen Kurs- und Tempo-/Item-/Bot-/Audio-/Kartziele bleiben offen. Bei Änderungen an Rennlogik oder Strecken stets den vollständigen Lauf zusätzlich zum schnellen Standardtest verwenden.
 
 **Historischer Übergabestand vor dem Streckenumbau, 11.10.2026:** Die folgenden Renn- und Streckenziele wurden für spätere lokale oder Cloud-Sitzungen bestätigt. Pjöngjang war als erster Pilot gewählt; Pjöngjang und Moskau wurden danach umgesetzt. Die älteren bestätigten Modell-/Kart-/Cup-Ziele bleiben offen. Für Cloud-Arbeit gelten weiterhin AGENTS.md und die vier Hauptdateien als aktuelle Steuerung; Sarahs nicht gemeinsam geklärte Detailideen und menschliche Abnahmen bleiben offen. Aktueller Status und nächster Schritt in CURRENT-WORKLIST.md.

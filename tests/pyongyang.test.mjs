@@ -160,7 +160,7 @@ test('Taedong north-bank decorative railing opens exactly at road crossings, not
   assert.deepEqual(trackCrossingsAtZ(south, 4), []);
 }));
 
-test('slow: Pyongyang parade column blocks only the right boulevard lane, for every kart, and bots still finish around it', onPyongyang(() => {
+test('slow: Pyongyang parade column leaves a safe lane for normal and faster bots', onPyongyang(() => {
   startParade(0); setParadeClock(20);
   try {
     const vehicles = paradeVehicles();
@@ -170,18 +170,20 @@ test('slow: Pyongyang parade column blocks only the right boulevard lane, for ev
       assert.equal(projectTrack(blocked.x, blocked.z).kind, 'obstacle', 'parade vehicle collides');
       assert.equal(projectTrack(open.x, open.z).kind, null, 'left half stays open');
     }
-    let states = Array.from({ length: 5 }, (_, i) => gridKart(i + 1));
-    const races = states.map(createRaceProgress);
-    let hits = 0;
-    for (let step = 0; step < 60 * 300; step++) {
-      setParadeClock(20 + step / 60);
-      states = states.map((state, i) => advanceKart(state, botInput(state, i + 1, states), 1 / 60, projectTrack, trackHeightAt));
-      states = resolveKartContacts(states, projectTrack);
-      states = states.map((state) => hazardAt(state.x, state.z) ? recoverKart(state, states) : state);
-      states.forEach((state, i) => { if (state.impactKind === 'obstacle') hits++; advanceRace(races[i], state, step / 60); });
+    for (const topSpeedBonus of [0, 5]) {
+      let states = Array.from({ length: 5 }, (_, i) => ({ ...gridKart(i + 1), topSpeedBonus }));
+      const races = states.map(createRaceProgress);
+      let hits = 0;
+      for (let step = 0; step < 60 * 300; step++) {
+        setParadeClock(20 + step / 60);
+        states = states.map((state, i) => advanceKart(state, botInput(state, i + 1, states), 1 / 60, projectTrack, trackHeightAt));
+        states = resolveKartContacts(states, projectTrack);
+        states = states.map((state) => hazardAt(state.x, state.z) ? recoverKart(state, states) : state);
+        states.forEach((state, i) => { if (state.impactKind === 'obstacle') hits++; advanceRace(races[i], state, step / 60); });
+      }
+      assert.ok(races.every((race) => race.distance > TRACK.length * 2), `${topSpeedBonus}: ${JSON.stringify(races.map((race) => race.distance | 0))}`);
+      assert.ok(hits < 60, `${topSpeedBonus}: bots mostly steer around the column (${hits} contact steps)`);
     }
-    assert.ok(races.every((race) => race.distance > TRACK.length * 2), JSON.stringify(races.map((race) => race.distance | 0)));
-    assert.ok(hits < 60, `bots mostly steer around the column (${hits} contact steps)`);
   } finally { stopParade(); }
   assert.equal(paradeVehicles().length, 0);
 }));

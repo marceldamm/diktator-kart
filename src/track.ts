@@ -433,6 +433,7 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const { s, lane: currentLane } = shortcut ?? main;
   const speed = Math.abs(state.speed);
   const difficulty = botDifficulty();
+  const trafficRange = difficulty.reaction + Math.max(0, speed - KART_TUNING.maxForwardSpeed) * 2;
   const corner = alley ? shortcutCurvatureAhead(shortcut!.u + 2, 10 + speed * 1.1) : curvatureAhead(s + 2, 10 + speed * 1.1);
   const radius = 1 / Math.max(corner.curvature, 1e-3);
   // Five racing lanes give room to pick a real passing line.
@@ -442,7 +443,7 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
     const otherAlley = inShortcut(other.x, other.z), p = otherAlley ? shortcutLocate(other.x, other.z) : trackLocate(other.x, other.z);
     return { ahead: signedGap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
   }).concat(alley ? [] : paradeVehicles().flatMap((v) => [v.lane - 1.2, v.lane + 1.2].map((lane) => ({ ahead: signedGap(v.s - s), lane, speed: PARADE_COLUMN.speed * .5, sameRoute: true }))))
-    .filter((other) => other.sameRoute && other.ahead > -12 && other.ahead < difficulty.reaction + (other.speed < 4 ? 14 : 0));
+    .filter((other) => other.sameRoute && other.ahead > -12 && other.ahead < trafficRange + (other.speed < 4 ? 14 : 0));
   const ahead = traffic.filter((t) => t.ahead > .05);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
   let preferred = radius < 30 ? corner.sign * 2.8 : style ? style.lane : [-2.8, 0, 2.8][index % 3];
@@ -458,7 +459,7 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const slower = ahead.filter((t) => t.speed < speed + .5);
   const score = (lane: number) => Math.abs(lane - currentLane) * .3 + Math.abs(lane - preferred) * (slower.length ? .05 : defending ? .7 : .2) +
     traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < difficulty.gap
-      ? t.ahead > 0 ? (difficulty.reaction - t.ahead) * (t.speed < speed + .5 ? 3.2 * eagerness : 1.2)
+      ? t.ahead > 0 ? Math.max(0, trafficRange + (t.speed < 4 ? 14 : 0) - t.ahead) * (t.speed < speed + .5 ? 3.2 * eagerness : 1.2)
         : Math.abs(t.ahead) < 4 ? (4 - Math.abs(t.ahead)) * 7 : 0 : 0), 0);
   const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
   const target = alley
