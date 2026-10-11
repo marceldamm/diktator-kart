@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Marcels Antworten zu Sarahs Kursideen dokumentiert
+
+Sarahs fünf belegte Kursnamen/Orte bleiben als bestätigte Zielvorgabe erhalten. Marcel möchte Parade und Startgatter in Pjöngjang bewahren, spannende Varianten für Rom/Havanna vergleichen, die älteren fünf Hauptstadtzonen inhaltlich umsetzen und die siebte verbindende Strecke als späteres Ziel behalten. Für Moskau/Peking und die genaue Zuordnung der Altzonen ist nichts Konkretes entschieden; die diktierte Unterführung bleibt ungeklärt. Kursereignisse dürfen innerhalb der bestehenden Grenzen kreativ entworfen werden. Sarahs eigene Rückmeldung und die gemeinsame Klärung ihrer weitergehenden Ideen stehen aus; keine Kontaktaufnahme oder Zustimmung behauptet. Nur die vier Hauptdateien geändert, kein Spielcode oder Laufzeittest.
+
 ## 11.10.2026 – Codex: Marcels 30 Antworten als künftige Rennziele eingeordnet
 
 Marcels priorisierte Zielrichtung in LONG-TERM-GOALS.md dokumentiert: sechs abwechslungsreiche Kurse, Pjöngjang als erster Entwurfspilot, individuell entworfene Abkürzungen und faire Streckenereignisse, mehr tatsächliches Tempo/Itemdynamik/taktische Bots sowie Klang und klare Rennanzeigen. Frühere Audit-Kandidaten als historischen Entwurf gekennzeichnet. Die nummerierten Antworten und offenen Menschenabnahmen stehen in TEAM-NOTES.md, Status/Nächstes in CURRENT-WORKLIST.md. Sarahs ursprüngliche Streckenideen werden als nächstes anhand ihrer Quellen gesondert mit Marcel abgeglichen; keine stillschweigende Änderung. Nur Dokumentation, kein Spielcode, Build oder Laufzeitprüfung in diesem Paket.

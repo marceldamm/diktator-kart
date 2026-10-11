@@ -1,6 +1,24 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
-## 11.10.2026 – Sarahs ursprüngliche Streckenideen: Quellenabgleich und Fragen (offen)
+## 11.10.2026 – Marcels Antworten zu Sarahs Streckenideen (Sarah-Gespräch offen)
+
+Antworten auf die neun Fragen im unmittelbar folgenden Quellenabgleich; Marcels Perspektive wird von Sarahs noch ausstehender Rückmeldung getrennt. Keine Nachricht an Sarah wurde versandt und keine Zustimmung von ihr behauptet.
+
+| Nr. | Marcels Antwort / daraus folgender Status |
+|---|---|
+| 1 | Sarahs fünf Kursnamen und Orte beibehalten. **Bestätigtes Ziel.** |
+| 2 | Marcel kennt derzeit nur die konkreten Angaben in den Dokumentationen. Weitere ursprüngliche Szenen oder Streckendetails von Sarah sind **nicht belegt**; Gespräch mit ihr nötig. |
+| 3 | Für Pjöngjang nannte Marcel „Unter Führung“ (wahrscheinlich „Unterführung“, diktierte Formulierung nicht sicher), Parade und Startgatter; maßgeblich soll auch sein, was Sarah vorsieht. **Parade und Startgatter als zu erhaltende Motive festhalten; Unterführung und weitere Kerne mit Sarah klären.** Der Wunsch nach kurvigeren Passagen bleibt bestehen. |
+| 4 | Für Rom und Havanna soll die beste, spannende Variante gewählt werden; Marcel legt keine heutigen Abschnitte als unveränderlich fest. Konkrete Auswahl erst nach Variantenvergleich und Sarah-Abgleich. |
+| 5 | Für Moskau und Peking hat Marcel noch keine spezifischen Wahrzeichen oder Fahrmomente festgelegt. Gestaltungsvorschläge sollen aus Kursidentität und späterem Sarah-Gespräch entstehen. |
+| 6 | Die fünf älteren Hauptstadtzonen sind Marcel wichtig und **sollen inhaltlich umgesetzt werden**. Ob in Berlin, auf der verbindenden Strecke oder verteilt, ist noch offen. Die persönliche Urheberschaft dieser historischen Ideen bleibt ungeklärt; Marcels Wertschätzung ersetzt keinen Herkunftsbeleg. |
+| 7 | Die siebte, die Themen verbindende Strecke bleibt ein **bestätigtes späteres Ziel**. Motive und Zeitpunkt innerhalb der weiteren Roadmap werden nach den sechs Einzelspielerstrecken bestimmt. |
+| 8 | Marcel gibt für kursbezogene Ereignisse und Risiken kreative Freiheit. Bestehende Satire-, Fairness-, Lesbarkeits- und Leistungsgrenzen sowie Sarahs belegte Namen/Orte gelten weiter. |
+| 9 | Marcel und Sarah müssen über offene Kreativfragen noch miteinander sprechen. Bis dahin keine gemeinsame Bestätigung für Detailänderungen behaupten. |
+
+**Nächster Schritt:** Sarahs Sicht auf ihre fünf Kursideen und Pjöngjang-Motive in einem echten Gespräch einholen; danach Unterschiede, bestätigte Kerne und offene Fragen in den vier Hauptdateien nachführen. Die Fragen werden nicht wiederholt, solange keine neue Information vorliegt.
+
+## 11.10.2026 – Sarahs ursprüngliche Streckenideen: Quellenabgleich und Fragen (Marcel beantwortet; Sarah offen)
 
 **Belegte Herkunft:** Sarahs eigene Nachricht vom 06.10.2026 [unten in dieser Datei](TEAM-NOTES.md) nennt fünf Planungsstrecken mit Ort: **Ewige-Führer-Allee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom), Genossen-Gerade (Moskau)**. Die damalige Streckenauswahl zeigte diese Namen; nur Berlin/Stadionring war zu dem Zeitpunkt spielbar. Heute sind alle sechs Kurse spielbar. Die Dokumente [Rom](docs/26-duce-drom.md), [Havanna](docs/29-havanna-revolutionsring.md) und [Pjöngjang](docs/30-pyongyang.md) trennen Sarahs Namen/Orte von später ausgearbeiteten Routen, Kulissen und Ereignissen. Die fünf Zonen Palastplatz, Boulevard, Staatsdruckerei, Baustelle, Palastgärten stammen aus dem alten gemischten Hauptstadt-Konzept ([Game Design](docs/01-game-design.md), [Alt-Extraktion](docs/11-legacy-extraction.md)); ihre persönliche Urheberschaft ist dort nicht sicher belegt. Die geplante siebte, verbindende Strecke ist ein separater langfristiger Vorschlag. Sarahs möglicherweise nur lokal vorhandene weitere Entwürfe sind hier nicht einsehbar.
 
@@ -16,7 +34,7 @@
 8. Darf jede Themenstrecke ihre eigene Art von Überraschung und Risiko bekommen, oder gibt es zu einem Sarah-Kurs ein Motiv/Ereignis, das ihr ausdrücklich vermeiden möchtet?
 9. Welche dieser Antworten kannst du selbst entscheiden, und welche Punkte möchtest du ausdrücklich erst mit Sarah gemeinsam festlegen? Ihre Zustimmung wird nicht aus Schweigen abgeleitet.
 
-**Status:** Fragen gestellt, noch keine Antworten. Namen/Orte sind belegte Sarah-Beiträge; spätere Ausarbeitungen nicht als ihre Originalentwürfe ausgeben. Ziel zum Abgleich in LONG-TERM-GOALS.md, aktueller Schritt in CURRENT-WORKLIST.md.
+**Status:** Marcels Antworten stehen unmittelbar oben; Sarahs eigene Rückmeldung bleibt offen. Namen/Orte sind belegte Sarah-Beiträge; spätere Ausarbeitungen nicht als ihre Originalentwürfe ausgeben. Ziel zum Abgleich in LONG-TERM-GOALS.md, aktueller Schritt in CURRENT-WORKLIST.md.
 
 ## 11.10.2026 – Marcel: Antworten zum Spielgefühl-Abgleich (Ziele dokumentiert)
 
