@@ -34,6 +34,8 @@ export interface TrackDefinition {
     elevation: readonly (readonly [number, number])[];
     /** [normalised start progress, lane centre] for 6 m shortcut boost strips. */
     boostPads: readonly (readonly [number, number])[];
+    /** Road side the alley branches off: -1 left (default, inside of the counter-clockwise loops), 1 right. */
+    side?: 1 | -1;
   };
   canal: { from: number; length: number };
   rampLips: readonly number[];
@@ -278,41 +280,53 @@ const EWIGE_FUEHRER_ALLEE: TrackDefinition = {
   ],
 };
 
-/** Genossen-Gerade (Sarah's Moscow selection; Marcel 09.10.2026): long parade straights around a broad civic square. */
+/**
+ * Genossen-Gerade (Sarah's Moscow selection; Marcel 09.10.2026): broad parade straights around a civic square.
+ * Second layout (Claude, 11.10.2026 – more variety at about the same length): the south parade straight with the
+ * lap-2 tailwind and the Red Square straight under the Kremlin wall stay; the east side becomes the Moskva serpentine
+ * with a climb to the Sparrow-hill ramp, the west side the Basilius pocket that swings into the square around a
+ * hairpin. The old west boulevard is now a rough, slow shortcut across the pocket's neck – worth it with a turbo.
+ */
 const MOSCOW: TrackDefinition = {
   ...EWIGE_FUEHRER_ALLEE,
   id: 'moscow', name: 'Genossen-Gerade', city: 'Moskau', theme: 'moscow',
-  tagline: 'Breite Parade-Geraden, Roter Platz und riskante Platzquerung',
+  tagline: 'Breite Parade-Geraden, Moskwa-Serpentine, Sperlingsberg-Sprung und Basilius-Kehre',
   controlPoints: [
-    [-300,-240],[-150,-240],[0,-240],[150,-240],[285,-240],[335,-205],[350,-130],[350,0],[350,130],[335,205],[285,240],
-    [150,240],[0,240],[-150,240],[-285,240],[-335,205],[-350,130],[-350,0],[-350,-130],[-335,-205],
+    [-300,-240],[-150,-240],[0,-240],[150,-240],[285,-240],[335,-205],                 // south parade straight (start)
+    [350,-140],[372,-95],[384,-40],[372,15],[338,52],[318,100],[328,160],[300,220],[240,242], // Moskva serpentine, Sparrow-hill climb
+    [150,240],[0,240],[-150,240],[-285,240],[-335,205],                                 // Red Square straight below the Kremlin wall
+    [-350,140],[-330,95],[-290,74],[-250,58],[-228,25],[-238,-8],[-272,-28],[-325,-56], // Basilius pocket and hairpin
+    [-350,-110],[-345,-180],[-322,-224],
   ],
   halfWidth: 8, start: 95, bump: -1,
-  shortcut: { from: 650, to: 1900, halfWidth: 4.2, speedCap: 11.2,
-    points: [[318,-178],[270,-132],[200,-88],[110,-32],[10,28],[-105,78],[-235,92],[-322,73]],
+  /** Old west boulevard: broken parade paving across the pocket's neck; slow unless a turbo is active. */
+  shortcut: { from: 1880, to: 2140, side: 1, halfWidth: 4.2, speedCap: 9.5,
+    points: [[-352,62],[-356,12],[-349,-32]],
     elevation: [[0,0],[1,0]], boostPads: [] },
-  canal: { from: -1000, length: 0 }, rampLips: [1050],
-  boostPads: [[230,0],[1210,0],[2340,0]], craters: [[850,-5,1.8],[860,4,1.8]],
-  grassVerges: [], elevation: [], hazards: [],
-  itemBoxes: [150,590,1070,1680,2280],
-  landmarks: { palace: null, fountains: [[0,0]], trees: [[-60,60],[60,-60]], column: [0,0], gateProgress: 2240, lawns: [], promenade: 7 },
+  canal: { from: -1000, length: 0 }, rampLips: [800],
+  boostPads: [[230,0],[690,0],[1300,0],[2200,0]], craters: [[1560,-5,1.8],[1570,4,1.8]],
+  grassVerges: [],
+  /** Sparrow-hill climb on the east serpentine: up 4.2 m, a short crest and the ramp, landing on the way down. */
+  elevation: [[715,0],[765,4.2],[800,4.2],[845,0]], hazards: [],
+  itemBoxes: [150,560,1150,1450,1760,2260],
+  landmarks: { palace: null, fountains: [[0,0]], trees: [[-60,60],[60,-60]], column: [0,0], gateProgress: 2250, lawns: [], promenade: 7 },
   river: { north: 365, south: 325, west: -480, east: 480, level: -1.15 },
   ground: { west: -500, east: 500, north: 420, south: -340 },
   dressing: {
-    boardRanges: [[0,260],[980,1320],[2130,2470]], flagRange: [620,980], pennants: [45,220,1160,2240,2460], screenProgress: 310,
+    boardRanges: [[0,260],[1150,1450],[2170,2340]], flagRange: [560,900], pennants: [45,220,1160,2240,2330], screenProgress: 310,
     districts: [
-      { from:0,to:300,left:'stands',right:'avenue' }, { from:300,to:520,left:'avenue',right:'avenue' }, { from:520,to:990,left:'plaza',right:'plaza' },
-      { from:990,to:1500,left:'plaza',right:'avenue' }, { from:1500,to:2050,left:'avenue',right:'plaza' },
-      { from:2050,to:99999,left:'avenue',right:'avenue' },
+      { from:0,to:300,left:'stands',right:'avenue' }, { from:300,to:560,left:'avenue',right:'avenue' }, { from:560,to:1150,left:'plaza',right:'avenue' },
+      { from:1150,to:1700,left:'plaza',right:'avenue' }, { from:1700,to:2150,left:'park',right:'avenue' },
+      { from:2150,to:99999,left:'avenue',right:'avenue' },
     ],
     // 10.10.2026: Kremlin-like wall with towers along the north side of the square and the onion-domed cathedral.
-    heroes: [{ m:'kit-palace',s:760,lane:24 },{ m:'kit-obelisk',s:1200,lane:-24 },{ m:'kit-stand-moscow',s:2200,lane:19 },
+    heroes: [{ m:'kit-palace',s:760,lane:26 },{ m:'kit-obelisk',s:1200,lane:-24 },{ m:'kit-stand-moscow',s:2200,lane:19 },
       { m:'kit-kremlin-tower', x:-200, z:200 }, { m:'kit-kremlin-tower', x:0, z:200 }, { m:'kit-kremlin-tower', x:200, z:200 },
       ...[20,46,72,98,124,150,175].flatMap((x) => [{ m:'kit-kremlin-wall', x, z:205 }, { m:'kit-kremlin-wall', x:-x, z:205 }]),
       { m:'kit-onion-church', x:-150, z:150 }],
-    bridges: [320,2240], cathedral: null, petals: [650,850],
+    bridges: [320,2240], cathedral: null, petals: [1300,1600],
   },
-  obstacles: [{ s:1050,lane:-7.5,radius:.38 },{ s:1050,lane:7.5,radius:.38 }],
+  obstacles: [{ s:1400,lane:-7.5,radius:.38 },{ s:1400,lane:7.5,radius:.38 }],
 };
 
 /**

@@ -2,7 +2,7 @@
 
 ## 11.10.2026 – Claude: Pjöngjang-Streckenpilot (zweites Layout) und Paradekolonne
 
-Ewige-Führer-Allee umgebaut: Monument-Schikanen, Triumph-Anstieg mit Sprungrampe, Fackelturm-Kehre um den Juche-Turm, Monumenttor auf der Tor-Allee, kleine Kai-Rampe; Kai, Start und Startgatter unverändert. Unterführung von der Kehre unter dem Paradeplatz zur West-Allee neu geführt (Gewinn 120 statt 213 m). Ab Runde 2 rollt eine Paradekolonne auf der rechten Spur der Tor-Allee, die linke Spur bleibt frei. Länge 1.829 m, gerade Anteile 92 → 58 %. Route und Ereignis sind Claudes Ausarbeitung; Sarahs Rückmeldung steht aus. Details und Prüfung in CURRENT-WORKLIST.md.
+Ewige-Führer-Allee umgebaut: Monument-Schikanen, Triumph-Anstieg mit Sprungrampe, Fackelturm-Kehre um den Juche-Turm, Monumenttor auf der Tor-Allee, kleine Kai-Rampe; Kai, Start und Startgatter unverändert. Unterführung von der Kehre unter dem Paradeplatz zur West-Allee neu geführt (Gewinn 120 statt 213 m). Ab Runde 2 rollt eine Paradekolonne auf der rechten Spur der Tor-Allee, die linke Spur bleibt frei. Länge 1.829 m, gerade Anteile 92 → 58 %. Route und Ereignis sind Claudes Ausarbeitung; Sarahs Rückmeldung steht aus. Moskau ebenso umgebaut: Moskwa-Serpentine mit Sperlingsberg-Sprung, Basilius-Kehre, kurze langsame Abkürzung statt der halben Platzquerung (2.354 m, gerade Anteile 80 → 57 %). Details und Prüfung in CURRENT-WORKLIST.md.
 
 ## 11.10.2026 – Codex: Projektabschluss und Cloud-Übergabe vorbereitet
 

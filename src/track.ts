@@ -112,7 +112,8 @@ export function trackLocate(x: number, z: number): { s: number; lane: number } {
 
 // Shortcut centreline: Catmull-Rom through the inside lanes of both legs and the backyard points.
 function buildShortcutPath() {
-  const raw = [trackPoint(SHORTCUT.from, -3), ...SHORTCUT.points.map(([x, z]) => ({ x, z })), trackPoint(SHORTCUT.to, -3)];
+  const side = (SHORTCUT.side ?? -1) * 3;
+  const raw = [trackPoint(SHORTCUT.from, side), ...SHORTCUT.points.map(([x, z]) => ({ x, z })), trackPoint(SHORTCUT.to, side)];
   const pts: { x: number; z: number }[] = [];
   for (let i = 0; i < raw.length - 1; i++) {
     const p0 = raw[Math.max(0, i - 1)], p1 = raw[i], p2 = raw[i + 1], p3 = raw[Math.min(raw.length - 1, i + 2)];
