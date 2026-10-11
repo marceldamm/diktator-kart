@@ -331,6 +331,11 @@ export function atSecondLapTrackEvent(distance: number, s: number, from: number,
   return distance >= TRACK.length + from - TRACK.start && s >= from && s < to;
 }
 
+/** The lap-two Zeppelin gives a small tailwind only to the outer grandstand lane. */
+export function berlinZeppelinWindAt(s: number, lane: number): boolean {
+  return s >= 45 && s < 182 && lane > 2.4;
+}
+
 /** Returns the zero-based race lap for a course landmark, or null outside its zone/race. */
 export function trackEventLap(distance: number, s: number, from: number, to: number, lastTriggeredLap = -1): number | null {
   if (!Number.isFinite(distance) || !Number.isFinite(s) || distance < 0 || s < from || s >= to) return null;

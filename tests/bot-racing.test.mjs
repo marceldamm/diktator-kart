@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {advanceKart,resolveKartContacts} from '../src/kart-model.ts';
 import {TRACK,selectTrack,setBotSkill,setBotStyles,BOT_STYLES,botInput,gridKart,createRaceProgress,advanceRace,projectTrack,trackHeightAt,applySurfaceDrag,trackPoint} from '../src/track.ts';
-import {createItems,botUsesItem,botItemDirection,stepItems} from '../src/items.ts';
+import {createItems,botUsesItem,botItemDirection,botShouldUseDefense,stepItems} from '../src/items.ts';
 
 test('slow: all difficulty levels complete six courses and produce distinct real race times',()=>{
  const result=[];
@@ -36,4 +36,17 @@ test('a rival fires backward at an aligned pursuer using the shared projectile r
  assert.ok(Math.cos(world.objects[0].heading-karts[0].heading)<-.9);
  const sideways=[karts[0],{...karts[1],x:karts[1].x+20}];world.slots[0]='direct';
  assert.equal(botItemDirection(world,0,sideways),'forward','no blind backward shot');
+});
+
+test('bots save the defensive slot for predicted projectile hits, not traps or fly-bys',()=>{
+ selectTrack('stadionring');const world=createItems(2),owner=gridKart(0),defender={...gridKart(1),x:0,z:0,heading:0,travelHeading:0,speed:0};
+ world.defenseSlots[1]=true;
+ world.objects=[{id:1,kind:'direct',owner:0,x:0,z:-6,heading:0,age:.1,remaining:2,target:null}];
+ assert.equal(botShouldUseDefense(world,1,[owner,defender]),true,'straight incoming shot crosses the kart');
+ world.objects[0]={...world.objects[0],x:4};
+ assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'nearby shot passes outside the collision radius');
+ world.objects[0]={...world.objects[0],kind:'trap',x:0};
+ assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'stationary trap cannot spend the projectile shield');
+ world.defenseSlots[1]=false;world.objects[0]={...world.objects[0],kind:'direct'};
+ assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'empty reserve slot cannot activate');
 });

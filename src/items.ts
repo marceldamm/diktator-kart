@@ -221,3 +221,20 @@ export function botUsesItem(world:ItemWorld,index:number,karts:KartState[],patie
   });
   return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<45&&wrap(backward?trackProgress(k.x,k.z)-trackProgress(other.x,other.z):trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<50)||world.heldFor[index]>6*patience;
 }
+
+/** Spend a bot's reserve defense only when relative motion predicts an incoming hit. */
+export function botShouldUseDefense(world:ItemWorld,index:number,karts:KartState[]):boolean {
+  if(!world.defenseSlots[index])return false;
+  const kart=karts[index],kartHeading=kart.travelHeading??kart.heading;
+  const kartVx=Math.sin(kartHeading)*kart.speed,kartVz=Math.cos(kartHeading)*kart.speed;
+  const horizon=Math.min(.65,ITEM_RULES.defenseDuration);
+  return world.objects.some((object)=>{
+    if(object.owner===index||object.kind==='trap'||object.remaining<=0)return false;
+    const rx=kart.x-object.x,rz=kart.z-object.z;
+    const rvx=kartVx-Math.sin(object.heading)*ITEM_RULES.speed,rvz=kartVz-Math.cos(object.heading)*ITEM_RULES.speed;
+    const relativeSpeedSq=rvx*rvx+rvz*rvz;
+    const closestTime=relativeSpeedSq>1e-6?Math.max(0,Math.min(horizon,-(rx*rvx+rz*rvz)/relativeSpeedSq)):0;
+    const dx=rx+rvx*closestTime,dz=rz+rvz*closestTime;
+    return Math.hypot(dx,dz)<=ITEM_RULES.hitRadius+.35;
+  });
+}

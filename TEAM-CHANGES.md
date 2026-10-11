@@ -1,5 +1,13 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Bot-Abwehrslot sagt Treffer voraus
+
+Der Bot-Abwehrslot zündete bisher für jedes nicht-Fallen-Objekt im 10-m-Umkreis. `botShouldUseDefense` sagt nun mit relativer Geschwindigkeit von Kart und Projektil voraus, ob der kleinste Abstand in den nächsten 0,65 Sekunden bis an den Trefferbereich heranreicht. Fremde aktive Projektile zählen; eigene, abgelaufene und Fallenobjekte nicht. `main.ts` nutzt die Funktion für alle Bots, die gemeinsame Itemwirkung bleibt unverändert. Vier gezielte Fälle und Vollsuite 136/136 bestanden; TypeScript und Build bestanden. Sichtabnahme in einer längeren Itemfahrt bleibt offen.
+
+## 11.10.2026 – Codex: Berliner Zeppelin mit fairer Linienwahl
+
+Der ortsgebundene Runde-zwei-Zeppelin hat nun einen spielwirksamen Nachlauf: 14 Sekunden lang erhalten bodengebundene Karts ohne aktiven Turbo auf der äußeren Tribünenspur zwischen s=45 und 182 einen kleinen, schrittweise aufgebauten Tempovorteil bis +1,2 m/s. Die Innenlinie bleibt eine unbeeinflusste Gegenwahl. Spieler und Bots nutzen dieselbe Regel; die Meldung erklärt beide Linien. Der neue Streckentest prüft Start/Zonenende und die freie Innenlinie. Vollsuite 135/135 und TypeScript bestanden; Produktionsbuild erfolgreich, mit der bekannten Chunkwarnung bei 2.163,74 KB / 534,71 KB gzip. Sichtbare Runtime-Abnahme steht noch aus.
+
 ## 11.10.2026 – Codex: Berliner Zeppelin ortsgebunden ausgelöst
 
 Der Runde-zwei-Hinweis zum Berliner Zeppelin bleibt in Runde 1 bestehen. Der Zeppelin startet jetzt erst, wenn ein Kart die Stadiongerade (s=45–182) in Runde 2 erreicht; `lapTimes.length === 1` löst ihn nicht mehr direkt am Start-/Rundenwechsel aus. Die gemeinsame Ereignisregression umfasst damit alle sechs Kurse. Gezielte Tests 30/30, TypeScript, Build und Vollsuite 133/133 bestanden. Der Build meldet unverändert das große Hauptbundle. Ein versteckter GP-Lauf erreichte Anzeige 2/3, konnte Trigger und Zeppelinbild aber nicht bestätigen; seine Runtime-Abnahme und die Sichtprüfung der Publikumsreaktionen bleiben offen.
