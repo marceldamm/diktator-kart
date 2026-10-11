@@ -693,7 +693,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     const posingUntil: number[] = [];
     /** Tank victims: flattened like a pancake until this time (seconds), then spring back. */
     const squashUntil: number[] = [];
-    // Duce-Drom lap-2 event: the empty balcony 'speaks' and a rose-petal shower drifts over the Prunkstraße (decorative, same for all).
+    // Duce-Drom lap-2 event: the empty balcony 'speaks'; petals gather around the podium and central racing line.
     const roseTexture = new DynamicTexture('Rose petal sprite', { width: 32, height: 32 }, scene, false);
     { const c = roseTexture.getContext() as CanvasRenderingContext2D; c.fillStyle = '#fff'; c.beginPath(); c.ellipse(16, 16, 12, 8, .4, 0, Math.PI * 2); c.fill(); roseTexture.hasAlpha = true; roseTexture.update(); }
     const roses = new ParticleSystem('Balcony rose shower', 420, scene); roses.particleTexture = roseTexture;

@@ -1,5 +1,13 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Duce-Drom-Streckenpass, Abschluss und Grenzen
+
+Die Romroute ist auf 1.367 m verlängert (vorher 1.238 m). 2-m-Abtastung mit |Krümmung| < 1/150 m: gerade Anteile 55 → 38 %. Neu sind zwei zusätzliche Aventin-Richtungswechsel, verschlungene Tiber-Anfahrt, S-Bogen am Triumphbogen, kleiner Tiber-Kicker sowie die im Belvedere-Plateau verbleibende 6-m-Rampe. Die Stallgasse taucht bis zu 1,6 m ab und bietet einen festen Schubstreifen. Balkonrede: Trigger bei Eintritt ins Balkonviertel der zweiten Runde, 14 Sekunden, Rosenwirbel bremst auf der Mittellinie; zwei Außenlinien sind frei. Im selben Lauf werden alle Karts gleich behandelt.
+
+Prüfung abgeschlossen: `npm test` 114/114, `npm run test:full` 131/131, `npm run typecheck` und `npm run build` bestanden. Build meldet das bestehende große Babylon-Bündel (2.160 KB, 534 KB gzip). Eigener verborgener Codex-In-App-Browser lud den Kurs; Karte 1.367 m, HUD 51–68 km/h, Botreihenfolge änderte sich und ein Kontakt zeigte 74 % Karosseriezustand. Der Lauf endete vor einem vollständigen Rennen und vor Runde-2-Balkonereignis; kein FPS-, Konsolen- oder menschlicher Fahrtest. Testtab und eigener Vite-Server wurden beendet. Offizielle Codex-Werte: 6 % Fünf-Stundenverbrauch / 16 % Wochenverbrauch (94 % / 84 % Rest).
+
+Die operative Liste bestätigter offener Pakete steht in CURRENT-WORKLIST.md: Havanna, Peking, Sechs-Kurse-Pass, Ereignisse, Bots/Items, Fahrgefühl, Audio/Publikum, visuelle Qualität und Geräte-/Menschenabnahmen. Unbeurteilte Balancefragen und Sarahs nicht dokumentierte Originaldetails bleiben offen für ein Gespräch.
+
 ## 11.10.2026 – Codex: Tempo-Paket, Prüfergebnisse und Grenzen
 
 Projektstart: sauberer `main`-Checkout und `origin/main` waren auf `1eba44f` identisch; Team-Startskript meldete keine ungesicherten Änderungen oder Überschneidungen. Tempo-Paket: normale Spitze 19,5 m/s, Turbo 24,5 m/s; Beschleunigung, Kartkontakt-Crashschwelle, Item-/Projektiltempo, Botreaktion und Kamera nachgeführt. Ein weiterer Testfehler offenbarte, dass `advanceKart` `topSpeedBonus` verlor; das Feld wird jetzt weitergereicht.

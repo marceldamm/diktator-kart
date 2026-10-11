@@ -33,7 +33,7 @@ test('drift arcs: inside ~18 m, neutral ~29 m, outside ~75 m at any speed; braki
 test('a hop on a hill stays on the road (Marcel 11.10.2026: the kart used to sink under a sloped road)', async () => {
   const T = await import('../src/track.ts');
   T.selectTrack('duce-drom');
-  for (const s0 of [520, 580, 690, 715]) {
+  for (const s0 of [500, 530, 670, 700]) {
     const p = T.trackPoint(s0, 0), ground = T.trackHeightAt(p.x, p.z);
     let k = { ...initialKartState(), ...p, travelHeading: p.heading, speed: 12, suspensionOffset: ground, wheelGroundHeights: [ground, ground, ground, ground] };
     for (let i = 0; i < 30; i++) k = advanceKart(k, { throttle: 1, steering: 0 }, dt, T.projectTrack, T.trackHeightAt);

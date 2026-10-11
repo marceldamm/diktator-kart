@@ -300,6 +300,11 @@ export function boostPadAt(x: number, z: number): number {
   return BOOST_PADS.findIndex(([from, centre]) => s >= from && s <= from + 6 && Math.abs(lane - centre) <= 1.5);
 }
 
+/** Rome lap-two balcony roses cover the middle strip briefly; two outer lines stay clear. */
+export function balconyRosePatchAt(s: number, lane: number): boolean {
+  return s >= 970 && s < 1125 && Math.abs(lane) < 2.4;
+}
+
 /** A kart beyond the open quay edge drops into the harbour basin. */
 export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | null {
   const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);

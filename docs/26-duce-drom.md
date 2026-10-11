@@ -8,23 +8,25 @@
 - **Referenzlage:** Rom bietet gut belegte, allgemein bekannte Bautypen (Circus-Rennbahn mit Obelisk, Triumphbögen, Aquädukte, Forum-Ruinen, Schirmpinien, ockerfarbene Palazzi, Tiber-Kai, Kuppelkirche). Machtinszenierung („Balkonreden“, Prunkstraßen, Marmorpathos) lässt sich satirisch zeigen, ohne Regimezeichen zu verwenden.
 - **Streckenpotenzial:** Rennbahn-Gerade, enge Meta-Kehre, Hügel mit Serpentine und Plateau, Abfahrt zum Wasser und eine lange Prunkstraße ergeben einen deutlich anderen Rhythmus als der Stadionring.
 
-## Route (gegen den Uhrzeigersinn, 1 238 m)
+## Route, zweiter Fahrpass (gegen den Uhrzeigersinn, ca. 1 367 m)
 
 | Abschnitt | Fortschritt | Inhalt |
 |---|---|---|
-| Circus-Gerade | 0–262 m | Start/Ziel bei 52 m, Tribünen beidseitig, Schubfeld, Itemreihe bei 150 m |
-| Meta-Kehre | 262–455 m | weiter Linksbogen um den Obelisken (eigenes Modul); innen die **Stallgasse** als Abkürzung |
-| Aventin-Serpentine | 455–600 m | engste Kurven der Strecke, Anstieg auf 6 m mit Stützmauern und Brüstung |
-| Belvedere | 600–652 m | Plateau mit Schubfeld und **Belvedere-Sprung** (Rampenkante 646 m) |
-| Abfahrt | 652–737 m | Gefälle zurück auf Straßenniveau, Itemreihe bei 705 m |
-| Tiber-Kai | 748–830 m | offene Kaikante rechts (Wasserbecken, Bergungsamt), Tiber und Kuppelkirche dahinter |
-| Forum-Bogen | 838–1 000 m | Ruinen, Statuen, Insulae; Schubfeld 860 m links |
-| Prunkstraße | 1 000–1 180 m | Balkonpalast (rechts), Triumphbogen bei 1 050 m, Bodenwelle 1 120 m, Itemreihe 1 005 m |
-| Kolosseumskehre | 1 180–1 238 m | enge Linkskehre zurück auf die Circus-Gerade |
+| Circus-Gerade | 0–262 m | Start/Ziel bei 52 m, Tribünen beidseitig, Schubfeld und Itemreihe bei 150 m; bleibt der schnelle Auftakt |
+| Meta-Kehre | 262–455 m | engerer Richtungswechsel um den Obelisken; innen die **Stallgasse** als feste Abkürzung |
+| Aventin-Switchbacks | 455–665 m | wechselnde Links-/Rechtslinien auf den Hügel, kurzer Zwischensattel und zweiter Anstieg |
+| Belvedere | 665–720 m | 6-m-Plateau mit dem großen **Belvedere-Sprung** (Rampenkante 700 m) |
+| Abfahrt / Tiber-Anfahrt | 720–835 m | schnelle Abfahrt und Folge enger werdender Bögen |
+| Tiber-Kai | 835–960 m | offene Kaikante rechts, Bootsbecken und Kuppelkirche; kleiner zweiter Rampenkicker bei 850 m, sichere Innenlinie neben dem Wasser |
+| Forum-Bogen | 960–1 100 m | Ruinen, Statuen, Insulae, wechselnde Bögen; Balkonpalast beginnt am Abschnittseingang |
+| Prunkstraße | 1 100–1 260 m | S-Kurve unter dem Triumphbogen, Bodenwelle und Itemreihe; Rosenwirbel-Ereignis in der zweiten Runde |
+| Kolosseumskehre | 1 260–1 367 m | enger Einlenkbogen zurück auf die Circus-Geraden |
 
-**Risiko-/Abkürzungsentscheidung:** Die Stallgasse (Schotter, 3 m halbe Breite) verbindet 270 m mit 452 m auf deutlich kürzerem Weg, deckelt das Tempo aber ohne Mini-Turbo auf 10,5 m/s. Mit Turbo lohnt sie sich, ohne Turbo ist sie knapp. Bot 4 nimmt sie wie auf dem Stadionring nach denselben Regeln.
+**Kurvenaudit:** Annähernd gerade Anteile sinken mit der bisherigen 2-m-Messregel (|Krümmung| < 1/150 m) von 55 % auf 38 %. Die Runde wächst um rund 10 %; die genaue Zielfahrt und Balance müssen noch menschlich beurteilt werden.
 
-**Streckenereignis:** In Runde 2 hält der leere Balkon seine „Rede“: Ansage im HUD, Publikumsjubel und ein dichter Rosenblätterregen über der Prunkstraße. Rein visuell, für alle gleich, verdeckt Fahrbahn und Rangliste nicht.
+**Risiko-/Abkürzungsentscheidung:** Die abgesenkte Stallgasse (Schotter, 3,2 m halbe Breite) verbindet 270 m mit 452 m auf deutlich kürzerem Weg und deckelt das Tempo ohne Turbo auf 11,5 m/s. Ein Booststreifen liegt im Tunnel; Fahrer entscheiden zwischen risikoreicherem Schub und freier Hauptlinie. Bot 4 nutzt den Weg wie zuvor.
+
+**Streckenereignis:** Die Balkonrede wird vor Runde 2 angekündigt und startet, sobald ein Kart das Balkonviertel der zweiten Runde erreicht. Für 14 Sekunden bremst der Rosenwirbel die Mittellinie; beide Außenlinien bleiben frei. HUD, Jubel und sichtbarer Blütenregen begleiten dieselbe Wirkung für Spieler und Bots. Das Ereignis ist jetzt spielwirksam und zeitlich an den Streckenabschnitt gebunden.
 
 ## Welt
 
@@ -38,7 +40,7 @@ Neue editierbare Blender-Module in `art-source/rome_kit_modules.py` (gebaut übe
 
 ## Offen
 
-Menschliche Fahr- und Stilabnahme, Messung auf Intel UHD, eigener Ton für die Balkonrede (derzeit Jubel), eigene Bodentextur jenseits des gemeinsamen Kopfsteinpflasters.
+Der zweite Fahrpass wurde technisch, automatisiert und mit einer kurzen Runtime-Stichprobe geprüft. Offen bleiben Marcels menschlicher Fahr- und Stilabnahme, ein vollständiger Lauf bis zur Balkonrede der zweiten Runde, Messung auf Intel UHD, ein eigener Ton für die Balkonrede (derzeit Jubel) und eine eigene Bodentextur jenseits des gemeinsamen Kopfsteinpflasters. Die kurze Stichprobe belegt weder vollständige Rennbalance noch FPS oder menschliches Fahrgefühl.
 
 ## Themenpass 07.10.2026 (Marcels Rückmeldung „mehr themenbasiert“)
 

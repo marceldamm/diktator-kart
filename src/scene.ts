@@ -69,7 +69,7 @@ export interface TestScene {
   splash?(kart: number, kind?: 'water' | 'lava' | 'cliff' | 'crater'): void;
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
-  /** Announced decorative track event (lap 2 propaganda zeppelin flyover). */
+  /** Announced lap-two course set piece (course-specific visuals plus any route effect). */
   trackEvent?(kind: 'zeppelin' | 'balcony' | 'wave' | 'parade' | 'loudspeaker' | 'column'): void;
   /** Dirt burst when a kart drops into a shell crater. */
   craterHit?(kart: number): void;

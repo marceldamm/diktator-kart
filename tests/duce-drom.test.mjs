@@ -3,7 +3,7 @@ import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { TRACKS } from '../src/track-layout.ts';
 import * as layout from '../src/track-layout.ts';
-import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, elevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, hazardAt, recoverKart, atRampLip } from '../src/track.ts';
+import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, elevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, hazardAt, recoverKart, atRampLip, boostPadAt, balconyRosePatchAt } from '../src/track.ts';
 import { createItems } from '../src/items.ts';
 import * as trackModule from '../src/track.ts';
 
@@ -13,7 +13,15 @@ const onRome = (fn) => () => { selectTrack('duce-drom'); try { fn(); } finally {
 test('Duce-Drom is its own circuit: different route, length and features from the Stadionring', onRome(() => {
   assert.equal(TRACK.id, 'duce-drom');
   assert.equal(layout.TRACK_INFO.city, 'Rom');
-  assert.ok(TRACK.length > 1150 && TRACK.length < 1350, `length ${TRACK.length}`);
+  assert.ok(TRACK.length > 1250 && TRACK.length < 1450, `length ${TRACK.length}`);
+  let straight = 0;
+  for (let s = 0; s < TRACK.length; s += 2) {
+    const a = trackPoint(s), b = trackPoint(Math.min(TRACK.length, s + 2)); let turn = b.heading - a.heading;
+    while (turn > Math.PI) turn -= Math.PI * 2; while (turn < -Math.PI) turn += Math.PI * 2;
+    const ds = Math.min(2, TRACK.length - s);
+    if (Math.abs(turn / ds) < 1 / 150) straight += ds;
+  }
+  assert.ok(straight / TRACK.length < .45, `near-straight route share ${(100 * straight / TRACK.length).toFixed(1)}%`);
   const berlin = TRACKS.stadionring.controlPoints;
   assert.notDeepEqual(layout.TRACK_CONTROL_POINTS, berlin);
   assert.equal(layout.CANAL_LENGTH, 0);
@@ -35,15 +43,27 @@ test('Duce-Drom progress is continuous and barriers contain karts except at the 
   }
 }));
 
-test('Duce-Drom hill: serpentine climbs to a 6 m Belvedere plateau with a take-off ramp before the descent', onRome(() => {
+test('Duce-Drom hills: switchback climb, Belvedere jump and lower quay kicker have distinct height changes', onRome(() => {
   assert.equal(elevationAt(300), 0);
   assert.ok(elevationAt(530) > 2 && elevationAt(530) < 6);
-  assert.equal(elevationAt(620), 6);
+  assert.equal(elevationAt(690), 6);
   const lip = trackPoint(layout.RAMP_LIPS[0] - .5);
   assert.ok(atRampLip(lip.x, lip.z));
   assert.ok(trackHeightAt(lip.x, lip.z) > 6.8, 'ramp sits on top of the plateau');
-  assert.ok(elevationAt(700) < 6 && elevationAt(745) === 0);
+  assert.ok(elevationAt(780) < 6 && elevationAt(810) === 0);
+  assert.equal(layout.RAMP_LIPS.length, 2, 'the smaller Tiber-side kicker creates another jump choice');
+  const shortcutPad = shortcutPoint(SHORTCUT_LENGTH * .47);
+  assert.ok(boostPadAt(shortcutPad.x, shortcutPad.z) >= layout.BOOST_PADS.length, 'the sunken Stallgasse has a boost strip');
+  const sidePad = trackPoint(430, -2.2);
+  assert.ok(boostPadAt(sidePad.x, sidePad.z) >= 0, 'the shortcut approach offers a clear-line boost');
 }));
+
+test('Duce-Drom lap-two rose patch slows only its middle line and leaves both outside lines open', () => {
+  assert.equal(balconyRosePatchAt(1000, 0), true);
+  assert.equal(balconyRosePatchAt(1000, -3), false);
+  assert.equal(balconyRosePatchAt(1000, 3), false);
+  assert.equal(balconyRosePatchAt(1125, 0), false);
+});
 
 test('slow: Duce-Drom: five bots finish three laps over the hill with the shared controller', onRome(() => {
   let states = Array.from({ length: 5 }, (_, i) => gridKart(i + 1));

@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Zweiter Duce-Drom-Fahrpass abgeschlossen
+
+Rom wurde auf 1.367 m verlängert und mit Aventin-Switchbacks, weiteren Tiber-Kehren, einer S-Kurve unter dem Triumphbogen und einem zweiten kleinen Sprung verdichtet. Der annähernd gerade Anteil sinkt nach der 2-m-Auditregel von 55 % auf 38 %. Die Stallgasse ist eine abgesenkte Schotter-Abkürzung mit Booststreifen; auf Runde 2 bremst die angekündigte Balkonrede zeitweise die Mittellinie, während beide Außenlinien offen bleiben. Prüfung abgeschlossen: `npm test` 114/114; `npm run test:full` 131/131; `npm run typecheck` und `npm run build` bestanden. Verborgener In-App-Browser lud Duce-Drom (1.367 m), zeigte 51–68 km/h, wechselnde Botreihenfolge und einen Kontakt mit 74 % Karosseriezustand. Kein vollständiges Rennen, kein Runde-2-Balkonereignis, keine FPS-/Konsolen- oder menschliche Fahrabnahme. Build-Warnung: bestehendes großes Babylon-Bündel (2.160 KB, 534 KB gzip). Offizielle Codex-Werte: 6 % Fünf-Stundenverbrauch / 16 % Wochenverbrauch (94 % / 84 % Rest). Nächster Kurs: Havanna; danach Peking und der integrierte Sechs-Kurse-Pass. Weitere bestätigte A-Aufgaben stehen in CURRENT-WORKLIST.md.
+
 ## 11.10.2026 – Codex: Globales Fahrtempo und Rennabstimmung erhöht
 
 Normales Spitzentempo 16 → 19,5 m/s, Turbo 20 → 24,5 m/s, Beschleunigung 10 → 12 m/s². Kart-Crashschwelle, Drift-/Turboschub, Itemboosts, Projektil-/Staatsbesuchtempo, Bot-Reaktionsweite und Kurvenvorausschau sowie Kamera-Speedkick abgestimmt. `advanceKart` erhält jetzt den Medaillen-Temposchub dauerhaft. Volltest 130/130, separater Langtest 17/17, Typprüfung und Build erfolgreich; verborgene In-App-Demo bis Runde 2 mit 70–79 km/h und ohne Browserkonsolenfehler geprüft. Kein vollständiges Rennen/FPS-Abnahme; menschliche Fahrurteile offen. Einzelheiten und nächster Kursblock in CURRENT-WORKLIST.md.

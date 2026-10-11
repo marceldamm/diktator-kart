@@ -127,32 +127,32 @@ const STADIONRING: TrackDefinition = {
 const R = 1.15;
 const DUCE_DROM: TrackDefinition = {
   id: 'duce-drom', name: 'Duce-Drom', city: 'Rom', theme: 'rome',
-  tagline: 'Circus-Gerade, Meta-Kehre, Belvedere-Sprung, Tiber-Kai und Triumphbogen',
+  tagline: 'Circus-Kehren, Aventin-Serpentine, Belvedere-Sprung, Tiber-Kai und Triumphbogen',
   controlPoints: ([
     [-140, -112], [-80, -113], [-20, -113], [40, -112], [90, -110],   // Circus straight, east (stands both sides)
     [125, -118], [158, -108], [175, -80], [168, -50], [146, -34],      // Meta-Kehre around the obelisk
-    [122, -22], [112, 0], [124, 22], [128, 46],                       // Aventin serpentine, climbing
-    [114, 66], [96, 82],                                               // Belvedere plateau and jump
-    [76, 102], [50, 122], [20, 134],                                   // descent toward the Tiber
-    [-20, 140], [-60, 140],                                            // Tiber quay, open water on the right
-    [-100, 136], [-138, 124], [-168, 100], [-182, 68],                // forum sweep
-    [-185, 30], [-186, -10], [-185, -50],                              // Prunkstraße through the triumphal arch
-    [-180, -82], [-166, -104],                                         // Kolosseumskehre into the Circus
+    [122, -22], [105, -8], [112, 8], [132, 22], [138, 40],            // Aventin switchback: outside/inside line choice
+    [126, 56], [105, 62], [92, 51], [78, 61], [76, 79], [91, 92],     // climbing esses onto the Belvedere
+    [76, 108], [51, 126], [23, 137],                                   // Belvedere jump and descent
+    [13, 155], [-9, 164], [-33, 153], [-55, 145], [-76, 158],          // Tiber quay bends, water edge on the right
+    [-101, 151], [-124, 138], [-147, 118], [-169, 96],                // Forum double-sweep
+    [-184, 67], [-193, 38], [-187, 10], [-176, -17], [-185, -47],     // Prunkstraße S-bend under the triumphal arch
+    [-190, -75], [-181, -96], [-162, -109],                            // Kolosseumskehre into the Circus
   ] as const).map(([x, z]) => [x * R, z * R] as const),
   halfWidth: 6, start: 52, bump: 1120,
-  /** Stallgasse: gravel lane of the old circus stables, straight through the Meta-Kehre. */
-  shortcut: { from: 270, to: 452, halfWidth: 3, speedCap: 10.5, points: [[118 * R, -92 * R], [131 * R, -64 * R]], elevation: [[0, 0], [1, 0]], boostPads: [] },
+  /** Stallgasse: rough, sunken service lane under the circus stable arches; one risky line through the Meta-Kehre. */
+  shortcut: { from: 270, to: 452, halfWidth: 3.2, speedCap: 11.5, points: [[118 * R, -92 * R], [131 * R, -64 * R]], elevation: [[0, 0], [.28, -1.6], [.72, -1.6], [1, 0]], boostPads: [[.44, 0]] },
   canal: { from: -1000, length: 0 },
-  rampLips: [646],
-  boostPads: [[112, 0], [612, 0], [860, -2.5], [1092, 0]],
+  rampLips: [700, 850],
+  boostPads: [[112, 0], [612, 0], [930, -2.5], [1092, 0], [430, -2.2]],
   craters: [], grassVerges: [],
-  elevation: [[455, 0], [600, 6], [652, 6], [737, 0]],
-  hazards: [{ from: 748, to: 830, side: 1, basin: 10, kind: 'water' }],
-  itemBoxes: [150, 705, 1005],
+  elevation: [[430, 0], [510, 3.3], [600, 0], [665, 6], [720, 6], [810, 0], [912, 1.8], [968, 0]],
+  hazards: [{ from: 835, to: 960, side: 1, basin: 10, kind: 'water' }],
+  itemBoxes: [150, 705, 1005, 455],
   landmarks: {
     palace: null, fountains: [], trees: [],
     column: [150 * R, -78 * R], gateProgress: 1050,
-    lawns: [[-172, -100, 95, 60], [-160, 60, 40, 124]], promenade: 5,
+    lawns: [[30, -90, 55, -70]], promenade: 5,
   },
   river: { north: 262, south: 186, west: -460, east: 520, level: -1.15 },
   ground: { west: -460, east: 520, north: 470, south: -420 },
@@ -161,8 +161,9 @@ const DUCE_DROM: TrackDefinition = {
     districts: [
       { from: 0, to: 262, left: 'stands', right: 'stands' }, { from: 262, to: 455, left: 'ruins', right: 'stands' },
       { from: 455, to: 600, left: 'pines', right: 'pines' }, { from: 600, to: 748, left: 'insula', right: 'pines' },
-      { from: 748, to: 838, left: 'insula', right: 'quay' }, { from: 838, to: 1000, left: 'ruins', right: 'insula' },
-      { from: 1000, to: 1180, left: 'avenue', right: 'avenue' }, { from: 1180, to: 99999, left: 'stands', right: 'stands' },
+      { from: 748, to: 835, left: 'insula', right: 'quay' }, { from: 835, to: 960, left: 'quay', right: 'quay' },
+      { from: 960, to: 1100, left: 'ruins', right: 'insula' }, { from: 1100, to: 1260, left: 'avenue', right: 'avenue' },
+      { from: 1260, to: 99999, left: 'stands', right: 'stands' },
     ],
     heroes: [
       { m: 'kit-balcony-palace', s: 985, lane: 22 },
