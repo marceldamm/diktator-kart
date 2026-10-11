@@ -152,6 +152,13 @@ export class KartAudio {
     this.music.loop=true;this.music.preload='metadata';this.music.playbackRate=rate;
     if(resume&&this.enabled)void this.music.play().catch(()=>{/* Next unlock gesture retries playback. */});
   }
+  /** Track selection (11.10.2026): clicking a circuit card plays that circuit's music right away, from its start. */
+  previewTrackMusic(track:TrackId):void {
+    const changed=this.musicTrack!==track;this.setTrackMusic(track);
+    if(!this.enabled)return;
+    if(changed)this.music.currentTime=0;
+    if(this.music.paused)void this.music.play().catch(()=>{/* Next unlock gesture retries playback. */});
+  }
   itemEvent(kind:'pickup'|'launch'|'hit'):void { this.play(kind==='pickup'?this.pickup:kind==='launch'?this.launch:this.impact,.65); }
   dogBark():void { this.play(this.bark,.85); }
   /** Original temporary parody, not an authentic historical recording. No key-repeat spam. */

@@ -122,12 +122,14 @@
         const heading = document.getElementById('loading-heading');
         const retry = document.getElementById('loading-retry');
         const overlay = document.querySelector('.loading-screen');
-        let failed = false;
+        let failed = false, pending = null;
+        const offlineNote = () => navigator.onLine === false ? ' Sobald die Internetverbindung zurück ist, lädt das Spiel automatisch neu.' : '';
         const fail = detail => {
+          clearTimeout(pending); pending = null;
           if (!document.body.classList.contains('is-loading')) return;
           failed = true;
           heading.textContent = 'Der Start wurde unterbrochen';
-          message.textContent = 'Das Spiel konnte nicht vollständig geladen werden. Prüfe die Verbindung und versuche es erneut.';
+          message.textContent = 'Das Spiel konnte nicht vollständig geladen werden. Prüfe die Verbindung und versuche es erneut.' + offlineNote();
           document.getElementById('loading-error-detail').textContent = detail;
           document.getElementById('loading-error').hidden = false;
           count.textContent = 'Startfehler';
@@ -135,8 +137,16 @@
           retry.hidden = false;
           overlay.setAttribute('aria-busy', 'false');
         };
+        // A stray script error or rejected promise is only a start failure if loading then stops moving
+        // (11.10.2026: after a short connection drop the error stayed on screen although the game loaded on).
+        const suspect = detail => { if (!failed && pending === null) pending = setTimeout(() => fail(detail), 8000); };
+        const clear = () => {
+          clearTimeout(pending); pending = null; failed = false;
+          retry.hidden = true;
+          document.getElementById('loading-error').hidden = true;
+        };
         window.addEventListener('dk:load-progress', ({ detail }) => {
-          failed = false;
+          clear();
           progress.max = detail.total;
           if (detail.completed === 0) progress.removeAttribute('value');
           else progress.value = detail.completed;
@@ -144,16 +154,17 @@
           message.textContent = detail.message;
           heading.textContent = detail.heading || 'Das Stadion wird vorbereitet';
           if (detail.footnote) document.querySelector('.loading-footnote span').textContent = detail.footnote;
-          retry.hidden = true;
-          document.getElementById('loading-error').hidden = true;
           overlay.setAttribute('aria-busy', String(detail.completed < detail.total));
         });
+        window.addEventListener('dk:load-ready', clear);
         window.addEventListener('dk:load-error', ({ detail }) => fail(detail));
         window.addEventListener('error', event => {
           if (event.target instanceof HTMLScriptElement && event.target.type === 'module') fail('Die Spielmodule konnten nicht geladen werden. Prüfe die Verbindung und versuche es erneut.');
-          else if (event.message) fail(`Das Spiel konnte nicht gestartet werden: ${event.message}`);
+          else if (event.message) suspect(`Das Spiel konnte nicht gestartet werden: ${event.message}`);
         }, true);
-        window.addEventListener('unhandledrejection', event => fail(`Der Spielstart ist fehlgeschlagen: ${event.reason?.message || event.reason || 'Unbekannter Fehler'}`));
+        window.addEventListener('unhandledrejection', event => suspect(`Der Spielstart ist fehlgeschlagen: ${event.reason?.message || event.reason || 'Unbekannter Fehler'}`));
+        // Connection back: a failed start retries by itself instead of keeping the old error on screen.
+        window.addEventListener('online', () => { if (failed && document.body.classList.contains('is-loading')) location.reload(); });
         document.querySelector('.loading-art').addEventListener('error', event => { event.target.style.visibility = 'hidden'; });
         retry.addEventListener('click', () => location.reload());
         setTimeout(() => {

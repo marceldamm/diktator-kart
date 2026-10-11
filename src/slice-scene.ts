@@ -32,7 +32,7 @@ import type { Camera } from '@babylonjs/core/Cameras/camera';
 import { TRACK, drivingSurfaceAt, elevationAt, trackHeightAt, trackLocate, trackPoint, shortcutLocate, shortcutPoint } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, TRACK_INFO, SHORTCUT } from './track-layout';
 import { addCityWorld } from './city-world';
-import { addTrackWorld } from './track-world';
+import { addTrackWorld, tunnelParkSpots } from './track-world';
 import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
 import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
 import { airTrickRoll, armGripPose, twoBoneElbow } from './kart-visuals';
@@ -126,7 +126,10 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     for(const material of treeContainer.materials) if(material instanceof PBRMaterial && material.name.includes('leaves')) {
       material.backFaceCulling=false;
     }
-    for (const [x, z] of LANDMARKS.trees) {
+    // Ewige-Führer-Allee: the park on the tunnel lid gets its own trees (11.10.2026); they stand over the tunnel on purpose.
+    const lidTrees = TRACK.id === 'pyongyang' ? tunnelParkSpots().map((p) => [p.x, p.z] as const) : [];
+    for (const [x, z] of [...LANDMARKS.trees, ...lidTrees]) {
+      const onLid = lidTrees.some(([lx, lz]) => lx === x && lz === z);
       const instance = treeContainer.instantiateModelsToScene((name) => `park ${x} ${z}/${name}`, false);
       const root = new TransformNode(`Park tree ${x} ${z}`, scene); instance.rootNodes.forEach((n) => n.parent = root);
       const bounds = root.getHierarchyBoundingVectors(); const height = bounds.max.y - bounds.min.y;
@@ -135,7 +138,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       const clear = (at: { x: number; z: number }) => Math.abs(trackLocate(at.x, at.z).lane) > TRACK.halfWidth + radius + 1
         && shortcutLocate(at.x, at.z).distance > SHORTCUT.halfWidth + radius + 1
         && !LANDMARKS.fountains.some(([fx, fz]) => Math.hypot(at.x - fx, at.z - fz) < radius + 8);
-      if (!clear({ x, z })) {
+      if (!onLid && !clear({ x, z })) {
         const alley = shortcutLocate(x, z), main = trackLocate(x, z), candidates: { x: number; z: number }[] = [];
         for (const extra of [1.5, 4, 8, 14, 24]) for (const side of [-1, 1]) {
           candidates.push(shortcutPoint(alley.u, side * (SHORTCUT.halfWidth + radius + extra)), trackPoint(main.s, side * (TRACK.halfWidth + radius + extra)));
@@ -283,7 +286,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         flame.parent = root; flame.position.set(x * .72, .6, -1.72); flame.scaling.z = 4;
         flame.material = glowMaterial(scene, `Boost flame ${index}`, '#71dfff'); markGlow(flame); flame.setEnabled(false); return flame;
       });
-      const v = { root, orientation, wheelFrame, pivots, spins, driver,head, scarf, steering, arms, grips, flames, pedals, kimCarPolish, kimHeadPolish, kimPolish:false, setKimPolish(active:boolean){
+      // Staatsbesuch item (11.10.2026): blue and red motorcade beacons on the nose, flashing while the road is closed.
+      const beacons = (['#3f8cff', '#ff3b3b'] as const).map((colour, k) => {
+        const beacon = MeshBuilder.CreateSphere(`State visit beacon ${index} ${k}`, { diameter: .38, segments: 8 }, scene);
+        beacon.parent = root; beacon.position.set(k ? .5 : -.5, 1.42, -1.3); beacon.scaling.y = .75;
+        beacon.material = glowMaterial(scene, `State visit beacon ${index} ${k}`, colour); markGlow(beacon); beacon.setEnabled(false); return beacon;
+      });
+      const v = { root, orientation, wheelFrame, pivots, spins, driver,head, scarf, steering, arms, grips, flames, beacons, escort: false, pedals, kimCarPolish, kimHeadPolish, kimPolish:false, setKimPolish(active:boolean){
           if(v.kimPolish===active)return;v.kimPolish=active;kimCarPolish.setEnabled(active);kimHeadPolish.setEnabled(active);
           for(const [material,base] of kimPaintBase){if(active){material.albedoColor=Color3.Lerp(base.color,Color3.FromHexString('#d2ac57'),.58);material.metallic=Math.max(base.metallic,.68);material.roughness=Math.min(base.roughness,.28);material.emissiveColor=new Color3(.045,.025,.004);}else{material.albedoColor.copyFrom(base.color);material.metallic=base.metallic;material.roughness=base.roughness;material.emissiveColor.copyFrom(base.emissive);}}
         }, gas: 0, brake: 0,shadowMeshes:[] as AbstractMesh[],bodyMeshes:[] as AbstractMesh[], rotation: 0, previousSpeed: 0, wasAirborne: false, spinning: false, cheer: 0, roll: 0, pitch: 0,
@@ -1021,6 +1030,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       },
       puddles() { return raining ? trackWorld.puddles : []; },
       setKimPolish(timers) { visuals.forEach((v,i)=>v.setKimPolish((timers[i]??0)>0)); },
+      setEscort(timers) { visuals.forEach((v,i)=>{ const on=(timers[i]??0)>0; if(v.escort&&!on) v.beacons.forEach((b)=>b.setEnabled(false)); v.escort=on; }); },
       setDamage(health, wrecked) { healthNow = health; wreckedNow = wrecked; },
       setTimeOfDay(t) { timeOfDay = Math.max(0, Math.min(1, t)); },
       craterHit(kart) { const at = lastStates[kart]; if (at) burst(puff, at, reducedEffects ? 10 : 34); },
@@ -1214,6 +1224,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           visuals[tankOwner].driver.position.y = tankBlend * .85; }
         [state, ...others].forEach((s, index) => {
           const v = visuals[index]; if (!v) return;
+          if(v.escort){const on=Math.sin(time*17+index)>0;v.beacons[0].setEnabled(on);v.beacons[1].setEnabled(!on);}
           if(v.kimPolish){v.kimCarPolish.rotation.y=Math.sin(time*3+index)*.025;v.kimHeadPolish.rotation.y=Math.sin(time*2.4+index)*.035;}
           contactShadows[index].position.x=s.x;contactShadows[index].position.z=s.z;contactShadows[index].rotation.y=s.heading;
           contactShadows[index].visibility=Math.max(.15,1-s.height*.9);

@@ -41,6 +41,8 @@ export interface TestScene {
   abilityEvent?(kind: 'transform' | 'revert' | 'crush' | 'kim-surge' | 'kim-audit' | 'pose' | 'pose-applause' | 'blockade', kart: number, target?: number): void;
   /** Per-kart remaining duration of Kim's temporary gilded propaganda finish. */
   setKimPolish?(timers: number[]): void;
+  /** Seconds of state-visit autopilot per kart (flashing motorcade beacons). */
+  setEscort?(timers: number[]): void;
   /** Weather: false = late-afternoon sun, true = rain with wet road, puddles and lightning. */
   setRain?(rain: boolean): void;
   /** Weather preset: sun, rain (wet road, puddles, lightning) or snow (flakes, cold light, haze). */

@@ -1,5 +1,6 @@
 import type { KartState } from './kart-model.ts';
-import { BOOST_PADS, HAZARDS, ITEM_BOX_PROGRESS, RAMP_LIPS, SHORTCUT } from './track-layout.ts';
+import { BOOST_PADS, HAZARDS, RAMP_LIPS, SHORTCUT } from './track-layout.ts';
+import { itemBoxRows } from './items.ts';
 import { TRACK, trackPoint } from './track.ts';
 
 /**
@@ -15,7 +16,8 @@ export interface MedalWorld { medals: Medal[]; counts: number[]; events: { kind:
 /** Rows of three medals every ~72 m, kept clear of item boxes, ramps, boost pads, open hazards and the start. */
 export function createMedals(kartCount: number): MedalWorld {
   const medals: Medal[] = [];
-  const blocked = (s: number) => ITEM_BOX_PROGRESS.some((b) => Math.abs(b - s) < 14) || RAMP_LIPS.some((r) => s > r - 16 && s < r + 22)
+  const rows = itemBoxRows();
+  const blocked = (s: number) => rows.some((b) => Math.abs(b - s) < 14) || RAMP_LIPS.some((r) => s > r - 16 && s < r + 22)
     || BOOST_PADS.some(([from]) => s > from - 6 && s < from + 10) || HAZARDS.some((h) => s > h.from - 4 && s < h.to + 4)
     || Math.abs(s - TRACK.start) < 30 || (s > SHORTCUT.from - 6 && s < SHORTCUT.from + 6);
   let row = 0;

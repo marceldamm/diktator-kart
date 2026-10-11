@@ -69,6 +69,22 @@ function sweep(scene: Scene, name: string, profile: [number, number][], material
   return mesh;
 }
 
+/** Shortcut distance range [from, to] where the underpass is deep enough (road <= -3.2 m) for a ground-level lid. */
+export function tunnelCover(): { from: number; to: number } {
+  let from = Infinity, to = -Infinity;
+  for (let u = 0; u <= SHORTCUT_LENGTH; u += .5) if (shortcutElevationAt(u) <= -3.2) { from = Math.min(from, u); to = Math.max(to, u); }
+  return from < to ? { from, to } : { from: 0, to: 0 };
+}
+/** Tree spots on the tunnel lid park: two rows over the tunnel, clear of the parade deck in the middle. */
+export function tunnelParkSpots(): { x: number; z: number }[] {
+  const { from, to } = tunnelCover(), middle = SHORTCUT_LENGTH / 2, spots: { x: number; z: number }[] = [];
+  for (let u = from + 9; u <= to - 9; u += 15) {
+    if (Math.abs(u - middle) < 58) continue;
+    for (const lane of [-6.5, 6.5]) spots.push(shortcutPoint(u + (lane > 0 ? 7 : 0), lane));
+  }
+  return spots;
+}
+
 /** Original fictional emblem: laurel wreath, crown and paragraph sign. No historical insignia. */
 export function paintEmblem(c: CanvasRenderingContext2D, cx: number, cy: number, r: number, gold = '#e2b65c', shade = '#8d5f1f'): void {
   c.save(); c.translate(cx, cy);
@@ -227,7 +243,7 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
         const x0 = cut.west + (cut.east - cut.west) * x / nx, x1 = cut.west + (cut.east - cut.west) * (x + 1) / nx;
         const z0 = south + (north - south) * z / nz, z1 = south + (north - south) * (z + 1) / nz;
         if (insideTunnelCut(px, pz) || insideTunnelCut(x0, z0) || insideTunnelCut(x1, z0) || insideTunnelCut(x0, z1) || insideTunnelCut(x1, z1)) continue;
-        const a = z * (nx + 1) + x, b = a + nx + 1; indices.push(a, b, a + 1, a + 1, b, b + 1);
+        const a = z * (nx + 1) + x, b = a + nx + 1; indices.push(a, a + 1, b, a + 1, b + 1, b); // upward winding: the old order faced down and the plaza was culled (11.10.2026)
       }
       const ground = new Mesh('Parade plaza ground around underpass', scene), data = new VertexData(), normals: number[] = [];
       VertexData.ComputeNormals(positions, indices, normals); data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs; data.applyToMesh(ground);
@@ -521,37 +537,75 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   });
   gravelTexture.uScale = gravelTexture.vScale = 2;
   const gravel = pbr(scene, 'Loose alley gravel', '#a18c68', 0, 1); gravel.albedoTexture = gravelTexture;
-  sweep(scene, pyongyang ? 'Lowered parade underpass road' : 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], pyongyang ? road : gravel,
-    { uScale: 2, vScale: 2, step: .5, to: SHORTCUT_LENGTH, at: alleyAt, heightAt: pyongyang ? shortcutElevationAt : undefined,
-      color: pyongyang ? undefined : (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
+  // Shortcut surface and hedges only where the alley has left the circuit (Marcel 11.10.2026): the joins used to lay
+  // gravel and hedge stubs right on top of the race road.
+  const offCircuit = (u: number, lanes: number[], margin: number) => lanes.every((lane) => { const q = alleyAt(u, lane); return Math.abs(trackLocate(q.x, q.z).lane) > TRACK.wall + margin; });
+  const alleyRuns = (from: number, to: number, ok: (u: number) => boolean) => {
+    const runs: [number, number][] = []; let open: number | null = null;
+    for (let u = from; u <= to + 1e-6; u += .5) { if (ok(u)) { open ??= u; if (u + .5 > to + 1e-6) runs.push([open, u]); } else if (open !== null) { if (u - .5 - open >= 1) runs.push([open, u - .5]); open = null; } }
+    return runs;
+  };
+  for (const [from, to] of alleyRuns(0, SHORTCUT_LENGTH, (u) => offCircuit(u, [0], -.3)))
+    sweep(scene, pyongyang ? 'Lowered parade underpass road' : 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], pyongyang ? road : gravel,
+      { uScale: 2, vScale: 2, step: .5, from, to, at: alleyAt, heightAt: pyongyang ? shortcutElevationAt : undefined,
+        color: pyongyang ? undefined : (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
   if (pyongyang) {
     const concrete = pbr(scene, 'Underpass reinforced concrete', '#777d79', 0, .9);
     concrete.backFaceCulling = false;
     // B8 (08.10.2026): seen from below the ceiling took the up-facing normal and lit like an open sky; light both sides properly.
     concrete.twoSidedLighting = true;
-    const roofFrom = SHORTCUT_LENGTH * .2, roofTo = SHORTCUT_LENGTH * .8;
+    // Covered tunnel (Marcel 11.10.2026): where the road lies deep enough, a ground-level lid closes the plaza and carries
+    // a small park with trees (slice-scene places them via `tunnelParkSpots`). The open ramps keep full-depth retaining
+    // walls, and paving strips close the stepped edges of the ground cut on both sides.
+    const { from: coverFrom, to: coverTo } = tunnelCover();
+    const wallLane = SHORTCUT.halfWidth + .9, cutFrom = SHORTCUT_LENGTH * .1, cutTo = SHORTCUT_LENGTH * .9;
     for (const side of [-1, 1]) {
-      const wallLane = SHORTCUT.halfWidth + .9;
-      const wall = sweep(scene, `Underpass retaining wall ${side}`, side < 0 ? [[-wallLane, 0], [-wallLane, 3.2]] : [[wallLane, 0], [wallLane, 3.2]], concrete,
-        { uScale: 2, vScale: 2, step: .8, from: roofFrom, to: roofTo, at: alleyAt, heightAt: shortcutElevationAt });
+      const wall = sweep(scene, `Underpass retaining wall ${side}`, side < 0 ? [[-wallLane, -3.8], [-wallLane, .06]] : [[wallLane, .06], [wallLane, -3.8]], concrete,
+        { uScale: 2, vScale: 2, step: .8, from: cutFrom, to: cutTo, at: alleyAt });
       shadow.addShadowCaster(wall);
-      sweep(scene, `Underpass red guide stripe ${side}`, side < 0 ? [[-wallLane - .02, 2.45], [-wallLane - .02, 2.62]] : [[wallLane + .02, 2.45], [wallLane + .02, 2.62]], kerb, { uScale: 1, step: 1, from: roofFrom + 3, to: roofTo - 3, at: alleyAt, heightAt: shortcutElevationAt });
+      // Gutter between road edge and wall at road level, so no gap opens beside the lowered road.
+      sweep(scene, `Underpass gutter ${side}`, side < 0 ? [[-wallLane, .03], [-SHORTCUT.halfWidth - .3, .03]] : [[SHORTCUT.halfWidth + .3, .03], [wallLane, .03]], concrete,
+        { uScale: 2, vScale: 2, step: .8, from: cutFrom, to: cutTo, at: alleyAt, heightAt: shortcutElevationAt });
+      sweep(scene, `Underpass red guide stripe ${side}`, side < 0 ? [[-wallLane + .02, -.98], [-wallLane + .02, -1.15]] : [[wallLane - .02, -1.15], [wallLane - .02, -.98]], kerb, { uScale: 1, step: 1, from: coverFrom + 3, to: coverTo - 3, at: alleyAt });
+      // Coping and paving along the open cut, split into runs that stay clear of the main road surface.
+      const clearOfRoad = (u: number) => [wallLane, wallLane + 3, wallLane + 5.6].every((lane) => { const q = alleyAt(u, side * lane); return Math.abs(trackLocate(q.x, q.z).lane) > TRACK.wall + .6; });
+      let runFrom: number | null = null;
+      for (let u = cutFrom - 4; u <= cutTo + 4.01; u += 2) {
+        const ok = u <= cutTo + 4 && clearOfRoad(u);
+        if (ok && runFrom === null) runFrom = u;
+        if ((!ok || u + 2 > cutTo + 4.01) && runFrom !== null) {
+          const runTo = ok ? u : u - 2;
+          if (runTo - runFrom >= 2) sweep(scene, `Underpass edge paving ${side}`, side < 0 ? [[-wallLane - 5.6, .022], [-wallLane, .022]] : [[wallLane, .022], [wallLane + 5.6, .022]], square,
+            { uScale: 4, vScale: 4, step: 1, from: runFrom, to: runTo, at: alleyAt });
+          runFrom = null;
+        }
+      }
     }
-    const roof = sweep(scene, 'Parade bridge underside over underpass', [[-SHORTCUT.halfWidth - .9, 3.2], [SHORTCUT.halfWidth + .9, 3.2]], concrete, { uScale: 3, vScale: 3, step: .8, from: roofFrom, to: roofTo, at: alleyAt, heightAt: shortcutElevationAt });
-    shadow.addShadowCaster(roof);
-    const lamp = new StandardMaterial('Underpass guide lights', scene); lamp.emissiveColor = new Color3(.62, .76, .72); lamp.disableLighting = true;
-    for (let u = roofFrom + 12; u < roofTo; u += 24) {
-      const p = shortcutPoint(u), light = MeshBuilder.CreateBox('Underpass ceiling light', { width: 1.4, height: .08, depth: .35 }, scene);
-      light.position.set(p.x, shortcutElevationAt(u) + 3.08, p.z); light.rotation.y = p.heading; light.material = lamp; light.isPickable = false;
+    if (coverTo > coverFrom) {
+      const roof = sweep(scene, 'Underpass ceiling', [[wallLane + .05, -.08], [-wallLane - .05, -.08]], concrete, { uScale: 3, vScale: 3, step: .8, from: coverFrom, to: coverTo, at: alleyAt });
+      shadow.addShadowCaster(roof);
+      sweep(scene, 'Tunnel park lawn', [[-wallLane - 5.6, .045], [wallLane + 5.6, .045]], lawn, { uScale: 5, vScale: 5, step: 1, from: coverFrom - .5, to: coverTo + .5, at: alleyAt });
+      // Portal lintels where the lid starts and ends.
+      for (const u of [coverFrom, coverTo]) {
+        const p = shortcutPoint(u), lintel = MeshBuilder.CreateBox('Underpass portal lintel', { width: wallLane * 2 + .8, height: .9, depth: .7 }, scene);
+        lintel.position.set(p.x, -.4, p.z); lintel.rotation.y = p.heading; lintel.material = concrete; lintel.isPickable = false; lintel.freezeWorldMatrix(); shadow.addShadowCaster(lintel);
+      }
+      const lamp = new StandardMaterial('Underpass guide lights', scene); lamp.emissiveColor = new Color3(.62, .76, .72); lamp.disableLighting = true;
+      for (let u = coverFrom + 12; u < coverTo; u += 24) {
+        const p = shortcutPoint(u), light = MeshBuilder.CreateBox('Underpass ceiling light', { width: 1.4, height: .08, depth: .35 }, scene);
+        light.position.set(p.x, -.16, p.z); light.rotation.y = p.heading; light.material = lamp; light.isPickable = false;
+      }
     }
   } else {
     const hedgeMaterial = pbr(scene, 'Clipped alley hedge', '#ffffff', 0, .95);
     const hedgeMaps = surfaceTextures(scene, 'Hedge', 'leaf'); hedgeMaps.color.hasAlpha = false; hedgeMaterial.albedoTexture = hedgeMaps.color; hedgeMaterial.bumpTexture = hedgeMaps.normal; hedgeMaterial.albedoColor = Color3.FromHexString('#5e8a4c');
     for (const side of [-1, 1]) {
       const a = SHORTCUT.halfWidth + .45, b = a + .7;
-      const hedge = sweep(scene, `Alley hedge ${side}`, side < 0 ? [[-b, 0], [-b, 1.05], [-a, 1.05], [-a, 0]] : [[a, 0], [a, 1.05], [b, 1.05], [b, 0]], hedgeMaterial,
-        { uScale: 1.5, vScale: 1.5, step: .8, from: 9, to: SHORTCUT_LENGTH - 9, at: alleyAt });
-      shadow.addShadowCaster(hedge);
+      for (const [from, to] of alleyRuns(9, SHORTCUT_LENGTH - 9, (u) => offCircuit(u, [side * a, side * b], .6))) {
+        const hedge = sweep(scene, `Alley hedge ${side}`, side < 0 ? [[-b, 0], [-b, 1.05], [-a, 1.05], [-a, 0]] : [[a, 0], [a, 1.05], [b, 1.05], [b, 0]], hedgeMaterial,
+          { uScale: 1.5, vScale: 1.5, step: .8, from, to, at: alleyAt });
+        shadow.addShadowCaster(hedge);
+      }
     }
   }
   const signTexture = canvasTexture(scene, 'Shortcut sign', 512, 256, (c) => {

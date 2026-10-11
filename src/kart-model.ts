@@ -14,9 +14,6 @@ export interface KartState {
   /** A trick was performed during the current jump (spin animation, bigger landing boost). */
   trick?: boolean;
   hopRemaining: number;
-  /** Seconds of near-straight (or reversed) steering while drifting; drives drift exit and side switching (07.10.2026). */
-  driftStraight?: number;
-  driftAgainst?: number;
   drifting: boolean;
   driftDirection: number;
   driftCharge: number;
@@ -89,8 +86,15 @@ export const KART_TUNING = {
   /** Mini-turbo tiers by charge (s): 1 short, 2 medium, 3 full boost. */
   driftTiers: [0.6, 1.1, 1.6] as const,
   driftYawMultiplier: .98,
+  /** Drift arc (11.10.2026): turn factor with no key (~29 m radius), added with the inside key (~15 m) and taken
+   *  away with the outside key (~75 m). Radius = 1 / (turn * steeringPerMetre * driftYawMultiplier), independent of speed. */
+  driftArcBase: .26,
+  driftArcInside: .17,
+  driftArcOutside: .16,
+  /** Softer roll into the slide than normal steering (Marcel: the drift felt too abrupt). */
+  driftYawResponse: 3.2,
   driftHeadingFollow: 1.6,
-  driftMaxSlip: 0.42,
+  driftMaxSlip: 0.5,
   normalHeadingFollow: 5.5,
   /** Steering wheel travel rate (1/s) and yaw response rate (1/s): less direct, more car-like. */
   steerRate: 7,
@@ -103,6 +107,8 @@ export const KART_TUNING = {
   maxTurboSpeed: 20,
   suspensionStiffness: 75,
   suspensionDamping: 17,
+  /** Maximum compression below the ground under the wheels (m). */
+  suspensionTravel: .1,
   bodyTiltFollow: 10,
   landingVelocity: -1.2,
   impactDuration: 0.22,
@@ -230,7 +236,6 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   let drifting = state.drifting;
   let driftDirection = state.driftDirection;
   let driftCharge = state.driftCharge;
-  let straight = state.driftStraight ?? 0, against = state.driftAgainst ?? 0;
   if (drifting) {
     if (!held || speed < KART_TUNING.driftMinSpeed) {
       const tier = driftTier(driftCharge);
@@ -242,21 +247,17 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
       driftDirection = 0;
       driftCharge = 0;
     } else {
-      // Marcel 07.10.: holding Space keeps drift mode armed; the drift follows the steering. Driving straight for a
-      // moment ends the slide (no boost, Space still held re-enters it), steering firmly the other way switches sides.
-      straight = Math.abs(steering) < .15 ? straight + dt : 0;
-      against = steering * driftDirection <= -.55 ? against + dt : 0;
-      if (straight > .35) { drifting = false; driftDirection = 0; driftCharge = 0; straight = 0; }
-      else if (against > .14) { driftDirection = -driftDirection; driftCharge *= .7; against = 0; }
-      else {
-        const charging = Math.abs(steering) >= .25 ? 1 : .6;
-        driftCharge = Math.min(KART_TUNING.driftChargeTime, driftCharge + dt * charging);
-      }
+      // Marcel 11.10.2026 (Mario Kart 8 on Switch as reference): the side is fixed at the hop and the slide lasts as
+      // long as Space is held. Steering only shapes the arc – inside tightens, no key holds a medium arc, the
+      // opposite key opens it wide – so keyboard players can drift through a bend without being thrown out or flipped.
+      // Releasing Space (and hopping again) is the way to change sides. Inside steering charges fastest.
+      const into = steering * driftDirection;
+      driftCharge = Math.min(KART_TUNING.driftChargeTime, driftCharge + dt * (into >= .25 ? 1 : into <= -.25 ? .55 : .8));
     }
   } else if (held && hopRemaining === 0 && speed >= KART_TUNING.driftMinSpeed && Math.abs(steering) >= 0.25) {
     drifting = true;
     driftDirection = Math.sign(steering);
-    driftCharge = 0; straight = 0; against = 0;
+    driftCharge = 0;
   }
 
   // The wheel needs time to turn and the body needs time to rotate: steering input -> steer -> yaw rate.
@@ -264,12 +265,18 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const steer = previousSteer + (steering - previousSteer) * Math.min(1, (returning ? KART_TUNING.steerReturnRate : KART_TUNING.steerRate) * dt);
   // The original drift kept a strong fixed yaw even while countersteering. Let countersteer widen the arc.
   const driftSteer = steer * driftDirection;
-  const turn = drifting ? driftDirection * (.38 + .32 * driftSteer) : steer;
+  const turn = drifting ? driftDirection * (KART_TUNING.driftArcBase + driftSteer * (driftSteer > 0 ? KART_TUNING.driftArcInside : KART_TUNING.driftArcOutside)) : steer;
   const targetYaw = Math.max(-KART_TUNING.maxYawRate,
     Math.min(KART_TUNING.maxYawRate, speed * turn * KART_TUNING.steeringPerMetre * (drifting ? KART_TUNING.driftYawMultiplier : 1)));
-  const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, (drifting ? 5 : KART_TUNING.yawResponse) * dt);
+  const yawRate = (state.yawRate ?? 0) + (targetYaw - (state.yawRate ?? 0)) * Math.min(1, (drifting ? KART_TUNING.driftYawResponse : KART_TUNING.yawResponse) * dt);
   let heading = state.heading + yawRate * dt;
-  const wantedTravel = heading - (drifting ? driftDirection * (.08 + .06 * Math.max(0, driftSteer)) : 0);
+  // Leaving a slide straightens the nose onto the line the kart is actually travelling (11.10.2026): without this the
+  // kart shot off toward the inside barrier at mini-turbo speed whenever Space was released in a bend.
+  if (state.drifting && !drifting) {
+    const slip = Math.atan2(Math.sin(heading - state.travelHeading), Math.cos(heading - state.travelHeading));
+    heading = state.travelHeading + slip * .35;
+  }
+  const wantedTravel = heading - (drifting ? driftDirection * (.16 + .08 * Math.max(0, driftSteer)) : 0);
   const angleDifference = Math.atan2(Math.sin(wantedTravel - state.travelHeading), Math.cos(wantedTravel - state.travelHeading));
   const follow = (drifting ? KART_TUNING.driftHeadingFollow : KART_TUNING.normalHeadingFollow) * dt;
   let travelHeading = state.travelHeading + Math.max(-follow, Math.min(follow, angleDifference));
@@ -341,23 +348,27 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   const landedClean = (state.jumpRemaining ?? 0) > 0 && jumpRemaining === 0 && Math.abs(Math.sin(heading - travelHeading)) < .3 && impactRemaining === 0;
   const wheelGroundHeights = sampleWheelGround(x, z, heading, terrain);
   const averageGround = wheelGroundHeights.reduce((sum, contact) => sum + contact, 0) / 4;
-  const targetOffset = grounded ? averageGround : 0;
+  // The body always rides on the ground under it, also in the air: a hop on a hill or slope used to pull the kart
+  // towards height 0 and sank it into the road (Marcel 11.10.2026). Hops keep following the slope's pitch and roll.
+  const targetOffset = averageGround, followSlope = jumpRemaining === 0;
   const landingImpulse = grounded && !state.grounded ? KART_TUNING.landingVelocity : 0;
-  const suspensionVelocity = state.suspensionVelocity + landingImpulse +
+  let suspensionVelocity = state.suspensionVelocity + landingImpulse +
     (KART_TUNING.suspensionStiffness * (targetOffset - state.suspensionOffset) -
       KART_TUNING.suspensionDamping * state.suspensionVelocity) * dt;
-  const suspensionOffset = state.suspensionOffset + suspensionVelocity * dt;
+  let suspensionOffset = state.suspensionOffset + suspensionVelocity * dt;
+  // Bump stop: the body never sinks more than the suspension travel below the road, also on climbs and landings.
+  if (suspensionOffset < averageGround - KART_TUNING.suspensionTravel) { suspensionOffset = averageGround - KART_TUNING.suspensionTravel; suspensionVelocity = Math.max(0, suspensionVelocity); }
   const frontGround = (wheelGroundHeights[0] + wheelGroundHeights[1]) / 2;
   const rearGround = (wheelGroundHeights[2] + wheelGroundHeights[3]) / 2;
   const leftGround = (wheelGroundHeights[0] + wheelGroundHeights[2]) / 2;
   const rightGround = (wheelGroundHeights[1] + wheelGroundHeights[3]) / 2;
   const tiltBlend = Math.min(1, KART_TUNING.bodyTiltFollow * dt);
-  const bodyPitch = state.bodyPitch + ((grounded ? Math.atan2(frontGround - rearGround, 1.36) : 0) - state.bodyPitch) * tiltBlend;
+  const bodyPitch = state.bodyPitch + ((followSlope ? Math.atan2(frontGround - rearGround, 1.36) : 0) - state.bodyPitch) * tiltBlend;
   const obstacleDodgeRoll = impactKind === 'obstacle' && impactRemaining > 0
     ? Math.sign(impactVelocityX * Math.cos(heading) - impactVelocityZ * Math.sin(heading)) * .42 * Math.min(1, impactRemaining / KART_TUNING.impactDuration)
     : 0;
-  const bodyRoll = state.bodyRoll + ((grounded ? Math.atan2(rightGround - leftGround, 1.66) + obstacleDodgeRoll : obstacleDodgeRoll) - state.bodyRoll) * tiltBlend;
-  return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, trick: state.trick, drifting, driftDirection, driftCharge, driftStraight: straight, driftAgainst: against, turboRemaining,
+  const bodyRoll = state.bodyRoll + ((followSlope ? Math.atan2(rightGround - leftGround, 1.66) + obstacleDodgeRoll : obstacleDodgeRoll) - state.bodyRoll) * tiltBlend;
+  return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, trick: state.trick, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
     scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,

@@ -328,3 +328,23 @@ body.incoming-item::after { content:'';position:fixed;inset:0;pointer-events:non
 .ceremony #finish-results { display:none; }
 .ceremony .ranking { display:none !important; }
 @media (max-width:760px) { .ceremony #finish-card { right:8px;width:calc(100vw - 16px);top:auto;bottom:8px;transform:none;max-height:55vh; } }
+/* Aktenflut (11.10.2026): censorship hit as a blooper-style fountain of files over the screen (src/document-flood.ts). */
+#document-flood { position:fixed;inset:0;z-index:79;pointer-events:none;overflow:hidden;transition:opacity .15s linear; }
+#document-flood[hidden] { display:none; }
+.photo-mode #document-flood,.menu-open #document-flood { display:none; }
+.flood-sheet { position:absolute;left:50%;bottom:-12vh;width:var(--w);min-height:calc(var(--w) * 1.25);padding:1.1vmin 1.3vmin;box-sizing:border-box;
+  background:#efe4c8;color:#2a2620;border:1px solid #b9a77d;box-shadow:0 1.2vmin 2.4vmin #0007;font:700 clamp(9px,1.5vmin,17px)/1.15 Georgia,serif;
+  transform:translate(-50%,0) rotate(0deg);animation:flood-burst .85s cubic-bezier(.2,.75,.3,1) both,flood-drift 3.6s ease-in-out infinite alternate; }
+.flood-sheet strong { display:block;margin-bottom:.9vmin;letter-spacing:.02em; }
+.flood-sheet i { display:block;height:.9vmin;margin:.7vmin 0;background:#8d8068;opacity:.55; }
+.flood-sheet i.black { background:#0b0b0b;opacity:1;height:1.5vmin; }
+.flood-sheet b { position:absolute;right:6%;bottom:9%;padding:.3vmin 1vmin;border:.4vmin solid #a1242d;color:#a1242d;font:900 clamp(10px,2.2vmin,24px)/1 system-ui,sans-serif;transform:rotate(-14deg);opacity:.85; }
+.flood-report { background:#f4f1e6; }
+.flood-file { background:#d9b46a;border-color:#9c7b3a; }
+.flood-leaflet { background:#b8262f;color:#f8e6c0;border-color:#7a1219;text-transform:uppercase;font-family:system-ui,sans-serif; }
+.flood-leaflet i { background:#f8e6c0;opacity:.6; }
+.flood-redacted { background:#e9e6dc; }
+.flood-decree { background:#f2e2b1;border:.5vmin double #8f6a2a; }
+@keyframes flood-burst { from { transform:translate(-50%,0) rotate(0deg) scale(.4); } to { transform:translate(calc(-50% + var(--x)),var(--y)) rotate(var(--r)) scale(1); } }
+@keyframes flood-drift { from { translate:0 0;rotate:0deg; } to { translate:1.5vw 2.5vh;rotate:calc(var(--spin) * .05); } }
+@media(prefers-reduced-motion:reduce) { .flood-sheet { animation:flood-burst .01s both; } }

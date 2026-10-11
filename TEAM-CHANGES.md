@@ -1,5 +1,11 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Claude: Drift, Items, Strecken-Fehler
+
+- Drift nach Mario-Kart-Vorbild: feste Seite bis Space losgelassen, Bogen innen ~18 m / neutral ~29 m / außen ~76 m (ersetzt den „Schlangenlinien“-Seitenwechsel vom 07.10.).
+- Itemboxen alle ~200 m (vier je Reihe); neue Items Eilerlass in dreifacher Ausfertigung, Goldener Dauererlass, Staatsbesuch; Zensurbalken wirkt als Aktenflut auf Sicht und Bots.
+- Hop auf Hügeln, Startfehler nach Verbindungsabbruch, Musik-Vorschau in der Streckenwahl, eigener Fahrer im Esc-Menü, Park über dem Tunnel der Ewige-Führer-Allee, Abkürzungen ohne Flicken auf der Fahrbahn.
+
 ## 10.10.2026 – Claude: Leistungspass, Beinfreiheit, Ehrenregister
 
 - Schattenwerfer auf die Sonnen-Schattenbox begrenzt, ein Schattenobjekt pro Stadtkachel, Leuchteffekt nur mit Kart-/Fahrerverdeckern, leichtere Baumrinde, Detail-LOD für Karts, Menü-/Pause-Bildratenbegrenzung, nur ein aktives Spielfenster. Speicher ~-60 %, Zeichenaufrufe ~-50 %.

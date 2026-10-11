@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Claude: Drift-Messung und Prüfhinweise
+
+- Drift-Simulation: Tastatur-Fahrer mit digitaler Lenkung, Space in Kurven unter 45 m Radius, 0,25 s Reaktion, Abbruch bei Bandennähe; zählt Bandenkontakte pro Runde (Kontakte < 0,5 s Abstand als einer). Skript lag im Sitzungs-Scratchpad; Kernwerte stehen in CURRENT-WORKLIST.md. Ein Simulationsfahrer ersetzt kein menschliches Fahrurteil.
+- Zum Testen im Browser: `__DK.items.slots[0] = 'golden' | 'triple' | 'escort'`, dann E. Aktenflut: einem Bot `censor` geben.
+- Ursache „schwarzer Boden“ Pjöngjang: selbstgebautes Gitter mit Abwärts-Wicklung wird per Backface-Culling verworfen. Bei eigenen VertexData-Böden Normalen prüfen.
+
 ## 10.10.2026 – Claude: Leistungsmessung
 
 - Messwerkzeuge (lokal, ignoriert): `.tools/claude/perf-ab.mjs` (Menü/Rennen/Pause), `menu-rt.mjs` (synchrone Renderzeit), `g.js` (Zeichenaufrufe je Pass). Messungen schwanken auf dem Laptop stark (Takt, andere Chrome-Fenster); nur A/B im selben Lauf vergleichen.

@@ -4,9 +4,10 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
+import { DocumentFlood } from './document-flood';
 import {createItems,stepItems,botUsesItem,botItemDirection,ITEM_NAMES,ITEM_RULES,type ItemWorld} from './items';
 import { ABILITY_NAME, ABILITY_RULES, abilityReady, botWantsAbility, createAbilities, stepAbilities, type AbilityEvent, type AbilityOwner, type AbilityWorld } from './abilities';
 import { LoadingProgress, type LoadingPhase } from './loading-progress';
@@ -194,6 +195,9 @@ class App {
   private order=rosterOrder(0);
   private selectedTrackId:TrackId='stadionring';
   private selectingTrack=false;
+  private readonly flood=new DocumentFlood();
+  /** Centreline progress and lane of karts on a state-visit autopilot (items.escortRemaining). */
+  private escortRoute:({s:number;lane:number}|null)[]=[];
   private selecting=false;
   /** Head portraits, rendered once in Blender (art-source/export_driver_stand.py) instead of live in the browser. */
   private portraits: string[] = CAST.map((member) => `/assets/portraits/${member.faceStyle}.webp`);
@@ -244,17 +248,17 @@ class App {
       this.rebinding=null;try{localStorage.setItem('dk-keys-v1',JSON.stringify(exportBindings()));}catch{}
       this.renderKeymap();
     },true);
-    document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection());
+    document.querySelector('#track-back')?.addEventListener('click',()=>this.closeTrackSelection(true));
     document.querySelector('#track-go')?.addEventListener('click',()=>this.confirmTrackSelection());
     document.querySelectorAll<HTMLButtonElement>('#track-grid .track-card.playable').forEach((card)=>card.addEventListener('click',()=>{
-      const id=card.dataset.trackId;if(isTrackId(id)){if(id===this.selectedTrackId)this.confirmTrackSelection();else{this.selectedTrackId=id;this.renderTrackSelection();}}
+      const id=card.dataset.trackId;if(isTrackId(id)){this.audio.previewTrackMusic(id);if(id===this.selectedTrackId)this.confirmTrackSelection();else{this.selectedTrackId=id;this.renderTrackSelection();}}
     }));
     document.querySelector('#driver-back')?.addEventListener('click',()=>this.closeSelection());
     document.querySelector('#driver-go')?.addEventListener('click',()=>this.confirmSelection());
     document.querySelector('#driver-random')?.addEventListener('click',()=>this.pick((this.chosen+1+Math.floor(Math.random()*(CAST.length-1)))%CAST.length));
     window.addEventListener('keydown',(event)=>{
       if(this.selectingTrack){
-        if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();this.closeTrackSelection();}
+        if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();this.closeTrackSelection(true);}
         if(event.code==='Enter'){event.preventDefault();event.stopImmediatePropagation();this.confirmTrackSelection();}
         return;
       }
@@ -320,6 +324,7 @@ class App {
     document.body.classList.toggle('is-loading',state==='loading'||state==='error');
     document.body.classList.toggle('start-error',state==='error');
     if (state === 'error') window.dispatchEvent(new CustomEvent('dk:load-error', { detail }));
+    else if (state === 'running') window.dispatchEvent(new CustomEvent('dk:load-ready'));
     status.textContent = { loading: 'Lädt …', running: 'Testszene läuft', paused: 'Pausiert', error: 'Startfehler' }[state];
     message.textContent = detail;
     pauseButton.disabled = state === 'loading' || state === 'error';
@@ -393,7 +398,7 @@ class App {
     if (!LAB_WORLD && !DEMO) this.loadKarts = this.loadKarts.map((s) => ({ ...s, speed: 0 }));
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
+    this.items=createItems(LOAD_KART_COUNT+1);this.escortRoute=[];this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];this.queuedSpecial=false;this.abilityStats={transform:0,revert:0,crush:0,'kim-surge':0,'kim-audit':0,pose:0,'pose-applause':0,blockade:0};
     this.queuedItemUse=false;this.queuedDefenseUse=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     speedDisplay.textContent = '0 km/h';
@@ -537,8 +542,10 @@ class App {
     const go = document.querySelector('#track-go'); if (go) go.innerHTML = this.mode === 'gp' && this.gp && !this.gpTrackChosen ? 'Grand Prix starten <span>↵</span>' : 'Fahrer wählen <span>↵</span>';
     this.renderTrackSelection();
   }
-  private closeTrackSelection(): void {
+  private closeTrackSelection(restoreMusic = false): void {
     this.selectingTrack = false; document.body.classList.remove('track-select-open');
+    // Leaving without a choice: the loaded circuit's own music returns after a card preview.
+    if (restoreMusic) this.audio.setTrackMusic(TRACK.id);
   }
   private confirmTrackSelection(): void {
     if (!isTrackId(this.selectedTrackId)) return;
@@ -626,7 +633,7 @@ class App {
     this.testScene.setGhost?.(null);
     this.resetRenderState();
     this.progress = [this.kart, ...this.loadKarts].map(createRaceProgress);
-    this.items=createItems(LOAD_KART_COUNT+1);this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
+    this.items=createItems(LOAD_KART_COUNT+1);this.escortRoute=[];this.itemMessage='';this.itemMessageUntil=0;this.abilityAnnouncementUntil=0;this.abilities=createAbilities(LOAD_KART_COUNT+1);this.queuedSpecial=false;this.testScene.setKimPolish?.([]);this.damage=createDamage(LOAD_KART_COUNT+1);this.salvage=[];
     this.queuedItemUse=false;this.queuedDefenseUse=false;this.itemHeld=false;this.itemDirection='forward';this.medals=createMedals(LOAD_KART_COUNT+1);
     this.botStuck = [this.kart,...this.loadKarts].map(() => 0); this.recoveryRemaining=this.botStuck.slice();
     this.startPress = null; this.padCooldown = [];
@@ -666,11 +673,11 @@ class App {
     const countdown = document.querySelector<HTMLElement>('#countdown')!;
     const item=this.items.slots[0];
     const own=this.castOf(0);
-    const itemName=item?(item==='direct'||item==='homing'?`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`:ITEM_NAMES[item]):'';
+    const itemName=item?(item==='direct'||item==='homing'?`${own.projectileName} · ${item==='homing'?'verfolgt':'voraus'}`:item==='triple'?`${ITEM_NAMES.triple} · noch ${this.items.charges[0]||3}×`:item==='golden'&&this.items.goldenRemaining[0]>0?`${ITEM_NAMES.golden} · ${this.items.goldenRemaining[0].toFixed(1)} s · E drücken!`:ITEM_NAMES[item]):'';
     const roulette=this.items.time<this.itemRouletteUntil;
-    const rouletteIcons=['✉','§','▰','📜','↗','↻'];
+    const rouletteIcons=['✉','§','▰','📜','↗','↻','⚜','🚨'];
     document.querySelector('#item-name')!.textContent=roulette?'Zuteilung läuft …':item?itemName:'Sendung abholen';
-    document.querySelector('#item-icon')!.textContent=roulette?rouletteIcons[Math.floor(this.items.time*24)%rouletteIcons.length]:item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':item==='boost'?'📜':'✉';
+    document.querySelector('#item-icon')!.textContent=roulette?rouletteIcons[Math.floor(this.items.time*24)%rouletteIcons.length]:item==='direct'||item==='homing'?own.projectileIcon:item==='trap'?'§':item==='censor'?'▰':item==='boost'?'📜':item==='triple'?'📜³':item==='golden'?'⚜':item==='escort'?'🚨':'✉';
     const itemCard=document.querySelector<HTMLElement>('#item-card')!,itemSlot=document.querySelector<HTMLElement>('#item-slot')!;
     itemCard.classList.toggle('roulette',roulette);
     itemCard.dataset.state=item?'ready':'empty';itemSlot.dataset.state=item?'ready':'empty';
@@ -689,7 +696,9 @@ class App {
     abilityAnnouncement.hidden=this.racePhase!=='race'||this.items.time>=this.abilityAnnouncementUntil;
     document.querySelector('#ability-announcement-title')!.textContent=this.abilityAnnouncementTitle;
     document.querySelector('#ability-announcement-detail')!.textContent=this.abilityAnnouncementDetail;
-    document.querySelector<HTMLElement>('#censor-banner')!.hidden=this.racePhase!=='race'||this.items.censorBannerRemaining[0]<=0;
+    // Own censorship launch: short official banner. Hit by someone else's: the screen drowns in files instead.
+    document.querySelector<HTMLElement>('#censor-banner')!.hidden=this.racePhase!=='race'||this.items.censorBannerRemaining[0]<=0||this.items.censorRemaining[0]>0;
+    this.flood.update(this.racePhase==='race'?this.items.censorRemaining[0]:0,!this.camera?.introMode&&!this.camera?.photoMode);
     const incoming=this.items.objects.some(o=>o.kind!=='trap'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15);
     const warning=document.querySelector<HTMLElement>('#item-warning')!;warning.hidden=!incoming;document.body.classList.toggle('incoming-item',incoming);warning.textContent=this.items.objects.some(o=>o.kind==='censor'&&o.owner!==0&&Math.hypot(o.x-this.kart.x,o.z-this.kart.z)<15)?'⚠ Zensurbalken im Anflug · ausweichen':'⚠ Rohrpost im Anflug · ausweichen';
     { // Ability HUD: name, state and a cooldown/duration bar.
@@ -828,6 +837,8 @@ class App {
   /** Start menu backdrop (Marcel, 07.10.): the camera glides from driver to driver every few seconds, random start. */
   private menuCycle={from:-1,to:Math.floor(Math.random()*6),since:0};
   private menuFocus(): KartState {
+    // Pause menu during a race (Marcel 11.10.2026): stay on the player's own kart; only the start menu tours the field.
+    if(this.racePhase!=='practice'){this.menuCycle.from=-1;return this.renderKart;}
     const all=[this.kart,...this.loadKarts], now=performance.now()/1000, hold=6.5, glide=2.6;
     if(this.menuCycle.from<0){this.menuCycle={from:this.menuCycle.to%all.length,to:this.menuCycle.to%all.length,since:now};}
     if(now-this.menuCycle.since>hold+glide){this.menuCycle={from:this.menuCycle.to,to:(this.menuCycle.to+1+Math.floor(Math.random()*(all.length-1)))%all.length,since:now};}
@@ -1026,12 +1037,28 @@ class App {
         this.loadKarts = this.loadKarts.map((other, index) => {
           if (!LAB_WORLD && this.racePhase === 'practice' && !DEMO) return other;
           let botDrive=LAB_WORLD?{throttle:1,steering:CONTACT_SCENARIO?0:.75}:botInput(other,index+1,traffic);
-          if(!LAB_WORLD&&this.items.censorRemaining[index+1]>0)botDrive={...botDrive,steering:botDrive.steering*.72};
+          // Buried in files (Aktenflut): rivals lose their bearings, weave, lift and now and then find a barrier.
+          if(!LAB_WORLD&&this.items.censorRemaining[index+1]>0)botDrive={...botDrive,throttle:Math.min(botDrive.throttle,.78),hopDrift:false,hopPressed:false,
+            steering:Math.max(-1,Math.min(1,botDrive.steering*.5+Math.sin(this.raceTime*2.7+index*1.9)*.65))};
           if(!LAB_WORLD&&this.abilities.kimPenaltyRemaining[index+1]>0)botDrive={...botDrive,throttle:botDrive.throttle*.55};
           if(!LAB_WORLD&&(this.abilities.poseRemaining?.[index+1]??0)>0)botDrive={...botDrive,throttle:Math.min(botDrive.throttle,ABILITY_RULES.poseThrottle)};
           let next = advanceKart(other, botDrive, FIXED_STEP, project, terrain);
           return next;
         });
+        if(!LAB_WORLD) {
+          // Staatsbesuch (Bullet Bill counterpart): the kart rides the centreline on autopilot at motorcade speed.
+          const all=[this.kart,...this.loadKarts];let escorted=false;
+          all.forEach((k,i)=>{
+            const left=this.items.escortRemaining?.[i]??0;
+            if(left<=0){if(this.escortRoute[i]){this.escortRoute[i]=null;all[i]={...k,speed:Math.min(k.speed,18),turboRemaining:Math.max(k.turboRemaining,.8)};escorted=true;}return;}
+            const route=this.escortRoute[i]??=(()=>{const at=trackLocate(k.x,k.z);return {s:at.s,lane:Math.max(-TRACK.halfWidth+1.5,Math.min(TRACK.halfWidth-1.5,at.lane))};})();
+            route.s+=ITEM_RULES.escortSpeed*FIXED_STEP;route.lane*=1-2.2*FIXED_STEP;
+            const p=trackPoint(route.s,route.lane);
+            all[i]={...k,x:p.x,z:p.z,heading:p.heading,travelHeading:p.heading,speed:ITEM_RULES.escortSpeed,yawRate:0,steer:0,drifting:false,driftDirection:0,driftCharge:0,
+              turboRemaining:Math.max(k.turboRemaining,.25),impactRemaining:0,impactVelocityX:0,impactVelocityZ:0,spinRemaining:0,hopRemaining:0};escorted=true;
+          });
+          if(escorted){this.kart=all[0];this.loadKarts=all.slice(1);}
+        }
         if(!LAB_WORLD) {
           const all=[this.kart,...this.loadKarts];
           const recovered=all.map((s,i)=>{
@@ -1073,7 +1100,7 @@ class App {
           const activations=all.map((_,i)=>i===0?this.queuedSpecial:botsActive&&owners[i]!=='none'&&botWantsAbility(this.abilities,i,all,owners[i]));
           const changed=stepAbilities(this.abilities,all,activations,this.items.immune,FIXED_STEP,owners);
           this.queuedSpecial=false;this.kart=changed[0];this.loadKarts=changed.slice(1);
-          this.testScene?.setKimPolish?.(this.abilities.kimPolishRemaining);
+          this.testScene?.setKimPolish?.(this.abilities.kimPolishRemaining);this.testScene?.setEscort?.(this.items.escortRemaining);
           for(const event of this.abilities.events){
             this.abilityStats[event.kind]++;this.testScene?.abilityEvent?.(event.kind,event.kart,event.target);
             const source=all[event.kart],near=event.kart===0||event.target===0||Math.hypot(source.x-this.kart.x,source.z-this.kart.z)<35;
@@ -1151,6 +1178,13 @@ class App {
             if(event.kind==='defense-use'){this.itemMessage='Abwehrschild aktiv · ein Treffer wird abgefangen';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('launch');continue;}
             if(event.kind==='near-miss'){this.itemMessage='Knapp vorbei · Präzisionsschub';this.itemMessageUntil=this.items.time+1.2;this.audio.cheer(.22);continue;}
             if(event.kind==='block'){this.itemMessage=event.item==='shield'?'Abwehrschild hat den Treffer abgefangen':'Abgewehrt · Item als Schild verbraucht';this.itemMessageUntil=this.items.time+1.6;this.audio.itemEvent('hit');continue;}
+            if(event.item==='triple'||event.item==='golden'||event.item==='escort'){
+              const pickupText={triple:'Eilerlass in dreifacher Ausfertigung · E = je ein Schub',golden:'Goldener Dauererlass · E öffnet 7,5 s Dauerschub',escort:'Staatsbesuch genehmigt · E = Straße sperren'}[event.item];
+              const launchText={triple:`Eilerlass · Durchschlag ${3-(this.items.charges[0]??0)} von 3`,golden:'Goldener Dauererlass · Vorfahrt ohne Ende',escort:'STAATSBESUCH · Straße gesperrt, Kolonne fährt durch'}[event.item];
+              this.itemMessage=event.kind==='pickup'?pickupText:launchText;this.itemMessageUntil=this.items.time+(event.item==='escort'&&event.kind==='launch'?3:1.4);
+              if(event.kind==='launch'&&event.item==='escort'){this.abilityAnnouncementTitle='STAATSBESUCH · STRASSE GESPERRT';this.abilityAnnouncementDetail='Die Kolonne hat Vorfahrt. Alle anderen haben Verständnis.';this.abilityAnnouncementUntil=this.items.time+2.6;}
+              if(event.kind==='launch'){this.audio.cue('start');if(event.item==='escort')this.audio.cheer(.7);}else this.audio.itemEvent('pickup');continue;
+            }
             if(event.item==='boost'){this.itemMessage=event.kind==='pickup'?'Eilerlass erhalten · E = Vorfahrt per Dekret':'Eilerlass · Vorfahrt per Dekret!';this.itemMessageUntil=this.items.time+1.6;if(event.kind==='launch')this.audio.cue('start');else this.audio.itemEvent('pickup');continue;}
             this.itemMessage=event.item==='censor'?(event.kind==='hit'?'Faktenlage amtlich geschwärzt':'FAKTENLAGE ERFOLGREICH GESCHWÄRZT'):event.kind==='pickup'?`${event.item==='trap'?ITEM_NAMES[event.item]:projectile} erhalten`:event.kind==='launch'?(event.item==='trap'?'Falle abgelegt':`${projectile} unterwegs`):'Treffer · kurzzeitig geschützt';
             this.itemMessageUntil=this.items.time+(event.item==='censor'?2.6:1.8);
@@ -1159,6 +1193,9 @@ class App {
             if(event.kind==='launch'&&event.item!=='trap'&&event.item!=='censor'&&this.castOf(0).projectile!=='dog'&&this.voiceCooldown===0){this.audio.voice(`${this.castOf(0).voice}-horn`,{channel:'driver',rate:this.castOf(0).voiceRate,volume:.8});this.voiceCooldown=6;}
             if(event.kind==='hit')this.say(0,'hit');
           }
+          for(const event of this.items.events) if(event.kind==='hit'&&event.item==='censor'&&event.kart===0)this.flood.start(ITEM_RULES.censorDuration);
+          for(const event of this.items.events) if(event.kind==='launch'&&event.item==='escort'&&event.kart!==0){this.itemMessage=`Staatsbesuch von ${this.castOf(event.kart).name} · Fahrbahn räumen!`;this.itemMessageUntil=this.items.time+2.4;}
+          for(const event of this.items.events) if(event.kind==='hit'&&event.item==='escort'&&event.kart===0){this.itemMessage='Von der Staatskolonne abgedrängt';this.itemMessageUntil=this.items.time+1.8;}
           // A nearby rival's dog barks too (Hitler as a bot).
           for(const event of this.items.events) if(event.kind==='launch'&&event.kart!==0&&event.item!=='trap'&&event.item!=='boost'&&event.item!=='censor'&&this.castOf(event.kart).projectile==='dog'&&Math.hypot(all[event.kart].x-this.kart.x,all[event.kart].z-this.kart.z)<30)this.audio.dogBark();
           for(const event of this.items.events) if(event.kind==='hit'&&event.owner===0&&event.kart!==0) {
@@ -1290,6 +1327,8 @@ class App {
         }
         if (!LAB_WORLD && (this.racePhase === 'race' || this.racePhase === 'practice' || this.afterRace)) {
           // Cumulative damage from this step's contacts, crashes and item hits; a wreck waits for the state workshop.
+          // The state-visit motorcade is armoured: no bodywork damage while it clears the road.
+          this.items.escortRemaining.forEach((left,i)=>{if(left>0)this.damage.protected[i]=Math.max(this.damage.protected[i],.5);});
           stepDamage(this.damage,[this.previousKart,...this.previousLoadKarts],[this.kart,...this.loadKarts],FIXED_STEP);
           for(const event of this.damage.events){
             if(event.kind==='repaired'){if(event.kart===0){this.itemMessage='Repariert · Staatliche Werkstatt stempelt ab';this.itemMessageUntil=this.items.time+2;}continue;}

@@ -108,7 +108,7 @@ test('censor bar briefly impairs opponents, shows its sender a short banner, and
   assert.ok(incoming.censorRemaining[0] > 2.5);
   assert.ok(incoming.events.some((event) => event.kind === 'hit' && event.kart === 0 && event.owner === 1));
 
-  for (let i = 0; i < 180; i++) stepItems(world, karts, [false, false, false], [1, 2, 3], 1 / 60);
+  for (let i = 0; i < 300; i++) stepItems(world, karts, [false, false, false], [1, 2, 3], 1 / 60);
   assert.equal(world.censorBannerRemaining[0], 0, 'sender banner expires quickly');
   assert.equal(world.censorRemaining[1], 0, 'opponent steering effect expires');
 });
@@ -124,6 +124,36 @@ test('Eilerlass boost item: rank-weighted, self-applied turbo, never a projectil
   assert.equal(world.objects.length, 0);
   assert.ok(out[0].turboRemaining >= ITEM_RULES.boostDuration - 1e-9 && out[0].speed > 13);
   let boosts = 0; const w = createItems(6, 7);
-  for (let k = 0; k < 400; k++) { w.slots[5] = null; w.boxes.forEach(b => b.readyIn = 0); const box = w.boxes[0]; stepItems(w, Array.from({ length: 6 }, (_, i) => i === 5 ? { ...gridKart(5), x: box.x, z: box.z } : { ...gridKart(i), x: 9999, z: 9999 }), Array(6).fill(false), [1, 2, 3, 4, 5, 6], 1 / 60); if (w.slots[5] === 'boost') boosts++; }
-  assert.ok(boosts > 60, `last place should draw boosts often (${boosts}/400)`);
+  for (let k = 0; k < 400; k++) { w.slots[5] = null; w.boxes.forEach(b => b.readyIn = 0); const box = w.boxes[0]; stepItems(w, Array.from({ length: 6 }, (_, i) => i === 5 ? { ...gridKart(5), x: box.x, z: box.z } : { ...gridKart(i), x: 9999, z: 9999 }), Array(6).fill(false), [1, 2, 3, 4, 5, 6], 1 / 60); if (['boost', 'triple', 'golden'].includes(w.slots[5])) boosts++; }
+  assert.ok(boosts > 120, `last place should draw speed decrees often (${boosts}/400)`);
+});
+
+test('Mario-Kart counterparts (11.10.2026): triple decree, golden decree and state visit', async () => {
+  const { createItems, stepItems, itemOdds, itemBoxRows, ITEM_RULES } = await import('../src/items.ts');
+  const { gridKart, TRACK } = await import('../src/track.ts');
+  const far = (i) => ({ ...gridKart(i), x: 9999 + i * 50, z: 9999 });
+  // Triple: three separate boosts from one pickup.
+  const t = createItems(2); t.boxes = []; t.slots[0] = 'triple'; t.charges[0] = 3;
+  let k = [{ ...gridKart(0), speed: 10 }, far(1)];
+  for (let use = 1; use <= 3; use++) { k = stepItems(t, k, [true, false], [1, 2], 1 / 60); assert.equal(t.charges[0], 3 - use); }
+  assert.equal(t.slots[0], null); assert.equal(t.stats.triple.launched, 3);
+  // Golden: unlimited presses inside the window, then the slot empties by itself.
+  const g = createItems(2); g.boxes = []; g.slots[0] = 'golden';
+  k = [{ ...gridKart(0), speed: 10 }, far(1)];
+  for (let i = 0; i < 10; i++) k = stepItems(g, k, [i % 2 === 0, false], [1, 2], 1 / 60);
+  assert.equal(g.stats.golden.launched, 5); assert.equal(g.slots[0], 'golden');
+  for (let i = 0; i < Math.ceil(ITEM_RULES.goldenDuration * 60) + 2; i++) stepItems(g, k, [false, false], [1, 2], 1 / 60);
+  assert.equal(g.slots[0], null);
+  // State visit: immune motorcade that shoves a kart in its way aside.
+  const e = createItems(2); e.boxes = []; e.slots[1] = 'escort';
+  const leader = gridKart(0), bill = { ...gridKart(1), x: leader.x + .8, z: leader.z };
+  stepItems(e, [leader, bill], [false, true], [1, 2], 1 / 60);
+  assert.ok(e.escortRemaining[1] > 4 && e.immune[1] > 4);
+  const out = stepItems(e, [leader, bill], [false, false], [1, 2], 1 / 60);
+  assert.ok(out[0].spinRemaining > 0 && e.events.some((ev) => ev.kind === 'hit' && ev.item === 'escort' && ev.kart === 0));
+  // Odds: leaders never get the state visit or golden decree, the last place often gets speed.
+  assert.equal(itemOdds(1, 6).escort, 0); assert.equal(itemOdds(1, 6).golden, 0); assert.ok(itemOdds(6, 6).escort > itemOdds(4, 6).escort);
+  // Box rows: no gap over ~255 m on the active circuit.
+  const rows = itemBoxRows(); const gaps = rows.map((r, i) => (i + 1 < rows.length ? rows[i + 1] : rows[0] + TRACK.length) - r);
+  assert.ok(Math.max(...gaps) < 260, `largest gap ${Math.max(...gaps)}`); assert.ok(rows.length >= 6);
 });

@@ -9,6 +9,24 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Fahrgefühl, Items und Streckenfehler – 11.10.2026 (Marcel, Claude)
+
+Marcels Liste vom Morgen plus drei Nachträge (Esc-Fahrer, Tunnelboden, Abkürzungsflächen, Zensur-Effekt).
+
+- [x] **Drift nach Mario Kart (Switch):** Seite steht ab dem Hop fest, Drift hält solange Space gehalten wird; Lenkung formt nur den Bogen (innen ~18 m, ohne Taste ~29 m, außen ~76 m, unabhängig vom Tempo). Vorher: innen 11 m, ohne Taste endete der Drift nach 0,35 s, Gegenlenken schaltete die Seite um – mit Tastatur blieb nur der enge Bogen. Weicheres Eindrehen, beim Loslassen richtet sich die Nase auf die Fahrlinie aus (früher schoss das Kart mit Turbo in die Innenbande).
+- [x] **Messung (Tastatur-Fahrer-Simulation, 0,25 s Reaktion, je 3 Runden):** Bandenkontakte pro Runde mit typischer „Innen-Taste halten“-Gewohnheit: Stadionring 14,0 → 6,7, Duce-Drom 7,0 → 3,7, Havanna 13,0 → 8,7, Kulturrevolutions-Schleife 4,3 → 2,3; mit ausgewogener Lenkung unverändert niedrig (z. B. Stadionring 3,7 → 4,3, Peking 0,7 → 1,3). Streckenbreite unverändert: +1 m brachte in der Simulation wenig und hätte die Kulissen auf sechs Kursen verschoben. Menschlicher Fahrtest offen.
+- [x] **Hop auf Hügeln:** Federung zielte in der Luft auf Höhe 0 und zog das Kart unter eine erhöhte Fahrbahn (Test: −3,13 m). Jetzt folgt sie dem Boden, plus Federanschlag 0,1 m.
+- [x] **Startfehler nach kurzem Internetausfall:** Einzelne Skriptfehler zeigen erst einen Fehler, wenn das Laden 8 s lang steht; Fehlertext verschwindet bei weiterem Fortschritt bzw. Spielstart; kommt die Verbindung zurück, lädt ein gescheiterter Start selbst neu. Ursache ohne Marcels Screenshot nicht sicher belegt.
+- [x] **Streckenmusik in der Streckenwahl:** Klick auf eine Streckenkarte startet deren Musik; „Zurück“/Esc stellt die Musik der geladenen Strecke wieder her.
+- [x] **Esc im Rennen:** Pausenmenü zeigt den eigenen Fahrer; die Fahrer-Rundfahrt bleibt dem Hauptmenü.
+- [x] **Mehr Itemboxen:** Reihen etwa alle 200 m, je vier Boxen über die Breite (vorher 3–5 Reihen, Lücken bis 694 m; jetzt 7–13 Reihen, größte Lücke 213 m). Füllreihen meiden Rampen, Kanal, Krater, Schubfelder, Gefahren, Abkürzungsmündungen und Start; Orden halten Abstand.
+- [x] **Neue Items (eigene Ausarbeitung, Mario-Kart-Vorbild):** *Eilerlass in dreifacher Ausfertigung* (dreimal Schub), *Goldener Dauererlass* (7,5 s lang Schub bei jedem Druck), *Staatsbesuch* (nur hintere Plätze: 4,2 s Autopilot mit Blaulicht, 25 m/s, rammt Karts beiseite, gepanzert). Verteilung nach Platz gewichtet; Bots nutzen alle drei.
+- [x] **Zensurbalken als Aktenflut:** Getroffene Spieler sehen ~4 s lang einen Springbrunnen aus Akten, Erlassen, geschwärzten Berichten und Flugblättern; Bots fahren orientierungslos (schlingern, gehen vom Gas) und finden auch mal die Bande.
+- [x] **Ewige-Führer-Allee Tunnel:** Der Platzboden um die Unterführung war nach unten gerichtet und unsichtbar (schwarze Fläche) – Wicklung korrigiert. Über dem tiefen Tunnelteil liegt jetzt ein Park mit Bäumen, Rampen haben durchgehende Stützmauern, Ränder sind gepflastert, Portalbalken an beiden Enden.
+- [x] **Abkürzungsflächen:** Schotter-/Straßenband und Hecken der Abkürzung entstehen nur noch außerhalb der Rennstrecke, keine Flicken mehr auf der Fahrbahn (alle Kurse).
+- Prüfung: TypeScript, Build, `npm test` (126/126), Browser-Stichproben mit Bildern `docs/evidence/*-20261011.jpg`.
+- **Offen:** Menschlicher Drift-/Fahrtest durch Marcel; Goldener Dauererlass nur per Test und HUD-Logik geprüft, nicht im Bild; Grenze: Startfehler-Ursache ohne Screenshot vermutet.
+
 ## Projektstart-Block 10.10.2026 nachmittags – Leistung, Beinfreiheit, Ehrenregister (Marcel, Claude)
 
 Marcels erste Aufgabe: Das Spiel frisst massiv PC-Ressourcen und ruckelt. Danach Block wie beauftragt, zum Schluss die Beinfreiheit.
