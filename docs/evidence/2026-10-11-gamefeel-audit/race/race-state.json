@@ -1,0 +1,74 @@
+[
+  {
+    "track": "stadionring",
+    "phase": "race",
+    "state": "running",
+    "speed": 15.26666666666663,
+    "progress": 183.9588379936199,
+    "item": null,
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Bereit"
+  },
+  {
+    "track": "duce-drom",
+    "phase": "race",
+    "state": "running",
+    "speed": 15.79805532648561,
+    "progress": 178.8850228774238,
+    "item": null,
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Bereit"
+  },
+  {
+    "track": "havanna",
+    "phase": "race",
+    "state": "running",
+    "speed": 15.766666666666664,
+    "progress": 179.72298234732716,
+    "item": null,
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Bereit"
+  },
+  {
+    "track": "pyongyang",
+    "phase": "race",
+    "state": "running",
+    "speed": 15.519303866529327,
+    "progress": 164.2107980604369,
+    "item": null,
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Bereit"
+  },
+  {
+    "track": "moscow",
+    "phase": "race",
+    "state": "running",
+    "speed": 15.850601162902093,
+    "progress": 162.95629741042012,
+    "item": null,
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Bereit"
+  },
+  {
+    "track": "beijing",
+    "phase": "race",
+    "state": "running",
+    "speed": 15.719999999999999,
+    "progress": 179.65657205937282,
+    "item": null,
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Bereit"
+  }
+]

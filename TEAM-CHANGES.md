@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Spielgefühl-Abgleich als Entscheidungsgrundlage
+
+Aktuellen Babylon-Stand `f645be6` auf allen sechs Kursen mit kurzen automatisierten Rennfahrten sowie festen Strecken- und Fahrer/Kart-Bildern geprüft. Streckenrhythmus, Ereigniswirkung, Items und Präsentation mit den offiziell beschriebenen Funktionen von Mario Kart 8 Deluxe abgeglichen. Befunde und Grenzen stehen in CURRENT-WORKLIST.md, unbestätigte Verbesserungskandidaten in LONG-TERM-GOALS.md, 30 Fragen an Marcel in TEAM-NOTES.md. Belege unter `docs/evidence/2026-10-11-gamefeel-audit/`. Keine Spielcode-, Modell- oder Balanceänderung; neue Ziele werden erst aus Marcels Antworten bestätigt.
+
 ## 11.10.2026 – Claude: Drift, Items, Strecken-Fehler
 
 - Drift nach Mario-Kart-Vorbild: feste Seite bis Space losgelassen, Bogen innen ~18 m / neutral ~29 m / außen ~76 m (ersetzt den „Schlangenlinien“-Seitenwechsel vom 07.10.).

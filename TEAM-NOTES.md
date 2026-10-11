@@ -1,5 +1,53 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Fragen an Marcel nach dem Spielgefühl-Abgleich (Status: offen, noch keine Antworten)
+
+**Prüfgrenze:** Der Vergleich mit Mario Kart 8 Deluxe stützt sich auf offizielle Nintendo-Funktionsbeschreibungen, nicht auf eine in dieser Sitzung gespielte Switch-Partie. Diktator Kart: sechs aktuelle Kursläufe als kurze automatisierte Demonstrationsfahrten, feste Rück-/Modellansichten, Quell-/Streckendaten. Kein menschlicher Lenk-, Hör- oder dreirundiger Direktvergleich. Aktuelle Bilder und Laufzeitstatus: `docs/evidence/2026-10-11-gamefeel-audit/`; Branch `main`, Commit `f645be6`, 11.10.2026. Marcel erlaubte für diesen Abgleich ausdrücklich die unsichtbare eigene Chrome-Testinstanz. Sie und der eigene Server wurden nach der Prüfung beendet. Keine Nutzerfenster bedient.
+
+### Strecke und Rhythmus
+
+1. Welche **zwei** Kurse sind für dich beim Fahren am langweiligsten? Welche konkreten Abschnitte?
+2. Welcher Kurs soll der erste Pilot für ein neues Streckendesign werden: Pjöngjang, Moskau oder ein anderer?
+3. Soll Pjöngjang seine fast durchgehend geraden Parade-Alleen bewusst behalten, oder darf dort eine deutlich kurvigere Passage entstehen?
+4. Soll Moskau vor allem ein Hochgeschwindigkeitskurs bleiben, oder braucht es spürbare Brems- und Driftpunkte auf dem Hauptring?
+5. Welche Rundenlänge bzw. Rennzeit über drei Runden fühlt sich richtig an? Ist Moskau mit rund 2,22 km pro Runde zu lang?
+6. Was reizt dich mehr: enge technische Kurven, Höhenwechsel/Sprünge, geteilte Wege oder große inszenierte Setpieces?
+7. Wie viele echte Linienentscheidungen pro Runde wünschst du: eine starke, zwei bis drei oder viele kleine?
+8. Soll eine Abkürzung ohne Item bereits knapp schneller sein, oder nur mit sauberem Drift/Schub? Wie hoch darf ihr Fehlschlag-Risiko sein?
+9. Möchtest du mehr Streckenabschnitte, deren Straßenbreite sich sichtbar ändert, solange Fahrbarkeit und Botlinien erhalten bleiben?
+10. Welche Ortsmotive aus Berlin, Rom, Havanna, Pjöngjang, Moskau und Peking sollen jeweils als unverwechselbarer Fahrmoment hervortreten?
+
+### Streckenreaktionen und Effekte
+
+11. Soll es auf jeder Runde kleine angekündigte Streckenreaktionen geben, zusätzlich zum großen Ereignis am Beginn von Runde 2?
+12. Dürfen Ereignisse eine Spur kurz verändern oder sperren, wenn eine sichere Alternative klar sichtbar bleibt?
+13. Sollen Welle, Regen oder Schnee vor allem die Optik ändern, oder auch die Wahl zwischen trockener/schneller und nasser/riskanter Linie?
+14. Welche thematischen Hindernisse passen dir: Schranken, Aktenwagen, Paradeaufbau, Marktstände, Lautsprecherwagen – oder lieber keine beweglichen Objekte?
+15. Wie viel Vorwarnung brauchst du vor einem Streckeneffekt: Schild, Ansage, Lichtsignal, sichtbare Bewegung oder Kombination?
+16. Wie oft darf ein Streckenereignis tatsächlich Zeit kosten, ohne sich unfair oder lästig anzufühlen?
+17. Soll ein Ereignis alle Karts im Abschnitt gleich beeinflussen, oder soll geschickte Positionierung den Effekt vermeiden können?
+
+### Items und Fahrgefühl
+
+18. Sind die Itemboxen nun häufig genug, oder möchtest du pro Runde mehr/weniger Begegnungen?
+19. Fehlt dir bei den Items eher Verteidigung, unmittelbares Chaos, Streckenkontrolle oder ein neuer Bewegungstrick?
+20. Welches vorhandene Item macht dir am meisten Spaß, welches fühlt sich entbehrlich oder zu ähnlich an?
+21. Soll das Trefferfeedback heftiger wirken, wenn Kontrollverlust und Trefferketten weiterhin kurz und fair bleiben?
+22. Wie beurteilst du den neuen Drift: Einlenken, innen/außen öffnen, Mini-Turbo und Loslassen? Wo verlierst du noch die Kontrolle?
+23. Fühlt sich das Kart bei etwa 55–60 km/h schnell genug an? Falls nein: fehlt dir eher Kamera-/Umgebungsbewegung, Motorsound oder tatsächliches Tempo?
+24. Wie deutlich sollen Reifenwahl und spätere Motor-/Fahrwerksabstimmung im Fahren spürbar werden, ohne eine dominante Kombination zu erzeugen?
+
+### Präsentation und Reihenfolge
+
+25. Welche Fahrer-/Kart-Silhouetten erkennst du im Rennen sofort, welche sehen aus der Verfolgerkamera zu ähnlich aus?
+26. Ist das Renn-HUD informativ oder verdeckt es dir zu viel von der Strecke? Welche Anzeige muss immer sichtbar sein?
+27. Was fehlt beim Sound am stärksten: Motorwechsel, Reifen/Untergrund, Item-/Trefferklang, Zuschauerkulisse oder Musikdynamik?
+28. Soll der nächste größere Arbeitsblock **Streckenrhythmus** vor Fahrer-/Kart-Feinschliff und Cup-Fortschritt priorisieren, oder bleibt die bisherige Reihenfolge?
+29. Soll eine spätere lokale Mehrspieler- oder Battle-Variante überhaupt in die nähere Planung, oder erst nach sechs überzeugenden Einzelspielerstrecken?
+30. Was sind deine drei wichtigsten Abnahmesätze für einen neuen Kurs, z. B. „Ich will an jeder Runde zweimal bewusst eine andere Linie wählen“?
+
+**Nächster Schritt:** Marcels Antworten wortgetreu als Herkunft sichern, bestätigte Entscheidungen in die passenden Hauptdateien übertragen und unbestätigte Varianten als solche erhalten. Sarahs ursprüngliche Themen nicht stillschweigend ändern.
+
 ## 11.10.2026 – Claude: Drift-Messung und Prüfhinweise
 
 - Drift-Simulation: Tastatur-Fahrer mit digitaler Lenkung, Space in Kurven unter 45 m Radius, 0,25 s Reaktion, Abbruch bei Bandennähe; zählt Bandenkontakte pro Runde (Kontakte < 0,5 s Abstand als einer). Skript lag im Sitzungs-Scratchpad; Kernwerte stehen in CURRENT-WORKLIST.md. Ein Simulationsfahrer ersetzt kein menschliches Fahrurteil.

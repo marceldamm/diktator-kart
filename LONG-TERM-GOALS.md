@@ -1,5 +1,19 @@
 # Langfristige Arbeitsliste – Diktator Kart
 
+## Neue Kandidaten aus dem Spielgefühl-Abgleich – 11.10.2026 (Marcel, Codex; unbestätigt)
+
+Diese Ideen sind Fragen zur gemeinsamen Zielwahl, **keine freigegebenen Bauaufträge** und keine Änderung von Sarahs ursprünglichen Streckenthemen. Der aktuelle Laufzeitbefund steht oben in CURRENT-WORKLIST.md, die Entscheidungsfragen in TEAM-NOTES.md. Vergleichsmaßstab war Mario Kart 8 Deluxe auf Switch nach offiziellen Nintendo-Beschreibungen; Diktator Kart wurde im aktuellen Babylon-Build fotografiert und kurz automatisiert gefahren. Ein menschlicher Direktvergleich beider Spiele fand nicht statt.
+
+| Kandidat | Mögliche erste Umsetzung | Prüfkriterium vor Freigabe |
+|---|---|---|
+| **Streckenrhythmus zuerst** | Pjöngjang oder Moskau als Pilot: mindestens zwei neue erkennbare Brems-/Drift-/Beschleunigungsmomente und eine alternative Linienentscheidung, ohne die thematisch gewollten Parade-Geraden zu verlieren. Höhenwechsel, Engstelle oder Schikane nur dort, wo Sicht und Bots sie fair meistern. | Marcels Wahl von Pilotkurs und gewünschtem Tempo; gleiche 3-Runden-Fahrten und klare Vorher-/Nachher-Bilder. |
+| **Ortsgebundene Streckenereignisse** | Bestehende Welle/Parade/Durchsage zu angekündigten, räumlich erkennbaren Reaktionen weiterentwickeln: etwa trockene und nasse Spur, kurz offene/gesperrte Durchfahrt oder sichere Ausweichlinie. Kleine Ereignisse auch vor Runde 2 prüfen; keine unlesbaren Überraschungstreffer. | Spieler und Bots haben dieselben Regeln, Vorwarnung, mindestens eine faire Wahl, begrenzte Effekte und messbare Bildzeit. |
+| **Abkürzungen mit nachvollziehbarem Nutzen** | Alle sechs Abkürzungen ohne Item, mit Drift und mit Schub gegen die Hauptroute fahren; Einfahrt, Weglänge, Schotter-Tempolimit und Ausfahrt bewerten. Nur die nachweislich schwachen Routen gezielt ändern. | Wiederholter Zeitvergleich, korrekte Rundenwertung, Bot-Nutzung und für Spieler erkennbares Risiko/Nutzen-Verhältnis. |
+| **Mehr Tempogefühl und Itemklarheit** | Kamerabewegung, Streckenrand-Parallaxe, Motor-/Reifen-/Schubfeedback und HUD-Rückmeldung bei 50–60 km/h vergleichen; Items stärker nach Einsatzabsicht unterscheiden. Keine pauschale Geschwindigkeitssteigerung ohne Fahrtest. | Menschliche Lenk-/Hörprobe, lesbare Treffer/Abwehr, keine Kameraübelkeit oder zusätzliche Ruckler. |
+| **Fahrer/Karts und Rennbild** | Die vorhandenen sechs Modelle an den laufenden Qualitätsanker anbinden; auf Renndistanz klarere Silhouetten/Animationen und bei Bedarf ein kompakteres HUD. | Feste Modell- und echte Rennbilder, keine Durchsteck-/Lesbarkeitsregression, Marcels Stilurteil. |
+| **Späterer Umfang** | Alternative Rennregeln, lokaler Mehrspielermodus oder Battle-Arena nur nach Priorisierung gegenüber den sechs Kursen, Kart-Abstimmung und Cup-Fortschritt. Keine Mario-Kart-Mechanik allein wegen des Vorbilds übernehmen. | Umfangs- und Prioritätsentscheidung von Marcel/Sarah, Geräte- und Leistungsprüfung. |
+
+
 **Fortschritt Klima/Boden 10.10.2026:** Sechs kostenlose CC0-Baumvarianten integriert und klimatisch verteilt, Roms mediterrane Originale erhalten; räumliche Materialbatches, begrenzte Texturen und tatsächliche Kronengrenzen. Sechs eigene Platzpflaster/Rasenpaletten, drei verbesserte Fahrbahntexturen und maßstäbliche Bodenkachelung. Prüfung/Belege in CURRENT-WORKLIST.md. Die älteren Ziele bleiben beauftragt; nach dem Umweltcheckpoint greift die Budgetreserve, kein Gesamtabschluss behauptet.
 
 **Fortschritt Musik 10.10.2026:** Sechs eigene thematische Schleifen mit erhaltenem Grundklang integriert; Kompositionsquelle, Datei-/Audiosteuerungstests und sichtbare Wiedergabe vorhanden. Menschliche Hör-/Mischungsabnahme offen. Als Nächstes Klima-Bäume und differenzierte Böden; danach ältere bestätigte Ziele.

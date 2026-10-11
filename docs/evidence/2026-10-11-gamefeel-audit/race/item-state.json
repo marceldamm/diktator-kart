@@ -1,0 +1,56 @@
+[
+  {
+    "track": "stadionring",
+    "phase": "race",
+    "state": "running",
+    "speed": 16,
+    "progress": 663.5444196772185,
+    "item": null,
+    "itemStats": {
+      "direct": {
+        "collected": 4,
+        "launched": 3,
+        "hits": 1
+      },
+      "homing": {
+        "collected": 3,
+        "launched": 3,
+        "hits": 2
+      },
+      "trap": {
+        "collected": 4,
+        "launched": 4,
+        "hits": 4
+      },
+      "censor": {
+        "collected": 0,
+        "launched": 0,
+        "hits": 0
+      },
+      "boost": {
+        "collected": 0,
+        "launched": 0,
+        "hits": 0
+      },
+      "triple": {
+        "collected": 1,
+        "launched": 3,
+        "hits": 0
+      },
+      "golden": {
+        "collected": 0,
+        "launched": 0,
+        "hits": 0
+      },
+      "escort": {
+        "collected": 0,
+        "launched": 0,
+        "hits": 0
+      }
+    },
+    "view": "Verfolger nah",
+    "rivals": 5,
+    "weather": "Wetter Sonne",
+    "hud": "Hop"
+  }
+]
