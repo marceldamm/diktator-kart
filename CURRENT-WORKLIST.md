@@ -21,6 +21,7 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 3. Übrige Kurse nach dem Pilotmuster umbauen: gerade Anteile heute Berlin 24 %, Rom 55 %, Havanna 47 %, Peking 58 % – Rom, Havanna, Peking zuerst. Pro Kurs eigene Abkürzung mit fairem Gewinn (Ziel 60–140 m bzw. nur mit Turbo lohnend), ein Ereignis mit sichtbarer sicherer Alternative.
 4. Danach Items/Bots/Klang/HUD/Kart-Abstimmung (Paket 3/4 in LONG-TERM-GOALS.md).
 5. Sarahs Sicht auf die geänderten Kurse (Pjöngjang, Moskau) einholen; ihre Zustimmung ist nicht unterstellt.
+6. **Offener Wunsch Marcel (11.10.2026, 11:36):** „Verkürze die Tests, die brauchen zu lange.“ Noch nicht umgesetzt. `npm test` dauert rund 80 s; die langen Läufe sind die Drei-Runden-Bot-Simulationen je Kurs (z. B. Pjöngjang-Bots ~4–5 s, Paradekolonne ~4 s, bot-racing). Vorschlag: kürzere Simulationsdauer bzw. eine schnelle Standard-Suite und eine separate lange Suite.
 
 **Werkzeuge für die Fortsetzung:** Grundriss-/Kurvenanalyse und Rennaufnahmen liefen mit kleinen Skripten im Sitzungs-Scratchpad (nicht im Repo): Plot per `sampleTrack`/`trackPoint` als SVG→PNG mit `sharp`, Rennen per CDP auf Port 9231 (Ablauf in TEAM-NOTES.md, Eintrag „Prüfnotizen Pjöngjang-Pilot“). Prüfregel „gerade Anteile“: 2-m-Abtastung, |Krümmung| < 1/150 m.
 
