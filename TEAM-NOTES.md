@@ -1,5 +1,11 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Neues A21 aus der offenen A4-Sichtprüfung
+
+Der bisherige verborgene Berlinlauf hat den Runde-zwei-Toast belegt, aber den Zeppelin im Kamerabild nicht eindeutig gezeigt. Die Grafikprüfansicht in `tests/feedback-visual.html` hat jetzt direkte Auswahl für alle sechs Rennereignisse; Auswahl und Heimstrecke bleiben gekoppelt. Nach Auslösung zeigt der Status das Ereignis, beim Zeppelin auch `Propaganda zeppelin`-Knoten aktiviert/inaktiv. `npm run build` bestand. Im versteckten In-App-Browser lud die echte Berliner Szene; der Zeppelin-Knoten war nach dem Trigger aktiv. In der festen Umgebungsansicht und der freien Übersicht war das Modell selbst nicht klar zu sehen. Peking lud nach Auswahl automatisch die Kulturrevolutions-Schleife und der Pflichtjubel-Trigger ließ sich auslösen; Partikel waren im Bild nicht eindeutig. Deshalb ist dies ein reproduzierbarer Steuerungs-/Knotenstatusbeleg, keine visuelle Ereignisabnahme. Der vorherige Rennlauf wurde pausiert; Auto-Gas und Lenkhilfe wurden ausgeschaltet.
+
+**Budget nach A21:** offizielle Codex-Werte 35 % Fünf-Stundenverbrauch / 20 % Wochenverbrauch (65 % / 80 % Rest).
+
 ## 11.10.2026 – Codex: Berliner Zeppelin erreicht die Stadiongerade in Runde 2
 
 Berlin verwendet denselben `atSecondLapTrackEvent`-Check wie die übrigen fünf Kursereignisse: `TRACK.length + s - TRACK.start` muss mindestens erreicht sein und die aktuelle Streckenposition muss zwischen s=45 und s=182 liegen. Der Bereich liegt auf der langen Zuschauer-/Tribünengeraden. Der Runde-eins-Hinweis spät in der Runde bleibt. Ein gemeinsamer Regressionstest prüft jetzt alle sechs Kurszonen gegen falschen Rundenstand, falschen Ort, Eintritt und Zonenende. Gezielte Streckentests 30/30, Typprüfung, Build und Vollsuite 133/133 bestehen. Der Zeppelin wurde im aktuellen Lauf nicht bis zum Ereignis beobachtet; keine Runtime-Sichtabnahme behauptet.

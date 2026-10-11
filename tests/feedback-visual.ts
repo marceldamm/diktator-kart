@@ -10,12 +10,14 @@ import { TRACKS, type TrackId } from '../src/track-layout';
 import type { TestScene } from '../src/scene';
 import { FreeFlight } from '../src/free-camera';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+const EVENT_NAMES = { zeppelin: 'Berlin · Zeppelin', wave: 'Havanna · Welle', balcony: 'Rom · Balkonrede', loudspeaker: 'Peking · Pflichtjubel', parade: 'Moskau · Ehrenparade', column: 'Pjöngjang · Kolonne' } as const;
+const EVENT_TRACKS = { zeppelin: 'stadionring', wave: 'havanna', balcony: 'duce-drom', loudspeaker: 'beijing', parade: 'moscow', column: 'pyongyang' } as const;
 MeshoptCompression.Configuration = { decoder: { url: '/vendor/meshopt_decoder.js' } };
 const driver = el<HTMLSelectElement>('driver'), track = el<HTMLSelectElement>('track'), view = el<HTMLSelectElement>('view');
 driver.replaceChildren(...CAST.map((c, i) => new Option(c.name, String(i))));
 track.replaceChildren(...Object.entries(TRACKS).map(([id, c]) => new Option(c.name, id)));
 const engine = new Engine(el<HTMLCanvasElement>('canvas'), true);
-let world: TestScene, camera: FreeCamera, paused = false, jump = 0, night = 0, health = 100, coursePosition = 0;
+let world: TestScene, camera: FreeCamera, paused = false, jump = 0, night = 0, health = 100, coursePosition = 0, triggeredEvent: keyof typeof EVENT_NAMES | null = null;
 try {
   const saved = JSON.parse(sessionStorage.getItem('dk-feedback-view') ?? 'null');
   if (saved) {
@@ -55,13 +57,15 @@ function render() {
   world.scene.render();
 }
 function status() {
-  el('status').textContent = `${CAST[Number(driver.value)].name} · ${TRACK.name} · ${view.value} · Sprung ${jump} · Nacht ${night} · Karosserie ${health} % · Position ${coursePosition}`;
+  const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_NAMES;
+  const zeppelinState = triggeredEvent === 'zeppelin' ? ` · Zeppelinmodell ${world.scene.getTransformNodeByName('Propaganda zeppelin')?.isEnabled() ? 'aktiv' : 'inaktiv'}` : '';
+  el('status').textContent = `${CAST[Number(driver.value)].name} · ${TRACK.name} · ${view.value} · Ereignis ${EVENT_NAMES[event]} · Zuletzt ausgelöst ${triggeredEvent ? EVENT_NAMES[triggeredEvent] : 'keines'}${zeppelinState} · Sprung ${jump} · Nacht ${night} · Karosserie ${health} % · Position ${coursePosition}`;
   try { sessionStorage.setItem('dk-feedback-view', JSON.stringify({ driver: driver.value, track: track.value, view: view.value,
     quality: el<HTMLSelectElement>('quality').value, lamps: el<HTMLInputElement>('lamps').checked, shortcut: el<HTMLInputElement>('shortcut').checked,
     jump, night, health, position: coursePosition, paused })); } catch { /* Storage is optional in the QA page. */ }
 }
 async function load() {
-  engine.stopRenderLoop(); world?.scene.dispose(); selectTrack(track.value as TrackId);
+  engine.stopRenderLoop(); world?.scene.dispose(); triggeredEvent = null; selectTrack(track.value as TrackId);
   el('status').textContent = 'Lädt tatsächliche Spielszene …';
   world = await createSliceScene(engine, 0, 1);
   world.scene.blockMaterialDirtyMechanism = false;
@@ -78,7 +82,17 @@ el('wreck').onclick = () => {
   if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); }
   render(); status();
 };
-track.onchange = () => void load(); view.onchange = () => { render(); status(); };
+track.onchange = () => {
+  const selectedEvent = (Object.keys(EVENT_TRACKS) as (keyof typeof EVENT_TRACKS)[]).find(event => EVENT_TRACKS[event] === track.value);
+  if (selectedEvent) el<HTMLSelectElement>('track-event').value = selectedEvent;
+  void load();
+};
+el<HTMLSelectElement>('track-event').onchange = () => {
+  const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_TRACKS;
+  track.value = EVENT_TRACKS[event]; void load();
+};
+view.onchange = () => { render(); status(); };
+el('trigger-event').onclick = () => { const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_NAMES; triggeredEvent = event; world.trackEvent?.(event); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } render(); status(); };
 for (const kind of ['cheer', 'fist', 'angry'] as const) el(kind).onclick = () => { world.driverReaction?.(0, kind); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } };
 el('pause').onclick = () => { paused = !paused; el('pause').textContent = paused ? 'Animation weiter' : 'Bild einfrieren'; if (paused) engine.stopRenderLoop(); else engine.runRenderLoop(render); status(); };
 for (const id of ['jump', 'night', 'health', 'position']) el<HTMLInputElement>(id).oninput = () => {

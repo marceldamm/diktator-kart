@@ -1,5 +1,11 @@
 # Gemeinsamer Änderungsverlauf
 
+### A21 – Ereignisvorschau in der Grafikprüfansicht (11.10.2026)
+
+Die bestehende Laufzeit-Grafikprüfansicht kann alle sechs Rennereignisse direkt auslösen: Berliner Zeppelin, Havanna-Welle, Rom-Balkonrede, Peking-Pflichtjubel, Moskauer Ehrenparade und Pjöngjang-Kolonne. Die Eventwahl lädt jeweils automatisch die Heimstrecke, ein Streckenwechsel passt die Eventauswahl an. Der Aufruf nutzt `TestScene.trackEvent`, dieselbe Szenenschnittstelle wie die Rennlogik. Der Status zeigt den letzten Trigger und beim Zeppelin dessen aktiven Szenenknoten.
+
+`npm run build` (TypeScript und Vite) bestanden. Hidden-Browser-Probe: Prüfansicht lud echte Streckenmodelle; Berlin-Zeppelin-Knoten wurde nach Auslösung als aktiv bestätigt. Peking-Event ließ sich mit automatischer Kurszuordnung auslösen. In den getesteten Kamerabildern waren weder das Zeppelinmodell noch Papiere eindeutig sichtbar, daher keine VFX-Abnahme behaupten.
+
 ### A16 – Botabwehr bis zum tatsächlichen Treffer regressionsprüfen (11.10.2026)
 
 Die A16-Testfälle prüfen nun auch den durchgehenden Ablauf: Eine vorhergesagte direkte Flugbahn aktiviert den Bot-Reserveschutz und dieser blockt anschließend das eintreffende Projektil. Der gezielte Test und der schnelle Standardlauf 124/124 bestanden. Dies ist ein Modell-/Integrationsbeleg, keine Runtime-Abnahme. Eine Berliner Laufzeitprobe blieb wegen gleichzeitigem Krater-/Trefferchaos ohne eindeutigen Schildblock; alle drei Schwierigkeitsstufen bleiben offen.

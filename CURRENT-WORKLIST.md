@@ -1,13 +1,22 @@
 # CURRENT WORKLIST – laufende Arbeit
 
-## Aktives Zielpaket – Streckenereignisse verlässlich starten und anzeigen (A19–A20, 11.10.2026)
+## Aktives Zielpaket – Streckenereignisse verlässlich starten und anzeigen (A19–A21, 11.10.2026)
 
 - [x] **A19 – Kursereignis-Meldung gegen Item-Toast-Überlagerung schützen:** Sechs Kursereignisse schreiben jetzt in einen eigenen, viersekündigen Meldungskanal. Er hat im Itemfeld Vorrang vor normalen Items, Treffern und Kollisionshinweisen; danach übernimmt der aktuelle Item-/Steuerungshinweis wieder. Überlagerung, Ablaufgrenze und leeres Ereignis sind regressionsgeprüft. Vollsuite 139/139 außerhalb der Sandbox, `npm run build` (inkl. TypeScript) bestanden. Bundle: 2.164,82 KB / 535,06 KB gzip, bestehende Chunkwarnung. Im Berliner Lauf war der Zeppelin-Toast bei 1:09 sichtbar und der normale Hinweis bei etwa 1:12 zurück; gleichzeitiger Itemtreffer wurde nicht gezielt erzwungen.
 - **Budget nach A19:** offizielle Codex-Werte 28 % Fünf-Stundenverbrauch / 19 % Wochenverbrauch (72 % / 81 % Rest).
 - [x] **A20 – Kursereignisse am eigenen Runde-zwei-Fortschritt ausrichten:** Alle sechs Kursmomente starten nun allein anhand des Spielerfortschritts am passenden Ort; ihre Wirkungen bleiben für alle Karts im Bereich geteilt. Regression belegt, dass Botfortschritt das Ereignis nicht verbraucht und eigener Runde-zwei-Eintritt es freigibt. Vollsuite 140/140, Build/TypeScript bestanden; Bundle 2.164,53 KB / 535,07 KB gzip, bekannte Chunkwarnung. Im zweiten versteckten Berlinlauf erschien der Zeppelin-Hinweis bei 1:17.82 mit Spieler-HUD 2/3 und Platz 3.
 - **Budget nach A20-Runtimeprüfung:** offizielle Codex-Werte 32 % Fünf-Stundenverbrauch / 20 % Wochenverbrauch (68 % / 80 % Rest).
 - **Runtime-Ergebnis A20/A4:** Im zweiten versteckten Berlin-GP blieb der Zeppelin-Toast während Spieler-Runde 1 aus und erschien bei 1:17.82 in Runde 2/3, Platz 3. Ein Screenshot bei 1:19.98 zeigte Runde 2, den Spieler auf Platz 3 und die gerade erfolgende Item-/Trefferpartikelanimation; das Zeppelinmodell selbst war nicht eindeutig sichtbar. A20-Laufzeitstart bestätigt; A4-Wind-/Modell-/Publikumsabnahme bleibt offen. Auto-Gas und Lenkhilfe danach wieder ausgeschaltet; Tab und eigene Vite-Instanz geschlossen.
-- **Nächster Schritt:** A5 Botabwehr- und Botitem-Runtime-Stichproben; danach A4 Zeppelin, Außenlinienwind und Publikumsreaktion gezielt sichtbar prüfen.
+- **Nächster Schritt:** A4 Sichtprüfung im neuen Ereignis-Vorschauhelfer abschließen; danach A5 Botabwehr- und Botitem-Runtime-Stichproben fortsetzen.
+
+## Neues Prüfziel – Streckenereignisse gezielt auslösen (A21, 11.10.2026)
+
+- [x] Prüfansicht um Auswahl und direkten Aufruf aller sechs echten Szenenereignisse ergänzt. Auswahl eines Ereignisses lädt automatisch dessen Heimstrecke; ein neuer Kurs setzt den alten Ereignisstatus zurück. Der Trigger nutzt dieselbe `TestScene.trackEvent`-Schnittstelle wie die Rennlogik und zeigt zuletzt ausgelöstes Ereignis sowie den Aktivzustand des Zeppelin-Modells im Status.
+- [ ] Verdeckter Browser-Sichtcheck auf Berlin/Zeppelin und mindestens ein Partikelereignis mit gesichertem Bildbeleg. Build bestanden; QA-Seite und echte Strecke geladen. Der Status bestätigte nach direktem Trigger „Zeppelinmodell aktiv“; das 3D-Modell selbst war aus der getesteten Umgebungs-/freien Kameraposition nicht sichtbar. Peking wurde ausgewählt und der Pflichtjubel-Trigger ausgelöst, aber der Papiereffekt war im Screenshot nicht eindeutig zu erkennen.
+- [ ] Danach Zeppelinflug/Wind auf der Außenlinie und kleine Publikumsreaktionen im echten Rennen abnehmen; mögliche Laufzeitverbesserung nur aus konkretem Sichtbefund ableiten.
+
+**Aktueller Stand:** Der vorherige Berlin-GP zeigte den A20-Toast, aber keinen eindeutig sichtbaren Zeppelin. Die Grafikprüfansicht kann jetzt Heimstrecke/Ereignis gezielt laden und den Auslöserstatus zeigen. In der aktuellen Browserprobe war der Zeppelin-Knoten nach Trigger aktiv, das Modell blieb im Bild dennoch außerhalb des klaren Sichtnachweises. Auto-Gas und Lenkhilfe im separaten Spieltab wurden ausgeschaltet. Noch keine A4-VFX-Sichtabnahme behaupten.
+**Budget nach A21-Prüfansicht:** offizielle Codex-Werte 35 % Fünf-Stundenverbrauch / 20 % Wochenverbrauch (65 % / 80 % Rest).
 
 > **Rolle und Vorrang (09.10.2026):** Dies ist zusammen mit LONG-TERM-GOALS.md, TEAM-CHANGES.md und TEAM-NOTES.md die vollständige, laufend gepflegte Projektsteuerung. Keine weitere Datei, kein GitHub-Issue und kein Board ist eine Aufgaben- oder Fortschrittsquelle. Frühere Logs, Detaildokumente und Issues bleiben historische Quellen; offene Aufgaben daraus wurden hierher übertragen. Alte Einträge nicht fortschreiben. Bei Widersprüchen gilt der jüngste ausdrücklich bestätigte Nutzerwunsch.
 
