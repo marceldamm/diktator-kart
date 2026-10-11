@@ -440,10 +440,22 @@ class App {
       report('ready');
       this.show('running', 'W/S fahren, A/D lenken; Space für Hop und Drift.');
       if(after)after();else if(!LAB_WORLD&&!DEMO)this.openMenu();
+      this.loadRetries = 0;
     } catch (error) {
-      if (generation === this.generation) this.show('error', error instanceof Error ? error.message : String(error));
+      if (generation !== this.generation) return;
+      const text = error instanceof Error ? error.message : String(error);
+      // A dropped or switched connection makes Chrome abort running downloads (net::ERR_NETWORK_CHANGED), even from
+      // the local game server (Marcel 11.10.2026). Retry quietly twice, once the browser is back online.
+      if (this.loadRetries < 2 && /fetch|network|load|HTTP|abort/i.test(text)) {
+        this.loadRetries++;
+        const retry = () => window.setTimeout(() => { if (generation === this.generation) void this.restart(after); }, 1500);
+        if (navigator.onLine === false) window.addEventListener('online', retry, { once: true }); else retry();
+        return;
+      }
+      this.show('error', text);
     }
   }
+  private loadRetries = 0;
 
   /** Sunshine half of the time, otherwise rain or snow. */
   private rollWeather(): 'sun'|'rain'|'snow' { const r = Math.random(); return r < .5 ? 'sun' : r < .75 ? 'rain' : 'snow'; }
