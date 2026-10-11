@@ -2,7 +2,7 @@
 
 ## 11.10.2026 – Codex: Bot-Abwehrslot sagt Treffer voraus
 
-Der Bot-Abwehrslot zündete bisher für jedes nicht-Fallen-Objekt im 10-m-Umkreis. `botShouldUseDefense` sagt nun mit relativer Geschwindigkeit von Kart und Projektil voraus, ob der kleinste Abstand in den nächsten 0,65 Sekunden bis an den Trefferbereich heranreicht. Fremde aktive Projektile zählen; eigene, abgelaufene und Fallenobjekte nicht. `main.ts` nutzt die Funktion für alle Bots, die gemeinsame Itemwirkung bleibt unverändert. Vier gezielte Fälle und Vollsuite 136/136 bestanden; TypeScript und Build bestanden. Sichtabnahme in einer längeren Itemfahrt bleibt offen.
+Der Bot-Abwehrslot zündete bisher für jedes nicht-Fallen-Objekt im 10-m-Umkreis. `botShouldUseDefense` sagt nun mit relativer Geschwindigkeit von Kart und Projektil voraus, ob der kleinste Abstand in den nächsten 0,65 Sekunden bis an den Trefferbereich heranreicht. Ein auf den Bot gelocktes Homing-Geschoss wird zusätzlich trotz seitlich abweichender aktueller Gerade erkannt. Fremde aktive Projektile zählen; eigene, abgelaufene und Fallenobjekte nicht. `main.ts` nutzt die Funktion für alle Bots, die gemeinsame Itemwirkung bleibt unverändert. Sechs gezielte Fälle und Vollsuite 136/136 bestanden; TypeScript und Build bestanden. Sichtabnahme in einer längeren Itemfahrt bleibt offen.
 
 ## 11.10.2026 – Codex: Berliner Zeppelin mit fairer Linienwahl
 

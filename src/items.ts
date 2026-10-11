@@ -231,6 +231,8 @@ export function botShouldUseDefense(world:ItemWorld,index:number,karts:KartState
   return world.objects.some((object)=>{
     if(object.owner===index||object.kind==='trap'||object.remaining<=0)return false;
     const rx=kart.x-object.x,rz=kart.z-object.z;
+    // A locked homing order curves toward its target, so its current straight heading can understate the threat.
+    if(object.kind==='homing'&&object.target===index&&Math.hypot(rx,rz)<=ITEM_RULES.speed*horizon)return true;
     const rvx=kartVx-Math.sin(object.heading)*ITEM_RULES.speed,rvz=kartVz-Math.cos(object.heading)*ITEM_RULES.speed;
     const relativeSpeedSq=rvx*rvx+rvz*rvz;
     const closestTime=relativeSpeedSq>1e-6?Math.max(0,Math.min(horizon,-(rx*rvx+rz*rvz)/relativeSpeedSq)):0;

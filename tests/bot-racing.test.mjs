@@ -47,6 +47,10 @@ test('bots save the defensive slot for predicted projectile hits, not traps or f
  assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'nearby shot passes outside the collision radius');
  world.objects[0]={...world.objects[0],kind:'trap',x:0};
  assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'stationary trap cannot spend the projectile shield');
+ world.objects[0]={...world.objects[0],kind:'homing',x:-12,z:0,target:1};
+ assert.equal(botShouldUseDefense(world,1,[owner,defender]),true,'a locked homing projectile may turn into the kart');
+ world.objects[0]={...world.objects[0],kind:'direct',owner:1,x:0,z:-6};
+ assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'a bot does not defend against its own projectile');
  world.defenseSlots[1]=false;world.objects[0]={...world.objects[0],kind:'direct'};
  assert.equal(botShouldUseDefense(world,1,[owner,defender]),false,'empty reserve slot cannot activate');
 });
