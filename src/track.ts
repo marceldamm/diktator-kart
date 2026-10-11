@@ -316,6 +316,16 @@ export function applyMaleconWaveDrag(speed: number, yawRate: number, dt: number)
   return { speed: Math.max(0, speed - .22 * step), yawRate: yawRate * Math.max(0, 1 - .025 * step) };
 }
 
+/** The Peking rulebook broadcast makes the middle line of the serpentine briefly harder to hold. */
+export function policyJubelPatchAt(s: number, lane: number): boolean {
+  return s >= 880 && s < 1040 && Math.abs(lane) < 2.4;
+}
+
+export function applyPolicyJubelDrag(speed: number, yawRate: number, dt: number): { speed: number; yawRate: number } {
+  const step = Math.max(0, dt);
+  return { speed: Math.max(0, speed - .18 * step), yawRate: yawRate * Math.max(0, 1 - .02 * step) };
+}
+
 /** A kart beyond the open quay edge drops into the harbour basin. */
 export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | null {
   const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);

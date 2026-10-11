@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -138,6 +138,9 @@ class App {
   /** Malecón wave (Havanna, lap 2): seaward-line drag remains active for this short race-time window. */
   private waveUntil=0;
   private waveTriggered=false;
+  /** Peking's lap-two rulebook broadcast briefly unsettles only the serpentine centre line. */
+  private jubelUntil=0;
+  private jubelTriggered=false;
   /** Balcony speech (Rome, lap 2): petals slow the centre line for a short window; either outer line stays clear. */
   private balconyUntil=0;
   private balconyTriggered=false;
@@ -660,7 +663,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -1112,6 +1115,10 @@ class App {
           const soak = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return maleconWavePatchAt(s, lane) && k.grounded ? { ...k, ...applyMaleconWaveDrag(k.speed, k.yawRate, FIXED_STEP) } : k; };
           this.kart = soak(this.kart); this.loadKarts = this.loadKarts.map(soak);
         }
+        if (!LAB_WORLD && this.raceTime < this.jubelUntil) {
+          const echo = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return policyJubelPatchAt(s, lane) && k.grounded ? { ...k, ...applyPolicyJubelDrag(k.speed, k.yawRate, FIXED_STEP) } : k; };
+          this.kart = echo(this.kart); this.loadKarts = this.loadKarts.map(echo);
+        }
         if (!LAB_WORLD && this.raceTime < this.balconyUntil) {
           // Balcony roses collect in the centre of the start-side avenue; a clean outer line avoids the brief drag.
           const rosePatch = (k: typeof this.kart) => { const { s, lane } = trackLocate(k.x, k.z); return balconyRosePatchAt(s, lane) && k.grounded ? { ...k, speed: Math.max(0, k.speed - .45 * FIXED_STEP), yawRate: k.yawRate * (1 - .3 * FIXED_STEP) } : k; };
@@ -1243,6 +1250,14 @@ class App {
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          if (!this.jubelTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+            const { s, lane } = trackLocate(kart.x, kart.z);
+            return this.progress[i].distance >= TRACK.length + 880 - TRACK.start && policyJubelPatchAt(s, lane);
+          })) {
+            this.jubelTriggered = true; this.jubelUntil = this.raceTime + 14;
+            this.testScene?.trackEvent?.('loudspeaker'); this.itemMessage = 'Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt'; this.itemMessageUntil = this.items.time + 4;
+            this.audio.cheer(1.2); window.setTimeout(() => this.audio.voice('announcer-loudspeaker', { force: true }), 900);
+          }
           if (!this.waveTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s, lane } = trackLocate(kart.x, kart.z);
             return this.progress[i].distance >= TRACK.length + 105 - TRACK.start && maleconWavePatchAt(s, lane);
@@ -1264,7 +1279,7 @@ class App {
           // Early notice (worklist 10.10.2026): the lap-2 event is announced in the last quarter of lap 1.
           if(!this.eventAnnounced&&this.racePhase==='race'&&this.lapTimes.length===0&&this.progress[0].distance>TRACK.length*.75){
             this.eventAnnounced=true;
-            const notice:Record<string,string>={havana:'Vorankündigung: Nächste Runde rollt die Malecón-Welle über die Uferstraße',rome:'Vorankündigung: Nächste Runde spricht der Balkon',moscow:'Vorankündigung: Nächste Runde Ehrenparade mit Rückenwind',beijing:'Vorankündigung: Nächste Runde Pflichtjubel-Durchsage',pyongyang:'Vorankündigung: Nächste Runde rollt die Paradekolonne über die rechte Spur der Tor-Allee',berlin:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin das Stadion'};
+            const notice:Record<string,string>={havana:'Vorankündigung: Nächste Runde rollt die Malecón-Welle über die Uferstraße',rome:'Vorankündigung: Nächste Runde spricht der Balkon',moscow:'Vorankündigung: Nächste Runde Ehrenparade mit Rückenwind',beijing:'Vorwarnung: Pflichtjubel in der Regelheft-Serpentine · außen bleibt freie Fahrt',pyongyang:'Vorankündigung: Nächste Runde rollt die Paradekolonne über die rechte Spur der Tor-Allee',berlin:'Vorankündigung: Nächste Runde überfliegt der Propaganda-Zeppelin das Stadion'};
             this.itemMessage=notice[TRACK_INFO.theme]??notice.berlin;this.itemMessageUntil=this.items.time+4;this.audio.cue('lap');
           }
           if(Math.floor(this.progress[0].distance/TRACK.length)>lapBefore){
@@ -1277,7 +1292,7 @@ class App {
               else if(TRACK_INFO.theme==='rome'){/* The spoken balcony event triggers on lap two at the palace, not at the start line. */}
               else if(TRACK_INFO.theme==='moscow'){this.testScene?.trackEvent?.('parade');this.itemMessage='Ehrenparade! Rückenwind auf der Parade-Geraden für alle';this.audio.cheer(1);this.paradeUntil=this.raceTime+15;window.setTimeout(()=>this.audio.voice('announcer-parade',{force:true}),900);}
               else if(TRACK_INFO.theme==='pyongyang'){startParade(this.raceTime);this.testScene?.trackEvent?.('column');this.itemMessage='Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei';this.audio.cheer(1);this.audio.cue('lap');}
-              else if(TRACK_INFO.theme==='beijing'){this.testScene?.trackEvent?.('loudspeaker');this.itemMessage='Durchsage: Planerfüllung 400 %! Pflichtjubel über der Serpentine';this.audio.cheer(1.2);window.setTimeout(()=>this.audio.voice('announcer-loudspeaker',{force:true}),900);}
+              else if(TRACK_INFO.theme==='beijing'){/* The Peking broadcast triggers inside the lap-two serpentine, not at the start line. */}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}
           }

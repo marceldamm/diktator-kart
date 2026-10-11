@@ -341,44 +341,44 @@ const BEIJING: TrackDefinition = {
   id: 'beijing', name: 'Kulturrevolutions-Schleife', city: 'Peking', theme: 'beijing',
   tagline: 'Platz der Planerfüllung, Hutong-Gasse, Regelheft-Serpentine und Palastgraben',
   controlPoints: [
-    [100, -204], [0, -208], [-100, -208], [-200, -205], [-232, -185], [-250, -145],    // Platz der Planerfüllung, westbound
-    [-254, -80], [-255, -10], [-254, 60], [-250, 125], [-222, 160],                    // hutong avenue through the gate
+    [100, -204], [60, -197], [20, -193], [-20, -197], [-60, -207], [-100, -216], [-140, -216], [-180, -209], [-200, -205], [-232, -185], [-250, -145], // Planerfüllungsplatz, a shallow counting chicane
+    [-254, -80], [-258, -53], [-260, -25], [-256, 2], [-248, 28], [-240, 55], [-240, 78], [-249, 103], [-250, 125], [-222, 160],                  // hutong avenue dogleg through the gate
     [-165, 170], [-110, 168], [-60, 148], [-10, 170], [40, 150], [95, 168],            // Regelheft serpentine
-    [150, 160], [195, 135], [220, 90], [228, 30], [228, -40], [224, -100],             // east avenue with the plateau jump
+    [150, 160], [180, 167], [204, 156], [219, 137], [224, 111], [215, 87], [218, 60], [230, 37], [235, 12], [229, -15], [217, -40], [218, -70], [224, -100], // east avenue switchbacks and plateau jump
     [208, -152], [165, -190],                                                          // along the palace moat, back to the square
   ],
   halfWidth: 6, start: 70, bump: -1,
   /** Hutong-Gasse: narrow gravel alley across the north-west corner, past washing lines and tea houses. */
-  shortcut: { from: 590, to: 790, halfWidth: 3, speedCap: 10.5, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [1, 0]], boostPads: [] },
+  shortcut: { from: 596, to: 799, halfWidth: 3, speedCap: 11.5, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [.22, -.75], [.76, -.75], [1, 0]], boostPads: [] },
   canal: { from: -1000, length: 0 },
-  rampLips: [1296],
-  boostPads: [[120, 0], [470, 0], [1000, 0], [1235, 0], [1505, 1.5]],
+  rampLips: [500, 1349],
+  boostPads: [[120, 0], [470, 0], [1000, 0], [1285, 0], [1562, 1.5]],
   craters: [], grassVerges: [],
   /** Plateau on the east avenue: climb, a short flat top and a jump off its lip. */
-  elevation: [[1225, 0], [1262, 3.8], [1300, 3.8], [1340, 0]],
-  hazards: [{ from: 1348, to: 1430, side: 1, basin: 9, kind: 'water' }],
-  itemBoxes: [150, 480, 905, 1190, 1470],
+  elevation: [[1277, 0], [1316, 3.8], [1353, 3.8], [1397, 0]],
+  hazards: [{ from: 1405, to: 1487, side: 1, basin: 9, kind: 'water' }],
+  itemBoxes: [153, 484, 927, 1238, 1527],
   landmarks: {
     palace: null, fountains: [], trees: [[-40, 60], [40, -20], [-150, 40]],
-    column: [-150, -120], gateProgress: 520, lawns: [[-200, -40, -90, 110]], promenade: 5,
+    column: [-150, -120], gateProgress: 537, lawns: [[-200, -40, -90, 110]], promenade: 5,
   },
   river: { north: 278, south: 228, west: -360, east: 340, level: -1.15 },
   ground: { west: -360, east: 340, north: 340, south: -300 },
   dressing: {
-    boardRanges: [[10, 150], [1230, 1330]], flagRange: [880, 1000], pennants: [30, 230, 470, 1010, 1500], screenProgress: 240,
+    boardRanges: [[10, 153], [1282, 1387]], flagRange: [902, 1022], pennants: [30, 234, 474, 1032, 1557], screenProgress: 244,
     districts: [
-      { from: 0, to: 300, left: 'stands', right: 'plaza' }, { from: 300, to: 420, left: 'hutong', right: 'hutong' },
-      { from: 420, to: 650, left: 'hutong', right: 'avenue' }, { from: 650, to: 780, left: 'park', right: 'hutong' },
-      { from: 780, to: 1060, left: 'hutong', right: 'park' }, { from: 1060, to: 1220, left: 'park', right: 'hutong' },
-      { from: 1220, to: 1340, left: 'avenue', right: 'plaza' }, { from: 1340, to: 1450, left: 'hutong', right: 'plaza' },
-      { from: 1450, to: 99999, left: 'stands', right: 'plaza' },
+      { from: 0, to: 304, left: 'stands', right: 'plaza' }, { from: 304, to: 424, left: 'hutong', right: 'hutong' },
+      { from: 424, to: 672, left: 'hutong', right: 'avenue' }, { from: 672, to: 802, left: 'park', right: 'hutong' },
+      { from: 802, to: 1106, left: 'hutong', right: 'park' }, { from: 1106, to: 1272, left: 'park', right: 'hutong' },
+      { from: 1272, to: 1397, left: 'avenue', right: 'plaza' }, { from: 1397, to: 1507, left: 'hutong', right: 'plaza' },
+      { from: 1507, to: 99999, left: 'stands', right: 'plaza' },
     ],
     heroes: [
-      { m: 'kit-cn-hall', x: 95, z: -55 }, { m: 'kit-pagoda', x: -60, z: 30 }, { m: 'kit-rulebook', s: 190, lane: 22 },
-      ...[1352, 1390, 1428].map((s) => ({ m: 'kit-cn-wall', s, lane: 22.5 })),
+      { m: 'kit-cn-hall', x: 95, z: -55 }, { m: 'kit-pagoda', x: -60, z: 30 }, { m: 'kit-rulebook', s: 192, lane: 22 },
+      ...[1409, 1447, 1485].map((s) => ({ m: 'kit-cn-wall', s, lane: 22.5 })),
       { m: 'kit-pagoda', x: -300, z: -250 },
     ],
-    bridges: [-140, 80], cathedral: null, petals: [10, 260],
+    bridges: [-140, 80], cathedral: null, petals: [12, 264],
   },
 };
 

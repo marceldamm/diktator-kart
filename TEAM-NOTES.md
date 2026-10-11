@@ -1,5 +1,13 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Peking-Streckenpass, Prüfung und Grenzen
+
+Ausgang: Länge 1.565,6 m; 60,8 % annähernd gerade bei 2-m-Abtastung und |Krümmung| < 1/150 m. Umsetzung misst 1.609,4 m und 38,9 % annähernd gerade; kleinster Radius 20,2 m. Ein erster Entwurf fiel auf 10,9 m Radius und führte beim manuellen Lenktest zu Wandkontakten; diese Kontrollpunkte wurden vor der Abnahme geglättet. Das ist auch ein Hinweis, dass die Geometriegrenze allein die menschliche Kurvenabnahme nicht ersetzt.
+
+Die neue Spurfolge hält Planerfüllungsplatz, Hutong, Regelheft-Serpentine und Palastgraben unterscheidbar. Zweiter Kicker bei s=500 vor der Hutong-Entscheidung; bestehende 3,8-m-Plateaurampe nach s=1.349. Hutong-Gasse: -0,75 m in der Mitte, 11,5-m/s-Limit, ca. 166 m Streckenlänge gegenüber 203 m Hauptweg. Regelheft-Pflichtjubel: Warnung im letzten Viertel von Runde 1, Ereignisstart in Runde 2 beim Eintritt in s=880–1040; 14 Sekunden mäßige Geschwindigkeits-/Lenkgrip-Einbuße nur zwischen lane -2,4 und +2,4. Bots und Spieler verwenden dieselbe Hilfsregel, außen bleibt Ausweichraum. `slice-scene` erzeugt in der Serpentine einen begrenzten Papierstoß und spielt die Peking-Ansage.
+
+Peking-Tests 2/2, vollständige Suite 132/132, TypeScript und Build bestanden. Drei-Runden-Botsimulationen auf sechs Strecken und drei Schwierigkeitsstufen liefen; der Peking-Stilbot nimmt die Hutong-Route. Build zeigt 2.161,52 KB Hauptbundle bzw. 534,16 KB gzip und die bekannte Chunkwarnung. Verborgener eigener Browser zeigte die aktuelle 1.609-m-Strecke und startete ein Einzelrennen bis zur Startansicht; kein vollständiger Spielerpass, kein Runde-2-Event, keine finale Partikelansicht, FPS- oder menschliche Fahrabnahme. Die erste schärfere Testfassung ist nicht der jetzige Stand. Nächster Block: direkter Sechs-Kurse-Pass mit Sicht auf Kurven, Linie, Ereignis und Wiederholungsrunde.
+
 ## 11.10.2026 – Codex: Havanna-Streckenpass, Prüfung und Grenzen
 
 Zweiter Havanna-Pass: 1.422,6 m statt 1.411,3 m; 2-m-Abtastung mit |Krümmung| < 1/150 m ergibt 46,1 → 26,6 % annähernd gerade Strecke. Die Küsten-S-Kurven bringen zusätzliche Linienwechsel. Neuer kleiner Kicker bei s=380 m; die Rampe bei s=1.146 m führt weiterhin auf den 4-m-Hügel. Zigarrenfabrik-Abkürzung bleibt eine feste kürzere Schotterlinie mit 10,5-m/s-Limit. Die Malecón-Welle wird Ende Runde 1 angekündigt und beim Eintritt des ersten Karts in die Küstenzone der zweiten Runde ausgelöst. 14 Sekunden: nur die seewärtige Spur verliert leicht Tempo und Lenkgrip; Mittel-/Landseite bleiben frei. Dieselbe Logik gilt für Spieler und Bots.
