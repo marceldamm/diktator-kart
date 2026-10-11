@@ -9,6 +9,21 @@ Projektablauf und nächste Schritte stehen in diesen vier Dateien; frühere Fort
 
 Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Basis bearbeiten. Status, Blocker und Prüfergebnisse werden hier oder in den jeweils passenden drei anderen Hauptdateien festgehalten. Neue Notizen hier zuordnen, Zukunftsziele nach LONG-TERM-GOALS.md.
 
+## Projektabschluss und Übergabe – 11.10.2026, 12:45 (Marcel, Claude)
+
+**Stand auf `main`:** Pjöngjang-Pilot (`2a9d508`) und Moskau-Umbau (`51e0a3b`) sind fertig, geprüft und gesichert; Details im Abschnitt „Arbeitsblock Strecken und Systempakete“ direkt darunter. Danach kein weiterer Spielcode. `npm test` 128/128, Typprüfung und Build grün.
+
+**Abgebrochen und verworfen (nicht auf `main`):** Erster Versuch des Tempo-Pakets (Paket 3). Probiert: Höchsttempo 16 → 19,5 m/s, Turbo 20 → 24,5 m/s, Beschleunigung 10 → 12, Turbo-Schub 4 → 5, Item-Projektil 24 → 29 m/s, Staatsbesuch 25 → 29 m/s, Gangstufen im Motorklang und Kamera-FOV auf das neue Höchsttempo skaliert, Abkürzungs-Tempolimits ×1,22, Kart-Crash-Schwelle 7 → 8,5 m/s, Moskauer Rückenwind relativ zum Höchsttempo. Ergebnis: drei Tests rot – Bots fuhren in Pjöngjang bei höherem Tempo deutlich häufiger in die Paradekolonne (303 statt < 60 Kontaktschritte), außerdem zwei Fahrmodell-Tests mit fest erwarteten Werten (Beschleunigungsgrenze, Rückstoß am Seitenpfosten). Wegen Marcels Abschlusswunsch zurückgesetzt statt halb nachgestimmt.
+
+**Nächste Schritte für die nächste KI (in dieser Reihenfolge):**
+1. Marcels Fahrtest Pjöngjang und Moskau abwarten bzw. einholen (Kehre, Sprünge, Paradekolonne, Basilius-Abkürzung).
+2. Tempo-Paket neu angehen: Werte oben als Ausgangspunkt; Bot-Vorausschau (`botInput` in `src/track.ts`: Verkehrsfenster `difficulty.reaction`, Kurvenblick `10 + speed * 1.1`) an das höhere Tempo anpassen, damit sie Kolonne und Kurven rechtzeitig sehen; danach die zwei Fahrmodell-Tests auf die neuen Grenzwerte umstellen und Drift-/Kamera-/Leistungsgefühl in einem sichtbaren Rennen prüfen.
+3. Übrige Kurse nach dem Pilotmuster umbauen: gerade Anteile heute Berlin 24 %, Rom 55 %, Havanna 47 %, Peking 58 % – Rom, Havanna, Peking zuerst. Pro Kurs eigene Abkürzung mit fairem Gewinn (Ziel 60–140 m bzw. nur mit Turbo lohnend), ein Ereignis mit sichtbarer sicherer Alternative.
+4. Danach Items/Bots/Klang/HUD/Kart-Abstimmung (Paket 3/4 in LONG-TERM-GOALS.md).
+5. Sarahs Sicht auf die geänderten Kurse (Pjöngjang, Moskau) einholen; ihre Zustimmung ist nicht unterstellt.
+
+**Werkzeuge für die Fortsetzung:** Grundriss-/Kurvenanalyse und Rennaufnahmen liefen mit kleinen Skripten im Sitzungs-Scratchpad (nicht im Repo): Plot per `sampleTrack`/`trackPoint` als SVG→PNG mit `sharp`, Rennen per CDP auf Port 9231 (Ablauf in TEAM-NOTES.md, Eintrag „Prüfnotizen Pjöngjang-Pilot“). Prüfregel „gerade Anteile“: 2-m-Abtastung, |Krümmung| < 1/150 m.
+
 ## Arbeitsblock Strecken und Systempakete – 11.10.2026 (Marcel, Claude)
 
 **Auftrag (Marcel, Projekt-Thread 11.10.2026):** Bestätigte offene Aufgaben tatsächlich umsetzen, beginnend mit einem begrenzten, prüfbaren Streckenpaket für Pjöngjang; danach übrige Kurse und Systempakete (Kurven/Höhen/Tunnel/Rampen/Alternativwege, Abkürzungen und faire Ereignisse, Tempo/Items/Bots, Klang/Publikum/HUD/Kart-Abstimmung). Sarahs fünf Kursnamen/Orte bleiben; Parade und Startgatter sind Pjöngjang-Motive. Sarahs Zustimmung zu Änderungen wird nicht unterstellt.

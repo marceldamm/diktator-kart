@@ -5,7 +5,7 @@
 - Test-Chrome: eigenes Profil `.tools/claude-chrome-profile`, Port 9231, mit den Anti-Drosselungs-Flags; Marcels Vite-Server auf 4173 mitbenutzt. Der eingebaute Browser der Claude-App drosselt verdeckt und lieferte keine Bilder.
 - Einzelrennen per CDP: `#menu-single` → Streckenkarte → „Rennen starten“; `?demo=1&weather=sun`, Tag durch kurzzeitig festgelegtes `Math.random` beim Start erzwungen (reiner Prüfhilfsgriff, nicht im Spiel).
 - Freie Kamera auch nach Rennende per `window.__DK.free.start()` nutzbar, Kamera über `free.camera.position`, `free.yaw`, `free.pitch` setzbar – so entstanden die Übersichts- und Kolonnenbilder.
-- **Hinweis an Marcel:** Während der Umbauten lief dein Vite-Server; ein offenes Spielfenster hat dadurch mehrfach neu geladen.
+- **Hinweis an Marcel:** Während der Umbauten lief dein Vite-Server; ein offenes Spielfenster hat dadurch mehrfach neu geladen. Das eigene Test-Chrome (Port 9231) wurde am Ende geschlossen.
 
 ## 11.10.2026 – Abschlussprüfung und Hinweis für die Cloud-Fortsetzung
 
