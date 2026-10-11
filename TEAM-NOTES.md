@@ -16,6 +16,16 @@ A29-Prüfgrenze: Modell und Strecken bieten nun automatische Rampe, Lufttrick un
 
 **Budget nach A29:** offizielle Codex-Werte 44 % Fünf-Stundenverbrauch / 22 % Wochenverbrauch (56 % / 78 % Rest).
 
+A30 hat die Emissionsraten im reduzierten Modus auf Werte 40–50 % des Normalbetriebs gesetzt; für Leserlichkeit bleiben La-Ola/kurze Jubelbewegung im Shader und der gleiche Zeit-/Fahrbahneffekt aktiv. Bei Qualitätswechsel während laufender Rosen- oder Windeffekte wird die neue Stufe sofort übernommen. `tests/crowd-wave.test.mjs` testet alle sechs Typen, Überhöhungsgrenzen und Abklingen. `npm test` 130/130, gezielte Reaktions-/Tracktests 22/22 und Build bestanden. Ein verblindeter Spielscreen konnte nach A27 noch nicht geladen werden; Sound/HUD/Dreirundeneffekt müssen später in echter Fahrt geprüft werden.
+
+**Budget nach A30:** offizielle Codex-Werte 44 % Fünf-Stundenverbrauch / 22 % Wochenverbrauch (56 % / 78 % Rest), zuletzt nach A29 abgerufen.
+
+### A31–A34 – ergänzte Abnahmen und Aufgaben (Marcel, 11.10.2026)
+
+Marcels fortgesetzter Auftrag ergänzt konkrete Abnahmepakete für die schon bestätigten Streckenziele: Ereignisprüfansicht und VFX in Normal-/Schwachgrafik zuverlässig laden und belegen; Rampen als vollständige Alternativrouten mit Rückführung und Botlinie prüfen; feste Boostpositionen sowie kurze, faire Streckenreaktionen pro Kurs gegen mehrere Linien testen; faire Positionswechsel, Itemtaktik und Bewegungstricks in vollständigen Drei-Runden-Botläufen auswerten. „Zufällig“ bleibt als variierende feste Platzierung pro Strecke verstanden, nicht als prozedurale Laufzeitgenerierung. Die vier Pakete stehen in CURRENT-WORKLIST.md und LONG-TERM-GOALS.md; Sarahs dokumentierte Originalideen werden nicht erweitert oder umgedeutet.
+
+Nach der A30-Codeänderung erneut `npm test`: 130/130 bestanden. Die letzte TypeScript-/Produktionsbuildprüfung für genau diese Codeänderung bestand ebenfalls; `git diff --check` ist sauber. Ereignis-Sicht/Hören und bewegter Rennlauf sind weiter offen. Offizielle Nutzung bleibt bei 44 % Fünf-Stunden- und 22 % Wochenverbrauch (zuletzt live abgefragt).
+
 ## 11.10.2026 – A22/A23: Berliner Zeppelin im Szenenfokus und Bannerlesbarkeit
 
 Aus der A21-Prüfansicht wurde der echte Zeppelin-Knoten aktiviert und anschließend mit der Seitenkamera verfolgt. Die erste Motivansicht zeigte das tatsächliche Modell vor der Berliner Stadt: silberner Rumpf, Gondel, Banner und Flossen. Beim Seitenwechsel war ein Bannertext spiegelverkehrt. Beide Banner-Meshes erhielten dieselbe horizontale UV-/Meshspiegelung, danach waren auf beiden Außenansichten die sichtbaren Textteile in Leserichtung. `npm run build` mit TypeScript bestanden; Bundles 2.164,54 KB / 535,10 KB gzip und bekannte Chunkwarnung.

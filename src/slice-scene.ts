@@ -650,6 +650,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       line.material = zeppelinWindMaterial; line.isPickable = false; line.setEnabled(false); return line;
     });
     let zeppelinTime = -1, zeppelinWindCueTime = -1;
+    const showZeppelinWindCue = (visible: boolean) => zeppelinWindLines.forEach((line, index) => line.setEnabled(visible && (!reducedEffects || index % 2 === 0)));
     // Pyongyang parade column (11.10.2026): three display tanks and a rocket transporter that roll along the right lane
     // of the gate boulevard from lap 2 (positions and collisions come from paradeVehicles in track.ts).
     const column: TransformNode[] = [];
@@ -1095,12 +1096,12 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       },
       trackEvent(kind) {
         reactToTrackEvent(kind);
-        if (kind === 'balcony') { roseTime = 0; roses.emitRate = 70; }
+        if (kind === 'balcony') { roseTime = 0; roses.emitRate = reducedEffects ? 28 : 70; }
         else if (kind === 'wave') { waveTime = 0; waveSpray.emitRate = reducedEffects ? 65 : 160; }
         else if (kind === 'column') placeColumn();
         else if (kind === 'parade') { const p = trackPoint(300, -5.5); confetti.burst(new Vector3(p.x, 7 + elevationAt(300), p.z), reducedEffects ? 45 : 140); }
         else if (kind === 'loudspeaker') { const p = trackPoint(960, 5.5); confetti.burst(new Vector3(p.x, 7 + elevationAt(960), p.z), reducedEffects ? 45 : 140); }
-        else if (kind === 'zeppelin') { zeppelinTime = 0; zeppelin.setEnabled(true); zeppelinWindCueTime = 0; zeppelinWindLines.forEach((line) => line.setEnabled(true)); }
+        else if (kind === 'zeppelin') { zeppelinTime = 0; zeppelin.setEnabled(true); zeppelinWindCueTime = 0; showZeppelinWindCue(true); }
       },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
         if (kind === 'crater') { burst(puff, at, reducedEffects ? 14 : 42); return; }
@@ -1140,7 +1141,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         confetti.burst(new Vector3(p.x, kind === 'start' ? 7.5 : 6, p.z), reducedEffects ? 80 : kind === 'start' ? 220 : 340);
         if (kind === 'finish') { fireworkTime = reducedEffects ? 4 : 9; nextBurst = 0; }
       },
-      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); zeppelinWindCueTime = -1; zeppelinWindLines.forEach((line) => line.setEnabled(false)); roseTime = -1; roses.emitRate = 0; roses.reset(); waveTime = -1; waveSpray.emitRate = 0; waveSpray.reset(); },
+      resetEffects() { skids.clear(); fireworkTime = 0; zeppelinTime = -1; zeppelin.setEnabled(false); zeppelinWindCueTime = -1; showZeppelinWindCue(false); roseTime = -1; roses.emitRate = 0; roses.reset(); waveTime = -1; waveSpray.emitRate = 0; waveSpray.reset(); },
       setQuality(level, reduced) {
         pipelineLevel = level;
         streetLights[1].setEnabled(level > 0); headLights[1].setEnabled(level > 0);
@@ -1149,6 +1150,8 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
           skyMaterial.emissiveTexture=skyTexture;old.dispose();skyQuality=level;
         }
         reducedEffects = reduced; sun.shadowEnabled = level > 0; glow.isEnabled = level > 0 && !reduced;
+        if (roseTime >= 0) roses.emitRate = reduced ? 28 : 70;
+        if (zeppelinWindCueTime >= 0) showZeppelinWindCue(true);
         engine.setHardwareScalingLevel(level === 0 ? Math.max(1, window.devicePixelRatio * 1.35) : 1);
         for (const system of scene.particleSystems) if (system.name === 'Fountain spray') system.emitRate = reduced ? 15 : level === 0 ? 30 : 65;
         configurePipeline(); configureHigh();
@@ -1164,13 +1167,13 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         sun.position.set(state.x - sunDirection.x * 110, -sunDirection.y * 110, state.z - sunDirection.z * 110);
         if (sunDisc.isEnabled() && gameCamera) { const c = gameCamera.position; sunDisc.position.set(c.x - sunDirection.x * 380, c.y - sunDirection.y * 380, c.z - sunDirection.z * 380); sunDiscMaterial.alpha = 1 - Math.min(1, timeOfDay * 1.6); sunDisc.isVisible = timeOfDay < .6 && !raining && !snowing; }
         trackWorld.animate(time); city.animate(time);
-        if (roseTime >= 0) { roseTime += dt; if (roseTime > 16) { roseTime = -1; roses.emitRate = 0; } }
+        if (roseTime >= 0) { roseTime += dt; roses.emitRate = reducedEffects ? 28 : 70; if (roseTime > 16) { roseTime = -1; roses.emitRate = 0; } }
         if (waveTime >= 0) { waveTime += dt; waveSpray.emitRate = waveTime > 13 ? 0 : (reducedEffects ? 65 : 160) * (.6 + .4 * Math.abs(Math.sin(waveTime * 1.7))); if (waveTime > 15) waveTime = -1; }
         placeColumn();
         if (zeppelinWindCueTime >= 0) {
           zeppelinWindCueTime += dt;
           zeppelinWindMaterial.alpha = .74 + Math.abs(Math.sin(zeppelinWindCueTime * 3.6)) * .2;
-          if (zeppelinWindCueTime >= 14) { zeppelinWindCueTime = -1; zeppelinWindMaterial.alpha = .94; zeppelinWindLines.forEach((line) => line.setEnabled(false)); }
+          if (zeppelinWindCueTime >= 14) { zeppelinWindCueTime = -1; zeppelinWindMaterial.alpha = .94; showZeppelinWindCue(false); }
         }
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;

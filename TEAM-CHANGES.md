@@ -20,6 +20,10 @@ Ein neuer Querschnittstest sucht jeden festen Hauptweg-Boost per Weltposition, p
 
 Die einmalige Landungsbelohnung liegt nun in `awardLandingBoost` und gilt unverändert für Spieler und Bots. Eine sichere Landung gibt +2,5 m/s und 0,7 Sekunden Turbo; ein gelandeter Trick +3,6 m/s und 1,1 Sekunden, jeweils bis zur normalen gemeinsamen Turbogrenze. Der Ein-Schritt-Status und Trickmarker werden dabei zurückgesetzt. Tests prüfen den Bonus, die Obergrenze und die Unterdrückung bei unsauberer Landung. Der Streckenquerschnitt prüft Take-off, offene Fahrbarkeit und freie Fallzonen für alle Rampen auf sechs Kursen; vorhandene Kamera folgt Sprunghöhe und Turbo. `npm test` 129/129, Vollsuite 146/146, TypeScript-/Produktionsbuild bestanden. Build: 2.165,47 KB / 535,42 KB gzip; bekannte Chunkwarnung. Laufendes Spielgefühl, Sichtbarkeit der Animation und menschliche Alternativrampenwahl wurden nicht bestätigt.
 
+### A30 – Ereigniseffekte im Schwachgrafikmodus begrenzen (11.10.2026)
+
+Wenn während eines Zeppelin-Ereignisses die reduzierte Stufe aktiv ist, bleiben fünf von zehn Außenlinienbändern an. Die Balkonrosen sinken dynamisch von 70 auf 28 Partikel/s, der Wellenstoß von 160 auf 65/s, Parade-/Pflichtjubel-Konfetti von 140 auf 45. Umgekehrtes Umschalten stellt die normale Menge während laufender Effekte wieder her. Publikum und Physik bleiben wirksam; der shaderbasierte Publikumsschub hängt nicht an Partikelsystemen. Tests decken sechs Eventtypen, Begrenzung wiederholter Reaktionen und Rücklauf ab. `npm test` 130/130, gezielte Szenen-/Tracktests 22/22 und TypeScript-/Build bestanden. Browser-Vorschauszene war nicht geladen; Sicht-/Hörabnahme offen.
+
 ### A22–A23 – Ereignisfokus und Berliner Zeppelinbanner (11.10.2026)
 
 Die Grafikprüfansicht verfolgt den aktivierten Zeppelin-Knoten nun aus einer seitlichen Kameraperspektive und erlaubt das Umschalten zwischen den Außenseiten. Der sichtbare Vergleich zeigte, dass der Slogan auf einer Seite spiegelverkehrt war. Beide Bannerflächen werden jetzt horizontal gespiegelt; die verdeckte Ansicht zeigte den Slogan von beiden Seiten in gleicher Leserichtung.
