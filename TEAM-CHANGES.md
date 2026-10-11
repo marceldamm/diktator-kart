@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Globales Fahrtempo und Rennabstimmung erhöht
+
+Normales Spitzentempo 16 → 19,5 m/s, Turbo 20 → 24,5 m/s, Beschleunigung 10 → 12 m/s². Kart-Crashschwelle, Drift-/Turboschub, Itemboosts, Projektil-/Staatsbesuchtempo, Bot-Reaktionsweite und Kurvenvorausschau sowie Kamera-Speedkick abgestimmt. `advanceKart` erhält jetzt den Medaillen-Temposchub dauerhaft. Volltest 130/130, separater Langtest 17/17, Typprüfung und Build erfolgreich; verborgene In-App-Demo bis Runde 2 mit 70–79 km/h und ohne Browserkonsolenfehler geprüft. Kein vollständiges Rennen/FPS-Abnahme; menschliche Fahrurteile offen. Einzelheiten und nächster Kursblock in CURRENT-WORKLIST.md.
+
 ## 11.10.2026 – Codex: Bot-Spurwertung vor globalem Tempo-Paket korrigiert
 
 Langsamer Verkehr im erweiterten Sichtfenster erzeugt keine negative Spurstrafe mehr; bei höherer tatsächlicher Geschwindigkeit sehen Bots weiter voraus. Für die Pjöngjang-Paradekolonne normal und mit zusätzlichem Kart-Höchsttempo simuliert, jeweils fünf Bots und begrenzte Kontakte. `npm test` 111/111, TypeScript und vollständige Suite 128/128 bestanden. Globale Tempoerhöhung und sichtbare Rennabnahme bleiben offen; 14 % Fünf-Stunden-Rest erzwingen nach AGENTS.md den Paketabschluss statt eines neuen großen Umbaus. Details in CURRENT-WORKLIST.md und TEAM-NOTES.md.

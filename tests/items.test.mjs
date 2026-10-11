@@ -115,6 +115,7 @@ test('censor bar briefly impairs opponents, shows its sender a short banner, and
 
 test('Eilerlass boost item: rank-weighted, self-applied turbo, never a projectile', async () => {
   const { createItems, stepItems, ITEM_RULES } = await import('../src/items.ts');
+  const { KART_TUNING } = await import('../src/kart-model.ts');
   const { gridKart } = await import('../src/track.ts');
   const world = createItems(2);
   world.slots[0] = 'boost';
@@ -123,6 +124,9 @@ test('Eilerlass boost item: rank-weighted, self-applied turbo, never a projectil
   assert.equal(world.slots[0], null);
   assert.equal(world.objects.length, 0);
   assert.ok(out[0].turboRemaining >= ITEM_RULES.boostDuration - 1e-9 && out[0].speed > 13);
+  const nearCapWorld = createItems(2); nearCapWorld.slots[0] = 'boost';
+  const nearCap = stepItems(nearCapWorld, [{ ...gridKart(0), speed: KART_TUNING.maxTurboSpeed - 1 }, gridKart(1)], [true, false], [1, 2], 1 / 60);
+  assert.equal(nearCap[0].speed, KART_TUNING.maxTurboSpeed, 'item boost clamps against the shared turbo cap');
   let boosts = 0; const w = createItems(6, 7);
   for (let k = 0; k < 400; k++) { w.slots[5] = null; w.boxes.forEach(b => b.readyIn = 0); const box = w.boxes[0]; stepItems(w, Array.from({ length: 6 }, (_, i) => i === 5 ? { ...gridKart(5), x: box.x, z: box.z } : { ...gridKart(i), x: 9999, z: 9999 }), Array(6).fill(false), [1, 2, 3, 4, 5, 6], 1 / 60); if (['boost', 'triple', 'golden'].includes(w.slots[5])) boosts++; }
   assert.ok(boosts > 120, `last place should draw speed decrees often (${boosts}/400)`);

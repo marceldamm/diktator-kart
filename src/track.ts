@@ -416,9 +416,9 @@ export const botStyleOf = (index: number): BotStyle | undefined => botStyles[ind
 /** Shared bot driver: racing lane choice, corner braking, traffic and drift-boost through tight bends. */
 /** Difficulty changes controller choices; the kart physics and available speed limits stay shared. */
 export const BOT_DIFFICULTY = [
-  { pace: .8, corner: -.6, reaction: 12, gap: 2.6, passing: .8, defense: false, patience: 1.4 },
-  { pace: .94, corner: 0, reaction: 16, gap: 2.2, passing: 1.15, defense: true, patience: 1 },
-  { pace: 1, corner: .6, reaction: 20, gap: 1.8, passing: 1.5, defense: true, patience: .72 },
+  { pace: .8, corner: -.6, reaction: 15, gap: 2.6, passing: .8, defense: false, patience: 1.4 },
+  { pace: .94, corner: 0, reaction: 20, gap: 2.2, passing: 1.15, defense: true, patience: 1 },
+  { pace: 1, corner: .6, reaction: 25, gap: 1.8, passing: 1.5, defense: true, patience: .72 },
 ] as const;
 let botLevel: 0 | 1 | 2 = 1;
 export function setBotSkill(level: 0 | 1 | 2): void { botLevel = level; }
@@ -434,7 +434,9 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   const speed = Math.abs(state.speed);
   const difficulty = botDifficulty();
   const trafficRange = difficulty.reaction + Math.max(0, speed - KART_TUNING.maxForwardSpeed) * 2;
-  const corner = alley ? shortcutCurvatureAhead(shortcut!.u + 2, 10 + speed * 1.1) : curvatureAhead(s + 2, 10 + speed * 1.1);
+  // Keep the established low-speed line through bend sequences; faster karts need more braking and steering notice.
+  const cornerLookahead = 10 + speed * 1.1 + Math.max(0, speed - 9) * 1.2;
+  const corner = alley ? shortcutCurvatureAhead(shortcut!.u + 2, cornerLookahead) : curvatureAhead(s + 2, cornerLookahead);
   const radius = 1 / Math.max(corner.curvature, 1e-3);
   // Five racing lanes give room to pick a real passing line.
   const outerLane = Math.min(5.6, TRACK.halfWidth - 2.4);
@@ -481,7 +483,9 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   if (towardWall > .4 && speed < 4 && Math.abs(currentLane) > 3.2 && !state.drifting)
     return { throttle: -.8, steering: Math.sign(currentLane) };
   // Drift-boost: hop into a committed tight bend, hold while charging, release once the bend opens.
-  const tight = radius < 17 && speed > 9 && Math.abs(currentLane) < 4.2;
+  const driftRadius = Math.max(17, speed * 1.7);
+  const tight = radius < driftRadius && speed > 9 && Math.abs(currentLane) < 4.2;
+  const driftEntrySteering = Math.max(.14, .35 - Math.max(0, speed - 9) * .02);
   if (state.drifting) {
     const near = curvatureAhead(s + 1, 7), outward = -currentLane * state.driftDirection;
     const inside = currentLane * state.driftDirection;
@@ -496,7 +500,7 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
     return { throttle: .9, steering: committed ? corner.sign * Math.max(.5, Math.abs(steering)) : steering, hopDrift: committed };
   }
   // Two of three bots are drifters; the third keeps grip, so the field races with different lines.
-  if (tight && (style ? style.drift : index % 3 !== 1) && Math.abs(steering) > .35 && Math.sign(steering) === corner.sign)
+  if (tight && (style ? style.drift : index % 3 !== 1) && Math.abs(steering) > driftEntrySteering && Math.sign(steering) === corner.sign)
     return { throttle: .9, steering, hopDrift: true, hopPressed: true };
   return { throttle, steering };
 }

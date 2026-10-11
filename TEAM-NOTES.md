@@ -1,12 +1,20 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Tempo-Paket, Prüfergebnisse und Grenzen
+
+Projektstart: sauberer `main`-Checkout und `origin/main` waren auf `1eba44f` identisch; Team-Startskript meldete keine ungesicherten Änderungen oder Überschneidungen. Tempo-Paket: normale Spitze 19,5 m/s, Turbo 24,5 m/s; Beschleunigung, Kartkontakt-Crashschwelle, Item-/Projektiltempo, Botreaktion und Kamera nachgeführt. Ein weiterer Testfehler offenbarte, dass `advanceKart` `topSpeedBonus` verlor; das Feld wird jetzt weitergereicht.
+
+Prüfung: `npm run typecheck`, `npm run build`, `npm run test:full` 130/130 bestanden; bei vollem Testlauf außerhalb der Sandbox, weil Git-Fixtures MSYS-Unterprozesse benötigen. Simulationen: alle sechs Kurse auf drei Botstufen beendeten drei Runden; Pjöngjang fünf Bots bei Grundtempo und +5 m/s bleiben von der Paradekolonne weg; Driftlinientest auf drei Kurven bestanden. Demo-Grand-Prix im eigenen verborgenen Codex-In-App-Browser bis Runde 2; HUD erreichte 70–79 km/h, Botplätze änderten sich, Runde/Ereignis/Itemanzeigen waren aktiv, keine Konsolenfehler. Die Tabinstanz und der eigene Server wurden anschließend geschlossen. Dieser Lauf ist keine vollständige Renn- oder Leistungsabnahme, und keine menschliche Fahrbewertung.
+
+Offizielle Codex-Werte nach dem Paket: 3 % Fünf-Stundenlimit und 16 % Wochenlimit verbraucht (97 % / 84 % Rest). Nächste bestätigte Umsetzungsarbeit: Duce-Drom/Rom als nächster Streckenumbau, danach Havanna und Peking. Sarahs konkrete Detailideen bleiben bis zum Gespräch offene, nicht gemeinsam bestätigte Punkte.
+
 ## 11.10.2026 – Codex: Bot-Vorausschau und Prüfgrenze
 
 In `botInput` lag die Wertung für sehr langsame Hindernisse außerhalb von `difficulty.reaction`, aber noch im erweiterten Verkehrsfenster unter null; das konnte die belegte Spur bevorzugen. Abstandswertung und Filter nutzen nun denselben geschwindigkeitsabhängigen Bereich. Der Pjöngjang-Test fährt die Paradekolonne mit fünf Bots bei unverändertem Tempo und mit `topSpeedBonus = 5 m/s`; beide Läufe passieren über zwei Runden mit weniger als 60 Hindernis-Kontaktschritten. Das ist eine Simulation des bestehenden Controllers, **keine** echte Erhöhung des globalen Tempolimits und kein menschlicher Fahrtest. `npm test` 111/111, `npm run typecheck` und `npm run test:full` 128/128 bestanden; kein neuer Browser-/Bildbeleg. Offizielle Werte nach dem Paket: 14 % Fünf-Stunden-, 87 % Wochenrest. Nächstes großes Tempo-Paket erst nach Budgeterholung beginnen.
 
 ## 11.10.2026 – Codex: kurze und vollständige Testläufe
 
-`npm test` ist der schnelle Standardlauf (111/111, 6,4 s Wandzeit auf diesem Rechner). `npm run test:full` prüft alle 128 Fälle (83 s Node-Testdauer); nach Änderungen an Strecken, Bots, Fahrmodell oder Team-Workflow zusätzlich ausführen. `npm run test:slow` ist für die 17 benannten Langläufe eingerichtet, wurde nicht separat ausgeführt. Keine Testfälle gelöscht; nur die drei Fünf-Bot-Rennen in Rom, Havanna und Pjöngjang beenden ihre Simulation nach dem Zieleinlauf aller Bots. Vorheriger ungeteilter `npm test`: 47 s Node-Testdauer, neun Git-Fixture-Fehler wegen Sandbox-Sperre `NtCreateDirectoryObject` im MSYS-Git-Unterprozess. Der vollständige Lauf außerhalb dieser Sperre bestand 128/128; kein Produktfehler aus den neun Sandbox-Fehlern ableiten. Kein Browser- oder Hörtest nötig, da nur Testorganisation geändert wurde.
+`npm test` ist der schnelle Standardlauf (111/111, 6,4 s Wandzeit auf diesem Rechner). `npm run test:full` prüft alle Fälle (aktueller Stand 130/130, 85 s Node-Testdauer); nach Änderungen an Strecken, Bots, Fahrmodell oder Team-Workflow zusätzlich ausführen. `npm run test:slow` wurde am 11.10.2026 separat mit 17/17 bestanden (78,6 s). Keine Testfälle gelöscht; nur die drei Fünf-Bot-Rennen in Rom, Havanna und Pjöngjang beenden ihre Simulation nach dem Zieleinlauf aller Bots. Vorheriger ungeteilter `npm test`: 47 s Node-Testdauer, neun Git-Fixture-Fehler wegen Sandbox-Sperre `NtCreateDirectoryObject` im MSYS-Git-Unterprozess. Volltest und Langtest bestanden außerhalb dieser Sperre; kein Produktfehler aus den Sandbox-Fehlern ableiten. Kein Browser- oder Hörtest nötig, da die Testorganisation selbst keine Spielmechanik änderte.
 
 ## 11.10.2026 – Claude: Prüfnotizen Pjöngjang-Pilot
 

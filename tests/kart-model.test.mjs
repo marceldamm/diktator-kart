@@ -3,18 +3,28 @@ import test from 'node:test';
 import { advanceKart, initialKartState, KART_TUNING, resolveKartContacts, TERRAIN_BUMPS, TEST_AREA_HALF_SIZE, TEST_OBSTACLES, terrainHeightAt } from '../src/kart-model.ts';
 
 const step = 1 / 60;
-function run(state, input, seconds) {
-  for (let i = 0; i < Math.round(seconds / step); i++) state = advanceKart(state, input, step);
+const openRoad = (x, z) => ({ x, z, normalX: 0, normalZ: 0 });
+function run(state, input, seconds, project) {
+  for (let i = 0; i < Math.round(seconds / step); i++) state = advanceKart(state, input, step, project);
   return state;
 }
 
 test('gas accelerates to its cap; brake slows before reverse', () => {
+  const rolling = run(initialKartState(), { throttle: 1, steering: 0 }, 1.2);
+  assert.ok(rolling.speed > 14, `the higher acceleration should be apparent before the cap (${rolling.speed})`);
   const fast = run(initialKartState(), { throttle: 1, steering: 0 }, 1.8);
   assert.equal(fast.speed, KART_TUNING.maxForwardSpeed);
-  const braking = run(fast, { throttle: -1, steering: 0 }, 0.5);
+  const braking = run(fast, { throttle: -1, steering: 0 }, 0.5, openRoad);
   assert.ok(braking.speed > 0 && braking.speed < fast.speed);
-  const reverse = run(braking, { throttle: -1, steering: 0 }, 3);
+  const reverse = run(braking, { throttle: -1, steering: 0 }, 3, openRoad);
   assert.equal(reverse.speed, -KART_TUNING.maxReverseSpeed);
+});
+
+test('turbo and top-speed medals use the higher shared speed limits', () => {
+  const regular = run({ ...initialKartState(), topSpeedBonus: 1 }, { throttle: 1, steering: 0 }, 2, openRoad);
+  assert.equal(regular.speed, KART_TUNING.maxForwardSpeed + 1);
+  const turbo = run({ ...initialKartState(), speed: KART_TUNING.maxForwardSpeed, turboRemaining: 2 }, { throttle: 1, steering: 0 }, 1, openRoad);
+  assert.equal(turbo.speed, KART_TUNING.maxTurboSpeed);
 });
 
 test('steering needs movement and reverses direction while backing up', () => {
@@ -54,12 +64,11 @@ test('boundary impact briefly rebounds, cancels drift/turbo and recovers', () =>
 });
 
 test('marked side obstacle triggers a visible evasive recoil without blocking the straight lane', () => {
-  const straight = run(initialKartState(), { throttle: 1, steering: 0 }, 2);
+  const straight = run(initialKartState(), { throttle: 1, steering: 0 }, 2, openRoad);
   assert.equal(straight.impactKind, null);
-  let state = run(initialKartState(), { throttle: 1, steering: 0 }, 0.5); // steering has inertia since quality level 2d
-  for (let index = 0; index < 160 && state.impactKind !== 'obstacle'; index++) {
-    state = advanceKart(state, { throttle: 1, steering: 1 }, step);
-  }
+  let state = { ...initialKartState(), x: 2.6, z: 4, speed: 12 };
+  for (let index = 0; index < 90 && state.impactKind !== 'obstacle'; index++)
+    state = advanceKart(state, { throttle: 1, steering: 0 }, step);
   assert.equal(state.impactKind, 'obstacle');
   assert.ok(state.speed < 0, 'the obstacle knocks the kart backward');
   assert.ok(Math.abs(state.bodyRoll) > 0, 'the kart dodges away from the impact');
@@ -91,6 +100,17 @@ test('two approaching karts share one contact rule and separate after impact', (
   assert.equal(left.speed, 9, 'input state should not be changed');
   const recovering = advanceKart(hitLeft, { throttle: 0, steering: 0 }, step);
   assert.ok(recovering.z < hitLeft.z);
+});
+
+test('kart crash threshold scales with the new race pace', () => {
+  const pair = (speed) => [
+    { ...initialKartState(), z: 4, speed },
+    { ...initialKartState(), z: 6, heading: Math.PI, travelHeading: Math.PI, speed },
+  ];
+  const [bump] = resolveKartContacts(pair(4));
+  assert.equal(bump.impactKind, null, '8 m/s closing speed remains a racing bump');
+  const [crash] = resolveKartContacts(pair(4.5));
+  assert.equal(crash.impactKind, 'kart', '9 m/s closing speed crosses the 8.5 m/s crash threshold');
 });
 
 test('kart contact leaves distant karts unchanged and handles coincident centres', () => {

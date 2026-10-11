@@ -1,7 +1,7 @@
 import { craterAt, overCanal, projectTrack, TRACK, trackLocate, trackPoint, trackProgress, wrap } from './track.ts';
 import { BOOST_PADS, HAZARDS, ITEM_BOX_PROGRESS, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout.ts';
 export { ITEM_BOX_PROGRESS };
-import type { KartState } from './kart-model.ts';
+import { KART_TUNING, type KartState } from './kart-model.ts';
 
 export type ItemKind = 'direct' | 'homing' | 'trap' | 'censor' | 'boost' | 'triple' | 'golden' | 'escort';
 export type ItemDirection = 'forward' | 'backward';
@@ -17,7 +17,7 @@ export interface ItemWorld { /** Karts holding their item behind them as a shiel
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
-export const ITEM_RULES={maxPerKind:6,speed:24,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,nearMissMargin:.55,nearMissCooldown:2.4,nearMissBoost:.6,homingTurnRate:2.4,maxBounces:3,censorDuration:4.2,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:4,defenseDuration:1.35,goldenDuration:7.5,goldenBoost:.75,escortDuration:4.2,escortSpeed:25,escortRadius:2.6,boxSpacing:215};
+export const ITEM_RULES={maxPerKind:6,speed:29,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,nearMissMargin:.55,nearMissCooldown:2.4,nearMissBoost:.6,homingTurnRate:2.4,maxBounces:3,censorDuration:4.2,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:5,defenseDuration:1.35,goldenDuration:7.5,goldenBoost:.75,escortDuration:4.2,escortSpeed:29,escortRadius:2.6,boxSpacing:215};
 /** Dispatch box rows come from the active circuit (track-layout.ts). */
 export function createItems(count:number,seed=921):ItemWorld {
   return {slots:Array(count).fill(null),charges:Array(count).fill(0),goldenRemaining:Array(count).fill(0),escortRemaining:Array(count).fill(0),defenseSlots:Array(count).fill(false),defenseRemaining:Array(count).fill(0),nearMissCooldown:Array(count).fill(0),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
@@ -123,7 +123,7 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
       if(kind==='triple')world.charges[i]=Math.max(0,(world.charges[i]||3)-1);
       if(kind==='boost'||kind==='triple'&&world.charges[i]===0)world.slots[i]=null;
       world.stats[kind].launched++;world.events.push({kind:'launch',kart:i,item:kind});
-      result[i]={...k,turboRemaining:Math.max(k.turboRemaining,golden?ITEM_RULES.goldenBoost:ITEM_RULES.boostDuration),speed:Math.min(20,Math.max(k.speed,0)+ITEM_RULES.boostKick*(golden?.8:1))};
+      result[i]={...k,turboRemaining:Math.max(k.turboRemaining,golden?ITEM_RULES.goldenBoost:ITEM_RULES.boostDuration),speed:Math.min(KART_TUNING.maxTurboSpeed,Math.max(k.speed,0)+ITEM_RULES.boostKick*(golden?.8:1))};
     } else if(kind==='escort') {
       world.slots[i]=null;world.escortRemaining[i]=ITEM_RULES.escortDuration;world.immune[i]=Math.max(world.immune[i],ITEM_RULES.escortDuration+.4);
       world.stats.escort.launched++;world.events.push({kind:'launch',kart:i,item:'escort'});

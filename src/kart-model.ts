@@ -70,10 +70,10 @@ export const WHEEL_POSITIONS = [
 export const driftTier = (charge: number) => KART_TUNING.driftTiers.filter((t) => charge >= t - 1e-9).length;
 
 export const KART_TUNING = {
-  acceleration: 10,
+  acceleration: 12,
   braking: 16,
   reverseAcceleration: 6,
-  maxForwardSpeed: 16,
+  maxForwardSpeed: 19.5,
   maxReverseSpeed: 5,
   steeringPerMetre: 0.134,
   maxYawRate: 1.68,
@@ -102,9 +102,9 @@ export const KART_TUNING = {
   steerReturnRate: 18,
   yawResponse: 9,
   turboDuration: 1.2,
-  turboSpeedBonus: 4,
-  turboAcceleration: 4,
-  maxTurboSpeed: 20,
+  turboSpeedBonus: 5,
+  turboAcceleration: 5,
+  maxTurboSpeed: 24.5,
   suspensionStiffness: 75,
   suspensionDamping: 17,
   /** Maximum compression below the ground under the wheels (m). */
@@ -116,7 +116,7 @@ export const KART_TUNING = {
   impactVelocityDecay: 10,
   collisionRadius: 1.25,
   /** Closing speed (m/s) above which kart contact is a stopping crash instead of a racing bump. */
-  crashClosingSpeed: 7,
+  crashClosingSpeed: 8.5,
 } as const;
 
 export function terrainHeightAt(x: number, z: number): number {
@@ -368,7 +368,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
     ? Math.sign(impactVelocityX * Math.cos(heading) - impactVelocityZ * Math.sin(heading)) * .42 * Math.min(1, impactRemaining / KART_TUNING.impactDuration)
     : 0;
   const bodyRoll = state.bodyRoll + ((followSlope ? Math.atan2(rightGround - leftGround, 1.66) + obstacleDodgeRoll : obstacleDodgeRoll) - state.bodyRoll) * tiltBlend;
-  return { x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, trick: state.trick, drifting, driftDirection, driftCharge, turboRemaining,
+  return { topSpeedBonus: state.topSpeedBonus, x, z, heading, travelHeading, speed, height, hopRemaining, jumpRemaining, jumpDuration, jumpStart: state.jumpStart, jumpPeak: state.jumpPeak, landedClean, trick: state.trick, drifting, driftDirection, driftCharge, turboRemaining,
     suspensionOffset, suspensionVelocity, bodyPitch, bodyRoll, wheelGroundHeights, grounded,
     impactRemaining, impactVelocityX, impactVelocityZ, impactKind, scrapeRemaining, spinRemaining,
     scrapeKind: scrapeRemaining > 0 ? (scrapeRemaining === .12 ? 'wall' : state.scrapeKind ?? null) : null,

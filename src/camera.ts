@@ -5,7 +5,7 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import type { Scene } from '@babylonjs/core/scene';
-import type { KartState } from './kart-model';
+import { KART_TUNING, type KartState } from './kart-model';
 import { trackHeightAt } from './track';
 
 const VIEWS = [
@@ -169,7 +169,7 @@ export class KartCamera {
       this.camera.position.set(desired.x, y, desired.z);
     } else this.camera.position = Vector3.Lerp(this.camera.position, desired, blend);
     // Speed widens the view slightly; mini-turbo adds a brief kick. Calm camera keeps a fixed angle.
-    const kickTarget = this.reducedMotion ? 0 : Math.min(.1, speed / 20 * .1) + (state.turboRemaining > 0 ? .085 : 0);
+    const kickTarget = this.reducedMotion ? 0 : Math.min(.1, speed / KART_TUNING.maxForwardSpeed * .1) + (state.turboRemaining > 0 ? .085 : 0);
     this.fovKick += (kickTarget - this.fovKick) * (immediate ? 1 : 1 - Math.exp(-6 * dt));
     this.camera.fov = (firstPerson && this.realCockpit ? 1.45 : view.fov) + this.fovKick;
     this.camera.setTarget(firstPerson
