@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: Marcels 30 Antworten als künftige Rennziele eingeordnet
+
+Marcels priorisierte Zielrichtung in LONG-TERM-GOALS.md dokumentiert: sechs abwechslungsreiche Kurse, Pjöngjang als erster Entwurfspilot, individuell entworfene Abkürzungen und faire Streckenereignisse, mehr tatsächliches Tempo/Itemdynamik/taktische Bots sowie Klang und klare Rennanzeigen. Frühere Audit-Kandidaten als historischen Entwurf gekennzeichnet. Die nummerierten Antworten und offenen Menschenabnahmen stehen in TEAM-NOTES.md, Status/Nächstes in CURRENT-WORKLIST.md. Sarahs ursprüngliche Streckenideen werden als nächstes anhand ihrer Quellen gesondert mit Marcel abgeglichen; keine stillschweigende Änderung. Nur Dokumentation, kein Spielcode, Build oder Laufzeitprüfung in diesem Paket.
+
 ## 11.10.2026 – Codex: Spielgefühl-Abgleich als Entscheidungsgrundlage
 
 Aktuellen Babylon-Stand `f645be6` auf allen sechs Kursen mit kurzen automatisierten Rennfahrten sowie festen Strecken- und Fahrer/Kart-Bildern geprüft. Streckenrhythmus, Ereigniswirkung, Items und Präsentation mit den offiziell beschriebenen Funktionen von Mario Kart 8 Deluxe abgeglichen. Befunde und Grenzen stehen in CURRENT-WORKLIST.md, unbestätigte Verbesserungskandidaten in LONG-TERM-GOALS.md, 30 Fragen an Marcel in TEAM-NOTES.md. Belege unter `docs/evidence/2026-10-11-gamefeel-audit/`. Keine Spielcode-, Modell- oder Balanceänderung; neue Ziele werden erst aus Marcels Antworten bestätigt.

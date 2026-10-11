@@ -1,6 +1,47 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
-## 11.10.2026 – Codex: Fragen an Marcel nach dem Spielgefühl-Abgleich (Status: offen, noch keine Antworten)
+## 11.10.2026 – Sarahs ursprüngliche Streckenideen: Quellenabgleich und Fragen (offen)
+
+**Belegte Herkunft:** Sarahs eigene Nachricht vom 06.10.2026 [unten in dieser Datei](TEAM-NOTES.md) nennt fünf Planungsstrecken mit Ort: **Ewige-Führer-Allee (Pjöngjang), Kulturrevolutions-Schleife (Peking), Havanna-Revolutionsring (Havanna), Duce-Drom (Rom), Genossen-Gerade (Moskau)**. Die damalige Streckenauswahl zeigte diese Namen; nur Berlin/Stadionring war zu dem Zeitpunkt spielbar. Heute sind alle sechs Kurse spielbar. Die Dokumente [Rom](docs/26-duce-drom.md), [Havanna](docs/29-havanna-revolutionsring.md) und [Pjöngjang](docs/30-pyongyang.md) trennen Sarahs Namen/Orte von später ausgearbeiteten Routen, Kulissen und Ereignissen. Die fünf Zonen Palastplatz, Boulevard, Staatsdruckerei, Baustelle, Palastgärten stammen aus dem alten gemischten Hauptstadt-Konzept ([Game Design](docs/01-game-design.md), [Alt-Extraktion](docs/11-legacy-extraction.md)); ihre persönliche Urheberschaft ist dort nicht sicher belegt. Die geplante siebte, verbindende Strecke ist ein separater langfristiger Vorschlag. Sarahs möglicherweise nur lokal vorhandene weitere Entwürfe sind hier nicht einsehbar.
+
+**Fragen an Marcel, anschließend mit Sarah abzugleichen:**
+
+1. Sollen Sarahs fünf Kursnamen und Orte unverändert als feste Identität erhalten bleiben? Falls einer geändert werden soll: welcher und warum?
+2. Kennst du von Sarah zu einem der fünf Kurse konkrete Szenen, Hindernisse, Abkürzungen oder Fahrmomente über Name und Ort hinaus? Was davon ist für sie unverzichtbar?
+3. **Pjöngjang:** Welcher Kern soll trotz der von dir gewünschten kurvigeren Pilotstrecke erhalten bleiben: monumentale Allee/Parade, Unterführung, Statuen, Startgatter oder etwas anderes? Was darf deutlich umgebaut werden?
+4. **Rom und Havanna:** Welche heutigen, später ausgearbeiteten Abschnitte gefallen euch und sollen bleiben; welche sollen für mehr Kurven, Höhen und Linienentscheidungen neu entstehen?
+5. **Moskau und Peking:** Welche eigenen Wahrzeichen, Streckenereignisse und Routelemente soll Sarahs jeweiliger Name unbedingt hervorrufen? Welche heutigen Passagen wirken zu austauschbar?
+6. **Berlin:** Soll die alte gemischte Hauptstadtidee mit Palastplatz, Papp-Zuschauern, Staatsdruckerei/Stempeln, Baustelle und Palastgärten in Berlin, in eine spätere verbindende Strecke oder nur als lose Ideenquelle eingehen? Diese fünf Zonen sind hier nicht sicher Sarah persönlich zuzuordnen.
+7. Wollt ihr die siebte verbindende Strecke nach den sechs überzeugenden Einzelspielerstrecken weiterhin als eigenes Ziel, und welche Motive müsste sie verbinden?
+8. Darf jede Themenstrecke ihre eigene Art von Überraschung und Risiko bekommen, oder gibt es zu einem Sarah-Kurs ein Motiv/Ereignis, das ihr ausdrücklich vermeiden möchtet?
+9. Welche dieser Antworten kannst du selbst entscheiden, und welche Punkte möchtest du ausdrücklich erst mit Sarah gemeinsam festlegen? Ihre Zustimmung wird nicht aus Schweigen abgeleitet.
+
+**Status:** Fragen gestellt, noch keine Antworten. Namen/Orte sind belegte Sarah-Beiträge; spätere Ausarbeitungen nicht als ihre Originalentwürfe ausgeben. Ziel zum Abgleich in LONG-TERM-GOALS.md, aktueller Schritt in CURRENT-WORKLIST.md.
+
+## 11.10.2026 – Marcel: Antworten zum Spielgefühl-Abgleich (Ziele dokumentiert)
+
+Marcels nummerierte Antworten beziehen sich auf den unveränderten Fragebogen direkt darunter. Die bestätigten Langfristziele und Reihenfolge stehen in LONG-TERM-GOALS.md; für diese Zielklärung wurde kein Spielcode geändert. Nach der Dokumentation sollen Sarahs ursprüngliche Streckenideen aus belegten Quellen betrachtet und separat mit Marcel abgefragt werden.
+
+| Nr. | Marcels Antwort und Status |
+|---|---|
+| 1–2 | Alle Kurse wirken langweilig; keine Rangfolge. Codex wählt den Piloten: Pjöngjang wegen des beim Audit gemessenen sehr geraden Rhythmus. |
+| 3–5 | Pjöngjang darf deutlich kurviger werden. Moskau soll abwechslungsreicher sein; seine aktuelle Länge ist okay. |
+| 6–7 | Technische Kurven, Höhen/Sprünge, geteilte Wege und große Setpieces zusammen; viele kleine Linienentscheidungen. |
+| 8 | Jede Strecke soll individuell entworfene Abkürzungen haben: mal itemabhängig, mal vom Untergrund beeinflusst, mal frei befahrbar. Auf ihnen dürfen Sturz, Feuer oder andere Effekte drohen. Keine dynamische Zufallsgenerierung der Strecken. |
+| 9–10 | Wechselnde Straßenbreiten sind erwünscht; pro Ort prägnante Motive über Architektur, Umwelt, Fahrbahn, NPCs und Objekte. |
+| 11–13 | Kleine wiederkehrende und große angekündigte Streckenereignisse; zeitweilige Spuränderung/-sperre bei sicherer Alternative; Wetter/Wellen/Schnee sollen die Linienwahl beeinflussen. |
+| 14–15 | Thematische Hindernisse aller vorgeschlagenen Arten und kleine bewegliche Objekte, maßvoll. Vorwarnung für jedes Ereignis passend, nicht einheitlich. |
+| 16–17 | Eher kurz- bis mittellange Zeitkosten nach denselben Regeln für alle gerade im Wirkbereich; geschickte Positionierung darf den Effekt vermeiden. |
+| 18 | Itembox-Häufigkeit kann Marcel noch nicht beurteilen; kein Mengenentscheid. |
+| 19–21 | Mehr unmittelbares Chaos und Bewegungstricks. Separate Schilde erscheinen Marcel fraglich; bevorzugt wird vorläufig ein hinten gehaltenes Item, das beim Treffer verbraucht wird und das Kart schützt. Das ist noch kein Detailentscheid zum bisherigen Abwehrslot. Stärkeres Trefferfeedback ist erwünscht, bei fairer kurzer Kontrollstörung. |
+| 22–24 | Neuer Drift noch nicht selbst beurteilt. Es fehlt **tatsächliche Geschwindigkeit**. Reifen/Motor/Fahrwerk dürfen sich spürbar unterscheiden, mit Balance. |
+| 25–27 | Fahrer-/Kart-Erkennbarkeit noch nicht beurteilt. Minimap und gehaltene/ausgewählte Items müssen angezeigt werden. Mehr Publikum, Musikdynamik und insgesamt mehr Klangreaktionen. |
+| 28–29 | Codex darf Reihenfolge wählen: Strecken zuerst. Lokaler Mehrspieler-/Battle-Modus erst nach sechs überzeugenden Einzelspielerstrecken. |
+| 30 | Abnahme: abwechslungsreiche Kurse; Bots holen auch mal taktisch auf und setzen Items gezielt ein statt konstant zu fahren; Ereignisse ordnen Positionen durcheinander und wirken auf alle betroffenen Karts; mehr Auf/Ab, Tunnel, große Bilder, verteilte Boden-Boosts, verschieden hohe Rampen und Rampen zu alternativen Wegen. Ob Boostpositionen je Rennen wechseln sollen, blieb offen; sicher ist Vielfalt der Platzierung. |
+
+**Noch offen für gezielte Abnahme:** Itembox-Dichte (18), Driftgefühl (22), Kart-/Fahrersilhouetten (25), genaue defensive Itemmechanik (20), variable oder feste Boostpositionen (30). Sarahs ursprüngliche Ideen werden nach Quellenprüfung einzeln gefragt; Herkunft und gemeinsame Bestätigung müssen bei Änderungen sichtbar bleiben.
+
+## 11.10.2026 – Codex: Fragen an Marcel nach dem Spielgefühl-Abgleich (beantwortet bzw. ausdrücklich offen)
 
 **Prüfgrenze:** Der Vergleich mit Mario Kart 8 Deluxe stützt sich auf offizielle Nintendo-Funktionsbeschreibungen, nicht auf eine in dieser Sitzung gespielte Switch-Partie. Diktator Kart: sechs aktuelle Kursläufe als kurze automatisierte Demonstrationsfahrten, feste Rück-/Modellansichten, Quell-/Streckendaten. Kein menschlicher Lenk-, Hör- oder dreirundiger Direktvergleich. Aktuelle Bilder und Laufzeitstatus: `docs/evidence/2026-10-11-gamefeel-audit/`; Branch `main`, Commit `f645be6`, 11.10.2026. Marcel erlaubte für diesen Abgleich ausdrücklich die unsichtbare eigene Chrome-Testinstanz. Sie und der eigene Server wurden nach der Prüfung beendet. Keine Nutzerfenster bedient.
 
@@ -46,7 +87,7 @@
 29. Soll eine spätere lokale Mehrspieler- oder Battle-Variante überhaupt in die nähere Planung, oder erst nach sechs überzeugenden Einzelspielerstrecken?
 30. Was sind deine drei wichtigsten Abnahmesätze für einen neuen Kurs, z. B. „Ich will an jeder Runde zweimal bewusst eine andere Linie wählen“?
 
-**Nächster Schritt:** Marcels Antworten wortgetreu als Herkunft sichern, bestätigte Entscheidungen in die passenden Hauptdateien übertragen und unbestätigte Varianten als solche erhalten. Sarahs ursprüngliche Themen nicht stillschweigend ändern.
+**Status:** Antwortzuordnung oben; ausdrücklich ungetestete Punkte bleiben offen. Sarahs ursprüngliche Themen nicht stillschweigend ändern.
 
 ## 11.10.2026 – Claude: Drift-Messung und Prüfhinweise
 
