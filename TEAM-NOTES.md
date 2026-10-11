@@ -10,6 +10,8 @@ Die Vollsuite bestand mit 133/133. Eine erste Fassung dieses Laufs entdeckte den
 
 Runde-zwei-Ereignisse müssen für Rom (970–1125), Havanna (105–330), Moskau (95–520), Pjöngjang (1372–1400) und Peking (880–1040) Fortschritt und tatsächlichen Ort erfüllen. Moskaus Parade erhält den Konfetti-Emitter; der Zeppelin wird nur für `zeppelin` gestartet. Die vollständige menschliche Fahrt und der sichtbare ausgelöste Partikeleffekt wurden im aktuellen Paket nicht geprüft.
 
+Zusatzlaufzeitcheck nach dem Checkpoint: der eigene verborgene In-App-Browser lud Stadionring mit 1.366 m und sechs Karts sowie Havanna mit 1.423 m. Der Havanna-GP zeigte nach etwa vier Sekunden Rangwechsel im Feld, sechs Karts, Minimap und 66–67 km/h. Escape brachte den Lauf zurück ins Menü; die eigenen Prüftabs und der Server auf Port 4174 wurden beendet. Es wurde kein voller Kurs gefahren und kein Runde-zwei-Ereignis erreicht; FPS/Konsole nicht geprüft, Screenshot nicht separat gespeichert. Diese Stichprobe ist Laufzeitbeleg, keine menschliche Fahrabnahme.
+
 ## 11.10.2026 – Codex: Peking-Streckenpass, Prüfung und Grenzen
 
 Ausgang: Länge 1.565,6 m; 60,8 % annähernd gerade bei 2-m-Abtastung und |Krümmung| < 1/150 m. Umsetzung misst 1.609,4 m und 38,9 % annähernd gerade; kleinster Radius 20,2 m. Ein erster Entwurf fiel auf 10,9 m Radius und führte beim manuellen Lenktest zu Wandkontakten; diese Kontrollpunkte wurden vor der Abnahme geglättet. Das ist auch ein Hinweis, dass die Geometriegrenze allein die menschliche Kurvenabnahme nicht ersetzt.
