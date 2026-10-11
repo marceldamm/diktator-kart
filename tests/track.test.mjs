@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
-import { TRACK, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
+import { TRACK, selectTrack, atSecondLapTrackEvent, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt,rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, recoverKart } from '../src/track.ts';
 import { SHORTCUT } from '../src/track-layout.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
@@ -17,6 +17,17 @@ test('track progress is continuous around the complete course; inner and outer b
       assert.equal(projectTrack(safe.x,safe.z).kind,null);
     }
   }
+});
+test('second-lap track events need both lap progress and the announced location',()=>{
+  const zones = [['duce-drom', 970, 1125], ['havanna', 105, 330], ['moscow', 95, 520], ['pyongyang', 1372, 1400], ['beijing', 880, 1040]];
+  for (const [id, from, to] of zones) {
+    selectTrack(id); const lapTwoEntry = TRACK.length + from - TRACK.start;
+    assert.equal(atSecondLapTrackEvent(lapTwoEntry - .01, from, from, to), false, `${id}: first-lap progress cannot trigger`);
+    assert.equal(atSecondLapTrackEvent(lapTwoEntry, from - .01, from, to), false, `${id}: wrong course location cannot trigger`);
+    assert.equal(atSecondLapTrackEvent(lapTwoEntry, from, from, to), true, `${id}: lap-two entry triggers at its location`);
+    assert.equal(atSecondLapTrackEvent(lapTwoEntry + 1, to, from, to), false, `${id}: event stops at the end of its district`);
+  }
+  selectTrack('stadionring');
 });
 test('canal rescue places a fallen kart beyond the water without awarding progress',()=>{
   const fallen={...gridKart(0),...trackPoint(CANAL_FROM+CANAL_LENGTH/2)};

@@ -326,6 +326,11 @@ export function applyPolicyJubelDrag(speed: number, yawRate: number, dt: number)
   return { speed: Math.max(0, speed - .18 * step), yawRate: yawRate * Math.max(0, 1 - .02 * step) };
 }
 
+/** Event entry is based on both lap-two progress and the kart's actual course location. */
+export function atSecondLapTrackEvent(distance: number, s: number, from: number, to: number): boolean {
+  return distance >= TRACK.length + from - TRACK.start && s >= from && s < to;
+}
+
 /** A kart beyond the open quay edge drops into the harbour basin. */
 export function hazardAt(x: number, z: number): 'water' | 'lava' | 'cliff' | null {
   const { s, lane } = trackLocate(x, z), h = hazardRange(s, lane);

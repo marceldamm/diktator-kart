@@ -1,5 +1,15 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+## 11.10.2026 – Codex: Sechs-Kurse-Abgleich, Shortcut-Vergleich und Ereignisorte
+
+Metriken und Grenzwerte sind in CURRENT-WORKLIST.md unter „Technischer Vergleich und erster Ausgleich“ festgehalten. Alle Kurse wurden mit derselben 2-m-Abtastung ausgewertet; gerade Anteil gilt als |Krümmung| < 1/150 m. Dreistufige Bot-Medianzeiten über drei Runden: Stadionring 231/210/204 s, Rom 241/213/206 s, Havanna 252/221/216 s, Pjöngjang 336/286/277 s, Moskau 437/373/360 s, Peking 288/251/244 s (leicht/mittel/schwer). Das bestätigt funktionierende Runden/Schwierigkeit, nicht menschlichen Fahrspaß oder FPS.
+
+Der erste Shortcut-Vergleich wurde mit demselben schnellen Botstil und drei Runden, ohne Items/Boostpads, als einmalige Richtungsprobe gefahren. Er ergab Hauptweg/Shortcut: Berlin 207,8/201,8 s; Rom 209,3/209,1 s; Havanna 220,4/225,3 s; Pjöngjang 290,4/269,1 s; Moskau 376,4/387,4 s; Peking 249,6/255,5 s. Danach erhielten Havanna, Moskau und Peking die in der Arbeitsliste genannten festen Boost-/Limitanpassungen. Diese Endwerte wurden im Volltest nicht separat zeitlich verglichen.
+
+Die Vollsuite bestand mit 133/133. Eine erste Fassung dieses Laufs entdeckte den noch auf Moskaus vorherigen Wert <10 m/s gesetzten Layouttest; die aktualisierte Regression prüft jetzt den 15-m/s-Wert. Build und Typprüfung bestehen; Chunkwarnung bleibt. Offizielle Nutzung: 15 % Fünf-Stundenverbrauch / 17 % Wochenverbrauch (85 % / 83 % Rest). Kein Reset und keine Zusatzkontingente verwendet.
+
+Runde-zwei-Ereignisse müssen für Rom (970–1125), Havanna (105–330), Moskau (95–520), Pjöngjang (1372–1400) und Peking (880–1040) Fortschritt und tatsächlichen Ort erfüllen. Moskaus Parade erhält den Konfetti-Emitter; der Zeppelin wird nur für `zeppelin` gestartet. Die vollständige menschliche Fahrt und der sichtbare ausgelöste Partikeleffekt wurden im aktuellen Paket nicht geprüft.
+
 ## 11.10.2026 – Codex: Peking-Streckenpass, Prüfung und Grenzen
 
 Ausgang: Länge 1.565,6 m; 60,8 % annähernd gerade bei 2-m-Abtastung und |Krümmung| < 1/150 m. Umsetzung misst 1.609,4 m und 38,9 % annähernd gerade; kleinster Radius 20,2 m. Ein erster Entwurf fiel auf 10,9 m Radius und führte beim manuellen Lenktest zu Wandkontakten; diese Kontrollpunkte wurden vor der Abnahme geglättet. Das ist auch ein Hinweis, dass die Geometriegrenze allein die menschliche Kurvenabnahme nicht ersetzt.

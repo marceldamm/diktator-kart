@@ -17,7 +17,7 @@ test('Moscow selection builds a distinct long course with parade straights and a
   assert.ok(straight / TRACK.samples.length < .62, `straight share ${(straight / TRACK.samples.length * 100).toFixed(1)} %`);
   assert.ok(tightest > 22, `tightest radius ${tightest.toFixed(1)}`);
   const saved = TRACKS.moscow.shortcut.to - TRACKS.moscow.shortcut.from - SHORTCUT_LENGTH;
-  assert.ok(saved > 50 && saved < 140 && TRACKS.moscow.shortcut.speedCap < 10, `shortcut saves ${saved.toFixed(0)} m`);
+  assert.ok(saved > 50 && saved < 140 && TRACKS.moscow.shortcut.speedCap === 15, `shortcut saves ${saved.toFixed(0)} m at the audited 15 m/s cap`);
   assert.deepEqual([...TRACKS.moscow.rampLips], [800]);
   assert.ok(shortcutPoint(SHORTCUT_LENGTH / 2));
   for (let s = 0; s < TRACK.length; s += 2) {

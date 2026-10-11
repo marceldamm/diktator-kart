@@ -4,7 +4,7 @@ import { attachKeyboard, attachPointerHold, attachTouch, InputHub, REBINDABLE, e
 import { advanceKart, driftTier, initialKartState, KART_TUNING, resolveKartContacts, type KartState } from './kart-model';
 import { createTestScene, type TestScene } from './scene';
 import './style.css';
-import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
+import { BOT_STYLES, botStyleOf, botDifficulty, setBotStyles, trackProgress as trackProgressAt, selectTrack, isTrackId, setBotSkill, atRampLip, boostPadAt, inShortcut, atSecondLapTrackEvent, balconyRosePatchAt, maleconWavePatchAt, applyMaleconWaveDrag, policyJubelPatchAt, applyPolicyJubelDrag, craterAt, shouldStartCraterFall, drivingSurfaceAt, hazardAt, overCanal, TRACK, advanceRace, applySurfaceDrag, botInput, createRaceProgress, gridKart, projectTrack, recoverKart, trackPoint, trackLocate, trackHeightAt, rankRace, shortcutPoint, SHORTCUT_LENGTH, setParadeClock, startParade, stopParade, type RaceProgress } from './track';
 import { KartAudio } from './audio';
 import { CAST, DEFAULT_TIRES, TIRE_SETS, rosterOrder } from './cast';
 import { DocumentFlood } from './document-flood';
@@ -141,6 +141,8 @@ class App {
   /** Peking's lap-two rulebook broadcast briefly unsettles only the serpentine centre line. */
   private jubelUntil=0;
   private jubelTriggered=false;
+  private paradeTriggered=false;
+  private columnTriggered=false;
   /** Balcony speech (Rome, lap 2): petals slow the centre line for a short window; either outer line stays clear. */
   private balconyUntil=0;
   private balconyTriggered=false;
@@ -663,7 +665,7 @@ class App {
     this.dayToNight = new URLSearchParams(location.search).get('night') === '1' || Math.random() < .5;
     this.lapTimes=[];this.lapNoticeUntil=0;
     this.audio.cue('countdown');this.audio.voice('announcer-3',{force:true});this.lastRank=6;
-    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
+    this.ranking.reset();this.audio.setMusicTempo(1);this.waveUntil=0;this.waveTriggered=false;this.jubelUntil=0;this.jubelTriggered=false;this.paradeTriggered=false;this.columnTriggered=false;this.balconyUntil=0;this.balconyTriggered=false;this.paradeUntil=0;stopParade();this.eventAnnounced=false;this.lastRanks=[];this.reactUntil=[];this.finishReacted=[];this.endCeremony();this.afterRace=false;
     this.showGpIntro();
     document.querySelector('#finish-card')?.setAttribute('hidden', '');
     this.camera?.update(this.kart, 0, true);
@@ -1250,9 +1252,25 @@ class App {
           this.raceTime += FIXED_STEP;this.voiceCooldown=Math.max(0,this.voiceCooldown-FIXED_STEP);this.leadCooldown=Math.max(0,this.leadCooldown-FIXED_STEP);
           const lapBefore=Math.floor(Math.max(0,this.progress[0].distance)/TRACK.length);
           [this.kart, ...this.loadKarts].forEach((s, i) => advanceRace(this.progress[i], s, this.raceTime));
+          if (!this.paradeTriggered && TRACK_INFO.theme === 'moscow' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+            const { s } = trackLocate(kart.x, kart.z);
+            return atSecondLapTrackEvent(this.progress[i].distance, s, 95, 520);
+          })) {
+            this.paradeTriggered = true; this.paradeUntil = this.raceTime + 15;
+            this.testScene?.trackEvent?.('parade'); this.itemMessage = 'Ehrenparade! Rückenwind auf der Parade-Geraden für alle'; this.itemMessageUntil = this.items.time + 4;
+            this.audio.cheer(1); window.setTimeout(() => this.audio.voice('announcer-parade', { force: true }), 900);
+          }
+          if (!this.columnTriggered && TRACK_INFO.theme === 'pyongyang' && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
+            const s = trackProgressAt(kart.x, kart.z);
+            return !inShortcut(kart.x, kart.z) && atSecondLapTrackEvent(this.progress[i].distance, s, 1372, 1400);
+          })) {
+            this.columnTriggered = true; startParade(this.raceTime); this.testScene?.trackEvent?.('column');
+            this.itemMessage = 'Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei'; this.itemMessageUntil = this.items.time + 4;
+            this.audio.cheer(1); this.audio.cue('lap');
+          }
           if (!this.jubelTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s, lane } = trackLocate(kart.x, kart.z);
-            return this.progress[i].distance >= TRACK.length + 880 - TRACK.start && policyJubelPatchAt(s, lane);
+            return atSecondLapTrackEvent(this.progress[i].distance, s, 880, 1040) && policyJubelPatchAt(s, lane);
           })) {
             this.jubelTriggered = true; this.jubelUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('loudspeaker'); this.itemMessage = 'Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt'; this.itemMessageUntil = this.items.time + 4;
@@ -1260,13 +1278,13 @@ class App {
           }
           if (!this.waveTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => {
             const { s, lane } = trackLocate(kart.x, kart.z);
-            return this.progress[i].distance >= TRACK.length + 105 - TRACK.start && maleconWavePatchAt(s, lane);
+            return atSecondLapTrackEvent(this.progress[i].distance, s, 105, 330) && maleconWavePatchAt(s, lane);
           })) {
             this.waveTriggered = true; this.waveUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('wave'); this.itemMessage = 'Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip'; this.itemMessageUntil = this.items.time + 4;
             this.audio.cheer(.7); window.setTimeout(() => this.audio.voice('announcer-wave', { force: true }), 900);
           }
-          if (!this.balconyTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => this.progress[i].distance >= TRACK.length + 970 - TRACK.start && trackProgressOf(kart) >= 970 && trackProgressOf(kart) < 1125)) {
+          if (!this.balconyTriggered && this.racePhase === 'race' && [this.kart, ...this.loadKarts].some((kart, i) => atSecondLapTrackEvent(this.progress[i].distance, trackProgressOf(kart), 970, 1125))) {
             this.balconyTriggered = true; this.balconyUntil = this.raceTime + 14;
             this.testScene?.trackEvent?.('balcony'); this.itemMessage = 'Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt'; this.audio.cheer(1.1);
             window.setTimeout(() => this.audio.voice('announcer-balcony', { force: true }), 1400);
@@ -1290,8 +1308,8 @@ class App {
             if(this.lapTimes.length===1){
               if(TRACK_INFO.theme==='havana'){/* The wave triggers on lap two at the Malecón and leaves an inland counterline. */}
               else if(TRACK_INFO.theme==='rome'){/* The spoken balcony event triggers on lap two at the palace, not at the start line. */}
-              else if(TRACK_INFO.theme==='moscow'){this.testScene?.trackEvent?.('parade');this.itemMessage='Ehrenparade! Rückenwind auf der Parade-Geraden für alle';this.audio.cheer(1);this.paradeUntil=this.raceTime+15;window.setTimeout(()=>this.audio.voice('announcer-parade',{force:true}),900);}
-              else if(TRACK_INFO.theme==='pyongyang'){startParade(this.raceTime);this.testScene?.trackEvent?.('column');this.itemMessage='Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei';this.audio.cheer(1);this.audio.cue('lap');}
+              else if(TRACK_INFO.theme==='moscow'){/* The parade triggers when a kart reaches the Red Square straight on lap two. */}
+              else if(TRACK_INFO.theme==='pyongyang'){/* The parade column triggers when a kart reaches the gate boulevard on lap two. */}
               else if(TRACK_INFO.theme==='beijing'){/* The Peking broadcast triggers inside the lap-two serpentine, not at the start line. */}
               else{this.testScene?.trackEvent?.('zeppelin');this.itemMessage='Achtung: Propaganda-Zeppelin über dem Stadion!';}
               this.itemMessageUntil=this.items.time+3;}

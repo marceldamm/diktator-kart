@@ -34,11 +34,11 @@ Gemeinsame kurzfristige Aufgaben für Marcel und Sarah. Nur die neue Babylon-Bas
 
 ## Offene A-Aufgaben – bestätigte Umsetzungspakete (geordnet, 11.10.2026)
 
-Diese Liste konkretisiert den bestehenden Auftrag zur selbstständigen Weiterarbeit. Die Pakete werden nacheinander in CURRENT-WORKLIST.md sichtbar nachgeführt; nach Havannas zweitem Pass ist Peking der nächste aktive Kurs. Nicht bestätigte Sarah-Details und ausdrücklich noch unbeurteilte Mechaniken sind Gesprächs-/Abnahmepunkte, keine stillschweigend beschlossenen Implementierungen.
+Diese Liste konkretisiert den bestehenden Auftrag zur selbstständigen Weiterarbeit. Die Pakete werden nacheinander in CURRENT-WORKLIST.md sichtbar nachgeführt. Havanna und Peking haben je einen zweiten technischen Pass; der integrierte Vergleich und die menschlichen Rennabnahmen laufen noch. Nicht bestätigte Sarah-Details und ausdrücklich noch unbeurteilte Mechaniken sind Gesprächs-/Abnahmepunkte, keine stillschweigend beschlossenen Implementierungen.
 
 1. [x] **Havanna-Revolutionsring überarbeiten:** zweiter Streckenpass umgesetzt; menschliche Spielspaß-/Stilabnahme und endgültige Sichtprüfung des verkleinerten Wellen-VFX bleiben Teil der späteren Sechs-Kurse-Abnahme.
 2. [x] **Kulturrevolutions-Schleife / Peking überarbeiten:** zweiter Peking-Streckenpass mit eigener Hutong-/Regelheft-Rhythmik, abgesenkter kürzerer Gasse, zwei Rampen, fairer ortsgebundener Pflichtjubel-Wirkung und zusätzlichen Kurven. Menschliche Fahrprobe und Event-VFX-Sichtprüfung bleiben Teil des Sechs-Kurse-Passes.
-3. [ ] **Sechs-Kurse-Spielpass durchführen:** Berlin, Rom, Havanna, Pjöngjang, Moskau und Peking unter vergleichbaren Bedingungen fahren/prüfen; Rhythmus, Linienwahl, alternative Wege, Höhen, Ereignislesbarkeit, NPCs, Streckenränder und wiederholte Runden vergleichen. Erst nach sechs überzeugenden Einzelspielerstrecken den lokalen Mehrspieler-/Battle-Modus wieder priorisieren.
+3. [ ] **Sechs-Kurse-Spielpass durchführen:** Der technische Vergleich, die gemeinsame Auslöserkorrektur und der erste Shortcut-Ausgleich sind erledigt; offen bleiben je ein vollständiger menschlicher Drei-Runden-Lauf, aktuelle Runtime-Bilder pro Kurs und die Fahrspaß-/Stilabnahme durch Marcel und Sarah. Erst nach sechs überzeugenden Einzelspielerstrecken den lokalen Mehrspieler-/Battle-Modus wieder priorisieren.
 4. [ ] **Ereignisse und Positionswechsel ausbauen:** pro Strecke kleine wiederkehrende Streckenreaktionen und passende größere Ereignisse mit eigener Vorwarnung prüfen. Zeitweilige Spuränderungen dürfen alle Karts im Wirkbereich betreffen, müssen eine lesbare sichere Linie lassen und dürfen keine unvermeidlichen Treffer erzeugen. Positionierung darf Ereignisse taktisch vermeiden; moderate bewegliche Objekte und unmittelbares Chaos ergänzen.
 5. [ ] **Bots taktischer und wechselhafter machen:** Aufholen ohne versteckte Tempoboni, Items nach Situation und Verfolgerposition einsetzen, Hindernisse/Ereignisse erkennen, Linien wechseln und sich erholen. Drei-Runden-Läufe je Kurs/Schwierigkeit auf faire Wertung und sichtbare Positionswechsel prüfen; menschliche Fahrabnahme bleibt zusätzlich nötig.
 6. [ ] **Item-, Abwehr- und Treffergefühl abstimmen:** vorhandenes Iteminventar/HUD beibehalten; ein hinten gehaltenes Abwehr-Item soll beim Treffer entfernt werden und das Kart schützen. Treffer kräftiger und unmittelbarer darstellen, Kontrollverlust kurz und fair halten, Trefferketten begrenzen. Balance von Projektilen, Verfolgern, Fallen und Itemchancen gemeinsam gegen Bots prüfen. Itembox-Dichte und genaue defensive Bedienung vor einer Detailänderung mit Marcel klären.
@@ -50,6 +50,7 @@ Diese Liste konkretisiert den bestehenden Auftrag zur selbstständigen Weiterarb
 12. [ ] **Jeder Strecke einen eigenen spielerischen Fingerabdruck geben:** je Kurs einprägsames Hauptmotiv, charakteristische Fahrbahn/Umwelt, unverwechselbaren Rhythmus, eine eigene Abkürzungsentscheidung und ein thematisches Ereignis kombinieren. Beim Sechs-Kurse-Pass prüfen, ob Strecken sich auch während der Fahrt durch Gefühl und Motive unterscheiden.
 13. [ ] **Drei-Runden-Spannungsbogen herstellen:** Runde 1 vermittelt Kurs und Linien, Runde 2 bringt das angekündigte Hauptgeschehen, Runde 3 steigert Musik, Publikum und Rennabschluss. Keine unnötige Rennzeit oder unlesbares HUD erzeugen.
 14. [ ] **Abkürzungen und Gefahren verständlicher machen:** Einfahrt, Belohnung, Risiko, Gegenmaßnahme und Rückkehrpunkt mit Umgebung/Markierung während schneller Fahrt lesbar vermitteln, ohne den Bildschirm mit Text zu füllen.
+15. [x] **Shortcut-Nutzen unter gleichen Bedingungen prüfen:** Ein Bot mit demselben Schwierigkeitsgrad und Kart absolvierte Haupt- und Abkürzungsroute je Kurs ohne Items. Erste Zeiten (Hauptweg / Abkürzung, Sekunden): Stadionring 207,8 / 201,8; Rom 209,3 / 209,1; Havanna 220,4 / 225,3; Pjöngjang 290,4 / 269,1; Moskau 376,4 / 387,4; Peking 249,6 / 255,5. Schwache Abkürzungen wurden angepasst: Havanna erhielt zwei Booststreifen und 17-m/s-Limit, Moskau 15-m/s-Limit, Peking einen Booststreifen und 15-m/s-Limit. Der Volltest bestätigt Fahrbarkeit der sechs Kurse, aber misst den Zeitgewinn dieser neuen Pad-Balance nicht; Mehrfachlauf mit Items/Boosts bleibt in der menschlichen und Balanceabnahme offen.
 
 **Noch echte Entscheidungs-/Abnahmepunkte:** Sarahs konkrete Originalentwürfe jenseits belegter Kursnamen/-orte; genaue Itembox-Dichte und defensive Itembedienung; Driftempfinden, Silhouettenurteil und ob Boostpositionen je Strecke fest oder variabel sein sollen; Marcels und Sarahs Fahr-/Stil-/Hörabnahme. Diese Fragen bleiben den Menschen vorbehalten.
 
@@ -75,7 +76,37 @@ Sarahs Kursname/Ort sowie die dokumentierte Satire gegen Dogma und Planstatistik
 - [x] **Prüfung:** Peking-Test (2/2) und Vollsuite außerhalb der Sandbox (132/132), Typprüfung und Build bestanden. Die Vollsuite-Simulation beendet drei Runden auf allen sechs Kursen und drei Schwierigkeitsstufen; festgelegter Bot nimmt die Hutong-Gasse. Build meldet das bestehende große Babylon-Bündel (2.161,52 KB, 534,16 KB gzip).
 - [x] **Verborgene Runtime:** aktuelle Kurskarte zeigte 1.609 m; Einzelrennen und finale Geometrie bis zur Startansicht geladen. Keine vollständige Drei-Runden-Fahrt und kein Erreichen des Runde-2-Pflichtjubels; daher keine menschliche Fahrlinien-, Spaß-, Event-VFX- oder FPS-Abnahme.
 - [x] **Budget nach Paket:** offizielle Codex-Werte 13 % Fünf-Stundenverbrauch / 17 % Wochenverbrauch (87 % / 83 % Rest).
-- [ ] **Nächster Entwicklungsblock:** integrierter Sechs-Kurse-Fahrpass (A-Aufgabe 3), um Streckenmotive, Kurvenrhythmus, Abkürzungen, Ereignisse und Botverhalten direkt zu vergleichen; dabei die offenen Havanna-/Peking-Laufzeitabnahmen miterfassen.
+- [x] **Nächster Entwicklungsblock:** integrierter Sechs-Kurse-Technikvergleich (A-Aufgabe 3); technische Werte, Botläufe und Ereignisorte sind unten festgehalten. Menschlicher Lauf und Runtime-Belege bleiben offen.
+
+## Sechs-Kurse-Technikpass abgeschlossen; menschlicher Fahrpass offen (Marcel, 11.10.2026)
+
+**Ziel:** vergleichen, ob Stadionring, Duce-Drom, Havanna, Ewige-Führer-Allee, Genossen-Gerade und Kulturrevolutions-Schleife jeweils klar erkennbare Motive, unterschiedliche Fahrmomente, nutzbare Linienentscheidungen, faire feste Abkürzungen, angekündigte Ereignisse und zuverlässige NPC-Runden bieten. Technische Zahlen helfen beim Aussortieren, ersetzen keine spätere menschliche Drei-Runden-Abnahme.
+
+- [x] Für alle sechs Strecken unter derselben 2-m-Regel Länge, annähernd gerade Anteile, Kurvenradien, Höhenhub, Rampen, Shortcut-Längen und Ereignisorte dokumentieren.
+- [x] Bot-/Ereignisprüfung: alle Schwierigkeitszeiten und drei Runden pro Kurs nachweisen; Ereigniswarnungs-/Auslöserlogik und freie Gegenlinien anhand gemeinsamer Streckenzonen prüfen. Aktuelle Runtime-Bilder pro Kurs und vollständige menschliche Fahrt bleiben getrennt offen.
+- [x] Gemeinsame Auslöser- und VFX-Lücken beheben, ohne sechs Motive zu vereinheitlichen; Regressionstest prüft Runde, Ort und Zonenbegrenzung auf allen fünf Runde-zwei-Ereigniskursen.
+- [x] Vergleichstabelle, gemessene Grenzen und offene menschliche Fragen in den vier Hauptdateien dokumentieren. Sarahs unbekannte Originaldetails bleiben dem gemeinsamen Gespräch vorbehalten.
+
+### Technischer Vergleich und erster Ausgleich (11.10.2026)
+
+| Kurs | Länge | Annähernd gerade | Engster Radius | Höhenhub | Rampen (Streckenmeter) | Abkürzung / Hauptweg | Ereignisgebiet Runde 2 |
+|---|---:|---:|---:|---|---|---:|---|
+| Stadionring | 1.366 m | 25,2 % | 9,3 m | 2,4 m | 128, 495 | 67 / 164 m (0,41) | Zeppelin-Inszenierung |
+| Duce-Drom | 1.367 m | 38,4 % | 4,6 m | 6,0 m | 700, 850 | 104 / 182 m (0,57) | Balkonviertel 970–1125 |
+| Havanna | 1.423 m | 26,6 % | 14,0 m | 4,0 m | 380, 1146 | 110 / 125 m (0,88) | Malecón 105–330 |
+| Pjöngjang | 1.829 m | 58,7 % | 20,2 m | 4,5 m | 232, 930 | 441 / 560 m (0,79) | Torallee 1372–1400 |
+| Moskau | 2.354 m | 56,5 % | 27,9 m | 4,2 m | 800 | 165 / 260 m (0,63) | Paradegerade 95–520 |
+| Peking | 1.609 m | 38,9 % | 19,7 m | 3,8 m | 500, 1349 | 166 / 203 m (0,82) | Regelheft-Serpentine 880–1040 |
+
+Messregel für gerade Strecken: 2-m-Stichprobe, |Krümmung| < 1/150 m. Shortcut-Zeitvergleich: derselbe schneller Stilbot, drei Runden, keine Items/Booststreifen, eine Vergleichsfahrt je Route; deshalb Richtungsbefund, keine endgültige Balanceabnahme. Havanna, Moskau und Peking waren in diesem Vergleich langsamer, obwohl der Weg kürzer war. Streckenwerte sind technische Kennzahlen und ersetzen keine menschliche Fahrt.
+
+- [x] **Runde-zwei-Ereignisse räumlich abgesichert:** Havanna, Rom, Moskau, Pjöngjang und Peking verlangen nun zugleich Runde-zwei-Fortschritt und die jeweils angekündigte Streckenposition; Moskaus Parade sowie Pjöngjangs Kolonne beginnen am Motiv. Bei der Kolonne zählt nur die Hauptstraße, sodass die Pjöngjang-Abkürzung nicht den Start auslöst. Ein Test prüft Frühtrigger, falschen Ort, korrekten Start und Zonenende auf allen fünf Kursen.
+- [x] **Paradeeffekt visuell passend geroutet:** Das Moskau-Ereignis hatte durch einen allgemeinen Effektzweig fälschlich den Zeppelin aktiviert. Parade und Lautsprecher verwenden jetzt lokale Konfettistöße; nur das explizite Stadionereignis startet den Zeppelin.
+- [x] **Erster fester Shortcut-Ausgleich:** Havanna zwei Booststreifen/17 m/s, Moskau 15 m/s und Peking ein Booststreifen/15 m/s. Das Moskau-Layouttestziel ist auf dieses konkrete Limit aktualisiert. Diese Werte brauchen den wiederholten Zeitvergleich mit aktivierten Pads sowie die menschliche Fahrprobe.
+- [x] **Technische Prüfung dieses Zwischenstands:** gezielte Strecken-/Ereignistests 21/21; `npm run typecheck`, `npm run build` und `npm run test:full` bestanden, Vollsuite 133/133. Der erste Volltest hatte einen Test mit Moskaus altem Limit unter 10 m/s gefunden; die Erwartung prüft jetzt das fest gewählte 15-m/s-Limit. Build: Hauptbundle 2.162,25 KB / 534,30 KB gzip; bestehende Chunkgrößenwarnung.
+- [x] **Dreistufige Botläufe:** alle sechs Strecken beenden drei Runden mit fairem, unterschiedlich schnellem Schwierigkeitsverlauf. Medianzeiten einfach/mittel/schwer: Stadionring 231/210/204 s; Rom 241/213/206 s; Havanna 252/221/216 s; Pjöngjang 336/286/277 s; Moskau 437/373/360 s; Peking 288/251/244 s. Diese Suite misst Feld-/Rundenfunktion, nicht eine aktuelle Hauptweg-gegen-Abkürzungs-Zeit.
+- [ ] **Menschliche Abnahme bleibt offen:** Ein verborgener Karten-/Startansichtscheck ist kein echter Drei-Runden-Fahrbeleg. Für alle sechs Kurse Spielgefühl, Ereignis-VFX, Sicht, Botaufholverhalten, Bildrate sowie Marcels und Sarahs Fahrurteil erfassen; Sarahs weitere Originalideen gemeinsam besprechen.
+- [ ] **Nächster technischer Block:** A4 Streckenereignisse und Positionswechsel: zusätzlich zu den festen Runde-zwei-Hauptmomenten passende kleine Rundenreaktionen auf Kursen ergänzen und Bot-/Spielerwirkung, Vorwarnung, Gegenlinie und kurze Chaosfenster prüfen. Danach A5 Botaufholverhalten und taktische Items vertiefen.
 
 ## Erledigtes Paket – Testläufe verkürzen (Marcel, 11.10.2026; Codex-Fortsetzung)
 

@@ -1080,8 +1080,9 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (kind === 'balcony') { roseTime = 0; roses.emitRate = 70; }
         else if (kind === 'wave') { waveTime = 0; waveSpray.emitRate = reducedEffects ? 65 : 160; }
         else if (kind === 'column') placeColumn();
+        else if (kind === 'parade') { const p = trackPoint(300, -5.5); confetti.burst(new Vector3(p.x, 7 + elevationAt(300), p.z), reducedEffects ? 45 : 140); }
         else if (kind === 'loudspeaker') { const p = trackPoint(960, 5.5); confetti.burst(new Vector3(p.x, 7 + elevationAt(960), p.z), reducedEffects ? 45 : 140); }
-        else { zeppelinTime = 0; zeppelin.setEnabled(true); }
+        else if (kind === 'zeppelin') { zeppelinTime = 0; zeppelin.setEnabled(true); }
       },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
         if (kind === 'crater') { burst(puff, at, reducedEffects ? 14 : 42); return; }

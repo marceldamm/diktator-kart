@@ -193,7 +193,7 @@ const HAVANNA: TrackDefinition = {
   ] as const).map(([x, z]) => [x * HV, z * HV] as const),
   halfWidth: 6, start: 40, bump: 1240,
   /** Zigarrenfabrik: gravel passage through the factory yard, straight across the old-town dip. */
-  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 10.5, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [] },
+  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 17, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [[.2, 0], [.68, 0]] },
   canal: { from: -1000, length: 0 },
   rampLips: [380, 1146],
   boostPads: [[100, 0], [500, 0], [800, 0], [1120, 0], [1300, 1.5]],
@@ -302,7 +302,7 @@ const MOSCOW: TrackDefinition = {
   ],
   halfWidth: 8, start: 95, bump: -1,
   /** Old west boulevard: broken parade paving across the pocket's neck; slow unless a turbo is active. */
-  shortcut: { from: 1880, to: 2140, side: 1, halfWidth: 4.2, speedCap: 9.5,
+  shortcut: { from: 1880, to: 2140, side: 1, halfWidth: 4.2, speedCap: 15,
     points: [[-352,62],[-356,12],[-349,-32]],
     elevation: [[0,0],[1,0]], boostPads: [] },
   canal: { from: -1000, length: 0 }, rampLips: [800],
@@ -349,7 +349,7 @@ const BEIJING: TrackDefinition = {
   ],
   halfWidth: 6, start: 70, bump: -1,
   /** Hutong-Gasse: narrow gravel alley across the north-west corner, past washing lines and tea houses. */
-  shortcut: { from: 596, to: 799, halfWidth: 3, speedCap: 11.5, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [.22, -.75], [.76, -.75], [1, 0]], boostPads: [] },
+  shortcut: { from: 596, to: 799, halfWidth: 3, speedCap: 15, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [.22, -.75], [.76, -.75], [1, 0]], boostPads: [[.62, 0]] },
   canal: { from: -1000, length: 0 },
   rampLips: [500, 1349],
   boostPads: [[120, 0], [470, 0], [1000, 0], [1285, 0], [1562, 1.5]],

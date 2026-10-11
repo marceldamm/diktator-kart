@@ -1,5 +1,13 @@
 # Gemeinsamer Änderungsverlauf
 
+## 11.10.2026 – Codex: integrierter Sechs-Kurse-Technikpass und Shortcut-Ausgleich
+
+Ereignisse auf Rom, Havanna, Moskau, Pjöngjang und Peking starten nun nur in Runde 2 beim Eintritt in die passende Kurszone; die Pjöngjang-Parade ignoriert die Unterführung als Auslöser. Moskaus Paradeeffekt setzt lokalen Konfettiimpuls statt versehentlich den Zeppelin zu aktivieren. Ein gemeinsamer Streckentest prüft falsche Runde, falschen Ort, Start und Zonenende.
+
+Der erste gleiche Shortcut-Zeitvergleich zeigte Havanna, Moskau und Peking trotz kürzerem Weg langsamer. Als erster fester Ausgleich kamen zwei Havanna-Booststreifen bei s=860–985 mit 17-m/s-Limit, Moskaus 15-m/s-Limit und ein Peking-Booststreifen bei s=596–799 mit 15-m/s-Limit hinzu. Das Moscow-Layoutregressionsziel prüft die neue Geschwindigkeitsgrenze. Wiederholte Zeitmessungen mit diesen Pads sind offen; die alten Zeitwerte sind ausdrücklich nur die Vorhermessung.
+
+`npm run typecheck`, `npm run build`, gezielte Streckentests 21/21 und `npm run test:full` 133/133 bestanden. Der Build meldet weiterhin das bekannte große Babylon-Bündel (2.162,25 KB / 534,30 KB gzip). Die vollständige Simulation beendet alle sechs Kurse auf drei Schwierigkeitsstufen. Menschenabnahme, aktuelle sechs Runtime-Bilder, FPS und finale Abkürzungsbalance fehlen noch.
+
 ## 11.10.2026 – Codex: Peking/Kulturrevolutions-Schleife, zweiter Streckenpass
 
 Die eigene Peking-Route erhält eine flache Zähl-Schikane am Planerfüllungsplatz, eine geglättete Hutong-Zufahrt, Schwenks am Ostboulevard und weiterhin die Regelheft-Serpentine. Länge 1.565,6 → 1.609,4 m; annähernd gerade Strecke 60,8 → 38,9 % nach gleicher 2-m-Auditregel. Kleinster Radius liegt bei rund 20,2 m; eine erste, zu enge Fassung mit 10,9 m wurde nach manueller Testfahrt verworfen. Ein kleiner Kicker ergänzt die bestehende 3,8-m-Plateaurampe. Die feste Hutong-Gasse ist leicht abgesenkt, kürzer und auf 11,5 m/s begrenzt. Pflichtjubel: Ende Runde 1 angekündigt, Runde 2 auf der Serpentine ausgelöst; nur die Mittellinie wird leicht gebremst, Außenlinien bleiben frei. Verborgener Codex-Browser lud die aktuelle Strecke bis zur Startansicht (1.609 m), nicht bis zum Event. Peking-Test 2/2, Volltest 132/132, Typprüfung und Build bestanden. Menschliche Fahrt, Event-VFX und FPS offen. Aktueller nächster Schritt: Sechs-Kurse-Pass in CURRENT-WORKLIST.md.
