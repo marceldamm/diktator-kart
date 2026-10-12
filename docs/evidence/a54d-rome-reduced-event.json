@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-12",
+  "track": "rome",
+  "graphics": "reduced",
+  "method": "full natural single-player race from grid; auto-gas and steering assist; no progress injection or QA event trigger",
+  "at450msAnd2s": {
+    "lap": "2 / 3",
+    "time": "2:04.10",
+    "place": "2",
+    "warning": "Balkonrede! Rosenwirbel auf der Mittellinie · außen bleibt freie Fahrt",
+    "distance": 2354.4211069630205,
+    "particles": [
+      {
+        "name": "Stadium petals",
+        "count": 257
+      },
+      {
+        "name": "Item hit paperwork",
+        "count": 28
+      },
+      {
+        "name": "Damage smoke 3",
+        "count": 1
+      },
+      {
+        "name": "Damage smoke 5",
+        "count": 8
+      },
+      {
+        "name": "Balcony rose shower",
+        "count": 59
+      }
+    ],
+    "camera": [
+      -162.34288893545585,
+      2.1000000000004575,
+      141.9402122644306
+    ],
+    "errors": []
+  }
+}

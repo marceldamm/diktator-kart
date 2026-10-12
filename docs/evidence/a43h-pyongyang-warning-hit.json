@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-12",
+  "track": "pyongyang",
+  "method": "controlled race start at first-lap warning threshold; real HUD warning and item step; injected direct projectile while the warning was active",
+  "seeded": {
+    "s": 1372,
+    "lane": 0,
+    "distance": 1372
+  },
+  "before": {
+    "time": "0:00.58",
+    "lap": "1 / 3",
+    "place": "1",
+    "text": "Vorankündigung: Nächste Runde rollt die Paradekolonne über die rechte Spur der Tor-Allee"
+  },
+  "hitsBefore": 0,
+  "after": {
+    "time": "0:01.48",
+    "lap": "1 / 3",
+    "place": "1",
+    "text": "Vorankündigung: Nächste Runde rollt die Paradekolonne über die rechte Spur der Tor-Allee",
+    "directHits": 1,
+    "player": {
+      "s": 1377.4919363433182,
+      "lane": 0.07383350628224777,
+      "speed": 1.642439974017866,
+      "impactRemaining": 0.06666666666666676,
+      "spinRemaining": 0.5666666666666654
+    }
+  },
+  "passed": true
+}

@@ -29,12 +29,12 @@ import '@babylonjs/core/Rendering/geometryBufferRendererSceneComponent';
 import '@babylonjs/core/Rendering/prePassRendererSceneComponent';
 import { VolumetricLightScatteringPostProcess } from '@babylonjs/core/PostProcesses/volumetricLightScatteringPostProcess';
 import type { Camera } from '@babylonjs/core/Cameras/camera';
-import { TRACK, drivingSurfaceAt, elevationAt, trackHeightAt, trackLocate, trackPoint, shortcutLocate, shortcutPoint, paradeVehicles } from './track';
+import { TRACK, drivingSurfaceAt, elevationAt, trackHeightAt, trackLocate, trackPoint, shortcutLocate, shortcutPoint, paradeVehicles, movingTrolley } from './track';
 import { CANAL_FROM, CANAL_LENGTH, LANDMARKS, TRACK_INFO, SHORTCUT } from './track-layout';
 import { addCityWorld } from './city-world';
 import { addTrackWorld, tunnelParkSpots } from './track-world';
 import { shouldRefreshShadowCasters } from './shadow-caster-refresh';
-import { SkidMarks, createConfetti, createPaperTexture, softParticleTexture } from './effects';
+import { SkidMarks, createConfetti, createCourseEventPaper, createPaperTexture, softParticleTexture } from './effects';
 import { airTrickRoll, armGripPose, twoBoneElbow } from './kart-visuals';
 import { canalSurfaceSprayRate, looseSurfaceDustRate } from './environment-effects';
 import type { KartState } from './kart-model';
@@ -370,7 +370,7 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
     puff.direction1 = new Vector3(-2.2, .2, -2.2); puff.direction2 = new Vector3(2.2, .9, 2.2); puff.minEmitPower = 1; puff.maxEmitPower = 1.8;
     puff.color1 = new Color4(.62, .57, .48, .35); puff.color2 = new Color4(.72, .69, .6, .28); puff.colorDead = new Color4(.7, .66, .58, 0); puff.start();
     const burst = (system: ParticleSystem, s: KartState, count: number) => { system.emitter = new Vector3(s.x, .5 + s.height, s.z); system.manualEmitCount = count; };
-    const confetti = createConfetti(scene);
+    const confetti = createConfetti(scene), courseEventPaper = createCourseEventPaper(scene);
     scene.onBeforeRenderObservable.add(() => stepCrowd(Math.min(.1, scene.getEngine().getDeltaTime() / 1000)));
     // Finish fireworks over the main stand: additive bursts in gold, red, white and green (capped pool).
     const fireworks = new ParticleSystem('Finish fireworks', 1200, scene); fireworks.particleTexture = particleTexture(scene);
@@ -634,12 +634,23 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       for (const m of zeppelin.getChildMeshes()) { m.isPickable = false; shadow.addShadowCaster(m); } }
     // Berlin lap-two tailwind: low, pale streaks mark only the powered outer grandstand line.
     const zeppelinWindMaterial = new StandardMaterial('Zeppelin outer-lane wind', scene);
-    zeppelinWindMaterial.diffuseColor = new Color3(.35, .88, 1); zeppelinWindMaterial.emissiveColor = new Color3(.55, .9, 1);
-    zeppelinWindMaterial.disableLighting = true; zeppelinWindMaterial.alpha = .94; zeppelinWindMaterial.backFaceCulling = false;
+    const zeppelinWindTexture = new DynamicTexture('Zeppelin wind streaks', { width: 256, height: 64 }, scene, true);
+    {
+      const c = zeppelinWindTexture.getContext() as CanvasRenderingContext2D; c.clearRect(0, 0, 256, 64); c.lineCap = 'round';
+      for (let x = 0; x < 256; x += 86) {
+        const fade = c.createLinearGradient(x, 0, x + 58, 0); fade.addColorStop(0, 'rgba(185,246,255,0)'); fade.addColorStop(.24, 'rgba(185,246,255,.8)'); fade.addColorStop(.82, 'rgba(185,246,255,.8)'); fade.addColorStop(1, 'rgba(185,246,255,0)');
+        c.strokeStyle = fade; c.lineWidth = 7; c.beginPath(); c.moveTo(x, 31); c.lineTo(x + 58, 26); c.stroke();
+        c.lineWidth = 2; c.beginPath(); c.moveTo(x + 8, 43); c.lineTo(x + 43, 40); c.stroke();
+      }
+      zeppelinWindTexture.update(); zeppelinWindTexture.hasAlpha = true; zeppelinWindTexture.wrapU = Texture.WRAP_ADDRESSMODE; zeppelinWindTexture.uScale = 2.5;
+    }
+    zeppelinWindMaterial.diffuseColor = new Color3(.32, .78, .9); zeppelinWindMaterial.emissiveColor = new Color3(.38, .72, .82);
+    zeppelinWindMaterial.diffuseTexture = zeppelinWindTexture; zeppelinWindMaterial.useAlphaFromDiffuseTexture = true;
+    zeppelinWindMaterial.disableLighting = true; zeppelinWindMaterial.alpha = .82; zeppelinWindMaterial.backFaceCulling = false;
     const zeppelinWindLines = Array.from({ length: 10 }, (_, index) => {
       const from = 48 + index * 13, pathA: Vector3[] = [], pathB: Vector3[] = [];
       for (let step = 0; step <= 5; step++) {
-        const point = trackPoint(from + step * 2, 2.65), opposite = trackPoint(from + step * 2, 4.05);
+        const point = trackPoint(from + step * 2, 3.25), opposite = trackPoint(from + step * 2, 3.8);
         // Use the route's progress profile here. A world-space nearest-road query can select
         // the lower plaza beneath the Berlin start overpass, putting the cue below the track.
         const height = elevationAt(from + step * 2) + .42;
@@ -686,6 +697,26 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
       }
       column.forEach((root, i) => { if (!shown.has(i)) root.setEnabled(false); });
     };
+    // A76 Moscow pilot: one compact maintenance trolley crosses the parade road and shares track.ts collision state.
+    const trolleyRoot = new TransformNode('Moscow moving maintenance trolley', scene);
+    trolleyRoot.setEnabled(TRACK_INFO.theme === 'moscow');
+    const trolleyWheels: Mesh[] = [];
+    if (TRACK_INFO.theme === 'moscow') {
+      const bodyMaterial = new PBRMaterial('Moscow trolley ochre enamel', scene); bodyMaterial.albedoColor = Color3.FromHexString('#bd8429'); bodyMaterial.metallic = .32; bodyMaterial.roughness = .48;
+      const darkMaterial = new PBRMaterial('Moscow trolley dark iron', scene); darkMaterial.albedoColor = Color3.FromHexString('#303431'); darkMaterial.metallic = .72; darkMaterial.roughness = .42;
+      const body = MeshBuilder.CreateBox('Moscow trolley body', { width: 1.22, height: .62, depth: 1.72 }, scene);
+      body.parent = trolleyRoot; body.position.y = .59; body.material = bodyMaterial; body.isPickable = false; shadow.addShadowCaster(body);
+      const lid = MeshBuilder.CreateBox('Moscow trolley raised lid', { width: .92, height: .12, depth: 1.25 }, scene);
+      lid.parent = trolleyRoot; lid.position.set(0, .96, -.08); lid.material = darkMaterial; lid.isPickable = false;
+      for (const side of [-1, 1]) {
+        const wheel = MeshBuilder.CreateCylinder('Moscow trolley wheel', { diameter: .44, height: .16, tessellation: 12 }, scene);
+        wheel.parent = trolleyRoot; wheel.position.set(side * .66, .27, 0); wheel.rotation.z = Math.PI / 2; wheel.material = darkMaterial; wheel.isPickable = false; trolleyWheels.push(wheel);
+      }
+      const warningLamp = MeshBuilder.CreateSphere('Moscow trolley amber beacon', { diameter: .22, segments: 8 }, scene);
+      warningLamp.parent = trolleyRoot; warningLamp.position.set(0, 1.05, .48);
+      const beaconMaterial = new PBRMaterial('Moscow trolley beacon glow', scene); beaconMaterial.albedoColor = Color3.FromHexString('#ffbf36'); beaconMaterial.emissiveColor = Color3.FromHexString('#bf6e08'); warningLamp.material = beaconMaterial; warningLamp.isPickable = false;
+      shadow.addShadowCaster(lid);
+    }
     // Grand-Prix podium (07.10.2026): three stepped blocks with gold/silver/bronze fronts, placed on the road after the finish line.
     const podium = new TransformNode('Grand Prix podium', scene); podium.setEnabled(false);
     {
@@ -1094,13 +1125,26 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (!botsShownForGhost) { botsShownForGhost = true; for (const m of g.root.getChildMeshes()) m.visibility = .35; }
         g.root.setEnabled(true); g.root.position.set(ghost.x, ghost.height, ghost.z); g.root.rotation.y = ghost.heading;
       },
-      trackEvent(kind) {
+      trackEvent(kind, eventAt) {
         reactToTrackEvent(kind);
-        if (kind === 'balcony') { roseTime = 0; roses.emitRate = reducedEffects ? 28 : 70; }
+        if (kind === 'balcony') {
+          roseTime = 0;
+          if (eventAt) {
+            roses.emitter = new Vector3(eventAt.x, eventAt.y, eventAt.z);
+            roses.minEmitBox = new Vector3(-10, 0, -4); roses.maxEmitBox = new Vector3(10, 2, 4);
+          }
+          roses.emitRate = reducedEffects ? 28 : 70;
+        }
         else if (kind === 'wave') { waveTime = 0; waveSpray.emitRate = reducedEffects ? 65 : 160; }
         else if (kind === 'column') placeColumn();
-        else if (kind === 'parade') { const p = trackPoint(300, -5.5); confetti.burst(new Vector3(p.x, 7 + elevationAt(300), p.z), reducedEffects ? 45 : 140); }
-        else if (kind === 'loudspeaker') { const p = trackPoint(960, 5.5); confetti.burst(new Vector3(p.x, 7 + elevationAt(960), p.z), reducedEffects ? 45 : 140); }
+        else if (kind === 'parade') {
+          const p = eventAt ?? (() => { const point = trackPoint(300, -5.5); return { x: point.x, y: 1.7 + elevationAt(300), z: point.z }; })();
+          courseEventPaper.burst(new Vector3(p.x, p.y, p.z), reducedEffects ? 12 : 24);
+        }
+        else if (kind === 'loudspeaker') {
+          const p = eventAt ?? (() => { const point = trackPoint(960, 5.5); return { x: point.x, y: 3.2 + elevationAt(960), z: point.z }; })();
+          courseEventPaper.burst(new Vector3(p.x, p.y, p.z), reducedEffects ? 8 : 12);
+        }
         else if (kind === 'zeppelin') { zeppelinTime = 0; zeppelin.setEnabled(true); zeppelinWindCueTime = 0; showZeppelinWindCue(true); }
       },
       splash(kart, kind) { const at = lastStates[kart]; if (!at) return; salvageDepth[kart] = kind === 'cliff' ? 5 : kind === 'crater' ? 2.2 : .9;
@@ -1170,10 +1214,17 @@ export async function createSliceScene(engine: Engine, loadKartCount: number, qu
         if (roseTime >= 0) { roseTime += dt; roses.emitRate = reducedEffects ? 28 : 70; if (roseTime > 16) { roseTime = -1; roses.emitRate = 0; } }
         if (waveTime >= 0) { waveTime += dt; waveSpray.emitRate = waveTime > 13 ? 0 : (reducedEffects ? 65 : 160) * (.6 + .4 * Math.abs(Math.sin(waveTime * 1.7))); if (waveTime > 15) waveTime = -1; }
         placeColumn();
+        const trolley = movingTrolley();
+        if (trolley) {
+          const p = trackPoint(trolley.s, trolley.lane);
+          trolleyRoot.setEnabled(true); trolleyRoot.position.set(p.x, elevationAt(trolley.s), p.z); trolleyRoot.rotation.y = p.heading;
+          trolleyWheels.forEach((wheel) => { wheel.rotation.x += Math.min(.08, Math.abs(trolley.speed) * .012); });
+        } else trolleyRoot.setEnabled(false);
         if (zeppelinWindCueTime >= 0) {
           zeppelinWindCueTime += dt;
-          zeppelinWindMaterial.alpha = .74 + Math.abs(Math.sin(zeppelinWindCueTime * 3.6)) * .2;
-          if (zeppelinWindCueTime >= 14) { zeppelinWindCueTime = -1; zeppelinWindMaterial.alpha = .94; showZeppelinWindCue(false); }
+          zeppelinWindMaterial.alpha = .68 + Math.abs(Math.sin(zeppelinWindCueTime * 3.6)) * .16;
+          zeppelinWindTexture.uOffset = (zeppelinWindCueTime * .22) % 1;
+          if (zeppelinWindCueTime >= 14) { zeppelinWindCueTime = -1; zeppelinWindMaterial.alpha = .82; zeppelinWindTexture.uOffset = 0; showZeppelinWindCue(false); }
         }
         if (zeppelinTime >= 0) { // a slow pass over the stadium, then gone
           zeppelinTime += dt; const u = zeppelinTime / 34; zeppelin.position.set(-160 + u * 320, 38 + Math.sin(zeppelinTime * .4) * 1.5, 10 + u * 30); zeppelin.rotation.y = Math.atan2(320, 30); zeppelin.rotation.z = Math.sin(zeppelinTime * .3) * .03;

@@ -1,0 +1,4624 @@
+{
+  "date": "2026-10-12T07:45:04.585Z",
+  "track": "havanna",
+  "graphics": "normal",
+  "method": "natural single-player race from grid, six karts, auto-gas and steering assist; event detected from the actual race notice, no position/progress/event injection",
+  "settings": {
+    "auto": "Auto-Gas an",
+    "assist": "Lenkhilfe an",
+    "storage": {
+      "auto": "1",
+      "assist": "1",
+      "reduced": "0"
+    }
+  },
+  "detectedAt": {
+    "phase": "race",
+    "lap": "2 / 3",
+    "time": "1:14.82",
+    "notice": "Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip",
+    "place": "1",
+    "progress": [
+      {
+        "distance": 1489.8897905451036,
+        "finished": false
+      },
+      {
+        "distance": 1431.3369828077825,
+        "finished": false
+      },
+      {
+        "distance": 1467.068764289022,
+        "finished": false
+      },
+      {
+        "distance": 1458.3296860678245,
+        "finished": false
+      },
+      {
+        "distance": 1330.4915312106687,
+        "finished": false
+      },
+      {
+        "distance": 1407.8189337264926,
+        "finished": false
+      }
+    ],
+    "positions": [
+      {
+        "kart": 0,
+        "rank": 1,
+        "distance": 1489.8897905451036,
+        "s": 107.28684009046219,
+        "lane": -1.8275850162481209,
+        "speed": 20.41,
+        "grounded": true,
+        "drifting": false,
+        "hopRemaining": 0,
+        "turboRemaining": 0,
+        "topSpeedBonus": 0.91,
+        "onPatch": false
+      },
+      {
+        "kart": 1,
+        "rank": 4,
+        "distance": 1431.3369828077825,
+        "s": 48.734032353141174,
+        "lane": -3.8037898317840595,
+        "speed": 19.113333333332847,
+        "grounded": true,
+        "drifting": false,
+        "hopRemaining": 0,
+        "turboRemaining": 0,
+        "topSpeedBonus": 0.26,
+        "onPatch": false
+      },
+      {
+        "kart": 2,
+        "rank": 2,
+        "distance": 1467.068764289022,
+        "s": 90.34619674694886,
+        "lane": 1.3281159360084016,
+        "speed": 19.273333333332957,
+        "grounded": true,
+        "drifting": false,
+        "hopRemaining": 0,
+        "turboRemaining": 0,
+        "topSpeedBonus": 0.91,
+        "onPatch": false
+      },
+      {
+        "kart": 3,
+        "rank": 3,
+        "distance": 1458.3296860678245,
+        "s": 75.72673561318311,
+        "lane": -2.2260565956455753,
+        "speed": 19.2999999999994,
+        "grounded": true,
+        "drifting": false,
+        "hopRemaining": 0,
+        "turboRemaining": 0,
+        "topSpeedBonus": 0.52,
+        "onPatch": false
+      },
+      {
+        "kart": 4,
+        "rank": 6,
+        "distance": 1330.4915312106687,
+        "s": 1379.5621291375232,
+        "lane": -3.6412711061050658,
+        "speed": 1.4,
+        "grounded": true,
+        "drifting": false,
+        "hopRemaining": 0,
+        "turboRemaining": 0,
+        "onPatch": false
+      },
+      {
+        "kart": 5,
+        "rank": 5,
+        "distance": 1407.8189337264926,
+        "s": 25.2159832718512,
+        "lane": -3.7182554815846682,
+        "speed": 18.989999999999643,
+        "grounded": true,
+        "drifting": false,
+        "hopRemaining": 0,
+        "turboRemaining": 0,
+        "topSpeedBonus": 0.13,
+        "onPatch": false
+      }
+    ]
+  },
+  "preEvent": [
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:05.63",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1298.3555403661594,
+          "finished": false
+        },
+        {
+          "distance": 1239.9859289954757,
+          "finished": false
+        },
+        {
+          "distance": 1273.2889823605542,
+          "finished": false
+        },
+        {
+          "distance": 1273.8507956259373,
+          "finished": false
+        },
+        {
+          "distance": 1210.7722980528774,
+          "finished": false
+        },
+        {
+          "distance": 1222.1556547295068,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1298.3555403661594,
+          "s": 1338.3555403661594,
+          "lane": -2.0900358078150854,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1239.9859289954757,
+          "s": 1279.9859289954757,
+          "lane": 3.649764233208299,
+          "speed": 19.127389541560962,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 1273.2889823605542,
+          "s": 1319.1693652731224,
+          "lane": 0.25438694541188933,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.41666666666666585,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 2,
+          "distance": 1273.8507956259373,
+          "s": 1313.8507956259373,
+          "lane": 1.0351458548481625,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.683333333333333,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1210.7722980528774,
+          "s": 1259.842895979732,
+          "lane": 0.2233382223241684,
+          "speed": 18.859214144098363,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1222.1556547295068,
+          "s": 1262.1556547295068,
+          "lane": -3.149144290766378,
+          "speed": 18.88768795812879,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:06.53",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1317.7883753068481,
+          "finished": false
+        },
+        {
+          "distance": 1256.617235619924,
+          "finished": false
+        },
+        {
+          "distance": 1294.8203583568788,
+          "finished": false
+        },
+        {
+          "distance": 1294.9115412995989,
+          "finished": false
+        },
+        {
+          "distance": 1227.7914988446578,
+          "finished": false
+        },
+        {
+          "distance": 1239.076779179587,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1317.7883753068481,
+          "s": 1357.7883753068481,
+          "lane": -1.9935745086737042,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1256.617235619924,
+          "s": 1296.617235619924,
+          "lane": 2.9973389435329016,
+          "speed": 18.780722874894234,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 1294.8203583568788,
+          "s": 1340.700741269447,
+          "lane": -0.452762489483695,
+          "speed": 22.899999999999963,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.37,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 2,
+          "distance": 1294.9115412995989,
+          "s": 1334.9115412995989,
+          "lane": 2.1093961505261283,
+          "speed": 23.006666666666632,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1227.7914988446578,
+          "s": 1276.8620967715124,
+          "lane": 0.11434017114021419,
+          "speed": 18.76588081076497,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1239.076779179587,
+          "s": 1279.076779179587,
+          "lane": -3.5042105595498763,
+          "speed": 19.04768795812873,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:07.45",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1337.2991286165507,
+          "finished": false
+        },
+        {
+          "distance": 1277.2985526362563,
+          "finished": false
+        },
+        {
+          "distance": 1314.7589788442806,
+          "finished": false
+        },
+        {
+          "distance": 1313.9036910324235,
+          "finished": false
+        },
+        {
+          "distance": 1245.0505552820873,
+          "finished": false
+        },
+        {
+          "distance": 1256.974665747547,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1337.2991286165507,
+          "s": 1377.2991286165507,
+          "lane": -2.2357243245385714,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1277.2985526362563,
+          "s": 1317.2985526362563,
+          "lane": 1.1263084333945808,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.4833333333333325,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1314.7589788442806,
+          "s": 1360.6393617568488,
+          "lane": -0.4708763199533406,
+          "speed": 20.28,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.32,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1313.9036910324235,
+          "s": 1353.9036910324235,
+          "lane": 0.6351380831206412,
+          "speed": 20.07333333333323,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1245.0505552820873,
+          "s": 1294.121153208942,
+          "lane": -0.35141883507918176,
+          "speed": 18.872547477431574,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1256.974665747547,
+          "s": 1296.974665747547,
+          "lane": -4.018238724313282,
+          "speed": 18.901021291462,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:08.37",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1357.580329113689,
+          "finished": false
+        },
+        {
+          "distance": 1299.0729228519563,
+          "finished": false
+        },
+        {
+          "distance": 1333.3889931599956,
+          "finished": false
+        },
+        {
+          "distance": 1331.2335242905451,
+          "finished": false
+        },
+        {
+          "distance": 1262.4358054543595,
+          "finished": false
+        },
+        {
+          "distance": 1275.4093616942737,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1357.580329113689,
+          "s": 1397.580329113689,
+          "lane": -1.7728049047570327,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1299.0729228519563,
+          "s": 1339.0729228519563,
+          "lane": -1.4023348738663397,
+          "speed": 22.52666666666662,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1333.3889931599956,
+          "s": 1379.2693760725638,
+          "lane": -0.9209551300740152,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": true,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1331.2335242905451,
+          "s": 1371.2335242905451,
+          "lane": -3.1216210741707826,
+          "speed": 19.1666666666665,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1262.4358054543595,
+          "s": 1311.506403381214,
+          "lane": -0.5796734463720731,
+          "speed": 18.725880810764846,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1275.4093616942737,
+          "s": 1315.4093616942737,
+          "lane": -4.110156585569058,
+          "speed": 19.007687958128606,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:09.28",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1376.367951727504,
+          "finished": false
+        },
+        {
+          "distance": 1319.834075445181,
+          "finished": false
+        },
+        {
+          "distance": 1355.2750920425592,
+          "finished": false
+        },
+        {
+          "distance": 1350.5040466698629,
+          "finished": false
+        },
+        {
+          "distance": 1279.8413402420542,
+          "finished": false
+        },
+        {
+          "distance": 1293.7688964468307,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1376.367951727504,
+          "s": 1416.367951727504,
+          "lane": -1.7540804532114416,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1319.834075445181,
+          "s": 1359.834075445181,
+          "lane": -3.826813390090617,
+          "speed": 19.59333333333322,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1355.2750920425592,
+          "s": 1401.1554749551274,
+          "lane": -0.971799503445149,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.11666666666666647,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1350.5040466698629,
+          "s": 1390.5040466698629,
+          "lane": -1.4631396626965874,
+          "speed": 18.76666666666644,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1279.8413402420542,
+          "s": 1328.9119381689088,
+          "lane": -0.6160153753549703,
+          "speed": 19.5,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.30333333333333334,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1293.7688964468307,
+          "s": 1333.7688964468307,
+          "lane": -4.251724960313651,
+          "speed": 19.63,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.25333333333333335,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:10.20",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1394.947029685989,
+          "finished": false
+        },
+        {
+          "distance": 1339.072234159301,
+          "finished": false
+        },
+        {
+          "distance": 1376.5313872224478,
+          "finished": false
+        },
+        {
+          "distance": 1368.301670436902,
+          "finished": false
+        },
+        {
+          "distance": 1298.1773403313896,
+          "finished": false
+        },
+        {
+          "distance": 1313.8406368840579,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1394.947029685989,
+          "s": 12.344079231347678,
+          "lane": -1.8713154831136891,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1339.072234159301,
+          "s": 1379.072234159301,
+          "lane": -4.482101013073712,
+          "speed": 18.68666666666649,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1376.5313872224478,
+          "s": 1422.411770135016,
+          "lane": 1.3917513628631752,
+          "speed": 21.886666666666606,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1368.301670436902,
+          "s": 1408.301670436902,
+          "lane": -2.4443906749041187,
+          "speed": 19.37999999999971,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1298.1773403313896,
+          "s": 1347.2479382582442,
+          "lane": -3.08579512851959,
+          "speed": 19.5,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.30333333333333334,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1313.8406368840579,
+          "s": 1353.8406368840579,
+          "lane": -4.601118156740472,
+          "speed": 18.81666666666662,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "1 / 3",
+      "time": "1:11.12",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1413.6195544621537,
+          "finished": false
+        },
+        {
+          "distance": 1359.9917305169047,
+          "finished": false
+        },
+        {
+          "distance": 1395.2071313448112,
+          "finished": false
+        },
+        {
+          "distance": 1385.9362925043,
+          "finished": false
+        },
+        {
+          "distance": 1317.4410891891698,
+          "finished": false
+        },
+        {
+          "distance": 1332.985983690838,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1413.6195544621537,
+          "s": 31.016604007512342,
+          "lane": -1.789838221440078,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1359.9917305169047,
+          "s": 1399.9917305169047,
+          "lane": -4.574184391969207,
+          "speed": 19.04666666666643,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1395.2071313448112,
+          "s": 18.484563802737966,
+          "lane": 1.582208793294903,
+          "speed": 19.713333333333207,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1385.9362925043,
+          "s": 3.3333420496585404,
+          "lane": -1.829351500412901,
+          "speed": 19.486666666666316,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1317.4410891891698,
+          "s": 1366.5116871160244,
+          "lane": -3.649421824985045,
+          "speed": 19.446666666666665,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1332.985983690838,
+          "s": 1372.985983690838,
+          "lane": -4.572171884185427,
+          "speed": 18.66999999999989,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:12.03",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1432.3060465194678,
+          "finished": false
+        },
+        {
+          "distance": 1377.7861275354398,
+          "finished": false
+        },
+        {
+          "distance": 1413.158161285041,
+          "finished": false
+        },
+        {
+          "distance": 1403.8150377778325,
+          "finished": false
+        },
+        {
+          "distance": 1329.826583486882,
+          "finished": false
+        },
+        {
+          "distance": 1353.9587716271326,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1432.3060465194678,
+          "s": 49.70309606482647,
+          "lane": -1.9003560882743606,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1377.7861275354398,
+          "s": 1417.7861275354398,
+          "lane": -3.7098002315004894,
+          "speed": 19.153333333333034,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1413.158161285041,
+          "s": 36.43559374296774,
+          "lane": 1.7250741119294366,
+          "speed": 19.566666666666478,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1403.8150377778325,
+          "s": 21.2120873231911,
+          "lane": -1.9220790510582244,
+          "speed": 19.339999999999588,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1329.826583486882,
+          "s": 1378.8971814137367,
+          "lane": -3.6802320648090303,
+          "speed": 0,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1353.9587716271326,
+          "s": 1393.9587716271326,
+          "lane": -4.674859633140835,
+          "speed": 18.776666666666497,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:12.98",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1451.9566517830008,
+          "finished": false
+        },
+        {
+          "distance": 1395.9649373137247,
+          "finished": false
+        },
+        {
+          "distance": 1431.5886480366753,
+          "finished": false
+        },
+        {
+          "distance": 1422.2577316677027,
+          "finished": false
+        },
+        {
+          "distance": 1329.9928885153358,
+          "finished": false
+        },
+        {
+          "distance": 1372.9020705157336,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1451.9566517830008,
+          "s": 69.35370132835942,
+          "lane": -1.911399082611423,
+          "speed": 20.28,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1395.9649373137247,
+          "s": 13.361986859083345,
+          "lane": -3.7272254426596056,
+          "speed": 19.15333333333297,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1431.5886480366753,
+          "s": 54.8660804946021,
+          "lane": 1.4249178296064209,
+          "speed": 19.566666666666414,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1422.2577316677027,
+          "s": 39.65478121306137,
+          "lane": -1.8729655437129558,
+          "speed": 19.339999999999524,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1329.9928885153358,
+          "s": 1379.0634864421904,
+          "lane": -3.669263241383467,
+          "speed": 0,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1372.9020705157336,
+          "s": 1412.9020705157336,
+          "lane": -3.942359535465748,
+          "speed": 19.029999999999767,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:13.90",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1470.8777171402671,
+          "finished": false
+        },
+        {
+          "distance": 1413.6628216230624,
+          "finished": false
+        },
+        {
+          "distance": 1449.2782850056453,
+          "finished": false
+        },
+        {
+          "distance": 1440.230157662293,
+          "finished": false
+        },
+        {
+          "distance": 1330.2386789676389,
+          "finished": false
+        },
+        {
+          "distance": 1390.1828804983293,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1470.8777171402671,
+          "s": 88.27476668562576,
+          "lane": -1.9455161102946974,
+          "speed": 20.41,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1413.6628216230624,
+          "s": 31.05987116842107,
+          "lane": -3.669695021667457,
+          "speed": 19.259999999999575,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1449.2782850056453,
+          "s": 72.55571746357214,
+          "lane": 1.3274672543755681,
+          "speed": 19.67333333333302,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.78,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1440.230157662293,
+          "s": 57.627207207651736,
+          "lane": -2.197595309990653,
+          "speed": 19.193333333332795,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1330.2386789676389,
+          "s": 1379.3092768944935,
+          "lane": -3.6568476535839705,
+          "speed": 0,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1390.1828804983293,
+          "s": 7.579930043687909,
+          "lane": -3.6923710812517916,
+          "speed": 18.883333333333038,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:14.82",
+      "notice": "Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1489.8897905451036,
+          "finished": false
+        },
+        {
+          "distance": 1431.3369828077825,
+          "finished": false
+        },
+        {
+          "distance": 1467.068764289022,
+          "finished": false
+        },
+        {
+          "distance": 1458.3296860678245,
+          "finished": false
+        },
+        {
+          "distance": 1330.4915312106687,
+          "finished": false
+        },
+        {
+          "distance": 1407.8189337264926,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1489.8897905451036,
+          "s": 107.28684009046219,
+          "lane": -1.8275850162481209,
+          "speed": 20.41,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1431.3369828077825,
+          "s": 48.734032353141174,
+          "lane": -3.8037898317840595,
+          "speed": 19.113333333332847,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1467.068764289022,
+          "s": 90.34619674694886,
+          "lane": 1.3281159360084016,
+          "speed": 19.273333333332957,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1458.3296860678245,
+          "s": 75.72673561318311,
+          "lane": -2.2260565956455753,
+          "speed": 19.2999999999994,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1330.4915312106687,
+          "s": 1379.5621291375232,
+          "lane": -3.6412711061050658,
+          "speed": 1.4,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1407.8189337264926,
+          "s": 25.2159832718512,
+          "lane": -3.7182554815846682,
+          "speed": 18.989999999999643,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    }
+  ],
+  "during": [
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:14.82",
+      "notice": "Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1489.8897905451036,
+          "finished": false
+        },
+        {
+          "distance": 1431.3369828077825,
+          "finished": false
+        },
+        {
+          "distance": 1467.068764289022,
+          "finished": false
+        },
+        {
+          "distance": 1458.3296860678245,
+          "finished": false
+        },
+        {
+          "distance": 1330.4915312106687,
+          "finished": false
+        },
+        {
+          "distance": 1407.8189337264926,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1489.8897905451036,
+          "s": 107.28684009046219,
+          "lane": -1.8275850162481209,
+          "speed": 20.41,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1431.3369828077825,
+          "s": 48.734032353141174,
+          "lane": -3.8037898317840595,
+          "speed": 19.113333333332847,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1467.068764289022,
+          "s": 90.34619674694886,
+          "lane": 1.3281159360084016,
+          "speed": 19.273333333332957,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1458.3296860678245,
+          "s": 75.72673561318311,
+          "lane": -2.2260565956455753,
+          "speed": 19.2999999999994,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1330.4915312106687,
+          "s": 1379.5621291375232,
+          "lane": -3.6412711061050658,
+          "speed": 1.4,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1407.8189337264926,
+          "s": 25.2159832718512,
+          "lane": -3.7182554815846682,
+          "speed": 18.989999999999643,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:17.33",
+      "notice": "Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1540.8352091204865,
+          "finished": false
+        },
+        {
+          "distance": 1486.1125105730193,
+          "finished": false
+        },
+        {
+          "distance": 1524.9530568081145,
+          "finished": false
+        },
+        {
+          "distance": 1507.3409924229616,
+          "finished": false
+        },
+        {
+          "distance": 1368.396529078072,
+          "finished": false
+        },
+        {
+          "distance": 1459.695298629233,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1540.8352091204865,
+          "s": 158.23225866584517,
+          "lane": -0.8765529624286662,
+          "speed": 20.41,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1486.1125105730193,
+          "s": 103.50956011837798,
+          "lane": -1.46405465878522,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 1.066666666666667,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1524.9530568081145,
+          "s": 148.23048926604133,
+          "lane": 0.10999042120295563,
+          "speed": 21.886666666666606,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1507.3409924229616,
+          "s": 124.7380419683202,
+          "lane": -3.510280901641636,
+          "speed": 19.353333333332564,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1368.396529078072,
+          "s": 1417.4671270049266,
+          "lane": -3.6046598922593107,
+          "speed": 18.933333333333227,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1459.695298629233,
+          "s": 77.09234817459173,
+          "lane": -4.0963285328734695,
+          "speed": 22.496666666666126,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:19.72",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1589.2577952406289,
+          "finished": false
+        },
+        {
+          "distance": 1541.6139726635733,
+          "finished": false
+        },
+        {
+          "distance": 1576.7053572603054,
+          "finished": false
+        },
+        {
+          "distance": 1552.3899007830657,
+          "finished": false
+        },
+        {
+          "distance": 1413.573612555271,
+          "finished": false
+        },
+        {
+          "distance": 1507.6462867760274,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1589.2577952406289,
+          "s": 206.6548447859875,
+          "lane": -1.6964690352724878,
+          "speed": 20.41,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1541.6139726635733,
+          "s": 159.011022208932,
+          "lane": 0.4790735147797877,
+          "speed": 20.233333333333235,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1576.7053572603054,
+          "s": 199.9827897182322,
+          "lane": -2.8622270615201844,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.23333333333333323,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1552.3899007830657,
+          "s": 169.78695032842438,
+          "lane": -2.522740741240072,
+          "speed": 19.326666666665737,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1413.573612555271,
+          "s": 40.04126002748421,
+          "lane": -3.6761062964688103,
+          "speed": 18.9066666666664,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1507.6462867760274,
+          "s": 125.04333632138605,
+          "lane": -3.579577902866362,
+          "speed": 18.923333333332625,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:20.70",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1609.1885593612583,
+          "finished": false
+        },
+        {
+          "distance": 1560.386205077433,
+          "finished": false
+        },
+        {
+          "distance": 1599.9010923729682,
+          "finished": false
+        },
+        {
+          "distance": 1570.9275905149473,
+          "finished": false
+        },
+        {
+          "distance": 1432.6600078053793,
+          "finished": false
+        },
+        {
+          "distance": 1526.1212363752816,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1609.1885593612583,
+          "s": 226.58560890661693,
+          "lane": -1.9574547895370356,
+          "speed": 20.54,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1560.386205077433,
+          "s": 177.78325462279167,
+          "lane": -0.8814216904197907,
+          "speed": 18.859999999999832,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1599.9010923729682,
+          "s": 223.17852483089496,
+          "lane": -3.2494084053877987,
+          "speed": 24.01999999999999,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1570.9275905149473,
+          "s": 188.3246400603059,
+          "lane": -1.1870098469085035,
+          "speed": 19.219999999999004,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1432.6600078053793,
+          "s": 59.12765527759257,
+          "lane": -3.9894290253932794,
+          "speed": 18.799999999999667,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1526.1212363752816,
+          "s": 143.5182859206402,
+          "lane": -3.356464375227785,
+          "speed": 19.069999999999226,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:21.65",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1628.7964688338516,
+          "finished": false
+        },
+        {
+          "distance": 1577.7222958058712,
+          "finished": false
+        },
+        {
+          "distance": 1621.7442075912084,
+          "finished": false
+        },
+        {
+          "distance": 1589.1180966604657,
+          "finished": false
+        },
+        {
+          "distance": 1454.7482367528555,
+          "finished": false
+        },
+        {
+          "distance": 1543.5343022005068,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1628.7964688338516,
+          "s": 246.19351837921022,
+          "lane": -0.4592527059607609,
+          "speed": 20.54,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1577.7222958058712,
+          "s": 195.11934535122987,
+          "lane": -2.345020979794006,
+          "speed": 19.113333333333102,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1621.7442075912084,
+          "s": 245.02164004913516,
+          "lane": -3.990006506546533,
+          "speed": 20.97999999999992,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1589.1180966604657,
+          "s": 206.5151462058243,
+          "lane": -1.5263207698373065,
+          "speed": 19.473333333332274,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1454.7482367528555,
+          "s": 81.21588422506875,
+          "lane": -4.088375785227861,
+          "speed": 21.746666666666254,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1543.5343022005068,
+          "s": 160.9313517458654,
+          "lane": -1.901878872644028,
+          "speed": 19.069999999999162,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:22.63",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1648.99577398547,
+          "finished": false
+        },
+        {
+          "distance": 1597.2287690495893,
+          "finished": false
+        },
+        {
+          "distance": 1641.9989743895985,
+          "finished": false
+        },
+        {
+          "distance": 1608.0172981426947,
+          "finished": false
+        },
+        {
+          "distance": 1475.3143209321556,
+          "finished": false
+        },
+        {
+          "distance": 1564.921756922697,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1648.99577398547,
+          "s": 266.39282353082854,
+          "lane": -0.20950903016759498,
+          "speed": 20.54,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1597.2287690495893,
+          "s": 214.625818594948,
+          "lane": -1.6976708686041537,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.3333333333333333,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1641.9989743895985,
+          "s": 265.2764068475253,
+          "lane": -4.075614526366982,
+          "speed": 19.606666666666516,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1608.0172981426947,
+          "s": 225.41434768805334,
+          "lane": -1.5923090326347002,
+          "speed": 19.36666666666554,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1475.3143209321556,
+          "s": 101.78196840436885,
+          "lane": -4.025391318444114,
+          "speed": 18.85333333333285,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1564.921756922697,
+          "s": 182.31880646805575,
+          "lane": -0.8841394931604372,
+          "speed": 22.416666666665748,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:23.62",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1669.3131210081026,
+          "finished": false
+        },
+        {
+          "distance": 1620.5870930854594,
+          "finished": false
+        },
+        {
+          "distance": 1662.7406735305995,
+          "finished": false
+        },
+        {
+          "distance": 1627.269812947027,
+          "finished": false
+        },
+        {
+          "distance": 1493.819165922426,
+          "finished": false
+        },
+        {
+          "distance": 1585.305179102024,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1669.3131210081026,
+          "s": 286.71017055346124,
+          "lane": -1.0287399909190251,
+          "speed": 20.54,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1620.5870930854594,
+          "s": 237.98414263081804,
+          "lane": -2.031196948153006,
+          "speed": 22.419999999999952,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1662.7406735305995,
+          "s": 286.01810598852626,
+          "lane": -4.27802879301817,
+          "speed": 19.753333333333117,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1627.269812947027,
+          "s": 244.6668624923857,
+          "lane": -2.143706670881322,
+          "speed": 19.259999999998808,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1493.819165922426,
+          "s": 120.28681339463924,
+          "lane": -3.5571635035798663,
+          "speed": 18.99999999999945,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1585.305179102024,
+          "s": 202.70222864738275,
+          "lane": 0.17971717243444058,
+          "speed": 19.26999999999901,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:24.58",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1689.3855378426179,
+          "finished": false
+        },
+        {
+          "distance": 1641.1493477174004,
+          "finished": false
+        },
+        {
+          "distance": 1682.1347604705998,
+          "finished": false
+        },
+        {
+          "distance": 1646.2783782774857,
+          "finished": false
+        },
+        {
+          "distance": 1511.9782833863985,
+          "finished": false
+        },
+        {
+          "distance": 1603.690575283658,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1689.3855378426179,
+          "s": 306.7825873879765,
+          "lane": -1.8259336153462795,
+          "speed": 20.67,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1641.1493477174004,
+          "s": 258.546397262759,
+          "lane": -2.164941266753869,
+          "speed": 19.326666666666547,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1682.1347604705998,
+          "s": 305.41219292852657,
+          "lane": -4.0177243913266105,
+          "speed": 19.65789604233024,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1646.2783782774857,
+          "s": 263.6754278228443,
+          "lane": -2.250192053339497,
+          "speed": 19.20666666666541,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1511.9782833863985,
+          "s": 138.44593085861175,
+          "lane": -3.4742594544806766,
+          "speed": 18.94666666666605,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1603.690575283658,
+          "s": 221.0876248290167,
+          "lane": 0.25230682542710764,
+          "speed": 18.963333333332276,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.13,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:25.57",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1709.8737600649415,
+          "finished": false
+        },
+        {
+          "distance": 1663.3517314990563,
+          "finished": false
+        },
+        {
+          "distance": 1701.5843216895248,
+          "finished": false
+        },
+        {
+          "distance": 1665.921507123267,
+          "finished": false
+        },
+        {
+          "distance": 1529.8801627405915,
+          "finished": false
+        },
+        {
+          "distance": 1622.4495356328573,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1709.8737600649415,
+          "s": 327.27080961030015,
+          "lane": -1.1201567699902604,
+          "speed": 20.67,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1663.3517314990563,
+          "s": 280.74878104441495,
+          "lane": -1.1260375161188365,
+          "speed": 24.179999999999993,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1701.5843216895248,
+          "s": 324.8617541474516,
+          "lane": -2.0573917281466327,
+          "speed": 19.551229375663507,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1665.921507123267,
+          "s": 283.31855666862566,
+          "lane": -2.681972870984993,
+          "speed": 19.099999999998676,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1529.8801627405915,
+          "s": 156.3478102128047,
+          "lane": -2.3925270391219566,
+          "speed": 18.839999999999318,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1622.4495356328573,
+          "s": 239.84658517821595,
+          "lane": -0.24074190683808938,
+          "speed": 19.109999999998877,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:26.55",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1729.9507005505372,
+          "finished": false
+        },
+        {
+          "distance": 1685.7265084645885,
+          "finished": false
+        },
+        {
+          "distance": 1720.4942292009314,
+          "finished": false
+        },
+        {
+          "distance": 1685.3570594098203,
+          "finished": false
+        },
+        {
+          "distance": 1550.2577020576039,
+          "finished": false
+        },
+        {
+          "distance": 1641.2703414937105,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1729.9507005505372,
+          "s": 347.3477500958959,
+          "lane": -1.613911190812981,
+          "speed": 20.67,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1685.7265084645885,
+          "s": 303.12355800994715,
+          "lane": -0.4491187490548066,
+          "speed": 21.033333333333253,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1720.4942292009314,
+          "s": 343.7716616588582,
+          "lane": 1.8429989610010262,
+          "speed": 19.697896042330107,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1685.3570594098203,
+          "s": 302.75410895517894,
+          "lane": -3.7084661148084717,
+          "speed": 19.246666666665277,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1550.2577020576039,
+          "s": 176.7253495298171,
+          "lane": -1.4344751829481783,
+          "speed": 23.19999999999924,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1641.2703414937105,
+          "s": 258.6673910390691,
+          "lane": -0.3936860733762751,
+          "speed": 19.003333333332144,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:27.52",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1749.5511829782504,
+          "finished": false
+        },
+        {
+          "distance": 1704.8182724025648,
+          "finished": false
+        },
+        {
+          "distance": 1739.8401422780348,
+          "finished": false
+        },
+        {
+          "distance": 1704.5111256026776,
+          "finished": false
+        },
+        {
+          "distance": 1570.9584842707213,
+          "finished": false
+        },
+        {
+          "distance": 1659.8022710912337,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1749.5511829782504,
+          "s": 366.948232523609,
+          "lane": -1.4790161440730456,
+          "speed": 20.67,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1704.8182724025648,
+          "s": 322.2153219479235,
+          "lane": -0.23126294714242976,
+          "speed": 19.206666666666518,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1739.8401422780348,
+          "s": 363.1175747359616,
+          "lane": 2.2892382671064424,
+          "speed": 19.64456270899671,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1704.5111256026776,
+          "s": 321.9081751480362,
+          "lane": -3.7617391756460847,
+          "speed": 19.446666666665212,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1570.9584842707213,
+          "s": 197.42613174293456,
+          "lane": 0.27236355294667924,
+          "speed": 20.106666666665834,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1659.8022710912337,
+          "s": 277.19932063659235,
+          "lane": -0.7426591511273465,
+          "speed": 18.949999999998745,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:28.48",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1769.1207095608966,
+          "finished": false
+        },
+        {
+          "distance": 1723.2850412939756,
+          "finished": false
+        },
+        {
+          "distance": 1759.7091673624032,
+          "finished": false
+        },
+        {
+          "distance": 1722.638816425325,
+          "finished": false
+        },
+        {
+          "distance": 1589.4331847820422,
+          "finished": false
+        },
+        {
+          "distance": 1678.40260976166,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1769.1207095608966,
+          "s": 386.5177591062552,
+          "lane": -1.8511861623727752,
+          "speed": 20.67,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1723.2850412939756,
+          "s": 340.68209083933425,
+          "lane": 0.35375074583971133,
+          "speed": 19.15333333333312,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1759.7091673624032,
+          "s": 382.98659982032996,
+          "lane": 2.315697330436418,
+          "speed": 19.59122937566331,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1722.638816425325,
+          "s": 340.03586597068374,
+          "lane": -3.1885043560975435,
+          "speed": 19.393333333331814,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1589.4331847820422,
+          "s": 215.90083225425542,
+          "lane": 0.23275751323279076,
+          "speed": 18.786666666665766,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1678.40260976166,
+          "s": 295.7996593070186,
+          "lane": -0.48058265416535256,
+          "speed": 19.14999999999868,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:29.45",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1790.3039540906004,
+          "finished": false
+        },
+        {
+          "distance": 1741.7671725708437,
+          "finished": false
+        },
+        {
+          "distance": 1778.7240069645277,
+          "finished": false
+        },
+        {
+          "distance": 1740.8592913986854,
+          "finished": false
+        },
+        {
+          "distance": 1607.6982064160043,
+          "finished": false
+        },
+        {
+          "distance": 1696.8888917660554,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1790.3039540906004,
+          "s": 407.70100363595907,
+          "lane": -1.942072137641759,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.4833333333333327,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1741.7671725708437,
+          "s": 359.1642221162024,
+          "lane": 0.46221295491468645,
+          "speed": 19.09999999999972,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1778.7240069645277,
+          "s": 402.0014394224545,
+          "lane": 1.500072874895456,
+          "speed": 23.721229375663242,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.6166666666666664,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1740.8592913986854,
+          "s": 358.25634094404404,
+          "lane": -3.1056783396051517,
+          "speed": 19.339999999998415,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1607.6982064160043,
+          "s": 234.1658538882175,
+          "lane": -0.04564016018672107,
+          "speed": 18.733333333332368,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1696.8888917660554,
+          "s": 314.28594131141404,
+          "lane": -0.36858251654235924,
+          "speed": 19.096666666665282,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:30.42",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1814.2981896620606,
+          "finished": false
+        },
+        {
+          "distance": 1760.3990313523636,
+          "finished": false
+        },
+        {
+          "distance": 1801.796213002899,
+          "finished": false
+        },
+        {
+          "distance": 1758.508451316255,
+          "finished": false
+        },
+        {
+          "distance": 1625.9545154335783,
+          "finished": false
+        },
+        {
+          "distance": 1715.3614975667494,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1814.2981896620606,
+          "s": 431.69523920741926,
+          "lane": -2.065038843314139,
+          "speed": 22.899999999999963,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1760.3990313523636,
+          "s": 377.7960808977223,
+          "lane": 0.8030857585331853,
+          "speed": 19.046666666666322,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1801.796213002899,
+          "s": 425.0736454608259,
+          "lane": 0.8588549366009451,
+          "speed": 23.32666666666664,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1758.508451316255,
+          "s": 375.90550086161375,
+          "lane": -2.416201088513649,
+          "speed": 19.286666666665017,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1625.9545154335783,
+          "s": 252.42216290579154,
+          "lane": -0.35217456921699003,
+          "speed": 18.933333333332303,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1715.3614975667494,
+          "s": 332.7585471121081,
+          "lane": 0.2031390095291492,
+          "speed": 19.043333333331883,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:31.40",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1835.7639967432356,
+          "finished": false
+        },
+        {
+          "distance": 1780.3525974566587,
+          "finished": false
+        },
+        {
+          "distance": 1822.9832252950098,
+          "finished": false
+        },
+        {
+          "distance": 1777.5472506763717,
+          "finished": false
+        },
+        {
+          "distance": 1644.5254944876815,
+          "finished": false
+        },
+        {
+          "distance": 1734.1125271129702,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1835.7639967432356,
+          "s": 453.1610462885942,
+          "lane": -2.0138025779724735,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1780.3525974566587,
+          "s": 397.74964700201735,
+          "lane": 1.2361365073220936,
+          "speed": 24.5,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 1.1500000000000008,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1822.9832252950098,
+          "s": 446.2606577529366,
+          "lane": 1.224129001426622,
+          "speed": 20.1799999999999,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1777.5472506763717,
+          "s": 394.9443002217304,
+          "lane": -2.1910288054188465,
+          "speed": 19.433333333331618,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1644.5254944876815,
+          "s": 270.99314195989473,
+          "lane": -0.6017141104668864,
+          "speed": 18.82666666666557,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1734.1125271129702,
+          "s": 351.5095766583288,
+          "lane": 1.69856668526504,
+          "speed": 19.189999999998484,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:32.35",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1856.245350967207,
+          "finished": false
+        },
+        {
+          "distance": 1803.435663703465,
+          "finished": false
+        },
+        {
+          "distance": 1841.5149745678812,
+          "finished": false
+        },
+        {
+          "distance": 1800.102463537466,
+          "finished": false
+        },
+        {
+          "distance": 1662.5868292616049,
+          "finished": false
+        },
+        {
+          "distance": 1752.67606759262,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1856.245350967207,
+          "s": 473.6424005125657,
+          "lane": -2.078887007151353,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1803.435663703465,
+          "s": 420.83271324882367,
+          "lane": -0.5488501218611259,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.299999999999999,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1841.5149745678812,
+          "s": 464.79240702580796,
+          "lane": 1.0161562061600053,
+          "speed": 19.67333333333317,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1800.102463537466,
+          "s": 417.4995130828247,
+          "lane": -3.0777260527886128,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.39999999999999897,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1662.5868292616049,
+          "s": 289.0544767338181,
+          "lane": -0.6427510381269833,
+          "speed": 18.826666666665506,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1752.67606759262,
+          "s": 370.07311713797867,
+          "lane": 2.4091589233639388,
+          "speed": 18.936666666665086,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:33.33",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1877.4274422645976,
+          "finished": false
+        },
+        {
+          "distance": 1826.8229901839063,
+          "finished": false
+        },
+        {
+          "distance": 1860.5992479290499,
+          "finished": false
+        },
+        {
+          "distance": 1824.4482792341507,
+          "finished": false
+        },
+        {
+          "distance": 1681.1524642252075,
+          "finished": false
+        },
+        {
+          "distance": 1771.9240358114685,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1877.4274422645976,
+          "s": 494.82449180995627,
+          "lane": -1.9983161494531256,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1826.8229901839063,
+          "s": 444.22003972926495,
+          "lane": -1.3738279822714474,
+          "speed": 22.25999999999995,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1860.5992479290499,
+          "s": 483.87668038697666,
+          "lane": 0.7687409954918382,
+          "speed": 19.81999999999977,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1824.4482792341507,
+          "s": 441.8453287795094,
+          "lane": -3.9395762551958584,
+          "speed": 22.579999999999956,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1681.1524642252075,
+          "s": 307.6201116974207,
+          "lane": -0.3409859116275337,
+          "speed": 18.719999999998773,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1771.9240358114685,
+          "s": 389.3210853568271,
+          "lane": 1.8177729250070964,
+          "speed": 19.083333333331687,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:34.30",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1898.0366302519153,
+          "finished": false
+        },
+        {
+          "distance": 1847.099214204356,
+          "finished": false
+        },
+        {
+          "distance": 1880.131173657201,
+          "finished": false
+        },
+        {
+          "distance": 1845.5008132207436,
+          "finished": false
+        },
+        {
+          "distance": 1699.4228344809585,
+          "finished": false
+        },
+        {
+          "distance": 1792.302110138323,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1898.0366302519153,
+          "s": 515.433679797274,
+          "lane": -2.0244135838796207,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1847.099214204356,
+          "s": 464.49626374971467,
+          "lane": -1.9759756870794465,
+          "speed": 19.36332890178681,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1880.131173657201,
+          "s": 503.4086061151279,
+          "lane": 1.137933044633526,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 1.066666666666667,
+          "topSpeedBonus": 1.04,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1845.5008132207436,
+          "s": 462.8978627661022,
+          "lane": -4.012039568490394,
+          "speed": 16.204571952552964,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1699.4228344809585,
+          "s": 325.89048195317173,
+          "lane": -0.06288330208307444,
+          "speed": 18.91999999999871,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1792.302110138323,
+          "s": 409.6991596836817,
+          "lane": 1.226230652979292,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.6666666666666661,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:35.27",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1918.2642103931792,
+          "finished": false
+        },
+        {
+          "distance": 1866.151008924434,
+          "finished": false
+        },
+        {
+          "distance": 1903.5424672362856,
+          "finished": false
+        },
+        {
+          "distance": 1862.9316098224526,
+          "finished": false
+        },
+        {
+          "distance": 1717.669173990005,
+          "finished": false
+        },
+        {
+          "distance": 1815.4983119306958,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1918.2642103931792,
+          "s": 535.6612599385378,
+          "lane": -0.3503515490893259,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1866.151008924434,
+          "s": 483.54805846979275,
+          "lane": -1.3990824794062235,
+          "speed": 19.00086686021123,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1903.5424672362856,
+          "s": 526.8198996942124,
+          "lane": 1.162809742258868,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.09999999999999926,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1862.9316098224526,
+          "s": 480.32865936781127,
+          "lane": -0.0787120037932762,
+          "speed": 19.318123809045098,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1717.669173990005,
+          "s": 344.1368214622182,
+          "lane": 0.35843121237780456,
+          "speed": 18.86666666666531,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1815.4983119306958,
+          "s": 432.8953614760544,
+          "lane": 1.0497259318259138,
+          "speed": 23.486666666666643,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:36.23",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1938.3011527071712,
+          "finished": false
+        },
+        {
+          "distance": 1884.9675457912815,
+          "finished": false
+        },
+        {
+          "distance": 1925.888718448311,
+          "finished": false
+        },
+        {
+          "distance": 1881.494806806532,
+          "finished": false
+        },
+        {
+          "distance": 1735.9166722414416,
+          "finished": false
+        },
+        {
+          "distance": 1836.4893116081143,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1938.3011527071712,
+          "s": 555.6982022525299,
+          "lane": 1.0079676846831436,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 1884.9675457912815,
+          "s": 502.36459533664015,
+          "lane": -3.76830979206746,
+          "speed": 18.94753352687783,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1925.888718448311,
+          "s": 549.1661509062378,
+          "lane": 3.249043445618425,
+          "speed": 21.673333333333268,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 1881.494806806532,
+          "s": 498.89185635189074,
+          "lane": -0.24283342868122978,
+          "speed": 19.2647904757117,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1735.9166722414416,
+          "s": 362.3843197136548,
+          "lane": 0.5209056654270031,
+          "speed": 18.81333333333191,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1836.4893116081143,
+          "s": 453.886361153473,
+          "lane": 1.1727152172343043,
+          "speed": 20.39333333333324,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:37.20",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1958.3586019233865,
+          "finished": false
+        },
+        {
+          "distance": 1904.3140245941827,
+          "finished": false
+        },
+        {
+          "distance": 1945.4333925696205,
+          "finished": false
+        },
+        {
+          "distance": 1904.9758679189722,
+          "finished": false
+        },
+        {
+          "distance": 1754.3382066211527,
+          "finished": false
+        },
+        {
+          "distance": 1854.8359269798825,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1958.3586019233865,
+          "s": 575.7556514687451,
+          "lane": 0.11991321390631596,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1904.3140245941827,
+          "s": 521.7110741395413,
+          "lane": -4.049609154726292,
+          "speed": 19.147533526877766,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1945.4333925696205,
+          "s": 568.7108250275473,
+          "lane": 3.4932048145134895,
+          "speed": 20.099999999999866,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.17,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1904.9758679189722,
+          "s": 522.3729174643308,
+          "lane": -0.6804524536997997,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.2999999999999992,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1754.3382066211527,
+          "s": 380.80585409336595,
+          "lane": 0.6520763072730243,
+          "speed": 18.759999999998513,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1854.8359269798825,
+          "s": 472.23297652524116,
+          "lane": 0.7953683131006121,
+          "speed": 19.07333333333317,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:38.17",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1978.4984002463425,
+          "finished": false
+        },
+        {
+          "distance": 1923.020248845822,
+          "finished": false
+        },
+        {
+          "distance": 1965.0362896577926,
+          "finished": false
+        },
+        {
+          "distance": 1927.876563845279,
+          "finished": false
+        },
+        {
+          "distance": 1772.553347454144,
+          "finished": false
+        },
+        {
+          "distance": 1872.9519170049884,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1978.4984002463425,
+          "s": 595.8954497917011,
+          "lane": 0.32312596255513254,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1923.020248845822,
+          "s": 540.4172983911806,
+          "lane": -3.6830188340171484,
+          "speed": 19.094200193544367,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1965.0362896577926,
+          "s": 588.3137221157194,
+          "lane": 3.929365705063577,
+          "speed": 19.87333333333315,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1927.876563845279,
+          "s": 545.2736133906376,
+          "lane": -0.35384221040578956,
+          "speed": 22.313333333333283,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1772.553347454144,
+          "s": 399.02099492635716,
+          "lane": -0.23001168850325213,
+          "speed": 21.45999999999845,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.7,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1872.9519170049884,
+          "s": 490.3489665503471,
+          "lane": 0.932658031570067,
+          "speed": 19.019999999999772,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:39.13",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 1998.6789986908339,
+          "finished": false
+        },
+        {
+          "distance": 1941.1518453621175,
+          "finished": false
+        },
+        {
+          "distance": 1988.4736183654963,
+          "finished": false
+        },
+        {
+          "distance": 1947.9307240257108,
+          "finished": false
+        },
+        {
+          "distance": 1796.072599730524,
+          "finished": false
+        },
+        {
+          "distance": 1893.5601865073145,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 1998.6789986908339,
+          "s": 616.0760482361925,
+          "lane": -0.0428506843033786,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1941.1518453621175,
+          "s": 558.5488949074761,
+          "lane": -1.7231409164504505,
+          "speed": 18.787533526877635,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 1988.4736183654963,
+          "s": 611.7510508234232,
+          "lane": 4.206026450933008,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.38333333333333186,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1947.9307240257108,
+          "s": 565.3277735710694,
+          "lane": -1.7561543668110593,
+          "speed": 19.473333333333212,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.52,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1796.072599730524,
+          "s": 422.5402472027372,
+          "lane": -0.9546842606111774,
+          "speed": 23.593333333333312,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1893.5601865073145,
+          "s": 510.9572360526731,
+          "lane": 1.0236882678963968,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.7499999999999999,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:40.12",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 2019.2165175993873,
+          "finished": false
+        },
+        {
+          "distance": 1959.4223218094603,
+          "finished": false
+        },
+        {
+          "distance": 2010.9643939270582,
+          "finished": false
+        },
+        {
+          "distance": 1966.844804372624,
+          "finished": false
+        },
+        {
+          "distance": 1817.8199000357683,
+          "finished": false
+        },
+        {
+          "distance": 1917.3440262315912,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2019.2165175993873,
+          "s": 636.613567144746,
+          "lane": -0.2695406664540171,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1959.4223218094603,
+          "s": 576.8193713548189,
+          "lane": 1.3695853752159264,
+          "speed": 19.18753352687757,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 2010.9643939270582,
+          "s": 634.241826384985,
+          "lane": 2.103118652142633,
+          "speed": 22.52666666666662,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.4033333333333333,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1966.844804372624,
+          "s": 584.2418539179826,
+          "lane": -1.5414233882881625,
+          "speed": 19.36666666666648,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.65,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1817.8199000357683,
+          "s": 444.28754750798157,
+          "lane": -0.563707092073506,
+          "speed": 20.446666666666573,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1917.3440262315912,
+          "s": 534.7410757769499,
+          "lane": 1.4333901505570252,
+          "speed": 23.69999999999998,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:41.08",
+      "notice": "Staatsbesuch von Stalin · Fahrbahn räumen!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 2039.543094156741,
+          "finished": false
+        },
+        {
+          "distance": 1986.1496539355971,
+          "finished": false
+        },
+        {
+          "distance": 2030.7957780384304,
+          "finished": false
+        },
+        {
+          "distance": 1989.7030866659854,
+          "finished": false
+        },
+        {
+          "distance": 1836.497104449995,
+          "finished": false
+        },
+        {
+          "distance": 1938.7189063327687,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2039.543094156741,
+          "s": 656.9401437020997,
+          "lane": -2.0077227861853135,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 4,
+          "distance": 1986.1496539355971,
+          "s": 603.5467034809558,
+          "lane": 0.26042531433424937,
+          "speed": 29,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.25,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 2030.7957780384304,
+          "s": 654.0732104963572,
+          "lane": 0.8141727601721719,
+          "speed": 20.406666666666553,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.4033333333333333,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 3,
+          "distance": 1989.7030866659854,
+          "s": 607.1001362113441,
+          "lane": -0.7929807486479874,
+          "speed": 24.5,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.5166666666666665,
+          "topSpeedBonus": 0.65,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1836.497104449995,
+          "s": 462.9647519222083,
+          "lane": -0.6629508370629077,
+          "speed": 18.619999999999838,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1938.7189063327687,
+          "s": 556.1159558781274,
+          "lane": 1.6369651751311434,
+          "speed": 20.606666666666577,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:42.03",
+      "notice": "Staatsbesuch von Stalin · Fahrbahn räumen!",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 2060.404660860459,
+          "finished": false
+        },
+        {
+          "distance": 2013.699518286986,
+          "finished": false
+        },
+        {
+          "distance": 2050.1511994544935,
+          "finished": false
+        },
+        {
+          "distance": 2013.2311024804176,
+          "finished": false
+        },
+        {
+          "distance": 1854.632830031841,
+          "finished": false
+        },
+        {
+          "distance": 1957.1956948173947,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2060.404660860459,
+          "s": 677.8017104058176,
+          "lane": -2.2763193728042244,
+          "speed": 20.8,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 2013.699518286986,
+          "s": 631.0965678323446,
+          "lane": 0.030970529080919264,
+          "speed": 29,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.25,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 2050.1511994544935,
+          "s": 673.4286319124203,
+          "lane": -0.1433149748869793,
+          "speed": 20.8,
+          "grounded": false,
+          "drifting": false,
+          "hopRemaining": 0.30333333333333334,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 2013.2311024804176,
+          "s": 630.6281520257762,
+          "lane": -4.101326627101106,
+          "speed": 23.059999999999967,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.65,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1854.632830031841,
+          "s": 481.1004775040542,
+          "lane": -0.9329434715871463,
+          "speed": 18.873333333333107,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1957.1956948173947,
+          "s": 574.5927443627534,
+          "lane": 1.8323840954823132,
+          "speed": 19.08666666666651,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    },
+    {
+      "phase": "race",
+      "lap": "2 / 3",
+      "time": "1:43.02",
+      "notice": "Treffer · kurzzeitig geschützt",
+      "place": "1",
+      "progress": [
+        {
+          "distance": 2079.022613083507,
+          "finished": false
+        },
+        {
+          "distance": 2042.2161610709986,
+          "finished": false
+        },
+        {
+          "distance": 2070.471595462187,
+          "finished": false
+        },
+        {
+          "distance": 2035.541822764469,
+          "finished": false
+        },
+        {
+          "distance": 1873.3201649294074,
+          "finished": false
+        },
+        {
+          "distance": 1976.2720002962851,
+          "finished": false
+        }
+      ],
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2079.022613083507,
+          "s": 696.4196626288658,
+          "lane": -2.274046818772705,
+          "speed": 10.990306893610347,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.91,
+          "onPatch": false
+        },
+        {
+          "kart": 1,
+          "rank": 3,
+          "distance": 2042.2161610709986,
+          "s": 659.6132106163573,
+          "lane": 0.0034179617324558817,
+          "speed": 29,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0.25,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        },
+        {
+          "kart": 2,
+          "rank": 2,
+          "distance": 2070.471595462187,
+          "s": 693.7490279201138,
+          "lane": -1.8945645352588791,
+          "speed": 20.42666666666666,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 1.3,
+          "onPatch": false
+        },
+        {
+          "kart": 3,
+          "rank": 4,
+          "distance": 2035.541822764469,
+          "s": 652.9388723098277,
+          "lane": -4.250900313806119,
+          "speed": 19.913333333333227,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.65,
+          "onPatch": false
+        },
+        {
+          "kart": 4,
+          "rank": 6,
+          "distance": 1873.3201649294074,
+          "s": 499.7878124016206,
+          "lane": -0.618426906261222,
+          "speed": 18.766666666666374,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "onPatch": false
+        },
+        {
+          "kart": 5,
+          "rank": 5,
+          "distance": 1976.2720002962851,
+          "s": 593.6690498416438,
+          "lane": 2.3201273913737723,
+          "speed": 18.979999999999777,
+          "grounded": true,
+          "drifting": false,
+          "hopRemaining": 0,
+          "turboRemaining": 0,
+          "topSpeedBonus": 0.26,
+          "onPatch": false
+        }
+      ]
+    }
+  ],
+  "runtimeErrors": []
+}

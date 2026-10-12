@@ -1,0 +1,228 @@
+{
+  "pickupEvents": [
+    {
+      "time": "0:05.67",
+      "item": "direct",
+      "x": -50.07999262544588,
+      "z": -202.55899075759856,
+      "progress": 81.6978364766419
+    },
+    {
+      "time": "0:37.55",
+      "item": "homing",
+      "x": -150.88393510463504,
+      "z": 165.6938466880144,
+      "progress": 694.490823602079
+    }
+  ],
+  "itemReleased": true,
+  "itemSlot": "homing",
+  "itemStats": {
+    "direct": {
+      "collected": 1,
+      "launched": 1,
+      "hits": 0
+    },
+    "homing": {
+      "collected": 1,
+      "launched": 0,
+      "hits": 0
+    },
+    "trap": {
+      "collected": 0,
+      "launched": 0,
+      "hits": 0
+    },
+    "censor": {
+      "collected": 0,
+      "launched": 0,
+      "hits": 0
+    },
+    "boost": {
+      "collected": 0,
+      "launched": 0,
+      "hits": 0
+    },
+    "triple": {
+      "collected": 0,
+      "launched": 0,
+      "hits": 0
+    },
+    "golden": {
+      "collected": 0,
+      "launched": 0,
+      "hits": 0
+    },
+    "escort": {
+      "collected": 0,
+      "launched": 0,
+      "hits": 0
+    }
+  },
+  "date": "2026-10-12T14:09:10.541Z",
+  "track": "beijing",
+  "method": "Botless time trial from grid in headless Chrome; auto-gas and steering assist with one normal ArrowRight line-choice input before the shortcut; no position, item or event injection; page-local 25-ms wet-zone sampling.",
+  "target": {
+    "x": -174.23680250229808,
+    "z": 154.13821153585997,
+    "heading": 1.0719875200678173
+  },
+  "contact": {
+    "time": "0:37.20",
+    "near": [
+      {
+        "i": 0,
+        "x": -157.18108195573606,
+        "z": 163.0251287461183,
+        "speed": 19.183333333333294,
+        "turboRemaining": 0,
+        "height": 0,
+        "grounded": true,
+        "progress": 687.4108090817006
+      }
+    ],
+    "kind": "natural-shortcut-route",
+    "kart": {
+      "i": 0,
+      "x": -157.18108195573606,
+      "z": 163.0251287461183,
+      "speed": 19.183333333333294,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 687.4108090817006,
+      "padId": -1,
+      "shortcutU": 138.70575510237472,
+      "shortcutLane": -0.45336557942923117
+    }
+  },
+  "warningApproach": null,
+  "runtimeErrors": [],
+  "sceneMeshes": [
+    {
+      "name": "Backyard alley",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -238.5588757893627,
+        -0.715,
+        85.87369573164318
+      ],
+      "max": [
+        -153.04434901382544,
+        -0.46640253750817756,
+        166.86636715629027
+      ],
+      "vertices": 690,
+      "material": {
+        "name": "Loose alley gravel",
+        "alpha": 1,
+        "backFaceCulling": true,
+        "twoSidedLighting": false,
+        "albedoTexture": true,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill surface",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -210.66794572176494,
+        -0.66,
+        125.35916500586745
+      ],
+      "max": [
+        -182.88123227926556,
+        -0.655,
+        149.9876130710787
+      ],
+      "vertices": 135,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": true
+      }
+    },
+    {
+      "name": "Hutong tea spill warning stripe 1",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -214.44403241132187,
+        -0.61,
+        121.26125178546411
+      ],
+      "max": [
+        -210.92841225253355,
+        -0.61,
+        124.37753882462792
+      ],
+      "vertices": 6,
+      "material": {
+        "name": "Hutong tea spill warning",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill warning stripe 2",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -213.6870935659026,
+        -0.61,
+        122.12701363741611
+      ],
+      "max": [
+        -210.1714734071143,
+        -0.61,
+        125.24330067657992
+      ],
+      "vertices": 6,
+      "material": {
+        "name": "Hutong tea spill warning",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill warning stripe 3",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -212.90469400071117,
+        -0.61,
+        122.96465521851698
+      ],
+      "max": [
+        -209.43259993145188,
+        -0.61,
+        126.13061424840318
+      ],
+      "vertices": 6,
+      "material": {
+        "name": "Hutong tea spill warning",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    }
+  ],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural route access is accepted when the kart reaches the middle of the shortcut according to the shared track model."
+}

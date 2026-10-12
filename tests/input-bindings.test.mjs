@@ -4,6 +4,7 @@ import { InputHub, primaryKey, rebind, resetBindings, exportBindings, importBind
 
 test('rebinding moves a key to the new action, keeps arrows and refuses reserved keys', () => {
   try {
+    assert.equal(DEFAULT_BINDINGS.KeyZ, undefined, 'the removed separate shield has no default key');
     assert.equal(primaryKey('item'), 'KeyE');
     assert.ok(rebind('item', 'KeyJ'));
     assert.equal(primaryKey('item'), 'KeyJ');

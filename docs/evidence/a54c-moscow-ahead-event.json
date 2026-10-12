@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-12",
+  "track": "moscow",
+  "graphics": "normal",
+  "method": "full natural single-player race from grid; auto-gas and steering assist; no progress injection or QA event trigger",
+  "at450msAnd2s": {
+    "lap": "2 / 3",
+    "time": "2:09.68",
+    "place": "4",
+    "warning": "Ehrenparade! Rückenwind auf der Parade-Geraden für alle",
+    "distance": 2419.326829564052,
+    "particles": [
+      {
+        "name": "Stadium petals",
+        "count": 248
+      },
+      {
+        "name": "Fountain spray",
+        "count": 72
+      },
+      {
+        "name": "Tire smoke and dust",
+        "count": 15
+      },
+      {
+        "name": "Item hit paperwork",
+        "count": 42
+      },
+      {
+        "name": "Landing dust",
+        "count": 14
+      },
+      {
+        "name": "Course event paper",
+        "count": 9
+      },
+      {
+        "name": "Damage smoke 1",
+        "count": 17
+      },
+      {
+        "name": "Damage smoke 2",
+        "count": 33
+      },
+      {
+        "name": "Damage smoke 3",
+        "count": 15
+      },
+      {
+        "name": "Damage smoke 5",
+        "count": 30
+      }
+    ],
+    "camera": [
+      -148.19487349892916,
+      2.1000000000000005,
+      -234.42123167028166
+    ],
+    "errors": []
+  }
+}

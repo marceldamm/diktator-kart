@@ -70,7 +70,7 @@ export interface TestScene {
   setSalvage?(timers: number[]): void;
   salvaged?(kart: number): void;
   /** Announced lap-two course set piece (course-specific visuals plus any route effect). */
-  trackEvent?(kind: 'zeppelin' | 'balcony' | 'wave' | 'parade' | 'loudspeaker' | 'column'): void;
+  trackEvent?(kind: 'zeppelin' | 'balcony' | 'wave' | 'parade' | 'loudspeaker' | 'column', eventAt?: { x: number; y: number; z: number }): void;
   /** Dirt burst when a kart drops into a shell crater. */
   craterHit?(kart: number): void;
   /** Time trial: hide the five bots; show the translucent ghost of the best run (null hides it). */

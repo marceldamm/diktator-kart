@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-12T11:15:00.782Z",
+  "track": "stadionring",
+  "method": "Natural six-kart race from grid in headless Chrome; auto-gas and steering assist; no progress, position, item or event injection; page-local 25-ms sampling around the shortcut pad.",
+  "target": {
+    "x": -51.80822779376961,
+    "z": -66.65397172917054,
+    "heading": 1.6890553075891626
+  },
+  "contact": {
+    "time": "0:30.92",
+    "near": [
+      {
+        "i": 2,
+        "x": -60.27938482276139,
+        "z": -67.47995190330205,
+        "speed": 23.926666666666662,
+        "turboRemaining": 0,
+        "height": 0,
+        "grounded": true,
+        "progress": 524.1797046449481
+      }
+    ],
+    "kind": "natural-shortcut-route",
+    "kart": {
+      "i": 2,
+      "x": -60.27938482276139,
+      "z": -67.47995190330205,
+      "speed": 23.926666666666662,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 524.1797046449481,
+      "padId": -1,
+      "shortcutU": 24.80020830839277,
+      "shortcutLane": 0.8224713856712151
+    }
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural route access is accepted when the kart reaches the middle of the shortcut according to the shared track model."
+}

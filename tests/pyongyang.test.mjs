@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, initialKartState, resolveKartContacts } from '../src/kart-model.ts';
 import * as layout from '../src/track-layout.ts';
-import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, shortcutElevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, boostPadAt, hazardAt, recoverKart, trackCrossingsAtZ, trackLocate, startParade, stopParade, setParadeClock, paradeVehicles } from '../src/track.ts';
+import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, shortcutElevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, boostPadAt, hazardAt, recoverKart, trackCrossingsAtZ, trackLocate, PARADE_COLUMN, startParade, stopParade, setParadeClock, paradeVehicles } from '../src/track.ts';
 
 const onPyongyang = (fn) => () => { selectTrack('pyongyang'); try { fn(); } finally { selectTrack('stadionring'); } };
 
@@ -160,8 +160,8 @@ test('Taedong north-bank decorative railing opens exactly at road crossings, not
   assert.deepEqual(trackCrossingsAtZ(south, 4), []);
 }));
 
-test('slow: Pyongyang parade column leaves a safe lane for normal and faster bots', onPyongyang(() => {
-  startParade(0); setParadeClock(20);
+test('slow: Pyongyang parade column leaves a safe lane for normal and faster bots during its 15-second window', onPyongyang(() => {
+  startParade(0); setParadeClock(0);
   try {
     const vehicles = paradeVehicles();
     assert.ok(vehicles.length >= 2, `column on the boulevard (${vehicles.length})`);
@@ -171,19 +171,22 @@ test('slow: Pyongyang parade column leaves a safe lane for normal and faster bot
       assert.equal(projectTrack(open.x, open.z).kind, null, 'left half stays open');
     }
     for (const topSpeedBonus of [0, 5]) {
-      let states = Array.from({ length: 5 }, (_, i) => ({ ...gridKart(i + 1), topSpeedBonus }));
-      const races = states.map(createRaceProgress);
       let hits = 0;
-      for (let step = 0; step < 60 * 300; step++) {
-        setParadeClock(20 + step / 60);
-        states = states.map((state, i) => advanceKart(state, botInput(state, i + 1, states), 1 / 60, projectTrack, trackHeightAt));
-        states = resolveKartContacts(states, projectTrack);
-        states = states.map((state) => hazardAt(state.x, state.z) ? recoverKart(state, states) : state);
-        states.forEach((state, i) => { if (state.impactKind === 'obstacle') hits++; advanceRace(races[i], state, step / 60); });
+      for (const lane of [-4, -2, 0, 2, 4]) {
+        const point = trackPoint(1360, lane);
+        let state = { ...gridKart(1), x: point.x, z: point.z, heading: point.heading, travelHeading: point.heading, topSpeedBonus };
+        for (let step = 0; step < 60 * (PARADE_COLUMN.duration + 10); step++) {
+          setParadeClock(step / 60);
+          state = advanceKart(state, botInput(state, 1, [state]), 1 / 60, projectTrack, trackHeightAt);
+          [state] = resolveKartContacts([state], projectTrack);
+          if (hazardAt(state.x, state.z)) state = recoverKart(state, [state]);
+          if (state.impactKind === 'obstacle') hits++;
+        }
+        assert.ok(state.speed > 4, `${topSpeedBonus}, lane ${lane}: bot resumes after the short event (${state.speed.toFixed(1)} m/s)`);
       }
-      assert.ok(races.every((race) => race.distance > TRACK.length * 2), `${topSpeedBonus}: ${JSON.stringify(races.map((race) => race.distance | 0))}`);
       assert.ok(hits < 60, `${topSpeedBonus}: bots mostly steer around the column (${hits} contact steps)`);
     }
+    setParadeClock(PARADE_COLUMN.duration);assert.equal(paradeVehicles().length,0,'expired vehicles cannot block either bot or player');
   } finally { stopParade(); }
   assert.equal(paradeVehicles().length, 0);
 }));

@@ -16,7 +16,7 @@ test('a tap between frames is visible once and actions remain separate', () => {
   assert.equal(input.read().pressed.size, 0);
 });
 
-test('item HUD pointer holds share the shield action and taps survive between frames', () => {
+test('item HUD pointer holds and taps survive between frames', () => {
   const input = new InputHub();
   const button = new EventTarget();
   const detach = attachPointerHold(input, button, 'item', 'test-item');

@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-12",
+  "check": "A73.5 Peking/Hutong item pickup geometry",
+  "track": "beijing",
+  "route": {
+    "shortcutProgressFrom": 596,
+    "shortcutProgressTo": 799,
+    "measuredShortcutDistance": 145.5,
+    "measuredLateralOffset": -2
+  },
+  "existingMainRouteFillRows": [
+    {
+      "progress": 631.6666666666667,
+      "shortcutU": 30.6,
+      "mainCenterToShortcutDistanceM": 13.2,
+      "nearestShortcutPathToAnyBoxM": 8.08
+    },
+    {
+      "progress": 779.3333333333333,
+      "shortcutU": 146.6,
+      "mainCenterToShortcutDistanceM": 5.29,
+      "nearestShortcutPathToAnyBoxM": 0.28,
+      "nearestBoxId": 23
+    }
+  ],
+  "pickupCheck": {
+    "itemPickupRadiusM": 1.65,
+    "kartToExistingBoxDistanceM": 0.2810780344593886,
+    "pickupTriggered": true,
+    "rolledItem": "direct"
+  },
+  "method": "Source-level route point and item row inspection plus one isolated stepItems geometry check with the kart placed at the measured shortcut point. This is not a natural race or human driving result.",
+  "conclusion": "The existing late main-route filler box is already reachable from the shortcut edge. Do not add a second box at the same phase until a natural route pass proves it is needed."
+}

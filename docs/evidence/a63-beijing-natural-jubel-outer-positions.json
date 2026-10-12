@@ -1,0 +1,6908 @@
+{
+  "date": "2026-10-12T05:34:46.986Z",
+  "track": "beijing",
+  "mode": "Einzelrennen",
+  "graphics": "normal",
+  "method": "Natural race from grid; only normal ArrowRight steering input near the lap-two marker, no injected position, rank, progress or event.",
+  "steering": [
+    {
+      "time": "1:54.95",
+      "s": 784.3092929362103,
+      "lane": 0.04612865236687227,
+      "action": "ArrowRight down"
+    },
+    {
+      "time": "1:55.30",
+      "s": 791.4169341995769,
+      "lane": 0.9005013677854846,
+      "action": "ArrowRight down"
+    },
+    {
+      "time": "1:55.62",
+      "s": 796.8672962852554,
+      "lane": 4.432642819435287,
+      "action": "ArrowRight up"
+    },
+    {
+      "time": "2:00.27",
+      "s": 878.4172033606067,
+      "lane": 2.6013558020051186,
+      "action": "ArrowRight down"
+    },
+    {
+      "time": "2:00.60",
+      "s": 884.6530948544998,
+      "lane": 3.283445078325914,
+      "action": "ArrowRight up"
+    }
+  ],
+  "before": [
+    {
+      "elapsedSeconds": 73,
+      "phase": "race",
+      "time": "1:47.38",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2168.7763244103426,
+          "s": 629.3702887913089,
+          "lane": -0.790471235930126,
+          "speed": 20.28,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 1991.1023092667429,
+          "s": 451.6962736477092,
+          "lane": -3.3641364967517604,
+          "speed": 18.819999999997577,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2097.215911081865,
+          "s": 573.8289630796783,
+          "lane": -3.3929748592579605,
+          "speed": 19.72691211675793,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1910.0735528916343,
+          "s": 370.66751727260066,
+          "lane": -5.849985376693343,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2128.802963482349,
+          "s": 604.6242755660426,
+          "lane": 0.11733041535767709,
+          "speed": 19.593333333333135,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2041.097100982579,
+          "s": 501.69106536354525,
+          "lane": -1.9491347476111238,
+          "speed": 18.982364708515593,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 74,
+      "phase": "race",
+      "time": "1:48.43",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2190.0086818990353,
+          "s": 650.6026462800016,
+          "lane": 0.33221712089460936,
+          "speed": 20.28,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2011.1797916069909,
+          "s": 471.7737559879572,
+          "lane": -3.529201589577921,
+          "speed": 19.006666666664174,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2119.0205305660943,
+          "s": 595.6335825639073,
+          "lane": -3.214469417067992,
+          "speed": 19.913578783424526,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1910.28353109617,
+          "s": 370.87749547713634,
+          "lane": -5.8472664497416496,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2147.7287552426233,
+          "s": 621.4305109251111,
+          "lane": 9.071308141849881,
+          "speed": 18.793333333333056,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2061.386375670504,
+          "s": 521.9803400514704,
+          "lane": -0.14454750101037833,
+          "speed": 24.5,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 75,
+      "phase": "race",
+      "time": "1:49.55",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2213.1495779737734,
+          "s": 673.7435423547397,
+          "lane": 0.9136256671859682,
+          "speed": 20.28,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2032.148647459092,
+          "s": 492.7426118400583,
+          "lane": -3.449114132466013,
+          "speed": 18.979999999997432,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2139.8012475250193,
+          "s": 616.4142995228324,
+          "lane": 4.161989987583611,
+          "speed": 19.886912116757784,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1913.6314173037072,
+          "s": 374.2253816846735,
+          "lane": -5.472067472241696,
+          "speed": 9,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2172.242086282771,
+          "s": 630.9095727084916,
+          "lane": 24.331682025144964,
+          "speed": 16.55999999999961,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2088.71567862383,
+          "s": 549.3096430047965,
+          "lane": 0.25417164565740913,
+          "speed": 23.966666666666654,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 76,
+      "phase": "race",
+      "time": "1:50.70",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2236.6163352913427,
+          "s": 697.210299672309,
+          "lane": 0.23226963268926765,
+          "speed": 20.41,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2053.33438344175,
+          "s": 513.9283478227164,
+          "lane": -3.145818636087489,
+          "speed": 18.84666666666402,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2164.5496128066466,
+          "s": 630.8502200747969,
+          "lane": 19.751546751151963,
+          "speed": 17.640245450091008,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1930.6558181201226,
+          "s": 391.24978250108893,
+          "lane": -3.5122506165344194,
+          "speed": 18.74666666666661,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2194.320772855191,
+          "s": 680.0275965367316,
+          "lane": 33.763908858250026,
+          "speed": 14.834999999999601,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2114.129107807156,
+          "s": 574.7230721881222,
+          "lane": -0.023275477288998345,
+          "speed": 20.28666666666657,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 77,
+      "phase": "race",
+      "time": "1:51.87",
+      "lap": "2 / 3",
+      "notice": "Staatsbesuch von Stalin · Fahrbahn räumen!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2260.5886199264387,
+          "s": 721.182584307405,
+          "lane": 0.2577983007075265,
+          "speed": 20.41,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2084.9163486582224,
+          "s": 545.5103130391888,
+          "lane": -0.4066308685001411,
+          "speed": 29,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2188.3649797001567,
+          "s": 672.6180420278181,
+          "lane": 33.24021182080257,
+          "speed": 15.306912116757607,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1952.268985315493,
+          "s": 412.8629496964593,
+          "lane": -3.387307647633336,
+          "speed": 19.06666666666653,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2215.8091216952744,
+          "s": 719.6332666832097,
+          "lane": 31.869476531233115,
+          "speed": 14.801666666666273,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2136.6809431191305,
+          "s": 597.2749075000968,
+          "lane": -0.5817635676663541,
+          "speed": 19.08666666666649,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 78,
+      "phase": "race",
+      "time": "1:53.10",
+      "lap": "2 / 3",
+      "notice": "Staatsbesuch von Stalin · Fahrbahn räumen!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2285.794210370278,
+          "s": 746.3881747512444,
+          "lane": 0.07547754525534213,
+          "speed": 20.41,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2120.6833131323174,
+          "s": 581.2772775132837,
+          "lane": -0.02562523021033594,
+          "speed": 29,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2211.1507863280226,
+          "s": 712.204152669012,
+          "lane": 33.17180042826291,
+          "speed": 14.94857878342428,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1975.6479555389087,
+          "s": 436.24191991987504,
+          "lane": -3.605042484916486,
+          "speed": 18.91999999999978,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2238.8556797178844,
+          "s": 738.3443602536242,
+          "lane": 22.527047580078506,
+          "speed": 20.776666666666273,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2160.5070673773685,
+          "s": 621.1010317583348,
+          "lane": -0.8301609021342704,
+          "speed": 19.193333333333072,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 79,
+      "phase": "race",
+      "time": "1:54.33",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2311.0475421223528,
+          "s": 771.6415065033191,
+          "lane": 0.030163619189637666,
+          "speed": 20.54,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2156.4500109715077,
+          "s": 617.043975352474,
+          "lane": -0.0016148535315534402,
+          "speed": 29,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2233.8781575910652,
+          "s": 738.1951594530085,
+          "lane": 24.208830278736393,
+          "speed": 14.781912116757619,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 1999.5741635325107,
+          "s": 460.16812791347706,
+          "lane": -3.839182836082612,
+          "speed": 19.026666666666365,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2275.263068636897,
+          "s": 769.0857422661131,
+          "lane": 9.727841485902363,
+          "speed": 22.779999999999987,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2184.4230099881,
+          "s": 645.0169743690665,
+          "lane": 0.989196208665486,
+          "speed": 19.89,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 80,
+      "phase": "race",
+      "time": "1:55.62",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2336.273331904289,
+          "s": 796.8672962852554,
+          "lane": 4.432642819435287,
+          "speed": 20.54,
+          "health": 86,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2190.531851227703,
+          "s": 651.1258156086694,
+          "lane": 0.3486933676882138,
+          "speed": 24.5,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2269.6766442599765,
+          "s": 765.422942136747,
+          "lane": 11.188154826635564,
+          "speed": 24.5,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2023.8329281668725,
+          "s": 484.42689254783886,
+          "lane": -3.519921660169549,
+          "speed": 18.973333333332945,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2301.249934274925,
+          "s": 792.8750585090168,
+          "lane": -0.004027659020610134,
+          "speed": 19.71999999999988,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2211.7115883535,
+          "s": 672.3055527344661,
+          "lane": 4.3075560473389265,
+          "speed": 19.51666666666666,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 81,
+      "phase": "race",
+      "time": "1:56.88",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2349.492996674121,
+          "s": 810.0869610550874,
+          "lane": 5.148029669519943,
+          "speed": 16.04132044403676,
+          "health": 55.83539126470295,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2220.5610523249484,
+          "s": 681.1550167059147,
+          "lane": 2.4546541286166246,
+          "speed": 20.87333333333325,
+          "health": 38.81694512124884,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2297.5697364812704,
+          "s": 789.9422646035066,
+          "lane": 1.3243287929900462,
+          "speed": 20.053333333333228,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2047.3422803590001,
+          "s": 507.93624473996647,
+          "lane": -3.165861843079873,
+          "speed": 18.97333333333286,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2323.9185132521384,
+          "s": 815.54363748623,
+          "lane": -3.8655712862839926,
+          "speed": 19.466666666666463,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2237.385807972579,
+          "s": 697.9797723535455,
+          "lane": 4.241731450918928,
+          "speed": 19.26333333333324,
+          "health": 21.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 82,
+      "phase": "race",
+      "time": "1:58.12",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2375.2224076801494,
+          "s": 835.8163720611158,
+          "lane": 3.5186290219474077,
+          "speed": 20.67,
+          "health": 55.83539126470295,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2240.89790144172,
+          "s": 701.4918658226863,
+          "lane": 2.510569601720189,
+          "speed": 10.21507768975678,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2319.9052106204563,
+          "s": 812.2777387426925,
+          "lane": -4.730481175735701,
+          "speed": 19.906666666666478,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2073.6461494760433,
+          "s": 534.2401138570096,
+          "lane": -3.1528956327948645,
+          "speed": 24.5,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2347.378808284428,
+          "s": 839.0039325185196,
+          "lane": -2.2536372269431357,
+          "speed": 20.036666666666658,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2261.9965104761113,
+          "s": 722.5904748570777,
+          "lane": 4.3406401835827655,
+          "speed": 10.872233278843549,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 83,
+      "phase": "race",
+      "time": "1:59.33",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2400.184204975505,
+          "s": 860.7781693564714,
+          "lane": 3.3875884381998915,
+          "speed": 20.67,
+          "health": 55.83539126470295,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2261.6689207037903,
+          "s": 722.2628850847566,
+          "lane": 1.7361176236204148,
+          "speed": 18.735077689756718,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2342.86580101354,
+          "s": 835.2383291357762,
+          "lane": -2.392830334739746,
+          "speed": 19.813333333333063,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2102.2015674637555,
+          "s": 562.7955318447218,
+          "lane": -3.489501297819193,
+          "speed": 21.993333333333275,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2371.732617635234,
+          "s": 863.3577418693255,
+          "lane": -2.5060014334523477,
+          "speed": 20.41,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2279.0819600577283,
+          "s": 739.6759244386947,
+          "lane": 3.797613902893382,
+          "speed": 18.9097391247737,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    }
+  ],
+  "during": [
+    {
+      "elapsedSeconds": 84,
+      "phase": "race",
+      "time": "2:00.60",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2424.0591304735335,
+          "s": 884.6530948544998,
+          "lane": 3.283445078325914,
+          "speed": 20.67,
+          "health": 55.83539126470295,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2285.5889776139343,
+          "s": 746.1829419949006,
+          "lane": 0.36757800474493113,
+          "speed": 18.988411023089967,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2368.2312743478947,
+          "s": 860.6038024701309,
+          "lane": -2.3202523224375193,
+          "speed": 20.67,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2128.1038162599575,
+          "s": 588.6977806409238,
+          "lane": -4.04030368362583,
+          "speed": 18.953333333333184,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2400.780493386393,
+          "s": 892.4056176204847,
+          "lane": -4.542249651227176,
+          "speed": 19.649999999999977,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2303.3412034017992,
+          "s": 763.9351677827656,
+          "lane": 3.6345314435664,
+          "speed": 19.16307245810695,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 84,
+      "phase": "race",
+      "time": "2:01.18",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2431.18927538175,
+          "s": 891.7832397627164,
+          "lane": 5.846654983251516,
+          "speed": 11.695968082853934,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2296.6109515717976,
+          "s": 757.2049159527639,
+          "lane": 0.14240381110945513,
+          "speed": 18.895077689756594,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2381.264582274898,
+          "s": 873.6371103971344,
+          "lane": -3.8197445309936895,
+          "speed": 20.67,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2139.746225046615,
+          "s": 600.3401894275814,
+          "lane": -4.1577952534772455,
+          "speed": 18.85999999999981,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2412.526723814831,
+          "s": 904.1518480489224,
+          "lane": -3.9316916666568082,
+          "speed": 19.80999999999994,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2314.5520716843325,
+          "s": 775.1460360652989,
+          "lane": 3.680467580255955,
+          "speed": 19.069739124773577,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 84,
+      "phase": "race",
+      "time": "2:01.50",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2435.25314607405,
+          "s": 895.8471104550165,
+          "lane": 5.74898256508985,
+          "speed": 15.423064444896287,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2302.5936063630047,
+          "s": 763.187570743971,
+          "lane": 0.07049011994357086,
+          "speed": 18.895077689756572,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2389.1684388616923,
+          "s": 881.5409669839285,
+          "lane": -4.80221656909521,
+          "speed": 20.67,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2146.1283505981028,
+          "s": 606.7223149790691,
+          "lane": -4.21809464115759,
+          "speed": 18.85999999999979,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2418.6560504518825,
+          "s": 910.2811746859741,
+          "lane": -3.647635564847942,
+          "speed": 19.556666666666583,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2320.673370280241,
+          "s": 781.2673346612075,
+          "lane": 3.715312591551595,
+          "speed": 19.069739124773555,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 84,
+      "phase": "race",
+      "time": "2:01.82",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2440.5943311769565,
+          "s": 901.1882955579229,
+          "lane": 5.123961298842459,
+          "speed": 19.223064444896274,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2308.5727291496787,
+          "s": 769.166693530645,
+          "lane": 0.06399613033391759,
+          "speed": 18.89507768975655,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2396.609485705497,
+          "s": 888.982013827733,
+          "lane": -4.753851857900015,
+          "speed": 20.136666666666656,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2152.5840072808974,
+          "s": 613.1779716618637,
+          "lane": -4.3521851225520995,
+          "speed": 18.85999999999977,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2424.7442349453904,
+          "s": 916.369359179482,
+          "lane": -3.1852644430489336,
+          "speed": 20.41,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2326.814034154705,
+          "s": 787.4079985356714,
+          "lane": 3.7539902337015487,
+          "speed": 19.069739124773534,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 85,
+      "phase": "race",
+      "time": "2:02.12",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2446.693853580909,
+          "s": 907.2878179618754,
+          "lane": 4.329294651789028,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2314.2378945881474,
+          "s": 774.8318589691137,
+          "lane": 0.0850916410884848,
+          "speed": 18.948411023089864,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2402.9528489600502,
+          "s": 895.3253770822864,
+          "lane": -4.354405010450618,
+          "speed": 19.936666666666635,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2158.992384559313,
+          "s": 619.5863489402793,
+          "lane": -4.3561415152007985,
+          "speed": 18.91333333333308,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2430.440001516711,
+          "s": 922.0651257508027,
+          "lane": -1.9809855250103836,
+          "speed": 20.407,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2332.6389296364882,
+          "s": 793.2328940174546,
+          "lane": 3.7885794610927976,
+          "speed": 19.123072458106847,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 85,
+      "phase": "race",
+      "time": "2:02.43",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2453.4265276122755,
+          "s": 914.0204919932419,
+          "lane": 3.803903261536289,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2320.2187778864195,
+          "s": 780.8127422673858,
+          "lane": 0.12063132192797545,
+          "speed": 18.948411023089843,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2409.40126639994,
+          "s": 901.7737945221763,
+          "lane": -4.057953206419156,
+          "speed": 19.936666666666614,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2165.2659036230007,
+          "s": 625.859868003967,
+          "lane": -4.096014805546588,
+          "speed": 18.91333333333306,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2436.4746292336554,
+          "s": 928.099753467747,
+          "lane": -0.6557931803817356,
+          "speed": 20.407,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2338.814177046619,
+          "s": 799.4081414275854,
+          "lane": 3.824336439575755,
+          "speed": 19.123072458106826,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 85,
+      "phase": "race",
+      "time": "2:02.75",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2460.4440202037645,
+          "s": 921.0379845847308,
+          "lane": 3.738388464812516,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2326.1966513400293,
+          "s": 786.7906157209957,
+          "lane": 0.15718579115681983,
+          "speed": 18.94841102308982,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2415.6718474343425,
+          "s": 908.0443755565786,
+          "lane": -3.7731728605281005,
+          "speed": 19.936666666666593,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2171.1536376360687,
+          "s": 631.747602017035,
+          "lane": -3.6705683892986487,
+          "speed": 18.91333333333304,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2442.7330019465494,
+          "s": 934.358126180641,
+          "lane": 1.2744794295156543,
+          "speed": 20.407,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2345.000656723062,
+          "s": 805.5946211040284,
+          "lane": 3.8634446530747315,
+          "speed": 19.123072458106805,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 85,
+      "phase": "race",
+      "time": "2:03.05",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2467.507791813315,
+          "s": 928.1017561942815,
+          "lane": 3.5484984587574377,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2331.860233596318,
+          "s": 792.4541979772841,
+          "lane": 0.18762701818610342,
+          "speed": 18.7484110230898,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2421.4756726469905,
+          "s": 913.8482007692267,
+          "lane": -3.424077119091549,
+          "speed": 20.66999999999991,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2176.466460393162,
+          "s": 637.0604247741283,
+          "lane": -3.267281948781839,
+          "speed": 18.966666666666352,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2450.2045967876156,
+          "s": 941.8297210217072,
+          "lane": 2.9367923831154994,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2350.8864107605355,
+          "s": 811.4803751415018,
+          "lane": 3.9045762019659613,
+          "speed": 19.176405791440118,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 86,
+      "phase": "race",
+      "time": "2:03.37",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2475.045364786334,
+          "s": 935.6393291673005,
+          "lane": 1.952855443352552,
+          "speed": 23.384999999999977,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2337.837179344328,
+          "s": 798.4311437252943,
+          "lane": 0.2221496114526481,
+          "speed": 18.74841102308978,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2427.6353762210583,
+          "s": 920.0079043432945,
+          "lane": -2.4876845249738118,
+          "speed": 20.67,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2182.1346519057065,
+          "s": 642.7286162866728,
+          "lane": -2.9203258067682385,
+          "speed": 18.96666666666633,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2458.2397427018705,
+          "s": 949.864866935962,
+          "lane": 2.061379203730464,
+          "speed": 24.497,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2357.10302633081,
+          "s": 817.6969907117762,
+          "lane": 3.983107412728504,
+          "speed": 18.923072458106763,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 86,
+      "phase": "race",
+      "time": "2:03.68",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2482.6478091568188,
+          "s": 943.2417735377851,
+          "lane": 0.01891669506083841,
+          "speed": 23.65199999999998,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2343.816446340876,
+          "s": 804.4104107218425,
+          "lane": 0.26276031963475954,
+          "speed": 18.74841102308976,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2433.732421084206,
+          "s": 926.1049492064424,
+          "lane": -1.214226726128333,
+          "speed": 20.667,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2187.9281275171743,
+          "s": 648.5220918981406,
+          "lane": -1.962859729284635,
+          "speed": 18.96666666666631,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2465.8931009129883,
+          "s": 957.5182251470799,
+          "lane": 1.7626166481179963,
+          "speed": 23.482999999999976,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2363.5243847585043,
+          "s": 824.1183491394706,
+          "lane": 4.1624437494061075,
+          "speed": 18.92307245810674,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 86,
+      "phase": "race",
+      "time": "2:03.95",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2488.7215379115814,
+          "s": 949.3155022925478,
+          "lane": -0.8634709379448526,
+          "speed": 22.750666666666625,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2348.8522531194094,
+          "s": 809.4462175003757,
+          "lane": 0.29933482163058145,
+          "speed": 18.90841102308974,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2438.934627388947,
+          "s": 931.307155511183,
+          "lane": 0.2196571599330655,
+          "speed": 20.667,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2192.7244965912055,
+          "s": 653.3184609721718,
+          "lane": -1.1791977949339392,
+          "speed": 18.619999999999624,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2472.004783380733,
+          "s": 963.6299076148246,
+          "lane": 1.7434468596243264,
+          "speed": 22.626666666666623,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2369.0554670745464,
+          "s": 829.6494314555127,
+          "lane": 4.210830408792212,
+          "speed": 19.083072458106724,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 86,
+      "phase": "race",
+      "time": "2:04.27",
+      "lap": "2 / 3",
+      "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2495.683881677455,
+          "s": 956.2778460584211,
+          "lane": -1.3646950498750663,
+          "speed": 21.680333333333266,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2354.820684016272,
+          "s": 815.4146483972384,
+          "lane": 0.3579407532261938,
+          "speed": 18.655077689756386,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2445.766402627267,
+          "s": 938.1389307495031,
+          "lane": 2.529260432107335,
+          "speed": 24.5,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2198.406094311013,
+          "s": 659.0000586919793,
+          "lane": -0.269465397976933,
+          "speed": 18.873333333332937,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2478.8556465894453,
+          "s": 970.4807708235369,
+          "lane": 0.892088233607875,
+          "speed": 21.589333333333265,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2375.441230463189,
+          "s": 836.0351948441555,
+          "lane": 4.147185535095534,
+          "speed": 19.083072458106702,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 87,
+      "phase": "race",
+      "time": "2:04.58",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2502.3817437116427,
+          "s": 962.975708092609,
+          "lane": -1.6761117407725272,
+          "speed": 20.667,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2360.788127191398,
+          "s": 821.3820915723643,
+          "lane": 0.5229216691918107,
+          "speed": 18.655077689756364,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2454.0343901413426,
+          "s": 946.4069182635787,
+          "lane": 3.361007621894851,
+          "speed": 24.5,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2204.390402913552,
+          "s": 664.9843672945183,
+          "lane": 0.48073229612711554,
+          "speed": 19.12666666666625,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2485.3866169409534,
+          "s": 977.011741175045,
+          "lane": -0.0020614834264743548,
+          "speed": 20.537,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2381.652502117471,
+          "s": 842.2464664984375,
+          "lane": 3.985336527568008,
+          "speed": 19.08307245810668,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 87,
+      "phase": "race",
+      "time": "2:04.88",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2508.675917276475,
+          "s": 969.2698816574414,
+          "lane": -2.1300736958587487,
+          "speed": 20.667,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2366.4870653106564,
+          "s": 827.0810296916227,
+          "lane": 0.6683862752204515,
+          "speed": 23.708411023089678,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2461.5804522208373,
+          "s": 953.9529803430735,
+          "lane": 3.100335982916066,
+          "speed": 24.126666666666658,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2210.134995573367,
+          "s": 670.7289599543335,
+          "lane": 0.663717969226478,
+          "speed": 18.92666666666623,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2491.518866833859,
+          "s": 983.1439910679508,
+          "lane": -1.427515263839548,
+          "speed": 20.537,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2387.4029969028966,
+          "s": 847.9969612838629,
+          "lane": 3.7806088806511338,
+          "speed": 19.136405791439994,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 87,
+      "phase": "race",
+      "time": "2:05.20",
+      "lap": "2 / 3",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2515.507516268737,
+          "s": 976.1014806497035,
+          "lane": -2.5292573353495675,
+          "speed": 20.8,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2373.900372107445,
+          "s": 834.4943364884114,
+          "lane": 0.6435387859626185,
+          "speed": 22.69507768975632,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2469.0609445872624,
+          "s": 961.4334727094986,
+          "lane": 3.355158526743036,
+          "speed": 23.1133333333333,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2216.171670716916,
+          "s": 676.7656350978825,
+          "lane": 0.5826883951718211,
+          "speed": 18.926666666666208,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2498.663876265189,
+          "s": 990.2890004992807,
+          "lane": -3.2458794743526505,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2393.3321557084973,
+          "s": 853.9261200894637,
+          "lane": 3.5460325906314485,
+          "speed": 19.136405791439973,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 87,
+      "phase": "race",
+      "time": "2:05.50",
+      "lap": "2 / 3",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2522.1959979481417,
+          "s": 982.789962329108,
+          "lane": -1.8735685542935756,
+          "speed": 20.797,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2380.5847750774637,
+          "s": 841.1787394584301,
+          "lane": 0.5191830300415423,
+          "speed": 21.7350776897563,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2475.6620229620557,
+          "s": 968.0345510842919,
+          "lane": 2.6785716673005644,
+          "speed": 22.15333333333328,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2221.881863328883,
+          "s": 682.4758277098492,
+          "lane": 0.5577409346512447,
+          "speed": 18.97999999999952,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2506.6284333368526,
+          "s": 998.2535575709442,
+          "lane": -3.8243231296861215,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2398.851304570172,
+          "s": 859.4452689511384,
+          "lane": 3.2729953100309297,
+          "speed": 19.636405791439955,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 88,
+      "phase": "race",
+      "time": "2:05.78",
+      "lap": "2 / 3",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2528.2826974627583,
+          "s": 988.8766618437246,
+          "lane": -0.803797338423994,
+          "speed": 20.797,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2386.6073390929887,
+          "s": 847.201303473955,
+          "lane": 0.28352776772345123,
+          "speed": 20.82841102308961,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2481.5481451309142,
+          "s": 973.9206732531504,
+          "lane": 2.7671288666862917,
+          "speed": 21.24666666666659,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2227.2884237398434,
+          "s": 687.8823881208098,
+          "lane": 0.6048818671807453,
+          "speed": 19.08666666666617,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2513.8669672420065,
+          "s": 1005.492091476098,
+          "lane": -3.455387227774126,
+          "speed": 24.28666666666666,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2404.144250061935,
+          "s": 864.7382144429014,
+          "lane": 2.6613190721150453,
+          "speed": 19.76,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 88,
+      "phase": "race",
+      "time": "2:06.08",
+      "lap": "2 / 3",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2534.5474956533726,
+          "s": 995.1414600343389,
+          "lane": -0.10593479524474882,
+          "speed": 20.797,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2392.5906109859347,
+          "s": 853.1845753669011,
+          "lane": -0.044361416108189416,
+          "speed": 19.359999999999985,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2487.3703803581643,
+          "s": 979.7429084804005,
+          "lane": 2.328518241395478,
+          "speed": 20.667,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2233.034010662471,
+          "s": 693.6279750434371,
+          "lane": 0.6565187142046491,
+          "speed": 18.886666666666148,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2521.139221098935,
+          "s": 1012.7643453330268,
+          "lane": -3.712895035085665,
+          "speed": 23.32666666666664,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2409.6715851120093,
+          "s": 870.2655494929757,
+          "lane": 1.6377617745995516,
+          "speed": 19.76,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 88,
+      "phase": "race",
+      "time": "2:06.38",
+      "lap": "2 / 3",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2540.972479821811,
+          "s": 1001.5664442027771,
+          "lane": 0.019810560528302074,
+          "speed": 24.497,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2398.2552423408792,
+          "s": 858.8492067218456,
+          "lane": -0.8562029310423879,
+          "speed": 18.90666666666663,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2493.5277024858256,
+          "s": 985.9002306080617,
+          "lane": 0.8300559844950658,
+          "speed": 24.497,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2238.7876814530227,
+          "s": 699.3816458339891,
+          "lane": 0.7252661884719686,
+          "speed": 18.93999999999946,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2527.9776072393715,
+          "s": 1019.6027314734631,
+          "lane": -3.7360789464533948,
+          "speed": 22.366666666666617,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2415.213885398631,
+          "s": 875.8078497795975,
+          "lane": 0.21136821741655573,
+          "speed": 19.76,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 88,
+      "phase": "race",
+      "time": "2:06.67",
+      "lap": "2 / 3",
+      "notice": "Brust voller Orden · Höchsttempo",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2547.913996497759,
+          "s": 1008.5079608787253,
+          "lane": -0.039224957117331344,
+          "speed": 24.497,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2403.5647302610796,
+          "s": 864.1586946420459,
+          "lane": -1.9896589318508608,
+          "speed": 18.759999999999945,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2500.3219635061064,
+          "s": 992.6944916283426,
+          "lane": 0.5738917884626081,
+          "speed": 24.497,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2244.2336912058645,
+          "s": 704.8276555868308,
+          "lane": 0.8455319892778121,
+          "speed": 19.04666666666611,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2534.059339423102,
+          "s": 1025.6844636571934,
+          "lane": -3.401062279914416,
+          "speed": 21.45999999999993,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2420.895817122807,
+          "s": 881.4897815037732,
+          "lane": -1.6390777245067543,
+          "speed": 23.546999999999997,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 89,
+      "phase": "race",
+      "time": "2:06.93",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2554.448402244328,
+          "s": 1015.0423666252943,
+          "lane": -0.05973746393789635,
+          "speed": 24.497,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2408.839953153177,
+          "s": 869.4339175341431,
+          "lane": -2.7724353976626674,
+          "speed": 18.919999999999927,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2506.6043116769965,
+          "s": 998.9768397992327,
+          "lane": 1.7112273417689474,
+          "speed": 24.215333333333326,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2249.4142529829696,
+          "s": 710.008217363936,
+          "lane": 0.9554267895850761,
+          "speed": 18.953333333332758,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2539.4685318549073,
+          "s": 1031.0936560889988,
+          "lane": -3.0539806658116033,
+          "speed": 20.606666666666577,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2427.7230040579425,
+          "s": 888.3169684389088,
+          "lane": -2.5461428922494873,
+          "speed": 24.5,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 89,
+      "phase": "race",
+      "time": "2:07.25",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2562.206091815303,
+          "s": 1022.8000561962692,
+          "lane": 0.0165547945857301,
+          "speed": 24.497,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2415.298988974853,
+          "s": 875.8929533558191,
+          "lane": -2.413818094990027,
+          "speed": 18.413333333333238,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2513.8632593278253,
+          "s": 1006.2357874500615,
+          "lane": 2.4605649074293368,
+          "speed": 23.156999999999968,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2255.556173390967,
+          "s": 716.1501377719335,
+          "lane": 0.9443061129170207,
+          "speed": 18.953333333332736,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2545.5100618864426,
+          "s": 1037.1351861205342,
+          "lane": -2.197671567499602,
+          "speed": 19.834666666666553,
+          "health": 19.854466714677425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2435.571588747653,
+          "s": 896.1655531286194,
+          "lane": -1.614920082184145,
+          "speed": 23.87733333333332,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 89,
+      "phase": "race",
+      "time": "2:07.50",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2568.3322793025345,
+          "s": 1028.9262436835008,
+          "lane": 0.22046409061483255,
+          "speed": 24.497,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2420.4345912457,
+          "s": 881.0285556266665,
+          "lane": -2.410604642953997,
+          "speed": 18.87099999999989,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2519.4664380668273,
+          "s": 1011.8389661890635,
+          "lane": 2.668937721455009,
+          "speed": 22.35699999999995,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2260.390209129166,
+          "s": 720.9841735101325,
+          "lane": 0.8567950996748395,
+          "speed": 19.166666666666053,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2550.206715255043,
+          "s": 1041.8318394891346,
+          "lane": -1.458801795064728,
+          "speed": 19.767666666666535,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2441.4674767457973,
+          "s": 902.0614411267636,
+          "lane": -1.604517781204452,
+          "speed": 23.0323333333333,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 89,
+      "phase": "race",
+      "time": "2:07.77",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2574.7686541131225,
+          "s": 1035.3626184940888,
+          "lane": 0.8782955225907061,
+          "speed": 23.65199999999998,
+          "health": 44.737439154837105,
+          "onWaveLine": true
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2425.8944627575215,
+          "s": 886.4884271384879,
+          "lane": -2.6904434133180186,
+          "speed": 19.03099999999987,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2525.2818930086896,
+          "s": 1017.6544211309258,
+          "lane": 3.036013027469226,
+          "speed": 21.503666666666597,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2265.520850431287,
+          "s": 726.1148148122531,
+          "lane": 0.7353148556365456,
+          "speed": 19.0733333333327,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2555.266042919343,
+          "s": 1046.8911671534345,
+          "lane": -0.9802048873676893,
+          "speed": 19.674333333333184,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2447.46627298812,
+          "s": 908.0602373690865,
+          "lane": -1.659622869027178,
+          "speed": 22.178999999999945,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 90,
+      "phase": "race",
+      "time": "2:08.07",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2581.8661640851615,
+          "s": 1042.4601284661278,
+          "lane": 1.7516578849273796,
+          "speed": 22.658999999999956,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2431.879054199628,
+          "s": 892.4730185805945,
+          "lane": -2.679312523515212,
+          "speed": 19.084333333333184,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2531.648146244991,
+          "s": 1024.0206743672272,
+          "lane": 3.4124058974956197,
+          "speed": 20.543666666666574,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2271.278082201723,
+          "s": 731.8720465826893,
+          "lane": 0.5980231255432155,
+          "speed": 19.126666666666015,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2561.1235880940085,
+          "s": 1052.7487123281,
+          "lane": -0.2970768938779176,
+          "speed": 19.98099999999983,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2453.853922167433,
+          "s": 914.4478865483995,
+          "lane": -0.9683265715612015,
+          "speed": 21.194999999999922,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 90,
+      "phase": "race",
+      "time": "2:08.37",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2588.8005542434285,
+          "s": 1049.3945186243948,
+          "lane": 2.2944761003536542,
+          "speed": 21.698999999999934,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2437.682976279452,
+          "s": 898.2769406604182,
+          "lane": -2.365396386431635,
+          "speed": 18.878333333333163,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2537.690287792383,
+          "s": 1030.0628159146193,
+          "lane": 2.2965742428826665,
+          "speed": 19.577666666666552,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2277.02190135374,
+          "s": 737.6158657347062,
+          "lane": 0.47231642514120586,
+          "speed": 19.17999999999933,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2567.0920160921974,
+          "s": 1058.717140326289,
+          "lane": 0.17201783938076823,
+          "speed": 20.034333333333144,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2459.933173723857,
+          "s": 920.5271381048235,
+          "lane": -0.20806292439656396,
+          "speed": 20.180999999999898,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 90,
+      "phase": "race",
+      "time": "2:08.65",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2595.0162371234237,
+          "s": 1055.61020150439,
+          "lane": 2.8627600654852663,
+          "speed": 20.8,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2443.0926016770086,
+          "s": 903.6865660579749,
+          "lane": -2.0854655471509327,
+          "speed": 18.93399999999981,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2543.084250528126,
+          "s": 1035.4567786503624,
+          "lane": 1.0162441502278357,
+          "speed": 19.12666666666653,
+          "health": 14.923646842226425,
+          "onWaveLine": true
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2282.44456588726,
+          "s": 743.0385302682264,
+          "lane": 0.3664644497930729,
+          "speed": 19.033333333332642,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2572.7595146366903,
+          "s": 1064.3846388707818,
+          "lane": 0.23413123353930737,
+          "speed": 19.88766666666646,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2465.5030335150254,
+          "s": 926.0969978959918,
+          "lane": 1.0915296173611957,
+          "speed": 19.887,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 90,
+      "phase": "race",
+      "time": "2:08.92",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2600.731514353104,
+          "s": 1061.3254787340704,
+          "lane": 3.319608977517966,
+          "speed": 20.8,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2448.1100800658915,
+          "s": 908.7040444468578,
+          "lane": -1.8725148709375596,
+          "speed": 18.792666666666456,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2548.3914355999086,
+          "s": 1040.7639637221448,
+          "lane": 1.2823928278000027,
+          "speed": 19.75433333333318,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2287.551674761882,
+          "s": 748.1456391428485,
+          "lane": 0.2767592697329623,
+          "speed": 19.193333333332625,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2578.8732105703502,
+          "s": 1070.4983348044418,
+          "lane": 0.13901239057717993,
+          "speed": 24.339999999999996,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2471.062195433999,
+          "s": 931.6561598149653,
+          "lane": 2.398869237229463,
+          "speed": 19.887,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 91,
+      "phase": "race",
+      "time": "2:09.18",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2606.391071980802,
+          "s": 1066.9850363617682,
+          "lane": 3.572099381253758,
+          "speed": 20.8,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2453.07182867055,
+          "s": 913.6657930515164,
+          "lane": -1.6399366990832838,
+          "speed": 18.904666666666436,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2553.8750436001355,
+          "s": 1046.2475717223717,
+          "lane": 2.1558061935939197,
+          "speed": 19.91433333333316,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2292.656330916925,
+          "s": 753.2502952978914,
+          "lane": 0.19376158731996757,
+          "speed": 19.099999999999273,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2585.2427698219844,
+          "s": 1076.867894056076,
+          "lane": 0.03806566866204825,
+          "speed": 23.486666666666643,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2476.9522799164333,
+          "s": 937.5462442973997,
+          "lane": 3.533364747983315,
+          "speed": 19.89,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 91,
+      "phase": "race",
+      "time": "2:09.48",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2612.693641898886,
+          "s": 1073.2876062798525,
+          "lane": 3.6428993466721873,
+          "speed": 20.8,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2458.522200315219,
+          "s": 919.1161646961853,
+          "lane": -1.2415009326817639,
+          "speed": 18.39733333333308,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2560.1060231635047,
+          "s": 1052.4785512857409,
+          "lane": 2.4607868004023348,
+          "speed": 19.967666666666474,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2298.398881629915,
+          "s": 758.9928460108815,
+          "lane": 0.10661076342994816,
+          "speed": 19.153333333332586,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2592.136196209245,
+          "s": 1083.7613204433367,
+          "lane": -0.12435721438563903,
+          "speed": 22.52666666666662,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2484.6577829530424,
+          "s": 945.2517473340088,
+          "lane": 4.8923494382625865,
+          "speed": 24.5,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 91,
+      "phase": "race",
+      "time": "2:09.77",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2618.5693759149462,
+          "s": 1079.1633402959126,
+          "lane": 3.591763446170875,
+          "speed": 20.8,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2463.6183078916038,
+          "s": 924.2122722725701,
+          "lane": -0.3468686202257782,
+          "speed": 18.70633333333306,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2565.918400276514,
+          "s": 1058.2909283987503,
+          "lane": 2.2996487153714984,
+          "speed": 19.82099999999979,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2303.8578629527565,
+          "s": 764.4518273337228,
+          "lane": 0.055511380590830606,
+          "speed": 19.259999999999234,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2598.413023932033,
+          "s": 1090.0381481661245,
+          "lane": -0.41248394977447983,
+          "speed": 21.859999999999943,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2491.959706763465,
+          "s": 952.5536711444313,
+          "lane": 4.543863037222776,
+          "speed": 24.5,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 91,
+      "phase": "race",
+      "time": "2:10.10",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2625.341081701305,
+          "s": 1085.9350460822714,
+          "lane": 3.4829282612735226,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2469.832307059247,
+          "s": 930.4262714402132,
+          "lane": 0.8732315242686031,
+          "speed": 18.5489999999997,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2572.6825431491075,
+          "s": 1065.0550712713436,
+          "lane": 2.1875288628308187,
+          "speed": 20.351666666666432,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2310.267722614876,
+          "s": 770.8616869958425,
+          "lane": 0.07441577923719292,
+          "speed": 19.32799999999921,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2605.672184085556,
+          "s": 1097.2973083196478,
+          "lane": -0.934497493393831,
+          "speed": 21.27333333333327,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2500.14929116659,
+          "s": 960.7432555475564,
+          "lane": 3.7229412602586267,
+          "speed": 24.5,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 92,
+      "phase": "race",
+      "time": "2:10.40",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2631.2269633827336,
+          "s": 1091.8209277637,
+          "lane": 3.404321095098,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2475.5087565208096,
+          "s": 936.1027209017759,
+          "lane": 0.7552297462040147,
+          "speed": 18.162999999999677,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2578.861634423012,
+          "s": 1071.2341625452484,
+          "lane": 3.079307826876285,
+          "speed": 20.67,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2316.0257182068526,
+          "s": 776.6196825878189,
+          "lane": 0.039238955178793895,
+          "speed": 18.99599999999919,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2612.112273817839,
+          "s": 1103.7373980519308,
+          "lane": -2.16517629908175,
+          "speed": 20.67,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2507.215669550449,
+          "s": 967.8096339314154,
+          "lane": 3.3642859035751824,
+          "speed": 23.69999999999998,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 92,
+      "phase": "race",
+      "time": "2:10.72",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2637.2704929280017,
+          "s": 1097.864457308968,
+          "lane": 3.403171998395315,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2481.422427904071,
+          "s": 942.0163922850372,
+          "lane": 0.2567320174688613,
+          "speed": 18.767333333332985,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2585.085478987414,
+          "s": 1077.45800710965,
+          "lane": 5.025771703426764,
+          "speed": 20.29666666666666,
+          "health": 14.923646842226425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2321.8720764554137,
+          "s": 782.46604083638,
+          "lane": -1.0401550113212548,
+          "speed": 18.610666666665832,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2618.8703561973307,
+          "s": 1110.4954804314223,
+          "lane": -3.6918396537242244,
+          "speed": 20.67,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2514.091492882978,
+          "s": 974.6854572639443,
+          "lane": 1.840495415557467,
+          "speed": 22.674666666666624,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 92,
+      "phase": "race",
+      "time": "2:10.98",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2642.18904041881,
+          "s": 1102.783004799776,
+          "lane": 3.5410180491281875,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2486.4072059827668,
+          "s": 947.0011703637331,
+          "lane": 0.9853316395721153,
+          "speed": 18.49399999999963,
+          "health": 24.816945121248843,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2589.768570699418,
+          "s": 1082.1410988216542,
+          "lane": 5.844008354191761,
+          "speed": 15.740204519970556,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2326.227052663758,
+          "s": 786.8210170447244,
+          "lane": -3.104117750197139,
+          "speed": 17.966666666665812,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2624.4780072969616,
+          "s": 1116.1031315310531,
+          "lane": -3.6675445329539356,
+          "speed": 20.456666666666663,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2519.6298205647017,
+          "s": 980.2237849456681,
+          "lane": 0.19245930413567758,
+          "speed": 21.77333333333327,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 92,
+      "phase": "race",
+      "time": "2:11.27",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2647.5103921928417,
+          "s": 1108.104356573808,
+          "lane": 3.8197455591450167,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2491.2576125214055,
+          "s": 951.8515769023718,
+          "lane": 2.9102404391319663,
+          "speed": 17.760666666666275,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2594.3840504334294,
+          "s": 1086.7565785556656,
+          "lane": 5.232381192626579,
+          "speed": 18.392204519970537,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2330.524591409132,
+          "s": 791.1185557900983,
+          "lane": -5.580621193293264,
+          "speed": 17.687999999999125,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2629.5985066115254,
+          "s": 1121.223630845617,
+          "lane": -1.7078335971175842,
+          "speed": 19.549999999999976,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2525.6659109928655,
+          "s": 986.2598753738318,
+          "lane": -0.7670587889087174,
+          "speed": 20.85766666666658,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 93,
+      "phase": "race",
+      "time": "2:11.57",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2653.3439313796116,
+          "s": 1113.937895760578,
+          "lane": 4.110032264103498,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2496.2441459653114,
+          "s": 956.8381103462777,
+          "lane": 5.032386013614458,
+          "speed": 17.84733333333292,
+          "health": 24.816945121248843,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2599.409039060276,
+          "s": 1091.7815671825122,
+          "lane": 2.6368948016704024,
+          "speed": 20.67,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2333.672782781964,
+          "s": 794.2667471629304,
+          "lane": -5.84689802954585,
+          "speed": 10.80134992419286,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2634.3858614518067,
+          "s": 1126.0109856858983,
+          "lane": 1.5974512013723512,
+          "speed": 19.217999999999954,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2531.937464028707,
+          "s": 992.5314284096733,
+          "lane": -1.5367574719674455,
+          "speed": 19.87966666666656,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 93,
+      "phase": "race",
+      "time": "2:11.85",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2659.25118227491,
+          "s": 1119.8451466558765,
+          "lane": 4.0772882860493835,
+          "speed": 20.41,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2500.928187611717,
+          "s": 961.5221519926833,
+          "lane": 5.799922127742027,
+          "speed": 15.748437474183277,
+          "health": 22.143271500124097,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2604.1692775028796,
+          "s": 1096.5418056251158,
+          "lane": -0.6704993824112246,
+          "speed": 20.67,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2337.0046218683874,
+          "s": 797.5985862493537,
+          "lane": -5.488687470203891,
+          "speed": 13.45334992419287,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2640.1054786465347,
+          "s": 1131.7306028806263,
+          "lane": 4.108848102128748,
+          "speed": 19.567333333333266,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2537.6341141216126,
+          "s": 998.2280785025789,
+          "lane": -1.6731051998143223,
+          "speed": 19.175333333333203,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 93,
+      "phase": "race",
+      "time": "2:12.15",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2666.1134734097736,
+          "s": 1126.70743779074,
+          "lane": 3.176865413721404,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2505.7331572800617,
+          "s": 966.3271216610281,
+          "lane": 4.452987369723092,
+          "speed": 18.347104140849925,
+          "health": 22.143271500124097,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2610.1882214301554,
+          "s": 1102.5607495523916,
+          "lane": -3.1440939863708546,
+          "speed": 20.67,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2341.025485666203,
+          "s": 801.6194500471695,
+          "lane": -3.7731040770982576,
+          "speed": 16.261349924192878,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2646.855071493518,
+          "s": 1138.4801957276097,
+          "lane": 4.5455545590500375,
+          "speed": 19.65399999999991,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2543.512606043917,
+          "s": 1004.1065704248833,
+          "lane": -1.847114393678838,
+          "speed": 19.174666666666514,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 93,
+      "phase": "race",
+      "time": "2:12.42",
+      "lap": "2 / 3",
+      "notice": "Faktenlage amtlich geschwärzt",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2672.0688162121287,
+          "s": 1132.662780593095,
+          "lane": 1.6983686502831452,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2509.695671855001,
+          "s": 970.2896362359672,
+          "lane": 1.9277995572490847,
+          "speed": 17.90343747418324,
+          "health": 22.143271500124097,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2616.0658858027073,
+          "s": 1108.4384139249435,
+          "lane": -3.0584947521682686,
+          "speed": 19.976666666666652,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2345.055553646185,
+          "s": 805.6495180271515,
+          "lane": -1.5389328337828005,
+          "speed": 18.12934992419286,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2652.1185071173013,
+          "s": 1143.7436313513929,
+          "lane": 2.838657479702079,
+          "speed": 18.800666666666558,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2548.725194607007,
+          "s": 1009.3191589879732,
+          "lane": -1.9908548150561434,
+          "speed": 19.286666666666495,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 94,
+      "phase": "race",
+      "time": "2:12.68",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2677.5029317850535,
+          "s": 1138.0968961660199,
+          "lane": 0.2833212411276657,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2513.7190612390295,
+          "s": 974.3130256199959,
+          "lane": -0.685477659574465,
+          "speed": 18.467437474183217,
+          "health": 22.143271500124097,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2620.99413169593,
+          "s": 1113.366659818166,
+          "lane": -1.059637851102966,
+          "speed": 19.1233333333333,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2349.6465312492987,
+          "s": 810.2404956302651,
+          "lane": 0.08776542103296622,
+          "speed": 18.950683257526173,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2656.355388679915,
+          "s": 1147.9805129140066,
+          "lane": 0.17625743529174034,
+          "speed": 18.15666666666654,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2553.881785848437,
+          "s": 1014.4757502294035,
+          "lane": -1.9642041012607907,
+          "speed": 19.14533333333314,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 94,
+      "phase": "race",
+      "time": "2:12.98",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2683.4858758937426,
+          "s": 1144.0798402747089,
+          "lane": -1.0091611724254057,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2519.229844771501,
+          "s": 979.8238091524674,
+          "lane": -2.5755104512154228,
+          "speed": 18.930770807516527,
+          "health": 22.143271500124097,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2625.7171576705296,
+          "s": 1118.0896857927657,
+          "lane": 2.092538765221582,
+          "speed": 18.791333333333277,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2355.288279559688,
+          "s": 815.8822439406542,
+          "lane": -0.19116452429285619,
+          "speed": 18.61868325752615,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2660.6279120219338,
+          "s": 1152.2530362560253,
+          "lane": -2.9922144231555303,
+          "speed": 18.03399999999985,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2559.635987159708,
+          "s": 1020.2299515406742,
+          "lane": -1.8009151027406471,
+          "speed": 19.144666666666453,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 94,
+      "phase": "race",
+      "time": "2:13.30",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2689.8002108677456,
+          "s": 1150.394175248712,
+          "lane": -1.647802822327332,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2525.5097170780955,
+          "s": 986.1036814590618,
+          "lane": -1.922374734483974,
+          "speed": 17.89943747418317,
+          "health": 22.143271500124097,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2631.5193042123065,
+          "s": 1123.8918323345426,
+          "lane": 4.9976311276752075,
+          "speed": 19.452666666666588,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2360.4549256620608,
+          "s": 821.0488900430271,
+          "lane": -2.4694437871069628,
+          "speed": 17.605349924192794,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2665.551664835531,
+          "s": 1157.1767890696226,
+          "lane": -5.333376392161825,
+          "speed": 18.69533333333316,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2565.6516870992364,
+          "s": 1026.2456514802027,
+          "lane": -1.605625499808888,
+          "speed": 19.08766666666643,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 94,
+      "phase": "race",
+      "time": "2:13.62",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2696.127293380222,
+          "s": 1156.7212577611883,
+          "lane": -1.7938041710806543,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2530.5083002942465,
+          "s": 991.1022646752128,
+          "lane": 0.6665120690459714,
+          "speed": 17.038437474183144,
+          "health": 22.143271500124097,
+          "onWaveLine": true
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2639.542258499511,
+          "s": 1131.914786621747,
+          "lane": 4.962739550843101,
+          "speed": 19.276666666666564,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2364.8021461035523,
+          "s": 825.3961104845187,
+          "lane": -5.372358990759377,
+          "speed": 17.220016590859437,
+          "health": 92.19933736947098,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2671.018717453947,
+          "s": 1162.6438416880385,
+          "lane": -5.397890960254319,
+          "speed": 19.775333333333137,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2571.5695478617495,
+          "s": 1032.1635122427158,
+          "lane": -1.3684307265276618,
+          "speed": 18.777333333333072,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 95,
+      "phase": "race",
+      "time": "2:13.88",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2701.43271618636,
+          "s": 1162.0266805673261,
+          "lane": -1.8366613247249834,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2534.0512445986305,
+          "s": 994.6452089795969,
+          "lane": 3.2888475301135407,
+          "speed": 16.992437474183124,
+          "health": 22.143271500124097,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2644.491296516316,
+          "s": 1136.8638246385524,
+          "lane": 2.470081469101577,
+          "speed": 18.42333333333321,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2367.2402555321614,
+          "s": 827.8342199131278,
+          "lane": -5.849937296129287,
+          "speed": 9.142355867157628,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2675.539709463027,
+          "s": 1167.1648336971186,
+          "lane": -3.5715155169262984,
+          "speed": 19.34066666666645,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2576.4934613340047,
+          "s": 1037.087425714971,
+          "lane": -0.7611443180676065,
+          "speed": 19.142666666666386,
+          "health": 7.990367949487066,
+          "onWaveLine": true
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 95,
+      "phase": "race",
+      "time": "2:14.18",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2707.3850331560066,
+          "s": 1167.9789975369729,
+          "lane": -1.7739582322717447,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2538.220076977616,
+          "s": 998.8140413585822,
+          "lane": 5.730295944932308,
+          "speed": 17.497770807516435,
+          "health": 22.143271500124097,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2648.5795068721527,
+          "s": 1140.952034994389,
+          "lane": -1.115194649342126,
+          "speed": 17.672666666666522,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2370.152007884881,
+          "s": 830.7459722658475,
+          "lane": -5.736810856371054,
+          "speed": 11.876415190763856,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2680.5769423589936,
+          "s": 1172.2020665930852,
+          "lane": -1.1168897728034868,
+          "speed": 19.63666666666643,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2582.1523329004604,
+          "s": 1042.7462972814267,
+          "lane": 0.17467343533624682,
+          "speed": 19.1689999999997,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 95,
+      "phase": "race",
+      "time": "2:14.48",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2713.35544921393,
+          "s": 1173.9494135948964,
+          "lane": -1.6270244230615836,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2542.0657690349044,
+          "s": 1002.6597334158707,
+          "lane": 5.64909099240197,
+          "speed": 14.920696370370575,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2652.48610722815,
+          "s": 1144.8586353503863,
+          "lane": -4.503361030805967,
+          "speed": 18.232666666666503,
+          "health": 10.634369710491889,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2373.9065324410385,
+          "s": 834.5004968220048,
+          "lane": -4.814580073549935,
+          "speed": 15.476415190763843,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2686.3514090490653,
+          "s": 1177.9765332831569,
+          "lane": 0.07892332006927723,
+          "speed": 19.943333333333076,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2587.8936773491714,
+          "s": 1048.4876417301377,
+          "lane": 0.6428759663389473,
+          "speed": 18.968999999999678,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 95,
+      "phase": "race",
+      "time": "2:14.77",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2718.9696172220356,
+          "s": 1179.563581603002,
+          "lane": -2.003526592878115,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2546.483191731925,
+          "s": 1007.0771561128915,
+          "lane": 4.69490331290146,
+          "speed": 18.320696370370563,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2656.602649676138,
+          "s": 1148.975177798374,
+          "lane": -5.8437652551075985,
+          "speed": 13.859557394232294,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2378.545899205103,
+          "s": 839.1398635860694,
+          "lane": -3.8896646998804885,
+          "speed": 18.876415190763833,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2692.1563431006207,
+          "s": 1183.7814673347123,
+          "lane": 0.33283446830101676,
+          "speed": 20.67,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2593.3668450383702,
+          "s": 1053.9608094193366,
+          "lane": 1.2042346447577545,
+          "speed": 19.32899999999966,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 96,
+      "phase": "race",
+      "time": "2:15.07",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2724.8299959957267,
+          "s": 1185.423960376693,
+          "lane": -2.631476756233306,
+          "speed": 20.54,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2551.9316747786415,
+          "s": 1012.5256391596079,
+          "lane": 3.866442854586235,
+          "speed": 18.880696370370543,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2660.886746401926,
+          "s": 1153.259274524162,
+          "lane": -5.127914561554825,
+          "speed": 17.45955739423228,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2384.212022974501,
+          "s": 844.8059873554673,
+          "lane": -3.682083272111056,
+          "speed": 19.18308185743048,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2698.3205017648697,
+          "s": 1189.9456259989613,
+          "lane": 1.3555548319066109,
+          "speed": 20.40333333333333,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2599.199846261138,
+          "s": 1059.7938106421045,
+          "lane": 1.7762383037513931,
+          "speed": 19.12899999999964,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 96,
+      "phase": "race",
+      "time": "2:15.40",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2731.3937142335253,
+          "s": 1191.9876786144916,
+          "lane": -2.6228666414218837,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2558.2429622007835,
+          "s": 1018.8369265817498,
+          "lane": 3.801294536747127,
+          "speed": 19.08069637037052,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2666.7256156803123,
+          "s": 1159.0981438025485,
+          "lane": -3.7041769671648526,
+          "speed": 19.939557394232263,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2390.6679317908843,
+          "s": 851.2618961718506,
+          "lane": -3.8557599674663994,
+          "speed": 19.129748524097124,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2705.1087427244274,
+          "s": 1196.733866958519,
+          "lane": 2.6567323402891523,
+          "speed": 20.09666666666664,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2605.694715920232,
+          "s": 1066.2886803011982,
+          "lane": 1.9451302130141845,
+          "speed": 19.328999999999617,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 96,
+      "phase": "race",
+      "time": "2:15.70",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2737.3273488789346,
+          "s": 1197.921313259901,
+          "lane": -2.0760124563518074,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2564.0371937367363,
+          "s": 1024.6311581177026,
+          "lane": 3.9284938306003614,
+          "speed": 18.8806963703705,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2672.358773863449,
+          "s": 1164.7313019856854,
+          "lane": -3.1376441490174747,
+          "speed": 20.67,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2396.5942674441812,
+          "s": 857.1882318251476,
+          "lane": -3.9521773162944625,
+          "speed": 19.183081857430437,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2711.679621156978,
+          "s": 1203.3047453910697,
+          "lane": 3.0130098121450475,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2611.5063780412684,
+          "s": 1072.1003424222347,
+          "lane": 1.8730158014496685,
+          "speed": 19.38233333333293,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 96,
+      "phase": "race",
+      "time": "2:16.00",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2743.288071215394,
+          "s": 1203.8820355963605,
+          "lane": -1.4912863748429177,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2569.9273101046997,
+          "s": 1030.521274485666,
+          "lane": 3.9966583581020085,
+          "speed": 18.934029703703814,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2678.209230455716,
+          "s": 1170.581758577952,
+          "lane": -2.373263820914542,
+          "speed": 20.67,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2402.6598229842425,
+          "s": 863.2537873652088,
+          "lane": -4.092353482040943,
+          "speed": 18.983081857430417,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2718.6887859461785,
+          "s": 1210.31391018027,
+          "lane": 3.484565857786923,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2617.281379263347,
+          "s": 1077.8753436443133,
+          "lane": 1.7851191510094906,
+          "speed": 19.18233333333291,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 97,
+      "phase": "race",
+      "time": "2:16.28",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2748.909600951064,
+          "s": 1209.5035653320303,
+          "lane": -1.0712744481351144,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2575.6402376748624,
+          "s": 1036.2342020558287,
+          "lane": 4.114096026284808,
+          "speed": 18.787363037037128,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2683.6292919122507,
+          "s": 1176.0018200344869,
+          "lane": -1.0860473322117907,
+          "speed": 19.869999999999983,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2408.6370796479728,
+          "s": 869.2310440289391,
+          "lane": -4.361176713221079,
+          "speed": 18.83641519076373,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2725.3878985785277,
+          "s": 1217.0130228126193,
+          "lane": 3.639787018900888,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2622.6861408338164,
+          "s": 1083.2801052147827,
+          "lane": 1.6878476569203902,
+          "speed": 19.288999999999557,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 97,
+      "phase": "race",
+      "time": "2:16.60",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2755.1717985009354,
+          "s": 1215.7657628819018,
+          "lane": -1.2300175846663777,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2582.245874690403,
+          "s": 1042.8398390713694,
+          "lane": 4.317608141408603,
+          "speed": 18.787363037037107,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2689.791712177532,
+          "s": 1182.1642402997684,
+          "lane": -0.2579658550212907,
+          "speed": 19.869999999999962,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2415.8756043910207,
+          "s": 876.469568771987,
+          "lane": -4.677036763946277,
+          "speed": 18.83641519076371,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2732.0463325593014,
+          "s": 1223.671456793393,
+          "lane": 4.385932791444724,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2628.6528759482303,
+          "s": 1089.2468403291966,
+          "lane": 1.4868285853908656,
+          "speed": 19.035666666666202,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 97,
+      "phase": "race",
+      "time": "2:16.90",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2761.2623850992695,
+          "s": 1221.8563494802358,
+          "lane": -1.714712631295425,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2588.4934342188253,
+          "s": 1049.0873985997916,
+          "lane": 4.36996461768546,
+          "speed": 18.84069637037042,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2695.738397256103,
+          "s": 1188.110925378339,
+          "lane": 0.2038995655488316,
+          "speed": 19.923333333333275,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2422.8376336890306,
+          "s": 883.4315980699969,
+          "lane": -4.6978928988863595,
+          "speed": 19.143081857430357,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2737.7469017355056,
+          "s": 1229.3720259695972,
+          "lane": 3.543396376574736,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2634.252440866974,
+          "s": 1094.8464052479405,
+          "lane": 1.165979149635434,
+          "speed": 19.088999999999515,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 97,
+      "phase": "race",
+      "time": "2:17.22",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2768.0213612087728,
+          "s": 1228.615325589739,
+          "lane": -2.1627960103105957,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2594.9208790747452,
+          "s": 1055.5148434557116,
+          "lane": 4.2926548525066925,
+          "speed": 18.8406963703704,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2702.249730026205,
+          "s": 1194.622258148441,
+          "lane": 0.6846958094481346,
+          "speed": 20.8,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2429.5855075307873,
+          "s": 890.1794719117536,
+          "lane": -4.5670158597536314,
+          "speed": 19.143081857430335,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2743.483405342675,
+          "s": 1235.1085295767664,
+          "lane": 1.9156091103232802,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2640.1345598302923,
+          "s": 1100.7285242112587,
+          "lane": 0.798670721489768,
+          "speed": 19.088999999999494,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 98,
+      "phase": "race",
+      "time": "2:17.52",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2774.7686916075354,
+          "s": 1235.3626559885017,
+          "lane": -2.0593143600330173,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2600.863201048834,
+          "s": 1061.4571654298004,
+          "lane": 4.161514908973167,
+          "speed": 18.894029703703712,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2708.4622364551988,
+          "s": 1200.834764577435,
+          "lane": 2.045553162185043,
+          "speed": 20.533333333333328,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2435.670329916492,
+          "s": 896.2642942974583,
+          "lane": -4.340614151775457,
+          "speed": 19.19641519076365,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2749.3541847794713,
+          "s": 1240.979309013563,
+          "lane": 0.9364693420023749,
+          "speed": 19.946666666666648,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2645.7718192975744,
+          "s": 1106.3657836785408,
+          "lane": 0.7363175177031542,
+          "speed": 19.142333333332807,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 98,
+      "phase": "race",
+      "time": "2:17.85",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2781.9443203895644,
+          "s": 1242.5382847705307,
+          "lane": -1.8051131010840806,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2607.350418831613,
+          "s": 1067.9443832125792,
+          "lane": 3.996951283653229,
+          "speed": 19.09402970370369,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2715.747894828437,
+          "s": 1208.1204229506732,
+          "lane": 3.326823795304966,
+          "speed": 20.8,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2442.1963495297023,
+          "s": 902.7903139106686,
+          "lane": -4.0168195249927905,
+          "speed": 19.143081857430293,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2755.927304845202,
+          "s": 1247.5524290792935,
+          "lane": 0.26964420603318384,
+          "speed": 20.146666666666626,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2652.0932217249847,
+          "s": 1112.687186105951,
+          "lane": 1.0649740169826343,
+          "speed": 19.342333333332785,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 98,
+      "phase": "race",
+      "time": "2:18.17",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2788.662042026559,
+          "s": 1249.2560064075253,
+          "lane": -2.1085095808018415,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2613.422499370521,
+          "s": 1074.0164637514874,
+          "lane": 3.831494224807324,
+          "speed": 19.09402970370367,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2723.3983721606846,
+          "s": 1215.7709002829208,
+          "lane": 3.973230042915183,
+          "speed": 20.639999999999997,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2448.21286238836,
+          "s": 908.8068267693263,
+          "lane": -3.705522397671263,
+          "speed": 19.14308185743027,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2762.261988328616,
+          "s": 1253.8871125627077,
+          "lane": -0.22276778216055562,
+          "speed": 20.146666666666604,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2658.2207159316595,
+          "s": 1118.8146803126258,
+          "lane": 1.6673704890167835,
+          "speed": 19.89,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 98,
+      "phase": "race",
+      "time": "2:18.42",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2793.9626286445764,
+          "s": 1254.5565930255427,
+          "lane": -2.7333929373173493,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2618.1442398937106,
+          "s": 1078.738204274677,
+          "lane": 3.694693476280901,
+          "speed": 19.05402970370365,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2728.8596387628386,
+          "s": 1221.2321668850748,
+          "lane": 3.900340456990814,
+          "speed": 20.8,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2452.851637667857,
+          "s": 913.4456020488235,
+          "lane": -3.4520617762171844,
+          "speed": 19.103081857430254,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2767.2702620882674,
+          "s": 1258.895386322359,
+          "lane": -0.4964920550772184,
+          "speed": 19.853333333333254,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2663.3702000992307,
+          "s": 1123.964164480197,
+          "lane": 2.587056615099122,
+          "speed": 20.02,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 99,
+      "phase": "race",
+      "time": "2:18.73",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2800.759629498829,
+          "s": 1261.3535938797952,
+          "lane": -3.568815950158121,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2624.0415797275245,
+          "s": 1084.6355441084909,
+          "lane": 3.5083082901137885,
+          "speed": 18.800696370370297,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2735.122453045643,
+          "s": 1227.4949811678791,
+          "lane": 2.781937684313411,
+          "speed": 20.8,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2458.5625972166144,
+          "s": 919.1565615975808,
+          "lane": -2.995068756008049,
+          "speed": 18.8497485240969,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2773.694488737432,
+          "s": 1265.3196129715236,
+          "lane": -0.7654321339951854,
+          "speed": 20.106666666666566,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2670.7017223687126,
+          "s": 1131.295686749679,
+          "lane": 3.3469557461819983,
+          "speed": 20.02,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 99,
+      "phase": "race",
+      "time": "2:19.00",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2806.8755980039905,
+          "s": 1267.4695623849568,
+          "lane": -3.8477624967397044,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2628.916187084791,
+          "s": 1089.5101514657574,
+          "lane": 3.301810899325488,
+          "speed": 18.96069637037028,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2740.1588716514925,
+          "s": 1232.5313997737287,
+          "lane": 2.2769927231739455,
+          "speed": 20.8,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2463.1981028702075,
+          "s": 923.7920672511739,
+          "lane": -2.1118110842411175,
+          "speed": 19.00974852409688,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2779.131057801529,
+          "s": 1270.7561820356207,
+          "lane": -0.6839814990292163,
+          "speed": 20.013333333333215,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2676.6713066112225,
+          "s": 1137.2652709921888,
+          "lane": 3.947971308730307,
+          "speed": 19.966666666666665,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 99,
+      "phase": "race",
+      "time": "2:19.32",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2813.7380047571187,
+          "s": 1274.331969138085,
+          "lane": -3.6455110601359455,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2634.5708151448316,
+          "s": 1095.164779525798,
+          "lane": 2.94408823319817,
+          "speed": 18.960696370370258,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2746.4934268734355,
+          "s": 1238.8659549956717,
+          "lane": 0.9941829718923862,
+          "speed": 24.5,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2468.7716846259323,
+          "s": 929.3656490068986,
+          "lane": -0.8332302075263955,
+          "speed": 18.756415190763526,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2785.481222695411,
+          "s": 1277.1063469295025,
+          "lane": -0.27557611096785406,
+          "speed": 20.013333333333193,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2683.418601977415,
+          "s": 1144.0125663583815,
+          "lane": 4.782147062244188,
+          "speed": 19.459999999999976,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 99,
+      "phase": "race",
+      "time": "2:19.60",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2819.463286070868,
+          "s": 1280.0572504518343,
+          "lane": -3.3839386464801082,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2639.56530821029,
+          "s": 1100.1592725912562,
+          "lane": 2.5900562784756103,
+          "speed": 18.81402970370357,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2753.139802181572,
+          "s": 1245.5123303038083,
+          "lane": -0.2062442414244814,
+          "speed": 20,
+          "health": 5.619181410877454,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2474.0013632280948,
+          "s": 934.5953276090611,
+          "lane": 0.09652108276056415,
+          "speed": 19.116415190763508,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2791.1271388103155,
+          "s": 1282.752263044407,
+          "lane": 0.21371236454310555,
+          "speed": 20.11999999999984,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2689.361655572879,
+          "s": 1149.9556199538454,
+          "lane": 4.601918124601069,
+          "speed": 19.059999999999956,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 100,
+      "phase": "race",
+      "time": "2:19.90",
+      "lap": "2 / 3",
+      "notice": "Mussolini: Totalschaden!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2825.261640856217,
+          "s": 1285.8556052371835,
+          "lane": -3.2906465750040765,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2644.7905743252068,
+          "s": 1105.384538706173,
+          "lane": 2.2470283075461164,
+          "speed": 18.867363037036885,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.0275131041763,
+          "s": 1246.4000412264124,
+          "lane": -0.23838206811762436,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2479.8121884484117,
+          "s": 940.406152829378,
+          "lane": 0.6982285369262361,
+          "speed": 19.16974852409682,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2798.0039222085716,
+          "s": 1289.6290464426631,
+          "lane": 0.48858859426401086,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2695.4874963969014,
+          "s": 1156.0814607778677,
+          "lane": 4.249605522160139,
+          "speed": 19.11333333333327,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 100,
+      "phase": "race",
+      "time": "2:20.18",
+      "lap": "2 / 3",
+      "notice": "Mussolini: Totalschaden!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2830.825069759885,
+          "s": 1291.4190341408514,
+          "lane": -3.409679388385836,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2649.950216416027,
+          "s": 1110.5441807969935,
+          "lane": 1.8163514732760606,
+          "speed": 18.974029703703533,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.0441792428146,
+          "s": 1246.4167073650508,
+          "lane": -0.2385147343161226,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2485.336096513322,
+          "s": 945.9300608942883,
+          "lane": 0.7605133389067208,
+          "speed": 19.27641519076347,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2804.9822663734312,
+          "s": 1296.6073906075228,
+          "lane": 0.6605697480677274,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2701.389191826894,
+          "s": 1161.9831562078605,
+          "lane": 4.275803738827522,
+          "speed": 19.219999999999917,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 100,
+      "phase": "race",
+      "time": "2:20.48",
+      "lap": "2 / 3",
+      "notice": "Mussolini: Totalschaden!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2836.8214691564885,
+          "s": 1297.4154335374549,
+          "lane": -3.3855031731860317,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2655.539227388884,
+          "s": 1116.13319176985,
+          "lane": 1.759665685555656,
+          "speed": 18.774029703703512,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.1041773926036,
+          "s": 1246.4767055148398,
+          "lane": -0.2389859251574102,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2491.1400320214752,
+          "s": 951.7339964024416,
+          "lane": 0.5660326208462638,
+          "speed": 19.329748524096782,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2812.4087689639864,
+          "s": 1304.033893198078,
+          "lane": 0.8990156705225196,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2707.7059613224824,
+          "s": 1168.2999257034487,
+          "lane": 4.410426968204414,
+          "speed": 19.27333333333323,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 100,
+      "phase": "race",
+      "time": "2:20.75",
+      "lap": "2 / 3",
+      "notice": "Mussolini: Totalschaden!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2842.090458385668,
+          "s": 1302.6844227666345,
+          "lane": -3.288134549043142,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2660.6435913097343,
+          "s": 1121.2375556907007,
+          "lane": 2.156157196757084,
+          "speed": 18.68069637037016,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.159245129519,
+          "s": 1246.5317732517553,
+          "lane": -0.23931415941560735,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2496.2810278938387,
+          "s": 956.874992274805,
+          "lane": 0.35981873600527015,
+          "speed": 19.23641519076343,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2819.057280243136,
+          "s": 1310.6824044772277,
+          "lane": 1.0903324011043913,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2713.298096619472,
+          "s": 1173.8920610004382,
+          "lane": 4.441069308781965,
+          "speed": 19.17999999999988,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 101,
+      "phase": "race",
+      "time": "2:21.05",
+      "lap": "2 / 3",
+      "notice": "Mussolini: Totalschaden!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2847.9640707488793,
+          "s": 1308.5580351298456,
+          "lane": -3.1795017692179672,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2666.7528251877156,
+          "s": 1127.346789568682,
+          "lane": 2.800433796976585,
+          "speed": 18.48069637037014,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.219245116167,
+          "s": 1246.591773238403,
+          "lane": -0.23935417066481715,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2502.036932113094,
+          "s": 962.6308964940602,
+          "lane": 0.11493199683289505,
+          "speed": 19.289748524096744,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2826.5452463678175,
+          "s": 1318.170370601909,
+          "lane": 1.191340554884841,
+          "speed": 24.01999999999999,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2719.6322022426257,
+          "s": 1180.226166623592,
+          "lane": 4.421561327623786,
+          "speed": 19.233333333333192,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 101,
+      "phase": "race",
+      "time": "2:21.37",
+      "lap": "2 / 3",
+      "notice": "Mussolini: Totalschaden!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2854.118238318847,
+          "s": 1314.7122026998134,
+          "lane": -3.131791247726557,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2673.546188674496,
+          "s": 1134.1401530554624,
+          "lane": 3.3464447582324706,
+          "speed": 18.987363037036786,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.2825784319984,
+          "s": 1246.6551065542346,
+          "lane": -0.23940122838310726,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2508.0937058678464,
+          "s": 968.6876702488128,
+          "lane": -0.1771349416497401,
+          "speed": 19.03641519076339,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2834.1075780612928,
+          "s": 1325.7327022953843,
+          "lane": 1.065374632642459,
+          "speed": 23.006666666666632,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2726.262789640597,
+          "s": 1186.8567540215633,
+          "lane": 4.403401681308844,
+          "speed": 19.23333333333317,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 101,
+      "phase": "race",
+      "time": "2:21.67",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2859.9681830252466,
+          "s": 1320.562147406213,
+          "lane": -3.1883031939085877,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2679.723472997503,
+          "s": 1140.3174373784693,
+          "lane": 3.705771927370691,
+          "speed": 18.787363037036766,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.342578411139,
+          "s": 1246.7151065333753,
+          "lane": -0.23945123287958892,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2513.8093251758232,
+          "s": 974.4032895567896,
+          "lane": -0.5703203514408514,
+          "speed": 18.83641519076337,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2840.9162010293458,
+          "s": 1332.5413252634373,
+          "lane": 0.8372448463382662,
+          "speed": 22.04666666666661,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2732.5139926114143,
+          "s": 1193.1079569923807,
+          "lane": 4.406701947355096,
+          "speed": 19.286666666666484,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 101,
+      "phase": "race",
+      "time": "2:21.97",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2865.913264433133,
+          "s": 1326.5072288140993,
+          "lane": -3.2823552369170073,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2685.835523845125,
+          "s": 1146.4294882260913,
+          "lane": 3.9680064709576226,
+          "speed": 18.84069637037008,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.4025783848965,
+          "s": 1246.7751065071327,
+          "lane": -0.23950731895301303,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2519.588099498168,
+          "s": 980.1820638791344,
+          "lane": -1.5271823635512471,
+          "speed": 19.143081857430015,
+          "health": 83.57156010905905,
+          "onWaveLine": true
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2847.4086217895065,
+          "s": 1339.033746023598,
+          "lane": 0.7765193615266478,
+          "speed": 21.086666666666588,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2738.738839170186,
+          "s": 1199.3328035511524,
+          "lane": 4.429251883420611,
+          "speed": 19.086666666666463,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 102,
+      "phase": "race",
+      "time": "2:22.27",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2871.9341124849598,
+          "s": 1332.528076865926,
+          "lane": -3.367423734734352,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2691.905196033138,
+          "s": 1152.4991604141044,
+          "lane": 4.162957738043665,
+          "speed": 18.894029703703392,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.462578351847,
+          "s": 1246.835106474083,
+          "lane": -0.23957026007135104,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2525.7863401171708,
+          "s": 986.3803044981371,
+          "lane": -2.4982435434644947,
+          "speed": 19.19641519076333,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2853.681826254149,
+          "s": 1345.3069504882408,
+          "lane": 0.8612592996754228,
+          "speed": 20.126666666666566,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2745.091880100026,
+          "s": 1205.6858444809925,
+          "lane": 4.554039688432168,
+          "speed": 19.139999999999777,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 102,
+      "phase": "race",
+      "time": "2:22.57",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2878.012404191397,
+          "s": 1338.6063685723632,
+          "lane": -3.3416962908820214,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2697.971760236006,
+          "s": 1158.5657246169724,
+          "lane": 4.263104642430738,
+          "speed": 18.947363037036705,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 3,
+          "distance": 2754.5225783103206,
+          "s": 1246.8951064325568,
+          "lane": -0.23964081423090816,
+          "speed": 0,
+          "health": 0,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2532.016855401305,
+          "s": 992.6108197822712,
+          "lane": -2.789809106234086,
+          "speed": 18.996415190763308,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2859.766319640972,
+          "s": 1351.3914438750637,
+          "lane": 0.5965541020755979,
+          "speed": 20.17999999999988,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 4,
+          "distance": 2752.16163191718,
+          "s": 1212.7555962981462,
+          "lane": 4.680776188696537,
+          "speed": 19.19333333333309,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 102,
+      "phase": "race",
+      "time": "2:22.87",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2883.8821221303288,
+          "s": 1344.476086511295,
+          "lane": -3.235837550184346,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2704.1583446617165,
+          "s": 1164.7523090426828,
+          "lane": 4.296420083051129,
+          "speed": 18.747363037036685,
+          "health": 16.960565660140244,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2754.844290080832,
+          "s": 1247.216818203068,
+          "lane": -0.23871626440466917,
+          "speed": 2.6,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2538.1497583700057,
+          "s": 998.743722750972,
+          "lane": -3.2480163068647907,
+          "speed": 19.303081857429955,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2865.8225192796754,
+          "s": 1357.447643513767,
+          "lane": 0.0860080404465203,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2758.6511023922594,
+          "s": 1219.2450667732257,
+          "lane": 4.39138495106987,
+          "speed": 19.246666666666403,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 102,
+      "phase": "race",
+      "time": "2:23.18",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2890.1079981452076,
+          "s": 1350.701962526174,
+          "lane": -3.424288035062027,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2708.545573869961,
+          "s": 1169.1395382509274,
+          "lane": 4.331110606624789,
+          "speed": 10.417603310314107,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2756.3056955967,
+          "s": 1248.6782237189361,
+          "lane": -0.22241673003307738,
+          "speed": 6.400000000000003,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2544.5163577773315,
+          "s": 1005.1103221582978,
+          "lane": -3.768986060689057,
+          "speed": 19.303081857429934,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2872.360765687751,
+          "s": 1363.9858899218427,
+          "lane": -1.1509205176106696,
+          "speed": 20.8,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2764.73676634359,
+          "s": 1225.3307307245561,
+          "lane": 3.764748677097327,
+          "speed": 20.02,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 103,
+      "phase": "race",
+      "time": "2:23.50",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2896.6962540001605,
+          "s": 1357.2902183811268,
+          "lane": -3.4639549894033035,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2711.9365543578187,
+          "s": 1172.530518738785,
+          "lane": 4.280205611687545,
+          "speed": 10.60103544682765,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2758.9718049217727,
+          "s": 1251.3443330440089,
+          "lane": -0.17191341356243564,
+          "speed": 10.199999999999996,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2550.804642598528,
+          "s": 1011.3986069794944,
+          "lane": -3.8177232478936087,
+          "speed": 19.303081857429913,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2879.0241622190256,
+          "s": 1370.6492864531172,
+          "lane": -2.7873719965508874,
+          "speed": 19.83999999999998,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2770.4082517893557,
+          "s": 1231.002216170322,
+          "lane": 2.255844641626347,
+          "speed": 19.859999999999996,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 103,
+      "phase": "race",
+      "time": "2:23.80",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2903.2078346405247,
+          "s": 1363.801799021491,
+          "lane": -2.535140641362145,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2716.048234497188,
+          "s": 1176.6421988781542,
+          "lane": 4.11616358760984,
+          "speed": 14.201035446827637,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2762.6082668228237,
+          "s": 1254.9807949450599,
+          "lane": -0.13996636958496417,
+          "speed": 13.799999999999983,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2556.6442704764845,
+          "s": 1017.2382348574508,
+          "lane": -3.6583565742798214,
+          "speed": 19.356415190763226,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2886.163129817767,
+          "s": 1377.7882540518588,
+          "lane": -2.8640930433082588,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2775.772457073096,
+          "s": 1236.3664214540624,
+          "lane": 1.283858574422561,
+          "speed": 19.153333333333308,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 103,
+      "phase": "race",
+      "time": "2:24.12",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2909.994148704218,
+          "s": 1370.5881130851842,
+          "lane": -1.0368292900185074,
+          "speed": 20.67,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2721.62199120944,
+          "s": 1182.215955590406,
+          "lane": 3.976301390371876,
+          "speed": 18.001035446827625,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2767.6210987533714,
+          "s": 1259.9936268756076,
+          "lane": -0.29099804001958757,
+          "speed": 17.59999999999997,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2562.6878227052252,
+          "s": 1023.2817870861916,
+          "lane": -3.499994613110221,
+          "speed": 19.356415190763204,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2894.1450705748034,
+          "s": 1385.770194808895,
+          "lane": -2.3112120341085807,
+          "speed": 24.5,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2781.6479055302234,
+          "s": 1242.2418699111897,
+          "lane": 1.892966192872693,
+          "speed": 19.153333333333286,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 103,
+      "phase": "race",
+      "time": "2:24.42",
+      "lap": "2 / 3",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2916.656085047773,
+          "s": 1377.2500494287394,
+          "lane": -0.059261003766618824,
+          "speed": 24.5,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2727.664301220577,
+          "s": 1188.2582656015431,
+          "lane": 4.088192630323672,
+          "speed": 18.81436878016094,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2773.3198812968158,
+          "s": 1265.692409419052,
+          "lane": -0.5834929424710613,
+          "speed": 19.173333333333286,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2568.3101289180013,
+          "s": 1028.9040932989676,
+          "lane": -3.3306026415972627,
+          "speed": 19.156415190763184,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2901.545435666566,
+          "s": 1393.1705599006575,
+          "lane": -2.28874486598992,
+          "speed": 24.126666666666658,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2787.1047730871906,
+          "s": 1247.6987374681569,
+          "lane": 2.5068975487994853,
+          "speed": 18.953333333333266,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "elapsedSeconds": 104,
+      "phase": "race",
+      "time": "2:24.70",
+      "lap": "2 / 3",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2923.587528500033,
+          "s": 1384.1814928809993,
+          "lane": 0.09692699708594729,
+          "speed": 24.5,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2733.36402000177,
+          "s": 1193.9579843827362,
+          "lane": 4.257389847215646,
+          "speed": 18.667702113494254,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2778.7994708452115,
+          "s": 1271.1719989674477,
+          "lane": -0.5662200332719717,
+          "speed": 19.0266666666666,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2573.5390764957774,
+          "s": 1034.1330408767437,
+          "lane": -3.0786489000075075,
+          "speed": 19.26308185742983,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2908.3101461493916,
+          "s": 1399.9352703834832,
+          "lane": -2.5028078962380147,
+          "speed": 23.21999999999997,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2792.363443915376,
+          "s": 1252.9574082963425,
+          "lane": 2.1430460600403722,
+          "speed": 19.313333333333247,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 104,
+      "phase": "race",
+      "time": "2:24.98",
+      "lap": "2 / 3",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2930.5249054424744,
+          "s": 1391.1188698234407,
+          "lane": -0.07451879897723625,
+          "speed": 24.446666666666665,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2739.121792167686,
+          "s": 1199.7157565486525,
+          "lane": 4.338948489329442,
+          "speed": 18.521035446827568,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2784.1979526734667,
+          "s": 1276.570480795703,
+          "lane": -0.2615959745027947,
+          "speed": 19.133333333333248,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2578.6658916542065,
+          "s": 1039.2598560351728,
+          "lane": -2.7709266565561297,
+          "speed": 19.36974852409648,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2915.05454268634,
+          "s": 1406.6796669204316,
+          "lane": -2.4173538055478394,
+          "speed": 22.313333333333283,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2797.6803713156633,
+          "s": 1258.2743356966296,
+          "lane": 1.4590293687623008,
+          "speed": 19.16666666666656,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 104,
+      "phase": "race",
+      "time": "2:25.25",
+      "lap": "2 / 3",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2936.921598442438,
+          "s": 1397.5155628234045,
+          "lane": -0.2801458089841392,
+          "speed": 23.593333333333312,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2744.5936099618275,
+          "s": 1205.1875743427938,
+          "lane": 4.437529026214831,
+          "speed": 18.427702113494217,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2789.255035097394,
+          "s": 1281.62756321963,
+          "lane": 0.15335525211373327,
+          "speed": 19.039999999999896,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2583.486007468964,
+          "s": 1044.0799718499304,
+          "lane": -2.576633134017579,
+          "speed": 19.023081857429794,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2920.9202922593786,
+          "s": 1412.5454164934702,
+          "lane": -2.0710919684383358,
+          "speed": 21.45999999999993,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2802.678229104309,
+          "s": 1263.2721934852755,
+          "lane": 1.3891803881858633,
+          "speed": 19.326666666666544,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 104,
+      "phase": "race",
+      "time": "2:25.52",
+      "lap": "2 / 3",
+      "notice": "Saubere Landung · Schub!",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2943.1151233412866,
+          "s": 1403.709087722253,
+          "lane": -0.15884278322695713,
+          "speed": 22.73999999999996,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2750.6184131801283,
+          "s": 1211.2123775610946,
+          "lane": 4.607577935139513,
+          "speed": 18.5877021134942,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2794.8194802885237,
+          "s": 1287.1920084107599,
+          "lane": 0.48568341097339807,
+          "speed": 24.5,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2588.332269198919,
+          "s": 1048.9262335798855,
+          "lane": -2.290614808216988,
+          "speed": 19.43641519076311,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2926.404035828742,
+          "s": 1418.0291600628336,
+          "lane": -1.6401706389371964,
+          "speed": 20.606666666666577,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2807.570466462308,
+          "s": 1268.1644308432744,
+          "lane": 2.042223733801228,
+          "speed": 19.233333333333192,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 105,
+      "phase": "race",
+      "time": "2:25.78",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2948.997322163353,
+          "s": 1409.5912865443195,
+          "lane": 0.6293338012204613,
+          "speed": 21.886666666666606,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2756.5039946198794,
+          "s": 1217.0979590008458,
+          "lane": 4.458039752146197,
+          "speed": 19.001035446827515,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2801.3697351225564,
+          "s": 1293.7422632447926,
+          "lane": 1.1299306452949576,
+          "speed": 24.5,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2593.3365697555173,
+          "s": 1053.9305341364836,
+          "lane": -1.7783451419452483,
+          "speed": 19.596415190763093,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2931.6107913818814,
+          "s": 1423.235915615973,
+          "lane": -1.1489367061098654,
+          "speed": 19.753333333333224,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2812.541919335912,
+          "s": 1273.1358837168784,
+          "lane": 2.7344718358820708,
+          "speed": 19.393333333333175,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    },
+    {
+      "elapsedSeconds": 105,
+      "phase": "race",
+      "time": "2:26.05",
+      "lap": "2 / 3",
+      "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+      "place": "1",
+      "positions": [
+        {
+          "kart": 0,
+          "rank": 1,
+          "distance": 2954.6747815763238,
+          "s": 1415.26874595729,
+          "lane": 1.4701848473479175,
+          "speed": 21.033333333333253,
+          "health": 44.737439154837105,
+          "onWaveLine": false
+        },
+        {
+          "kart": 1,
+          "rank": 5,
+          "distance": 2761.645535348569,
+          "s": 1222.2394997295353,
+          "lane": 4.102583378009205,
+          "speed": 18.65436878016083,
+          "health": 2.9605656601402437,
+          "onWaveLine": false
+        },
+        {
+          "kart": 2,
+          "rank": 4,
+          "distance": 2807.9614127444424,
+          "s": 1300.3339408666786,
+          "lane": 2.027030282846278,
+          "speed": 24.5,
+          "health": 100,
+          "onWaveLine": false
+        },
+        {
+          "kart": 3,
+          "rank": 6,
+          "distance": 2598.431374968467,
+          "s": 1059.0253393494334,
+          "lane": -1.4968309851482056,
+          "speed": 19.50308185742974,
+          "health": 83.57156010905905,
+          "onWaveLine": false
+        },
+        {
+          "kart": 4,
+          "rank": 2,
+          "distance": 2936.7799360009626,
+          "s": 1428.4050602350542,
+          "lane": -0.43174247462487914,
+          "speed": 20.16666666666654,
+          "health": 19.854466714677425,
+          "onWaveLine": false
+        },
+        {
+          "kart": 5,
+          "rank": 3,
+          "distance": 2817.7230399878226,
+          "s": 1278.317004368789,
+          "lane": 3.164458948573738,
+          "speed": 19.299999999999823,
+          "health": 7.990367949487066,
+          "onWaveLine": false
+        }
+      ]
+    }
+  ],
+  "runtimeErrors": [],
+  "detectedAt": {
+    "elapsedSeconds": 84,
+    "phase": "race",
+    "time": "2:00.60",
+    "lap": "2 / 3",
+    "notice": "Pflichtjubel! Die Regelheft-Serpentine dröhnt · außen bleibt freie Fahrt",
+    "place": "1",
+    "positions": [
+      {
+        "kart": 0,
+        "rank": 1,
+        "distance": 2424.0591304735335,
+        "s": 884.6530948544998,
+        "lane": 3.283445078325914,
+        "speed": 20.67,
+        "health": 55.83539126470295,
+        "onWaveLine": false
+      },
+      {
+        "kart": 1,
+        "rank": 5,
+        "distance": 2285.5889776139343,
+        "s": 746.1829419949006,
+        "lane": 0.36757800474493113,
+        "speed": 18.988411023089967,
+        "health": 24.816945121248843,
+        "onWaveLine": false
+      },
+      {
+        "kart": 2,
+        "rank": 3,
+        "distance": 2368.2312743478947,
+        "s": 860.6038024701309,
+        "lane": -2.3202523224375193,
+        "speed": 20.67,
+        "health": 14.923646842226425,
+        "onWaveLine": false
+      },
+      {
+        "kart": 3,
+        "rank": 6,
+        "distance": 2128.1038162599575,
+        "s": 588.6977806409238,
+        "lane": -4.04030368362583,
+        "speed": 18.953333333333184,
+        "health": 100,
+        "onWaveLine": false
+      },
+      {
+        "kart": 4,
+        "rank": 2,
+        "distance": 2400.780493386393,
+        "s": 892.4056176204847,
+        "lane": -4.542249651227176,
+        "speed": 19.649999999999977,
+        "health": 19.854466714677425,
+        "onWaveLine": false
+      },
+      {
+        "kart": 5,
+        "rank": 4,
+        "distance": 2303.3412034017992,
+        "s": 763.9351677827656,
+        "lane": 3.6345314435664,
+        "speed": 19.16307245810695,
+        "health": 7.990367949487066,
+        "onWaveLine": false
+      }
+    ]
+  },
+  "steered": true,
+  "endedAt": "2026-10-12T05:36:51.583Z"
+}

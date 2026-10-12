@@ -1,0 +1,787 @@
+{
+  "track": "stadionring",
+  "method": "Headless Babylon runtime race from the real grid. The player collected and held an item through normal pickup and E input; a single direct projectile was then injected 1.7 m behind the moving kart through the live ItemWorld, followed by a second identical projectile after the held item was consumed. No kart position or item slot was injected.",
+  "runtimeErrors": [],
+  "preItemHeld": {
+    "phase": "race",
+    "slot": "trap",
+    "shield": true,
+    "health": 58.79924495584801,
+    "speed": 19.5,
+    "spin": 0,
+    "immune": 0,
+    "impact": 0,
+    "cart": {
+      "x": -81.97617187836866,
+      "z": -37.24935625390979,
+      "heading": -3.1835992563712985
+    },
+    "nearBots": [
+      3.6954330964663353,
+      26.06542714044827
+    ]
+  },
+  "afterFirstProjectile": null,
+  "afterSecondProjectile": null,
+  "events": [
+    {
+      "time": 4.883333333333321,
+      "kind": "launch",
+      "kart": 1,
+      "item": "direct"
+    },
+    {
+      "time": 5.33333333333332,
+      "kind": "hit",
+      "kart": 0,
+      "item": "direct",
+      "owner": 1
+    },
+    {
+      "time": 13.600000000000255,
+      "kind": "pickup",
+      "kart": 5,
+      "item": "trap"
+    },
+    {
+      "time": 13.600000000000255,
+      "kind": "launch",
+      "kart": 1,
+      "item": "direct"
+    },
+    {
+      "time": 14.583333333333638,
+      "kind": "launch",
+      "kart": 5,
+      "item": "trap"
+    },
+    {
+      "time": 14.583333333333638,
+      "kind": "hit",
+      "kart": 4,
+      "item": "trap",
+      "owner": 5
+    },
+    {
+      "time": 22.766666666666655,
+      "kind": "hit",
+      "kart": 2,
+      "item": "trap",
+      "owner": 5
+    },
+    {
+      "time": 30.633333333332875,
+      "kind": "near-miss",
+      "kart": 0,
+      "item": "trap",
+      "owner": 3
+    },
+    {
+      "time": 30.666666666666206,
+      "kind": "hit",
+      "kart": 0,
+      "item": "trap",
+      "owner": 3
+    },
+    {
+      "time": 37.9166666666658,
+      "kind": "launch",
+      "kart": 1,
+      "item": "triple"
+    },
+    {
+      "time": 41.04999999999895,
+      "kind": "hit",
+      "kart": 1,
+      "item": "trap",
+      "owner": 5
+    },
+    {
+      "time": 42.09999999999889,
+      "kind": "near-miss",
+      "kart": 4,
+      "item": "trap",
+      "owner": 3
+    },
+    {
+      "time": 43.683333333332136,
+      "kind": "pickup",
+      "kart": 1,
+      "item": "boost"
+    },
+    {
+      "time": 46.083333333332,
+      "kind": "pickup",
+      "kart": 3,
+      "item": "trap"
+    },
+    {
+      "time": 46.916666666665286,
+      "kind": "pickup",
+      "kart": 4,
+      "item": "censor"
+    },
+    {
+      "time": 47.28333333333193,
+      "kind": "launch",
+      "kart": 3,
+      "item": "trap"
+    },
+    {
+      "time": 47.41666666666526,
+      "kind": "launch",
+      "kart": 4,
+      "item": "censor"
+    },
+    {
+      "time": 47.41666666666526,
+      "kind": "hit",
+      "kart": 0,
+      "item": "censor",
+      "owner": 4
+    },
+    {
+      "time": 47.89999999999856,
+      "kind": "hit",
+      "kart": 4,
+      "item": "trap",
+      "owner": 3
+    },
+    {
+      "time": 50.13333333333177,
+      "kind": "near-miss",
+      "kart": 0,
+      "item": "direct",
+      "owner": 2
+    },
+    {
+      "time": 50.59999999999841,
+      "kind": "hit",
+      "kart": 5,
+      "item": "direct",
+      "owner": 2
+    },
+    {
+      "time": 53.7166666666649,
+      "kind": "pickup",
+      "kart": 2,
+      "item": "trap"
+    },
+    {
+      "time": 55.66666666666479,
+      "kind": "launch",
+      "kart": 5,
+      "item": "triple"
+    },
+    {
+      "time": 56.54999999999807,
+      "kind": "launch",
+      "kart": 3,
+      "item": "direct"
+    },
+    {
+      "time": 56.616666666664734,
+      "kind": "launch",
+      "kart": 2,
+      "item": "trap"
+    },
+    {
+      "time": 56.6833333333314,
+      "kind": "hit",
+      "kart": 4,
+      "item": "direct",
+      "owner": 3
+    },
+    {
+      "time": 58.11666666666465,
+      "kind": "near-miss",
+      "kart": 3,
+      "item": "trap",
+      "owner": 2
+    },
+    {
+      "time": 58.14999999999798,
+      "kind": "hit",
+      "kart": 3,
+      "item": "trap",
+      "owner": 2
+    },
+    {
+      "time": 59.966666666664544,
+      "kind": "pickup",
+      "kart": 5,
+      "item": "homing"
+    },
+    {
+      "time": 60.94999999999782,
+      "kind": "launch",
+      "kart": 5,
+      "item": "homing"
+    },
+    {
+      "time": 68.5999999999974,
+      "kind": "launch",
+      "kart": 4,
+      "item": "censor"
+    },
+    {
+      "time": 68.5999999999974,
+      "kind": "hit",
+      "kart": 0,
+      "item": "censor",
+      "owner": 4
+    },
+    {
+      "time": 69.38333333333068,
+      "kind": "pickup",
+      "kart": 2,
+      "item": "trap"
+    },
+    {
+      "time": 72.78333333333049,
+      "kind": "launch",
+      "kart": 1,
+      "item": "direct"
+    },
+    {
+      "time": 74.26666666666374,
+      "kind": "hit",
+      "kart": 5,
+      "item": "direct",
+      "owner": 1
+    },
+    {
+      "time": 74.71666666666371,
+      "kind": "pickup",
+      "kart": 3,
+      "item": "boost"
+    },
+    {
+      "time": 78.71666666666349,
+      "kind": "near-miss",
+      "kart": 4,
+      "item": "trap",
+      "owner": 2
+    },
+    {
+      "time": 80.61666666666338,
+      "kind": "pickup",
+      "kart": 5,
+      "item": "homing"
+    },
+    {
+      "time": 80.78333333333003,
+      "kind": "pickup",
+      "kart": 1,
+      "item": "triple"
+    },
+    {
+      "time": 81.09999999999668,
+      "kind": "near-miss",
+      "kart": 1,
+      "item": "trap",
+      "owner": 4
+    },
+    {
+      "time": 83.38333333332989,
+      "kind": "pickup",
+      "kart": 2,
+      "item": "boost"
+    },
+    {
+      "time": 84.01666666666318,
+      "kind": "launch",
+      "kart": 1,
+      "item": "triple"
+    },
+    {
+      "time": 85.38333333332977,
+      "kind": "launch",
+      "kart": 3,
+      "item": "direct"
+    },
+    {
+      "time": 85.38333333332977,
+      "kind": "hit",
+      "kart": 2,
+      "item": "direct",
+      "owner": 3
+    },
+    {
+      "time": 86.43333333332971,
+      "kind": "launch",
+      "kart": 4,
+      "item": "homing"
+    },
+    {
+      "time": 89.31666666666288,
+      "kind": "pickup",
+      "kart": 1,
+      "item": "golden"
+    }
+  ],
+  "snapshots": [
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 1.5999999999999999,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.65807681567735,
+        "z": -63.4729372413127,
+        "heading": -0.09082448986436592
+      },
+      "nearBots": [
+        3.7998494880406,
+        5.327708260675327
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 3.0000000000000004,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.63190590325505,
+        "z": -63.19416335928716,
+        "heading": -0.09604319541861413
+      },
+      "nearBots": [
+        3.79692683800065,
+        5.766207188705976
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 4.400000000000001,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.58657329993363,
+        "z": -62.75315644564161,
+        "heading": -0.10751919602794892
+      },
+      "nearBots": [
+        3.7813911291256623,
+        5.955979714605235
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 6.000000000000003,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.50285985894962,
+        "z": -62.051477656251436,
+        "heading": -0.12721432559944537
+      },
+      "nearBots": [
+        3.725112566253769,
+        5.911788110061392
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 7.400000000000004,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.3983792537666,
+        "z": -61.26505505242905,
+        "heading": -0.1326534732585728
+      },
+      "nearBots": [
+        3.627448660239838,
+        5.547674195744952
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 8.8,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.26959355494765,
+        "z": -60.317100161064616,
+        "heading": -0.14009950647901445
+      },
+      "nearBots": [
+        3.490560876103062,
+        5.168784745242402
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 10.199999999999996,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 88.09257934218346,
+        "z": -59.21124547601972,
+        "heading": -0.17609936045413818
+      },
+      "nearBots": [
+        3.326519792056764,
+        4.802596059626848
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 11.79999999999999,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 87.77734673346023,
+        "z": -57.76552975857793,
+        "heading": -0.24635802502674883
+      },
+      "nearBots": [
+        3.1208173823534806,
+        4.367987886420515
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 12.999999999999986,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 87.43027258050441,
+        "z": -56.564863629228874,
+        "heading": -0.30537194115284305
+      },
+      "nearBots": [
+        2.9587932520607723,
+        3.9821348308998283
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 14.59999999999998,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 86.80364374504695,
+        "z": -54.82100605758361,
+        "heading": -0.36953442182389623
+      },
+      "nearBots": [
+        2.7244629556055475,
+        3.38180294543298
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 15.999999999999975,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 86.15065405232755,
+        "z": -53.14721956893805,
+        "heading": -0.3636803137477169
+      },
+      "nearBots": [
+        2.520651480876082,
+        2.7733640795465746
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 13.27777968688431,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 85.72971242065289,
+        "z": -51.80621004513226,
+        "heading": -0.31363761980742805
+      },
+      "nearBots": [
+        2.5775593734866273,
+        2.5798199626308915
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 14.677779686884305,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 85.30514073509808,
+        "z": -50.3045822623564,
+        "heading": -0.2797269894314242
+      },
+      "nearBots": [
+        2.6833970087048598,
+        2.7434699242088048
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 16.2777796868843,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 84.75790789291923,
+        "z": -48.329118870640215,
+        "heading": -0.2683070313152673
+      },
+      "nearBots": [
+        2.7576592386530265,
+        2.812863146373866
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 17.877779686884296,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 84.21664716129582,
+        "z": -46.111283459053176,
+        "heading": -0.21114655740147825
+      },
+      "nearBots": [
+        2.7017558665554313,
+        2.732895922592481
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 19.448349024934565,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 83.84304719075081,
+        "z": -43.80324441238395,
+        "heading": -0.11840604239489096
+      },
+      "nearBots": [
+        2.5456283582931323,
+        2.633835731930125
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 21.715015691601216,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 83.71215787351707,
+        "z": -41.13995461341416,
+        "heading": -0.0028956190850798584
+      },
+      "nearBots": [
+        2.565068611209646,
+        2.863639537650929
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 22.329210397523063,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 83.9145578490015,
+        "z": -37.70533616981662,
+        "heading": 0.09745535096017466
+      },
+      "nearBots": [
+        2.5587349663685743,
+        3.3950302970026107
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 22.357633390352216,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 84.29660329456959,
+        "z": -34.61248238277219,
+        "heading": 0.14185010403152518
+      },
+      "nearBots": [
+        2.5949396316467617,
+        3.6890665760718164
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 19.89143390362822,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 84.72221872853333,
+        "z": -31.947072713842598,
+        "heading": 0.16868036632909136
+      },
+      "nearBots": [
+        2.662994604288549,
+        3.539134285922007
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 19.5,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 85.16948977259969,
+        "z": -29.428655668869283,
+        "heading": 0.17766172199954205
+      },
+      "nearBots": [
+        2.813359707141733,
+        3.2056186181283857
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 19.5,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 85.56186098516096,
+        "z": -27.20351549063591,
+        "heading": 0.1672120335537807
+      },
+      "nearBots": [
+        2.8361936793701843,
+        2.935147529439926
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 18.162993073392595,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 85.92951408437229,
+        "z": -24.709983008439583,
+        "heading": 0.09297195965931578
+      },
+      "nearBots": [
+        2.521291486492757,
+        3.0748304223151663
+      ]
+    },
+    {
+      "phase": "race",
+      "slot": null,
+      "shield": false,
+      "health": 100,
+      "speed": 17.853953894841432,
+      "spin": 0,
+      "immune": 0,
+      "impact": 0,
+      "cart": {
+        "x": 86.05851815362834,
+        "z": -22.8775184321084,
+        "heading": -0.0007375829585845178
+      },
+      "nearBots": [
+        2.4999999999999973,
+        3.214006130269502
+      ]
+    }
+  ],
+  "captured": {
+    "before": true,
+    "afterBlock": false,
+    "afterNextHit": false
+  },
+  "hud": "DK\nEINZELRENNEN · STADIONRING · HITLER\n5\nPLATZ / 6\n2 / 3\nRUNDE\n1:30.07\nZEIT\n1366 m · STADIONRING\n5\nHitler\nDU\n4\nStalin\n2\nMussolini\n1\nMao\n3\nKim Jong-un\n6\nCastro\n⚡\nGrößenbefehl\nQ · Panzer bereit\nQ\n§\nIM SLOT\nStempelfalle\nCastro: Totalschaden!\nWERFEN\n\n23 km/h\n\n·········· 0/10 Orden\nSammeln erhöht dein Spitzentempo\n\nFahrzeugkontakt – Kart fängt sich\n\nKAROSSERIE\n100 %"
+}

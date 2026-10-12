@@ -1,0 +1,149 @@
+{
+  "track": "havanna",
+  "method": "Deterministic headless two-bot simulation with the designated shortcut-driving bot; actual createItems/stepItems, normal bot item use, no position or item-state injection.",
+  "finished": [
+    false,
+    false
+  ],
+  "sawAlley": true,
+  "itemBox": {
+    "u": 55,
+    "lane": 0,
+    "x": -34.88019679036972,
+    "z": -45.06708902689624
+  },
+  "shortcutItemPickups": [
+    {
+      "time": 46.11666666666667,
+      "kart": 0,
+      "item": "direct",
+      "progress": 877.1032284508246,
+      "routeU": 53.65831968374331,
+      "routeLane": -0.364738586274069,
+      "routeDistance": 0.36473858627406897,
+      "inShortcut": true,
+      "distanceToAuthoredBox": 1.3868023552044455,
+      "x": -36.219295881901004,
+      "z": -44.70648620458242
+    }
+  ],
+  "allPickups": [
+    {
+      "time": 6.216666666666667,
+      "kart": 0,
+      "item": "trap",
+      "progress": 98.36649219864921,
+      "routeU": 87.74970827681732,
+      "routeLane": -246.60174517046565,
+      "routeDistance": 248.0814922773641,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 263.5562508887586,
+      "x": 119.66371954142184,
+      "z": 168.423133951512
+    },
+    {
+      "time": 6.366666666666666,
+      "kart": 1,
+      "item": "censor",
+      "progress": 98.34294369916734,
+      "routeU": 87.74970827681732,
+      "routeLane": -243.8756985233466,
+      "routeDistance": 245.64157982642683,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 261.42716196063355,
+      "x": 120.74409400867991,
+      "z": 164.993000290623
+    },
+    {
+      "time": 16.933333333333334,
+      "kart": 0,
+      "item": "trap",
+      "progress": 300.9992791379391,
+      "routeU": 0,
+      "routeLane": -196.06064271148344,
+      "routeDistance": 201.7115745743789,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 216.88328951283495,
+      "x": -74.71026380601403,
+      "z": 168.12748649377093
+    },
+    {
+      "time": 17.066666666666666,
+      "kart": 1,
+      "item": "homing",
+      "progress": 300.5709336183536,
+      "routeU": 0,
+      "routeLane": -193.32474128516193,
+      "routeDistance": 198.5105866001274,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 213.37363456009402,
+      "x": -73.30339745886441,
+      "z": 164.81851213662603
+    },
+    {
+      "time": 27.65,
+      "kart": 1,
+      "item": "escort",
+      "progress": 503.2623652030736,
+      "routeU": 0,
+      "routeLane": -67.90657531913507,
+      "routeDistance": 169.02155000199875,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 218.5846531262446,
+      "x": -215.52651217599703,
+      "z": 78.0026445387419
+    },
+    {
+      "time": 27.733333333333334,
+      "kart": 0,
+      "item": "trap",
+      "progress": 503.31123119956237,
+      "routeU": 0,
+      "routeLane": -66.87894487744582,
+      "routeDistance": 171.78149711503806,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 221.59543155453414,
+      "x": -219.12357393361424,
+      "z": 78.05444956279324
+    },
+    {
+      "time": 36.15,
+      "kart": 1,
+      "item": "golden",
+      "progress": 664.9708997974617,
+      "routeU": 0,
+      "routeLane": 66.11378035798471,
+      "routeDistance": 120.64522869597661,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 170.67173408791794,
+      "x": -204.26373453688626,
+      "z": -65.99692316506798
+    },
+    {
+      "time": 36.2,
+      "kart": 0,
+      "item": "trap",
+      "progress": 665.0668129828987,
+      "routeU": 0,
+      "routeLane": 65.48095825449872,
+      "routeDistance": 120.25351800867321,
+      "inShortcut": false,
+      "distanceToAuthoredBox": 170.3605246375981,
+      "x": -204.021827150452,
+      "z": -65.4095872493604
+    },
+    {
+      "time": 46.11666666666667,
+      "kart": 0,
+      "item": "direct",
+      "progress": 877.1032284508246,
+      "routeU": 53.65831968374331,
+      "routeLane": -0.364738586274069,
+      "routeDistance": 0.36473858627406897,
+      "inShortcut": true,
+      "distanceToAuthoredBox": 1.3868023552044455,
+      "x": -36.219295881901004,
+      "z": -44.70648620458242
+    }
+  ]
+}

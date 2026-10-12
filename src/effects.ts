@@ -97,3 +97,20 @@ export function createConfetti(scene: Scene): { burst(at: Vector3, amount?: numb
   system.emitRate = 0; system.manualEmitCount = 0; system.start();
   return { burst(at, amount = 260) { system.emitter = at.clone(); system.manualEmitCount = amount; } };
 }
+
+/** Larger, bounded paper pieces for course events that need to read from a racing camera. */
+export function createCourseEventPaper(scene: Scene): { burst(at: Vector3, amount: number): void } {
+  const texture = new DynamicTexture('Course event paper', 64, scene, false); const c = texture.getContext();
+  c.clearRect(0, 0, 64, 64); c.fillStyle = '#f4efe2'; c.fillRect(8, 7, 48, 50);
+  c.fillStyle = '#b3242b'; c.fillRect(12, 12, 40, 7); c.fillStyle = '#c9a54e'; c.fillRect(16, 27, 32, 5);
+  c.strokeStyle = '#8c1821'; c.lineWidth = 4; c.beginPath(); c.arc(32, 43, 9, 0, Math.PI * 2); c.stroke();
+  texture.hasAlpha = true; texture.update();
+  const system = new ParticleSystem('Course event paper', 420, scene); system.particleTexture = texture;
+  system.minSize = .28; system.maxSize = .46; system.minLifeTime = 1.4; system.maxLifeTime = 2.4;
+  system.color1 = new Color4(1, 1, 1, 1); system.color2 = new Color4(1, .92, .72, 1); system.colorDead = new Color4(1, 1, 1, 0);
+  system.direction1 = new Vector3(-3, -.8, -3); system.direction2 = new Vector3(3, .5, 3); system.gravity = new Vector3(0, -1, 0);
+  system.minAngularSpeed = -6; system.maxAngularSpeed = 6; system.minEmitPower = .8; system.maxEmitPower = 1.6;
+  system.minEmitBox = new Vector3(-6, 0, -1); system.maxEmitBox = new Vector3(6, .5, 1);
+  system.emitRate = 0; system.manualEmitCount = 0; system.start();
+  return { burst(at, amount) { system.emitter = at.clone(); system.manualEmitCount = Math.min(240, Math.max(0, Math.floor(amount))); } };
+}

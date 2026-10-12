@@ -1,0 +1,24 @@
+{
+  "task": "A73.5 Moscow broken paving natural contact telemetry",
+  "date": "2026-10-12",
+  "run": {
+    "mode": "natural six-kart race from the normal menu/grid",
+    "stateInjection": false,
+    "runtimeErrors": 0,
+    "screenshotAccepted": false,
+    "visualNote": "Capture attempts were invalid (misdirected/black camera output) and were discarded; this report proves telemetry only."
+  },
+  "nearestObservedKart": {
+    "kartIndex": 2,
+    "distanceToPavingMidpointMeters": 11.535,
+    "worldPosition": {
+      "x": -357.5047,
+      "z": 40.3596
+    },
+    "courseProgressMeters": 1873.127,
+    "raceElapsed": "1:34.12",
+    "speedMetersPerSecond": 14.949,
+    "grounded": true
+  },
+  "interpretation": "A bot naturally reached the monitored region near the fixed shortcut paving. The image pass did not visually confirm the surface, its readability, or the line choice. No time/risk comparison was performed in this runtime run."
+}

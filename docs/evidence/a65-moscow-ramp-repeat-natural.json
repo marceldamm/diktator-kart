@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-12T08:39:19.784Z",
+  "track": "moscow",
+  "method": "Natural lap-one single race from grid with six karts, auto-gas and steering assist; no progress/position/event injection.",
+  "captures": [
+    {
+      "mark": 1320,
+      "name": "a65-moscow-ramp-repeat-1320.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1360,
+      "name": "a65-moscow-ramp-repeat-1360.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1390,
+      "name": "a65-moscow-ramp-repeat-1390.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1400,
+      "name": "a65-moscow-ramp-repeat-1400.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1410,
+      "name": "a65-moscow-ramp-repeat-1410.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1440,
+      "name": "a65-moscow-ramp-repeat-1440.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1470,
+      "name": "a65-moscow-ramp-repeat-1470.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "0:00.73",
+        "place": "5",
+        "notice": "Leuchtende Postkisten auf der Strecke",
+        "distance": -9.414349890944322,
+        "s": 2353.3916151423173,
+        "camera": [
+          -221.11082278514482,
+          2.1,
+          -244.43763867243112
+        ],
+        "kart": {
+          "x": -214.65921032784848,
+          "z": -244.5753844414399,
+          "speed": 8.8,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    }
+  ],
+  "runtimeErrors": [],
+  "endedAt": "2026-10-12T08:39:22.371Z"
+}

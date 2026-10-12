@@ -5,8 +5,8 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { createSliceScene } from '../src/slice-scene';
 import { initialKartState } from '../src/kart-model';
 import { CAST } from '../src/cast';
-import { TRACK, selectTrack, trackPoint, trackHeightAt, shortcutPoint, SHORTCUT_LENGTH } from '../src/track';
-import { TRACKS, type TrackId } from '../src/track-layout';
+import { TRACK, selectTrack, trackPoint, elevationAt, shortcutPoint, shortcutElevationAt, SHORTCUT_LENGTH, startParade, setParadeClock } from '../src/track';
+import { RAMP_SHORTCUT_ENTRY, TRACKS, type TrackId } from '../src/track-layout';
 import type { TestScene } from '../src/scene';
 import { FreeFlight } from '../src/free-camera';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -31,11 +31,38 @@ try {
   }
 } catch { /* QA controls can always start from their default values. */ }
 const currentPoint = () => el<HTMLInputElement>('shortcut').checked ? shortcutPoint(coursePosition * SHORTCUT_LENGTH) : trackPoint(TRACK.start + coursePosition * TRACK.length);
+const currentElevation = () => el<HTMLInputElement>('shortcut').checked ? shortcutElevationAt(coursePosition * SHORTCUT_LENGTH) : elevationAt(TRACK.start + coursePosition * TRACK.length);
 let state = initialKartState();
+let previewRaceTime = 0;
+const activeEventNode = () => {
+  if (triggeredEvent === 'zeppelin') return world?.scene.getTransformNodeByName('Propaganda zeppelin');
+  if (triggeredEvent === 'column') return [0, 1, 2, 3].map(i => world?.scene.getTransformNodeByName(`Parade column vehicle ${i}`)).find(node => node?.isEnabled());
+  return undefined;
+};
 function frameCamera() {
   const p = currentPoint(), f = new Vector3(Math.sin(p.heading), 0, Math.cos(p.heading));
   const side = new Vector3(Math.cos(p.heading), 0, -Math.sin(p.heading));
-  const ground = trackHeightAt(p.x, p.z), center = new Vector3(p.x, ground + (jump ? 1.4 : 0), p.z);
+  const ground = currentElevation(), center = new Vector3(p.x, ground + (jump ? 1.4 : 0), p.z);
+  if (view.value === 'Rampensprung' && RAMP_SHORTCUT_ENTRY && TRACK.id === 'stadionring') {
+    const entry = RAMP_SHORTCUT_ENTRY, before = trackPoint(entry.lip - 55, Math.abs(entry.lane) + 6), target = trackPoint(entry.lip - 15, entry.lane + 3);
+    camera.position.set(before.x, elevationAt(entry.lip - 55) + 20, before.z);
+    camera.setTarget(new Vector3(target.x, elevationAt(entry.lip - 15) + 2, target.z)); camera.fov = .96; world.setPlayerVisible(true); return;
+  }
+  if (view.value === 'Windspur') {
+    camera.position.copyFrom(center.add(f.scale(-10)).add(side.scale(7)).add(new Vector3(0, 6, 0)));
+    camera.setTarget(center.add(f.scale(18)).add(side.scale(3.4)));
+    camera.fov = .9; world.setPlayerVisible(true); return;
+  }
+  if (view.value === 'Ereignisblick') {
+    const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_PROGRESS;
+    const s = EVENT_PROGRESS[event], lane = event === 'loudspeaker' ? 5.5 : event === 'parade' ? -5.5 : event === 'wave' ? 5.2 : 0;
+    const eventPoint = trackPoint(s, lane), eventForward = new Vector3(Math.sin(eventPoint.heading), 0, Math.cos(eventPoint.heading));
+    const eventSide = new Vector3(Math.cos(eventPoint.heading), 0, -Math.sin(eventPoint.heading));
+    const eventHeight = event === 'loudspeaker' || event === 'parade' ? 7 + elevationAt(s) : event === 'wave' ? .6 : event === 'balcony' ? 11 : elevationAt(s) + 5;
+    const target = new Vector3(eventPoint.x, eventHeight + (event === 'loudspeaker' || event === 'parade' ? 1 : 0), eventPoint.z);
+    camera.position.copyFrom(target.add(eventSide.scale(18)).add(eventForward.scale(-8)).add(new Vector3(0, 9, 0)));
+    camera.setTarget(target); camera.fov = 1.08; world.setPlayerVisible(true); return;
+  }
   const eye = view.value === 'Cockpit';
   const offset = view.value === 'Umgebung' ? f.scale(24).add(side.scale(18)).add(new Vector3(0, 12, 0)) : eye ? f.scale(-.42).add(new Vector3(0, 1.97, 0)) :
     view.value === 'Front' ? f.scale(4.5).add(new Vector3(0, 2.4, 0)) :
@@ -47,17 +74,21 @@ function frameCamera() {
   world.setPlayerVisible(!eye);
 }
 function render() {
+  previewRaceTime = performance.now() / 1000;
+  setParadeClock(previewRaceTime);
   const p = currentPoint();
   state = { ...state, x: p.x, z: p.z, heading: p.heading, travelHeading: p.heading,
-    height: trackHeightAt(p.x, p.z) + (jump ? 1.4 : 0), grounded: !jump, trick: !!jump, jumpDuration: 1, jumpRemaining: jump ? 1 - jump : 0 };
+    height: currentElevation() + (jump ? 1.4 : 0), grounded: !jump, trick: !!jump, jumpDuration: 1, jumpRemaining: jump ? 1 - jump : 0 };
   world.setDamage?.([health], [health === 0 ? 1 : 0]); world.setTimeOfDay?.(night);
   world.present(state, []);
   if (free.active) free.update(Math.min(engine.getDeltaTime() / 1000, .1));
   else if (focusZeppelin) {
-    const zeppelin = world.scene.getTransformNodeByName('Propaganda zeppelin');
-    if (zeppelin?.isEnabled()) {
-      const side = new Vector3(Math.cos(zeppelin.rotation.y), 0, -Math.sin(zeppelin.rotation.y));
-      const target = zeppelin.getAbsolutePosition(); camera.position.copyFrom(target.add(side.scale(95 * focusSide)).add(new Vector3(0, 24, 0))); camera.setTarget(target);
+    const eventNode = activeEventNode();
+    if (eventNode?.isEnabled()) {
+      const side = new Vector3(Math.cos(eventNode.rotation.y), 0, -Math.sin(eventNode.rotation.y));
+      const target = eventNode.getAbsolutePosition();
+      const range = triggeredEvent === 'zeppelin' ? 95 : 22, height = triggeredEvent === 'zeppelin' ? 24 : 8;
+      camera.position.copyFrom(target.add(side.scale(range * focusSide)).add(new Vector3(0, height, 0))); camera.setTarget(target);
     } else { focusZeppelin = false; frameCamera(); }
   } else frameCamera();
   for (const light of world.scene.lights) if (/Nearby street lantern|Kart headlight beam/.test(light.name)) {
@@ -67,10 +98,10 @@ function render() {
 }
 function status() {
   const event = el<HTMLSelectElement>('track-event').value as keyof typeof EVENT_NAMES;
-  const zeppelinActive = !!world?.scene.getTransformNodeByName('Propaganda zeppelin')?.isEnabled();
-  const zeppelinState = triggeredEvent === 'zeppelin' ? ` · Zeppelinmodell ${zeppelinActive ? 'aktiv' : 'inaktiv'}` : '';
-  el<HTMLButtonElement>('focus-event').disabled = !zeppelinActive;
-  el('status').textContent = `${CAST[Number(driver.value)].name} · ${TRACK.name} · ${view.value} · Ereignis ${EVENT_NAMES[event]} · Zuletzt ausgelöst ${triggeredEvent ? EVENT_NAMES[triggeredEvent] : 'keines'}${zeppelinState} · Sprung ${jump} · Nacht ${night} · Karosserie ${health} % · Position ${coursePosition}`;
+  const eventNode = activeEventNode();
+  const eventNodeState = triggeredEvent === 'zeppelin' || triggeredEvent === 'column' ? ` · Ereignismodell ${eventNode ? 'aktiv' : 'inaktiv'}` : '';
+  el<HTMLButtonElement>('focus-event').disabled = !eventNode;
+  el('status').textContent = `${CAST[Number(driver.value)].name} · ${TRACK.name} · ${view.value} · Ereignis ${EVENT_NAMES[event]} · Zuletzt ausgelöst ${triggeredEvent ? EVENT_NAMES[triggeredEvent] : 'keines'}${eventNodeState} · Sprung ${jump} · Nacht ${night} · Karosserie ${health} % · Position ${coursePosition}`;
   try { sessionStorage.setItem('dk-feedback-view', JSON.stringify({ driver: driver.value, track: track.value, view: view.value,
     quality: el<HTMLSelectElement>('quality').value, lamps: el<HTMLInputElement>('lamps').checked, shortcut: el<HTMLInputElement>('shortcut').checked,
     jump, night, health, position: coursePosition, paused })); } catch { /* Storage is optional in the QA page. */ }
@@ -79,6 +110,7 @@ async function load() {
   engine.stopRenderLoop(); el<HTMLButtonElement>('trigger-event').disabled = true; world?.scene.dispose(); triggeredEvent = null; focusZeppelin = false; focusSide = 1; selectTrack(track.value as TrackId);
   el('status').textContent = 'Lädt tatsächliche Spielszene …';
   world = await createSliceScene(engine, 0, 1);
+  Object.assign(window, { __feedbackWorld: world });
   world.scene.blockMaterialDirtyMechanism = false;
   camera = new FreeCamera('Prüfkamera', Vector3.Zero(), world.scene); camera.minZ = .05;
   world.attachCamera?.(camera); world.setWeather?.('sun'); world.setRoster?.([Number(driver.value)]); world.setQuality?.(Number(el<HTMLSelectElement>('quality').value), false);
@@ -108,11 +140,15 @@ el('trigger-event').onclick = () => {
   // Put the free preview camera on the event section so visual checks inspect the same road segment as the effect.
   coursePosition = ((EVENT_PROGRESS[event] - TRACK.start + TRACK.length) % TRACK.length) / TRACK.length;
   el<HTMLInputElement>('position').value = String(coursePosition);
-  triggeredEvent = event; world.trackEvent?.(event);
+  triggeredEvent = event;
+  // The live race starts this timed traffic before asking the scene to display it.
+  // Mirror that setup here so the event preview shows the actual moving column.
+  if (event === 'column') startParade(previewRaceTime);
+  world.trackEvent?.(event);
   if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); }
   render(); status();
 };
-el('focus-event').onclick = () => { if (!world.scene.getTransformNodeByName('Propaganda zeppelin')?.isEnabled()) return; if (focusZeppelin) focusSide *= -1; else focusZeppelin = true; world.setPlayerVisible(false); render(); status(); };
+el('focus-event').onclick = () => { if (!activeEventNode()?.isEnabled()) return; if (focusZeppelin) focusSide *= -1; else focusZeppelin = true; world.setPlayerVisible(false); render(); status(); };
 for (const kind of ['cheer', 'fist', 'angry'] as const) el(kind).onclick = () => { world.driverReaction?.(0, kind); if (paused) { paused = false; el('pause').textContent = 'Bild einfrieren'; engine.runRenderLoop(render); } };
 el('pause').onclick = () => { paused = !paused; el('pause').textContent = paused ? 'Animation weiter' : 'Bild einfrieren'; if (paused) engine.stopRenderLoop(); else engine.runRenderLoop(render); status(); };
 for (const id of ['jump', 'night', 'health', 'position']) el<HTMLInputElement>(id).oninput = () => {

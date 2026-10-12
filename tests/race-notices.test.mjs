@@ -8,3 +8,9 @@ test('course event stays readable over ordinary item messages, then yields to cu
   assert.equal(selectRaceInfoNotice(8, event, 8, 'Treffer · kurzzeitig geschützt'), 'Treffer · kurzzeitig geschützt');
   assert.equal(selectRaceInfoNotice(8, '', 0, 'E/Touch halten: Schild · loslassen oder antippen: werfen'), 'E/Touch halten: Schild · loslassen oder antippen: werfen');
 });
+
+test('lap-one track warning remains visible through an item hit for its full notice window', () => {
+  const warning = 'Vorwarnung: Pflichtjubel in der Regelheft-Serpentine · außen bleibt freie Fahrt';
+  assert.equal(selectRaceInfoNotice(15.2, warning, 18, 'Treffer · kurzzeitig geschützt'), warning);
+  assert.equal(selectRaceInfoNotice(18, warning, 18, 'Treffer · kurzzeitig geschützt'), 'Treffer · kurzzeitig geschützt');
+});

@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-12T12:58:02.618Z",
+  "track": "beijing",
+  "method": "Botless time trial from grid in headless Chrome; auto-gas and steering assist with one normal ArrowRight line-choice input before the shortcut; no position, item or event injection; page-local 25-ms wet-zone sampling.",
+  "target": {
+    "x": -209.31391891523435,
+    "z": 126.58999519328628,
+    "heading": 0.7501379735407588
+  },
+  "contact": {
+    "time": "0:32.88",
+    "near": [
+      {
+        "i": 0,
+        "x": -209.13290043753625,
+        "z": 128.07252241496946,
+        "speed": 14.34477168238907,
+        "turboRemaining": 0,
+        "height": 0,
+        "grounded": true,
+        "progress": 610.6525933525247
+      }
+    ],
+    "kind": "natural-shortcut-route",
+    "kart": {
+      "i": 0,
+      "x": -209.13290043753625,
+      "z": 128.07252241496946,
+      "speed": 14.34477168238907,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 610.6525933525247,
+      "padId": -1,
+      "shortcutU": 75.88692342419083,
+      "shortcutLane": -0.8782654945987418
+    }
+  },
+  "warningApproach": {
+    "time": "0:31.43",
+    "kart": {
+      "i": 0,
+      "x": -222.7797210638228,
+      "z": 111.11426151951451,
+      "speed": 14.878798404664943,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 584.1262691785007,
+      "shortcutU": 54.20157160761586,
+      "shortcutLane": -0.664353248722441
+    },
+    "photoMode": true
+  },
+  "runtimeErrors": [],
+  "sceneMeshes": [
+    {
+      "name": "Backyard alley",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -238.5588757893627,
+        -0.715,
+        85.87369573164318
+      ],
+      "max": [
+        -153.04434901382544,
+        -0.46640253750817756,
+        166.86636715629027
+      ],
+      "vertices": 690,
+      "material": {
+        "name": "Loose alley gravel",
+        "alpha": 1,
+        "backFaceCulling": true,
+        "twoSidedLighting": false,
+        "albedoTexture": true,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill surface",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -210.66794572176494,
+        -0.66,
+        125.35916500586745
+      ],
+      "max": [
+        -182.88123227926556,
+        -0.655,
+        149.9876130710787
+      ],
+      "vertices": 135,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": true
+      }
+    },
+    {
+      "name": "Hutong tea spill warning stripe",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -216.35036224151693,
+        -0.645,
+        119.05494836016084
+      ],
+      "max": [
+        -205.8299705807367,
+        -0.645,
+        130.1336369632845
+      ],
+      "vertices": 32,
+      "material": {
+        "name": "Hutong tea spill warning",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": true
+      }
+    }
+  ],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural route access is accepted when the kart reaches the middle of the shortcut according to the shared track model."
+}

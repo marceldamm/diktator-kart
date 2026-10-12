@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-12T08:43:38.708Z",
+  "track": "moscow",
+  "method": "Natural lap-one single race from grid with six karts, auto-gas and steering assist; no progress/position/event injection.",
+  "captures": [
+    {
+      "mark": 1320,
+      "name": "a65-moscow-ramp-repeat3-1320.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:10.05",
+        "place": "5",
+        "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "distance": 1320.7690976570675,
+        "s": 1320.7690976570675,
+        "camera": [
+          11.338423292362236,
+          2.6494714437115756,
+          228.10191533136657
+        ],
+        "kart": {
+          "x": 3.074269218933201,
+          "z": 227.44081616591527,
+          "speed": 19.5,
+          "grounded": false,
+          "jumpRemaining": 0.19299999999999878
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1360,
+      "name": "a65-moscow-ramp-repeat3-1360.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:11.93",
+        "place": "5",
+        "notice": "Faktenlage amtlich geschwärzt",
+        "distance": 1363.3060196207016,
+        "s": 1363.3060196207016,
+        "camera": [
+          -31.21069076936706,
+          2.0999975223196325,
+          232.01493622645802
+        ],
+        "kart": {
+          "x": -39.587679253941964,
+          "z": 234.12172203154194,
+          "speed": 21.299999999999926,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1390,
+      "name": "a65-moscow-ramp-repeat3-1390.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:13.33",
+        "place": "5",
+        "notice": "Faktenlage amtlich geschwärzt",
+        "distance": 1391.1353743660693,
+        "s": 1391.1353743660693,
+        "camera": [
+          -58.484340575497654,
+          2.0999999997654037,
+          239.54196804841808
+        ],
+        "kart": {
+          "x": -66.30234497068267,
+          "z": 241.78062289201486,
+          "speed": 19.5,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1400,
+      "name": "a65-moscow-ramp-repeat3-1400.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:13.98",
+        "place": "5",
+        "notice": "Faktenlage amtlich geschwärzt",
+        "distance": 1403.9854151047234,
+        "s": 1403.9854151047234,
+        "camera": [
+          -70.48778971327808,
+          2.0999999999965473,
+          242.8717789700816
+        ],
+        "kart": {
+          "x": -78.60133118195108,
+          "z": 244.83667149751318,
+          "speed": 19.5,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1410,
+      "name": "a65-moscow-ramp-repeat3-1410.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:14.53",
+        "place": "5",
+        "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "distance": 1414.9296295603708,
+        "s": 1414.9296295603708,
+        "camera": [
+          -81.18323874431773,
+          2.0999999999999157,
+          245.2873155005417
+        ],
+        "kart": {
+          "x": -89.17190342696264,
+          "z": 246.63018751534133,
+          "speed": 19.5,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1440,
+      "name": "a65-moscow-ramp-repeat3-1440.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:16.03",
+        "place": "5",
+        "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "distance": 1444.927243911512,
+        "s": 1444.927243911512,
+        "camera": [
+          -110.16848322936815,
+          2.0999999999999996,
+          246.75138923251896
+        ],
+        "kart": {
+          "x": -118.2935086103333,
+          "z": 245.72647363706085,
+          "speed": 19.5,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1470,
+      "name": "a65-moscow-ramp-repeat3-1470.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:17.43",
+        "place": "5",
+        "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "distance": 1472.5229485064601,
+        "s": 1472.5229485064601,
+        "camera": [
+          -136.73742707007133,
+          2.0999999999999996,
+          241.34548748361777
+        ],
+        "kart": {
+          "x": -144.78460362923988,
+          "z": 239.16752066188243,
+          "speed": 19.5,
+          "grounded": true,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "runtimeErrors": []
+      }
+    }
+  ],
+  "runtimeErrors": [],
+  "endedAt": "2026-10-12T08:44:56.218Z"
+}

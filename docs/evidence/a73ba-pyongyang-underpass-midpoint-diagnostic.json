@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-12T15:47:58.056Z",
+  "track": "pyongyang",
+  "method": "Natural six-kart headless race from the start grid; auto-gas and steering assist; no progress, position, item or event injection. The test camera was moved to the NPC at Pyongyang shortcut u≈0.53 for a route midpoint capture.",
+  "target": {
+    "x": -98.48165820250458,
+    "z": 104.73823503827602,
+    "heading": -2.2002137722773516
+  },
+  "contact": {
+    "time": "1:09.93",
+    "near": [
+      {
+        "i": 4,
+        "x": -91.22233631898054,
+        "z": 109.96904895544056,
+        "speed": 19.473333333333148,
+        "turboRemaining": 0,
+        "height": 0,
+        "grounded": true,
+        "progress": 1449.5447927751998
+      }
+    ],
+    "kind": "natural-underpass-midpoint",
+    "kart": {
+      "i": 4,
+      "x": -91.22233631898054,
+      "z": 109.96904895544056,
+      "speed": 19.473333333333148,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 1449.5447927751998,
+      "padId": -1,
+      "shortcutU": 224.49370802718514,
+      "shortcutLane": -0.03040862499084592
+    }
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "NPC reached the authored underpass midpoint naturally and remained grounded. The bot-follow camera image is nearly black and does not establish player-camera readability; retain only as a diagnostic route-contact record."
+}

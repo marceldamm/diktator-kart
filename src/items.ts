@@ -1,4 +1,4 @@
-import { craterAt, overCanal, projectTrack, TRACK, trackLocate, trackPoint, trackProgress, wrap } from './track.ts';
+import { craterAt, overCanal, projectTrack, TRACK, trackLocate, trackPoint, trackProgress, shortcutPoint, wrap } from './track.ts';
 import { BOOST_PADS, HAZARDS, ITEM_BOX_PROGRESS, RAMP_LENGTH, RAMP_LIPS, SHORTCUT } from './track-layout.ts';
 export { ITEM_BOX_PROGRESS };
 import { KART_TUNING, type KartState } from './kart-model.ts';
@@ -10,18 +10,20 @@ export const ITEM_NAMES:Record<ItemKind,string>={direct:'Rohrpost',homing:'Sucha
   triple:'Eilerlass in dreifacher Ausfertigung',golden:'Goldener Dauererlass',escort:'Staatsbesuch'};
 export interface ItemBox { id:number; x:number; z:number; readyIn:number }
 export interface ItemObject { id:number; kind:ItemKind; owner:number; x:number; z:number; heading:number; age:number; remaining:number; target:number|null; direction?:ItemDirection; bounces?:number; nearMissed?:number[] }
-export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'|'defense-pickup'|'defense-use'|'near-miss'; kart:number; item:ItemKind|'shield'; owner?:number }
+export interface ItemEvent { kind:'pickup'|'launch'|'hit'|'block'|'near-miss'; kart:number; item:ItemKind; owner?:number; objectId?:number }
 export interface ItemWorld { /** Karts holding their item behind them as a shield this step (set by the caller). */ shield?:boolean[];
   /** Owners whose straight projectile seeks targets on its own (Hitler's shepherd, 07.10.2026). */ seekers?:boolean[];
-  slots:(ItemKind|null)[];/** Remaining uses of a multi-use item (triple decree). */ charges:number[];/** Seconds left in an opened golden decree. */ goldenRemaining:number[];/** Seconds left of a state-visit motorcade autopilot. */ escortRemaining:number[];defenseSlots:boolean[];defenseRemaining:number[];nearMissCooldown:number[];heldFor:number[];immune:number[];censorRemaining:number[];censorBannerRemaining:number[];objects:ItemObject[];boxes:ItemBox[];
+  slots:(ItemKind|null)[];/** Remaining uses of a multi-use item (triple decree). */ charges:number[];/** Seconds left in an opened golden decree. */ goldenRemaining:number[];/** Seconds left of a state-visit motorcade autopilot. */ escortRemaining:number[];nearMissCooldown:number[];heldFor:number[];immune:number[];censorRemaining:number[];censorBannerRemaining:number[];objects:ItemObject[];boxes:ItemBox[];
   events:ItemEvent[];random:number;nextId:number;time:number;
   stats:Record<ItemKind,{collected:number;launched:number;hits:number}>;
 }
-export const ITEM_RULES={maxPerKind:6,speed:29,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,nearMissMargin:.55,nearMissCooldown:2.4,nearMissBoost:.6,homingTurnRate:2.4,maxBounces:3,censorDuration:4.2,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:5,defenseDuration:1.35,goldenDuration:7.5,goldenBoost:.75,escortDuration:4.2,escortSpeed:29,escortRadius:2.6,boxSpacing:215};
+export const ITEM_RULES={maxPerKind:6,speed:29,lifetime:5,trapLifetime:12,boxRespawn:6,immunity:1.8,hitSpeedFactor:.6,hitRadius:1.35,nearMissMargin:.55,nearMissCooldown:2.4,nearMissBoost:.6,homingTurnRate:2.4,maxBounces:3,censorDuration:4.2,censorSpeedFactor:.72,censorBannerDuration:.9,boostDuration:1.4,boostKick:5,goldenDuration:7.5,goldenBoost:.75,escortDuration:4.2,escortSpeed:29,escortRadius:2.6,boxSpacing:215};
 /** Dispatch box rows come from the active circuit (track-layout.ts). */
 export function createItems(count:number,seed=921):ItemWorld {
-  return {slots:Array(count).fill(null),charges:Array(count).fill(0),goldenRemaining:Array(count).fill(0),escortRemaining:Array(count).fill(0),defenseSlots:Array(count).fill(false),defenseRemaining:Array(count).fill(0),nearMissCooldown:Array(count).fill(0),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
-    boxes:itemBoxSpots().map((spot,id)=>({id,...trackPoint(spot.s,spot.lane),readyIn:0})),events:[],random:seed,nextId:1,time:0,
+  const mainBoxes=itemBoxSpots().map((spot,id)=>({id,...trackPoint(spot.s,spot.lane),readyIn:0}));
+  const shortcutBoxes=(SHORTCUT.itemBoxes??[]).map(([u,lane],index)=>{const point=shortcutPoint(u,lane);return {id:mainBoxes.length+index,x:point.x,z:point.z,readyIn:0};});
+  return {slots:Array(count).fill(null),charges:Array(count).fill(0),goldenRemaining:Array(count).fill(0),escortRemaining:Array(count).fill(0),nearMissCooldown:Array(count).fill(0),heldFor:Array(count).fill(0),immune:Array(count).fill(0),censorRemaining:Array(count).fill(0),censorBannerRemaining:Array(count).fill(0),objects:[],
+    boxes:[...mainBoxes,...shortcutBoxes],events:[],random:seed,nextId:1,time:0,
     stats:Object.fromEntries((Object.keys(ITEM_NAMES) as ItemKind[]).map(k=>[k,{collected:0,launched:0,hits:0}])) as ItemWorld['stats']};
 }
 /** Lap positions of dispatch-box rows: the circuit's own rows plus fillers so no gap exceeds ~215 m (Marcel 11.10.2026:
@@ -53,6 +55,8 @@ export function itemBoxRows():number[] {
 export function itemBoxSpots():{s:number;lane:number}[] {
   return itemBoxRows().flatMap(s=>[-.62,-.21,.21,.62].map(f=>({s,lane:f*TRACK.halfWidth})));
 }
+/** Total number of visible item-box models required by the active circuit. */
+export function itemBoxCount():number { return itemBoxSpots().length+(SHORTCUT.itemBoxes?.length??0); }
 /** Rank-weighted draw like Mario Kart: leaders mostly get traps and projectiles, the back of the field gets speed
  *  (triple and golden decree) and from mid-field on the state visit, the Bullet Bill counterpart. */
 export function itemOdds(rank:number,count:number):Record<ItemKind,number> {
@@ -86,8 +90,8 @@ const sweptDistance=(x:number,z:number,ax:number,az:number,bx:number,bz:number)=
   return Math.hypot(x-ax-t*dx,z-az-t*dz);
 };
 /** Identical collection, allocation, launch, collision and immunity for all participants. */
-export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[],ranks:number[],dt:number,directions:ItemDirection[]=[],defenseActivations:boolean[]=[]):KartState[] {
-  world.events=[];world.time+=dt;world.immune=world.immune.map(n=>Math.max(0,n-dt));world.defenseRemaining=world.defenseRemaining.map(n=>Math.max(0,n-dt));world.nearMissCooldown=world.nearMissCooldown.map(n=>Math.max(0,n-dt));world.censorRemaining=world.censorRemaining.map(n=>Math.max(0,n-dt));world.censorBannerRemaining=world.censorBannerRemaining.map(n=>Math.max(0,n-dt));
+export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[],ranks:number[],dt:number,directions:ItemDirection[]=[]):KartState[] {
+  world.events=[];world.time+=dt;world.immune=world.immune.map(n=>Math.max(0,n-dt));world.nearMissCooldown=world.nearMissCooldown.map(n=>Math.max(0,n-dt));world.censorRemaining=world.censorRemaining.map(n=>Math.max(0,n-dt));world.censorBannerRemaining=world.censorBannerRemaining.map(n=>Math.max(0,n-dt));
   world.heldFor=world.heldFor.map((n,i)=>world.slots[i]?n+dt:0);
   const result=karts.slice();
   for(let i=0;i<karts.length;i++){
@@ -106,14 +110,12 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
   }
   for(const box of world.boxes) {
     box.readyIn=Math.max(0,box.readyIn-dt);if(box.readyIn>0)continue;
-    for(let i=0;i<karts.length;i++)if((!world.slots[i]||!world.defenseSlots[i])&&Math.hypot(karts[i].x-box.x,karts[i].z-box.z)<1.65) {
+    for(let i=0;i<karts.length;i++)if(!world.slots[i]&&Math.hypot(karts[i].x-box.x,karts[i].z-box.z)<1.65) {
       box.readyIn=ITEM_RULES.boxRespawn;
-      if(world.slots[i]){world.defenseSlots[i]=true;world.events.push({kind:'defense-pickup',kart:i,item:'shield'});}
-      else {const kind=roll(world,ranks[i],karts.length);world.slots[i]=kind;world.charges[i]=kind==='triple'?3:0;world.heldFor[i]=0;world.events.push({kind:'pickup',kart:i,item:kind});world.stats[kind].collected++;}
+      const kind=roll(world,ranks[i],karts.length);world.slots[i]=kind;world.charges[i]=kind==='triple'?3:0;world.heldFor[i]=0;world.events.push({kind:'pickup',kart:i,item:kind});world.stats[kind].collected++;
       break;
     }
   }
-  for(let i=0;i<karts.length;i++)if(defenseActivations[i]&&world.defenseSlots[i]){world.defenseSlots[i]=false;world.defenseRemaining[i]=ITEM_RULES.defenseDuration;world.events.push({kind:'defense-use',kart:i,item:'shield'});}
   for(let i=0;i<karts.length;i++)if(activations[i]&&world.slots[i]) {
     const kind=world.slots[i]!;
     if(kind==='boost'||kind==='triple'||kind==='golden') {
@@ -174,16 +176,15 @@ export function stepItems(world:ItemWorld,karts:KartState[],activations:boolean[
         if(passed&&distance<=ITEM_RULES.hitRadius+ITEM_RULES.nearMissMargin&&world.nearMissCooldown[i]<=0&&!o.nearMissed?.includes(i)){
           o.nearMissed=[...(o.nearMissed??[]),i];world.nearMissCooldown[i]=ITEM_RULES.nearMissCooldown;
           const k=result[i];result[i]={...k,speed:Math.min(20,Math.max(0,k.speed)+ITEM_RULES.nearMissBoost),turboRemaining:Math.max(k.turboRemaining,.28)};
-          world.events.push({kind:'near-miss',kart:i,item:o.kind,owner:o.owner});
+          world.events.push({kind:'near-miss',kart:i,item:o.kind,owner:o.owner,objectId:o.id});
         }
         continue;
       }
-      if(world.defenseRemaining[i]>0){world.defenseRemaining[i]=0;o.remaining=0;world.events.push({kind:'block',kart:i,item:'shield',owner:o.owner});break;}
       // Countermeasure: an item held behind the kart blocks one projectile arriving from behind (same rule for all).
-      if(world.shield?.[i]&&world.slots[i]){const k=karts[i],fwd=(o.x-k.x)*Math.sin(k.heading)+(o.z-k.z)*Math.cos(k.heading);
-        if(fwd<.6){world.slots[i]=null;world.heldFor[i]=0;o.remaining=0;world.events.push({kind:'block',kart:i,item:o.kind,owner:o.owner});break;}}
+      if(world.shield?.[i]&&world.slots[i]&&o.kind!=='trap'){const k=karts[i],fwd=(o.x-k.x)*Math.sin(k.heading)+(o.z-k.z)*Math.cos(k.heading);
+        if(fwd<-.25){world.slots[i]=null;world.heldFor[i]=0;o.remaining=0;world.events.push({kind:'block',kart:i,item:o.kind,owner:o.owner,objectId:o.id});break;}}
       const k=result[i];result[i]=(k.tankRemaining??0)>0?{...k,speed:k.speed*.88,impactRemaining:.12,impactKind:'item'}:o.kind==='censor'?{...k,speed:k.speed*ITEM_RULES.censorSpeedFactor,impactRemaining:.18,impactKind:'item'}:{...k,speed:k.speed*ITEM_RULES.hitSpeedFactor,drifting:false,driftCharge:0,turboRemaining:0,impactRemaining:.45,impactKind:'item',spinRemaining:.95};
-      world.immune[i]=ITEM_RULES.immunity;world.events.push({kind:'hit',kart:i,item:o.kind,owner:o.owner});world.stats[o.kind].hits++;o.remaining=0;break;
+      world.immune[i]=ITEM_RULES.immunity;world.events.push({kind:'hit',kart:i,item:o.kind,owner:o.owner,objectId:o.id});world.stats[o.kind].hits++;o.remaining=0;break;
     }
   }
   world.objects=world.objects.filter(o=>o.remaining>0);return result;
@@ -205,7 +206,7 @@ export function botItemDirection(world:ItemWorld,index:number,karts:KartState[])
 }
 
 export function botUsesItem(world:ItemWorld,index:number,karts:KartState[],patience=1):boolean {
-  const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2*patience)return false;
+  const kind=world.slots[index];if(!kind||world.heldFor[index]<1.2*patience||botShouldHoldItemAsShield(world,index,karts))return false;
   const k=karts[index];
   if(kind==='trap')return world.heldFor[index]>4*patience||karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<16&&wrap(trackProgress(k.x,k.z)-trackProgress(other.x,other.z))<18);
   if(kind==='boost')return world.heldFor[index]>1.6*patience&&(karts[index].speed??0)>6;
@@ -222,15 +223,17 @@ export function botUsesItem(world:ItemWorld,index:number,karts:KartState[],patie
   return karts.some((other,i)=>i!==index&&Math.hypot(other.x-k.x,other.z-k.z)<45&&wrap(backward?trackProgress(k.x,k.z)-trackProgress(other.x,other.z):trackProgress(other.x,other.z)-trackProgress(k.x,k.z))<50)||world.heldFor[index]>6*patience;
 }
 
-/** Spend a bot's reserve defense only when relative motion predicts an incoming hit. */
-export function botShouldUseDefense(world:ItemWorld,index:number,karts:KartState[]):boolean {
-  if(!world.defenseSlots[index])return false;
+/** Hold the current item when a projectile is on course to hit the kart from behind. */
+export function botShouldHoldItemAsShield(world:ItemWorld,index:number,karts:KartState[]):boolean {
+  if(!world.slots[index])return false;
   const kart=karts[index],kartHeading=kart.travelHeading??kart.heading;
   const kartVx=Math.sin(kartHeading)*kart.speed,kartVz=Math.cos(kartHeading)*kart.speed;
-  const horizon=Math.min(.65,ITEM_RULES.defenseDuration);
+  const horizon=.65;
   return world.objects.some((object)=>{
     if(object.owner===index||object.kind==='trap'||object.remaining<=0)return false;
     const rx=kart.x-object.x,rz=kart.z-object.z;
+    const rear=(object.x-kart.x)*Math.sin(kartHeading)+(object.z-kart.z)*Math.cos(kartHeading)<-.25;
+    if(!rear)return false;
     // A locked homing order curves toward its target, so its current straight heading can understate the threat.
     if(object.kind==='homing'&&object.target===index&&Math.hypot(rx,rz)<=ITEM_RULES.speed*horizon)return true;
     const rvx=kartVx-Math.sin(object.heading)*ITEM_RULES.speed,rvz=kartVz-Math.cos(object.heading)*ITEM_RULES.speed;

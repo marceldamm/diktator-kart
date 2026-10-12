@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-12",
+  "mode": "Einzelrennen",
+  "graphics": "normal",
+  "method": "Natural Pjöngjang single race from the grid, six karts, auto-gas and steering assistance; no injected rank, progress or event.",
+  "event": {
+    "elapsedSeconds": 145,
+    "time": "2:46.03",
+    "lap": "2 / 3",
+    "place": "5",
+    "speed": 20.15,
+    "health": 100,
+    "x": -18.590165742206516,
+    "z": 231.4528202383915,
+    "distance": 3173.816565528954,
+    "onShortcut": false,
+    "active": true,
+    "vehicles": [
+      { "s": 1468.1564716875532, "lane": 3.4, "index": 0 },
+      { "s": 1459.1564716875532, "lane": 3.4, "index": 1 },
+      { "s": 1450.1564716875532, "lane": 3.4, "index": 2 },
+      { "s": 1440.1564716875532, "lane": 3.4, "index": 3 }
+    ],
+    "notice": "Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei"
+  },
+  "after2s": {
+    "time": "2:48.48",
+    "lap": "2 / 3",
+    "place": "5",
+    "speed": 20.15,
+    "health": 100,
+    "x": -67.0176621089192,
+    "z": 222.32038988530775,
+    "distance": 3222.8857564690506,
+    "active": true,
+    "vehicles": [
+      { "s": 1480.8098050208966, "lane": 3.4, "index": 0 },
+      { "s": 1471.8098050208966, "lane": 3.4, "index": 1 },
+      { "s": 1462.8098050208966, "lane": 3.4, "index": 2 },
+      { "s": 1452.8098050208966, "lane": 3.4, "index": 3 }
+    ],
+    "notice": "Paradekolonne! Rechte Spur der Tor-Allee gesperrt, links vorbei"
+  },
+  "after15s": {
+    "time": "3:01.95",
+    "lap": "2 / 3",
+    "place": "5",
+    "speed": 20.15,
+    "health": 100,
+    "x": -248.18605314337233,
+    "z": 38.06834124646909,
+    "distance": 3494.2053479736132,
+    "active": false,
+    "vehicles": [],
+    "notice": "E/Touch halten: hinten schützen · loslassen/antippen: werfen"
+  },
+  "rankChangesDuringEventWindow": 0,
+  "runtimeErrors": 0,
+  "screenshots": [
+    "a62-pyongyang-natural-parade.png",
+    "a62-pyongyang-natural-parade-plus-2s.png"
+  ]
+}

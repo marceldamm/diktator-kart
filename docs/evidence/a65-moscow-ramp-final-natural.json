@@ -1,0 +1,304 @@
+{
+  "date": "2026-10-12T08:57:16.163Z",
+  "track": "moscow",
+  "graphics": "normal",
+  "method": "Natural lap-one six-kart single race from grid, auto-gas and steering assist; no progress, position or event injection. Item effects are active.",
+  "captures": [
+    {
+      "mark": 1320,
+      "name": "a65-moscow-ramp-final-1320.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:09.15",
+        "place": "3",
+        "distance": 1323.6019668764907,
+        "s": 1323.6019668764907,
+        "camera": [
+          8.561386851794023,
+          2.450390429100915,
+          227.85518924711755
+        ],
+        "kart": {
+          "x": 0.15293564431837936,
+          "z": 227.41269356410152,
+          "speed": 19.76,
+          "grounded": false,
+          "height": 0.3582562794217161,
+          "jumpRemaining": 0.06850666666666572
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1360,
+      "name": "a65-moscow-ramp-final-1360.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:10.95",
+        "place": "3",
+        "distance": 1364.074874503076,
+        "s": 1364.074874503076,
+        "camera": [
+          -31.893515543423188,
+          2.0999981184237497,
+          234.13345971229836
+        ],
+        "kart": {
+          "x": -39.59353121111858,
+          "z": 236.9115801846279,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1390,
+      "name": "a65-moscow-ramp-final-1390.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:12.35",
+        "place": "3",
+        "distance": 1391.7385180361234,
+        "s": 1391.7385180361234,
+        "camera": [
+          -58.12743156288961,
+          2.0999999998007604,
+          242.38467457244337
+        ],
+        "kart": {
+          "x": -66.15945711483404,
+          "z": 244.62064376063373,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1400,
+      "name": "a65-moscow-ramp-final-1400.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:12.87",
+        "place": "3",
+        "distance": 1401.9505172938557,
+        "s": 1401.9505172938557,
+        "camera": [
+          -68.16497440471039,
+          2.0999999999938295,
+          245.11343194733666
+        ],
+        "kart": {
+          "x": -76.07814558974339,
+          "z": 247.03507643230066,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1410,
+      "name": "a65-moscow-ramp-final-1410.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:13.40",
+        "place": "3",
+        "distance": 1412.5198677044555,
+        "s": 1412.5198677044555,
+        "camera": [
+          -78.39596339811239,
+          2.099999999999814,
+          247.4478961028265
+        ],
+        "kart": {
+          "x": -86.47643935345256,
+          "z": 248.87500813416884,
+          "speed": 19.89,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1440,
+      "name": "a65-moscow-ramp-final-1440.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:14.85",
+        "place": "3",
+        "distance": 1441.4018486538562,
+        "s": 1441.4018486538562,
+        "camera": [
+          -106.92992884784208,
+          2.0999999999999996,
+          249.45635720930383
+        ],
+        "kart": {
+          "x": -115.22002285429642,
+          "z": 248.69112817113603,
+          "speed": 19.89,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1470,
+      "name": "a65-moscow-ramp-final-1470.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:16.30",
+        "place": "3",
+        "distance": 1470.2544595305471,
+        "s": 1470.2544595305471,
+        "camera": [
+          -135.2813726379629,
+          2.0999999999999996,
+          244.56059225521528
+        ],
+        "kart": {
+          "x": -143.359760983626,
+          "z": 242.46562484399337,
+          "speed": 19.89,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "opacity": "0.01",
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    }
+  ],
+  "runtimeErrors": [],
+  "endedAt": "2026-10-12T08:58:32.517Z"
+}

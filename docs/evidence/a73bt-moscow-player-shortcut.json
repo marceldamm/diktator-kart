@@ -1,0 +1,1997 @@
+{
+  "date": "2026-10-12T18:59:39.700Z",
+  "run": "single race from regular menu; six-kart field; auto-gas and steering assistance enabled through UI; no position/progress/route state injection",
+  "setup": {
+    "track": "moscow",
+    "autoGas": "Auto-Gas an",
+    "assist": "Lenkhilfe an"
+  },
+  "modules": {
+    "patch": {
+      "kind": "broken-parade",
+      "from": 45,
+      "to": 180,
+      "lane": 0,
+      "halfWidth": 2.15
+    },
+    "shortLength": 173.17135382456237,
+    "trackLength": 2362.8059650332616
+  },
+  "outcome": {
+    "reason": "player-naturally-reached-shortcut-patch",
+    "sample": {
+      "phase": "race",
+      "state": "running",
+      "progress": 2047.0592692416922,
+      "position": {
+        "x": -316.80436435215336,
+        "z": -46.521043780014466
+      },
+      "speed": 18.88609902949457,
+      "height": 0,
+      "shortcut": {
+        "u": 172.34884099972263,
+        "lane": 2.103934367322459,
+        "distance": 2.103934367322459,
+        "s": 2138.765076730445
+      },
+      "main": {
+        "s": 2142.059269241692,
+        "lane": 2.2609141702591007
+      },
+      "rank": 2,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    "capture": "discarded: player view was unusable; no PNG retained"
+  },
+  "runtimeErrors": [],
+  "samples": [
+    {
+      "elapsedMs": 186,
+      "phase": "race",
+      "state": "running",
+      "progress": -10.246498054677431,
+      "position": {
+        "x": -215.4915303722901,
+        "z": -244.6039977694445
+      },
+      "speed": 7.600000000000004,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 160.16879283345762,
+        "distance": 223.4139465784996,
+        "s": 2140
+      },
+      "main": {
+        "s": 84.75350194532257,
+        "lane": 2.127943143326715
+      },
+      "rank": 6,
+      "hud": {
+        "speed": "27 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 2390,
+      "phase": "race",
+      "state": "running",
+      "progress": 19.766058071216776,
+      "position": {
+        "x": -185.73396371916635,
+        "z": -238.50138896783
+      },
+      "speed": 18.82702802898431,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 145.33507614573873,
+        "distance": 233.114824580422,
+        "s": 2140
+      },
+      "main": {
+        "s": 114.76605807121678,
+        "lane": -2.497870777297493
+      },
+      "rank": 6,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 3748,
+      "phase": "race",
+      "state": "running",
+      "progress": 47.91268932498406,
+      "position": {
+        "x": -157.52833144574078,
+        "z": -237.59338773357348
+      },
+      "speed": 19.019241256690826,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 135.92200234204086,
+        "distance": 249.2002016752669,
+        "s": 2140
+      },
+      "main": {
+        "s": 142.91268932498406,
+        "lane": -2.4703912746113432
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 5353,
+      "phase": "race",
+      "state": "running",
+      "progress": 76.69487835352083,
+      "position": {
+        "x": -128.70832192454836,
+        "z": -237.23284649839198
+      },
+      "speed": 18.979241256690724,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 126.84445547129263,
+        "distance": 268.1252702562613,
+        "s": 2140
+      },
+      "main": {
+        "s": 171.69487835352083,
+        "lane": -2.7671535016080213
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 6781,
+      "phase": "race",
+      "state": "running",
+      "progress": 102.37104690276738,
+      "position": {
+        "x": -103.03215337530139,
+        "z": -237.20265045937978
+      },
+      "speed": 18.9659079233573,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 119.03446616988624,
+        "distance": 286.57456439356616,
+        "s": 2140
+      },
+      "main": {
+        "s": 197.37104690276738,
+        "lane": -2.7973495406202176
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 8267,
+      "phase": "race",
+      "state": "running",
+      "progress": 128.0461335066575,
+      "position": {
+        "x": -77.35706677141155,
+        "z": -237.2002026888233
+      },
+      "speed": 18.952574590023875,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 111.25124813345171,
+        "distance": 306.0841356358316,
+        "s": 2140
+      },
+      "main": {
+        "s": 223.0461335066575,
+        "lane": -2.7997973111766896
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 9999,
+      "phase": "race",
+      "state": "running",
+      "progress": 158.4749195161885,
+      "position": {
+        "x": -46.92828076188031,
+        "z": -237.20000942007078
+      },
+      "speed": 18.899241256690434,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 102.02956064616303,
+        "distance": 330.30139389519707,
+        "s": 2140
+      },
+      "main": {
+        "s": 253.4749195161885,
+        "lane": -2.799990579929215
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 11521,
+      "phase": "race",
+      "state": "running",
+      "progress": 188.58871817261252,
+      "position": {
+        "x": -16.81448210545578,
+        "z": -237.20000059538535
+      },
+      "speed": 18.899241256690328,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 92.90350646470431,
+        "distance": 355.21011636245873,
+        "s": 2140
+      },
+      "main": {
+        "s": 283.5887181726125,
+        "lane": -2.7999994046146526
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 12996,
+      "phase": "race",
+      "state": "running",
+      "progress": 216.48738312686874,
+      "position": {
+        "x": 11.08418284880106,
+        "z": -237.20000004077093
+      },
+      "speed": 19.01924125669023,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 84.44876077935909,
+        "distance": 378.96158673581203,
+        "s": 2140
+      },
+      "main": {
+        "s": 311.48738312686874,
+        "lane": -2.799999959229069
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 14665,
+      "phase": "race",
+      "state": "running",
+      "progress": 247.55103273501754,
+      "position": {
+        "x": 42.14783245695056,
+        "z": -237.20000000225068
+      },
+      "speed": 19.112574590023453,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 75.03486077618126,
+        "distance": 406.02876069280796,
+        "s": 2140
+      },
+      "main": {
+        "s": 342.55103273501754,
+        "lane": -2.7999999977493246
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 16312,
+      "phase": "race",
+      "state": "running",
+      "progress": 277.98248541238763,
+      "position": {
+        "x": 72.57928513432132,
+        "z": -237.2000000001321
+      },
+      "speed": 19.05924125669001,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 65.81254932805498,
+        "distance": 433.06557095940366,
+        "s": 2140
+      },
+      "main": {
+        "s": 372.98248541238763,
+        "lane": -2.7999999998679073
+      },
+      "rank": 5,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 18122,
+      "phase": "race",
+      "state": "running",
+      "progress": 305.0811139718039,
+      "position": {
+        "x": 99.67791369373795,
+        "z": -237.03514598966427
+      },
+      "speed": 18.779241256689915,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 57.44315517925378,
+        "distance": 457.43107922273737,
+        "s": 2140
+      },
+      "main": {
+        "s": 400.0811139718039,
+        "lane": -2.9648540103357277
+      },
+      "rank": 6,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 19854,
+      "phase": "race",
+      "state": "running",
+      "progress": 333.53989607863696,
+      "position": {
+        "x": 128.13669580057132,
+        "z": -235.82214052535454
+      },
+      "speed": 17.79587198667779,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 47.66270271051555,
+        "distance": 482.92066572280254,
+        "s": 2140
+      },
+      "main": {
+        "s": 428.53989607863696,
+        "lane": -4.177859474645459
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "64 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 21362,
+      "phase": "race",
+      "state": "running",
+      "progress": 358.99655725270895,
+      "position": {
+        "x": 153.58325313098376,
+        "z": -240.99585663356496
+      },
+      "speed": 18.831438937038072,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 44.88149068758594,
+        "distance": 508.3657214242379,
+        "s": 2140
+      },
+      "main": {
+        "s": 453.99655725270895,
+        "lane": 0.9702376395248147
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 23081,
+      "phase": "race",
+      "state": "running",
+      "progress": 388.59970849789806,
+      "position": {
+        "x": 183.07859410605298,
+        "z": -242.64975673477045
+      },
+      "speed": 18.724772270371297,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 37.518993579870006,
+        "distance": 536.3041521408519,
+        "s": 2140
+      },
+      "main": {
+        "s": 483.59970849789806,
+        "lane": 1.373179076284664
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "67 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 24844,
+      "phase": "race",
+      "state": "running",
+      "progress": 418.73373594130317,
+      "position": {
+        "x": 213.38373662431533,
+        "z": -240.95327959545904
+      },
+      "speed": 18.764772270371186,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 26.718262013411625,
+        "distance": 563.9892777881645,
+        "s": 2140
+      },
+      "main": {
+        "s": 513.7337359413032,
+        "lane": -2.3865022632958635
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 26262,
+      "phase": "race",
+      "state": "running",
+      "progress": 445.60879972789553,
+      "position": {
+        "x": 240.12345820256368,
+        "z": -241.68743100372893
+      },
+      "speed": 18.791438937037757,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 19.314364149382463,
+        "distance": 589.3773556550057,
+        "s": 2140
+      },
+      "main": {
+        "s": 540.6087997278955,
+        "lane": -2.8683427152813357
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 27945,
+      "phase": "race",
+      "state": "running",
+      "progress": 477.5256858764237,
+      "position": {
+        "x": 271.4498463168623,
+        "z": -239.82317149177752
+      },
+      "speed": 18.77810560370431,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": 8.044249856791941,
+        "distance": 618.4013866068011,
+        "s": 2140
+      },
+      "main": {
+        "s": 572.5256858764237,
+        "lane": -3.1338589543945856
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 29535,
+      "phase": "race",
+      "state": "running",
+      "progress": 506.7226992199053,
+      "position": {
+        "x": 299.2879041543747,
+        "z": -233.42323685415718
+      },
+      "speed": 10.279414696795842,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -6.491099719072473,
+        "distance": 642.9712637490715,
+        "s": 2140
+      },
+      "main": {
+        "s": 601.7226992199053,
+        "lane": -0.9452210717336237
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "37 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 31435,
+      "phase": "race",
+      "state": "running",
+      "progress": 532.119885307914,
+      "position": {
+        "x": 318.8461145131006,
+        "z": -218.11592351079975
+      },
+      "speed": 18.578892998990415,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -27.005725881537366,
+        "distance": 657.492900697456,
+        "s": 2140
+      },
+      "main": {
+        "s": 627.119885307914,
+        "lane": -3.3187287479217664
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "67 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 33174,
+      "phase": "race",
+      "state": "running",
+      "progress": 565.1504596218874,
+      "position": {
+        "x": 334.1570609560457,
+        "z": -192.24795051857095
+      },
+      "speed": 18.725559665656974,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -56.29724480067591,
+        "distance": 666.0730647686784,
+        "s": 2140
+      },
+      "main": {
+        "s": 660.1504596218874,
+        "lane": -6.209349107773974
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "67 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 34723,
+      "phase": "race",
+      "state": "running",
+      "progress": 596.509585011263,
+      "position": {
+        "x": 339.75598550857455,
+        "z": -162.62735021561198
+      },
+      "speed": 18.925559665656866,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -86.22167281302733,
+        "distance": 665.6564112363974,
+        "s": 2140
+      },
+      "main": {
+        "s": 691.509585011263,
+        "lane": -5.679008989998487
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 36293,
+      "phase": "race",
+      "state": "running",
+      "progress": 623.2956136373391,
+      "position": {
+        "x": 347.0098750948276,
+        "z": -135.61627339674064
+      },
+      "speed": 18.9388929989901,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -114.16083310648355,
+        "distance": 668.5941404426529,
+        "s": 2140
+      },
+      "main": {
+        "s": 718.2956136373391,
+        "lane": -4.35735957300626
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 37878,
+      "phase": "race",
+      "state": "running",
+      "progress": 652.6023674065682,
+      "position": {
+        "x": 361.9775487361701,
+        "z": -109.81591421054777
+      },
+      "speed": 18.938892998989992,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -143.28388832808335,
+        "distance": 680.4768903132045,
+        "s": 2140
+      },
+      "main": {
+        "s": 747.6023674065682,
+        "lane": -2.8957309633096258
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 39337,
+      "phase": "race",
+      "state": "running",
+      "progress": 679.8735649642758,
+      "position": {
+        "x": 372.1313101900074,
+        "z": -85.1535977884059
+      },
+      "speed": 18.965559665656563,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -169.86355281249175,
+        "distance": 688.6995305545456,
+        "s": 2140
+      },
+      "main": {
+        "s": 774.8735649642758,
+        "lane": -3.0228204395411513
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 40954,
+      "phase": "race",
+      "state": "running",
+      "progress": 710.6647529931752,
+      "position": {
+        "x": 379.5169155589644,
+        "z": -55.78936426538312
+      },
+      "speed": 18.912226332323122,
+      "height": 2.553180706165967,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -200.08512706777603,
+        "distance": 694.9872836508654,
+        "s": 2140
+      },
+      "main": {
+        "s": 805.6647529931752,
+        "lane": -3.114719819972984
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 42391,
+      "phase": "race",
+      "state": "running",
+      "progress": 738.8408107797682,
+      "position": {
+        "x": 380.2554672281176,
+        "z": -28.470056612738098
+      },
+      "speed": 24.5,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -226.3435374019975,
+        "distance": 695.8292279396412,
+        "s": 2140
+      },
+      "main": {
+        "s": 833.8408107797682,
+        "lane": -3.2299713264982928
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "88 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 43532,
+      "phase": "race",
+      "state": "running",
+      "progress": 765.0698710664556,
+      "position": {
+        "x": 374.64655231565683,
+        "z": -3.6307962379214462
+      },
+      "speed": 21.619999999999933,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -248.31491487652053,
+        "distance": 691.2544642312364,
+        "s": 2140
+      },
+      "main": {
+        "s": 860.0698710664556,
+        "lane": -4.3137391185902
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "78 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 45106,
+      "phase": "race",
+      "state": "running",
+      "progress": 797.8960035059613,
+      "position": {
+        "x": 359.1210283441829,
+        "z": 21.949216974094856
+      },
+      "speed": 18.993333333333158,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -267.9869627364305,
+        "distance": 677.7952624027033,
+        "s": 2140
+      },
+      "main": {
+        "s": 892.8960035059613,
+        "lane": -6.161034589642463
+      },
+      "rank": 2,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 46713,
+      "phase": "race",
+      "state": "running",
+      "progress": 825.3070882307557,
+      "position": {
+        "x": 339.71962862239883,
+        "z": 41.4184415379901
+      },
+      "speed": 18.91333333333306,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -280.6609959401441,
+        "distance": 660.7473051663543,
+        "s": 2140
+      },
+      "main": {
+        "s": 920.3070882307557,
+        "lane": -5.215803667949606
+      },
+      "rank": 2,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 48118,
+      "phase": "race",
+      "state": "running",
+      "progress": 851.7424525625488,
+      "position": {
+        "x": 326.67693530143765,
+        "z": 65.74053389418933
+      },
+      "speed": 19.033333333332962,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -299.886704588886,
+        "distance": 651.5001245351647,
+        "s": 2140
+      },
+      "main": {
+        "s": 946.7424525625488,
+        "lane": -2.8132438285862773
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 49560,
+      "phase": "race",
+      "state": "running",
+      "progress": 878.2711105399535,
+      "position": {
+        "x": 317.31495955222636,
+        "z": 91.1596420219673
+      },
+      "speed": 19.0066666666662,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -321.2732894644818,
+        "distance": 647.1338441891149,
+        "s": 2140
+      },
+      "main": {
+        "s": 973.2711105399535,
+        "lane": -2.2518159726140685
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 51314,
+      "phase": "race",
+      "state": "running",
+      "progress": 908.1750958644734,
+      "position": {
+        "x": 318.5887754620329,
+        "z": 121.73978549619493
+      },
+      "speed": 19.099999999999422,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -350.8014045420647,
+        "distance": 655.4724026297149,
+        "s": 2140
+      },
+      "main": {
+        "s": 1003.1750958644734,
+        "lane": -2.193037537185562
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 53352,
+      "phase": "race",
+      "state": "running",
+      "progress": 939.208632394425,
+      "position": {
+        "x": 324.7882025426687,
+        "z": 151.5104234263286
+      },
+      "speed": 18.696329073652944,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -605.3420590032381,
+        "distance": 665.2091063414265,
+        "s": 1880
+      },
+      "main": {
+        "s": 1034.208632394425,
+        "lane": -3.3463334647631506
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "67 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 54766,
+      "phase": "race",
+      "state": "running",
+      "progress": 966.4383651426856,
+      "position": {
+        "x": 320.8479217207724,
+        "z": 177.03574123999203
+      },
+      "speed": 18.737698893149084,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -592.8602736279,
+        "distance": 663.7251059142269,
+        "s": 1880
+      },
+      "main": {
+        "s": 1061.4383651426856,
+        "lane": -3.2546598185443387
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "67 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 56415,
+      "phase": "race",
+      "state": "running",
+      "progress": 998.7273541051168,
+      "position": {
+        "x": 307.82344164095423,
+        "z": 205.44657618784177
+      },
+      "speed": 18.724365559815638,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -570.8561063688106,
+        "distance": 654.7240225401897,
+        "s": 1880
+      },
+      "main": {
+        "s": 1093.7273541051168,
+        "lane": -3.277739594358734
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "67 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 57761,
+      "phase": "race",
+      "state": "running",
+      "progress": 1025.2158590812637,
+      "position": {
+        "x": 290.22967902935665,
+        "z": 222.9662883762046
+      },
+      "speed": 18.76436555981555,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -548.3087314040808,
+        "distance": 640.4717180990726,
+        "s": 1880
+      },
+      "main": {
+        "s": 1120.2158590812637,
+        "lane": -3.532137940803493
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 59349,
+      "phase": "race",
+      "state": "running",
+      "progress": 1055.46738471581,
+      "position": {
+        "x": 263.36248549035156,
+        "z": 234.06143260873978
+      },
+      "speed": 18.87103222648211,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -519.2644564372887,
+        "distance": 616.4217204655664,
+        "s": 1880
+      },
+      "main": {
+        "s": 1150.46738471581,
+        "lane": -3.1860693939251057
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 60801,
+      "phase": "race",
+      "state": "running",
+      "progress": 1083.1849986692291,
+      "position": {
+        "x": 236.55780612558553,
+        "z": 239.35157812458857
+      },
+      "speed": 18.791032226482013,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -492.27610534155167,
+        "distance": 591.495726855589,
+        "s": 1880
+      },
+      "main": {
+        "s": 1178.1849986692291,
+        "lane": -3.098532532116036
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 62495,
+      "phase": "race",
+      "state": "running",
+      "progress": 1113.9613237370977,
+      "position": {
+        "x": 206.4113989944292,
+        "z": 239.70323337654213
+      },
+      "speed": 18.991032226481906,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -463.8491394640449,
+        "distance": 562.318860706864,
+        "s": 1880
+      },
+      "main": {
+        "s": 1208.9613237370977,
+        "lane": -2.994934603417022
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 64210,
+      "phase": "race",
+      "state": "running",
+      "progress": 1144.5182665265138,
+      "position": {
+        "x": 175.945191610607,
+        "z": 237.541988648368
+      },
+      "speed": 18.88436555981513,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -435.9864673649066,
+        "distance": 532.2904110781232,
+        "s": 1880
+      },
+      "main": {
+        "s": 1239.5182665265138,
+        "lane": -2.7536512509287925
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 65697,
+      "phase": "race",
+      "state": "running",
+      "progress": 1172.3165210798988,
+      "position": {
+        "x": 147.73330171642056,
+        "z": 237.90519786631228
+      },
+      "speed": 18.897698893148362,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -409.37194184497156,
+        "distance": 505.1754623005304,
+        "s": 1880
+      },
+      "main": {
+        "s": 1267.3165210798988,
+        "lane": -2.333008775952488
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 67261,
+      "phase": "race",
+      "state": "running",
+      "progress": 1200.231864136742,
+      "position": {
+        "x": 120.16830431778061,
+        "z": 244.13108960958976
+      },
+      "speed": 18.911032226481595,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -381.347743779576,
+        "distance": 480.52313574547645,
+        "s": 1880
+      },
+      "main": {
+        "s": 1295.231864136742,
+        "lane": -2.8113038108624817
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 68733,
+      "phase": "race",
+      "state": "running",
+      "progress": 1228.349863220386,
+      "position": {
+        "x": 93.44380437193382,
+        "z": 246.25431197448353
+      },
+      "speed": 18.88436555981483,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -355.5242660083589,
+        "distance": 455.75772043960444,
+        "s": 1880
+      },
+      "main": {
+        "s": 1323.349863220386,
+        "lane": -3.373179162717317
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 70241,
+      "phase": "race",
+      "state": "running",
+      "progress": 1256.882122662028,
+      "position": {
+        "x": 66.02772359181762,
+        "z": 240.840840025526
+      },
+      "speed": 18.9510322264814,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -331.6444491274266,
+        "distance": 428.0627917586351,
+        "s": 1880
+      },
+      "main": {
+        "s": 1351.882122662028,
+        "lane": -2.995803754152134
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 71845,
+      "phase": "race",
+      "state": "running",
+      "progress": 1287.3701397440236,
+      "position": {
+        "x": 36.54643024532281,
+        "z": 232.88129172497128
+      },
+      "speed": 18.844365559814623,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -306.70148504048825,
+        "distance": 397.60537251340594,
+        "s": 1880
+      },
+      "main": {
+        "s": 1382.3701397440236,
+        "lane": -2.717060949735741
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 73450,
+      "phase": "race",
+      "state": "running",
+      "progress": 1315.8396934345037,
+      "position": {
+        "x": 8.109189318183667,
+        "z": 227.95607572695613
+      },
+      "speed": 18.751032226481186,
+      "height": 1.7858641445323729,
+      "shortcut": {
+        "u": 0,
+        "lane": -281.69486370134825,
+        "distance": 369.17785668815384,
+        "s": 1880
+      },
+      "main": {
+        "s": 1410.8396934345037,
+        "lane": -2.415669465652239
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 74620,
+      "phase": "race",
+      "state": "running",
+      "progress": 1341.91124106188,
+      "position": {
+        "x": -18.43480885937497,
+        "z": 229.55884767917973
+      },
+      "speed": 24.233333333333327,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -256.2199305501412,
+        "distance": 344.9737658454397,
+        "s": 1880
+      },
+      "main": {
+        "s": 1436.91124106188,
+        "lane": -2.207324586637174
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "87 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 75973,
+      "phase": "race",
+      "state": "running",
+      "progress": 1369.3403874045189,
+      "position": {
+        "x": -45.38895219205886,
+        "z": 235.8845826584851
+      },
+      "speed": 18.997654766641215,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -228.73494274400196,
+        "distance": 322.72081263652547,
+        "s": 1880
+      },
+      "main": {
+        "s": 1464.3403874045189,
+        "lane": -2.624755913465352
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 77652,
+      "phase": "race",
+      "state": "running",
+      "progress": 1400.6810397375698,
+      "position": {
+        "x": -75.47946458847515,
+        "z": 243.92086652687658
+      },
+      "speed": 18.78432143330777,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -197.71654111121236,
+        "distance": 299.41718612220467,
+        "s": 1880
+      },
+      "main": {
+        "s": 1495.6810397375698,
+        "lane": -2.977602088456555
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 79310,
+      "phase": "race",
+      "state": "running",
+      "progress": 1430.5576260605458,
+      "position": {
+        "x": -104.29126488458631,
+        "z": 246.6156996906531
+      },
+      "speed": 18.944321433307667,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -169.73652775209976,
+        "distance": 275.8693032714015,
+        "s": 1880
+      },
+      "main": {
+        "s": 1525.5576260605458,
+        "lane": -3.2629731906132564
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 80814,
+      "phase": "race",
+      "state": "running",
+      "progress": 1460.6043926457137,
+      "position": {
+        "x": -133.29947373691544,
+        "z": 242.03068000823018
+      },
+      "speed": 19.05098809997423,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -144.0767504094847,
+        "distance": 249.08279222997808,
+        "s": 1880
+      },
+      "main": {
+        "s": 1555.6043926457137,
+        "lane": -3.0479350656794146
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 82366,
+      "phase": "race",
+      "state": "running",
+      "progress": 1487.9410874410923,
+      "position": {
+        "x": -159.6155242833431,
+        "z": 234.949754296192
+      },
+      "speed": 19.024321433307467,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -121.80349940856392,
+        "distance": 223.57475593909285,
+        "s": 1880
+      },
+      "main": {
+        "s": 1582.9410874410923,
+        "lane": -2.801451376096827
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 83726,
+      "phase": "race",
+      "state": "running",
+      "progress": 1513.6135624832732,
+      "position": {
+        "x": -184.89615322454634,
+        "z": 229.16051994076335
+      },
+      "speed": 18.957654766640708,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -100.05804777867613,
+        "distance": 200.1532600087251,
+        "s": 1880
+      },
+      "main": {
+        "s": 1608.6135624832732,
+        "lane": -2.536533672171567
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 85513,
+      "phase": "race",
+      "state": "running",
+      "progress": 1544.787491800147,
+      "position": {
+        "x": -216.66908251108038,
+        "z": 228.65506396025026
+      },
+      "speed": 18.890988099973928,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -70.39874997716122,
+        "distance": 176.58231942767162,
+        "s": 1880
+      },
+      "main": {
+        "s": 1639.787491800147,
+        "lane": -2.322926809218206
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 87000,
+      "phase": "race",
+      "state": "running",
+      "progress": 1574.1658568513017,
+      "position": {
+        "x": -245.73195240237547,
+        "z": 234.21787777357866
+      },
+      "speed": 19.250988099973824,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -41.19625792206846,
+        "distance": 162.47588586406584,
+        "s": 1880
+      },
+      "main": {
+        "s": 1669.1658568513017,
+        "lane": -2.7530580996397283
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 88459,
+      "phase": "race",
+      "state": "running",
+      "progress": 1601.7891734371465,
+      "position": {
+        "x": -272.43194511043424,
+        "z": 237.9188912794852
+      },
+      "speed": 19.024321433307062,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -14.852947740284293,
+        "distance": 152.18183269109576,
+        "s": 1880
+      },
+      "main": {
+        "s": 1696.7891734371465,
+        "lane": -3.3004072577724903
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 89940,
+      "phase": "race",
+      "state": "running",
+      "progress": 1631.682630757985,
+      "position": {
+        "x": -299.5293639925191,
+        "z": 230.95336415081954
+      },
+      "speed": 19.09098809997363,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": 8.193672498467762,
+        "distance": 135.8393888484343,
+        "s": 1880
+      },
+      "main": {
+        "s": 1726.682630757985,
+        "lane": -3.41041984541572
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 91520,
+      "phase": "race",
+      "state": "running",
+      "progress": 1662.0093616016438,
+      "position": {
+        "x": -323.174227064267,
+        "z": 214.03636137942246
+      },
+      "speed": 18.997654766640192,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": 24.57468119635173,
+        "distance": 114.24706315536876,
+        "s": 1880
+      },
+      "main": {
+        "s": 1757.0093616016438,
+        "lane": -3.345946663896408
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 93036,
+      "phase": "race",
+      "state": "running",
+      "progress": 1692.5848698265627,
+      "position": {
+        "x": -339.022715779526,
+        "z": 189.75549787384185
+      },
+      "speed": 19.15765476664009,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": 31.101724845933692,
+        "distance": 88.93699782743673,
+        "s": 1880
+      },
+      "main": {
+        "s": 1787.5848698265627,
+        "lane": -3.384055557499088
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 94763,
+      "phase": "race",
+      "state": "running",
+      "progress": 1724.94669222012,
+      "position": {
+        "x": -346.5006059281252,
+        "z": 159.2850889425428
+      },
+      "speed": 19.197654766639978,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": 27.63966194658399,
+        "distance": 59.01165337702553,
+        "s": 1880
+      },
+      "main": {
+        "s": 1819.94669222012,
+        "lane": -3.2090697837266577
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 96354,
+      "phase": "race",
+      "state": "running",
+      "progress": 1755.2998270261169,
+      "position": {
+        "x": -344.8572793700888,
+        "z": 130.2785899382193
+      },
+      "speed": 19.10432143330654,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": 16.116892257403922,
+        "distance": 30.13943476191245,
+        "s": 1880
+      },
+      "main": {
+        "s": 1850.2998270261169,
+        "lane": -3.395751206249156
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 97890,
+      "phase": "race",
+      "state": "running",
+      "progress": 1786.760711162864,
+      "position": {
+        "x": -332.23236391977287,
+        "z": 103.11593058939835
+      },
+      "speed": 19.104321433306435,
+      "height": 0,
+      "shortcut": {
+        "u": 0,
+        "lane": -5.082665342003175,
+        "distance": 6.662430024811879,
+        "s": 1880
+      },
+      "main": {
+        "s": 1881.760711162864,
+        "lane": -3.426265924209691
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 99676,
+      "phase": "race",
+      "state": "running",
+      "progress": 1820.396094039028,
+      "position": {
+        "x": -306.98550333199,
+        "z": 84.56689450102823
+      },
+      "speed": 19.09098809997299,
+      "height": 0,
+      "shortcut": {
+        "u": 3.2825271764306034,
+        "lane": -35.229572386508686,
+        "distance": 35.229572386508686,
+        "s": 1884.9283963370563
+      },
+      "main": {
+        "s": 1915.396094039028,
+        "lane": -3.285982233831291
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 101289,
+      "phase": "race",
+      "state": "running",
+      "progress": 1851.2637108169192,
+      "position": {
+        "x": -278.6771039568452,
+        "z": 73.01966770632087
+      },
+      "speed": 19.037654766639548,
+      "height": 0,
+      "shortcut": {
+        "u": 3.395259854152109,
+        "lane": -65.80229246788974,
+        "distance": 65.80229246788974,
+        "s": 1885.0976535239997
+      },
+      "main": {
+        "s": 1946.2637108169192,
+        "lane": -3.0446766654330064
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 102912,
+      "phase": "race",
+      "state": "running",
+      "progress": 1880.5322545713343,
+      "position": {
+        "x": -251.34758209655712,
+        "z": 61.20008850594818
+      },
+      "speed": 19.397733333333335,
+      "height": 0.5510204081632653,
+      "shortcut": {
+        "u": 4.126921497758691,
+        "lane": -95.56921855751347,
+        "distance": 95.56921855751345,
+        "s": 1886.1961725523279
+      },
+      "main": {
+        "s": 1975.5322545713343,
+        "lane": -1.8257163654684778
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "70 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 104530,
+      "phase": "race",
+      "state": "running",
+      "progress": 1908.7068886819015,
+      "position": {
+        "x": -236.00237962044582,
+        "z": 37.522610076722515
+      },
+      "speed": 18.853333333333314,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -102.47468544651178,
+        "distance": 114.33535763460866,
+        "s": 2140
+      },
+      "main": {
+        "s": 2003.7068886819015,
+        "lane": 2.908117172541788
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 105703,
+      "phase": "race",
+      "state": "running",
+      "progress": 1935.643409213686,
+      "position": {
+        "x": -232.96493506321747,
+        "z": 14.115841512930631
+      },
+      "speed": 19.546666666666663,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -81.08914633400144,
+        "distance": 101.29025709328748,
+        "s": 2140
+      },
+      "main": {
+        "s": 2030.643409213686,
+        "lane": 4.565771191371357
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "70 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 107058,
+      "phase": "race",
+      "state": "running",
+      "progress": 1964.1239508212566,
+      "position": {
+        "x": -244.31502898885034,
+        "z": -8.353637933033447
+      },
+      "speed": 18.799999999999958,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -56.23664764422417,
+        "distance": 79.85271803475358,
+        "s": 2140
+      },
+      "main": {
+        "s": 2059.1239508212566,
+        "lane": 4.281330894110705
+      },
+      "rank": 4,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 108395,
+      "phase": "race",
+      "state": "running",
+      "progress": 1990.8528196334637,
+      "position": {
+        "x": -266.108300320452,
+        "z": -21.71992597306218
+      },
+      "speed": 19.039999999999868,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -36.8944285804413,
+        "distance": 54.39741678465176,
+        "s": 2140
+      },
+      "main": {
+        "s": 2085.8528196334637,
+        "lane": 2.9298641689286926
+      },
+      "rank": 2,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 109905,
+      "phase": "race",
+      "state": "running",
+      "progress": 2018.9171021479797,
+      "position": {
+        "x": -291.3440988497872,
+        "z": -33.585053808851
+      },
+      "speed": 19.12609902949467,
+      "height": 0,
+      "shortcut": {
+        "u": 173.17135382456237,
+        "lane": -17.939511589018895,
+        "distance": 26.51157443292846,
+        "s": 2140
+      },
+      "main": {
+        "s": 2113.9171021479797,
+        "lane": 2.902765441787989
+      },
+      "rank": 3,
+      "hud": {
+        "speed": "69 km/h",
+        "camera": "Verfolger nah"
+      }
+    },
+    {
+      "elapsedMs": 111392,
+      "phase": "race",
+      "state": "running",
+      "progress": 2047.0592692416922,
+      "position": {
+        "x": -316.80436435215336,
+        "z": -46.521043780014466
+      },
+      "speed": 18.88609902949457,
+      "height": 0,
+      "shortcut": {
+        "u": 172.34884099972263,
+        "lane": 2.103934367322459,
+        "distance": 2.103934367322459,
+        "s": 2138.765076730445
+      },
+      "main": {
+        "s": 2142.059269241692,
+        "lane": 2.2609141702591007
+      },
+      "rank": 2,
+      "hud": {
+        "speed": "68 km/h",
+        "camera": "Verfolger nah"
+      }
+    }
+  ]
+}

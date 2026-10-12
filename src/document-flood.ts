@@ -1,7 +1,8 @@
 /**
  * Aktenflut (Marcel 11.10.2026): a censorship hit no longer shows a small notice. Like the Mario Kart blooper, a
- * fountain of files, decrees, redacted reports and propaganda leaflets bursts over the screen and blocks much of
- * the view, then thins out until the road is clear again. Pure DOM overlay; the race simulation owns the timing.
+ * fountain of files, decrees, redacted reports and propaganda leaflets bursts over the screen, then scatters toward
+ * the edges so the player can read the road while the temporary handling effect continues. Pure DOM overlay; the
+ * race simulation owns the timing.
  */
 const HEADLINES = [
   'AMTLICH GESCHWÄRZT', 'VERSCHLUSSSACHE', 'Erfolgsmeldung Nr. 4711', 'Planerfüllung: 312 %', 'Die Ernte war nie besser',
@@ -22,20 +23,23 @@ export class DocumentFlood {
   }
 
   /** Starts a fresh burst; `duration` is the full time the documents block the view. */
-  start(duration: number): void {
+  start(duration: number, reduced = false): void {
     this.total = Math.max(.5, duration); this.active = true;
     this.root.replaceChildren();
-    const count = 36;
+    const count = reduced ? 12 : 22;
     for (let i = 0; i < count; i++) {
       const sheet = document.createElement('div'), kind = i % 5;
       sheet.className = `flood-sheet ${['flood-file', 'flood-report', 'flood-leaflet', 'flood-redacted', 'flood-decree'][kind]}`;
       const random = (a: number, b: number) => a + Math.random() * (b - a);
-      // Fountain: everything leaves the bottom centre, fans out and settles somewhere over the picture.
-      sheet.style.setProperty('--x', `${random(-48, 48).toFixed(1)}vw`);
-      sheet.style.setProperty('--y', `${random(-86, -18).toFixed(1)}vh`);
+      // A short central burst sells the hit; most sheets settle at the sides, clear of the racing line.
+      const edge = i % 4 !== 0, side = i % 2 === 0 ? 1 : -1;
+      const x = edge ? random(24, 46) * side : random(-13, 13);
+      const y = edge ? random(-82, -18) : (Math.random() < .5 ? random(-90, -74) : random(-25, -14));
+      sheet.style.setProperty('--x', `${x.toFixed(1)}vw`);
+      sheet.style.setProperty('--y', `${y.toFixed(1)}vh`);
       sheet.style.setProperty('--r', `${random(-38, 38).toFixed(0)}deg`);
       sheet.style.setProperty('--spin', `${random(-200, 200).toFixed(0)}deg`);
-      sheet.style.setProperty('--w', `${random(13, 24).toFixed(1)}vmin`);
+      sheet.style.setProperty('--w', `${random(reduced ? 6 : 7.5, reduced ? 10 : 13.5).toFixed(1)}vmin`);
       sheet.style.animationDelay = `${(i * .028).toFixed(3)}s, ${(.9 + Math.random() * .6).toFixed(2)}s`;
       const headline = document.createElement('strong'); headline.textContent = HEADLINES[(i * 7) % HEADLINES.length];
       sheet.append(headline);

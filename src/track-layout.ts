@@ -21,6 +21,8 @@ export interface District { from: number; to: number; left: string; right: strin
 export interface HeroPlacement { m: string; s?: number; lane?: number; x?: number; z?: number; yaw?: number; spanRoad?: boolean }
 /** Fixed roadside collision post, positioned in progress/lane space and rendered by the world builder. */
 export interface TrackObstacle { s: number; lane: number; radius: number }
+/** Fixed local shortcut surface effect, expressed in metres along and across the alley. */
+export interface ShortcutSurfacePatch { kind: 'wet-stones' | 'broken-parade'; from: number; to: number; lane: number; halfWidth: number }
 
 export interface TrackDefinition {
   id: TrackId; name: string; city: string; theme: 'berlin' | 'rome' | 'havana' | 'pyongyang' | 'moscow' | 'beijing';
@@ -34,11 +36,19 @@ export interface TrackDefinition {
     elevation: readonly (readonly [number, number])[];
     /** [normalised start progress, lane centre] for 6 m shortcut boost strips. */
     boostPads: readonly (readonly [number, number])[];
+    /** Fixed shortcut-only item boxes as [metres along the alley, lateral lane]. */
+    itemBoxes?: readonly (readonly [number, number])[];
     /** Road side the alley branches off: -1 left (default, inside of the counter-clockwise loops), 1 right. */
     side?: 1 | -1;
   };
+  /** Static, course-specific surface effects along the alternate route. */
+  shortcutSurfacePatches?: readonly ShortcutSurfacePatch[];
+  /** A specific ramp can provide an airborne shortcut entry; walls elsewhere remain solid in flight. */
+  rampShortcutEntry?: { lip: number; lane: number; approachRadius: number; entryLength: number };
   canal: { from: number; length: number };
   rampLips: readonly number[];
+  /** Authored take-off heights in metres, paired by index with rampLips. */
+  rampHeights: readonly number[];
   boostPads: readonly (readonly [number, number])[];
   craters: readonly (readonly [number, number, number])[];
   grassVerges: readonly (readonly [number, number, number, number])[];
@@ -84,9 +94,11 @@ const STADIONRING: TrackDefinition = {
   halfWidth: 6, start: 30 * S, bump: 345 * S,
   /** Backyard shortcut through the fountain hairpin; narrow, rough cobbles cap the speed unless a mini-turbo is active. */
   shortcut: { from: 343 * S, to: 452 * S, halfWidth: 3, speedCap: 10.5, points: [[-46 * S, -44 * S], [-34 * S, -44.5 * S], [-22 * S, -47.5 * S]], elevation: [[0, 0], [1, 0]], boostPads: [] },
+  rampShortcutEntry: { lip: 500, lane: -5.8, approachRadius: 24, entryLength: 22 },
   /** Canal across the grandstand straight in front of the stands: jump it from the ramp, or fall in and get salvaged. */
   canal: { from: 85 * S, length: 9 },
-  rampLips: [85 * S, 330 * S],
+  /** Outer kicker at 500 m sends a deliberate edge-line jump into the shortcut entrance at 514.5 m. */
+  rampLips: [85 * S, 500], rampHeights: [.75, 1.55],
   boostPads: [[62 * S, -2], [176 * S, 2], [292 * S, 0], [85 * S - 22, 0], [1050, 0], [1192, 1.5]],
   craters: [[298 * S, -3, 1.7], [305 * S, 2.6, 1.9], [312 * S, -.6, 1.6]],
   grassVerges: [[345 * S, 362 * S, 4.8, 5.8]],
@@ -141,9 +153,9 @@ const DUCE_DROM: TrackDefinition = {
   ] as const).map(([x, z]) => [x * R, z * R] as const),
   halfWidth: 6, start: 52, bump: 1120,
   /** Stallgasse: rough, sunken service lane under the circus stable arches; one risky line through the Meta-Kehre. */
-  shortcut: { from: 270, to: 452, halfWidth: 3.2, speedCap: 11.5, points: [[118 * R, -92 * R], [131 * R, -64 * R]], elevation: [[0, 0], [.28, -1.6], [.72, -1.6], [1, 0]], boostPads: [[.44, 0]] },
+  shortcut: { from: 270, to: 452, halfWidth: 3.2, speedCap: 11.5, points: [[118 * R, -92 * R], [131 * R, -64 * R]], elevation: [[0, 0], [.28, -1.6], [.72, -1.6], [1, 0]], boostPads: [[.44, 0]], itemBoxes: [[68, 0]] },
   canal: { from: -1000, length: 0 },
-  rampLips: [700, 850],
+  rampLips: [700, 850], rampHeights: [.7, 1.8],
   boostPads: [[112, 0], [612, 0], [930, -2.5], [1092, 0], [430, -2.2]],
   craters: [], grassVerges: [],
   elevation: [[430, 0], [510, 3.3], [600, 0], [665, 6], [720, 6], [810, 0], [912, 1.8], [968, 0]],
@@ -193,9 +205,9 @@ const HAVANNA: TrackDefinition = {
   ] as const).map(([x, z]) => [x * HV, z * HV] as const),
   halfWidth: 6, start: 40, bump: 1240,
   /** Zigarrenfabrik: gravel passage through the factory yard, straight across the old-town dip. */
-  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 17, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [[.3, 0], [.68, 0]] },
+  shortcut: { from: 860, to: 985, halfWidth: 3, speedCap: 17, points: [[-60 * HV, -52 * HV], [-5 * HV, -55 * HV]], elevation: [[0, 0], [1, 0]], boostPads: [[.55, 0]], itemBoxes: [[55, 0]] },
   canal: { from: -1000, length: 0 },
-  rampLips: [380, 1146],
+  rampLips: [380, 1146], rampHeights: [.65, 2.15],
   boostPads: [[100, 0], [500, 0], [800, 0], [1120, 0], [1300, 1.5]],
   craters: [], grassVerges: [],
   elevation: [[1060, 0], [1105, 4], [1150, 4], [1195, 0]],
@@ -251,7 +263,7 @@ const EWIGE_FUEHRER_ALLEE: TrackDefinition = {
   },
   canal: { from: -1000, length: 0 },
   /** A small kicker on the quay straight and the Triumph ramp at the top of the climb. */
-  rampLips: [232, 930],
+  rampLips: [232, 930], rampHeights: [.7, 1.9],
   boostPads: [[70, 0], [262, 0], [872, 0], [1450, 1.5]],
   craters: [], grassVerges: [],
   /** Triumph climb on the north-east: up 4.5 m, a short crest and the ramp lip, landing on the way down toward the hairpin. */
@@ -296,7 +308,7 @@ const MOSCOW: TrackDefinition = {
   controlPoints: [
     [-300,-240],[-150,-240],[0,-240],[150,-240],[285,-240],[335,-205],                 // south parade straight (start)
     [350,-140],[372,-95],[384,-40],[372,15],[338,52],[318,100],[328,160],[300,220],[240,242], // Moskva serpentine, Sparrow-hill climb
-    [150,240],[0,240],[-150,240],[-285,240],[-335,205],                                 // Red Square straight below the Kremlin wall
+    [150,240],[100,250],[0,230],[-100,250],[-200,230],[-285,240],[-335,205],            // Red Square long straight with a mild alternating S-kink
     [-350,140],[-330,95],[-290,74],[-250,58],[-228,25],[-238,-8],[-272,-28],[-325,-56], // Basilius pocket and hairpin
     [-350,-110],[-345,-180],[-322,-224],
   ],
@@ -304,8 +316,11 @@ const MOSCOW: TrackDefinition = {
   /** Old west boulevard: broken parade paving across the pocket's neck; slow unless a turbo is active. */
   shortcut: { from: 1880, to: 2140, side: 1, halfWidth: 4.2, speedCap: 15,
     points: [[-352,62],[-356,12],[-349,-32]],
-    elevation: [[0,0],[1,0]], boostPads: [] },
-  canal: { from: -1000, length: 0 }, rampLips: [800],
+    elevation: [[0,0],[1,0]], boostPads: [[.52,0]] },
+  /** Broken parade-stone centre strip; narrow intact edges retain a quicker line. */
+  shortcutSurfacePatches: [{ kind: 'broken-parade', from: 45, to: 180, lane: 0, halfWidth: 2.15 }],
+  /** Sparrow-hill launch plus a small kicker on the Red Square S-kink. */
+  canal: { from: -1000, length: 0 }, rampLips: [800,1400], rampHeights: [2,.75],
   boostPads: [[230,0],[690,0],[1300,0],[2200,0]], craters: [[1560,-5,1.8],[1570,4,1.8]],
   grassVerges: [],
   /** Sparrow-hill climb on the east serpentine: up 4.2 m, a short crest and the ramp, landing on the way down. */
@@ -349,9 +364,11 @@ const BEIJING: TrackDefinition = {
   ],
   halfWidth: 6, start: 70, bump: -1,
   /** Hutong-Gasse: narrow gravel alley across the north-west corner, past washing lines and tea houses. */
-  shortcut: { from: 596, to: 799, halfWidth: 3, speedCap: 15, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [.22, -.75], [.76, -.75], [1, 0]], boostPads: [[.62, 0]] },
+  shortcut: { from: 596, to: 799, halfWidth: 3, speedCap: 15, points: [[-232, 95], [-208, 128], [-178, 152]], elevation: [[0, 0], [.22, -.75], [.76, -.75], [1, 0]], boostPads: [[.62, 0]], itemBoxes: [[125, 0]] },
+  /** A fixed tea spill crosses the middle of the hutong; the narrow dry edge lines stay available. */
+  shortcutSurfacePatches: [{ kind: 'wet-stones', from: 75, to: 108, lane: 0, halfWidth: 2.15 }],
   canal: { from: -1000, length: 0 },
-  rampLips: [500, 1349],
+  rampLips: [500, 1349], rampHeights: [.7, 2.2],
   boostPads: [[120, 0], [470, 0], [1000, 0], [1285, 0], [1562, 1.5]],
   craters: [], grassVerges: [],
   /** Plateau on the east avenue: climb, a short flat top and a jump off its lip. */
@@ -453,10 +470,13 @@ export let START_PROGRESS = STADIONRING.start;
 /** Raised cobble hump: progress metres of its crest. */
 export let BUMP_PROGRESS = STADIONRING.bump;
 export let SHORTCUT = STADIONRING.shortcut;
+export let SHORTCUT_SURFACE_PATCHES = STADIONRING.shortcutSurfacePatches ?? [];
+export let RAMP_SHORTCUT_ENTRY = STADIONRING.rampShortcutEntry;
 export let CANAL_FROM = STADIONRING.canal.from, CANAL_LENGTH = STADIONRING.canal.length;
 export const RAMP_LENGTH = 9, RAMP_HEIGHT = 1;
 /** Take-off ramps: lip progress. */
 export let RAMP_LIPS = STADIONRING.rampLips;
+export let RAMP_HEIGHTS = STADIONRING.rampHeights;
 /** Glowing boost pads [progress start, lane centre]; 6 m long, 3 m wide, same effect for everyone. */
 export let BOOST_PADS = STADIONRING.boostPads;
 /** Marked shell craters [progress, lane, radius]; avoidable. */
@@ -475,7 +495,7 @@ export let GROUND = STADIONRING.ground;
 export function setTrackLayout(id: TrackId): TrackDefinition {
   const t = TRACKS[id];
   TRACK_INFO = t; TRACK_CONTROL_POINTS = t.controlPoints; TRACK_HALF_WIDTH = t.halfWidth; START_PROGRESS = t.start; BUMP_PROGRESS = t.bump;
-  SHORTCUT = t.shortcut; CANAL_FROM = t.canal.from; CANAL_LENGTH = t.canal.length; RAMP_LIPS = t.rampLips; BOOST_PADS = t.boostPads;
+  SHORTCUT = t.shortcut; SHORTCUT_SURFACE_PATCHES = t.shortcutSurfacePatches ?? []; RAMP_SHORTCUT_ENTRY = t.rampShortcutEntry; CANAL_FROM = t.canal.from; CANAL_LENGTH = t.canal.length; RAMP_LIPS = t.rampLips; RAMP_HEIGHTS = t.rampHeights; BOOST_PADS = t.boostPads;
   CRATERS = t.craters; GRASS_VERGES = t.grassVerges; ELEVATION = t.elevation; HAZARDS = t.hazards; ITEM_BOX_PROGRESS = t.itemBoxes;
   LANDMARKS = t.landmarks; RIVER = t.river; GROUND = t.ground;
   return t;

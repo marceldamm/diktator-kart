@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-12",
+  "track": "berlin",
+  "graphics": "normal",
+  "method": "full natural single-player race from grid; auto-gas and steering assist; no progress injection or QA event trigger",
+  "at450msAnd2s": {
+    "lap": "2 / 3",
+    "time": "1:16.78",
+    "place": "3",
+    "warning": "Propaganda-Zeppelin! Rückenwind auf der Tribünenspur · innen bleibt freie Fahrt",
+    "distance": 1441.2518626932097,
+    "particles": [
+      {
+        "name": "Stadium petals",
+        "count": 256
+      },
+      {
+        "name": "Fountain spray",
+        "count": 72
+      },
+      {
+        "name": "Fountain spray",
+        "count": 75
+      },
+      {
+        "name": "Tire smoke and dust",
+        "count": 15
+      },
+      {
+        "name": "Turbo exhaust fire",
+        "count": 22
+      },
+      {
+        "name": "Item hit paperwork",
+        "count": 88
+      },
+      {
+        "name": "Damage smoke 0",
+        "count": 6
+      },
+      {
+        "name": "Damage smoke 1",
+        "count": 29
+      },
+      {
+        "name": "Damage smoke 3",
+        "count": 18
+      },
+      {
+        "name": "Damage smoke 4",
+        "count": 7
+      },
+      {
+        "name": "Damage smoke 5",
+        "count": 30
+      }
+    ],
+    "camera": [
+      82.16795744014797,
+      2.123157733944517,
+      14.558452196735566
+    ],
+    "errors": []
+  }
+}

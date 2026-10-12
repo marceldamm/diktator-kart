@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-12T11:43:38.936Z",
+  "track": "beijing",
+  "method": "Natural six-kart race from grid in headless Chrome; auto-gas and steering assist; no progress, position, item or event injection; page-local 25-ms sampling around the shortcut wet zone.",
+  "target": {
+    "x": -209.31391891523435,
+    "z": 126.58999519328628,
+    "heading": 0.7501379735407588
+  },
+  "contact": {
+    "time": "0:31.05",
+    "near": [
+      {
+        "i": 2,
+        "x": -208.75797359965884,
+        "z": 127.23350495816372,
+        "speed": 14.352990454104555,
+        "turboRemaining": 0,
+        "height": 0,
+        "grounded": true,
+        "progress": 609.9721171456911
+      }
+    ],
+    "kind": "natural-shortcut-route",
+    "kart": {
+      "i": 2,
+      "x": -208.75797359965884,
+      "z": 127.23350495816372,
+      "speed": 14.352990454104555,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 609.9721171456911,
+      "padId": -1,
+      "shortcutU": 75.52870511679765,
+      "shortcutLane": -0.03197944908345215
+    }
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural route access is accepted when the kart reaches the middle of the shortcut according to the shared track model."
+}

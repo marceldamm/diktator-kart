@@ -1,0 +1,397 @@
+{
+  "date": "2026-10-12T09:00:37.847Z",
+  "track": "moscow",
+  "graphics": "normal",
+  "method": "Natural lap-one six-kart single race from grid, auto-gas and steering assist; no progress, position or event injection. Marks use trackProgress(kart), including Moscow start offset 95 m.",
+  "captures": [
+    {
+      "mark": 1375,
+      "name": "a65-moscow-course-s-1375.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:06.97",
+        "place": "3",
+        "raceDistance": 1281.1734504042179,
+        "courseS": 1376.1734504042179,
+        "camera": [
+          50.722863921709305,
+          2.1000000000000005,
+          236.45516452805748
+        ],
+        "kart": {
+          "x": 42.57022090041809,
+          "z": 234.5013814146844,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1385,
+      "name": "a65-moscow-course-s-1385.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:07.50",
+        "place": "3",
+        "raceDistance": 1291.6295182613535,
+        "courseS": 1386.6295182613535,
+        "camera": [
+          40.445406498626554,
+          2.1000000000000005,
+          233.90856817527128
+        ],
+        "kart": {
+          "x": 32.37491935889093,
+          "z": 231.8337903254492,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1390,
+      "name": "a65-moscow-course-s-1390.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:08.07",
+        "place": "3",
+        "raceDistance": 1302.6811323491165,
+        "courseS": 1397.6811323491165,
+        "camera": [
+          29.39645334247494,
+          2.5812216391003044,
+          231.16170729372905
+        ],
+        "kart": {
+          "x": 21.432061930539856,
+          "z": 229.46940537247355,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1395,
+      "name": "a65-moscow-course-s-1395.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:08.07",
+        "place": "3",
+        "raceDistance": 1302.6811323491165,
+        "courseS": 1397.6811323491165,
+        "camera": [
+          29.39645334247494,
+          2.5812216391003044,
+          231.16170729372905
+        ],
+        "kart": {
+          "x": 21.432061930539856,
+          "z": 229.46940537247355,
+          "speed": 19.76,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1400,
+      "name": "a65-moscow-course-s-1400.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:08.93",
+        "place": "3",
+        "raceDistance": 1319.4510044955905,
+        "courseS": 1414.4510044955905,
+        "camera": [
+          12.684444189142715,
+          2.7693359410430656,
+          228.24632754105923
+        ],
+        "kart": {
+          "x": 4.432962048715332,
+          "z": 227.5042206646142,
+          "speed": 19.76,
+          "grounded": false,
+          "height": 1.3669637160589079,
+          "jumpRemaining": 0.28517333333333234
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1405,
+      "name": "a65-moscow-course-s-1405.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:08.93",
+        "place": "3",
+        "raceDistance": 1319.4510044955905,
+        "courseS": 1414.4510044955905,
+        "camera": [
+          12.684444189142715,
+          2.7693359410430656,
+          228.24632754105923
+        ],
+        "kart": {
+          "x": 4.432962048715332,
+          "z": 227.5042206646142,
+          "speed": 19.76,
+          "grounded": false,
+          "height": 1.3669637160589079,
+          "jumpRemaining": 0.28517333333333234
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1410,
+      "name": "a65-moscow-course-s-1410.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:08.93",
+        "place": "3",
+        "raceDistance": 1319.4510044955905,
+        "courseS": 1414.4510044955905,
+        "camera": [
+          12.684444189142715,
+          2.7693359410430656,
+          228.24632754105923
+        ],
+        "kart": {
+          "x": 4.432962048715332,
+          "z": 227.5042206646142,
+          "speed": 19.76,
+          "grounded": false,
+          "height": 1.3669637160589079,
+          "jumpRemaining": 0.28517333333333234
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1420,
+      "name": "a65-moscow-course-s-1420.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:10.08",
+        "place": "3",
+        "raceDistance": 1345.3685507915397,
+        "courseS": 1440.3685507915397,
+        "camera": [
+          -13.32980785608742,
+          2.0996062941252442,
+          228.55462364223663
+        ],
+        "kart": {
+          "x": -21.88348312615773,
+          "z": 230.21553076111985,
+          "speed": 23.966666666666654,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    },
+    {
+      "mark": 1440,
+      "name": "a65-moscow-course-s-1440.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:10.08",
+        "place": "3",
+        "raceDistance": 1345.3685507915397,
+        "courseS": 1440.3685507915397,
+        "camera": [
+          -13.32980785608742,
+          2.0996062941252442,
+          228.55462364223663
+        ],
+        "kart": {
+          "x": -21.88348312615773,
+          "z": 230.21553076111985,
+          "speed": 23.966666666666654,
+          "grounded": true,
+          "height": 0,
+          "jumpRemaining": 0
+        },
+        "rampHeight": 0,
+        "atRampLip": false,
+        "flood": {
+          "active": false,
+          "remaining": 0,
+          "sheetCount": 0,
+          "centerLaneObstructions": 0
+        },
+        "announcement": {
+          "hidden": true,
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0,
+          "width": 0,
+          "position": "fixed"
+        },
+        "runtimeErrors": []
+      }
+    }
+  ],
+  "runtimeErrors": [],
+  "endedAt": "2026-10-12T09:01:48.286Z"
+}

@@ -11,8 +11,8 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 import type { ShadowGenerator } from '@babylonjs/core/Lights/Shadows/shadowGenerator';
-import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, shortcutElevationAt, shortcutEdgeGaps as alleyGaps, SHORTCUT_LENGTH } from './track';
-import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, TRACK_INFO, raisedSpans } from './track-layout';
+import { TRACK, trackPoint, trackHeightAt, elevationAt, trackLocate, shortcutLocate, shortcutPoint, shortcutElevationAt, shortcutEdgeGaps as alleyGaps, SHORTCUT_LENGTH, MOVING_TROLLEY } from './track';
+import { GROUND, RIVER, BOOST_PADS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_HEIGHTS, RAMP_LENGTH, RAMP_LIPS, RAMP_SHORTCUT_ENTRY, SHORTCUT, SHORTCUT_SURFACE_PATCHES, TRACK_INFO, raisedSpans } from './track-layout';
 import { surfaceTextures } from './surface-textures';
 import { COURSE_GROUND, paintCourseGround } from './course-ground';
 import {addPeriodDetails} from './period-details';
@@ -221,7 +221,38 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
   };
   if (!pyongyang) {
-    for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) groundPatch(GROUND.west, GROUND.east, z0, z1);
+    if (TRACK.id === 'beijing') {
+      // The lowered hutong runs through the city-floor patch. Leave a narrow opening there so the alley road,
+      // its wet-stone surface and its warning paint are not buried under the plaza paving at y=0.
+      const cut = { west: -246, east: -168, south: 82, north: 165 }, step = 1.25;
+      groundPatch(GROUND.west, GROUND.east, RIVER.north, GROUND.north);
+      groundPatch(GROUND.west, cut.west, GROUND.south, RIVER.south);
+      groundPatch(cut.east, GROUND.east, GROUND.south, RIVER.south);
+      groundPatch(cut.west, cut.east, GROUND.south, cut.south);
+      groundPatch(cut.west, cut.east, cut.north, RIVER.south);
+      const nx = Math.ceil((cut.east - cut.west) / step), nz = Math.ceil((cut.north - cut.south) / step);
+      const positions: number[] = [], uvs: number[] = [], indices: number[] = [];
+      const inAlley = (x: number, z: number) => {
+        const q = shortcutLocate(x, z);
+        return q.u >= 0 && q.u <= SHORTCUT_LENGTH && Math.abs(q.lane) < SHORTCUT.halfWidth + .35;
+      };
+      for (let z = 0; z <= nz; z++) for (let x = 0; x <= nx; x++) {
+        const px = cut.west + (cut.east - cut.west) * x / nx, pz = cut.south + (cut.north - cut.south) * z / nz;
+        positions.push(px, 0, pz); uvs.push((px - cut.west) / 4, (pz - cut.south) / 4);
+      }
+      for (let z = 0; z < nz; z++) for (let x = 0; x < nx; x++) {
+        const x0 = cut.west + (cut.east - cut.west) * x / nx, x1 = cut.west + (cut.east - cut.west) * (x + 1) / nx;
+        const z0 = cut.south + (cut.north - cut.south) * z / nz, z1 = cut.south + (cut.north - cut.south) * (z + 1) / nz;
+        if (inAlley(x0, z0) || inAlley(x1, z0) || inAlley(x0, z1) || inAlley(x1, z1) || inAlley((x0 + x1) / 2, (z0 + z1) / 2)) continue;
+        const a = z * (nx + 1) + x, b = a + nx + 1;
+        indices.push(a, a + 1, b, a + 1, b + 1, b);
+      }
+      const ground = new Mesh('City paving around Peking hutong cut', scene), data = new VertexData(), normals: number[] = [];
+      VertexData.ComputeNormals(positions, indices, normals); data.positions = positions; data.indices = indices; data.normals = normals; data.uvs = uvs; data.applyToMesh(ground);
+      ground.material = square; ground.receiveShadows = true; ground.isPickable = false; ground.freezeWorldMatrix();
+    } else {
+      for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) groundPatch(GROUND.west, GROUND.east, z0, z1);
+    }
   } else {
     const cut = { west: -214, east: 244, south: -238, north: 196 }, step = 2.5;
     for (const [z0, z1] of [[RIVER.north, GROUND.north], [GROUND.south, RIVER.south]]) {
@@ -450,13 +481,39 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     const planks = canvasTexture(scene, 'Ramp planks', 256, 256, (c) => { c.fillStyle = '#7a5532'; c.fillRect(0, 0, 256, 256); for (let x = 0; x < 256; x += 32) { c.fillStyle = x % 64 ? '#6b4a2b' : '#835c37'; c.fillRect(x + 2, 0, 28, 256); }
       c.strokeStyle = '#e8b82a'; c.lineWidth = 14; for (let x = 40; x < 256; x += 90) { c.beginPath(); c.moveTo(x, 40); c.lineTo(x + 40, 128); c.lineTo(x, 216); c.stroke(); } });
     const rampMaterial = pbr(scene, 'Timber ramp', '#ffffff', 0, .8); rampMaterial.albedoTexture = planks; rampMaterial.backFaceCulling = false;
-    for (const end of RAMP_LIPS) {
+    for (const [index, end] of RAMP_LIPS.entries()) {
+      const rampHeight = RAMP_HEIGHTS[index] ?? RAMP_HEIGHT;
       const paths: Vector3[][] = [];
       // The road follows the same ramp profile; lift the timber by a thin plank thickness to avoid coplanar flicker.
-      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + RAMP_HEIGHT * k / 12 + elevationAt(s), p.z)); } paths.push(path); }
+      for (const lane of [-W - 1, W + 1]) { const path: Vector3[] = []; for (let k = 0; k <= 12; k++) { const s = end - RAMP_LENGTH + k / 12 * RAMP_LENGTH, p = trackPoint(s, lane); path.push(new Vector3(p.x, .07 + rampHeight * k / 12 + elevationAt(s), p.z)); } paths.push(path); }
       const ramp = MeshBuilder.CreateRibbon('Take-off ramp', { pathArray: paths, sideOrientation: Mesh.DOUBLESIDE }, scene); ramp.material = rampMaterial; ramp.isPickable = false; ramp.receiveShadows = true; shadow.addShadowCaster(ramp);
-      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane), e = elevationAt(end); return [new Vector3(p.x, RAMP_HEIGHT + .07 + e, p.z), new Vector3(p.x, -.2 + e, p.z)]; });
+      const lip = [-W - 1, W + 1].map((lane) => { const p = trackPoint(end, lane), e = elevationAt(end); return [new Vector3(p.x, rampHeight + .07 + e, p.z), new Vector3(p.x, -.2 + e, p.z)]; });
       const face = MeshBuilder.CreateRibbon('Ramp end face', { pathArray: [lip.map((l) => l[0]), lip.map((l) => l[1])], sideOrientation: Mesh.DOUBLESIDE }, scene); face.material = rampMaterial; face.isPickable = false;
+    }
+    if (RAMP_SHORTCUT_ENTRY) {
+      const entry = RAMP_SHORTCUT_ENTRY, warningFrom = entry.lip - 25, warningTo = entry.lip - 9;
+      const arrowTexture = canvasTexture(scene, 'Shortcut ramp arrows', 128, 64, (c) => {
+        c.clearRect(0, 0, 128, 64); c.strokeStyle = '#f2c348'; c.lineWidth = 13; c.lineJoin = 'round';
+        for (let x = -64; x < 160; x += 48) { c.beginPath(); c.moveTo(x, 52); c.lineTo(x + 24, 12); c.lineTo(x + 48, 52); c.stroke(); }
+      }, true);
+      const arrows = pbr(scene, 'Shortcut ramp approach arrows', '#ffffff', 0, .8); arrows.albedoTexture = arrowTexture; arrows.useAlphaFromAlbedoTexture = true;
+      sweep(scene, 'Shortcut ramp approach arrows', [[entry.lane - .8, .052], [entry.lane + .8, .052]], arrows,
+        { uScale: 4, vScale: 2, step: .75, from: warningFrom, to: warningTo });
+
+      const signTexture = canvasTexture(scene, 'Shortcut ramp warning', 512, 256, (c) => {
+        c.fillStyle = '#e8b82a'; c.fillRect(0, 0, 512, 256); c.strokeStyle = '#171a19'; c.lineWidth = 18; c.strokeRect(8, 8, 496, 240);
+        c.fillStyle = '#171a19'; c.textAlign = 'center'; c.font = 'bold 42px Arial'; c.fillText('SPRUNG · AUSSENSPUR', 256, 98);
+        c.font = 'bold 42px Arial'; c.fillText('ABKÜRZUNG →', 256, 165);
+        c.font = 'bold 26px Arial'; c.fillText('RECHTS ANFAHREN', 256, 215);
+      });
+      const warningMaterial = pbr(scene, 'Shortcut ramp warning sign', '#ffffff', 0, .65); warningMaterial.albedoTexture = signTexture;
+      // A course-spanning board stays visible above the roadside facades and leaves the chosen line open.
+      const p = trackPoint(warningFrom, 0), warning = MeshBuilder.CreatePlane('Shortcut ramp warning sign', { width: 10.5, height: 2.3, sideOrientation: Mesh.DOUBLESIDE }, scene);
+      warning.material = warningMaterial; warning.position.set(p.x, 6 + elevationAt(warningFrom), p.z); warning.rotation.y = p.heading; warning.isPickable = false;
+      for (const lane of [-TRACK.halfWidth - .45, TRACK.halfWidth + .45]) {
+        const supportPoint = trackPoint(warningFrom, lane), post = MeshBuilder.CreateCylinder('Shortcut ramp warning post', { diameter: .14, height: 6, tessellation: 8 }, scene);
+        post.position.set(supportPoint.x, 3 + elevationAt(warningFrom), supportPoint.z); post.material = kerbStone; post.isPickable = false; shadow.addShadowCaster(post);
+      }
     }
   }
   { // Shell craters: dark recessed-looking bowls, scorched soil and raised rims at the abstract practice ground.
@@ -474,6 +531,15 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
     if (CRATERS.length) { const at = trackPoint(CRATERS[0][0] - 8, -(W + 2.5)); const board = MeshBuilder.CreatePlane('Training ground sign', { width: 2.6, height: 1.3 }, scene);
     board.material = signMaterial; board.position.set(at.x, 2.3, at.z); board.rotation.y = at.heading + Math.PI; board.isPickable = false; } }
   const alleyAt = (u: number, lane: number) => shortcutPoint(u, lane);
+  if (moscow) {
+    // Three short ochre bars give this pilot its own road-crossing warning motif before the moving trolley.
+    const warning = new StandardMaterial('Moscow trolley crossing warning', scene);
+    warning.diffuseColor = new Color3(.95, .57, .08); warning.emissiveColor = new Color3(.38, .17, .015); warning.specularColor = Color3.Black(); warning.disableLighting = true;
+    for (let i = 0; i < 3; i++) {
+      const from = MOVING_TROLLEY.s - 26 + i * 2.1;
+      sweep(scene, `Moscow trolley warning bar ${i + 1}`, [[-3.7, .07], [3.7, .07]], warning, { uScale: 1, step: .16, from, to: from + .34 });
+    }
+  }
   { // Boost pads: glowing chevrons painted on the cobbles.
     // Texture u runs along the track (sweep), so the chevrons point toward +x = the driving direction.
     const chevrons = canvasTexture(scene, 'Boost chevrons', 256, 128, (c) => { c.fillStyle = '#3a1608'; c.fillRect(0, 0, 256, 128); c.strokeStyle = '#ffb21e'; c.lineWidth = 16; c.lineJoin = 'miter';
@@ -547,8 +613,84 @@ export function addTrackWorld(scene: Scene, shadow: ShadowGenerator): TrackWorld
   };
   for (const [from, to] of alleyRuns(0, SHORTCUT_LENGTH, (u) => offCircuit(u, [0], -.3)))
     sweep(scene, pyongyang ? 'Lowered parade underpass road' : 'Backyard alley', [[-SHORTCUT.halfWidth - .4, .035], [0, .04], [SHORTCUT.halfWidth + .4, .035]], pyongyang ? road : gravel,
-      { uScale: 2, vScale: 2, step: .5, from, to, at: alleyAt, heightAt: pyongyang ? shortcutElevationAt : undefined,
+      { uScale: 2, vScale: 2, step: .5, from, to, at: alleyAt, heightAt: shortcutElevationAt,
         color: pyongyang ? undefined : (u) => { const t = .62 + Math.sin(u * .9) * .04; return [t, t * .93, t * .84]; } });
+  for (const patch of SHORTCUT_SURFACE_PATCHES) {
+    if (patch.kind === 'broken-parade') {
+      const positions: number[] = [], indices: number[] = [], colors: number[] = [];
+      const addTile = (from: number, to: number, lane0: number, lane1: number, height: number, color: [number, number, number]) => {
+        const base = positions.length / 3;
+        for (const [u, lane] of [[from, lane0], [to, lane0], [to, lane1], [from, lane1]] as const) {
+          const point = alleyAt(u, lane);
+          positions.push(point.x, shortcutElevationAt(u) + height, point.z);
+          colors.push(color[0], color[1], color[2], 1);
+        }
+        // This direct top-face geometry has upward winding and stays visible above the city paving.
+        indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
+      };
+      // A dark foundation and weathered copper/ochre slabs make the broken strip legible beside the grey city paving.
+      // Keep the warm/cool split strong enough to read at speed without making the stones look emissive or molten.
+      addTile(patch.from, patch.to, -2.08, 2.08, .055, [.075, .05, .032]);
+      const stoneTones = [
+        [.46, .22, .10], [.61, .34, .16], [.36, .13, .055], [.75, .49, .21],
+      ] as const;
+      let row = 0;
+      for (let u = patch.from + .18; u < patch.to - 1.1; u += 3.2, row++) {
+        for (const lane of [-1, 1]) {
+          const stagger = (row + (lane > 0 ? 1 : 0)) % 2 ? .42 : 0;
+          const tone = stoneTones[(row * 3 + (lane > 0 ? 1 : 0)) % stoneTones.length];
+          addTile(u + stagger, Math.min(patch.to, u + 2.55 + stagger), lane - .92, lane + .92, .12, [...tone]);
+        }
+      }
+      // Broken transverse joints expose the dark foundation and give the long patch a strong repeating signature.
+      for (let u = patch.from + 6; u < patch.to - .4; u += 12)
+        addTile(u, u + .32, -2.08, 2.08, .135, [.035, .018, .012]);
+      for (let i = 0; i < 3; i++) {
+        const from = Math.max(0, patch.from - 5) + i * .85;
+        for (let lane = -2.2, stripe = 0; lane < 2.2; lane += .45, stripe++) {
+          const warning = stripe % 2 === 0 ? [.96, .60, .04] as const : [.10, .09, .07] as const;
+          addTile(from, from + .55, lane, Math.min(2.2, lane + .4), .16, [...warning]);
+        }
+      }
+      const paving = new Mesh('Moscow broken parade paving', scene), data = new VertexData(), normals: number[] = [];
+      VertexData.ComputeNormals(positions, indices, normals);
+      data.positions = positions; data.indices = indices; data.normals = normals; data.colors = colors; data.applyToMesh(paving);
+      const stoneMaterial = new StandardMaterial('Moscow broken parade paving', scene);
+      stoneMaterial.diffuseColor = Color3.White(); stoneMaterial.emissiveColor = Color3.White(); stoneMaterial.specularColor = Color3.Black();
+      stoneMaterial.disableLighting = true; stoneMaterial.backFaceCulling = false;
+      paving.useVertexColors = true;
+      paving.material = stoneMaterial; paving.isPickable = false; paving.receiveShadows = true;
+      continue;
+    }
+    const spillTexture = canvasTexture(scene, 'Hutong tea spill ripples', 256, 128, (c) => {
+      c.fillStyle = '#075b68'; c.fillRect(0, 0, 256, 128);
+      c.strokeStyle = '#8de1d1'; c.lineWidth = 7;
+      for (let y = 14; y < 140; y += 32) for (let x = -24 + (y % 3) * 11; x < 290; x += 74) {
+        c.beginPath(); c.ellipse(x, y, 24, 7, -.08, .15, Math.PI * 1.65); c.stroke();
+      }
+      c.strokeStyle = '#d6fff0'; c.lineWidth = 3; c.globalAlpha = .9;
+      for (let y = 22; y < 130; y += 32) for (let x = 16; x < 270; x += 74) {
+        c.beginPath(); c.moveTo(x, y); c.lineTo(x + 20, y - 2); c.stroke();
+      }
+    });
+    spillTexture.wrapV = Texture.WRAP_ADDRESSMODE;
+    const spill = new StandardMaterial('Hutong tea spill', scene);
+    spill.diffuseTexture = spillTexture; spill.emissiveTexture = spillTexture;
+    spill.emissiveColor = new Color3(.95, .95, .95); spill.specularColor = Color3.Black();
+    spill.backFaceCulling = false; spill.disableLighting = true;
+    sweep(scene, 'Hutong tea spill surface', [[patch.lane - patch.halfWidth, .09], [patch.lane, .095], [patch.lane + patch.halfWidth, .09]], spill,
+      { uScale: 2, vScale: 1, step: .75, from: patch.from, to: patch.to, at: alleyAt, heightAt: shortcutElevationAt });
+    const warningMaterial = new StandardMaterial('Hutong tea spill warning', scene);
+    warningMaterial.diffuseColor = new Color3(1, .68, .03); warningMaterial.emissiveColor = new Color3(.9, .58, .02);
+    warningMaterial.specularColor = Color3.Black();
+    warningMaterial.backFaceCulling = false; warningMaterial.disableLighting = true;
+    const warningU = Math.max(0, patch.from - 5.5);
+    for (let i = 0; i < 3; i++) {
+      const from = warningU + i * 1.15;
+      sweep(scene, `Hutong tea spill warning stripe ${i + 1}`, [[patch.lane - patch.halfWidth - .08, .14], [patch.lane + patch.halfWidth + .08, .14]], warningMaterial,
+        { uScale: 1, vScale: 1, step: .12, from, to: from + .24, at: alleyAt, heightAt: shortcutElevationAt });
+    }
+  }
   if (pyongyang) {
     const concrete = pbr(scene, 'Underpass reinforced concrete', '#777d79', 0, .9);
     concrete.backFaceCulling = false;

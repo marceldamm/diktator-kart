@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-12T12:03:57.950Z",
+  "method": "Static shared-layout geometry scan at 0.25 m increments over shortcut u/lane, followed by one stepItems contact check at each nearest point; kart coordinates are set for this isolated test. This is not a natural race or human driving test.",
+  "results": [
+    {
+      "track": "stadionring",
+      "shortcutLength": 66.62,
+      "nearestBox": {
+        "courseS": 495,
+        "boxLane": -3.72,
+        "shortcutU": 0,
+        "shortcutLane": -3,
+        "distance": 17.009
+      },
+      "withinPickupRadius": false,
+      "pickedItem": null,
+      "actualPickup": false
+    },
+    {
+      "track": "duce-drom",
+      "shortcutLength": 103.53,
+      "nearestBox": {
+        "courseS": 455,
+        "boxLane": -3.72,
+        "shortcutU": 103,
+        "shortcutLane": -3,
+        "distance": 0.068
+      },
+      "withinPickupRadius": true,
+      "pickedItem": "trap",
+      "actualPickup": true
+    },
+    {
+      "track": "havanna",
+      "shortcutLength": 110.19,
+      "nearestBox": {
+        "courseS": 868.33,
+        "boxLane": -3.72,
+        "shortcutU": 7.5,
+        "shortcutLane": 1.25,
+        "distance": 0.071
+      },
+      "withinPickupRadius": true,
+      "pickedItem": "trap",
+      "actualPickup": true
+    },
+    {
+      "track": "pyongyang",
+      "shortcutLength": 440.46,
+      "nearestBox": {
+        "courseS": 1180,
+        "boxLane": -3.72,
+        "shortcutU": 0,
+        "shortcutLane": -3,
+        "distance": 20.296
+      },
+      "withinPickupRadius": false,
+      "pickedItem": null,
+      "actualPickup": false
+    },
+    {
+      "track": "moscow",
+      "shortcutLength": 173.17,
+      "nearestBox": {
+        "courseS": 1926.67,
+        "boxLane": -1.68,
+        "shortcutU": 5,
+        "shortcutLane": -3,
+        "distance": 43.447
+      },
+      "withinPickupRadius": false,
+      "pickedItem": null,
+      "actualPickup": false
+    },
+    {
+      "track": "beijing",
+      "shortcutLength": 165.95,
+      "nearestBox": {
+        "courseS": 779.33,
+        "boxLane": 3.72,
+        "shortcutU": 145.25,
+        "shortcutLane": -1.75,
+        "distance": 0.093
+      },
+      "withinPickupRadius": true,
+      "pickedItem": "trap",
+      "actualPickup": true
+    }
+  ]
+}

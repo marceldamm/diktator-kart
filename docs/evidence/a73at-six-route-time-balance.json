@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-12T14:50:09.082Z",
+  "method": "Same bot style, controller, kart physics and regular road boosts; no items or rival contact; three laps; fixed shortcut choice; only shortcut-pad activations toggled for the isolation route.",
+  "routes": [
+    {
+      "track": "stadionring",
+      "main": {
+        "finished": true,
+        "time": 213.26666666666665,
+        "shortcutHits": 0,
+        "sawShortcut": false
+      },
+      "shortcutWithoutPad": {
+        "finished": true,
+        "time": 210.2,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      },
+      "shortcutWithPad": {
+        "finished": true,
+        "time": 210.2,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      }
+    },
+    {
+      "track": "duce-drom",
+      "main": {
+        "finished": true,
+        "time": 227.65,
+        "shortcutHits": 0,
+        "sawShortcut": false
+      },
+      "shortcutWithoutPad": {
+        "finished": true,
+        "time": 228.6,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      },
+      "shortcutWithPad": {
+        "finished": true,
+        "time": 221.98333333333332,
+        "shortcutHits": 3,
+        "sawShortcut": true
+      }
+    },
+    {
+      "track": "havanna",
+      "main": {
+        "finished": true,
+        "time": 221.96666666666667,
+        "shortcutHits": 0,
+        "sawShortcut": false
+      },
+      "shortcutWithoutPad": {
+        "finished": true,
+        "time": 229.18333333333334,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      },
+      "shortcutWithPad": {
+        "finished": true,
+        "time": 224.18333333333334,
+        "shortcutHits": 3,
+        "sawShortcut": true
+      }
+    },
+    {
+      "track": "pyongyang",
+      "main": {
+        "finished": true,
+        "time": 287.48333333333335,
+        "shortcutHits": 0,
+        "sawShortcut": false
+      },
+      "shortcutWithoutPad": {
+        "finished": true,
+        "time": 270.56666666666666,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      },
+      "shortcutWithPad": {
+        "finished": true,
+        "time": 266.9,
+        "shortcutHits": 6,
+        "sawShortcut": true
+      }
+    },
+    {
+      "track": "moscow",
+      "main": {
+        "finished": true,
+        "time": 370.35,
+        "shortcutHits": 0,
+        "sawShortcut": false
+      },
+      "shortcutWithoutPad": {
+        "finished": true,
+        "time": 369.6666666666667,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      },
+      "shortcutWithPad": {
+        "finished": true,
+        "time": 369.45,
+        "shortcutHits": 3,
+        "sawShortcut": true
+      }
+    },
+    {
+      "track": "beijing",
+      "main": {
+        "finished": true,
+        "time": 254.56666666666666,
+        "shortcutHits": 0,
+        "sawShortcut": false
+      },
+      "shortcutWithoutPad": {
+        "finished": true,
+        "time": 259.21666666666664,
+        "shortcutHits": 0,
+        "sawShortcut": true
+      },
+      "shortcutWithPad": {
+        "finished": true,
+        "time": 256.2833333333333,
+        "shortcutHits": 3,
+        "sawShortcut": true
+      }
+    }
+  ]
+}

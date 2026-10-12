@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-12T10:52:09.206Z",
+  "track": "moscow",
+  "method": "Natural six-kart race from grid in headless Chrome; auto-gas and steering assist; no progress, position, item or event injection; page-local 25-ms sampling around the shortcut pad.",
+  "target": {
+    "x": -355.9524786250373,
+    "z": 10.369862636516844,
+    "heading": 3.1124491462593573
+  },
+  "contact": {
+    "time": "1:35.98",
+    "near": [
+      {
+        "i": 2,
+        "x": -356.058700986115,
+        "z": 13.263273218976915,
+        "speed": 19.950443413261254,
+        "turboRemaining": 1.2,
+        "height": 0,
+        "grounded": true,
+        "progress": 1912.991121084422
+      }
+    ],
+    "kart": {
+      "i": 2,
+      "x": -356.058700986115,
+      "z": 13.263273218976915,
+      "speed": 19.950443413261254,
+      "turboRemaining": 1.2,
+      "height": 0,
+      "grounded": true,
+      "progress": 1912.991121084422,
+      "padId": 4,
+      "shortcutU": 90.15397537789988,
+      "shortcutLane": 0.029219110305654803
+    }
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural contact is accepted only where the shared track model reports the Moscow shortcut boost pad index (4) and inShortcut is true."
+}

@@ -1,0 +1,417 @@
+{
+  "date": "2026-10-12",
+  "track": "beijing",
+  "participants": 6,
+  "browser": "owned headless Chrome QA profile",
+  "mode": "single diagnostic pass per quality; six-second sample windows",
+  "results": [
+    {
+      "quality": "normal",
+      "before": {
+        "name": "normal-before",
+        "seconds": 6,
+        "raf": {
+          "frames": 241,
+          "meanMs": 25.04439834024895,
+          "medianMs": 18.10000000000582,
+          "p95Ms": 36.10000000000582,
+          "p99Ms": 36.20000000001164,
+          "estimatedRafFps": 39.92908858955881
+        },
+        "engineFps": 40.05875283757474,
+        "activeParticles": [
+          {
+            "name": "Stadium petals",
+            "count": 250
+          },
+          {
+            "name": "Tire smoke and dust",
+            "count": 16
+          },
+          {
+            "name": "Loose gravel and grass dust 2",
+            "count": 4
+          },
+          {
+            "name": "Damage smoke 1",
+            "count": 19
+          },
+          {
+            "name": "Damage smoke 2",
+            "count": 31
+          },
+          {
+            "name": "Damage smoke 4",
+            "count": 31
+          },
+          {
+            "name": "Damage smoke 5",
+            "count": 34
+          }
+        ],
+        "camera": [
+          -121.80718430145008,
+          2.0999999999999996,
+          169.66620248944025
+        ],
+        "lap": "2 / 3",
+        "raceTime": "1:56.58",
+        "distance": 2357.284671830356,
+        "cdpMetricDelta": {
+          "TaskDuration": 6.0074570000000165,
+          "ScriptDuration": 5.580515999999989,
+          "LayoutDuration": 0.1449959999999999,
+          "RecalcStyleDuration": 0.05975399999999986,
+          "JSHeapUsedSize": 4958920,
+          "JSHeapTotalSize": 151552
+        }
+      }
+    },
+    {
+      "quality": "normal",
+      "event": {
+        "name": "normal-event",
+        "seconds": 6,
+        "raf": {
+          "frames": 243,
+          "meanMs": 24.831687242798377,
+          "medianMs": 18,
+          "p95Ms": 36.10000000000582,
+          "p99Ms": 36.20000000001164,
+          "estimatedRafFps": 40.27112576854871
+        },
+        "engineFps": 38.3435582822817,
+        "activeParticles": [
+          {
+            "name": "Stadium petals",
+            "count": 253
+          },
+          {
+            "name": "Tire smoke and dust",
+            "count": 13
+          },
+          {
+            "name": "Item hit paperwork",
+            "count": 109
+          },
+          {
+            "name": "Landing dust",
+            "count": 48
+          },
+          {
+            "name": "Tank transformation smoke",
+            "count": 24
+          },
+          {
+            "name": "Damage smoke 0",
+            "count": 7
+          },
+          {
+            "name": "Damage smoke 1",
+            "count": 31
+          },
+          {
+            "name": "Damage smoke 2",
+            "count": 28
+          },
+          {
+            "name": "Damage smoke 4",
+            "count": 32
+          },
+          {
+            "name": "Damage smoke 5",
+            "count": 31
+          }
+        ],
+        "camera": [
+          44.75143818785313,
+          2.0999999982846496,
+          151.92567394121784
+        ],
+        "lap": "2 / 3",
+        "raceTime": "2:05.67",
+        "distance": 2538.7135047653655,
+        "cdpMetricDelta": {
+          "TaskDuration": 5.995865000000009,
+          "ScriptDuration": 5.518708000000004,
+          "LayoutDuration": 0.16378899999999996,
+          "RecalcStyleDuration": 0.06904000000000021,
+          "JSHeapUsedSize": 1396452,
+          "JSHeapTotalSize": 1339392
+        }
+      }
+    },
+    {
+      "quality": "normal",
+      "after": {
+        "name": "normal-after",
+        "seconds": 6,
+        "raf": {
+          "frames": 249,
+          "meanMs": 24.253413654618498,
+          "medianMs": 18,
+          "p95Ms": 36,
+          "p99Ms": 36.39999999999418,
+          "estimatedRafFps": 41.23130930105475
+        },
+        "engineFps": 40.4149265797124,
+        "activeParticles": [
+          {
+            "name": "Stadium petals",
+            "count": 244
+          },
+          {
+            "name": "Tire smoke and dust",
+            "count": 18
+          },
+          {
+            "name": "Item hit paperwork",
+            "count": 36
+          },
+          {
+            "name": "Landing dust",
+            "count": 40
+          },
+          {
+            "name": "Damage smoke 0",
+            "count": 7
+          },
+          {
+            "name": "Damage smoke 1",
+            "count": 30
+          },
+          {
+            "name": "Damage smoke 2",
+            "count": 33
+          },
+          {
+            "name": "Damage smoke 4",
+            "count": 28
+          },
+          {
+            "name": "Damage smoke 5",
+            "count": 30
+          },
+          {
+            "name": "Damage sparks",
+            "count": 22
+          }
+        ],
+        "camera": [
+          165.60374526177281,
+          2.0999999999999996,
+          163.92573745775317
+        ],
+        "lap": "2 / 3",
+        "raceTime": "2:11.75",
+        "distance": 2663.5828234292544,
+        "cdpMetricDelta": {
+          "TaskDuration": 5.9918499999999995,
+          "ScriptDuration": 5.391331000000008,
+          "LayoutDuration": 0.16353600000000013,
+          "RecalcStyleDuration": 0.11540600000000012,
+          "JSHeapUsedSize": 4236936,
+          "JSHeapTotalSize": 16928768
+        }
+      }
+    },
+    {
+      "quality": "reduced",
+      "before": {
+        "name": "reduced-before",
+        "seconds": 6,
+        "raf": {
+          "frames": 244,
+          "meanMs": 24.693852459016465,
+          "medianMs": 18.09999999999127,
+          "p95Ms": 36.09999999999127,
+          "p99Ms": 36.19999999999709,
+          "estimatedRafFps": 40.49590891739818
+        },
+        "engineFps": 40.91653027848179,
+        "activeParticles": [
+          {
+            "name": "Stadium petals",
+            "count": 255
+          },
+          {
+            "name": "Loose gravel and grass dust 2",
+            "count": 2
+          },
+          {
+            "name": "Damage smoke 1",
+            "count": 4
+          },
+          {
+            "name": "Damage smoke 2",
+            "count": 9
+          },
+          {
+            "name": "Damage smoke 4",
+            "count": 8
+          },
+          {
+            "name": "Damage smoke 5",
+            "count": 9
+          }
+        ],
+        "camera": [
+          -121.6851219184725,
+          2.0999999999999996,
+          169.6512985364048
+        ],
+        "lap": "2 / 3",
+        "raceTime": "1:56.60",
+        "distance": 2357.6269673267693,
+        "cdpMetricDelta": {
+          "TaskDuration": 6.001215999999999,
+          "ScriptDuration": 5.548979000000003,
+          "LayoutDuration": 0.1553880000000003,
+          "RecalcStyleDuration": 0.061796000000000184,
+          "JSHeapUsedSize": 1114448,
+          "JSHeapTotalSize": 0
+        }
+      }
+    },
+    {
+      "quality": "reduced",
+      "event": {
+        "name": "reduced-event",
+        "seconds": 6,
+        "raf": {
+          "frames": 256,
+          "meanMs": 23.57421875,
+          "medianMs": 18,
+          "p95Ms": 36.10000000000582,
+          "p99Ms": 36.10000000000582,
+          "estimatedRafFps": 42.419221209610605
+        },
+        "engineFps": 43.5856457941737,
+        "activeParticles": [
+          {
+            "name": "Stadium petals",
+            "count": 256
+          },
+          {
+            "name": "Item hit paperwork",
+            "count": 22
+          },
+          {
+            "name": "Landing dust",
+            "count": 12
+          },
+          {
+            "name": "Tank transformation smoke",
+            "count": 8
+          },
+          {
+            "name": "Damage smoke 0",
+            "count": 2
+          },
+          {
+            "name": "Damage smoke 1",
+            "count": 9
+          },
+          {
+            "name": "Damage smoke 2",
+            "count": 8
+          },
+          {
+            "name": "Damage smoke 4",
+            "count": 8
+          },
+          {
+            "name": "Damage smoke 5",
+            "count": 8
+          }
+        ],
+        "camera": [
+          47.70245361328419,
+          2.1000000001323307,
+          152.66357869261282
+        ],
+        "lap": "2 / 3",
+        "raceTime": "2:05.82",
+        "distance": 2541.9017812201973,
+        "cdpMetricDelta": {
+          "TaskDuration": 5.99084000000002,
+          "ScriptDuration": 5.491569999999996,
+          "LayoutDuration": 0.17038699999999984,
+          "RecalcStyleDuration": 0.07033500000000004,
+          "JSHeapUsedSize": 347652,
+          "JSHeapTotalSize": 712704
+        }
+      }
+    },
+    {
+      "quality": "reduced",
+      "after": {
+        "name": "reduced-after",
+        "seconds": 6,
+        "raf": {
+          "frames": 247,
+          "meanMs": 24.374898785425007,
+          "medianMs": 18.10000000000582,
+          "p95Ms": 36.10000000000582,
+          "p99Ms": 53.5,
+          "estimatedRafFps": 41.025811380925646
+        },
+        "engineFps": 32.383419689171106,
+        "activeParticles": [
+          {
+            "name": "Stadium petals",
+            "count": 252
+          },
+          {
+            "name": "Item hit paperwork",
+            "count": 12
+          },
+          {
+            "name": "Landing dust",
+            "count": 8
+          },
+          {
+            "name": "Damage smoke 0",
+            "count": 1
+          },
+          {
+            "name": "Damage smoke 1",
+            "count": 10
+          },
+          {
+            "name": "Damage smoke 2",
+            "count": 8
+          },
+          {
+            "name": "Damage smoke 4",
+            "count": 9
+          },
+          {
+            "name": "Damage smoke 5",
+            "count": 10
+          },
+          {
+            "name": "Damage sparks",
+            "count": 7
+          }
+        ],
+        "camera": [
+          168.3471692606258,
+          2.1000000000000005,
+          164.40685983761176
+        ],
+        "lap": "2 / 3",
+        "raceTime": "2:11.88",
+        "distance": 2666.4200384027863,
+        "cdpMetricDelta": {
+          "TaskDuration": 5.988607999999999,
+          "ScriptDuration": 5.350858000000002,
+          "LayoutDuration": 0.16484900000000025,
+          "RecalcStyleDuration": 0.11768,
+          "JSHeapUsedSize": -1951980,
+          "JSHeapTotalSize": -2891776
+        }
+      }
+    }
+  ]
+}

@@ -16,9 +16,12 @@ test('Moscow selection builds a distinct long course with parade straights and a
   let straight = 0, tightest = Infinity; for (const p of TRACK.samples) { if (Math.abs(p.curvature) < 1 / 150) straight++; tightest = Math.min(tightest, 1 / Math.abs(p.curvature || 1e-9)); }
   assert.ok(straight / TRACK.samples.length < .62, `straight share ${(straight / TRACK.samples.length * 100).toFixed(1)} %`);
   assert.ok(tightest > 22, `tightest radius ${tightest.toFixed(1)}`);
+  const redSquare=TRACK.samples.filter((p)=>p.s>=1250&&p.s<=1650).map((p)=>p.curvature);
+  assert.ok(redSquare.some((k)=>k>.0005)&&redSquare.some((k)=>k<-.0005),'the long Red Square straight now alternates direction');
   const saved = TRACKS.moscow.shortcut.to - TRACKS.moscow.shortcut.from - SHORTCUT_LENGTH;
   assert.ok(saved > 50 && saved < 140 && TRACKS.moscow.shortcut.speedCap === 15, `shortcut saves ${saved.toFixed(0)} m at the audited 15 m/s cap`);
-  assert.deepEqual([...TRACKS.moscow.rampLips], [800]);
+  assert.deepEqual([...TRACKS.moscow.rampLips], [800,1400]);
+  assert.deepEqual([...TRACKS.moscow.rampHeights], [2,.75]);
   assert.ok(shortcutPoint(SHORTCUT_LENGTH / 2));
   for (let s = 0; s < TRACK.length; s += 2) {
     const point = trackPoint(s); assert.ok(Math.abs(trackLocate(point.x, point.z).s - s) < .01);

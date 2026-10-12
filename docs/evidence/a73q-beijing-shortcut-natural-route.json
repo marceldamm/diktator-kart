@@ -1,0 +1,255 @@
+{
+  "date": "2026-10-12T12:37:39.675Z",
+  "track": "beijing",
+  "method": "Botless time trial from grid in headless Chrome; auto-gas and steering assist with one normal ArrowRight line-choice input before the shortcut; no position, item or event injection; page-local 25-ms wet-zone sampling.",
+  "target": {
+    "x": -209.31391891523435,
+    "z": 126.58999519328628,
+    "heading": 0.7501379735407588
+  },
+  "contact": {
+    "time": "0:32.48",
+    "near": [
+      {
+        "i": 0,
+        "x": -209.35194270285427,
+        "z": 127.7577977089497,
+        "speed": 14.442860660377917,
+        "turboRemaining": 0,
+        "height": 0,
+        "grounded": true,
+        "progress": 610.1041741637507
+      }
+    ],
+    "kind": "natural-shortcut-route",
+    "kart": {
+      "i": 0,
+      "x": -209.35194270285427,
+      "z": 127.7577977089497,
+      "speed": 14.442860660377917,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 610.1041741637507,
+      "padId": -1,
+      "shortcutU": 75.50734265166231,
+      "shortcutLane": -0.823955350964862
+    }
+  },
+  "warningApproach": {
+    "time": "0:31.15",
+    "kart": {
+      "i": 0,
+      "x": -222.47001431772733,
+      "z": 111.63172804002097,
+      "speed": 16.583333333333165,
+      "turboRemaining": 0,
+      "height": 0,
+      "grounded": true,
+      "progress": 584.7771462572862,
+      "shortcutU": 54.802419232317355,
+      "shortcutLane": -0.7160446436800694
+    },
+    "photoMode": true
+  },
+  "runtimeErrors": [],
+  "sceneMeshes": [
+    {
+      "name": "Backyard alley",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -238.5588757893627,
+        -0.715,
+        85.87369573164318
+      ],
+      "max": [
+        -153.04434901382544,
+        -0.46640253750817756,
+        166.86636715629027
+      ],
+      "vertices": 690,
+      "material": {
+        "name": "Loose alley gravel",
+        "alpha": 1,
+        "backFaceCulling": true,
+        "twoSidedLighting": false,
+        "albedoTexture": true,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill puddle",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -211.35583357810975,
+        -0.6800000071525574,
+        124.63095544278622
+      ],
+      "max": [
+        -204.09878678321837,
+        -0.6800000071525574,
+        131.93725134432316
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": true,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill puddle",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -207.87564724087716,
+        -0.6800000071525574,
+        128.21987435519696
+      ],
+      "max": [
+        -200.58226901888847,
+        -0.6800000071525574,
+        135.4923448830843
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": true,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill puddle",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -204.27893903255463,
+        -0.6800000071525574,
+        131.69818659126759
+      ],
+      "max": [
+        -196.951438164711,
+        -0.6800000071525574,
+        138.92406682670116
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": true,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill puddle",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -200.55093104839324,
+        -0.6800000071525574,
+        135.04390439093112
+      ],
+      "max": [
+        -193.19562046527864,
+        -0.6800000071525574,
+        142.20963564813138
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": true,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill puddle",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -196.68675005733968,
+        -0.6800000071525574,
+        138.24123731851577
+      ],
+      "max": [
+        -189.31303631961345,
+        -0.6800000071525574,
+        145.3344157576561
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": true,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill puddle",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -192.69225673377514,
+        -0.6800000071525574,
+        141.28366461694242
+      ],
+      "max": [
+        -185.3108255416155,
+        -0.6800000071525574,
+        148.2951012521982
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": true,
+        "albedoTexture": false,
+        "emissiveTexture": false
+      }
+    },
+    {
+      "name": "Hutong tea spill warning stripe",
+      "visible": true,
+      "enabled": true,
+      "min": [
+        -219.9063787251711,
+        -0.6700000166893005,
+        114.85913926661014
+      ],
+      "max": [
+        -209.51400091350078,
+        -0.6700000166893005,
+        126.03090589940548
+      ],
+      "vertices": 4,
+      "material": {
+        "name": "Hutong tea spill warning",
+        "alpha": 1,
+        "backFaceCulling": false,
+        "twoSidedLighting": false,
+        "albedoTexture": false,
+        "emissiveTexture": true
+      }
+    }
+  ],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural route access is accepted when the kart reaches the middle of the shortcut according to the shared track model."
+}

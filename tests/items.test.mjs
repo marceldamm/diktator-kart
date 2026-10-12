@@ -31,31 +31,58 @@ test('recovery preserves track progress and supplies no forward speed',()=>{
   assert.ok(Math.abs(trackProgress(k.x,k.z)-trackProgress(r.x,r.z))<.05);assert.equal(r.speed,0);assert.equal(r.height,0);
 });
 
-test('an item held behind as a shield blocks one projectile from behind, consuming the item', async () => {
+test('a held item blocks one rear projectile and is consumed without hitting the kart', async () => {
   const { createItems: create, stepItems: step } = await import('../src/items.ts');
   const { initialKartState: init } = await import('../src/kart-model.ts');
+  const { createDamage, stepDamage, DAMAGE_RULES } = await import('../src/damage.ts');
   const world = create(2); world.boxes = [];
   const p = trackPoint(100, 0), back = trackPoint(98.8, 0), far = trackPoint(80, 0);
   const target = { ...init(), x: p.x, z: p.z, heading: p.heading }, shooter = { ...init(), x: far.x, z: far.z, heading: p.heading };
   world.slots[0] = 'trap'; world.shield = [true, false];
   world.objects.push({ id: 99, kind: 'direct', owner: 1, x: back.x, z: back.z, heading: back.heading, age: 1, remaining: 2, target: null });
   const after = step(world, [target, shooter], [false, false], [1, 2], 1 / 60);
-  assert.ok(world.events.some((e) => e.kind === 'block' && e.kart === 0));
+  assert.ok(world.events.some((e) => e.kind === 'block' && e.kart === 0 && e.item === 'direct' && e.objectId === 99), 'the distinct rear projectile is consumed by the held item');
   assert.equal(world.slots[0], null); assert.equal(after[0].spinRemaining ?? 0, 0);
+  const damage = createDamage(2);
+  stepDamage(damage, [target, shooter], after, 1 / 60);
+  assert.equal(damage.health[0], 100, 'the blocked projectile causes no isolated kart-health loss');
+  assert.deepEqual(damage.events, []);
+  world.objects.push({ id: 100, kind: 'direct', owner: 1, x: back.x, z: back.z, heading: back.heading, age: 1, remaining: 2, target: null });
+  const afterHit = step(world, after, [false, false], [1, 2], 1 / 60);
+  assert.ok(world.events.some((e) => e.kind === 'hit' && e.kart === 0 && e.objectId === 100), 'a distinct second projectile hits after the one held item was consumed');
+  stepDamage(damage, after, afterHit, 1 / 60);
+  assert.equal(damage.health[0], 100 - DAMAGE_RULES.itemHit, 'the following unblocked projectile applies exactly one hit of damage');
+  assert.deepEqual(damage.events, [{ kind: 'damage', kart: 0, amount: DAMAGE_RULES.itemHit }]);
 });
 
-test('a second item box grants a distinct defensive slot that activates and blocks one projectile', () => {
+test('a held item does not block front, side, or trap collisions', async () => {
+  const { createItems: create, stepItems: step } = await import('../src/items.ts');
+  const { initialKartState: init } = await import('../src/kart-model.ts');
+  const p = trackPoint(100, 0), target = { ...init(), x: p.x, z: p.z, heading: p.heading };
+  const shooter = { ...init(), x: p.x, z: p.z, heading: p.heading };
+  const sideX = Math.cos(p.heading), sideZ = -Math.sin(p.heading);
+  for (const shot of [
+    { kind: 'direct', x: p.x + Math.sin(p.heading), z: p.z + Math.cos(p.heading), heading: p.heading + Math.PI },
+    { kind: 'direct', x: p.x + sideX, z: p.z + sideZ, heading: p.heading + Math.PI / 2 },
+    { kind: 'trap', x: p.x - Math.sin(p.heading), z: p.z - Math.cos(p.heading), heading: p.heading },
+  ]) {
+    const world = create(2); world.boxes = []; world.slots[0] = 'homing'; world.shield = [true, false];
+    world.objects.push({ id: 99, owner: 1, age: 1, remaining: 2, target: null, ...shot });
+    const after = step(world, [target, shooter], [false, false], [1, 2], 1 / 60);
+    assert.equal(world.slots[0], 'homing', `${shot.kind} from outside the rear zone must preserve the held item`);
+    assert.ok(world.events.some((e) => e.kind === 'hit' && e.kart === 0), 'unblocked collision should still hit');
+    assert.ok((after[0].spinRemaining ?? 0) > 0 || shot.kind === 'trap');
+  }
+});
+
+test('an occupied item slot cannot collect a separate defensive item', () => {
   const world=createItems(2);const target={...gridKart(0),...trackPoint(100,0),speed:12},rival={...gridKart(1),...trackPoint(80,0)};
   world.slots[0]='trap';world.boxes=[{id:1,x:target.x,z:target.z,readyIn:0}];
   stepItems(world,[target,rival],[false,false],[1,2],1/60);
   assert.equal(world.slots[0],'trap','the occupied offensive item must not be overwritten');
-  assert.equal(world.defenseSlots[0],true);assert.ok(world.events.some(e=>e.kind==='defense-pickup'&&e.kart===0));
-  world.boxes=[];stepItems(world,[target,rival],[false,false],[1,2],1/60,[],[true,false]);
-  assert.equal(world.defenseSlots[0],false);assert.ok(world.defenseRemaining[0]>0);
-  world.objects.push({id:99,kind:'direct',owner:1,x:target.x,z:target.z,heading:target.heading,age:1,remaining:2,target:null});
-  const after=stepItems(world,[target,rival],[false,false],[1,2],1/60);
-  assert.ok(world.events.some(e=>e.kind==='block'&&e.kart===0&&e.item==='shield'));
-  assert.equal(world.defenseRemaining[0],0);assert.equal(after[0].speed,target.speed);
+  assert.equal('defenseSlots' in world,false,'there is no separate defensive inventory');
+  assert.equal('defenseRemaining' in world,false,'there is no timed defensive shield');
+  assert.equal(world.events.some(e=>e.kind==='pickup'&&e.kart===0),false);
 });
 
 test('near misses reward one close dodge once per projectile with a small cooldown-protected boost', () => {

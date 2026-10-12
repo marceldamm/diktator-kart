@@ -1,0 +1,119 @@
+{
+  "trackLength": 2362.8059650332616,
+  "setup": {
+    "auto": "Auto-Gas an",
+    "assist": "Lenkhilfe an",
+    "storage": {
+      "auto": "1",
+      "assist": "1",
+      "reduced": "0"
+    }
+  },
+  "method": "natural lap-one single-player race from grid; auto-gas and steering assist; no progress or event injection",
+  "date": "2026-10-12",
+  "captures": [
+    {
+      "mark": 1250,
+      "name": "a65-moscow-s-kink-1250.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:06.67",
+        "place": "5",
+        "distance": 1254.5855465356535,
+        "warning": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "camera": [
+          76.66827661547593,
+          2.0999999999999996,
+          243.5730251560895
+        ]
+      }
+    },
+    {
+      "mark": 1360,
+      "name": "a65-moscow-s-kink-1360.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:12.08",
+        "place": "5",
+        "distance": 1366.4437709764838,
+        "warning": "Faktenlage amtlich geschwärzt",
+        "camera": [
+          -34.46545846304082,
+          2.0999991069718082,
+          232.820444118827
+        ]
+      }
+    },
+    {
+      "mark": 1400,
+      "name": "a65-moscow-s-kink-1400.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:13.98",
+        "place": "5",
+        "distance": 1403.9854151047234,
+        "warning": "Faktenlage amtlich geschwärzt",
+        "camera": [
+          -70.59051836995778,
+          2.099999999996674,
+          242.89712064702758
+        ]
+      }
+    },
+    {
+      "mark": 1440,
+      "name": "a65-moscow-s-kink-1440.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:16.05",
+        "place": "5",
+        "distance": 1445.2608961139085,
+        "warning": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "camera": [
+          -110.35813434650953,
+          2.0999999999999996,
+          246.73383812219424
+        ]
+      }
+    },
+    {
+      "mark": 1530,
+      "name": "a65-moscow-s-kink-1530.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:20.78",
+        "place": "5",
+        "distance": 1536.9442855604948,
+        "warning": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "camera": [
+          -200.4035012872025,
+          2.0999999999999996,
+          227.5052301813751
+        ]
+      }
+    },
+    {
+      "mark": 1610,
+      "name": "a65-moscow-s-kink-1610.png",
+      "state": {
+        "phase": "race",
+        "lap": "1 / 3",
+        "time": "1:24.78",
+        "place": "5",
+        "distance": 1615.9337779054003,
+        "warning": "E/Touch halten: hinten schützen · loslassen/antippen: werfen",
+        "camera": [
+          -277.48013313395825,
+          2.0999999999999996,
+          237.92394705550416
+        ]
+      }
+    }
+  ],
+  "runtimeExceptions": []
+}

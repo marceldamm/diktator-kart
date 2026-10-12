@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-12",
+  "track": "beijing",
+  "quality": "normal",
+  "mode": "controlled lap-two player position at s=900, then normal game event gate and player camera; six karts; auto-gas and assist disabled",
+  "afterEvent": {
+    "at450": {
+      "lap": "2 / 3",
+      "time": "0:01.18",
+      "distance": 2511.1264547434885,
+      "kart": {
+        "x": -36.25446002150344,
+        "y": 0,
+        "z": 158.1606992589501
+      },
+      "camera": [
+        -55.7610059507967,
+        2.1,
+        155.21376695427494
+      ],
+      "particles": [
+        {
+          "name": "Stadium petals",
+          "count": 260
+        },
+        {
+          "name": "Tire smoke and dust",
+          "count": 11
+        },
+        {
+          "name": "Course event paper",
+          "count": 24
+        },
+        {
+          "name": "Tank transformation smoke",
+          "count": 10
+        }
+      ]
+    },
+    "at2s": {
+      "lap": "2 / 3",
+      "time": "0:01.78",
+      "distance": 2519.5368862825007,
+      "kart": {
+        "x": -29.112338194838276,
+        "y": 0,
+        "z": 162.59866499675803
+      },
+      "camera": [
+        -35.519807215308965,
+        2.1,
+        158.67641386457058
+      ],
+      "particles": [
+        {
+          "name": "Stadium petals",
+          "count": 248
+        },
+        {
+          "name": "Tire smoke and dust",
+          "count": 20
+        }
+      ]
+    }
+  }
+}

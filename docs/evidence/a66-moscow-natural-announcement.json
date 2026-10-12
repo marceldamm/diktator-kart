@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-12T09:07:37.179Z",
+  "track": "moscow",
+  "method": "natural six-kart race from grid; no state or event injection; captured during a naturally triggered special announcement",
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "time": "0:00.62",
+  "lap": "1 / 3",
+  "place": "5",
+  "title": "Rennergebnis NICHT manipuliert.",
+  "announcement": {
+    "left": 202,
+    "right": 562,
+    "top": 303.21875,
+    "bottom": 363,
+    "width": 360,
+    "height": 59.78125,
+    "hidden": false,
+    "position": "fixed",
+    "transform": "matrix(1, 0, 0, 1, -180, 0)"
+  },
+  "minimap": {
+    "left": 660,
+    "right": 750,
+    "top": 16,
+    "bottom": 170,
+    "width": 90,
+    "height": 154,
+    "hidden": false
+  },
+  "ranking": {
+    "left": 570,
+    "right": 738,
+    "top": 210,
+    "bottom": 360,
+    "width": 168,
+    "height": 150,
+    "hidden": false
+  },
+  "itemCard": {
+    "left": 30,
+    "right": 338.515625,
+    "top": 220,
+    "bottom": 297,
+    "width": 308.515625,
+    "height": 77,
+    "hidden": false
+  },
+  "abilityCard": {
+    "left": 30,
+    "right": 301.5,
+    "top": 160,
+    "bottom": 224,
+    "width": 271.5,
+    "height": 64,
+    "hidden": false
+  },
+  "raceHud": {
+    "left": 219.515625,
+    "right": 544.484375,
+    "top": 16,
+    "bottom": 114,
+    "width": 324.96875,
+    "height": 98,
+    "hidden": false
+  },
+  "runtimeErrors": []
+}

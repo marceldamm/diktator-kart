@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-12T15:51:42.578Z",
+  "track": "pyongyang",
+  "method": "Natural six-kart race from grid in headless Chrome; auto-gas and steering assist; no progress, position, item or event injection; page-local 25-ms sampling around the shortcut pad.",
+  "target": {
+    "x": -24.585068214296008,
+    "z": 155.14349460194362,
+    "heading": -2.0965825041274284
+  },
+  "contact": {
+    "time": "1:06.17",
+    "near": [
+      {
+        "i": 4,
+        "x": -22.35955995701083,
+        "z": 156.28815424568597,
+        "speed": 24.5,
+        "turboRemaining": 1.1833333333333333,
+        "height": 0,
+        "grounded": true,
+        "progress": 1343.9569909393772
+      }
+    ],
+    "kind": "natural-shortcut-boost",
+    "kart": {
+      "i": 4,
+      "x": -22.35955995701083,
+      "z": 156.28815424568597,
+      "speed": 24.5,
+      "turboRemaining": 1.1833333333333333,
+      "height": 0,
+      "grounded": true,
+      "progress": 1343.9569909393772,
+      "padId": 4,
+      "shortcutU": 141.44601022233576,
+      "shortcutLane": -0.1235928540754249
+    }
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural boost contact is accepted only where the shared track model reports a shortcut-specific boost index and inShortcut is true."
+}

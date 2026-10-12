@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-12T11:10:12.978Z",
+  "track": "duce-drom",
+  "method": "Natural six-kart race from grid in headless Chrome; auto-gas and steering assist; no progress, position, item or event injection; page-local 25-ms sampling around the shortcut pad.",
+  "target": {
+    "x": 143.37940400604114,
+    "z": -91.61018876226697,
+    "heading": 0.38272144060293156
+  },
+  "contact": {
+    "time": "0:14.82",
+    "near": [
+      {
+        "i": 2,
+        "x": 141.77324985769616,
+        "z": -92.72887960351731,
+        "speed": 23.5466666666666,
+        "turboRemaining": 1.1500000000000001,
+        "height": 0,
+        "grounded": true,
+        "progress": 295.77624868923726
+      }
+    ],
+    "kind": "natural-shortcut-boost",
+    "kart": {
+      "i": 2,
+      "x": 141.77324985769616,
+      "z": -92.72887960351731,
+      "speed": 23.5466666666666,
+      "turboRemaining": 1.1500000000000001,
+      "height": 0,
+      "grounded": true,
+      "progress": 295.77624868923726,
+      "padId": 5,
+      "shortcutU": 46.89776729386768,
+      "shortcutLane": -1.0623246055904927
+    }
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  },
+  "note": "Natural boost contact is accepted only where the shared track model reports a shortcut-specific boost index and inShortcut is true."
+}

@@ -1,0 +1,426 @@
+{
+  "date": "2026-10-12T14:57:15.223Z",
+  "method": "Three-lap deterministic track-physics simulation from the regular grid. A designated shortcut-driving bot uses the production controller, kart physics, surface drag, shortcut mapping and hazard query; no position/progress/item/event injection, no opponents. Entry/exit means crossing the spatial inShortcut boundary; finish uses normal race progress.",
+  "routes": [
+    {
+      "track": "stadionring",
+      "finished": true,
+      "finishTime": 210.2,
+      "shortcutHits": 0,
+      "entries": [
+        {
+          "time": 25.833333333333332,
+          "progress": 522.7051758151454,
+          "u": 3.3432493923849638,
+          "lane": -1.2100829149031236,
+          "speed": 9.525663964072354,
+          "grounded": true
+        },
+        {
+          "time": 94.78333333333333,
+          "progress": 523.0100570151858,
+          "u": 3.467475114020698,
+          "lane": -1.08619747100268,
+          "speed": 9.456999576921566,
+          "grounded": true
+        },
+        {
+          "time": 163.73333333333332,
+          "progress": 522.9143727835528,
+          "u": 3.4284879848628287,
+          "lane": -1.116455310721199,
+          "speed": 9.389646644524149,
+          "grounded": true
+        }
+      ],
+      "exits": [
+        {
+          "time": 31.383333333333333,
+          "progress": 674.4461153782324,
+          "u": 61.74615358059411,
+          "lane": 0.6739840638986394,
+          "roadLane": -6.226469630100656,
+          "speed": 10.542330630739045,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 100.31666666666666,
+          "progress": 674.4339677809999,
+          "u": 61.7249023074785,
+          "lane": 0.6718778364926306,
+          "roadLane": -6.244033476046174,
+          "speed": 10.50699957692159,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 169.26666666666665,
+          "progress": 674.4034502017605,
+          "u": 61.66821005022953,
+          "lane": 0.6637815342501955,
+          "roadLane": -6.292492113040601,
+          "speed": 10.631313311190839,
+          "grounded": true,
+          "hazard": null
+        }
+      ],
+      "shortcutHazards": [],
+      "final": {
+        "progress": 91.21206539850414,
+        "speed": 18.977979977854957,
+        "grounded": true
+      }
+    },
+    {
+      "track": "duce-drom",
+      "finished": true,
+      "finishTime": 221.98333333333332,
+      "shortcutHits": 3,
+      "entries": [
+        {
+          "time": 12.766666666666666,
+          "progress": 277.0717317504668,
+          "u": 4.022847544635121,
+          "lane": -0.872099527814219,
+          "speed": 18.646666666665876,
+          "grounded": true
+        },
+        {
+          "time": 85.2,
+          "progress": 276.485223127615,
+          "u": 3.689204406489936,
+          "lane": -1.094795049302081,
+          "speed": 14.00890486206638,
+          "grounded": true
+        },
+        {
+          "time": 158.71666666666667,
+          "progress": 276.3081542842551,
+          "u": 3.5884764678637815,
+          "lane": -1.1833320230923867,
+          "speed": 13.79452921296755,
+          "grounded": true
+        }
+      ],
+      "exits": [
+        {
+          "time": 17.916666666666668,
+          "progress": 451.82483422238874,
+          "u": 100.29408734540272,
+          "lane": -0.018048437408469023,
+          "roadLane": -6.234502158861339,
+          "speed": 16.833333333333183,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 91.36666666666666,
+          "progress": 451.82482451355554,
+          "u": 100.29504469877186,
+          "lane": -0.017983940044392733,
+          "roadLane": -6.233542684462537,
+          "speed": 16.733333333333178,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 164.91666666666666,
+          "progress": 451.82259997011806,
+          "u": 100.25487882819898,
+          "lane": -0.01805375178940605,
+          "roadLane": -6.273646966516358,
+          "speed": 16.733333333333178,
+          "grounded": true,
+          "hazard": null
+        }
+      ],
+      "shortcutHazards": [],
+      "final": {
+        "progress": 83.38299547503766,
+        "speed": 18.968654533947234,
+        "grounded": true
+      }
+    },
+    {
+      "track": "havanna",
+      "finished": true,
+      "finishTime": 224.18333333333334,
+      "shortcutHits": 3,
+      "entries": [
+        {
+          "time": 44.65,
+          "progress": 895.4971690614902,
+          "u": 31.29136217547662,
+          "lane": -0.2662840725929285,
+          "speed": 18.58666666666401,
+          "grounded": true
+        },
+        {
+          "time": 118.73333333333333,
+          "progress": 895.5579869578814,
+          "u": 31.344974192238915,
+          "lane": -0.26624855118869795,
+          "speed": 18.439999999995937,
+          "grounded": true
+        },
+        {
+          "time": 192.7,
+          "progress": 895.6420269496666,
+          "u": 31.419056883611198,
+          "lane": -0.2668550239970604,
+          "speed": 18.439999999995937,
+          "grounded": true
+        }
+      ],
+      "exits": [
+        {
+          "time": 48.95,
+          "progress": 987.5400397712428,
+          "u": 106.10758287198747,
+          "lane": -0.9219453544697317,
+          "roadLane": -6.210570075351297,
+          "speed": 17.08499999999686,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 123.03333333333333,
+          "progress": 987.5618714234188,
+          "u": 106.04250143769536,
+          "lane": -0.9106117962415121,
+          "roadLane": -6.2729192661631545,
+          "speed": 17.12333333332879,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 197,
+          "progress": 987.5349670477349,
+          "u": 106.10974368254516,
+          "lane": -0.9173419610538315,
+          "roadLane": -6.210927579785872,
+          "speed": 17.061666666662124,
+          "grounded": true,
+          "hazard": null
+        }
+      ],
+      "shortcutHazards": [],
+      "final": {
+        "progress": 71.95527739079807,
+        "speed": 18.95333333333214,
+        "grounded": true
+      }
+    },
+    {
+      "track": "pyongyang",
+      "finished": true,
+      "finishTime": 266.9,
+      "shortcutHits": 6,
+      "entries": [
+        {
+          "time": 62.55,
+          "progress": 1225.2488117552875,
+          "u": 19.858881917487032,
+          "lane": -0.1317746329565272,
+          "speed": 18.726666666662734,
+          "grounded": true
+        },
+        {
+          "time": 150.9,
+          "progress": 1225.424599596458,
+          "u": 19.997143868749262,
+          "lane": -0.13608862944532457,
+          "speed": 18.686666666661694,
+          "grounded": true
+        },
+        {
+          "time": 239.23333333333332,
+          "progress": 1225.1831590739503,
+          "u": 19.807244285630627,
+          "lane": -0.12736668212649208,
+          "speed": 18.686666666661694,
+          "grounded": true
+        }
+      ],
+      "exits": [
+        {
+          "time": 82.91666666666667,
+          "progress": 1748.6593835576205,
+          "u": 428.82359037670085,
+          "lane": -0.4919476924987662,
+          "roadLane": -6.242570929732521,
+          "speed": 18.873333333332937,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 171.25,
+          "progress": 1748.4627027697234,
+          "u": 428.6201942424016,
+          "lane": -0.5002849250888689,
+          "roadLane": -6.295070116082699,
+          "speed": 18.873333333332937,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 259.6,
+          "progress": 1748.593637112771,
+          "u": 428.7556145727104,
+          "lane": -0.49466554719702077,
+          "roadLane": -6.2600495352822465,
+          "speed": 18.873333333332937,
+          "grounded": true,
+          "hazard": null
+        }
+      ],
+      "shortcutHazards": [],
+      "final": {
+        "progress": 57.64615784565012,
+        "speed": 18.819999999999112,
+        "grounded": true
+      }
+    },
+    {
+      "track": "moscow",
+      "finished": true,
+      "finishTime": 369.45,
+      "shortcutHits": 3,
+      "entries": [
+        {
+          "time": 94.46666666666667,
+          "progress": 1888.7735077499729,
+          "u": 5.843539287896742,
+          "lane": 1.197410847818154,
+          "speed": 18.693333333327587,
+          "grounded": true
+        },
+        {
+          "time": 216.2,
+          "progress": 1888.7768286624669,
+          "u": 5.845751160636678,
+          "lane": 1.2008840799204028,
+          "speed": 18.612111096066208,
+          "grounded": true
+        },
+        {
+          "time": 337.9,
+          "progress": 1888.6808051478101,
+          "u": 5.781795306667227,
+          "lane": 1.236488130568896,
+          "speed": 18.59837710649128,
+          "grounded": true
+        }
+      ],
+      "exits": [
+        {
+          "time": 105.08333333333333,
+          "progress": 2145.1807070883415,
+          "u": 165.54704704489924,
+          "lane": 0.48404055162325543,
+          "roadLane": 8.155871488657773,
+          "speed": 15.048333333327566,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 226.81666666666666,
+          "progress": 2145.253415799556,
+          "u": 165.44337261277107,
+          "lane": 0.48579562146731214,
+          "roadLane": 8.229796528128558,
+          "speed": 15.028777762732867,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 348.51666666666665,
+          "progress": 2145.295019727255,
+          "u": 165.38374886963223,
+          "lane": 0.4865134682545714,
+          "roadLane": 8.272512090279932,
+          "speed": 15.145043773157933,
+          "grounded": true,
+          "hazard": null
+        }
+      ],
+      "shortcutHazards": [],
+      "final": {
+        "progress": 165.90242846905676,
+        "speed": 18.908091589360843,
+        "grounded": true
+      }
+    },
+    {
+      "track": "beijing",
+      "finished": true,
+      "finishTime": 256.2833333333333,
+      "shortcutHits": 3,
+      "entries": [
+        {
+          "time": 29.966666666666665,
+          "progress": 626.9293785701705,
+          "u": 25.284862363967694,
+          "lane": 0.5924057797363511,
+          "speed": 18.57999999999805,
+          "grounded": true
+        },
+        {
+          "time": 114.39999999999999,
+          "progress": 627.2183190383414,
+          "u": 25.521072087758455,
+          "lane": 0.4129172224349461,
+          "speed": 18.67999999999672,
+          "grounded": true
+        },
+        {
+          "time": 198.8,
+          "progress": 627.2291067975627,
+          "u": 25.529891114189944,
+          "lane": 0.4131843207034805,
+          "speed": 18.67999999999672,
+          "grounded": true
+        }
+      ],
+      "exits": [
+        {
+          "time": 37.71666666666667,
+          "progress": 777.874602938926,
+          "u": 142.98164954510136,
+          "lane": -0.005930918717045193,
+          "roadLane": 6.273417061317959,
+          "speed": 17.866666666666568,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 122.11666666666666,
+          "progress": 777.8508170239236,
+          "u": 142.9557547476345,
+          "lane": -0.00520387662384215,
+          "roadLane": 6.283678609619003,
+          "speed": 17.899999999999903,
+          "grounded": true,
+          "hazard": null
+        },
+        {
+          "time": 206.51666666666665,
+          "progress": 777.8590615250316,
+          "u": 142.96464097898962,
+          "lane": -0.005231955826978665,
+          "roadLane": 6.280362874766442,
+          "speed": 17.899999999999903,
+          "grounded": true,
+          "hazard": null
+        }
+      ],
+      "shortcutHazards": [],
+      "final": {
+        "progress": 115.94298275333244,
+        "speed": 18.913333333331867,
+        "grounded": true
+      }
+    }
+  ]
+}

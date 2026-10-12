@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import * as layout from '../src/track-layout.ts';
-import { TRACK, selectTrack, trackPoint, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, elevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, hazardAt, recoverKart, atRampLip, maleconWavePatchAt, applyMaleconWaveDrag } from '../src/track.ts';
+import { TRACK, selectTrack, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, botStyleOf, setBotStyles, createRaceProgress, advanceRace, trackHeightAt, elevationAt, inShortcut, shortcutPoint, SHORTCUT_LENGTH, hazardAt, recoverKart, atRampLip, maleconWavePatchAt, applyMaleconWaveDrag } from '../src/track.ts';
 
 const onHavana = (fn) => () => { selectTrack('havanna'); try { fn(); } finally { selectTrack('stadionring'); } };
 
@@ -67,9 +67,39 @@ test('Havanna coastal S-bends shorten the long straight and the lap-two wave lea
   assert.equal(maleconWavePatchAt(200, -3), false, 'the inland lane stays clear');
   assert.equal(maleconWavePatchAt(330, 3), false, 'the wave stays inside its event district');
   const oneSecond = applyMaleconWaveDrag(18, 1, 1);
-  assert.ok(oneSecond.speed > 17.7 && oneSecond.speed < 18, 'the sea-side line loses only a little speed per second');
-  assert.ok(oneSecond.yawRate > .97 && oneSecond.yawRate < 1, 'wet grip loss stays small enough to steer');
+  assert.ok(Math.abs(oneSecond.speed - 17.16) < .001, 'the sea-side event cap produces a clear, recoverable speed loss');
+  assert.ok(oneSecond.yawRate > .95 && oneSecond.yawRate < 1, 'wet grip loss stays small enough to steer');
+  assert.ok(Math.abs(applyMaleconWaveDrag(22, 1, 1 / 60, 22).speed - 19.36) < .001, 'wave applies its visible event speed limit below top speed');
+  assert.ok(Math.abs(applyMaleconWaveDrag(19.4, 1, 0, 20.8).speed - 18.304) < .001, 'wave also affects ordinary corner speed, not only near-maximum speed');
   const fullWindow = applyMaleconWaveDrag(18, 1, 14);
-  assert.ok(fullWindow.speed > 14 && fullWindow.speed < 18, 'even the full event window does not stop the kart');
-  assert.ok(fullWindow.yawRate > .6, 'steering stays usable through the whole event');
+  assert.ok(fullWindow.speed > 13.5 && fullWindow.speed < 18, 'even the full event window leaves the kart moving');
+  assert.ok(fullWindow.yawRate > .4, 'steering stays usable through the whole event');
+  const previousStyles = Array.from({ length: 6 }, (_, index) => botStyleOf(index));
+  try {
+    const style = { label: 'sea-side test', lane: 2.8, drift: false, shortcut: false, pass: 1, itemPatience: 1, eventRisk: 1 };
+    setBotStyles([undefined, style]);
+    const point = trackPoint(150, 2.8), centre = trackPoint(150);
+    let bot = { ...gridKart(1), x: point.x, z: point.z, heading: centre.heading, speed: 18 };
+    for (let step = 0; step < 300; step++) bot = advanceKart(bot, botInput(bot, 1, [bot], 'wave'), 1 / 60, projectTrack, trackHeightAt);
+    assert.ok(trackLocate(bot.x, bot.z).lane < 0.65, 'an exposed bot chooses the clear inland counterline during the wave');
+
+    const approach = trackPoint(25, 2.8), approachCentre = trackPoint(25);
+    let approachingBot = { ...gridKart(1), x: approach.x, z: approach.z, heading: approachCentre.heading, speed: 18 };
+    let enteredWave = false;
+    for (let step = 0; step < 720; step++) {
+      approachingBot = advanceKart(approachingBot, botInput(approachingBot, 1, [approachingBot], 'wave'), 1 / 60, projectTrack, trackHeightAt);
+      const current = trackLocate(approachingBot.x, approachingBot.z);
+      if (!enteredWave && current.s >= 105) {
+        enteredWave = true;
+        assert.ok(current.lane < 0.65, `a bot clears the seaward line before entering the wave (lane ${current.lane.toFixed(2)})`);
+      }
+    }
+    assert.equal(enteredWave, true, 'the bot should reach the wave district');
+
+    const riskStyle = { ...style, eventRisk: 0 };
+    setBotStyles([undefined, riskStyle]);
+    let riskTaker = { ...gridKart(1), x: point.x, z: point.z, heading: centre.heading, speed: 18 };
+    for (let step = 0; step < 90; step++) riskTaker = advanceKart(riskTaker, botInput(riskTaker, 1, [riskTaker], 'wave'), 1 / 60, projectTrack, trackHeightAt);
+    assert.ok(trackLocate(riskTaker.x, riskTaker.z).lane > 0.65, 'a bot with a bold event-risk style can hold its preferred exposed line');
+  } finally { setBotStyles(previousStyles); }
 }));

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-12T08:55:28.800Z",
+  "track": "moscow",
+  "method": "natural lap-one six-kart race from grid, auto-gas and steering assist; no state or event injection; captured after a natural opponent censor hit",
+  "state": {
+    "time": "0:16.90",
+    "lap": "1 / 3",
+    "place": "5",
+    "remaining": 3.9333333333333345,
+    "opacity": "1",
+    "sheetCount": 22,
+    "centerLaneObstructions": 4,
+    "errors": []
+  },
+  "elapsedMs": 16923
+}

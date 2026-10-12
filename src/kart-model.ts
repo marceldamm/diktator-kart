@@ -173,7 +173,7 @@ function approachZero(value: number, amount: number): number {
   return Math.min(0, value + amount);
 }
 
-export type WorldProjection = (rawX: number, rawZ: number) => {
+export type WorldProjection = (rawX: number, rawZ: number, airborne?: boolean) => {
   x: number; z: number; normalX: number; normalZ: number; kind: 'boundary' | 'obstacle' | null;
 };
 
@@ -302,7 +302,7 @@ export function advanceKart(state: KartState, input: DriveInput, dt: number, pro
   }
   const rawX = state.x + Math.sin(travelHeading) * speed * dt + state.impactVelocityX * dt;
   const rawZ = state.z + Math.cos(travelHeading) * speed * dt + state.impactVelocityZ * dt;
-  const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = project(rawX, rawZ);
+  const { x, z, normalX: collisionNormalX, normalZ: collisionNormalZ, kind } = project(rawX, rawZ, (state.jumpRemaining ?? 0) > 0);
   let impactKind: KartState['impactKind'] = kind ?? state.impactKind;
   const collided = collisionNormalX !== 0 || collisionNormalZ !== 0;
   let impactRemaining = Math.max(0, state.impactRemaining - dt);
@@ -439,7 +439,7 @@ export function resolveKartContacts(states: KartState[], project: WorldProjectio
       }
     }
     for (const kart of resolved) {
-      const projected = project(kart.x, kart.z);
+      const projected = project(kart.x, kart.z, (kart.jumpRemaining ?? 0) > 0);
       if (projected.x !== kart.x || projected.z !== kart.z) corrected = true;
       kart.x = projected.x;
       kart.z = projected.z;

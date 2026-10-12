@@ -1,9 +1,10 @@
-import { BOOST_PADS, HAZARDS, RAMP_LIPS, SHORTCUT, TRACKS } from '../src/track-layout.ts';
+import { BOOST_PADS, HAZARDS, RAMP_HEIGHTS, RAMP_LIPS, SHORTCUT, TRACKS } from '../src/track-layout.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { advanceKart, resolveKartContacts } from '../src/kart-model.ts';
 import { BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, GRASS_VERGES } from '../src/track-layout.ts';
-import { TRACK, selectTrack, atRampLip, atSecondLapTrackEvent, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, rankRace, inShortcut, shortcutPoint, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, hazardAt, recoverKart, boostPadAt } from '../src/track.ts';
+import { TRACK, selectTrack, atRampLip, rampHeightAt, rampFlightProfile, atSecondLapTrackEvent, playerAtSecondLapTrackEvent, berlinZeppelinWindAt, maleconWavePatchAt, policyJubelPatchAt, eventBelongsToTrackTheme, trackEventLap, trackPoint, trackLocate, trackProgress, projectTrack, gridKart, botInput, createRaceProgress, advanceRace, trackHeightAt, elevationAt, rankRace, inShortcut, shortcutPoint, shortcutSurfaceEffectAt, SHORTCUT_LENGTH, applySurfaceDrag, drivingSurfaceAt, craterAt, craterPitAt, shouldStartCraterFall, overCanal, hazardAt, recoverKart, boostPadAt, PARADE_COLUMN, MOVING_TROLLEY, movingTrolley, paradeActive, paradeVehicles, setParadeClock, startParade, stopParade } from '../src/track.ts';
+import { BOT_STYLES, setBotSkill, setBotStyles } from '../src/track.ts';
 import { airTrickRoll } from '../src/kart-visuals.ts';
 
 test('track progress is continuous around the complete course; inner and outer barriers contain karts',()=>{
@@ -27,6 +28,21 @@ test('second-lap track events need both lap progress and the announced location'
     assert.equal(atSecondLapTrackEvent(lapTwoEntry + 1, to, from, to), false, `${id}: event stops at the end of its district`);
   }
   selectTrack('stadionring');
+});
+test('shared line events start at the lap-two course marker even when the player uses the counterline',()=>{
+  try {
+    for (const {id,from,to} of [{id:'havanna',from:105,to:330},{id:'beijing',from:880,to:1040}]) {
+      selectTrack(id);
+      const lapTwoEntry=TRACK.length+from-TRACK.start;
+      assert.equal(playerAtSecondLapTrackEvent(lapTwoEntry,from,from,to),true,`${id}: course progress starts the shared event`);
+    }
+    selectTrack('havanna');
+    assert.equal(maleconWavePatchAt(200,-1.8),false,'the inland counterline stays clear after the event activates');
+    assert.equal(maleconWavePatchAt(200,1.85),true,'the sea-side line still receives the wave effect');
+    selectTrack('beijing');
+    assert.equal(policyJubelPatchAt(900,3.4),false,'the outer counterline stays clear after the broadcast starts');
+    assert.equal(policyJubelPatchAt(900,0),true,'the middle line still receives the broadcast effect');
+  } finally { selectTrack('stadionring'); }
 });
 test('small crowd reactions trigger once at their landmark in each of the three laps',()=>{
   selectTrack('stadionring'); const from=295,to=325, s=from+1;
@@ -84,11 +100,139 @@ test('every course ramp lip remains drivable and clear of fall volumes',()=>{
   }
   selectTrack('stadionring');
 });
+test('course ramps use authored small and large heights that match their road and launch profiles',()=>{
+  try {
+    for (const id of Object.keys(TRACKS)) {
+      selectTrack(id);
+      assert.equal(RAMP_HEIGHTS.length, RAMP_LIPS.length, `${id}: each lip has an authored height`);
+      assert.ok(RAMP_HEIGHTS.every((height) => height >= .5 && height <= 2.5), `${id}: ramp heights stay within the readable 0.5–2.5 m range`);
+      for (const [index, lip] of RAMP_LIPS.entries()) {
+        const point = trackPoint(lip);
+        assert.equal(rampHeightAt(point.x, point.z), RAMP_HEIGHTS[index], `${id}: lip ${lip} selects its own take-off height`);
+        assert.ok(Math.abs(trackHeightAt(point.x, point.z) - elevationAt(lip) - RAMP_HEIGHTS[index]) < .02, `${id}: road and ramp surface meet at lip ${lip}`);
+      }
+      if (RAMP_HEIGHTS.length > 1) assert.ok(Math.max(...RAMP_HEIGHTS) - Math.min(...RAMP_HEIGHTS) >= .6, `${id}: small and large ramps create a meaningful choice`);
+    }
+  } finally {
+    selectTrack('stadionring');
+  }
+});
+test('Berlin outer-line kicker jumps through the shortcut entrance and lands inside its return route',()=>{
+  selectTrack('stadionring');
+  const takeoff = trackPoint(RAMP_LIPS[1], -5.8), height = rampHeightAt(takeoff.x, takeoff.z);
+  assert.equal(height, RAMP_HEIGHTS[1]);
+  assert.equal(projectTrack(takeoff.x, takeoff.z).kind, null, 'the authored outer launch line is reachable while grounded');
+  const unrelatedWall = trackPoint(850, -12);
+  assert.equal(projectTrack(unrelatedWall.x, unrelatedWall.z, true).kind, 'boundary', 'other airborne shortcuts remain blocked');
+  const flight = rampFlightProfile(19, height);
+  let state = { ...gridKart(0), x: takeoff.x, z: takeoff.z, heading: takeoff.heading, travelHeading: takeoff.heading,
+    speed: 19, height: trackHeightAt(takeoff.x, takeoff.z), grounded: false, jumpRemaining: flight.duration,
+    jumpDuration: flight.duration, jumpStart: 1, jumpPeak: flight.peak };
+  let enteredShortcut = false;
+  for (let step = 0; step < Math.ceil(flight.duration * 60); step++) {
+    state = advanceKart(state, { throttle: 0, steering: -.1 }, 1 / 60, projectTrack, trackHeightAt);
+    state = resolveKartContacts([state], projectTrack)[0];
+    enteredShortcut ||= inShortcut(state.x, state.z);
+  }
+  assert.equal(enteredShortcut, true, 'the jump clears the outer barrier into the alley');
+  assert.equal(state.grounded, true, 'the landing completes before the shortcut exit');
+  assert.equal(inShortcut(state.x, state.z), true, 'the kart lands on the authored alternate route');
+  assert.equal(projectTrack(state.x, state.z).kind, null, 'the shortcut catches and supports the landing');
+  assert.equal(hazardAt(state.x, state.z), null, 'the landing avoids the water/fall zone');
+  const entry = trackProgress(state.x, state.z), exit = shortcutPoint(SHORTCUT_LENGTH);
+  assert.ok(entry > SHORTCUT.from && entry < SHORTCUT.to);
+  assert.equal(projectTrack(exit.x, exit.z).kind, null, 'the existing route merges back into the circuit');
+  assert.ok(Math.abs(trackLocate(exit.x, exit.z).s - SHORTCUT.to) < 2, 'shortcut exit returns at the intended lap progress');
+});
+test('Berlin risk-taking bot follows the authored ramp approach and lands safely in the shortcut',()=>{
+  selectTrack('stadionring');setBotSkill(1);setBotStyles([undefined,BOT_STYLES[4]]);
+  try {
+    const approach=trackPoint(470,0);let state={...gridKart(1),...approach,travelHeading:approach.heading,speed:19};
+    let launched=false,enteredFromRamp=false,landed=false;
+    for(let tick=0;tick<240;tick++) {
+      if((state.jumpRemaining??0)===0&&state.speed>3&&atRampLip(state.x,state.z)&&state.height<rampHeightAt(state.x,state.z)+.25) {
+        const flight=rampFlightProfile(state.speed,rampHeightAt(state.x,state.z));
+        state={...state,hopRemaining:0,jumpRemaining:flight.duration,jumpDuration:flight.duration,jumpStart:1,jumpPeak:flight.peak};launched=true;
+      }
+      state=advanceKart(state,botInput(state,1,[state]),1/60,projectTrack,trackHeightAt);
+      state=resolveKartContacts([state],projectTrack)[0];
+      if(launched&&inShortcut(state.x,state.z))enteredFromRamp=true;
+      if(enteredFromRamp&&state.grounded&&(state.jumpRemaining??0)===0){landed=true;break;}
+    }
+    assert.equal(launched,true,'the authored bot reaches and launches from the ramp lip');
+    assert.equal(enteredFromRamp,true,'the airborne bot clears the designated shortcut-entry wall');
+    assert.equal(landed,true,'the bot lands before the shortcut exit');
+    assert.equal(inShortcut(state.x,state.z),true,'the bot keeps the shortcut route at touchdown');
+    assert.equal(projectTrack(state.x,state.z).kind,null,'the landing is on a supported race surface');
+    assert.equal(hazardAt(state.x,state.z),null,'the shortcut landing avoids fall zones');
+  } finally {
+    setBotStyles([]);setBotSkill(1);selectTrack('stadionring');
+  }
+});
 test('course events belong only to their named course across every circuit theme',()=>{
   const routes={zeppelin:'berlin',wave:'havana',balcony:'rome',jubel:'beijing',parade:'moscow',column:'pyongyang'};
   const themes=Object.values(routes);
   for(const [event,home] of Object.entries(routes))for(const theme of themes)
     assert.equal(eventBelongsToTrackTheme(theme,event),theme===home,`${event} must stay on ${home}, not ${theme}`);
+});
+test('A76 Moscow trolley moves across lines and uses the shared obstacle projection',()=>{
+  selectTrack('moscow');stopParade();
+  try {
+    setParadeClock(0);const start=movingTrolley();assert.ok(start);assert.equal(start.s,MOVING_TROLLEY.s);assert.ok(Math.abs(start.lane)<1e-9);
+    const centre=trackPoint(start.s,start.lane);assert.equal(projectTrack(centre.x,centre.z).kind,'obstacle','the moving prop has real shared collision');
+    const clear=trackPoint(start.s,TRACK.halfWidth-2);assert.equal(projectTrack(clear.x,clear.z).kind,null,'a broad outer passing lane remains open');
+    setParadeClock(MOVING_TROLLEY.period/4);const crossing=movingTrolley();assert.ok(crossing);assert.ok(Math.abs(crossing.lane-MOVING_TROLLEY.laneAmplitude)<1e-8,'the trolley reaches the opposite line on its period');
+    const moved=trackPoint(crossing.s,crossing.lane);assert.equal(projectTrack(moved.x,moved.z).kind,'obstacle');
+    setParadeClock(0);const approach=trackPoint(MOVING_TROLLEY.s-20,0),bot={...gridKart(1),...approach,travelHeading:approach.heading,speed:15};
+    assert.ok(Math.abs(botInput(bot,1,[bot]).steering)>.1,'the standard bot controller begins choosing a passing line before contact');
+    selectTrack('stadionring');assert.equal(movingTrolley(),null,'the pilot belongs only to its authored course');
+  } finally { setParadeClock(0);stopParade();selectTrack('stadionring'); }
+});
+test('Moscow shortcut has a fixed broken centre line with faster dry edges and a shared mild penalty',()=>{
+  selectTrack('moscow');
+  try {
+    const centre=shortcutPoint(100,0), edge=shortcutPoint(100,2.5), main=trackPoint(100,0);
+    assert.equal(shortcutSurfaceEffectAt(centre.x,centre.z),'broken-parade');
+    assert.equal(shortcutSurfaceEffectAt(edge.x,edge.z),null,'the narrow outside line stays intact');
+    assert.equal(shortcutSurfaceEffectAt(main.x,main.z),null,'the patch remains shortcut-only');
+    const kart=gridKart(0),dt=1/60,speed=8;
+    const onCentre=applySurfaceDrag({...kart,x:centre.x,z:centre.z,speed,grounded:true,turboRemaining:0},dt);
+    const onEdge=applySurfaceDrag({...kart,x:edge.x,z:edge.z,speed,grounded:true,turboRemaining:0},dt);
+    assert.ok(onEdge.speed-onCentre.speed>.007,'the broken centre has a small, measurable fixed cost');
+    const boostedCentre=applySurfaceDrag({...kart,x:centre.x,z:centre.z,speed,turboRemaining:1},dt);
+    const boostedEdge=applySurfaceDrag({...kart,x:edge.x,z:edge.z,speed,turboRemaining:1},dt);
+    assert.ok(Math.abs(boostedCentre.speed-boostedEdge.speed)<1e-9,'turbo carries every kart through the broken surface at the same speed');
+  } finally { selectTrack('stadionring'); }
+});
+test('Pyongyang parade starts clear of the kart that naturally triggers the lap-two event',()=>{
+  selectTrack('pyongyang');
+  try {
+    const approach=trackPoint(1368.96,1.68);
+    assert.equal(projectTrack(approach.x,approach.z).kind,null,'the sampled player line is clear before the event');
+    startParade(100);setParadeClock(100);
+    assert.equal(projectTrack(approach.x,approach.z).kind,null,'spawning the parade must not hit the triggering kart');
+    const vehicles=paradeVehicles();
+    assert.equal(vehicles.length,4,'the full parade is staged ahead at event start');
+    assert.ok(Math.min(...vehicles.map(v=>v.s))-1368.96>=30,'the rear vehicle starts at least 30 m ahead of the trigger position');
+    for(const lane of [-1.8,0,1.68,3.4]) {
+      const kart=trackPoint(1368.96,lane);
+      assert.equal(projectTrack(kart.x,kart.z).kind,null,`triggering line ${lane} must stay clear`);
+    }
+    const field=[
+      trackPoint(1368.96,1.68), trackPoint(1429.8,3.4), trackPoint(1494.6,-2),
+      trackPoint(1720,-15), trackPoint(1815,-.1), trackPoint(1325,-2.3),
+    ];
+    stopParade();startParade(100,field);setParadeClock(100);
+    assert.ok(paradeVehicles().length>=2,'the parade still stages several vehicles in its boulevard');
+    const triggerS=trackLocate(field[0].x,field[0].z).s,rearGap=Math.min(...paradeVehicles().map(v=>v.s))-triggerS;
+    assert.ok(rearGap>=30,'the rear of the column keeps 30 m clearance ahead of the triggering kart');
+    assert.ok(rearGap<120,`the column uses the closest safe gap instead of starting far ahead (${rearGap.toFixed(1)} m)`);
+    for(const kart of field) assert.equal(projectTrack(kart.x,kart.z).kind,null,'deployment checks every current racer before choosing its starting gap');
+    setParadeClock(114.99);assert.ok(paradeVehicles().length>=2,'the convoy remains present until its 15-second window ends');
+    setParadeClock(115);assert.equal(paradeActive(),false,'the physical event ends at 15 seconds');assert.equal(paradeVehicles().length,0,'no parade collision objects remain after expiry');
+  } finally {
+    stopParade();selectTrack('stadionring');
+  }
 });
 test('a bot leader cannot consume the course event before the player enters lap two',()=>{
   const s=100;

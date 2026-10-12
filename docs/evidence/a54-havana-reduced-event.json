@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-12",
+  "track": "havanna",
+  "graphics": "reduced",
+  "method": "full natural single-player race from grid; auto-gas and steering assist; no progress injection or QA event trigger",
+  "at450msAnd2s": {
+    "lap": "2 / 3",
+    "time": "1:22.43",
+    "place": "1",
+    "warning": "Malecón-Welle! Die Gischt trifft die Meerseite · innen bleibt mehr Grip",
+    "distance": 1645.938211270089,
+    "particles": [
+      {
+        "name": "Stadium petals",
+        "count": 250
+      },
+      {
+        "name": "Item hit paperwork",
+        "count": 28
+      },
+      {
+        "name": "Landing dust",
+        "count": 5
+      },
+      {
+        "name": "Damage smoke 1",
+        "count": 5
+      },
+      {
+        "name": "Damage smoke 2",
+        "count": 4
+      },
+      {
+        "name": "Damage smoke 3",
+        "count": 4
+      },
+      {
+        "name": "Damage smoke 5",
+        "count": 9
+      },
+      {
+        "name": "Damage sparks",
+        "count": 2
+      },
+      {
+        "name": "Malecon wave spray",
+        "count": 59
+      }
+    ],
+    "camera": [
+      8.007728629190472,
+      2.1000000000000005,
+      181.25175213932292
+    ],
+    "errors": []
+  }
+}

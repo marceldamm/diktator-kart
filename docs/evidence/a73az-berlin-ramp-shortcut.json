@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-12T15:42:48.593Z",
+  "track": "stadionring",
+  "method": "Natural six-kart Berlin race from grid in headless Chrome; auto-gas and steering assist; no progress, position, item, event or jump injection. Captures the authored ramp-style bot entering the shortcut airborne and landing on the route.",
+  "rampEntry": {
+    "lip": 500,
+    "lane": -5.8,
+    "approachRadius": 24,
+    "entryLength": 22
+  },
+  "rampAirborne": {
+    "time": "0:31.28",
+    "i": 4,
+    "x": -77.35154808454578,
+    "z": -56.63662131766868,
+    "speed": 23.87410451674982,
+    "turboRemaining": 0.9666666666666679,
+    "height": 1.7424538676679133,
+    "grounded": false,
+    "jumpRemaining": 0.3003199999999959,
+    "progress": 469.0218917169941,
+    "shortcutU": 3.442539267897832,
+    "shortcutLane": -3.2919180544091415
+  },
+  "rampLanding": {
+    "time": "0:31.73",
+    "i": 4,
+    "x": -69.23566425854227,
+    "z": -63.83186747886703,
+    "speed": 24.288753438058492,
+    "turboRemaining": 0.5666666666666662,
+    "height": 0,
+    "grounded": true,
+    "jumpRemaining": 0,
+    "progress": 497.5926329566539,
+    "shortcutU": 15.08386365160788,
+    "shortcutLane": -1.9594530548561837
+  },
+  "captured": {
+    "airCaptured": true,
+    "landingCaptured": true
+  },
+  "runtimeErrors": [],
+  "viewport": {
+    "width": 764,
+    "height": 429
+  }
+}

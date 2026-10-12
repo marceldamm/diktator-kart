@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-12T04:30:13.172Z",
+  "method": "Paused isolated headless runtime QA: Parade started through track helper in current Pyongyang race scene, race clock frozen, then event clock advanced to 14.99s and 15.00s. This validates runtime expiry but is not a natural event-trigger run.",
+  "start": {
+    "time": 282.8500000000714,
+    "active": true,
+    "vehicles": [
+      {
+        "s": 1430,
+        "lane": 3.4,
+        "index": 0
+      },
+      {
+        "s": 1421,
+        "lane": 3.4,
+        "index": 1
+      },
+      {
+        "s": 1412,
+        "lane": 3.4,
+        "index": 2
+      },
+      {
+        "s": 1402,
+        "lane": 3.4,
+        "index": 3
+      }
+    ],
+    "root": false
+  },
+  "near": {
+    "active": true,
+    "count": 4,
+    "root": false
+  },
+  "expired": {
+    "active": false,
+    "count": 0,
+    "root": false,
+    "projection": {
+      "x": -73.36415890462935,
+      "z": 222.58077460878908,
+      "normalX": 0,
+      "normalZ": 0,
+      "kind": null
+    }
+  },
+  "errors": []
+}

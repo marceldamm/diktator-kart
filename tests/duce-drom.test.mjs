@@ -49,7 +49,7 @@ test('Duce-Drom hills: switchback climb, Belvedere jump and lower quay kicker ha
   assert.equal(elevationAt(690), 6);
   const lip = trackPoint(layout.RAMP_LIPS[0] - .5);
   assert.ok(atRampLip(lip.x, lip.z));
-  assert.ok(trackHeightAt(lip.x, lip.z) > 6.8, 'ramp sits on top of the plateau');
+  assert.ok(trackHeightAt(lip.x, lip.z) > 6.5, 'the smaller kicker sits on top of the six-metre plateau');
   assert.ok(elevationAt(780) < 6 && elevationAt(810) === 0);
   assert.equal(layout.RAMP_LIPS.length, 2, 'the smaller Tiber-side kicker creates another jump choice');
   const shortcutPad = shortcutPoint(SHORTCUT_LENGTH * .47);
@@ -113,7 +113,11 @@ test('rival styles change visible choices only: style shortcut users take the al
       sawAlley ||= inShortcut(a.x, a.z); drifted ||= b.drifting;
     }
     assert.ok(sawAlley, 'Mussolini style uses the shortcut'); assert.equal(drifted, false, 'Stalin style keeps grip');
-    for (const style of BOT_STYLES) assert.deepEqual(Object.keys(style).sort(), ['drift', 'itemPatience', 'label', 'lane', 'pass', 'shortcut'], 'no speed or grip field');
+    for (const style of BOT_STYLES) assert.deepEqual(Object.keys(style).sort(), [
+      'drift', 'eventRisk', 'itemPatience', 'label', 'lane', 'pass', 'shortcut',
+      ...(style.shortcutLane !== undefined ? ['shortcutLane'] : []),
+      ...(style.rampShortcut ? ['rampShortcut'] : []),
+    ].sort(), 'driving style includes event-risk and optional shortcut-line preferences but no speed or grip field');
   } finally { setBotStyles([]); }
 });
 

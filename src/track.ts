@@ -1,5 +1,5 @@
 import { initialKartState, KART_TUNING, type DriveInput, type KartState, type WorldProjection } from './kart-model.ts';
-import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, ELEVATION, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_LENGTH, RAMP_LIPS, SHORTCUT, START_PROGRESS, TRACK_HALF_WIDTH, TRACK_INFO, isTrackId, sampleTrack, setTrackLayout, type TrackDefinition, type TrackId, type TrackSample } from './track-layout.ts';
+import { BOOST_PADS, BUMP_PROGRESS, CANAL_FROM, CANAL_LENGTH, CRATERS, ELEVATION, GRASS_VERGES, HAZARDS, LANDMARKS, RAMP_HEIGHT, RAMP_HEIGHTS, RAMP_LENGTH, RAMP_LIPS, RAMP_SHORTCUT_ENTRY, SHORTCUT, SHORTCUT_SURFACE_PATCHES, START_PROGRESS, TRACK_HALF_WIDTH, TRACK_INFO, isTrackId, sampleTrack, setTrackLayout, type TrackDefinition, type TrackId, type TrackSample } from './track-layout.ts';
 
 let SAMPLES: TrackSample[] = [];
 /** Inner face of the barrier wall (lane metres); karts may use the kerbs right up to it. Mutated in place by `selectTrack`. */
@@ -187,6 +187,13 @@ export function trackProgress(x: number, z: number): number {
 
 export type DrivingSurface = 'cobble' | 'gravel' | 'grass';
 
+/** Fixed shortcut-only effects; querying the spatial shortcut first avoids bleeding onto the main road. */
+export function shortcutSurfaceEffectAt(x: number, z: number): 'wet-stones' | 'broken-parade' | null {
+  if (!inShortcut(x, z)) return null;
+  const { u, lane } = shortcutLocate(x, z);
+  return SHORTCUT_SURFACE_PATCHES.find((patch) => u >= patch.from && u <= patch.to && Math.abs(lane - patch.lane) <= patch.halfWidth)?.kind ?? null;
+}
+
 /** Surface under the kart: the racing ribbon stays cobble, the alley is gravel, park edges are grass. */
 export function drivingSurfaceAt(x: number, z: number): DrivingSurface {
   if (inShortcut(x, z)) return TRACK_INFO.theme === 'pyongyang' ? 'cobble' : 'gravel';
@@ -200,15 +207,25 @@ export function drivingSurfaceAt(x: number, z: number): DrivingSurface {
 export function applySurfaceDrag(state: KartState, dt: number): KartState {
   if (!state.grounded || Math.abs(state.speed) < .01) return state;
   const surface = drivingSurfaceAt(state.x, state.z);
-  if (surface === 'cobble') return state;
+  let result = state;
   if (surface === 'gravel') {
     const capDrag = state.turboRemaining > 0 || state.speed <= SHORTCUT.speedCap ? 0 : 14;
     const rollingDrag = state.turboRemaining > 0 ? 0 : 2.5;
     const loss = Math.max(capDrag, rollingDrag) * dt;
-    return { ...state, speed: Math.sign(state.speed) * Math.max(0, Math.abs(state.speed) - loss), yawRate: state.yawRate * .82 };
+    result = { ...state, speed: Math.sign(state.speed) * Math.max(0, Math.abs(state.speed) - loss), yawRate: state.yawRate * .82 };
+  } else if (surface === 'grass') {
+    const speed = Math.sign(state.speed) * Math.max(0, Math.abs(state.speed) - 6 * dt);
+    result = { ...state, speed, yawRate: state.yawRate * .62 };
   }
-  const speed = Math.sign(state.speed) * Math.max(0, Math.abs(state.speed) - 6 * dt);
-  return { ...state, speed, yawRate: state.yawRate * .62 };
+  const shortcutEffect = shortcutSurfaceEffectAt(state.x, state.z);
+  if (shortcutEffect === 'wet-stones') {
+    return { ...result, speed: result.speed * (1 - 1.1 * dt), yawRate: result.yawRate * (1 - 2 * dt) };
+  }
+  if (shortcutEffect === 'broken-parade') {
+    const chipDrag = state.turboRemaining > 0 ? 0 : .45;
+    return { ...result, speed: Math.sign(result.speed) * Math.max(0, Math.abs(result.speed) - chipDrag * dt) };
+  }
+  return result;
 }
 
 /** Largest absolute centreline curvature in [from, from + distance]. */
@@ -260,7 +277,7 @@ export function shortcutElevationAt(u: number): number {
 function localHeightAt(s: number, lane: number): number {
   const delta = BUMP_PROGRESS < 0 ? Infinity : Math.abs(signedGap(s - BUMP_PROGRESS));
   // Take-off ramp across the whole road before the canal.
-  for (const lip of RAMP_LIPS) if (s >= lip - RAMP_LENGTH && s <= lip && Math.abs(lane) <= TRACK.halfWidth + 1) return RAMP_HEIGHT * (s - (lip - RAMP_LENGTH)) / RAMP_LENGTH;
+  for (const [index, lip] of RAMP_LIPS.entries()) if (s >= lip - RAMP_LENGTH && s <= lip + .01 && Math.abs(lane) <= TRACK.halfWidth + 1) return (RAMP_HEIGHTS[index] ?? RAMP_HEIGHT) * Math.min(1, (s - (lip - RAMP_LENGTH)) / RAMP_LENGTH);
   // Painted kerbs are real rumble strips: a ridged 5 cm profile between the road edge and the wall.
   const kerb = Math.abs(lane) > TRACK.halfWidth && Math.abs(lane) < TRACK.wall ? .035 + .02 * Math.abs(Math.sin(s * Math.PI / 1.2)) : 0;
   return Math.max(kerb, BUMP_PROGRESS >= 0 && delta < 4 && Math.abs(lane) < TRACK.halfWidth + 1 ? .24 * (.5 + .5 * Math.cos(delta / 4 * Math.PI)) : 0);
@@ -276,6 +293,21 @@ export function overCanal(x: number, z: number): boolean {
 export function atRampLip(x: number, z: number): boolean {
   const { s, lane } = trackLocate(x, z);
   return RAMP_LIPS.some((lip) => s >= lip - 1.4 && s <= lip + .2) && Math.abs(lane) <= TRACK.halfWidth + 1;
+}
+
+/** Authored take-off height for a kart at the ramp lip, or zero off a ramp. */
+export function rampHeightAt(x: number, z: number): number {
+  const { s, lane } = trackLocate(x, z);
+  if (Math.abs(lane) > TRACK.halfWidth + 1) return 0;
+  const index = RAMP_LIPS.findIndex((lip) => s >= lip - 1.4 && s <= lip + .2);
+  return index < 0 ? 0 : RAMP_HEIGHTS[index] ?? RAMP_HEIGHT;
+}
+
+/** Shared flight duration/apex for player and bot take-offs, scaled by the authored ramp height. */
+export function rampFlightProfile(speed: number, height: number): { duration: number; peak: number } {
+  const heightDelta = height - 1;
+  const duration = .45 + speed * .034 + heightDelta * .08;
+  return { duration, peak: .7 + speed * .05 + heightDelta * .65 };
 }
 
 /** Index of the crater under a kart, or -1. */
@@ -318,9 +350,9 @@ export function maleconWavePatchAt(s: number, lane: number): boolean {
 }
 
 /** A short, bounded speed and grip cost for a kart caught on the exposed line. */
-export function applyMaleconWaveDrag(speed: number, yawRate: number, dt: number): { speed: number; yawRate: number } {
+export function applyMaleconWaveDrag(speed: number, yawRate: number, dt: number, topSpeed: number = KART_TUNING.maxForwardSpeed): { speed: number; yawRate: number } {
   const step = Math.max(0, dt);
-  return { speed: Math.max(0, speed - .22 * step), yawRate: yawRate * Math.max(0, 1 - .025 * step) };
+  return { speed: Math.min(Math.max(0, topSpeed * .88), Math.max(0, speed - .32 * step)), yawRate: yawRate * Math.max(0, 1 - .04 * step) };
 }
 
 /** The Peking rulebook broadcast makes the middle line of the serpentine briefly harder to hold. */
@@ -328,9 +360,9 @@ export function policyJubelPatchAt(s: number, lane: number): boolean {
   return s >= 880 && s < 1040 && Math.abs(lane) < 2.4;
 }
 
-export function applyPolicyJubelDrag(speed: number, yawRate: number, dt: number): { speed: number; yawRate: number } {
+export function applyPolicyJubelDrag(speed: number, yawRate: number, dt: number, topSpeed: number = KART_TUNING.maxForwardSpeed): { speed: number; yawRate: number } {
   const step = Math.max(0, dt);
-  return { speed: Math.max(0, speed - .18 * step), yawRate: yawRate * Math.max(0, 1 - .02 * step) };
+  return { speed: Math.min(Math.max(0, topSpeed * .88), Math.max(0, speed - .3 * step)), yawRate: yawRate * Math.max(0, 1 - .035 * step) };
 }
 
 /** Event entry is based on both lap-two progress and the kart's actual course location. */
@@ -364,20 +396,51 @@ export const inHarbour = (x: number, z: number) => hazardAt(x, z) !== null;
 
 /**
  * Pyongyang lap-2 event (Claude, 11.10.2026): a parade column of display tanks and a rocket transporter rolls at walking
- * pace along the right half of the gate boulevard until the race ends. The left half always stays open; the same
+ * pace along the right half of the gate boulevard during a short event window. The left half always stays open; the same
  * collision applies to every kart and bots plan around the column like slow traffic.
  */
-export const PARADE_COLUMN = { from: 1372, to: 1625, speed: 5.2, lane: 3.4, radius: 1.75, gaps: [0, 9, 18, 28] as const };
+export const PARADE_COLUMN = { from: 1372, to: 1625, speed: 5.2, lane: 3.4, radius: 1.75, gaps: [0, 9, 18, 28] as const, initialLead: 58, duration: 15 };
 let paradeStart: number | null = null, paradeClock = 0;
-export function startParade(time: number): void { paradeStart = TRACK_INFO.theme === 'pyongyang' ? time : null; paradeClock = time; }
+let paradeInitialLead = PARADE_COLUMN.initialLead;
+/** A76 Moscow pilot (12.10.2026): one small maintenance trolley crosses the broad parade road. */
+export const MOVING_TROLLEY = { s: 820, laneAmplitude: 3.2, period: 12, radius: .82 } as const;
+export function movingTrolley(): { s: number; lane: number; speed: number } | null {
+  if (TRACK_INFO.theme !== 'moscow') return null;
+  const phase = paradeClock * Math.PI * 2 / MOVING_TROLLEY.period;
+  return { s: MOVING_TROLLEY.s, lane: MOVING_TROLLEY.laneAmplitude * Math.sin(phase), speed: MOVING_TROLLEY.laneAmplitude * Math.cos(phase) * Math.PI * 2 / MOVING_TROLLEY.period };
+}
+function paradePlacementClear(headS: number, karts: readonly Pick<KartState, 'x' | 'z'>[]): boolean {
+  const { from, to, lane, gaps, radius } = PARADE_COLUMN, clearance = radius + KART_TUNING.collisionRadius + 1;
+  const centers = gaps.map((gap) => headS - gap).filter((s) => s >= from && s <= to)
+    .flatMap((s) => [-1.6, 1.6].map((offset) => trackPoint(s + offset, lane)));
+  return karts.every((kart) => centers.every((center) => Math.hypot(kart.x - center.x, kart.z - center.z) >= clearance));
+}
+export function startParade(time: number, karts: readonly Pick<KartState, 'x' | 'z'>[] = []): void {
+  paradeStart = TRACK_INFO.theme === 'pyongyang' ? time : null; paradeClock = time; paradeInitialLead = PARADE_COLUMN.initialLead;
+  if (paradeStart === null || !karts.length) return;
+  const { from, to, gaps } = PARADE_COLUMN, minimumHead = from + gaps[gaps.length - 1];
+  const triggeringKartS = trackLocate(karts[0].x, karts[0].z).s;
+  const minRearS = Math.max(minimumHead - gaps[gaps.length - 1], triggeringKartS + 30);
+  const preferredHead = Math.min(to, Math.max(from + PARADE_COLUMN.initialLead, minRearS + gaps[gaps.length - 1]));
+  const candidates = [
+    ...Array.from({ length: to - preferredHead + 1 }, (_, i) => preferredHead + i),
+    ...Array.from({ length: preferredHead - minimumHead }, (_, i) => preferredHead - 1 - i),
+  ];
+  const safeHead = candidates.find((headS) => paradePlacementClear(headS, karts));
+  if (safeHead !== undefined) paradeInitialLead = safeHead - from;
+}
 export function stopParade(): void { paradeStart = null; }
-export function setParadeClock(time: number): void { paradeClock = time; }
+export function setParadeClock(time: number): void {
+  paradeClock = time;
+  if (paradeStart !== null && time - paradeStart >= PARADE_COLUMN.duration) stopParade();
+}
 export const paradeActive = () => paradeStart !== null;
 /** Centre progress and lane of each parade vehicle currently on the boulevard (each spans two collision circles). */
 export function paradeVehicles(): { s: number; lane: number; index: number }[] {
   if (paradeStart === null) return [];
   const { from, to, speed, lane, gaps } = PARADE_COLUMN, cycle = to - from + gaps[gaps.length - 1] + 8;
-  const head = from + ((paradeClock - paradeStart) * speed) % cycle;
+  // Stage the column in an unoccupied part of the boulevard before it begins rolling.
+  const head = from + paradeInitialLead + ((paradeClock - paradeStart) * speed) % cycle;
   return gaps.map((gap, index) => ({ s: head - gap, lane, index })).filter((v) => v.s >= from && v.s <= to);
 }
 function paradeContact(x: number, z: number): ReturnType<WorldProjection> | null {
@@ -391,9 +454,18 @@ function paradeContact(x: number, z: number): ReturnType<WorldProjection> | null
   return null;
 }
 
-export const projectTrack: WorldProjection = (x, z) => {
+export const projectTrack: WorldProjection = (x, z, airborne = false) => {
   const { s, lane } = trackLocate(x, z);
   if (paradeStart !== null) { const contact = paradeContact(x, z); if (contact) return contact; }
+  const trolley = movingTrolley();
+  if (trolley) {
+    const centre = trackPoint(trolley.s, trolley.lane), dx = x - centre.x, dz = z - centre.z, distance = Math.hypot(dx, dz);
+    const clearance = MOVING_TROLLEY.radius + KART_TUNING.collisionRadius;
+    if (distance < clearance) {
+      const normalX = distance > 1e-6 ? dx / distance : Math.cos(centre.heading), normalZ = distance > 1e-6 ? dz / distance : -Math.sin(centre.heading);
+      return { x: centre.x + normalX * clearance, z: centre.z + normalZ * clearance, normalX, normalZ, kind: 'obstacle' };
+    }
+  }
   for (const obstacle of TRACK_INFO.obstacles ?? []) {
     const centre = trackPoint(obstacle.s, obstacle.lane), dx = x - centre.x, dz = z - centre.z, distance = Math.hypot(dx, dz);
     const clearance = obstacle.radius + KART_TUNING.collisionRadius;
@@ -401,6 +473,13 @@ export const projectTrack: WorldProjection = (x, z) => {
     const sign = Math.sign(obstacle.lane) || 1, normalX = distance > 1e-6 ? dx / distance : sign * Math.cos(centre.heading);
     const normalZ = distance > 1e-6 ? dz / distance : -sign * Math.sin(centre.heading);
     return { x: centre.x + normalX * clearance, z: centre.z + normalZ * clearance, normalX, normalZ, kind: 'obstacle' };
+  }
+  // Only the authored launch lane can cross the nearby shortcut-entry wall; all other barriers stay solid in flight.
+  if (airborne && RAMP_SHORTCUT_ENTRY) {
+    const launch = trackPoint(RAMP_SHORTCUT_ENTRY.lip, RAMP_SHORTCUT_ENTRY.lane), alley = shortcutLocate(x, z);
+    if (Math.hypot(x - launch.x, z - launch.z) <= RAMP_SHORTCUT_ENTRY.approachRadius &&
+        alley.u <= RAMP_SHORTCUT_ENTRY.entryLength && alley.distance <= SHORTCUT.halfWidth + 3)
+      return { x, z, normalX: 0, normalZ: 0, kind: null };
   }
   const safe = TRACK.wall - KART_SIDE;
   if (Math.abs(lane) <= safe + 1e-7) return { x, z, normalX: 0, normalZ: 0, kind: null };
@@ -453,15 +532,15 @@ export function recoverKart(state: KartState, others: KartState[]): KartState {
  * straights, drift or grip through tight bends, whether it risks the shortcut, how eagerly it commits to a
  * passing line and how long it saves an item. No style changes speed, grip or the shared kart physics.
  */
-export interface BotStyle { label: string; lane: number; drift: boolean; shortcut: boolean; pass: number; itemPatience: number }
+export interface BotStyle { label: string; lane: number; drift: boolean; shortcut: boolean; shortcutLane?: number; rampShortcut?: boolean; pass: number; itemPatience: number; eventRisk: number }
 /** Indexed like CAST: Hitler, Stalin, Mussolini, Mao, Kim Jong-un, Castro. */
 export const BOT_STYLES: readonly BotStyle[] = [
-  { label: 'beansprucht die Mitte, drängelt beim Überholen', lane: 0, drift: true, shortcut: false, pass: 1.45, itemPatience: .7 },
-  { label: 'schwer und geduldig auf der Innenlinie, kein Drift', lane: -2.8, drift: false, shortcut: false, pass: .65, itemPatience: 1.6 },
-  { label: 'Außenlinie mit Pose, nimmt jede Abkürzung', lane: 2.8, drift: true, shortcut: true, pass: 1.2, itemPatience: 1 },
-  { label: 'gleichmäßig innen, Haftung statt Drift', lane: -2.8, drift: false, shortcut: false, pass: .9, itemPatience: 1.3 },
-  { label: 'sprunghaft, riskiert die Abkürzung, wirft früh', lane: 0, drift: true, shortcut: true, pass: 1.3, itemPatience: .55 },
-  { label: 'Langstreckenlinie außen, driftet sauber', lane: 2.8, drift: true, shortcut: false, pass: 1, itemPatience: 1.1 },
+  { label: 'beansprucht die Mitte, drängelt beim Überholen', lane: 0, drift: true, shortcut: false, pass: 1.45, itemPatience: .7, eventRisk: 0 },
+  { label: 'schwer und geduldig auf der Innenlinie, kein Drift', lane: -2.8, drift: false, shortcut: false, pass: .65, itemPatience: 1.6, eventRisk: 1 },
+  { label: 'Außenlinie mit Pose, nimmt jede Abkürzung', lane: 2.8, drift: true, shortcut: true, shortcutLane: 2.4, pass: 1.2, itemPatience: 1, eventRisk: .25 },
+  { label: 'gleichmäßig innen, Haftung statt Drift', lane: -2.8, drift: false, shortcut: false, pass: .9, itemPatience: 1.3, eventRisk: .8 },
+  { label: 'sprunghaft, nimmt den Rampensprung zur Abkürzung, wirft früh', lane: 0, drift: true, shortcut: true, shortcutLane: -2.4, rampShortcut: true, pass: 1.3, itemPatience: .55, eventRisk: 0 },
+  { label: 'Langstreckenlinie außen, driftet sauber', lane: 2.8, drift: true, shortcut: false, pass: 1, itemPatience: 1.1, eventRisk: .5 },
 ];
 let botStyles: (BotStyle | undefined)[] = [];
 /** Style per kart slot (slot 0 = player, ignored); without styles the earlier slot-based defaults apply. */
@@ -479,10 +558,12 @@ let botLevel: 0 | 1 | 2 = 1;
 export function setBotSkill(level: 0 | 1 | 2): void { botLevel = level; }
 export const botDifficulty = () => BOT_DIFFICULTY[botLevel];
 
-export function botInput(state: KartState, index: number, others: KartState[] = []): DriveInput {
+export function botInput(state: KartState, index: number, others: KartState[] = [], courseEvent?: 'wave' | 'jubel'): DriveInput {
   const main = trackLocate(state.x, state.z);
   const style = botStyles[index];
-  const takesAlley = style ? style.shortcut : index === 3;
+  const rampEntry = style?.rampShortcut ? RAMP_SHORTCUT_ENTRY : undefined;
+  const rampApproach = !!rampEntry && main.s >= rampEntry.lip - rampEntry.approachRadius && main.s <= rampEntry.lip + rampEntry.approachRadius;
+  const takesAlley = style ? style.shortcut && !rampEntry : index === 3;
   const alley = inShortcut(state.x, state.z) || (takesAlley && main.s >= SHORTCUT.from - 14 && main.s < SHORTCUT.to);
   const shortcut = alley ? shortcutLocate(state.x, state.z) : null;
   const { s, lane: currentLane } = shortcut ?? main;
@@ -496,10 +577,12 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
   // Five racing lanes give room to pick a real passing line.
   const outerLane = Math.min(5.6, TRACK.halfWidth - 2.4);
   const lanes = alley ? [0] : [-outerLane, -outerLane / 2, 0, outerLane / 2, outerLane];
+  const trolley = alley ? null : movingTrolley();
   const traffic = others.filter((other) => other !== state).map((other) => {
     const otherAlley = inShortcut(other.x, other.z), p = otherAlley ? shortcutLocate(other.x, other.z) : trackLocate(other.x, other.z);
     return { ahead: signedGap(p.s - s), lane: p.lane, speed: other.speed, sameRoute: otherAlley === alley };
   }).concat(alley ? [] : paradeVehicles().flatMap((v) => [v.lane - 1.2, v.lane + 1.2].map((lane) => ({ ahead: signedGap(v.s - s), lane, speed: PARADE_COLUMN.speed * .5, sameRoute: true }))))
+    .concat(trolley ? [{ ahead: signedGap(trolley.s - s), lane: trolley.lane, speed: Math.abs(trolley.speed), sameRoute: true }] : [])
     .filter((other) => other.sameRoute && other.ahead > -12 && other.ahead < trafficRange + (other.speed < 4 ? 14 : 0));
   const ahead = traffic.filter((t) => t.ahead > .05);
   // Inside lane through bends (positive curvature turns right), personal lane on straights.
@@ -518,10 +601,22 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
     traffic.reduce((sum, t) => sum + (Math.abs(t.lane - lane) < difficulty.gap
       ? t.ahead > 0 ? Math.max(0, trafficRange + (t.speed < 4 ? 14 : 0) - t.ahead) * (t.speed < speed + .5 ? 3.2 * eagerness : 1.2)
         : Math.abs(t.ahead) < 4 ? (4 - Math.abs(t.ahead)) * 7 : 0 : 0), 0);
-  const lane = [...lanes].sort((a, b) => score(a) - score(b))[0];
+  const eventLanePenalty = (lane: number) => {
+    const eventS = s + Math.max(4, Math.min(20, 6.5 + speed * .38));
+    const [eventStart, eventEnd] = courseEvent === 'wave' ? [105, 330] : courseEvent === 'jubel' ? [880, 1040] : [Infinity, -Infinity];
+    const approachingEvent = eventS >= eventStart - 80 && eventS < eventEnd;
+    const laneS = Math.max(eventStart, eventS);
+    const exposed = courseEvent === 'wave' && maleconWavePatchAt(laneS, lane) || courseEvent === 'jubel' && policyJubelPatchAt(laneS, lane);
+    return approachingEvent && exposed ? 250 * Math.max(0, Math.min(1, style?.eventRisk ?? 1)) : 0;
+  };
+  const lane = [...lanes].sort((a, b) => score(a) + eventLanePenalty(a) - score(b) - eventLanePenalty(b))[0];
+  const leavingCourseEventLine = eventLanePenalty(currentLane) > 0 && eventLanePenalty(lane) === 0;
+  const shortcutLane = Math.max(-SHORTCUT.halfWidth + .6, Math.min(SHORTCUT.halfWidth - .6, style?.shortcutLane ?? 0));
   const target = alley
-    ? shortcutPoint(shortcut!.u + 6.5 + speed * .38, 0)
-    : trackPoint(s + 6.5 + speed * .38, lane);
+    ? shortcutPoint(shortcut!.u + 6.5 + speed * .38, shortcutLane)
+    : rampApproach && (state.jumpRemaining ?? 0) > 0
+      ? shortcutPoint(Math.min(rampEntry!.entryLength, 6.5 + speed * .38), 0)
+    : trackPoint(s + 6.5 + speed * .38, rampApproach ? rampEntry!.lane : lane);
   const desired = Math.atan2(target.x - state.x, target.z - state.z);
   const error = Math.atan2(Math.sin(desired - state.heading), Math.cos(desired - state.heading));
   const steering = Math.max(-1, Math.min(1, error * 2.3));
@@ -546,11 +641,12 @@ export function botInput(state: KartState, index: number, others: KartState[] = 
     const inside = currentLane * state.driftDirection;
     const opening = near.curvature < 1 / 24 || near.sign !== state.driftDirection;
     const against = error * state.driftDirection < -.3;
-    const release = against || outward > 3.4 || inside > 3.8 || state.driftCharge >= KART_TUNING.driftChargeTime && (opening || outward > 2.6);
+    const release = leavingCourseEventLine || against || outward > 3.4 || inside > 3.8 || state.driftCharge >= KART_TUNING.driftChargeTime && (opening || outward > 2.6);
     const driftSteer = Math.max(-1, Math.min(1, state.driftDirection * (.45 + Math.max(0, outward - .8) * .35) + error * 1.6));
     return { throttle: .9, steering: release ? steering : driftSteer, hopDrift: !release };
   }
   if (state.hopRemaining > 0) {
+    if (leavingCourseEventLine) return { throttle: .9, steering, hopDrift: false };
     const committed = tight && Math.sign(steering) === corner.sign;
     return { throttle: .9, steering: committed ? corner.sign * Math.max(.5, Math.abs(steering)) : steering, hopDrift: committed };
   }
