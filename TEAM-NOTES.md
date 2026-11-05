@@ -1,5 +1,13 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+### 05.11.2026 – Projektabschluss Sarah
+
+Ausgangsbranch `codex/team-sarah-20261105-155036-138` stand auf `de9c699`, identisch zu `origin/main`; Babylon-Projektkennung und Mindestabstammung geprüft. Lokale Arbeit in den vier Arbeitsdateien und `src/cast.ts` blieb erhalten. `npm test -- --test-reporter=dot` bestand 147/147. `npm run build` nach der Änderung des Mao-Vorschlagsnamens bestand mit TypeScript/Vite; bekannte Vite-Warnung zum Hauptbundle über 500 KB. `git diff --check` bestand nach der Dokumentationspflege.
+
+A73.5: ältere Moskau-Bilder/Telemetrie aus dem 12.10. sind keine aktuelle Sicht- oder Linienabnahme. Am 05.11. wurden mehrere sichtbare Bot-/Einzelrennversuche mit Auto-Gas und Grafik Standard durchgeführt. Der Demo-Bot nahm die Hauptstrecke; manuelle Eingaben trafen den Shortcut-Belag nicht zuverlässig, einmal kam es zum Randkontakt. Kein eindeutiger Mittel-/Seitenlinienvergleich und kein Screenshotbeleg; A73.5 bleibt offen. Der integrierte Browser verlor zeitweise sein Steuerungs-Handle und protokollierte beim Szenenaufbau `GL_INVALID_OPERATION`-Warnungen zu Uniform-Buffer-Größen. Ein Testtab wurde bei `s≈2.363 m` pausiert, kein Browserfenster geschlossen. Nächster Schritt: erneute sichtbare Probe mit stabiler Steuerung, gleiche Einstellungen und zwei natürliche Linienläufe.
+
+Die offizielle Fünf-Stunden-/Wochen-Usage-Anzeige war in dieser Sitzung nicht verfügbar; es werden keine Kontowerte geschätzt. Die Fahrer-Heimatstrecken und verstärkten Spezialfähigkeiten sowie Stalins und Maos Prototypen bleiben als Sarahs Vorschläge markiert; Marcels gemeinsame Freigabe ist offen.
+
 ### 12.10.2026 – Abschlussprüfung vor Projektende
 
 `npm test -- --test-reporter=dot`: 147/147 bestanden. Der Slow-Lauf bestand 12/21; neun Windows-Git-Fixtures scheiterten in der Sandbox mit `NtCreateDirectoryObject ... C0000022`. Der isolierte, außerhalb der Sandbox wiederholte Workflow-Test bestand genau diese neun Fälle 9/9; damit sind die 21 Slow-Tests insgesamt abgedeckt. `git diff --check` ohne Inhaltsfehler. Der letzte versteckte Moskau-Versuch erzeugte kein gültiges Spielerbild; unbrauchbare Bilder wurden entfernt und A73.5 bleibt für die visuelle Linien-/Risikoprüfung offen. Vite beendet und 18 eigene Team-Fixture-Verzeichnisse entfernt. Offizielle Usage-Anzeige: 27 % Fünf-Stundenverbrauch und 49 % Wochenverbrauch (73 %/51 % Rest).

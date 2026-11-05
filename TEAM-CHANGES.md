@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 05.11.2026 – Mao-Fähigkeitsvorschlag umbenannt
+
+Sarah hat Maos noch nicht gebaute Fähigkeit im Fahrerprofil von „Einheitslenkung“ in „Massenmobilisierung“ umbenannt. Die Anzeige bleibt ausdrücklich als „Vorschlag, noch nicht gebaut“ markiert; es wurde keine Mechanik ergänzt. Die Bonusrichtung für Massenmobilisierung sowie die Heimatstrecken-Verstärkung aller Fähigkeiten bleiben Prototypideen und brauchen Marcels gemeinsame Freigabe.
+
 ## 12.10.2026 – Moskau-Shortcut: Farbpass und Abschlussprüfung
 
 Der Mittelstreifen des Moskauer Parade-Shortcuts wurde farblich von kräftigem Orange auf warmgraue Platten mit verwitterten Kupfer-/Ockertönen und breiteren dunklen Fugen abgestimmt. Geometrie, Warnbalken, Fahrwirkung und Linienführung blieben dabei unverändert. Ein natürlicher versteckter Sechs-Kart-Lauf erfasste einen Bot im Mittelstreifenbereich bei 1:34,12, 1.873,127 m Kursfortschritt, 14,949 m/s, bodengebunden und ohne Runtimefehler; Telemetrie `docs/evidence/a73bs-moscow-natural-contact.json`. Die Laufzeitbilder waren unbrauchbar und wurden nicht als visuelle Evidenz behalten. Gezielte Strecken-/Shortcuttests 31/31, Standardsuite 147/147 sowie TypeScript-/Vite-Build bestanden; Hauptbundle 2.176,47 KB / 539,28 KB gzip, bekannte Vite-Warnung über 500 KB. A73.5 bleibt wegen fehlender gültiger Sicht- und Verkehrsbilanz offen.
