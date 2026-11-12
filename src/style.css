@@ -134,6 +134,11 @@ body.parked #parked-card { display: flex; flex-direction: column; align-items: c
 .ability-announcement span { font-size:8px;font-weight:800;color:#e4c475; }
 .ability-announcement strong { margin:2px 0;font-size:12px;line-height:1.2; }
 .ability-announcement small { font-size:9px;line-height:1.25;color:#d5c9ac; }
+.ability-announcement.stalin-plan { border-color:#a53a31;background-color:#eee3cb;background-image:repeating-linear-gradient(0deg,transparent 0 13px,#8d817522 14px),linear-gradient(90deg,#eee3cb,#e5d7ba);box-shadow:0 0 0 2px #8e2635,0 6px 18px #0008;color:#342b25; }
+.ability-announcement.stalin-plan span { color:#9d302b; }
+.ability-announcement.stalin-plan strong { color:#5b2822; }
+.ability-announcement.stalin-plan small { color:#53473b; }
+.ability-announcement.mao-surge { border-color:#cf5641;box-shadow:0 0 0 2px #8e2635,0 6px 18px #0008; }
 .menu-open .ability-announcement,.race-finished .ability-announcement,.photo-mode .ability-announcement { display:none !important; }
 .censor-banner { position:fixed;z-index:80;top:42%;left:50%;width:min(700px,86vw);padding:10px 18px 11px;transform:translate(-50%,-50%) rotate(-1deg);border:2px solid #c6a054;background:#172126f2;box-shadow:0 0 0 5px #8e2635,0 12px 34px #000a;color:#ead7aa;text-align:center;pointer-events:none;animation:censor-stamp .24s cubic-bezier(.15,.85,.25,1.25); }
 .censor-banner>span { display:block;font-size:10px;font-weight:800;color:#e4c475; }
@@ -180,6 +185,7 @@ body.parked #parked-card { display: flex; flex-direction: column; align-items: c
 #ability-fill { height:100%;width:100%;background:#8f6a4a; }
 .ability-card.ready #ability-fill { background:#e8c06c;box-shadow:0 0 8px #e8c06c; }
 .ability-card.active { border-color:#f0c46c;box-shadow:0 0 18px #c8873a88; }
+.ability-card.home-bonus { border-color:#e8c06c; }
 .ability-card.active #ability-fill { background:#ff9b4a; }
 .ability-key { margin-left:auto;border:1px solid #e2c58c88;padding:4px 8px;font-size:12px; }
 .photo-mode .ability-card,.menu-open .ability-card,.race-finished .ability-card { display:none !important; }

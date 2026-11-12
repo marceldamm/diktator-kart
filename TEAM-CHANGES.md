@@ -1,5 +1,9 @@
 # Gemeinsamer Änderungsverlauf
 
+## 12.11.2026 – Heimstreckenboni und sechs individuelle Fähigkeiten
+
+Sarah berichtete nach Rücksprache mit Marcel, dass er den betreffenden Anpassungen zustimmt. `src/cast.ts` ordnet jetzt jedem Fahrer eine feste Heimatstrecke und Fähigkeit zu. Auf der Heimatstrecke wirken Dauer mit Faktor 1,25 und Stärke mit Faktor 1,15; die gemeinsame Q-Logik gilt für Spieler und Bots. Die vorher ungebauten Prototypen sind spielbar: Stalins „Fünfjahresplan-Korrektur“ drosselt im 1-s-Planungsfenster das Gas und löst anschließend einen Freigabeschub aus; das HUD erhält eine cremefarbene Tabellen-/Rotstiftoptik ohne Regimezeichen. Maos „Massenmobilisierung“ ist als gedeckelter Pulk-Schub umgesetzt, der mit bis zu vier Karts im 16-m-Umkreis skaliert. Castro erhält auf Havanna längere und etwas breiter verteilte Paragraphenschranken. Die konkreten Werte sind prototypisch, nicht abschließend balanciert. Gezielte Cast-/Fähigkeitstests 12/12, schnelle Suite 150/150, `npm run test:full` 171/171 (121,7 s), TypeScript und Produktionsbuild bestanden. Hauptbundle 2.181,68 KB / 540,65 KB gzip; bekannte Vite-Warnung über 500 KB. Sichtbarer Rennenpass löste Stalins Fenster aus. Menschliche Abnahme und unabhängiger Balancepass über alle sechs Kurse bleiben offen.
+
 ## 05.11.2026 – Mao-Fähigkeitsvorschlag umbenannt
 
 Sarah hat Maos noch nicht gebaute Fähigkeit im Fahrerprofil von „Einheitslenkung“ in „Massenmobilisierung“ umbenannt. Die Anzeige bleibt ausdrücklich als „Vorschlag, noch nicht gebaut“ markiert; es wurde keine Mechanik ergänzt. Die Bonusrichtung für Massenmobilisierung sowie die Heimatstrecken-Verstärkung aller Fähigkeiten bleiben Prototypideen und brauchen Marcels gemeinsame Freigabe.

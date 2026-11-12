@@ -14,6 +14,12 @@ test('the six current drivers keep distinct kart and face variants with delibera
   assert.equal(new Set(CAST.map(({ body }) => body)).size, CAST.length, 'each driver retains an individual kart silhouette');
   assert.equal(new Set(CAST.map(({ faceStyle }) => faceStyle)).size, CAST.length, 'each driver has an individually sculpted head variant');
   const byName = Object.fromEntries(CAST.map((member) => [member.name, member]));
+  assert.deepEqual(Object.fromEntries(CAST.map(({ name, homeTrack }) => [name, homeTrack])), {
+    Hitler: 'stadionring', Stalin: 'moscow', Mussolini: 'duce-drom', Mao: 'beijing', 'Kim Jong-un': 'pyongyang', Castro: 'havanna',
+  });
+  assert.deepEqual(Object.fromEntries(CAST.map(({ name, ability }) => [name, ability])), {
+    Hitler: 'tank', Stalin: 'stalin', Mussolini: 'pose', Mao: 'mao', 'Kim Jong-un': 'kim', Castro: 'blockade',
+  });
   // Redesign 06.10.2026: the Hitler quality anchor shows the bare side-parted hair and a compact, nose-wide brush moustache.
   assert.equal(byName.Hitler.hat, 'none');
   assert.equal(byName.Hitler.body, 'grandprix');

@@ -11,7 +11,7 @@ Status: **umgesetzt** (im Spiel und geprüft) · **teilweise** · **ungeprüft**
 | Inhalte von Beginn an verfügbar | **umgesetzt** | Keine Freischaltungen; beide Strecken, alle Fahrer sofort | – |
 | Bots fahren persönlich und aktiv nach fairen Regeln | **teilweise** | Rivalenstile (Linie, Drift/Haftung, Abkürzung, Überholdrang, Item-Geduld) ohne Tempobonus; Grundtempo unterscheidet sich weiter leicht nach Startplatz (Altbestand) | Grundtempo bewusst entscheiden; Reaktionen/Sprüche je Stil |
 | Fahrfehler: kurzer lesbarer Nachteil mit Comeback | **teilweise** | Bergungsamt, Krater, Schaden/Werkstatt, Windschatten, Rang-abhängige Items | Menschliche Balanceprobe |
-| Eigene Eitelkeit/Reaktionen je Figur | **teilweise** | Rufe, Hupe, Rivalenstil; Fähigkeiten für Hitler, Kim und neu Castro („Blockade“: zwei Paragraphenschranken mit den Item-Fallenregeln, Bot nur bei Gegner dicht dahinter) und Mussolini („Große Pose“: Kinn hoch bei halbem Gas, dann Pflichtapplaus-Schub und kurzer Itemschutz, gleiche Regel für Bots) | Stalin („Große Säuberung“) und Mao („Kulturrevolution“) beziehen sich auf reale Massenverbrechen: vor dem Bau gemeinsam entscheiden, wie die Satire Täter statt Opfer trifft |
+| Eigene Eitelkeit/Reaktionen je Figur | **teilweise** | Seit 12.11.2026 haben alle sechs Fahrer Q-Fähigkeiten; Stalin: satirisches Planungs-/Freigabefenster, Mao: gedeckelter Pulk-Schub. Heimstreckenboni gelten im selben Produktionspfad für Spieler und Bots. | Menschliche Lesbarkeit und Balance auf sechs Kursen prüfen; Satire bleibt auf Funktionäre gerichtet, nicht auf Opfer. A87 in CURRENT-WORKLIST.md |
 | Realitätsnahe, erwachsene Figuren; Hitler-Anker zuerst | **teilweise** | Prozedurale Karikatur-Zwischenstufe (siehe CURRENT-WORKLIST) | Skulptur/lizenzierte Basismesh, dann übrige fünf |
 | Karts: gemeinsame Basis, klassische 1920/30er-Silhouetten | **teilweise** | Sieben Karosserievarianten im Kit | Silhouetten je Fahrer schärfen |
 | Reifen je Kart, frei zwischen Karts wählbar | **umgesetzt** | Sechs Radsätze (Paradeweißwand, Staatsradkappe, Corsa-Speiche, Volksstahlscheibe, Raketennabe, Guerilla-Stollen) in `build_kart.py`; Wahl in der Fahrerwahl (◀ ▶, lokal gespeichert), im Chrome umgeschaltet | Nahansicht/Stilprobe |
@@ -33,4 +33,4 @@ Status: **umgesetzt** (im Spiel und geprüft) · **teilweise** · **ungeprüft**
 | Blender-Quellen und Laufzeitmodelle gemeinsam versioniert | **umgesetzt** | Rom-Module als Python-Quelle + `.blend` + GLB | – |
 | Mehrspieler später | **offen (bewusst später)** | – | – |
 
-**Empfohlene Reihenfolge danach:** (1) M7-Messung beider Strecken inkl. Intel UHD, (2) Gamepad-Praxistest, (3) Fähigkeiten der übrigen vier Fahrer, (4) dritte Strecke aus Sarahs Liste, (5) Reifenauswahl.
+**Empfohlene Reihenfolge danach:** (1) M7-Messung beider Strecken inkl. Intel UHD, (2) Gamepad-Praxistest, (3) menschliche Balance-/Fahrprobe der sechs Fähigkeiten, (4) dritte Strecke aus Sarahs Liste, (5) Reifenauswahl.

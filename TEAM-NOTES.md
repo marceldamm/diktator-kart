@@ -1,12 +1,16 @@
 # TEAM NOTES – Notizen und gemeinsame Anleitung
 
+### 12.11.2026 – Sarah berichtet Marcels Freigabe der Fahrerprototypen
+
+Sarah teilte mit, dass sie mit Marcel über die ihn betreffenden Anpassungen gesprochen habe und er zustimme. Daraufhin umgesetzt: feste Heimatstrecken für alle sechs Fahrer, längere/stärkere Q-Fähigkeiten auf der Heimatstrecke, Stalins „Fünfjahresplan-Korrektur“ mit Planungs-/Freigabefenster und Maos „Massenmobilisierung“ als begrenzter Pulk-Beschleunigungsschub. Da die Ausgangsnotiz zwei mögliche Mao-Richtungen nannte, wurde für den ersten Test der bereits dort aufgeführte Schub gewählt; eine Griffstabilisierung wurde nicht zusätzlich eingebaut. Zahlen und offene Grenzen stehen in CURRENT-WORKLIST.md und LONG-TERM-GOALS.md. Laufzeit: sichtbarer Stalin-Q-Pass zeigte „Plan wird korrigiert“ und die passende Fähigkeit im HUD; keine natürliche Sechs-Kurs-Balance oder menschliche Spaßabnahme behauptet. Prüfung: Fähigkeiten/Cast 12/12, schnelle Suite 150/150, Vollsuite 171/171 in 121,7 s, `npm run build` erfolgreich; Hauptbundle 2.181,68 KB / 540,65 KB gzip, bekannte Vite-Warnung >500 KB. Die offizielle Fünf-Stunden-/Wochen-Usage-Anzeige war hier nicht verfügbar; keine Werte geschätzt.
+
 ### 05.11.2026 – Projektabschluss Sarah
 
 Ausgangsbranch `codex/team-sarah-20261105-155036-138` stand auf `de9c699`, identisch zu `origin/main`; Babylon-Projektkennung und Mindestabstammung geprüft. Lokale Arbeit in den vier Arbeitsdateien und `src/cast.ts` blieb erhalten. `npm test -- --test-reporter=dot` bestand 147/147. `npm run build` nach der Änderung des Mao-Vorschlagsnamens bestand mit TypeScript/Vite; bekannte Vite-Warnung zum Hauptbundle über 500 KB. `git diff --check` bestand nach der Dokumentationspflege.
 
 A73.5: ältere Moskau-Bilder/Telemetrie aus dem 12.10. sind keine aktuelle Sicht- oder Linienabnahme. Am 05.11. wurden mehrere sichtbare Bot-/Einzelrennversuche mit Auto-Gas und Grafik Standard durchgeführt. Der Demo-Bot nahm die Hauptstrecke; manuelle Eingaben trafen den Shortcut-Belag nicht zuverlässig, einmal kam es zum Randkontakt. Kein eindeutiger Mittel-/Seitenlinienvergleich und kein Screenshotbeleg; A73.5 bleibt offen. Der integrierte Browser verlor zeitweise sein Steuerungs-Handle und protokollierte beim Szenenaufbau `GL_INVALID_OPERATION`-Warnungen zu Uniform-Buffer-Größen. Ein Testtab wurde bei `s≈2.363 m` pausiert, kein Browserfenster geschlossen. Nächster Schritt: erneute sichtbare Probe mit stabiler Steuerung, gleiche Einstellungen und zwei natürliche Linienläufe.
 
-Die offizielle Fünf-Stunden-/Wochen-Usage-Anzeige war in dieser Sitzung nicht verfügbar; es werden keine Kontowerte geschätzt. Die Fahrer-Heimatstrecken und verstärkten Spezialfähigkeiten sowie Stalins und Maos Prototypen bleiben als Sarahs Vorschläge markiert; Marcels gemeinsame Freigabe ist offen.
+Die offizielle Fünf-Stunden-/Wochen-Usage-Anzeige war in dieser Sitzung nicht verfügbar; es werden keine Kontowerte geschätzt. Die Fahrer-Heimatstrecken und verstärkten Spezialfähigkeiten sowie Stalins und Maos Prototypen blieben damals als Sarahs Vorschläge markiert; die spätere Freigabe, die Umsetzung und deren Prüfgrenzen stehen im Eintrag vom 12.11.2026.
 
 ### 12.10.2026 – Abschlussprüfung vor Projektende
 

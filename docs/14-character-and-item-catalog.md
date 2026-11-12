@@ -16,7 +16,18 @@ Alle sechs bestätigten Fahrer sind im Babylon-Spiel als getrennt gestaltete Kar
 | Kim Jong-un | Mini-Propaganda-Rakete | Kartname „Propaganda-Rakete“ |
 | Castro | Aufklappender Aktenkoffer | Altdetail „aufklappender Aktenkoffer“ |
 
-Hitler besitzt „Größenbefehl“; Kim besitzt seit 05.10.2026 „Propaganda-Sieg“. Die Fähigkeiten der übrigen vier Startfahrer sind weiterhin nur Katalogideen und werden in der Fahrerwahl als „noch nicht gebaut“ angezeigt.
+Seit 12.11.2026 haben alle sechs Fahrer eine Q-Fähigkeit und eine feste Heimatstrecke. Sarah berichtete Marcels Zustimmung zu diesen Anpassungen; die Runtime-Prototypen sind umgesetzt, aber noch nicht menschlich über alle Strecken balanciert.
+
+| Fahrer | Heimatstrecke | Fähigkeit | Prototypverhalten |
+|---|---|---|---|
+| Hitler | Stadionring | Größenbefehl | 8-s-Panzerform mit Kontaktwirkung |
+| Stalin | Genossen-Gerade (Moskau) | Fünfjahresplan-Korrektur | 1-s-Planungsfenster mit reduziertem Gas, danach Freigabeschub |
+| Mussolini | Duce-Drom | Große Pose | Pose, Pflichtapplaus-Schub und kurzer Itemschutz |
+| Mao | Kulturrevolutions-Schleife (Peking) | Massenmobilisierung | gedeckelter Beschleunigungsschub, skaliert mit bis zu vier nahen Karts |
+| Kim Jong-un | Ewige-Führer-Allee (Pjöngjang) | Propaganda-Sieg | Triumphschub mit anschließender Nachprüfung |
+| Castro | Havanna-Revolutionsring | Blockade | zwei Paragraphenschranken nach Item-Fallenregeln |
+
+Auf der jeweiligen Heimatstrecke wirken alle Fähigkeiten 1,25-mal so lange und 1,15-mal so stark. Bei Stalin wird nur der positive Freigabeschub verstärkt, nicht die Planungsverzögerung; Castros Schranken halten länger und stehen etwas breiter. Mao zählt Karts im 16-m-Umkreis, höchstens vier. Die Werte sind ein testbarer Prototyp. Regimezeichen bleiben ausgeschlossen; die Satire richtet sich gegen Funktionäre/Bürokratie und nicht gegen Opfer historischer Gewalt. Details/Regressionen: `src/abilities.ts`, `tests/abilities.test.mjs` und CURRENT-WORKLIST.md (A87).
 
 ## Spieler-Schäferhund – tatsächliche Zwischenumsetzung
 

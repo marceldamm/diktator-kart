@@ -84,3 +84,38 @@ test('Castro blockade triggers only with a rival close behind and uses the share
   assert.ok(world.events.some(e => e.kind === 'blockade'));
   assert.equal(botWantsAbility(world, 0, [self, behind], 'blockade'), false, 'cooldown after use');
 });
+
+test('the home-track tank bonus extends transformation and strengthens its contact without affecting off-track use', () => {
+  const homeWorld = createAbilities(2), homeKarts = [initialKartState(), { ...initialKartState(), x: 3.2, speed: 10 }];
+  const result = stepAbilities(homeWorld, homeKarts, [true, false], [0, 0], step, ['tank', 'none'], [true, false]);
+  assert.equal(result[0].tankRemaining, ABILITY_RULES.tankDuration * ABILITY_RULES.homeDurationMultiplier);
+  assert.ok(homeWorld.events.some((event) => event.kind === 'crush'), 'the home-track radius reaches the target');
+
+  const awayWorld = createAbilities(2), awayKarts = [initialKartState(), { ...initialKartState(), x: 3.2, speed: 10 }];
+  const awayResult = stepAbilities(awayWorld, awayKarts, [true, false], [0, 0], step, ['tank', 'none'], [false, false]);
+  assert.equal(awayResult[0].tankRemaining, ABILITY_RULES.tankDuration);
+  assert.ok(!awayWorld.events.some((event) => event.kind === 'crush'), 'the same distance stays outside the standard radius');
+});
+
+test('Stalin plans first, then gets a longer and stronger approved-plan boost at home', () => {
+  const world = createAbilities(1); let karts = [initialKartState()];
+  karts = stepAbilities(world, karts, [true], [0], step, ['stalin'], [true]);
+  assert.equal(world.stalinPlanRemaining[0], ABILITY_RULES.stalinPlanDuration, 'home track does not prolong the setup penalty');
+  assert.equal(world.events[0].kind, 'stalin-plan');
+  karts = stepAbilities(world, karts, [false], [0], ABILITY_RULES.stalinPlanDuration * ABILITY_RULES.homeDurationMultiplier, ['stalin'], [true]);
+  assert.equal(world.events[0].kind, 'stalin-approved');
+  assert.equal(world.stalinBoostRemaining[0], ABILITY_RULES.stalinBoostDuration * ABILITY_RULES.homeDurationMultiplier);
+  assert.equal(karts[0].speed, ABILITY_RULES.stalinSpeedKick * ABILITY_RULES.homeStrengthMultiplier);
+});
+
+test('Mao gains a capped pack-scaled burst and the home-track bonus applies to both dimensions', () => {
+  const world = createAbilities(6);
+  const karts = Array.from({ length: 6 }, (_, index) => ({ ...initialKartState(), x: index * 2 }));
+  const result = stepAbilities(world, karts, [true, false, false, false, false, false], Array(6).fill(0), step,
+    ['mao', 'none', 'none', 'none', 'none', 'none'], [true, false, false, false, false, false]);
+  const nearby = ABILITY_RULES.maoNearbyKartCap;
+  assert.equal(world.events[0].kind, 'mao-surge');
+  assert.equal(world.events[0].nearby, nearby);
+  assert.equal(world.maoBoostRemaining[0], (ABILITY_RULES.maoBoostDuration + nearby * ABILITY_RULES.maoBoostPerNearbyKart) * ABILITY_RULES.homeDurationMultiplier);
+  assert.equal(result[0].speed, (ABILITY_RULES.maoSpeedKick + nearby * ABILITY_RULES.maoKickPerNearbyKart) * ABILITY_RULES.homeStrengthMultiplier);
+});
